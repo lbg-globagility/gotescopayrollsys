@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.InteropServices
 Imports MySql.Data.MySqlClient
+Imports System.Threading
 
 Public Class EmpTimeEntry
     Public q_employee As String = "SELECT e.RowID," & _
@@ -2792,12 +2793,42 @@ Public Class EmpTimeEntry
 
     Private Sub tsbtnNewtimeent_Click(sender As Object, e As EventArgs) Handles tsbtnNewtimeent.Click
 
-        Dim n_TimEntduration As New TimEntduration
+        'Dim n_TimEntduration As New TimEntduration
+        Dim n_TimEntduration As New PayPeriodGUI
+
+        n_TimEntduration.AsPurpose = PayPeriodGUI.PurposeAs.TimeEntry
 
         With n_TimEntduration
-            '.ShowDialog()
-            .Show()
-            .BringToFront()
+            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+
+                ToolStripProgressBar1.Visible = True
+
+                Dim ted As New TimEntduration
+
+                Dim date_f = Convert.ToDateTime(.PayDateFrom).ToString("yyyy-MM-dd")
+                ted.dayFrom = date_f
+
+                Dim date_t = Convert.ToDateTime(.PayDateTo).ToString("yyyy-MM-dd")
+                ted.dayTo = date_t
+
+                ted.quer_empPayFreq = .PayFreqType
+
+                Try
+                    ted.bgworkRECOMPUTE_employeeleave.RunWorkerAsync()
+                Catch ex As Exception
+                    MsgBox(getErrExcptn(ex, Me.Name))
+                Finally
+                    Static once As SByte = True
+                    If once Then
+                        once = False
+                        AddHandler ted.bgWork.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
+                        AddHandler ted.bgworkRECOMPUTE_employeeleave.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
+                    End If
+                End Try
+
+            End If
+            '.Show()
+            '.BringToFront()
             'MDIPrimaryForm.Enabled = False
         End With
 
@@ -2923,7 +2954,7 @@ Public Class EmpTimeEntry
             Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / " & page_limiter & " FROM employee WHERE OrganizationID=" & orgztnID & ";"))
 
             Dim remender = lastpage Mod 1
-            
+
             pagination = (lastpage - remender) * page_limiter
 
             If pagination - page_limiter < page_limiter Then
@@ -4018,7 +4049,7 @@ Public Class EmpTimeEntry
         If TabControl1.SelectedIndex = 0 Then
 
         ElseIf TabControl1.SelectedIndex = 1 Then
-            
+
             etentsummapaypID = Val(EXECQUER("SELECT RowID FROM payperiod WHERE PayFromDate='" & the_year & "-" & sel_month & "-" & If(firstbound.ToString.Length = 1, "0" & firstbound, firstbound) & _
                                             "' AND PayToDate='" & the_year & "-" & sel_month & "-" & If(lastbound.ToString.Length = 1, "0" & lastbound, lastbound) & _
                                             "' AND OrganizationID=" & orgztnID & " LIMIT 1;"))
@@ -4223,7 +4254,7 @@ Public Class EmpTimeEntry
             'lbllate.Visible = 1
             'lblundertime.Visible = 1
             'Label21.Visible = 1
-            
+
             RemoveHandler dgvdatesummary.SelectionChanged, AddressOf dgvdatesummary_SelectionChanged
 
             RemoveHandler dgvdatesummary.CurrentCellChanged, AddressOf dgvdatesummary_CurrentCellChanged
@@ -7498,7 +7529,7 @@ Public Class EmpTimeEntry
         Else
 
             'EmpTimeDetail
-            
+
             MDIPrimaryForm.ToolStripButton3_Click(sender, e)
 
             TimeAttendForm.TimeEntryLogsToolStripMenuItem_Click(sender, e)
@@ -7514,7 +7545,7 @@ Public Class EmpTimeEntry
         Else
 
             'EmpTimeDetail
-            
+
             MDIPrimaryForm.ToolStripButton3_Click(sender, e)
 
             TimeAttendForm.TimeEntryLogsToolStripMenuItem_Click(sender, e)
@@ -7530,7 +7561,7 @@ Public Class EmpTimeEntry
         Else
 
             'EmpTimeDetail
-            
+
             MDIPrimaryForm.ToolStripButton3_Click(sender, e)
 
             TimeAttendForm.TimeEntryLogsToolStripMenuItem_Click(sender, e)
@@ -7546,7 +7577,7 @@ Public Class EmpTimeEntry
         Else
 
             'EmpTimeDetail
-            
+
             MDIPrimaryForm.ToolStripButton3_Click(sender, e)
 
             TimeAttendForm.TimeEntryLogsToolStripMenuItem_Click(sender, e)
@@ -7562,7 +7593,7 @@ Public Class EmpTimeEntry
         Else
 
             'EmpTimeDetail
-            
+
             MDIPrimaryForm.ToolStripButton3_Click(sender, e)
 
             TimeAttendForm.TimeEntryLogsToolStripMenuItem_Click(sender, e)
@@ -7578,7 +7609,7 @@ Public Class EmpTimeEntry
         Else
 
             'EmpTimeDetail
-            
+
             MDIPrimaryForm.ToolStripButton3_Click(sender, e)
 
             TimeAttendForm.TimeEntryLogsToolStripMenuItem_Click(sender, e)
@@ -7619,7 +7650,7 @@ Public Class EmpTimeEntry
 
                 '2020-01-01
                 'MsgBox(("2020-01-02").ToString.Substring(0, 8))
-                
+
                 payp_fromdate = lastdayofmonth.ToString.Substring(0, 8) & "01"
                 payp_todate = lastdayofmonth.ToString.Substring(0, 8) & "15"
 
@@ -7708,6 +7739,21 @@ Public Class EmpTimeEntry
     Protected Overrides Sub OnDeactivate(e As EventArgs)
         'Me.KeyPreview = False
         MyBase.OnDeactivate(e)
+    End Sub
+
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+
+    End Sub
+
+    Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
+        Dim is_100 As Boolean = (e.ProgressPercentage = ToolStripProgressBar1.Maximum)
+
+        ToolStripProgressBar1.Value = CInt(e.ProgressPercentage)
+
+        If is_100 Then
+            ToolStripProgressBar1.Visible = (Not is_100)
+        End If
+
     End Sub
 
 End Class

@@ -193,6 +193,12 @@
     <Compile Include="Core Forms\OBFForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Core Forms\PayPeriodGUI.designer.vb">
+      <DependentUpon>PayPeriodGUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Core Forms\PayPeriodGUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Core Forms\rpt\printallpayslipotherformat.vb">
       <DependentUpon>printallpayslipotherformat.rpt</DependentUpon>
       <SubType>Component</SubType>
@@ -1006,6 +1012,7 @@
     <Compile Include="Core Forms\viewtotloan.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Reports\Providers\IReportProvider.vb" />
     <Compile Include="Reports\rpt\CrystalReport1.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1179,6 +1186,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\OBFForm.resx">
       <DependentUpon>OBFForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\PayPeriodGUI.resx">
+      <DependentUpon>PayPeriodGUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\rpt\printallpayslipotherformat.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

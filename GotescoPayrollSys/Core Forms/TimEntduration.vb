@@ -18,7 +18,19 @@ Public Class TimEntduration
 
     Protected Overrides Sub OnLoad(e As EventArgs)
 
-        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT RowID,Name FROM `division` WHERE OrganizationID='" & orgztnID & "';")
+        Dim str_query As String =
+            String.Concat("SELECT dv.RowID",
+                          ", CONCAT_WS(' - ', dd.Name, dv.Name) `Name`",
+                          " FROM employee e",
+                          " INNER JOIN `position` pos ON pos.RowID=e.PositionID",
+                          " INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.OrganizationID=e.OrganizationID",
+                          " INNER JOIN division dd ON dd.RowID=dv.ParentDivisionID AND dd.RowID != dv.RowID AND dd.OrganizationID=e.OrganizationID",
+                          " WHERE e.OrganizationID=", orgztnID,
+                          " GROUP BY dv.RowID",
+                          " HAVING COUNT(e.RowID) > 0;")
+
+        'Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT RowID,Name FROM `division` WHERE OrganizationID='" & orgztnID & "';")
+        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable(str_query)
 
         With n_SQLQueryToDatatable.ResultTable
 
@@ -156,7 +168,7 @@ Public Class TimEntduration
 
     Dim unselectedButtonFont = New System.Drawing.Font("Trebuchet MS", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
 
-    Dim quer_empPayFreq As String = String.Empty
+    Public quer_empPayFreq As String = String.Empty
 
     Sub PayFreq_Changed(sender As Object, e As EventArgs)
 
@@ -1265,6 +1277,8 @@ Public Class TimEntduration
 
         bgWork.ReportProgress(100, "")
 
+        Console.WriteLine(100)
+
         '*******************************************************************************
 
         'Dim LeftPartString = "UPDATE employeetimeentry SET "
@@ -1414,8 +1428,8 @@ Public Class TimEntduration
     Dim selectdayFrom As Object = Nothing
     Dim selectdayTo As Object = Nothing
 
-    Dim dayFrom As Object = Nothing
-    Dim dayTo As Object = Nothing
+    Public dayFrom As Object = Nothing
+    Public dayTo As Object = Nothing
 
     Private Sub dgvpayper_SelectionChanged(sender As Object, e As EventArgs) Handles dgvpaypers.SelectionChanged 'dgvpayper
 
@@ -1488,6 +1502,8 @@ Public Class TimEntduration
             New ExecuteQuery("CALL RECOMPUTE_employeeleave('" & orgztnID & "','" & dayFrom & "','" & dayTo & "');", 999999)
 
         bgworkRECOMPUTE_employeeleave.ReportProgress(50, "")
+
+        Console.WriteLine(50)
 
     End Sub
 

@@ -23,24 +23,24 @@ Partial Class EmpTimeEntry
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EmpTimeEntry))
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle28 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle39 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle40 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle41 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle42 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle43 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle44 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle45 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle46 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle47 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle48 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle49 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle50 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle51 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.dgvEmployi = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.cemp_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -402,6 +402,8 @@ Partial Class EmpTimeEntry
         Me.bgworkloademployees = New System.ComponentModel.BackgroundWorker()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         CType(Me.dgvEmployi, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
         Me.TabControl2.SuspendLayout()
@@ -441,14 +443,14 @@ Partial Class EmpTimeEntry
         Me.dgvEmployi.ColumnHeadersHeight = 34
         Me.dgvEmployi.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvEmployi.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.cemp_RowID, Me.cemp_EmployeeID, Me.cemp_FirstName, Me.cemp_MiddleName, Me.cemp_LastName, Me.cemp_SurName, Me.cemp_Nickname, Me.cemp_MaritalStatus, Me.cemp_NoOfDependents, Me.cemp_Birthdate, Me.cemp_Startdate, Me.cemp_JobTitle, Me.cemp_Position, Me.cemp_Salutation, Me.cemp_TIN, Me.cemp_SSS, Me.cemp_PAGIBIG, Me.cemp_PhilHealth, Me.cemp_WorkPhone, Me.cemp_HomePhone, Me.cemp_MobilePhone, Me.cemp_HomeAddress, Me.cemp_EmailAddress, Me.cemp_Gender, Me.cemp_EmployementStatus, Me.cemp_PayFrequency, Me.cemp_UndertimeOverride, Me.cemp_OvertimeOverride, Me.cemp_Created, Me.cemp_CreatedBy, Me.cemp_LastUpd, Me.cemp_LastUpdBy, Me.cemp_PositionID, Me.cemp_PayFrequencyID, Me.cemp_EmployeeType, Me.cemp_LeaveBalance, Me.cemp_SickLeaveBalance, Me.cemp_MaternityLeaveBalance, Me.cemp_LeaveAllowance, Me.cemp_SickLeaveAllowance, Me.cemp_MaternityLeaveAllowance, Me.cemp_LeavePerPayPeriod, Me.cemp_SickLeavePerPayPeriod, Me.cemp_MaternityLeavePerPayPeriod, Me.cemp_fstatRowID})
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle18.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvEmployi.DefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle35.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle35.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle35.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle35.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle35.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvEmployi.DefaultCellStyle = DataGridViewCellStyle35
         Me.dgvEmployi.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgvEmployi.Location = New System.Drawing.Point(12, 234)
         Me.dgvEmployi.MultiSelect = False
@@ -953,7 +955,7 @@ Partial Class EmpTimeEntry
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.Transparent
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNewtimeent, Me.tsbtnSavetimeent, Me.tsbtnrecalc, Me.tsbtnCancelempawar, Me.tsbtnCloseempawar, Me.tsbtnAudittrail})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNewtimeent, Me.tsbtnSavetimeent, Me.tsbtnrecalc, Me.tsbtnCancelempawar, Me.tsbtnCloseempawar, Me.tsbtnAudittrail, Me.ToolStripProgressBar1})
         Me.ToolStrip1.Location = New System.Drawing.Point(3, 3)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(843, 25)
@@ -1377,7 +1379,7 @@ Partial Class EmpTimeEntry
         Me.ToolStrip3.Location = New System.Drawing.Point(1, 25)
         Me.ToolStrip3.Name = "ToolStrip3"
         Me.ToolStrip3.ShowItemToolTips = False
-        Me.ToolStrip3.Size = New System.Drawing.Size(2562, 25)
+        Me.ToolStrip3.Size = New System.Drawing.Size(2984, 25)
         Me.ToolStrip3.TabIndex = 168
         Me.ToolStrip3.Text = "ToolStrip3"
         '
@@ -1387,7 +1389,7 @@ Partial Class EmpTimeEntry
         Me.prevyear.Image = CType(resources.GetObject("prevyear.Image"), System.Drawing.Image)
         Me.prevyear.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.prevyear.Name = "prevyear"
-        Me.prevyear.Size = New System.Drawing.Size(52, 22)
+        Me.prevyear.Size = New System.Drawing.Size(50, 22)
         Me.prevyear.Text = "← 2014"
         '
         'ToolStripSeparator14
@@ -1408,13 +1410,13 @@ Partial Class EmpTimeEntry
         'firstjan
         '
         Me.firstjan.Name = "firstjan"
-        Me.firstjan.Size = New System.Drawing.Size(100, 22)
+        Me.firstjan.Size = New System.Drawing.Size(96, 22)
         Me.firstjan.Text = "1-15"
         '
         'secjan
         '
         Me.secjan.Name = "secjan"
-        Me.secjan.Size = New System.Drawing.Size(100, 22)
+        Me.secjan.Size = New System.Drawing.Size(96, 22)
         Me.secjan.Text = "16-"
         '
         'ToolStripSeparator15
@@ -1435,13 +1437,13 @@ Partial Class EmpTimeEntry
         'firstfeb
         '
         Me.firstfeb.Name = "firstfeb"
-        Me.firstfeb.Size = New System.Drawing.Size(100, 22)
+        Me.firstfeb.Size = New System.Drawing.Size(96, 22)
         Me.firstfeb.Text = "1-15"
         '
         'secfeb
         '
         Me.secfeb.Name = "secfeb"
-        Me.secfeb.Size = New System.Drawing.Size(100, 22)
+        Me.secfeb.Size = New System.Drawing.Size(96, 22)
         Me.secfeb.Text = "16-"
         '
         'ToolStripSeparator16
@@ -1462,13 +1464,13 @@ Partial Class EmpTimeEntry
         'firstmar
         '
         Me.firstmar.Name = "firstmar"
-        Me.firstmar.Size = New System.Drawing.Size(100, 22)
+        Me.firstmar.Size = New System.Drawing.Size(96, 22)
         Me.firstmar.Text = "1-15"
         '
         'secmar
         '
         Me.secmar.Name = "secmar"
-        Me.secmar.Size = New System.Drawing.Size(100, 22)
+        Me.secmar.Size = New System.Drawing.Size(96, 22)
         Me.secmar.Text = "16-"
         '
         'ToolStripSeparator17
@@ -1489,13 +1491,13 @@ Partial Class EmpTimeEntry
         'firstapr
         '
         Me.firstapr.Name = "firstapr"
-        Me.firstapr.Size = New System.Drawing.Size(100, 22)
+        Me.firstapr.Size = New System.Drawing.Size(96, 22)
         Me.firstapr.Text = "1-15"
         '
         'secapr
         '
         Me.secapr.Name = "secapr"
-        Me.secapr.Size = New System.Drawing.Size(100, 22)
+        Me.secapr.Size = New System.Drawing.Size(96, 22)
         Me.secapr.Text = "16-"
         '
         'ToolStripSeparator18
@@ -1516,13 +1518,13 @@ Partial Class EmpTimeEntry
         'firstmay
         '
         Me.firstmay.Name = "firstmay"
-        Me.firstmay.Size = New System.Drawing.Size(100, 22)
+        Me.firstmay.Size = New System.Drawing.Size(96, 22)
         Me.firstmay.Text = "1-15"
         '
         'secmay
         '
         Me.secmay.Name = "secmay"
-        Me.secmay.Size = New System.Drawing.Size(100, 22)
+        Me.secmay.Size = New System.Drawing.Size(96, 22)
         Me.secmay.Text = "16-"
         '
         'ToolStripSeparator19
@@ -1543,13 +1545,13 @@ Partial Class EmpTimeEntry
         'firstjun
         '
         Me.firstjun.Name = "firstjun"
-        Me.firstjun.Size = New System.Drawing.Size(100, 22)
+        Me.firstjun.Size = New System.Drawing.Size(96, 22)
         Me.firstjun.Text = "1-15"
         '
         'secjun
         '
         Me.secjun.Name = "secjun"
-        Me.secjun.Size = New System.Drawing.Size(100, 22)
+        Me.secjun.Size = New System.Drawing.Size(96, 22)
         Me.secjun.Text = "16-"
         '
         'ToolStripSeparator20
@@ -1570,13 +1572,13 @@ Partial Class EmpTimeEntry
         'firstjul
         '
         Me.firstjul.Name = "firstjul"
-        Me.firstjul.Size = New System.Drawing.Size(100, 22)
+        Me.firstjul.Size = New System.Drawing.Size(96, 22)
         Me.firstjul.Text = "1-15"
         '
         'secjul
         '
         Me.secjul.Name = "secjul"
-        Me.secjul.Size = New System.Drawing.Size(100, 22)
+        Me.secjul.Size = New System.Drawing.Size(96, 22)
         Me.secjul.Text = "16-"
         '
         'ToolStripSeparator21
@@ -1597,13 +1599,13 @@ Partial Class EmpTimeEntry
         'firstaug
         '
         Me.firstaug.Name = "firstaug"
-        Me.firstaug.Size = New System.Drawing.Size(100, 22)
+        Me.firstaug.Size = New System.Drawing.Size(96, 22)
         Me.firstaug.Text = "1-15"
         '
         'secaug
         '
         Me.secaug.Name = "secaug"
-        Me.secaug.Size = New System.Drawing.Size(100, 22)
+        Me.secaug.Size = New System.Drawing.Size(96, 22)
         Me.secaug.Text = "16-"
         '
         'ToolStripSeparator22
@@ -1624,13 +1626,13 @@ Partial Class EmpTimeEntry
         'firstsep
         '
         Me.firstsep.Name = "firstsep"
-        Me.firstsep.Size = New System.Drawing.Size(100, 22)
+        Me.firstsep.Size = New System.Drawing.Size(96, 22)
         Me.firstsep.Text = "1-15"
         '
         'secsep
         '
         Me.secsep.Name = "secsep"
-        Me.secsep.Size = New System.Drawing.Size(100, 22)
+        Me.secsep.Size = New System.Drawing.Size(96, 22)
         Me.secsep.Text = "16-"
         '
         'ToolStripSeparator23
@@ -1651,13 +1653,13 @@ Partial Class EmpTimeEntry
         'firstoct
         '
         Me.firstoct.Name = "firstoct"
-        Me.firstoct.Size = New System.Drawing.Size(100, 22)
+        Me.firstoct.Size = New System.Drawing.Size(96, 22)
         Me.firstoct.Text = "1-15"
         '
         'secoct
         '
         Me.secoct.Name = "secoct"
-        Me.secoct.Size = New System.Drawing.Size(100, 22)
+        Me.secoct.Size = New System.Drawing.Size(96, 22)
         Me.secoct.Text = "16-"
         '
         'ToolStripSeparator24
@@ -1678,13 +1680,13 @@ Partial Class EmpTimeEntry
         'firstnov
         '
         Me.firstnov.Name = "firstnov"
-        Me.firstnov.Size = New System.Drawing.Size(100, 22)
+        Me.firstnov.Size = New System.Drawing.Size(96, 22)
         Me.firstnov.Text = "1-15"
         '
         'secnov
         '
         Me.secnov.Name = "secnov"
-        Me.secnov.Size = New System.Drawing.Size(100, 22)
+        Me.secnov.Size = New System.Drawing.Size(96, 22)
         Me.secnov.Text = "16-"
         '
         'ToolStripSeparator25
@@ -1705,13 +1707,13 @@ Partial Class EmpTimeEntry
         'firstdec
         '
         Me.firstdec.Name = "firstdec"
-        Me.firstdec.Size = New System.Drawing.Size(100, 22)
+        Me.firstdec.Size = New System.Drawing.Size(96, 22)
         Me.firstdec.Text = "1-15"
         '
         'secdec
         '
         Me.secdec.Name = "secdec"
-        Me.secdec.Size = New System.Drawing.Size(100, 22)
+        Me.secdec.Size = New System.Drawing.Size(96, 22)
         Me.secdec.Text = "16-"
         '
         'ToolStripSeparator26
@@ -1725,7 +1727,7 @@ Partial Class EmpTimeEntry
         Me.nxtyear.Image = CType(resources.GetObject("nxtyear.Image"), System.Drawing.Image)
         Me.nxtyear.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.nxtyear.Name = "nxtyear"
-        Me.nxtyear.Size = New System.Drawing.Size(52, 22)
+        Me.nxtyear.Size = New System.Drawing.Size(50, 22)
         Me.nxtyear.Text = "2016 →"
         '
         'lblmonthyear
@@ -1767,14 +1769,14 @@ Partial Class EmpTimeEntry
         Me.dgvcalendar.AllowUserToResizeRows = False
         Me.dgvcalendar.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvcalendar.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle19.BackColor = System.Drawing.Color.DimGray
-        DataGridViewCellStyle19.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle19.ForeColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        DataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvcalendar.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle36.BackColor = System.Drawing.Color.DimGray
+        DataGridViewCellStyle36.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle36.ForeColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        DataGridViewCellStyle36.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle36.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle36.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvcalendar.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle36
         Me.dgvcalendar.ColumnHeadersHeight = 45
         Me.dgvcalendar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvcalendar.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7})
@@ -1790,10 +1792,10 @@ Partial Class EmpTimeEntry
         '
         'Column1
         '
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle20.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle20.ForeColor = System.Drawing.Color.DimGray
-        Me.Column1.DefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle37.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle37.ForeColor = System.Drawing.Color.DimGray
+        Me.Column1.DefaultCellStyle = DataGridViewCellStyle37
         Me.Column1.HeaderText = "SUNDAY"
         Me.Column1.Name = "Column1"
         Me.Column1.ReadOnly = True
@@ -1801,10 +1803,10 @@ Partial Class EmpTimeEntry
         '
         'Column2
         '
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle21.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle21.ForeColor = System.Drawing.Color.DimGray
-        Me.Column2.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle38.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle38.ForeColor = System.Drawing.Color.DimGray
+        Me.Column2.DefaultCellStyle = DataGridViewCellStyle38
         Me.Column2.HeaderText = "MONDAY"
         Me.Column2.Name = "Column2"
         Me.Column2.ReadOnly = True
@@ -1812,10 +1814,10 @@ Partial Class EmpTimeEntry
         '
         'Column3
         '
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle22.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle22.ForeColor = System.Drawing.Color.DimGray
-        Me.Column3.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle39.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle39.ForeColor = System.Drawing.Color.DimGray
+        Me.Column3.DefaultCellStyle = DataGridViewCellStyle39
         Me.Column3.HeaderText = "TUESDAY"
         Me.Column3.Name = "Column3"
         Me.Column3.ReadOnly = True
@@ -1823,10 +1825,10 @@ Partial Class EmpTimeEntry
         '
         'Column4
         '
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle23.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle23.ForeColor = System.Drawing.Color.DimGray
-        Me.Column4.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle40.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle40.ForeColor = System.Drawing.Color.DimGray
+        Me.Column4.DefaultCellStyle = DataGridViewCellStyle40
         Me.Column4.HeaderText = "WEDNESDAY"
         Me.Column4.Name = "Column4"
         Me.Column4.ReadOnly = True
@@ -1834,10 +1836,10 @@ Partial Class EmpTimeEntry
         '
         'Column5
         '
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle24.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle24.ForeColor = System.Drawing.Color.DimGray
-        Me.Column5.DefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle41.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle41.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle41.ForeColor = System.Drawing.Color.DimGray
+        Me.Column5.DefaultCellStyle = DataGridViewCellStyle41
         Me.Column5.HeaderText = "THURSDAY"
         Me.Column5.Name = "Column5"
         Me.Column5.ReadOnly = True
@@ -1845,10 +1847,10 @@ Partial Class EmpTimeEntry
         '
         'Column6
         '
-        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle25.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle25.ForeColor = System.Drawing.Color.DimGray
-        Me.Column6.DefaultCellStyle = DataGridViewCellStyle25
+        DataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle42.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle42.ForeColor = System.Drawing.Color.DimGray
+        Me.Column6.DefaultCellStyle = DataGridViewCellStyle42
         Me.Column6.HeaderText = "FRIDAY"
         Me.Column6.Name = "Column6"
         Me.Column6.ReadOnly = True
@@ -1856,10 +1858,10 @@ Partial Class EmpTimeEntry
         '
         'Column7
         '
-        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle26.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle26.ForeColor = System.Drawing.Color.DimGray
-        Me.Column7.DefaultCellStyle = DataGridViewCellStyle26
+        DataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle43.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle43.ForeColor = System.Drawing.Color.DimGray
+        Me.Column7.DefaultCellStyle = DataGridViewCellStyle43
         Me.Column7.HeaderText = "SATURDAY"
         Me.Column7.Name = "Column7"
         Me.Column7.ReadOnly = True
@@ -2253,13 +2255,13 @@ Partial Class EmpTimeEntry
         '
         Me.txtFName.BackColor = System.Drawing.Color.White
         Me.txtFName.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtFName.Font = New System.Drawing.Font("Nyala", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtFName.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtFName.ForeColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(149, Byte), Integer), CType(CType(54, Byte), Integer))
         Me.txtFName.Location = New System.Drawing.Point(11, 55)
         Me.txtFName.MaxLength = 250
         Me.txtFName.Name = "txtFName"
         Me.txtFName.ReadOnly = True
-        Me.txtFName.Size = New System.Drawing.Size(516, 26)
+        Me.txtFName.Size = New System.Drawing.Size(516, 28)
         Me.txtFName.TabIndex = 162
         '
         'Label5
@@ -2275,13 +2277,13 @@ Partial Class EmpTimeEntry
         '
         Me.txtEmpID.BackColor = System.Drawing.Color.White
         Me.txtEmpID.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtEmpID.Font = New System.Drawing.Font("Nyala", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtEmpID.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtEmpID.ForeColor = System.Drawing.Color.FromArgb(CType(CType(89, Byte), Integer), CType(CType(89, Byte), Integer), CType(CType(89, Byte), Integer))
         Me.txtEmpID.Location = New System.Drawing.Point(11, 87)
         Me.txtEmpID.MaxLength = 50
         Me.txtEmpID.Name = "txtEmpID"
         Me.txtEmpID.ReadOnly = True
-        Me.txtEmpID.Size = New System.Drawing.Size(516, 20)
+        Me.txtEmpID.Size = New System.Drawing.Size(516, 22)
         Me.txtEmpID.TabIndex = 161
         '
         'Label6
@@ -2941,14 +2943,14 @@ Partial Class EmpTimeEntry
         Me.dgvdatesummary.AllowUserToResizeColumns = False
         Me.dgvdatesummary.AllowUserToResizeRows = False
         Me.dgvdatesummary.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle27.BackColor = System.Drawing.Color.DimGray
-        DataGridViewCellStyle27.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle27.ForeColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
-        DataGridViewCellStyle27.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle27.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvdatesummary.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle27
+        DataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle44.BackColor = System.Drawing.Color.DimGray
+        DataGridViewCellStyle44.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle44.ForeColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        DataGridViewCellStyle44.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle44.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle44.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvdatesummary.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle44
         Me.dgvdatesummary.ColumnHeadersHeight = 45
         Me.dgvdatesummary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvdatesummary.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.col_sun, Me.col_mon, Me.col_tue, Me.col_wed, Me.col_thu, Me.col_fri, Me.col_sat})
@@ -2964,10 +2966,10 @@ Partial Class EmpTimeEntry
         '
         'col_sun
         '
-        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle28.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle28.ForeColor = System.Drawing.Color.DimGray
-        Me.col_sun.DefaultCellStyle = DataGridViewCellStyle28
+        DataGridViewCellStyle45.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle45.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle45.ForeColor = System.Drawing.Color.DimGray
+        Me.col_sun.DefaultCellStyle = DataGridViewCellStyle45
         Me.col_sun.HeaderText = "SUNDAY"
         Me.col_sun.Name = "col_sun"
         Me.col_sun.ReadOnly = True
@@ -2975,10 +2977,10 @@ Partial Class EmpTimeEntry
         '
         'col_mon
         '
-        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle29.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle29.ForeColor = System.Drawing.Color.DimGray
-        Me.col_mon.DefaultCellStyle = DataGridViewCellStyle29
+        DataGridViewCellStyle46.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle46.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle46.ForeColor = System.Drawing.Color.DimGray
+        Me.col_mon.DefaultCellStyle = DataGridViewCellStyle46
         Me.col_mon.HeaderText = "MONDAY"
         Me.col_mon.Name = "col_mon"
         Me.col_mon.ReadOnly = True
@@ -2986,10 +2988,10 @@ Partial Class EmpTimeEntry
         '
         'col_tue
         '
-        DataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle30.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle30.ForeColor = System.Drawing.Color.DimGray
-        Me.col_tue.DefaultCellStyle = DataGridViewCellStyle30
+        DataGridViewCellStyle47.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle47.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle47.ForeColor = System.Drawing.Color.DimGray
+        Me.col_tue.DefaultCellStyle = DataGridViewCellStyle47
         Me.col_tue.HeaderText = "TUESDAY"
         Me.col_tue.Name = "col_tue"
         Me.col_tue.ReadOnly = True
@@ -2997,10 +2999,10 @@ Partial Class EmpTimeEntry
         '
         'col_wed
         '
-        DataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle31.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle31.ForeColor = System.Drawing.Color.DimGray
-        Me.col_wed.DefaultCellStyle = DataGridViewCellStyle31
+        DataGridViewCellStyle48.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle48.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle48.ForeColor = System.Drawing.Color.DimGray
+        Me.col_wed.DefaultCellStyle = DataGridViewCellStyle48
         Me.col_wed.HeaderText = "WEDNESDAY"
         Me.col_wed.Name = "col_wed"
         Me.col_wed.ReadOnly = True
@@ -3008,10 +3010,10 @@ Partial Class EmpTimeEntry
         '
         'col_thu
         '
-        DataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle32.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle32.ForeColor = System.Drawing.Color.DimGray
-        Me.col_thu.DefaultCellStyle = DataGridViewCellStyle32
+        DataGridViewCellStyle49.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle49.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle49.ForeColor = System.Drawing.Color.DimGray
+        Me.col_thu.DefaultCellStyle = DataGridViewCellStyle49
         Me.col_thu.HeaderText = "THURSDAY"
         Me.col_thu.Name = "col_thu"
         Me.col_thu.ReadOnly = True
@@ -3019,10 +3021,10 @@ Partial Class EmpTimeEntry
         '
         'col_fri
         '
-        DataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle33.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle33.ForeColor = System.Drawing.Color.DimGray
-        Me.col_fri.DefaultCellStyle = DataGridViewCellStyle33
+        DataGridViewCellStyle50.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle50.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle50.ForeColor = System.Drawing.Color.DimGray
+        Me.col_fri.DefaultCellStyle = DataGridViewCellStyle50
         Me.col_fri.HeaderText = "FRIDAY"
         Me.col_fri.Name = "col_fri"
         Me.col_fri.ReadOnly = True
@@ -3030,10 +3032,10 @@ Partial Class EmpTimeEntry
         '
         'col_sat
         '
-        DataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
-        DataGridViewCellStyle34.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle34.ForeColor = System.Drawing.Color.DimGray
-        Me.col_sat.DefaultCellStyle = DataGridViewCellStyle34
+        DataGridViewCellStyle51.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft
+        DataGridViewCellStyle51.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle51.ForeColor = System.Drawing.Color.DimGray
+        Me.col_sat.DefaultCellStyle = DataGridViewCellStyle51
         Me.col_sat.HeaderText = "SATURDAY"
         Me.col_sat.Name = "col_sat"
         Me.col_sat.ReadOnly = True
@@ -3061,7 +3063,7 @@ Partial Class EmpTimeEntry
         Me.ToolStrip2.Location = New System.Drawing.Point(6, 65)
         Me.ToolStrip2.Name = "ToolStrip2"
         Me.ToolStrip2.ShowItemToolTips = False
-        Me.ToolStrip2.Size = New System.Drawing.Size(8557, 25)
+        Me.ToolStrip2.Size = New System.Drawing.Size(8803, 25)
         Me.ToolStrip2.TabIndex = 164
         Me.ToolStrip2.Text = "ToolStrip2"
         '
@@ -3071,7 +3073,7 @@ Partial Class EmpTimeEntry
         Me.tsbtnPrev.Image = CType(resources.GetObject("tsbtnPrev.Image"), System.Drawing.Image)
         Me.tsbtnPrev.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnPrev.Name = "tsbtnPrev"
-        Me.tsbtnPrev.Size = New System.Drawing.Size(52, 22)
+        Me.tsbtnPrev.Size = New System.Drawing.Size(50, 22)
         Me.tsbtnPrev.Text = "← 2014"
         '
         'ToolStripSeparator1
@@ -3092,13 +3094,13 @@ Partial Class EmpTimeEntry
         'onehalfjan
         '
         Me.onehalfjan.Name = "onehalfjan"
-        Me.onehalfjan.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfjan.Size = New System.Drawing.Size(96, 22)
         Me.onehalfjan.Text = "1-15"
         '
         'wholejan
         '
         Me.wholejan.Name = "wholejan"
-        Me.wholejan.Size = New System.Drawing.Size(100, 22)
+        Me.wholejan.Size = New System.Drawing.Size(96, 22)
         Me.wholejan.Text = "16-"
         '
         'ToolStripSeparator2
@@ -3119,13 +3121,13 @@ Partial Class EmpTimeEntry
         'onehalffeb
         '
         Me.onehalffeb.Name = "onehalffeb"
-        Me.onehalffeb.Size = New System.Drawing.Size(100, 22)
+        Me.onehalffeb.Size = New System.Drawing.Size(96, 22)
         Me.onehalffeb.Text = "1-15"
         '
         'wholefeb
         '
         Me.wholefeb.Name = "wholefeb"
-        Me.wholefeb.Size = New System.Drawing.Size(100, 22)
+        Me.wholefeb.Size = New System.Drawing.Size(96, 22)
         Me.wholefeb.Text = "16-"
         '
         'ToolStripSeparator3
@@ -3146,13 +3148,13 @@ Partial Class EmpTimeEntry
         'onehalfmar
         '
         Me.onehalfmar.Name = "onehalfmar"
-        Me.onehalfmar.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfmar.Size = New System.Drawing.Size(96, 22)
         Me.onehalfmar.Text = "1-15"
         '
         'wholemar
         '
         Me.wholemar.Name = "wholemar"
-        Me.wholemar.Size = New System.Drawing.Size(100, 22)
+        Me.wholemar.Size = New System.Drawing.Size(96, 22)
         Me.wholemar.Text = "16-"
         '
         'ToolStripSeparator4
@@ -3173,13 +3175,13 @@ Partial Class EmpTimeEntry
         'onehalfapr
         '
         Me.onehalfapr.Name = "onehalfapr"
-        Me.onehalfapr.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfapr.Size = New System.Drawing.Size(96, 22)
         Me.onehalfapr.Text = "1-15"
         '
         'wholeapr
         '
         Me.wholeapr.Name = "wholeapr"
-        Me.wholeapr.Size = New System.Drawing.Size(100, 22)
+        Me.wholeapr.Size = New System.Drawing.Size(96, 22)
         Me.wholeapr.Text = "16-"
         '
         'ToolStripSeparator5
@@ -3200,13 +3202,13 @@ Partial Class EmpTimeEntry
         'onehalfmay
         '
         Me.onehalfmay.Name = "onehalfmay"
-        Me.onehalfmay.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfmay.Size = New System.Drawing.Size(96, 22)
         Me.onehalfmay.Text = "1-15"
         '
         'wholemay
         '
         Me.wholemay.Name = "wholemay"
-        Me.wholemay.Size = New System.Drawing.Size(100, 22)
+        Me.wholemay.Size = New System.Drawing.Size(96, 22)
         Me.wholemay.Text = "16-"
         '
         'ToolStripSeparator6
@@ -3227,13 +3229,13 @@ Partial Class EmpTimeEntry
         'onehalfjun
         '
         Me.onehalfjun.Name = "onehalfjun"
-        Me.onehalfjun.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfjun.Size = New System.Drawing.Size(96, 22)
         Me.onehalfjun.Text = "1-15"
         '
         'wholejun
         '
         Me.wholejun.Name = "wholejun"
-        Me.wholejun.Size = New System.Drawing.Size(100, 22)
+        Me.wholejun.Size = New System.Drawing.Size(96, 22)
         Me.wholejun.Text = "16-"
         '
         'ToolStripSeparator7
@@ -3254,13 +3256,13 @@ Partial Class EmpTimeEntry
         'onehalfjul
         '
         Me.onehalfjul.Name = "onehalfjul"
-        Me.onehalfjul.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfjul.Size = New System.Drawing.Size(96, 22)
         Me.onehalfjul.Text = "1-15"
         '
         'wholejul
         '
         Me.wholejul.Name = "wholejul"
-        Me.wholejul.Size = New System.Drawing.Size(100, 22)
+        Me.wholejul.Size = New System.Drawing.Size(96, 22)
         Me.wholejul.Text = "16-"
         '
         'ToolStripSeparator8
@@ -3281,13 +3283,13 @@ Partial Class EmpTimeEntry
         'onehalfaug
         '
         Me.onehalfaug.Name = "onehalfaug"
-        Me.onehalfaug.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfaug.Size = New System.Drawing.Size(96, 22)
         Me.onehalfaug.Text = "1-15"
         '
         'wholeaug
         '
         Me.wholeaug.Name = "wholeaug"
-        Me.wholeaug.Size = New System.Drawing.Size(100, 22)
+        Me.wholeaug.Size = New System.Drawing.Size(96, 22)
         Me.wholeaug.Text = "16-"
         '
         'ToolStripSeparator9
@@ -3308,13 +3310,13 @@ Partial Class EmpTimeEntry
         'onehalfsep
         '
         Me.onehalfsep.Name = "onehalfsep"
-        Me.onehalfsep.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfsep.Size = New System.Drawing.Size(96, 22)
         Me.onehalfsep.Text = "1-15"
         '
         'wholesep
         '
         Me.wholesep.Name = "wholesep"
-        Me.wholesep.Size = New System.Drawing.Size(100, 22)
+        Me.wholesep.Size = New System.Drawing.Size(96, 22)
         Me.wholesep.Text = "16-"
         '
         'ToolStripSeparator10
@@ -3335,13 +3337,13 @@ Partial Class EmpTimeEntry
         'onehalfoct
         '
         Me.onehalfoct.Name = "onehalfoct"
-        Me.onehalfoct.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfoct.Size = New System.Drawing.Size(96, 22)
         Me.onehalfoct.Text = "1-15"
         '
         'wholeoct
         '
         Me.wholeoct.Name = "wholeoct"
-        Me.wholeoct.Size = New System.Drawing.Size(100, 22)
+        Me.wholeoct.Size = New System.Drawing.Size(96, 22)
         Me.wholeoct.Text = "16-"
         '
         'ToolStripSeparator11
@@ -3362,13 +3364,13 @@ Partial Class EmpTimeEntry
         'onehalfnov
         '
         Me.onehalfnov.Name = "onehalfnov"
-        Me.onehalfnov.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfnov.Size = New System.Drawing.Size(96, 22)
         Me.onehalfnov.Text = "1-15"
         '
         'wholenov
         '
         Me.wholenov.Name = "wholenov"
-        Me.wholenov.Size = New System.Drawing.Size(100, 22)
+        Me.wholenov.Size = New System.Drawing.Size(96, 22)
         Me.wholenov.Text = "16-"
         '
         'ToolStripSeparator12
@@ -3389,13 +3391,13 @@ Partial Class EmpTimeEntry
         'onehalfdec
         '
         Me.onehalfdec.Name = "onehalfdec"
-        Me.onehalfdec.Size = New System.Drawing.Size(100, 22)
+        Me.onehalfdec.Size = New System.Drawing.Size(96, 22)
         Me.onehalfdec.Text = "1-15"
         '
         'wholedec
         '
         Me.wholedec.Name = "wholedec"
-        Me.wholedec.Size = New System.Drawing.Size(100, 22)
+        Me.wholedec.Size = New System.Drawing.Size(96, 22)
         Me.wholedec.Text = "16-"
         '
         'ToolStripSeparator13
@@ -3409,7 +3411,7 @@ Partial Class EmpTimeEntry
         Me.tsbtnNxt.Image = CType(resources.GetObject("tsbtnNxt.Image"), System.Drawing.Image)
         Me.tsbtnNxt.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnNxt.Name = "tsbtnNxt"
-        Me.tsbtnNxt.Size = New System.Drawing.Size(52, 22)
+        Me.tsbtnNxt.Size = New System.Drawing.Size(50, 22)
         Me.tsbtnNxt.Text = "2016 →"
         '
         'Label25
@@ -3514,6 +3516,15 @@ Partial Class EmpTimeEntry
         Me.Button1.Text = "INSERT PAY PERIOD"
         Me.Button1.UseVisualStyleBackColor = True
         Me.Button1.Visible = False
+        '
+        'BackgroundWorker1
+        '
+        '
+        'ToolStripProgressBar1
+        '
+        Me.ToolStripProgressBar1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
+        Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 22)
         '
         'EmpTimeEntry
         '
@@ -3923,4 +3934,6 @@ Partial Class EmpTimeEntry
     Friend WithEvents ShiftEffectiveDateTo As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents IsDayOfRest As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents esBasicPay As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ToolStripProgressBar1 As System.Windows.Forms.ToolStripProgressBar
 End Class

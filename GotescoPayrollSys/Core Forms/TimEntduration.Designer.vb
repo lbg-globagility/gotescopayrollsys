@@ -462,29 +462,26 @@ Partial Class TimEntduration
         Me.cboxDivisions.Name = "cboxDivisions"
         Me.cboxDivisions.Size = New System.Drawing.Size(147, 21)
         Me.cboxDivisions.TabIndex = 285
-        Me.cboxDivisions.Visible = False
         '
         'Label124
         '
         Me.Label124.AutoSize = True
-        Me.Label124.Font = New System.Drawing.Font("Gisha", 14.25!, System.Drawing.FontStyle.Bold)
+        Me.Label124.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
         Me.Label124.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
         Me.Label124.Location = New System.Drawing.Point(218, 382)
         Me.Label124.Name = "Label124"
-        Me.Label124.Size = New System.Drawing.Size(19, 23)
+        Me.Label124.Size = New System.Drawing.Size(18, 24)
         Me.Label124.TabIndex = 286
         Me.Label124.Text = "*"
-        Me.Label124.Visible = False
         '
         'lblgrouping
         '
         Me.lblgrouping.AutoSize = True
-        Me.lblgrouping.Location = New System.Drawing.Point(186, 390)
+        Me.lblgrouping.Location = New System.Drawing.Point(161, 390)
         Me.lblgrouping.Name = "lblgrouping"
-        Me.lblgrouping.Size = New System.Drawing.Size(36, 13)
+        Me.lblgrouping.Size = New System.Drawing.Size(62, 13)
         Me.lblgrouping.TabIndex = 287
-        Me.lblgrouping.Text = "Group"
-        Me.lblgrouping.Visible = False
+        Me.lblgrouping.Text = "Department"
         '
         'DataGridViewTextBoxColumn15
         '

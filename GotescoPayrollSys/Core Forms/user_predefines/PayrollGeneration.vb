@@ -881,7 +881,7 @@ Public Class PayrollGeneration
 
                         Dim ecola_allowance_amount = (ValNoComma(emp_dailytype_allowance.Compute("SUM(TotalAllowanceAmount)",
                                                                                                 str_allow_quer)) _
-                                                      + ValNoComma(emp_monthlytype_allowance.Compute("SUM(TotalAllowanceAmount)",
+                                                      + ValNoComma(emp_monthlytype_allowance.Compute("AllowanceAmount - SUM(DeductAllowance)",
                                                                                                 str_allow_quer)) _
                                                       )
 

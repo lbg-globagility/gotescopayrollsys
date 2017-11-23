@@ -463,6 +463,8 @@ Public Class LeaveForm
 
         If dtempfullname IsNot Nothing Then
 
+            cboxEmployees.DataSource = catchdt
+
             For Each drow As DataRow In dtempfullname.Rows
 
                 If CStr(drow("EmpFullName")) <> Nothing Then
@@ -502,10 +504,6 @@ Public Class LeaveForm
 
             TxtEmployeeFullName1.Text = ""
 
-            cboxEmployees.DisplayMember = "EmpFullName"
-            cboxEmployees.ValueMember = "RowID"
-            cboxEmployees.DataSource = catchdt
-
         End If
 
         TxtEmployeeFullName1.Focus()
@@ -531,7 +529,8 @@ Public Class LeaveForm
     Dim e_rowid As Integer = 0
 
     Private Sub cboxEmployees_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboxEmployees.SelectedIndexChanged,
-                                                                                             cboxEmployees.SelectedValueChanged
+                                                                                             cboxEmployees.SelectedValueChanged,
+                                                                                             cboxEmployees.TextChanged
 
         'e_rowid = Convert.ToInt32(cboxEmployees.SelectedValue)
         e_rowid = Convert.ToInt32(ValNoComma(TxtEmployeeFullName1.RowIDValue))

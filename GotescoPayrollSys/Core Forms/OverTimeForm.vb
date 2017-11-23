@@ -552,7 +552,8 @@ Public Class OverTimeForm
     Dim e_rowid As Integer = 0
 
     Private Sub cboxEmployees_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboxEmployees.SelectedIndexChanged,
-                                                                                             cboxEmployees.SelectedValueChanged
+                                                                                             cboxEmployees.SelectedValueChanged,
+                                                                                             cboxEmployees.TextChanged
 
         'e_rowid = Convert.ToInt32(cboxEmployees.SelectedValue)
         e_rowid = Convert.ToInt32(ValNoComma(TxtEmployeeFullName1.RowIDValue))

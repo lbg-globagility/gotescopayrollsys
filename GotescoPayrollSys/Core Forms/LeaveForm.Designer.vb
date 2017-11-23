@@ -351,7 +351,7 @@ Partial Class LeaveForm
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(139, 398)
+        Me.Label9.Location = New System.Drawing.Point(662, 398)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(31, 17)
         Me.Label9.TabIndex = 267
@@ -360,11 +360,13 @@ Partial Class LeaveForm
         '
         'cboxEmployees
         '
+        Me.cboxEmployees.DisplayMember = "EmpFullName"
         Me.cboxEmployees.FormattingEnabled = True
         Me.cboxEmployees.Location = New System.Drawing.Point(12, 390)
         Me.cboxEmployees.Name = "cboxEmployees"
-        Me.cboxEmployees.Size = New System.Drawing.Size(121, 25)
+        Me.cboxEmployees.Size = New System.Drawing.Size(644, 25)
         Me.cboxEmployees.TabIndex = 266
+        Me.cboxEmployees.ValueMember = "RowID"
         Me.cboxEmployees.Visible = False
         '
         'Label7

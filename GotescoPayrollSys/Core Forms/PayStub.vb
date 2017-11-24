@@ -9229,6 +9229,12 @@ Public Class PayStub
             txtPaidLeave.Text = FormatNumber(ValNoComma(drow("PaidLeaveAmount")), 2)
             txtPaidLeaveHrs.Text = FormatNumber(ValNoComma(drow("PaidLeaveHours")), 2)
 
+            'txtRestDayHrs.Text = FormatNumber(ValNoComma(drow("RestDayPayment")), 2)
+            txtRestDayPay.Text = FormatNumber(ValNoComma(drow("RestDayPayment")), 2)
+            Dim add_restday_pay_formonthly =
+                (ValNoComma(lblsubtot.Text) + ValNoComma(drow("RestDayPayment")))
+            lblsubtot.Text = FormatNumber(add_restday_pay_formonthly, 2)
+
         Next
 
         paystubactual.Dispose()
@@ -9510,6 +9516,12 @@ Public Class PayStub
 
             txtPaidLeave.Text = FormatNumber(ValNoComma(drow("PaidLeaveAmount")), 2)
             txtPaidLeaveHrs.Text = FormatNumber(ValNoComma(drow("PaidLeaveHours")), 2)
+
+            'txtRestDayHrs.Text = FormatNumber(ValNoComma(drow("RestDayPayment")), 2)
+            txtRestDayPay.Text = FormatNumber(ValNoComma(drow("RestDayPayment")), 2)
+            Dim add_restday_pay_formonthly =
+                (ValNoComma(lblsubtot.Text) + ValNoComma(drow("RestDayPayment")))
+            lblsubtot.Text = FormatNumber(add_restday_pay_formonthly, 2)
 
         Next
 

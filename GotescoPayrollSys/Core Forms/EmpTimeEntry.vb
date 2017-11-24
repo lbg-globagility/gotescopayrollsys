@@ -582,6 +582,12 @@ Public Class EmpTimeEntry
             txt_RestDayOvertimeRate.Text = ""
 
             Try
+                If dgvcalendar.CurrentRow Is Nothing Then
+                    dgvcalendar.ClearSelection()
+                    'dgvcalendar.CurrentCell = dgvcalendar.Item("Column1", 0)
+                    curr_CalendCol = "Column1"
+                End If
+
                 If dgvcalendar.CurrentRow.Cells(curr_CalendCol).Value <> Nothing Then
 
                     Dim rowpayrate() As DataRow = dattab.Select("dateday='" & dgvcalendar.CurrentRow.Cells(curr_CalendCol).Value & "'")
@@ -660,10 +666,6 @@ Public Class EmpTimeEntry
                                                    " AND '" & curr_YYYY & "-" & curr_mm & "-01" & _
                                                    "' BETWEEN EffectiveFrom AND COALESCE(EffectiveTo,EffectiveFrom) AND COALESCE(RestDay,0)=1 LIMIT 1;")
                 End Try
-
-                daterecalc = curr_YYYY & "-" & curr_mm & "-" & If(Trim(dgvcalendar.CurrentRow.Cells(curr_CalendCol).Value).Length = 1, _
-                                                                  "0" & dgvcalendar.CurrentRow.Cells(curr_CalendCol).Value, _
-                                                                  dgvcalendar.CurrentRow.Cells(curr_CalendCol).Value)
 
                 'ORDER BY DATEDIFF('" & curr_YYYY & "-" & curr_mm & "-" & etent_day & "',EffectiveFrom)
 
@@ -2799,9 +2801,12 @@ Public Class EmpTimeEntry
         n_TimEntduration.AsPurpose = PayPeriodGUI.PurposeAs.TimeEntry
 
         With n_TimEntduration
-            If .ShowDialog = Windows.Forms.DialogResult.OK Then
+            Dim bool_result = (.ShowDialog = Windows.Forms.DialogResult.OK)
 
-                ToolStripProgressBar1.Visible = True
+            If bool_result Then
+                
+                ToolStripProgressBar1.Visible = bool_result
+                ToolStripProgressBar1.Value = 0
 
                 Dim ted As New TimEntduration
 
@@ -2813,17 +2818,21 @@ Public Class EmpTimeEntry
 
                 ted.quer_empPayFreq = .PayFreqType
 
+                ted.DivisionID = n_TimEntduration.DivisionRowID
+
                 Try
                     ted.bgworkRECOMPUTE_employeeleave.RunWorkerAsync()
                 Catch ex As Exception
                     MsgBox(getErrExcptn(ex, Me.Name))
                 Finally
+                    RemoveHandler ted.bgWork.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
+                    RemoveHandler ted.bgworkRECOMPUTE_employeeleave.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
                     Static once As SByte = True
                     If once Then
                         once = False
-                        AddHandler ted.bgWork.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
-                        AddHandler ted.bgworkRECOMPUTE_employeeleave.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
                     End If
+                    AddHandler ted.bgWork.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
+                    AddHandler ted.bgworkRECOMPUTE_employeeleave.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
                 End Try
 
             End If
@@ -7746,12 +7755,13 @@ Public Class EmpTimeEntry
     End Sub
 
     Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
-        Dim is_100 As Boolean = (e.ProgressPercentage = ToolStripProgressBar1.Maximum)
-
-        ToolStripProgressBar1.Value = CInt(e.ProgressPercentage)
+        Dim is_100 As Boolean = (e.ProgressPercentage >= ToolStripProgressBar1.Maximum)
 
         If is_100 Then
+            ToolStripProgressBar1.Value = ToolStripProgressBar1.Maximum
             ToolStripProgressBar1.Visible = (Not is_100)
+        Else
+            ToolStripProgressBar1.Value = CInt(e.ProgressPercentage)
         End If
 
     End Sub

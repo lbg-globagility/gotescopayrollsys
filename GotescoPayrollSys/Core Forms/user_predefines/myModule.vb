@@ -5,6 +5,7 @@ Imports CrystalDecisions.Shared
 Imports System.IO
 
 Imports Excel = Microsoft.Office.Interop.Excel
+'Imports Microsoft.Office.Interop.Excel
 Imports System.Data.OleDb
 Imports Microsoft.Win32
 

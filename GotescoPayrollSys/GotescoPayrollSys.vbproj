@@ -101,6 +101,10 @@
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="EPPlus, Version=4.1.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.1.1\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EWSoftware.ListControls, Version=2015.1.27.0, Culture=neutral, PublicKeyToken=74660aaee20da427, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\EWSoftware.ListControls.dll</HintPath>
@@ -148,6 +152,7 @@
       <HintPath>bin\Debug\OCRTools.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -181,6 +186,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Core Forms\Common\SqlReaderExtensions.vb" />
+    <Compile Include="Core Forms\DeptManagerPool.Designer.vb">
+      <DependentUpon>DeptManagerPool.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Core Forms\DeptManagerPool.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Core Forms\EmployeeData.Designer.vb">
       <DependentUpon>EmployeeData.vb</DependentUpon>
     </Compile>
@@ -199,6 +211,30 @@
     <Compile Include="Core Forms\PayPeriodGUI.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Core Forms\ReportsList.Designer.vb">
+      <DependentUpon>ReportsList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Core Forms\ReportsList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core Forms\REPORTS\LoanReportByType.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoanReportByType.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core Forms\REPORTS\ThirteenthMonthSummary.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ThirteenthMonthSummary.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core Forms\rpt\LoanReports.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoanReports.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core Forms\rpt\printallpayslipotherformat.vb">
       <DependentUpon>printallpayslipotherformat.rpt</DependentUpon>
       <SubType>Component</SubType>
@@ -211,6 +247,13 @@
       <DependentUpon>printallpayslipotherformat2.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\rpt\ThirteenthMonthPayDetailSummary.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ThirteenthMonthPayDetailSummary.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core Forms\user_predefines\OutputText.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\EmployeeCollection.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\IEmployee.vb" />
     <Compile Include="General Forms\AddListOfValueForm.Designer.vb">
@@ -593,12 +636,6 @@
       <DependentUpon>ReportsForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Core Forms\ReportsForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Core Forms\ReportsList.Designer.vb">
-      <DependentUpon>ReportsList.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Core Forms\ReportsList.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core Forms\REPORTS\Alphalist.vb">
@@ -1012,7 +1049,25 @@
     <Compile Include="Core Forms\viewtotloan.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Reports\Providers\AgencyFeeReportProvider.vb" />
+    <Compile Include="Reports\Providers\AttendanceSheetReportProvider.vb" />
+    <Compile Include="Reports\Providers\EmployeeIdentificationNumberReportProvider.vb" />
+    <Compile Include="Reports\Providers\EmployeeOffenseReportProvider.vb" />
+    <Compile Include="Reports\Providers\EmployeeProfilesReportProvider.vb" />
+    <Compile Include="Reports\Providers\EmploymentRecordReportProvider.vb" />
     <Compile Include="Reports\Providers\IReportProvider.vb" />
+    <Compile Include="Reports\Providers\LeaveLedgerReportProvider.vb" />
+    <Compile Include="Reports\Providers\LoanSummaryByTypeReportProvider.vb" />
+    <Compile Include="Reports\Providers\LoanSummaryReportProvider.vb" />
+    <Compile Include="Reports\Providers\PagIBIGMonthlyReportProvider.vb" />
+    <Compile Include="Reports\Providers\PayrollLedgerReportProvider.vb" />
+    <Compile Include="Reports\Providers\PhilHealthReportProvider.vb" />
+    <Compile Include="Reports\Providers\PostEmploymentClearanceReportProvider.vb" />
+    <Compile Include="Reports\Providers\SalaryIncreaseHistoryReportProvider.vb" />
+    <Compile Include="Reports\Providers\SSSMonthlyReportProvider.vb" />
+    <Compile Include="Reports\Providers\TaxReportProvider.vb" />
+    <Compile Include="Reports\Providers\ThirteenthMonthPayReportProvider.vb" />
+    <Compile Include="Reports\Providers\ThirteenthMonthSummaryReportProvider.vb" />
     <Compile Include="Reports\rpt\CrystalReport1.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1181,6 +1236,9 @@
     <EmbeddedResource Include="AboutAndVersion.resx">
       <DependentUpon>AboutAndVersion.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\DeptManagerPool.resx">
+      <DependentUpon>DeptManagerPool.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\EmployeeData.resx">
       <DependentUpon>EmployeeData.vb</DependentUpon>
     </EmbeddedResource>
@@ -1190,6 +1248,21 @@
     <EmbeddedResource Include="Core Forms\PayPeriodGUI.resx">
       <DependentUpon>PayPeriodGUI.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\ReportsList.resx">
+      <DependentUpon>ReportsList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\REPORTS\LoanReportByType.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>LoanReportByType.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\REPORTS\ThirteenthMonthSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ThirteenthMonthSummary.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\rpt\LoanReports.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>LoanReports.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\rpt\printallpayslipotherformat.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>printallpayslipotherformat.vb</LastGenOutput>
@@ -1197,6 +1270,10 @@
     <EmbeddedResource Include="Core Forms\rpt\printallpayslipotherformat2.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>printallpayslipotherformat2.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\rpt\ThirteenthMonthPayDetailSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ThirteenthMonthPayDetailSummary.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="General Forms\AddListOfValueForm.resx">
       <DependentUpon>AddListOfValueForm.vb</DependentUpon>
@@ -1377,9 +1454,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\ReportsForm.resx">
       <DependentUpon>ReportsForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core Forms\ReportsList.resx">
-      <DependentUpon>ReportsList.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\REPORTS\Alphalist.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

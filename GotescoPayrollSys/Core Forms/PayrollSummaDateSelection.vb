@@ -90,9 +90,35 @@
 
     End Property
 
+    Public Property PayPeriodFromID As Object
+
+        Get
+            Return me_DateFromID
+        End Get
+
+        Set(value As Object)
+            me_DateFromID = value
+
+        End Set
+
+    End Property
+
     Dim me_DateToID = Nothing
 
     Public Property DateToID As Object
+
+        Get
+            Return me_DateToID
+        End Get
+
+        Set(value As Object)
+            me_DateToID = value
+
+        End Set
+
+    End Property
+
+    Public Property PayPeriodToID As Object
 
         Get
             Return me_DateToID
@@ -126,9 +152,35 @@
 
     End Property
 
+    Public Property DateFrom As Object
+
+        Get
+            Return me_DateFromstr
+        End Get
+
+        Set(value As Object)
+            me_DateFromstr = value
+
+        End Set
+
+    End Property
+
     Dim me_DateTostr = Nothing
 
     Public Property DateTostr As Object
+
+        Get
+            Return me_DateTostr
+        End Get
+
+        Set(value As Object)
+            me_DateTostr = value
+
+        End Set
+
+    End Property
+
+    Public Property DateTo As Object
 
         Get
             Return me_DateTostr

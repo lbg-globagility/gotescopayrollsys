@@ -99,6 +99,8 @@ Public Class MySQLExecuteCommand
 
             Try
 
+                dat_adap = New MySqlDataAdapter
+
                 dat_adap.SelectCommand = prepared_mysqlcmd
                 'dat_adap.SelectCommand = Me.PrepareMySQLCommand
 
@@ -178,6 +180,8 @@ Public Class MySQLExecuteCommand
                     .CommandType = CommandType.Text
 
                     .Connection = mysql_connectn
+
+                    .CommandTimeout = 2147483
 
                     'Else
                     '    .CommandType = CommandType.StoredProcedure

@@ -1,5 +1,4 @@
-﻿Imports Acupay
-
+﻿
 Public Class LeaveLedgerReportProvider
     Implements IReportProvider
 

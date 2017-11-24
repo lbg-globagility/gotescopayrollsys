@@ -1,7 +1,10 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.IO
+Imports System.Threading
 
 Public Class TimEntduration
+
+    Property DivisionID As Integer
 
     Dim day_today As Integer = Val(CDate(EmpTimeEntry.today_date).Day)
 
@@ -1257,27 +1260,119 @@ Public Class TimEntduration
 
         'EMPLOYEE_payrollgen_paginate
 
-        Dim n_ExecuteQuery As _
-            New ExecuteQuery("CALL MASS_generate_employeetimeentry('" & orgztnID & "'" & _
-                             ",'" & quer_empPayFreq & "'" & _
-                             ",'" & z_User & "'" & _
-                             ",'" & Format(CDate(selectdayFrom), "yyy-MM-dd") & "'" & _
-                             ",'" & Format(CDate(selectdayTo), "yyy-MM-dd") & "');", 192)
+        'Dim n_ExecuteQuery As _
+        '    New ExecuteQuery("CALL MASS_generate_employeetimeentry('" & orgztnID & "'" & _
+        '                     ",'" & quer_empPayFreq & "'" & _
+        '                     ",'" & z_User & "'" & _
+        '                     ",'" & Format(CDate(selectdayFrom), "yyy-MM-dd") & "'" & _
+        '                     ",'" & Format(CDate(selectdayTo), "yyy-MM-dd") & "', " & DivisionID & ");", 192)
         '",'" & division_selectedvalue & "'" & _
 
+        'Dim sql As New SQL("CALL MASS_generate_employeetimeentry(?og_rowid, ?pay_freq, ?u_rowid, ?day_from, ?day_to, ?dv_rowid);",
+        '                   New Object() {orgztnID,
+        '                                 quer_empPayFreq,
+        '                                 z_User,
+        '                                 Format(CDate(selectdayFrom), "yyy-MM-dd"),
+        '                                 Format(CDate(selectdayFrom), "yyy-MM-dd"),
+        '                                 If(DivisionID = 0, DBNull.Value, DivisionID)})
+
+        'sql.ExecuteQuery()
+
+        'If sql.HasError Then
+        '    Throw sql.ErrorException
+        'Else
 
         'n_ExecuteQuery = _
         '    New ExecuteQuery("CALL RECOMPUTE_agencytotalbill('" & orgztnID & "', '" & dayFrom & "', '" & dayTo & "', '" & z_User & "');")
 
-        Dim parram_arrays = New Object() {orgztnID, dayFrom, dayTo, z_User}
+        'Dim parram_arrays =
+        '    New Object() {orgztnID,
+        '                  dayFrom,
+        '                  dayTo,
+        '                  z_User,
+        '                  If(DivisionID = 0, DBNull.Value, DivisionID)}
 
-        Dim n_ExecSQLProcedure As New  _
-            ExecSQLProcedure("INS_employeeetimeentrygeneration", 192,
-                             parram_arrays)
+        'Dim n_ExecSQLProcedure As New  _
+        '    ExecSQLProcedure("INS_employeeetimeentrygeneration", 192,
+        '                     parram_arrays)
 
-        bgWork.ReportProgress(100, "")
+        'Dim sql1 As New SQL("CALL INS_employeeetimeentrygeneration(?og_rowid, ?day_from, ?day_to, ?u_rowid, ?div_rowid);",
+        '                    parram_arrays)
 
-        Console.WriteLine(100)
+        Dim parram_arrays =
+            New Object() {z_User,
+                          orgztnID,
+                          If(DivisionID = 0, DBNull.Value, DivisionID),
+                          dayFrom,
+                          dayTo}
+
+        'String.Concat("SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid)",
+        Dim str_query As String =
+            String.Concat("SELECT CONCAT('SELECT GENERATE_employeetimeentry(', e.RowID, ', ', e.OrganizationID, ', \'', d.DateValue, '\', ", z_User, ");') `Result`",
+                          ", ?u_rowid `UserRowID`",
+                          " FROM dates d",
+                          " INNER JOIN employee e ON e.OrganizationID=?og_rowid AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')",
+                          " INNER JOIN `position` pos ON pos.RowID=e.PositionID",
+                          " INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(?div_rowid, dv.RowID)",
+                          " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID AND pf.PayFrequencyType='Semi-monthly'",
+                          " WHERE d.DateValue BETWEEN ?day_from AND ?day_to",
+                          " ORDER BY e.RowID, d.DateValue;")
+
+        Dim sql1 As New SQL(str_query,
+                            parram_arrays)
+
+        'sql1.ExecuteQuery()
+        Dim dt As New DataTable
+        dt = sql1.GetFoundRows.Tables(0)
+
+        Dim i = 0
+
+        Dim progress_value As Integer
+
+        Dim row_count = (dt.Rows.Count - 1)
+
+        Dim half_progress = 50
+
+        For Each drow As DataRow In dt.Rows
+
+            Dim _str_quer As String = Convert.ToString(drow("Result"))
+
+            Dim _sql As New SQL(_str_quer)
+
+            _sql.ExecuteQuery()
+
+            If _sql.HasError Then
+                Throw _sql.ErrorException
+            End If
+
+            progress_value =
+                ((i / row_count) * half_progress)
+
+            bgWork.ReportProgress((half_progress + progress_value), String.Empty)
+
+            i += 1
+
+        Next
+
+        Console.WriteLine(progress_value)
+
+        'Dim thrd As New Thread(AddressOf sql1.ExecuteQuery) With {.IsBackground = True}
+
+        'thrd.Start()
+
+        'thrd.Join()
+
+        'If sql1.HasError Then
+        '    Throw sql1.ErrorException
+        'Else
+
+        'bgWork.ReportProgress(100, "")
+
+        'Console.WriteLine(100)
+
+        'End If
+
+        'End If
 
         '*******************************************************************************
 
@@ -1309,9 +1404,13 @@ Public Class TimEntduration
     'BEFORE_LAST_METHOD
     Private Sub bgWork_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgWork.ProgressChanged
 
-        progbar.Value = CType(e.ProgressPercentage, Integer)
+        If progbar.Maximum < CType(e.ProgressPercentage, Integer) Then
+            progbar.Value = progbar.Maximum
+        Else
+            progbar.Value = CType(e.ProgressPercentage, Integer)
+        End If
 
-        MDIPrimaryForm.systemprogressbar.Value = CType(e.ProgressPercentage, Integer)
+        MDIPrimaryForm.systemprogressbar.Value = progbar.Value
 
     End Sub
 
@@ -1493,15 +1592,44 @@ Public Class TimEntduration
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgworkRECOMPUTE_employeeleave.DoWork
 
-        Dim n_ExecuteQuery As New ExecuteQuery("CALL RESET_employeeleave_duplicate('" & orgztnID & "','" & dayFrom & "','" & dayTo & "'" &
-                                               ", '" & quer_empPayFreq & "');", 999999)
+        'Dim n_ExecuteQuery As New ExecuteQuery("CALL RESET_employeeleave_duplicate('" & orgztnID & "','" & dayFrom & "','" & dayTo & "'" &
+        '                                       ", '" & quer_empPayFreq & "', " & DivisionID & ");", 999999)
 
-        bgworkRECOMPUTE_employeeleave.ReportProgress(25, "")
+        Dim sql As New SQL("CALL RESET_employeeleave_duplicate(?og_rowid, ?day_from, ?day_to, ?pay_freq, ?div_rowid);",
+                           New Object() {orgztnID,
+                                         dayFrom,
+                                         dayTo,
+                                         quer_empPayFreq,
+                                         If(DivisionID = 0, DBNull.Value, DivisionID)})
 
-        n_ExecuteQuery =
-            New ExecuteQuery("CALL RECOMPUTE_employeeleave('" & orgztnID & "','" & dayFrom & "','" & dayTo & "');", 999999)
+        sql.ExecuteQuery()
 
-        bgworkRECOMPUTE_employeeleave.ReportProgress(50, "")
+        If sql.HasError Then
+            Throw sql.ErrorException
+        Else
+
+            bgworkRECOMPUTE_employeeleave.ReportProgress(25, "")
+
+            Dim sql1 As New SQL("CALL RECOMPUTE_employeeleave(?og_rowid, ?day_from, ?day_to, ?div_rowid);",
+                                New Object() {orgztnID,
+                                              dayFrom,
+                                              dayTo,
+                                              If(DivisionID = 0, DBNull.Value, DivisionID)})
+
+            sql1.ExecuteQuery()
+
+            If sql1.HasError Then
+                Throw sql1.ErrorException
+            Else
+
+                bgworkRECOMPUTE_employeeleave.ReportProgress(50, "")
+
+            End If
+
+        End If
+
+        'n_ExecuteQuery =
+        '    New ExecuteQuery("CALL RECOMPUTE_employeeleave('" & orgztnID & "','" & dayFrom & "','" & dayTo & "', " & DivisionID & ");", 999999)
 
         Console.WriteLine(50)
 
@@ -1548,7 +1676,7 @@ Public Class TimEntduration
         ElseIf keyData = Keys.Left Then
 
             If Panel1.Enabled Then
-                
+
                 n_link.Name = "linkPrev"
 
                 linkPrev_LinkClicked(linkPrev, New LinkLabelLinkClickedEventArgs(n_link))

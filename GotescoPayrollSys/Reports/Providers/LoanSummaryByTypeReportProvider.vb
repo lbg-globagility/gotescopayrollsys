@@ -14,7 +14,8 @@ Public Class LoanSummaryByTypeReportProvider
             Return
         End If
 
-        Dim dateFrom = CDate(dateSelector.DateFrom)
+        Dim dateFrom = CDate(dateSelector.DateFromstr
+            )
         Dim dateTo = CDate(dateSelector.DateTo)
 
         Dim params = New Object(,) {
@@ -32,7 +33,8 @@ Public Class LoanSummaryByTypeReportProvider
         Dim dateTotTitle = dateTo.ToString("MMMM d, yyyy")
 
         Dim title = DirectCast(report.ReportDefinition.Sections(1).ReportObjects("Text14"), TextObject)
-        title.Text = $"For the period of {dateFromTitle} to {dateTotTitle}"
+        title.Text =
+            String.Concat("For the period of ", dateFromTitle, " to ", dateTotTitle)
 
         Dim crvwr As New CrysRepForm
         crvwr.crysrepvwr.ReportSource = report

@@ -83,7 +83,9 @@ Public Class SQL
         Dim my_exec_cmd As New  _
                 MySQLExecuteCommand(mysql_cmd)
 
-        Dim obj As Object = my_exec_cmd.GetFoundRow
+        'Dim obj As Object = my_exec_cmd.GetFoundRow
+
+        my_exec_cmd.Execute()
 
         AssingError(my_exec_cmd)
 

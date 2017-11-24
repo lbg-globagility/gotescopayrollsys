@@ -1,0 +1,13 @@
+
+# INSERT INTO `position_view` (`PositionID`, `ViewID`, `Creates`, `OrganizationID`, `ReadOnly`, `Updates`, `Deleting`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`)
+
+SELECT pos.RowID
+,v.RowID
+,v.ViewName
+,v.OrganizationID
+FROM `position` pos
+INNER JOIN listofval l ON l.`Type`='Report List' AND l.`Active`='Yes'
+INNER JOIN `view` v ON v.RowID AND v.ViewName=l.DisplayValue
+ORDER BY pos.RowID, v.OrganizationID, v.ViewName
+;
+

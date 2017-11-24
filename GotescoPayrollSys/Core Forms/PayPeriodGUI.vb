@@ -609,7 +609,7 @@ Public Class PayPeriodGUI
 
     Private Sub dgvpaypers_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvpaypers.RowsAdded
 
-        Dim month_column_name As String = "Column12"
+        Dim month_column_name As String = "Column5"
 
         Dim is_even As Boolean = ((dgvpaypers.Item(month_column_name, e.RowIndex).Value Mod 2) = 0)
 
@@ -855,16 +855,29 @@ Public Class PayPeriodGUI
     Private Sub Load_Divisions(sender As Object, e As EventArgs) Handles cboxDivisions.VisibleChanged
 
         If cboxDivisions.Visible Then
+            
+            'Dim str_query As String =
+            '    String.Concat("SELECT dv.RowID",
+            '                  ",dv.Name",
+            '                  " FROM employee e",
+            '                  " INNER JOIN `position` pos ON pos.RowID=e.PositionID",
+            '                  " INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.OrganizationID=e.OrganizationID",
+            '                  " WHERE e.OrganizationID=", orgztnID,
+            '                  " GROUP BY dv.RowID",
+            '                  " HAVING COUNT(e.RowID) > 0;")
 
             Dim str_query As String =
-                String.Concat("SELECT dv.RowID",
-                              ",dv.Name",
-                              " FROM employee e",
-                              " INNER JOIN `position` pos ON pos.RowID=e.PositionID",
-                              " INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.OrganizationID=e.OrganizationID",
-                              " WHERE e.OrganizationID=", orgztnID,
-                              " GROUP BY dv.RowID",
-                              " HAVING COUNT(e.RowID) > 0;")
+                String.Concat("SELECT i.RowID, i.Name",
+                              " FROM (SELECT dv.RowID",
+                              "		  ,dv.Name",
+                              "		  FROM employee e",
+                              "		  INNER JOIN `position` pos ON pos.RowID=e.PositionID",
+                              "		  INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.OrganizationID=e.OrganizationID",
+                              "		  WHERE e.OrganizationID = ", orgztnID,
+                              "		  GROUP BY dv.RowID",
+                              "		  HAVING COUNT(e.RowID) > 0) i",
+                              " UNION",
+                              " SELECT 0 `RowID`, 'All' `Name`;")
 
             Dim sql As New SQL(str_query)
 

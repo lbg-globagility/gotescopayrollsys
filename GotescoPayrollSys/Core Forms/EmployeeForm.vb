@@ -2492,11 +2492,11 @@ Public Class EmployeeForm
                         End Try
 
                         Dim dt_dptmngr As New DataTable
-                        Dim str_quer As String =
-                            String.Concat("SELECT ee.RowID",
-                                          ", CONCAT_WS(', ', ee.LastName, ee.FirstName, ee.MiddleName) `FullName`",
+                        Static str_quer As String =
+                            String.Concat("SELECT pos.RowID",
+                                          ", CONCAT_WS('', pos.PositionName) `FullName`",
                                           " FROM employee e",
-                                          " LEFT JOIN employee ee ON ee.RowID=e.DeptManager",
+                                          " LEFT JOIN `position` pos ON pos.RowID=e.DeptManager",
                                           " WHERE e.RowID = ?e_rowid",
                                           " AND e.OrganizationID = ?og_id;")
                         dt_dptmngr = New SQL(str_quer,
@@ -5738,17 +5738,17 @@ Public Class EmployeeForm
 
     Private Sub btnShowEmployeeList_Click(sender As Object, e As EventArgs) Handles btnShowEmployeeList.Click
 
-        Dim emp_data As New EmployeeData
+        Dim emp_data As New DeptManagerPool 'EmployeeData
 
         If IsDBNull(txtboxDeptMngr.Tag) = False Then
-            emp_data.RowID = txtboxDeptMngr.Tag
+            emp_data.PositionID = txtboxDeptMngr.Tag
         End If
 
         If emp_data.ShowDialog = Windows.Forms.DialogResult.OK Then
 
-            txtboxDeptMngr.Tag = emp_data.RowID
+            txtboxDeptMngr.Tag = emp_data.PositionID
 
-            txtboxDeptMngr.Text = emp_data.FullName
+            txtboxDeptMngr.Text = emp_data.PositionName
 
         End If
 
@@ -5757,7 +5757,7 @@ Public Class EmployeeForm
     Private Sub CreateUserDeptMngr(emp_rowid_as_deptmngr As Object)
 
         Static str_quer_check_if_empdeptmngr_alreadyauser As String =
-            "SELECT EXISTS(SELECT RowID FROM `user` WHERE DeptMngrID = ?emp_rowid_as_deptmngr);"
+            "SELECT EXISTS(SELECT RowID FROM `user` WHERE PositionID = ?emp_rowid_as_deptmngr);"
 
         Dim sql As New SQL(str_quer_check_if_empdeptmngr_alreadyauser,
                            New Object() {emp_rowid_as_deptmngr})
@@ -5781,10 +5781,10 @@ Public Class EmployeeForm
             ElseIf Convert.ToBoolean(sql.GetFoundRow) = False Then
 
                 Dim new_ee =
-                    EmployeeCollection.Lists.Cast(Of IEmployee).Where(Function(ee) ee.RowID = emp_rowid_as_deptmngr)
+                    EmployeeCollection.Lists.Cast(Of IEmployee).Where(Function(ee) ee.PositionID = emp_rowid_as_deptmngr)
 
                 If Convert.ToBoolean(sql.GetFoundRow) = False _
-                   And new_ee.Count > 0 Then
+                    And new_ee.Count > 0 Then
 
                     For Each ee In new_ee
                         emp_uniqueid = ee.EmployeeID
@@ -5793,7 +5793,7 @@ Public Class EmployeeForm
                         midname = ee.MiddleName
                         e_mailadd = ee.EmailAddress
                         positn_rowid = ee.PositionID
-
+                        Exit For
                     Next
 
                     Dim str_ins_user As String =

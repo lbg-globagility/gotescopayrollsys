@@ -42,7 +42,7 @@ Public Class SalaryIncreaseHistoryReportProvider
 
         For Each currentRow As DataRow In data.Rows
             Dim currentEmployeeID = ConvertToType(Of Integer?)(currentRow.Item("DatCol1"))
-            Dim previousEmployeeID = ConvertToType(Of Integer?)(previousRow?.Item("DatCol1"))
+            Dim previousEmployeeID = ConvertToType(Of Integer?)(previousRow.Item("DatCol1"))
 
             If currentEmployeeID = previousEmployeeID Then
                 Dim currentSalary = ConvertToType(Of Decimal)(currentRow("DatCol9"))

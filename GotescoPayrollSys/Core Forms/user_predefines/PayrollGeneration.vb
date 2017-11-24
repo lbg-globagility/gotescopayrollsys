@@ -52,6 +52,10 @@ Public Class PayrollGeneration
 
     Private form_caller As Form
 
+    Private ecoal_dat_set As New DataSet
+    Private str_ecola_forgovt_contrib As String =
+        "CALL ECOLA_forSSScontrib(?og_rowid, ?date_from, ?date_to);"
+
     'ByVal _isorgPHHdeductsched As SByte,
     'ByVal _isorgSSSdeductsched As SByte,
     'ByVal _isorgHDMFdeductsched As SByte,
@@ -72,6 +76,8 @@ Public Class PayrollGeneration
                               " LIMIT 1;")
 
     Private ecola_allowance_name As String = "Ecola"
+
+    Private monthlyemployee_restday_payment As New DataTable
 
     Sub New(ByVal _employee_dattab As DataTable,
                   ByVal _isEndOfMonth As String,
@@ -144,11 +150,9 @@ Public Class PayrollGeneration
         VeryFirstPayPeriodIDOfThisYear = _VeryFirstPayPeriodIDOfThisYear
         withthirteenthmonthpay = _withthirteenthmonthpay
 
-        payWTax = New MySQLQueryToDataTable("SELECT * FROM paywithholdingtax;" &
-                                          "").ResultTable
+        payWTax = New SQL("SELECT * FROM paywithholdingtax;").GetFoundRows.Tables(0)
 
-        filingStatus = New MySQLQueryToDataTable("SELECT * FROM filingstatus;" &
-                                          "").ResultTable
+        filingStatus = New SQL("SELECT * FROM filingstatus;").GetFoundRows.Tables(0)
 
         m_NotifyMainWindow = AddressOf pay_stub_frm.ProgressCounter
 
@@ -179,6 +183,28 @@ Public Class PayrollGeneration
 
         Set(value As Object)
             n_PayrollDateTo = value
+
+            '********************************************
+            Dim params =
+                New Object() {orgztnID,
+                              n_PayrollDateFrom,
+                              n_PayrollDateTo}
+
+            '"CALL GET_employee_allowanceofthisperiod(?og_rowid, ?allw_freq, ?is_taxable, ?date_from, ?date_to);"
+
+            ecoal_dat_set = New DataSet
+
+            ecoal_dat_set = New SQL(str_ecola_forgovt_contrib,
+                                    params).GetFoundRows
+            '**********************
+            monthlyemployee_restday_payment = New DataTable
+            monthlyemployee_restday_payment =
+                New SQL(String.Concat("SELECT i.*",
+                                      " FROM monthlyemployee_restday_payment i",
+                                      " WHERE i.OrganizationID = ?og_rowid",
+                                      " AND i.`Date` BETWEEN ?date_f AND ?date_t;"),
+                        params).GetFoundRows.Tables(0)
+            '********************************************
 
         End Set
 
@@ -216,22 +242,10 @@ Public Class PayrollGeneration
         Dim emp_dailytype_allowance,
             emp_monthlytype_allowance As New DataTable
 
-        Dim params =
-            New Object() {orgztnID,
-                          n_PayrollDateFrom,
-                          n_PayrollDateTo}
+        emp_monthlytype_allowance = ecoal_dat_set.Tables(0)
 
-        Dim str_ecola_forgovt_contrib As String =
-            "CALL ECOLA_forSSScontrib(?og_rowid, ?date_from, ?date_to);"
-        '"CALL GET_employee_allowanceofthisperiod(?og_rowid, ?allw_freq, ?is_taxable, ?date_from, ?date_to);"
+        emp_dailytype_allowance = ecoal_dat_set.Tables(1)
 
-        Dim ecoal_dat_set As New DataSet
-        ecoal_dat_set = New SQL(str_ecola_forgovt_contrib,
-                                params).GetFoundRows
-
-        emp_dailytype_allowance = ecoal_dat_set.Tables(0)
-
-        emp_monthlytype_allowance = ecoal_dat_set.Tables(1)
 
         Dim emptimeentryOfLeave As New DataTable
 
@@ -343,10 +357,6 @@ Public Class PayrollGeneration
         For Each drow As DataRow In employee_dattab.Rows
 
             Try
-
-                If ValNoComma(drow("RowID")) = 57 Then
-                    Dim call_lambert = "Over here"
-                End If
 
                 strPHHdeductsched = drow("PhHealthDeductSched").ToString
                 If drow("PhHealthDeductSched").ToString = "End of the month" Then
@@ -756,6 +766,8 @@ Public Class PayrollGeneration
 
                 Dim prior_ot_amount As Double = 0
 
+                Dim restday_pay_formonthlyemployee As Double = 0
+
                 For Each drowtotdaypay In emptotdaypay
 
                     grossincome = Val(0)
@@ -801,10 +813,6 @@ Public Class PayrollGeneration
                         Dim overall_overtime = (ValNoComma(drowtotdaypay("OvertimeHoursAmount")) _
                                                 + ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")))
 
-                        If Convert.ToInt16(drow("RowID")) = 65 Then
-                            Dim call_me = "Hey! over here"
-                        End If
-
                         If employment_type = "Fixed" Then
                             grossincome = ValNoComma(drowsal("BasicPay"))
 
@@ -825,6 +833,9 @@ Public Class PayrollGeneration
                             monthly_computed_salary = grossincome + grossincome_firsthalf
 
                         ElseIf employment_type = "Monthly" Then
+
+                            restday_pay_formonthlyemployee =
+                                ValNoComma(monthlyemployee_restday_payment.Compute("SUM(AddtlRestDayPayment)", String.Concat("EmployeeID = ", drow("RowID"))))
 
                             If skipgovtdeduct And employment_type = "Monthly" Then
                                 grossincome = ValNoComma(drowtotdaypay("TotalDayPay"))
@@ -871,7 +882,7 @@ Public Class PayrollGeneration
                         'monthly_computed_salary = ValNoComma(prev_empTimeEntry.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) _
                         '                          + ValNoComma(etent_totdaypay.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'"))
 
-                        If employee_ID = 64 Then
+                        If employee_ID = 73 Then
                             Console.WriteLine("Over here")
                         End If
 
@@ -879,13 +890,20 @@ Public Class PayrollGeneration
                             SBConcat.ConcatResult("EmployeeID=", drow("RowID"), "")
                         '                         " AND PartNo='", ecola_allowance_name, "'")
 
-                        Dim ecola_allowance_amount = (ValNoComma(emp_dailytype_allowance.Compute("SUM(TotalAllowanceAmount)",
-                                                                                                str_allow_quer)) _
-                                                      + ValNoComma(emp_monthlytype_allowance.Compute("AllowanceAmount - SUM(DeductAllowance)",
-                                                                                                str_allow_quer)) _
-                                                      )
+                        Dim ecola_semim_amount =
+                            (ValNoComma(emp_monthlytype_allowance.Compute("MIN(AllowanceAmount)", str_allow_quer)))
 
-                        Dim amount_used_to_get_sss_contrib = (monthly_computed_salary + addtl_taxable_daily_allowance + ecola_allowance_amount) '_
+                        Dim ecola_less_deduction =
+                            (ValNoComma(emp_monthlytype_allowance.Compute("SUM(DeductAllowance)", str_allow_quer)))
+
+                        Dim ecola_semim_compute = (ecola_semim_amount - Math.Round(ecola_less_deduction, 2))
+
+                        Dim ecola_allowance_amount = (ValNoComma(emp_dailytype_allowance.Compute("SUM(TotalAllowanceAmount)",
+                                                                                                 str_allow_quer)) _
+                                                      + ecola_semim_compute)
+
+                        'Dim amount_used_to_get_sss_contrib = (monthly_computed_salary + addtl_taxable_daily_allowance + ecola_allowance_amount)
+                        Dim amount_used_to_get_sss_contrib = (monthly_computed_salary + ecola_allowance_amount) '_
                         '+ ValNoComma(emptimeentryOfHoliday.Compute("SUM(HolidayPayAmount)", "EmployeeID = '" & drow("RowID") & "'")) + If(ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")) < 0, 0, ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")))
 
                         Dim sss_ee, sss_er As Double
@@ -1013,7 +1031,7 @@ Public Class PayrollGeneration
                         Dim isMinimumWage = (Math.Round(ValNoComma(drow("EmpRatePerDay")), 2) <= the_MinimumWageAmount)
 
                         Dim _eRowID = Convert.ToInt32(drow("RowID"))
-                        If _eRowID = 8 Then : Dim call_bert = "over here" : End If
+
                         If isEndOfMonth = isorgWTaxdeductsched Then
 
                             emp_taxabsal = grossincome - _
@@ -1082,7 +1100,7 @@ Public Class PayrollGeneration
                                     '                             )
 
                                     'Dim the_values = Split(GET_employeetaxableincome, ";")
-                                    
+
                                     tax_amount =
                                         ((the_taxable_salary - ValNoComma(drowtax("TaxableIncomeFromAmount"))) * ValNoComma(drowtax("ExemptionInExcessAmount"))) _
                                         + ValNoComma(drowtax("ExemptionAmount"))
@@ -1113,7 +1131,13 @@ Public Class PayrollGeneration
 
                             End If
 
-                            the_taxable_salary -= (prior_ot_amount + OTAmount)
+                            Dim ot_to_less = (prior_ot_amount + OTAmount)
+
+                            If (the_taxable_salary - ot_to_less) > 0 Then
+
+                                the_taxable_salary -= ot_to_less
+
+                            End If
 
                             If isMinimumWage Then
 
@@ -1139,7 +1163,7 @@ Public Class PayrollGeneration
                                 For Each fstatrow In sel_filingStatus
                                     fstat_id = fstatrow("RowID")
                                 Next
-                                
+
                                 Dim wtx_sqlquery As String =
                                     String.Concat("SELECT ptx.*",
                                                   " FROM paywithholdingtax ptx",
@@ -1170,7 +1194,7 @@ Public Class PayrollGeneration
                                     '                             )
 
                                     'Dim the_values = Split(GET_employeetaxableincome, ";")
-                                    
+
                                     tax_amount =
                                         ((the_taxable_salary - ValNoComma(drowtax("TaxableIncomeFromAmount"))) * ValNoComma(drowtax("ExemptionInExcessAmount"))) _
                                         + ValNoComma(drowtax("ExemptionAmount"))
@@ -1247,189 +1271,18 @@ Public Class PayrollGeneration
                         '",e.AdditionalVLBalance = 0" &
 
                     End If
-
-                    '#######################################################################################################################################################
-
-                    'Dim max_existing_payroll_ordinalval = ValNoComma(New ExecuteQuery("SELECT pp.OrdinalValue FROM paystub ps INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID WHERE ps.EmployeeID='" & drow("RowID") & "' AND ps.OrganizationID='" & orgztnID & "' ORDER BY ps.PayFromDate DESC,ps.PayToDate DESC LIMIT 1;").Result)
-
-                    ''Dim hasatleastpayroll = ValNoComma(New ExecuteQuery("SELECT EXISTS(SELECT pp.OrdinalValue FROM paystub ps INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID WHERE ps.EmployeeID='" & drow("RowID") & "' AND ps.OrganizationID='" & orgztnID & "' ORDER BY ps.PayFromDate DESC,ps.PayToDate DESC LIMIT 1);").Result)
-
-                    ''If hasatleastpayroll > 0 Then
-                    ''    max_existing_payroll_ordinalval = ValNoComma(New ExecuteQuery("SELECT pp.OrdinalValue FROM paystub ps INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID WHERE ps.EmployeeID='" & drow("RowID") & "' AND ps.OrganizationID='" & orgztnID & "' ORDER BY ps.PayFromDate DESC,ps.PayToDate DESC LIMIT 1;").Result)
-                    ''End If
-
-                    ''accrual of typical leaves
-                    'Dim n_ExecuteQuery As _
-                    '    New ExecuteQuery("UPDATE employee e" &
-                    '                     " INNER JOIN payperiod pp ON pp.RowID='" & n_PayrollRecordID & "' AND pp.TotalGrossSalary=e.PayFrequencyID" &
-                    '                     " AND pp.OrdinalValue > " & max_existing_payroll_ordinalval &
-                    '                     " SET" &
-                    '                     " e.LeaveBalance=pp.OrdinalValue * e.LeavePerPayPeriod" &
-                    '                     ",e.SickLeaveBalance=pp.OrdinalValue * e.SickLeavePerPayPeriod" &
-                    '                     ",e.MaternityLeaveBalance=pp.OrdinalValue * e.MaternityLeavePerPayPeriod" &
-                    '                     ",e.OtherLeaveBalance=pp.OrdinalValue * e.OtherLeavePerPayPeriod" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND (e.DateRegularized <= '" & n_PayrollDateFrom & "'" &
-                    '                     " OR e.DateRegularized <= '" & n_PayrollDateTo & "');")
-                    ''" e.LeaveBalance=e.LeaveBalance + e.LeavePerPayPeriod" &
-                    ''",e.SickLeaveBalance=e.SickLeaveBalance + e.SickLeavePerPayPeriod" &
-                    ''",e.MaternityLeaveBalance=e.MaternityLeaveBalance + e.MaternityLeavePerPayPeriod" &
-                    ''",e.OtherLeaveBalance=e.OtherLeaveBalance + e.OtherLeavePerPayPeriod" &
-
-                    ''" AND e.DateRegularized <= '" & n_PayrollDateFrom & "'" &
-                    ''" OR e.DateRegularized <= '" & n_PayrollDateTo & "');")
-
-                    ''years of service is between 5th and 10th
-                    'n_ExecuteQuery =
-                    '    New ExecuteQuery("UPDATE employee e" &
-                    '                     " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
-                    '                     " SET e.AdditionalVLPerPayPeriod=(e.LeaveTenthYearService / (PAYFREQUENCY_DIVISOR(pf.PayFrequencyType) * MONTH(SUBDATE(MAKEDATE(YEAR(CURDATE()),1), INTERVAL 1 DAY))))" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND IF(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "', '" & n_PayrollDateTo & "', '" & n_PayrollDateFrom & "')" &
-                    '                     " BETWEEN ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) AND ADDDATE(e.DateRegularized,INTERVAL 10 YEAR);")
-                    ''" AND '" & n_PayrollDateFrom & "' BETWEEN ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) AND ADDDATE(e.DateRegularized,INTERVAL 10 YEAR);")
-                    ''IF(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "', '" & n_PayrollDateTo & "', '" & n_PayrollDateFrom & "')
-
-                    'n_ExecuteQuery =
-                    '    New ExecuteQuery("UPDATE employee e" &
-                    '                     " INNER JOIN payperiod pp ON pp.RowID='" & n_PayrollRecordID & "' AND pp.TotalGrossSalary=e.PayFrequencyID" &
-                    '                     " AND pp.OrdinalValue > " & max_existing_payroll_ordinalval &
-                    '                     " SET" &
-                    '                     " e.AdditionalVLBalance=pp.OrdinalValue * e.AdditionalVLPerPayPeriod" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND e.AdditionalVLPerPayPeriod > 0" &
-                    '                     " AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) < (pp.`Year` * 1)" &
-                    '                     " AND '" & n_PayrollDateFrom & "' BETWEEN ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) AND ADDDATE(e.DateRegularized,INTERVAL 10 YEAR);" &
-                    '                     "" &
-                    '                     "UPDATE employee e" &
-                    '                     " INNER JOIN payperiod pp ON pp.RowID='" & n_PayrollRecordID & "' AND pp.TotalGrossSalary=e.PayFrequencyID" &
-                    '                     " AND pp.OrdinalValue > " & max_existing_payroll_ordinalval &
-                    '                     " SET" &
-                    '                     " e.AdditionalVLBalance=e.AdditionalVLBalance + e.AdditionalVLPerPayPeriod" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND e.AdditionalVLPerPayPeriod > 0" &
-                    '                     " AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = pp.`Year`" &
-                    '                     " AND '" & n_PayrollDateTo & "' BETWEEN ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) AND '" & last_enddate_cutoff_thisyear & "';")
-                    ''" AND ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "';")
-                    ''
-                    ''" e.AdditionalVLBalance=e.AdditionalVLBalance + e.AdditionalVLPerPayPeriod" &
-                    ''" AND '" & n_PayrollDateFrom & "' BETWEEN ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) AND ADDDATE(e.DateRegularized,INTERVAL 10 YEAR);")
-
-                    ''years of service is between 10th and 15th
-                    'n_ExecuteQuery =
-                    '    New ExecuteQuery("UPDATE employee e" &
-                    '                     " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
-                    '                     " SET e.AdditionalVLPerPayPeriod=(e.LeaveFifteenthYearService / (PAYFREQUENCY_DIVISOR(pf.PayFrequencyType) * MONTH(SUBDATE(MAKEDATE(YEAR(CURDATE()),1), INTERVAL 1 DAY))))" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND IF(ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR),INTERVAL 1 DAY) BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "', '" & n_PayrollDateTo & "', '" & n_PayrollDateFrom & "')" &
-                    '                     " BETWEEN ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR),INTERVAL 1 DAY) AND ADDDATE(e.DateRegularized,INTERVAL 15 YEAR);")
-                    'n_ExecuteQuery =
-                    '    New ExecuteQuery("UPDATE employee e" &
-                    '                     " INNER JOIN payperiod pp ON pp.RowID='" & n_PayrollRecordID & "' AND pp.TotalGrossSalary=e.PayFrequencyID" &
-                    '                     " AND pp.OrdinalValue > " & max_existing_payroll_ordinalval &
-                    '                     " SET" &
-                    '                     " e.AdditionalVLBalance=pp.OrdinalValue * e.AdditionalVLPerPayPeriod" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND e.AdditionalVLPerPayPeriod > 0" &
-                    '                     " AND YEAR(ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR),INTERVAL 1 DAY)) < pp.`Year`" &
-                    '                     " AND '" & n_PayrollDateFrom & "' BETWEEN ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR),INTERVAL 1 DAY) AND ADDDATE(e.DateRegularized,INTERVAL 15 YEAR);" &
-                    '                     "" &
-                    '                     "UPDATE employee e" &
-                    '                     " INNER JOIN payperiod pp ON pp.RowID='" & n_PayrollRecordID & "' AND pp.TotalGrossSalary=e.PayFrequencyID" &
-                    '                     " AND pp.OrdinalValue > " & max_existing_payroll_ordinalval &
-                    '                     " SET" &
-                    '                     " e.AdditionalVLBalance=e.AdditionalVLBalance + e.AdditionalVLPerPayPeriod" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND e.AdditionalVLPerPayPeriod > 0" &
-                    '                     " AND YEAR(ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR),INTERVAL 1 DAY)) = pp.`Year`" &
-                    '                     " AND '" & n_PayrollDateTo & "' BETWEEN ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR),INTERVAL 1 DAY) AND '" & last_enddate_cutoff_thisyear & "';")
-                    ''" AND ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR),INTERVAL 1 DAY) BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "';")
-                    ''
-                    ''" e.AdditionalVLBalance=e.AdditionalVLBalance + e.AdditionalVLPerPayPeriod" &
-                    ''" AND '" & n_PayrollDateFrom & "' BETWEEN ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR),INTERVAL 1 DAY) AND ADDDATE(e.DateRegularized,INTERVAL 15 YEAR);")
-
-                    ''years of service is greater than 15
-                    'n_ExecuteQuery =
-                    '    New ExecuteQuery("UPDATE employee e" &
-                    '                     " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
-                    '                     " SET e.AdditionalVLPerPayPeriod=(e.LeaveAboveFifteenthYearService / (PAYFREQUENCY_DIVISOR(pf.PayFrequencyType) * MONTH(SUBDATE(MAKEDATE(YEAR(CURDATE()),1), INTERVAL 1 DAY))))" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND IF(ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR),INTERVAL 1 DAY) BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "', '" & n_PayrollDateTo & "', '" & n_PayrollDateFrom & "')" &
-                    '                     " BETWEEN ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR),INTERVAL 1 DAY) AND LAST_DAY(DATE_FORMAT(CURDATE(),'%Y-12-01'));") 'ADDDATE(e.DateRegularized,INTERVAL 99 YEAR)
-                    'n_ExecuteQuery =
-                    '    New ExecuteQuery("UPDATE employee e" &
-                    '                     " INNER JOIN payperiod pp ON pp.RowID='" & n_PayrollRecordID & "' AND pp.TotalGrossSalary=e.PayFrequencyID" &
-                    '                     " AND pp.OrdinalValue > " & max_existing_payroll_ordinalval &
-                    '                     " SET" &
-                    '                     " e.AdditionalVLBalance=pp.OrdinalValue * e.AdditionalVLPerPayPeriod" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND e.AdditionalVLPerPayPeriod > 0" &
-                    '                     " AND YEAR(ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR),INTERVAL 1 DAY)) < pp.`Year`" &
-                    '                     " AND '" & n_PayrollDateFrom & "' BETWEEN ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR),INTERVAL 1 DAY) AND LAST_DAY(DATE_FORMAT(CURDATE(),'%Y-12-01'));" &
-                    '                     "" &
-                    '                     "UPDATE employee e" &
-                    '                     " INNER JOIN payperiod pp ON pp.RowID='" & n_PayrollRecordID & "' AND pp.TotalGrossSalary=e.PayFrequencyID" &
-                    '                     " AND pp.OrdinalValue > " & max_existing_payroll_ordinalval &
-                    '                     " SET" &
-                    '                     " e.AdditionalVLBalance=e.AdditionalVLBalance + e.AdditionalVLPerPayPeriod" &
-                    '                     ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                    '                     ",e.LastUpdBy='" & z_User & "'" &
-                    '                     " WHERE e.RowID='" & drow("RowID") & "'" &
-                    '                     " AND e.OrganizationID='" & orgztnID & "'" &
-                    '                     " AND e.AdditionalVLPerPayPeriod > 0" &
-                    '                     " AND YEAR(ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR),INTERVAL 1 DAY)) = pp.`Year`" &
-                    '                     " AND '" & n_PayrollDateTo & "' BETWEEN ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR),INTERVAL 1 DAY) AND '" & last_enddate_cutoff_thisyear & "';")
-                    ''" AND ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR),INTERVAL 1 DAY) BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "';")
-                    ''
-                    ''" e.AdditionalVLBalance=e.AdditionalVLBalance + e.AdditionalVLPerPayPeriod" &
-                    ''" AND '" & n_PayrollDateFrom & "' BETWEEN ADDDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR),INTERVAL 1 DAY) AND ADDDATE(e.DateRegularized,INTERVAL 99 YEAR);")
-
-                    '#######################################################################################################################################################
-
                 End If
 
-                'Dim procparam_array = New String() {orgztnID,
-                '                                    Convert.ToInt32(drow("RowID")),
-                '                                    z_User,
-                '                                    n_PayrollDateFrom, n_PayrollDateTo}
-                'Dim exec_sqlproc As New  _
-                '    ExecSQLProcedure("LEAVE_gainingbalance", 256,
-                '                     procparam_array)
-                'If exec_sqlproc.HasError Then
-                '    Dim lv_gainbal_haserr As Boolean = True
-                '    Console.WriteLine(String.Concat("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@LEAVE_gainingbalance@PayStub_Class error in employee.RowID", Convert.ToInt32(drow("RowID"))))
-
-                'End If
-
                 Dim thirteenthmoval = Val(0)
-                ''INSUPD_paystub
+
+                Dim _gross, _net As Double
+
+                _gross =
+                    (grossincome + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce + restday_pay_formonthlyemployee)
+
+                _net =
+                    (tot_net_pay + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce + thirteenthmoval + restday_pay_formonthlyemployee)
+
                 Dim n_ExecSQLProcedure = New  _
                     ExecSQLProcedure("INSUPD_paystub_proc", 255,
                                      DBNull.Value,
@@ -1441,8 +1294,8 @@ Public Class PayrollGeneration
                                      DBNull.Value,
                                      n_PayrollDateFrom,
                                      n_PayrollDateTo,
-                                     grossincome + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce,
-                                     tot_net_pay + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce + thirteenthmoval,
+                                     _gross,
+                                     _net,
                                      the_taxable_salary,
                                      pstub_TotalEmpSSS,
                                      tax_amount,
@@ -1547,6 +1400,7 @@ Public Class PayrollGeneration
     End Sub
 
     Sub PayrollGeneration_BackgourndWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
+
         DoProcess()
 
         'For i = 0 To 19

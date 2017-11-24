@@ -1,5 +1,5 @@
 ﻿Option Strict On
-Imports Acupay
+
 Imports CrystalDecisions.CrystalReports.Engine
 
 Public Class LoanSummaryReportProvider

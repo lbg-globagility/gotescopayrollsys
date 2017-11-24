@@ -1,0 +1,37 @@
+
+SET @is_actual = TRUE; # TRUE FALSE
+
+INSERT INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, PayAmount, `Undeclared`)
+
+SELECT ps.OrganizationID
+,CURRENT_TIMESTAMP()
+,ps.CreatedBy
+,CURRENT_TIMESTAMP()
+,ps.CreatedBy
+,ps.RowID
+,p.RowID
+,(@_val := ROUND(IFNULL(i.`AddtlRestDayPayment`, 0.00), 2)) `PayAmount`
+,@is_actual
+FROM product p
+INNER JOIN paystub ps ON ps.RowID IS NOT NULL
+LEFT JOIN (SELECT
+           i.EmployeeID
+           ,(i.ActualPercentage * SUM(i.AddtlRestDayPayment)) `AddtlRestDayPayment`
+			  FROM monthlyemployee_restday_payment i
+			  INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.OrganizationID=i.OrganizationID
+           INNER JOIN paystub ps ON ps.RowID IS NOT NULL AND ps.EmployeeID=e.RowID
+			  WHERE i.`Date` BETWEEN ps.PayFromDate AND ps.PayToDate
+			  AND i.OrganizationID=ps.OrganizationID
+			  GROUP BY ps.RowID) i ON i.`AddtlRestDayPayment` IS NOT NULL AND i.EmployeeID = ps.EmployeeID
+WHERE p.PartNo='Restday pay'
+AND p.OrganizationID=ps.OrganizationID
+ON 
+DUPLICATE 
+KEY 
+UPDATE 
+	LastUpd=CURRENT_TIMESTAMP()
+	,LastUpdBy=ps.CreatedBy
+	,ProductID=p.RowID
+	,PayAmount=@_val
+	,Undeclared=@is_actual
+;

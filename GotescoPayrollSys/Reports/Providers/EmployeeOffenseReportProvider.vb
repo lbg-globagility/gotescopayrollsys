@@ -7,6 +7,8 @@ Public Class EmployeeOffenseReportProvider
 
     Public Property Name As String = "Employee Offenses" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = "Employee's Offenses" Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
         Dim payperiodSelector = New PayrollSummaDateSelection()
 

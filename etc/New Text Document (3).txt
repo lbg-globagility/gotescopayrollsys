@@ -1,10 +1,21 @@
+USE gotescopayrolldb;
 
-# INSERT INTO `position_view` (`PositionID`, `ViewID`, `Creates`, `OrganizationID`, `ReadOnly`, `Updates`, `Deleting`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`)
+SET @curr_time_stamp = CURRENT_TIMESTAMP();
+
+# INSERT INTO `position_view` (`PositionID`, `ViewID`, `OrganizationID`, `ReadOnly`, `Creates`, `Updates`, `Deleting`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`)
 
 SELECT pos.RowID
 ,v.RowID
-,v.ViewName
+# ,v.ViewName
 ,v.OrganizationID
+,'Y'
+,'N'
+,'N'
+,'N'
+,@curr_time_stamp
+,pos.CreatedBy
+,@curr_time_stamp
+,pos.CreatedBy
 FROM `position` pos
 INNER JOIN listofval l ON l.`Type`='Report List' AND l.`Active`='Yes'
 INNER JOIN `view` v ON v.RowID AND v.ViewName=l.DisplayValue

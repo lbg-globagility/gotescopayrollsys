@@ -7,6 +7,8 @@ Public Class LoanSummaryByTypeReportProvider
 
     Public Property Name As String = "Loan Summary by Type" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = String.Empty Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
         Dim dateSelector As New PayrollSummaDateSelection
 

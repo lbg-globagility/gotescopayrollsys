@@ -5,6 +5,8 @@ Public Class PayrollLedgerReportProvider
 
     Public Property Name As String = "Payroll Ledger" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = String.Empty Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
         Dim payperiodSelector = New PayrollSummaDateSelection()
 

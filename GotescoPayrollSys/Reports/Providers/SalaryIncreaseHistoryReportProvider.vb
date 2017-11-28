@@ -7,6 +7,8 @@ Public Class SalaryIncreaseHistoryReportProvider
 
     Public Property Name As String = "Salary Increase History" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = String.Empty Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
         Dim payPeriodSelector As New PayrollSummaDateSelection()
 

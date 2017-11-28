@@ -7,6 +7,8 @@ Public Class AttendanceSheetReportProvider
 
     Public Property Name As String = "Attendance Sheet" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = "Attendance sheet" Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
         Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
 

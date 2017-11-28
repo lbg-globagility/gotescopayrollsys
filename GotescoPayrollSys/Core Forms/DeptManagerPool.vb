@@ -47,7 +47,8 @@
                       " INNER JOIN `position` pos ON pos.RowID=e.PositionID",
                       " INNER JOIN `position` pstn ON pstn.PositionName=pos.PositionName AND pstn.OrganizationID=e.OrganizationID",
                       " INNER JOIN `user` u ON u.DeptMngrID=e.RowID",
-                      " WHERE e.OrganizationID=?og_rowid;")
+                      " WHERE e.OrganizationID=?og_rowid",
+                      " GROUP BY pstn.RowID;")
 
     Private char_enter_key = ChrW(13)
 

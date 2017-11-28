@@ -4,6 +4,8 @@ Public Class AgencyFeeReportProvider
 
     Public Property Name As String = "Agency Fee" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = String.Empty Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
         Throw New NotImplementedException()
     End Sub

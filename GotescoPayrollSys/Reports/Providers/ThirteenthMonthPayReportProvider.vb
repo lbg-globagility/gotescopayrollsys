@@ -7,6 +7,8 @@ Public Class ThirteenthMonthPayReportProvider
 
     Public Property Name As String = "Employee's 13th Month Pay Report" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = String.Empty Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
 
         Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection

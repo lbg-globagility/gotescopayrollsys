@@ -105,17 +105,44 @@
 
     Sub VIEW_position_view(ByVal PositionID As Object)
 
-        Dim params(1, 2) As Object
+        'Dim params(1, 2) As Object
 
-        params(0, 0) = "pv_OrganizationID"
-        params(1, 0) = "pv_PositionID"
+        'params(0, 0) = "pv_OrganizationID"
+        'params(1, 0) = "pv_PositionID"
 
-        params(0, 1) = orgztnID
-        params(1, 1) = PositionID
+        'params(0, 1) = orgztnID
+        'params(1, 1) = PositionID
 
-        EXEC_VIEW_PROCEDURE(params, _
-                             "VIEW_position_view", _
-                             dgvpositview)
+        'EXEC_VIEW_PROCEDURE(params, _
+        '                     "VIEW_position_view", _
+        '                     dgvpositview)
+
+        dgvpositview.Rows.Clear()
+
+        Dim para_meters =
+            New Object() {orgztnID, PositionID}
+
+        Dim sql As New SQL("CALL VIEW_position_view(?og_rowid, ?pos_rowid);",
+                           para_meters)
+
+        Try
+
+            Dim dt As New DataTable
+            dt = sql.GetFoundRows.Tables(0)
+
+            If sql.HasError Then
+                Throw sql.ErrorException
+            Else
+                For Each drow As DataRow In dt.Rows
+                    Dim row_array = drow.ItemArray
+                    dgvpositview.Rows.Add(row_array)
+
+                Next
+            End If
+
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Me.Name))
+        End Try
 
     End Sub
 
@@ -692,6 +719,41 @@
     Protected Overrides Sub OnDeactivate(e As EventArgs)
         Me.KeyPreview = False
         MyBase.OnDeactivate(e)
+    End Sub
+
+    Private Sub dgvpositview_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvpositview.RowsAdded
+
+        Dim is_newrow = dgvpositview.Rows(e.RowIndex).IsNewRow
+
+        Static col_count = dgvpositview.Columns.Count
+
+        Static last_columnindex = (col_count - 1)
+
+        'Dim sel_dgvrow = dgvpositview.Item(dgvpositview.Columns.Item(1).Name, e.RowIndex)
+        Dim sel_dgvrow = dgvpositview.Rows(e.RowIndex)
+
+        If is_newrow _
+            Or dgvpositview.Item(last_columnindex, e.RowIndex).Value = "Report" Then
+
+            'dgvpositview.Item("Column10", e.RowIndex).Style.BackColor = Color.FromArgb(255, 158, 0) '94
+            sel_dgvrow.DefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240)
+
+            sel_dgvrow.DefaultCellStyle.ForeColor = Color.Black
+
+            'dgvposit.Item("Column2", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 158, 0)
+            'dgvpositview.Item("Column10", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 174, 0)
+            sel_dgvrow.DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight
+
+        Else
+
+            sel_dgvrow.DefaultCellStyle.BackColor = Color.White
+
+            sel_dgvrow.DefaultCellStyle.ForeColor = Color.Black
+
+            sel_dgvrow.DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight
+
+        End If
+
     End Sub
 
 End Class

@@ -7,6 +7,8 @@ Public Class PhilHealthReportProvider
 
     Public Property Name As String = "PhilHealth Monthly Report" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = "PhilHealth Monthly Report" Implements IReportProvider.GotescoReportName
+
     Private Sub Run() Implements IReportProvider.Run
         Dim n_selectMonth As New selectMonth
 

@@ -5,6 +5,8 @@ Public Class ThirteenthMonthSummaryReportProvider
 
     Public Property Name As String = "Thirteenth Month Summary" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = "Employee 13th Month Pay Report" Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
         Dim promptYear = New promptyear()
 

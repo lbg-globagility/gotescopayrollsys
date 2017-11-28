@@ -7,6 +7,8 @@ Public Class SSSMonthlyReportProvider
 
     Public Property Name As String = "SSS Monthly Report" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = "SSS Monthly Report" Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
 
         Dim n_selectMonth As New selectMonth

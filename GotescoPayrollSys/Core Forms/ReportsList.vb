@@ -28,13 +28,28 @@ Public Class ReportsList
             New AgencyFeeReportProvider()
         }
 
-        For Each provider In providers
+        Dim _providers =
+            providers.OfType(Of IReportProvider).Where(Function(p) p.GotescoReportName.Length > 0)
+
+
+        Dim str_quer As String =
+            String.Concat("SELECT REPLACE(l.DisplayValue, '\'', '') `DisplayValue`",
+                          " FROM listofval l",
+                          " INNER JOIN `user` u ON u.RowID=", z_User,
+                          " INNER JOIN position_view pv ON pv.PositionID = u.PositionID AND pv.OrganizationID = ", orgztnID, " AND pv.ReadOnly = 'Y'",
+                          " INNER JOIN `view` v ON v.RowID=pv.ViewID AND v.ViewName=l.DisplayValue",
+                          " WHERE l.`Type` = 'Report List';")
+
+        For Each provider In _providers 'providers
             Dim dataTable =
-                New SQL("SELECT l.DisplayValue FROM listofval l WHERE l.`Type` = 'ReportProviders';").GetFoundRows.Tables(0)
-
-            Dim type = provider.GetType().Name
-
-            Dim str_query = OutputText.Display("DisplayValue = '{0}'", type)
+                New SQL(str_quer).GetFoundRows.Tables(0)
+            'New SQL("SELECT REPLACE(l.DisplayValue, '\'', '') `DisplayValue` FROM listofval l WHERE l.`Type` = 'Report List';").GetFoundRows.Tables(0)
+            'New SQL("SELECT l.DisplayValue FROM listofval l WHERE l.`Type` = 'ReportProviders';").GetFoundRows.Tables(0)
+            
+            'Dim type = provider.GetType().Name
+            Dim type = provider.GotescoReportName
+            
+            Dim str_query = OutputText.Display("DisplayValue = '{0}'", type.Replace("'", ""))
 
             Dim found = dataTable.Select(str_query).Count >= 1
 

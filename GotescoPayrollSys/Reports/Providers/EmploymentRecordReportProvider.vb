@@ -4,6 +4,8 @@ Public Class EmploymentRecordReportProvider
 
     Public Property Name As String = "Employees' Employment Record" Implements IReportProvider.Name
 
+    Public Property GotescoReportName As String = "Employee's Employment Record" Implements IReportProvider.GotescoReportName
+
     Public Sub Run() Implements IReportProvider.Run
 
         Dim sql_print_employment_history As _

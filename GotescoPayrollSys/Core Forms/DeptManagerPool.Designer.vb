@@ -25,6 +25,17 @@ Partial Class DeptManagerPool
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(DeptManagerPool))
         Me.dgvEmployee = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.e_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_id = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_lname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_fname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_midname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_type = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_posrowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_posname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_payfreqtype = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.e_dispinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.tsSearch = New System.Windows.Forms.ToolStripTextBox()
@@ -49,17 +60,6 @@ Partial Class DeptManagerPool
         Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_id = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_lname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_fname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_midname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_type = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_posrowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_posname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_payfreqtype = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.e_dispinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvEmployee, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -90,6 +90,83 @@ Partial Class DeptManagerPool
         Me.dgvEmployee.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgvEmployee.Size = New System.Drawing.Size(351, 267)
         Me.dgvEmployee.TabIndex = 2
+        '
+        'e_rowid
+        '
+        Me.e_rowid.HeaderText = "RowID"
+        Me.e_rowid.Name = "e_rowid"
+        Me.e_rowid.ReadOnly = True
+        Me.e_rowid.Visible = False
+        '
+        'e_id
+        '
+        Me.e_id.HeaderText = "ID"
+        Me.e_id.Name = "e_id"
+        Me.e_id.ReadOnly = True
+        Me.e_id.Visible = False
+        '
+        'e_lname
+        '
+        Me.e_lname.HeaderText = "Last Name"
+        Me.e_lname.Name = "e_lname"
+        Me.e_lname.ReadOnly = True
+        Me.e_lname.Visible = False
+        '
+        'e_fname
+        '
+        Me.e_fname.HeaderText = "First Name"
+        Me.e_fname.Name = "e_fname"
+        Me.e_fname.ReadOnly = True
+        Me.e_fname.Visible = False
+        '
+        'e_midname
+        '
+        Me.e_midname.HeaderText = "Middle Name"
+        Me.e_midname.Name = "e_midname"
+        Me.e_midname.ReadOnly = True
+        Me.e_midname.Visible = False
+        '
+        'e_type
+        '
+        Me.e_type.HeaderText = "Type"
+        Me.e_type.Name = "e_type"
+        Me.e_type.ReadOnly = True
+        Me.e_type.Visible = False
+        '
+        'e_status
+        '
+        Me.e_status.HeaderText = "Employment status"
+        Me.e_status.Name = "e_status"
+        Me.e_status.ReadOnly = True
+        Me.e_status.Visible = False
+        '
+        'e_posrowid
+        '
+        Me.e_posrowid.HeaderText = "PositionID"
+        Me.e_posrowid.Name = "e_posrowid"
+        Me.e_posrowid.ReadOnly = True
+        Me.e_posrowid.Visible = False
+        '
+        'e_posname
+        '
+        Me.e_posname.HeaderText = "Position"
+        Me.e_posname.Name = "e_posname"
+        Me.e_posname.ReadOnly = True
+        Me.e_posname.Width = 308
+        '
+        'e_payfreqtype
+        '
+        Me.e_payfreqtype.HeaderText = "Pay frequency"
+        Me.e_payfreqtype.Name = "e_payfreqtype"
+        Me.e_payfreqtype.ReadOnly = True
+        Me.e_payfreqtype.Visible = False
+        '
+        'e_dispinfo
+        '
+        Me.e_dispinfo.HeaderText = "DisplayInfo"
+        Me.e_dispinfo.Name = "e_dispinfo"
+        Me.e_dispinfo.ReadOnly = True
+        Me.e_dispinfo.Visible = False
         '
         'ToolStrip1
         '
@@ -260,83 +337,6 @@ Partial Class DeptManagerPool
         Me.DataGridViewTextBoxColumn11.HeaderText = "DisplayInfo"
         Me.DataGridViewTextBoxColumn11.Name = "DataGridViewTextBoxColumn11"
         Me.DataGridViewTextBoxColumn11.Visible = False
-        '
-        'e_rowid
-        '
-        Me.e_rowid.HeaderText = "RowID"
-        Me.e_rowid.Name = "e_rowid"
-        Me.e_rowid.ReadOnly = True
-        Me.e_rowid.Visible = False
-        '
-        'e_id
-        '
-        Me.e_id.HeaderText = "ID"
-        Me.e_id.Name = "e_id"
-        Me.e_id.ReadOnly = True
-        Me.e_id.Visible = False
-        '
-        'e_lname
-        '
-        Me.e_lname.HeaderText = "Last Name"
-        Me.e_lname.Name = "e_lname"
-        Me.e_lname.ReadOnly = True
-        Me.e_lname.Visible = False
-        '
-        'e_fname
-        '
-        Me.e_fname.HeaderText = "First Name"
-        Me.e_fname.Name = "e_fname"
-        Me.e_fname.ReadOnly = True
-        Me.e_fname.Visible = False
-        '
-        'e_midname
-        '
-        Me.e_midname.HeaderText = "Middle Name"
-        Me.e_midname.Name = "e_midname"
-        Me.e_midname.ReadOnly = True
-        Me.e_midname.Visible = False
-        '
-        'e_type
-        '
-        Me.e_type.HeaderText = "Type"
-        Me.e_type.Name = "e_type"
-        Me.e_type.ReadOnly = True
-        Me.e_type.Visible = False
-        '
-        'e_status
-        '
-        Me.e_status.HeaderText = "Employment status"
-        Me.e_status.Name = "e_status"
-        Me.e_status.ReadOnly = True
-        Me.e_status.Visible = False
-        '
-        'e_posrowid
-        '
-        Me.e_posrowid.HeaderText = "PositionID"
-        Me.e_posrowid.Name = "e_posrowid"
-        Me.e_posrowid.ReadOnly = True
-        Me.e_posrowid.Visible = False
-        '
-        'e_posname
-        '
-        Me.e_posname.HeaderText = "Position"
-        Me.e_posname.Name = "e_posname"
-        Me.e_posname.ReadOnly = True
-        Me.e_posname.Width = 308
-        '
-        'e_payfreqtype
-        '
-        Me.e_payfreqtype.HeaderText = "Pay frequency"
-        Me.e_payfreqtype.Name = "e_payfreqtype"
-        Me.e_payfreqtype.ReadOnly = True
-        Me.e_payfreqtype.Visible = False
-        '
-        'e_dispinfo
-        '
-        Me.e_dispinfo.HeaderText = "DisplayInfo"
-        Me.e_dispinfo.Name = "e_dispinfo"
-        Me.e_dispinfo.ReadOnly = True
-        Me.e_dispinfo.Visible = False
         '
         'DeptManagerPool
         '

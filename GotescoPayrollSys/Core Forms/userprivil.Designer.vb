@@ -49,6 +49,7 @@ Partial Class userprivil
         Me.Column13 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.Column14 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.view_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
@@ -60,6 +61,18 @@ Partial Class userprivil
         Me.tsbtnCloseUserPrivil = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnAudittrail = New System.Windows.Forms.ToolStripButton()
         Me.lblforballoon = New System.Windows.Forms.Label()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvposit, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -75,7 +88,7 @@ Partial Class userprivil
         Me.Label25.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Bold)
         Me.Label25.Location = New System.Drawing.Point(0, 0)
         Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(1235, 21)
+        Me.Label25.Size = New System.Drawing.Size(1358, 21)
         Me.Label25.TabIndex = 108
         Me.Label25.Text = "USER PRIVILEGE"
         Me.Label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -95,7 +108,7 @@ Partial Class userprivil
         Me.dgvposit.MultiSelect = False
         Me.dgvposit.Name = "dgvposit"
         Me.dgvposit.ReadOnly = True
-        Me.dgvposit.Size = New System.Drawing.Size(306, 279)
+        Me.dgvposit.Size = New System.Drawing.Size(306, 554)
         Me.dgvposit.TabIndex = 109
         '
         'Column1
@@ -159,7 +172,7 @@ Partial Class userprivil
         Me.Last.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Last.AutoSize = True
         Me.Last.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Last.Location = New System.Drawing.Point(274, 448)
+        Me.Last.Location = New System.Drawing.Point(274, 723)
         Me.Last.Name = "Last"
         Me.Last.Size = New System.Drawing.Size(44, 15)
         Me.Last.TabIndex = 154
@@ -171,7 +184,7 @@ Partial Class userprivil
         Me.Nxt.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Nxt.AutoSize = True
         Me.Nxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Nxt.Location = New System.Drawing.Point(229, 448)
+        Me.Nxt.Location = New System.Drawing.Point(229, 723)
         Me.Nxt.Name = "Nxt"
         Me.Nxt.Size = New System.Drawing.Size(39, 15)
         Me.Nxt.TabIndex = 153
@@ -183,7 +196,7 @@ Partial Class userprivil
         Me.Prev.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Prev.AutoSize = True
         Me.Prev.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Prev.Location = New System.Drawing.Point(59, 448)
+        Me.Prev.Location = New System.Drawing.Point(59, 723)
         Me.Prev.Name = "Prev"
         Me.Prev.Size = New System.Drawing.Size(38, 15)
         Me.Prev.TabIndex = 152
@@ -195,7 +208,7 @@ Partial Class userprivil
         Me.First.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.First.AutoSize = True
         Me.First.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.First.Location = New System.Drawing.Point(9, 448)
+        Me.First.Location = New System.Drawing.Point(9, 723)
         Me.First.Name = "First"
         Me.First.Size = New System.Drawing.Size(44, 15)
         Me.First.TabIndex = 151
@@ -214,7 +227,7 @@ Partial Class userprivil
         Me.TabControl1.Location = New System.Drawing.Point(324, 24)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(911, 439)
+        Me.TabControl1.Size = New System.Drawing.Size(1034, 714)
         Me.TabControl1.TabIndex = 155
         '
         'TabPage1
@@ -225,32 +238,31 @@ Partial Class userprivil
         Me.TabPage1.Location = New System.Drawing.Point(4, 4)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(903, 406)
+        Me.TabPage1.Size = New System.Drawing.Size(1026, 681)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "USER PRIVILEGE               "
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'Panel1
         '
-        Me.Panel1.AutoScroll = True
-        Me.Panel1.Controls.Add(Me.Label223)
         Me.Panel1.Controls.Add(Me.Label4)
         Me.Panel1.Controls.Add(Me.dgvpositview)
         Me.Panel1.Controls.Add(Me.CheckBox4)
         Me.Panel1.Controls.Add(Me.CheckBox1)
         Me.Panel1.Controls.Add(Me.CheckBox3)
         Me.Panel1.Controls.Add(Me.CheckBox2)
+        Me.Panel1.Controls.Add(Me.Label223)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(3, 28)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(897, 375)
+        Me.Panel1.Size = New System.Drawing.Size(1020, 650)
         Me.Panel1.TabIndex = 6
         '
         'Label223
         '
         Me.Label223.AutoSize = True
         Me.Label223.ForeColor = System.Drawing.Color.White
-        Me.Label223.Location = New System.Drawing.Point(772, 557)
+        Me.Label223.Location = New System.Drawing.Point(775, 557)
         Me.Label223.Name = "Label223"
         Me.Label223.Size = New System.Drawing.Size(37, 13)
         Me.Label223.TabIndex = 372
@@ -269,14 +281,17 @@ Partial Class userprivil
         '
         'dgvpositview
         '
+        Me.dgvpositview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvpositview.BackgroundColor = System.Drawing.Color.White
         Me.dgvpositview.ColumnHeadersHeight = 38
         Me.dgvpositview.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvpositview.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column9, Me.Column10, Me.Column11, Me.Column12, Me.Column13, Me.Column14, Me.view_RowID})
+        Me.dgvpositview.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column9, Me.Column10, Me.Column11, Me.Column12, Me.Column13, Me.Column14, Me.view_RowID, Me.Column15})
         Me.dgvpositview.Location = New System.Drawing.Point(3, 44)
         Me.dgvpositview.MultiSelect = False
         Me.dgvpositview.Name = "dgvpositview"
-        Me.dgvpositview.Size = New System.Drawing.Size(806, 510)
+        Me.dgvpositview.Size = New System.Drawing.Size(806, 603)
         Me.dgvpositview.TabIndex = 0
         '
         'Column9
@@ -330,6 +345,12 @@ Partial Class userprivil
         Me.view_RowID.Name = "view_RowID"
         Me.view_RowID.Visible = False
         '
+        'Column15
+        '
+        Me.Column15.HeaderText = "Column15"
+        Me.Column15.Name = "Column15"
+        Me.Column15.Visible = False
+        '
         'CheckBox4
         '
         Me.CheckBox4.AutoSize = True
@@ -381,7 +402,7 @@ Partial Class userprivil
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNewUserPrivil, Me.tsbtnSaveUserPrivil, Me.tsbtnCancelUserPrivil, Me.tsbtnCloseUserPrivil, Me.tsbtnAudittrail})
         Me.ToolStrip1.Location = New System.Drawing.Point(3, 3)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(897, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1020, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -438,12 +459,85 @@ Partial Class userprivil
         Me.lblforballoon.TabIndex = 156
         Me.lblforballoon.Text = "Label1"
         '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.HeaderText = "RowID"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.Visible = False
+        '
+        'DataGridViewTextBoxColumn2
+        '
+        Me.DataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Position Name"
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.HeaderText = "ParentPositionID"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        Me.DataGridViewTextBoxColumn3.Visible = False
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.HeaderText = "DivisionId"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        Me.DataGridViewTextBoxColumn4.Visible = False
+        '
+        'DataGridViewTextBoxColumn5
+        '
+        Me.DataGridViewTextBoxColumn5.HeaderText = "Created"
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        Me.DataGridViewTextBoxColumn5.Visible = False
+        '
+        'DataGridViewTextBoxColumn6
+        '
+        Me.DataGridViewTextBoxColumn6.HeaderText = "CreatedBy"
+        Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
+        Me.DataGridViewTextBoxColumn6.Visible = False
+        '
+        'DataGridViewTextBoxColumn7
+        '
+        Me.DataGridViewTextBoxColumn7.HeaderText = "LastUpd"
+        Me.DataGridViewTextBoxColumn7.Name = "DataGridViewTextBoxColumn7"
+        Me.DataGridViewTextBoxColumn7.Visible = False
+        '
+        'DataGridViewTextBoxColumn8
+        '
+        Me.DataGridViewTextBoxColumn8.HeaderText = "LastUpdBy"
+        Me.DataGridViewTextBoxColumn8.Name = "DataGridViewTextBoxColumn8"
+        Me.DataGridViewTextBoxColumn8.Visible = False
+        '
+        'DataGridViewTextBoxColumn9
+        '
+        Me.DataGridViewTextBoxColumn9.HeaderText = "RowID"
+        Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
+        Me.DataGridViewTextBoxColumn9.Visible = False
+        Me.DataGridViewTextBoxColumn9.Width = 127
+        '
+        'DataGridViewTextBoxColumn10
+        '
+        Me.DataGridViewTextBoxColumn10.HeaderText = "Form Name"
+        Me.DataGridViewTextBoxColumn10.Name = "DataGridViewTextBoxColumn10"
+        Me.DataGridViewTextBoxColumn10.Width = 250
+        '
+        'DataGridViewTextBoxColumn11
+        '
+        Me.DataGridViewTextBoxColumn11.HeaderText = "view_RowID"
+        Me.DataGridViewTextBoxColumn11.Name = "DataGridViewTextBoxColumn11"
+        Me.DataGridViewTextBoxColumn11.Visible = False
+        '
+        'DataGridViewTextBoxColumn12
+        '
+        Me.DataGridViewTextBoxColumn12.HeaderText = "Column15"
+        Me.DataGridViewTextBoxColumn12.Name = "DataGridViewTextBoxColumn12"
+        Me.DataGridViewTextBoxColumn12.Visible = False
+        '
         'userprivil
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(217, Byte), Integer), CType(CType(183, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1235, 472)
+        Me.ClientSize = New System.Drawing.Size(1358, 747)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Last)
         Me.Controls.Add(Me.Nxt)
@@ -498,6 +592,9 @@ Partial Class userprivil
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents lblforballoon As System.Windows.Forms.Label
+    Friend WithEvents tsbtnAudittrail As System.Windows.Forms.ToolStripButton
+    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents Label223 As System.Windows.Forms.Label
     Friend WithEvents Column9 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Column10 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Column11 As System.Windows.Forms.DataGridViewCheckBoxColumn
@@ -505,7 +602,17 @@ Partial Class userprivil
     Friend WithEvents Column13 As System.Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents Column14 As System.Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents view_RowID As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents tsbtnAudittrail As System.Windows.Forms.ToolStripButton
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label223 As System.Windows.Forms.Label
+    Friend WithEvents Column15 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn1 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn6 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn7 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn8 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn9 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn10 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn11 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn12 As System.Windows.Forms.DataGridViewTextBoxColumn
 End Class

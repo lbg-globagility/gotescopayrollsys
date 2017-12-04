@@ -8244,7 +8244,26 @@ Public Class PayStub
 
                 Dim crvwr As New CrysVwr
 
-                crvwr.CrystalReportViewer1.ReportSource = rptdoc
+                With crvwr
+
+
+                    .PayperiodIDFrom = n_PayrollSummaDateSelection.DateFromID
+
+                    .PayperiodIDTo = n_PayrollSummaDateSelection.DateToID
+
+                    .IsActual = CShort(params(3, 1))
+
+                    .SalaryDistribution =
+                        n_PayrollSummaDateSelection.
+                           cboStringParameter.
+                           Text
+
+
+                    '.SpecificReport = "PayrollSummary"
+
+                    .CrystalReportViewer1.ReportSource = rptdoc
+
+                End With
 
                 Dim papy_string = ""
 
@@ -8268,15 +8287,19 @@ Public Class PayStub
 
                 objText = rptdoc.ReportDefinition.Sections(2).ReportObjects("txtorgaddress")
 
-                Dim obj_value = EXECQUER("SELECT CONCAT(IF(StreetAddress1 IS NULL,'',StreetAddress1)" &
-                                         ",IF(StreetAddress2 IS NULL,'',CONCAT(', ',StreetAddress2))" &
-                                         ",IF(Barangay IS NULL,'',CONCAT(', ',Barangay))" &
-                                         ",IF(CityTown IS NULL,'',CONCAT(', ',CityTown))" &
-                                         ",IF(Country IS NULL,'',CONCAT(', ',Country))" &
-                                         ",IF(State IS NULL,'',CONCAT(', ',State)))" &
-                                         " FROM address a LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID" &
-                                         " WHERE o.RowID=" & orgztnID &
-                                         " AND o.PrimaryAddressID IS NOT NULL;")
+                Dim obj_value = EXECQUER(String.Concat("SELECT CONCAT_WS(', '",
+                                                       ", IF(LENGTH(TRIM(a.StreetAddress1)) = 0, NULL, a.StreetAddress1)",
+                                                       ", IF(LENGTH(TRIM(a.StreetAddress2)) = 0, NULL, a.StreetAddress2)",
+                                                       ", IF(LENGTH(TRIM(a.Barangay)) = 0, NULL, a.Barangay)",
+                                                       ", IF(LENGTH(TRIM(a.CityTown)) = 0, NULL, a.CityTown)",
+                                                       ", IF(LENGTH(TRIM(a.Country)) = 0, NULL, a.Country)",
+                                                       ", IF(LENGTH(TRIM(a.State)) = 0, NULL, a.State)",
+                                                       ") `Result`",
+                                                       " FROM address a",
+                                                       " LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID",
+                                                       " WHERE o.RowID=", orgztnID,
+                                                       " AND o.PrimaryAddressID IS NOT NULL LIMIT 1;"))
+
                 If obj_value = Nothing Then
                 Else
                     objText.Text = CStr(obj_value)

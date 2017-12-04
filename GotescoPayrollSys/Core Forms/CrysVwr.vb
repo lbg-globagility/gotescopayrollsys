@@ -1,5 +1,89 @@
 ﻿Public Class CrysVwr
 
+#Region "Vairable declarations"
+
+    Private pp_rowid_from,
+        pp_rowid_to As Object
+
+    Private is_actual As Boolean = False
+
+    Private sal_distrib As String = "Cash"
+
+    Private specific_rpt As String = String.Empty
+
+#End Region
+
+#Region "Properties"
+
+    Property PayperiodIDFrom As Object
+
+        Get
+            Return pp_rowid_from
+        End Get
+        Set(value As Object)
+            pp_rowid_from = value
+        End Set
+    End Property
+
+    Property PayperiodIDTo As Object
+
+        Get
+            Return pp_rowid_to
+        End Get
+        Set(value As Object)
+            pp_rowid_to = value
+        End Set
+    End Property
+
+    Property IsActual As Boolean
+
+        Get
+            Return is_actual
+        End Get
+        Set(value As Boolean)
+            is_actual = value
+        End Set
+    End Property
+
+    Property SalaryDistribution As String
+
+        Get
+            Return sal_distrib
+        End Get
+        Set(value As String)
+            sal_distrib = value
+        End Set
+    End Property
+
+    Property SpecificReport As String
+
+        Get
+            Return specific_rpt
+        End Get
+        Set(value As String)
+            specific_rpt = value
+        End Set
+    End Property
+
+#End Region
+
+#Region "Event Handlers"
+
+    Protected Overrides Sub OnLoad(e As EventArgs)
+
+        Dim accesible_buttons =
+            Panel1.Controls.Cast(Of Button).Where(Function(btn) Convert.ToString(btn.Tag) = specific_rpt)
+
+        Panel1.Visible = (accesible_buttons.Count > 0)
+
+        For Each obj In accesible_buttons
+            obj.Visible = True
+        Next
+
+        MyBase.OnLoad(e)
+
+    End Sub
+
     Private Sub CrysVwr_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
         If CrystalReportViewer1.ReportSource IsNot Nothing Then
             CrystalReportViewer1.ReportSource.Dispose()
@@ -30,5 +114,28 @@
         End If
 
     End Sub
+
+    Private Sub btnExportPayrollSummaToExcel_Click(sender As Object, e As EventArgs) Handles btnExportPayrollSummaToExcel.Click
+
+        Dim psefr As New PayrollSummaryExcelFormatReportProvider
+
+        With psefr
+            
+            .PayperiodIDFrom = pp_rowid_from
+
+            .PayperiodIDTo = pp_rowid_to
+
+            .IsActual = is_actual
+
+            .SalaryDistribution = sal_distrib
+
+
+            .Run()
+
+        End With
+
+    End Sub
+
+#End Region
 
 End Class

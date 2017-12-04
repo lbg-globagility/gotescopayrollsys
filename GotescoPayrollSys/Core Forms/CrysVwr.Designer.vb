@@ -23,20 +23,42 @@ Partial Class CrysVwr
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.CrystalReportViewer1 = New CrystalDecisions.Windows.Forms.CrystalReportViewer()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnExportPayrollSummaToExcel = New System.Windows.Forms.Button()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'CrystalReportViewer1
         '
         Me.CrystalReportViewer1.ActiveViewIndex = -1
         Me.CrystalReportViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.CrystalReportViewer1.CachedPageNumberPerDoc = 10
         Me.CrystalReportViewer1.Cursor = System.Windows.Forms.Cursors.Default
         Me.CrystalReportViewer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CrystalReportViewer1.Location = New System.Drawing.Point(0, 0)
+        Me.CrystalReportViewer1.Location = New System.Drawing.Point(0, 46)
         Me.CrystalReportViewer1.Name = "CrystalReportViewer1"
-        Me.CrystalReportViewer1.Size = New System.Drawing.Size(793, 285)
+        Me.CrystalReportViewer1.Size = New System.Drawing.Size(793, 239)
         Me.CrystalReportViewer1.TabIndex = 0
         Me.CrystalReportViewer1.ToolPanelView = CrystalDecisions.Windows.Forms.ToolPanelViewType.None
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.btnExportPayrollSummaToExcel)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(793, 46)
+        Me.Panel1.TabIndex = 1
+        Me.Panel1.Visible = False
+        '
+        'btnExportPayrollSummaToExcel
+        '
+        Me.btnExportPayrollSummaToExcel.Location = New System.Drawing.Point(12, 12)
+        Me.btnExportPayrollSummaToExcel.Name = "btnExportPayrollSummaToExcel"
+        Me.btnExportPayrollSummaToExcel.Size = New System.Drawing.Size(183, 23)
+        Me.btnExportPayrollSummaToExcel.TabIndex = 0
+        Me.btnExportPayrollSummaToExcel.Tag = "PayrollSummary"
+        Me.btnExportPayrollSummaToExcel.Text = "Export Payroll summary to MS Excel"
+        Me.btnExportPayrollSummaToExcel.UseVisualStyleBackColor = True
         '
         'CrysVwr
         '
@@ -44,12 +66,16 @@ Partial Class CrysVwr
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(793, 285)
         Me.Controls.Add(Me.CrystalReportViewer1)
+        Me.Controls.Add(Me.Panel1)
         Me.KeyPreview = True
         Me.Name = "CrysVwr"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents CrystalReportViewer1 As CrystalDecisions.Windows.Forms.CrystalReportViewer
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents btnExportPayrollSummaToExcel As System.Windows.Forms.Button
 End Class

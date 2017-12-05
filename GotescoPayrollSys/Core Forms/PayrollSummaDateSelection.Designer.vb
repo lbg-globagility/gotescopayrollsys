@@ -22,8 +22,15 @@ Partial Class PayrollSummaDateSelection
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgvpayperiod = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.Column1 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.btnClose = New System.Windows.Forms.Button()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.linkNxt = New System.Windows.Forms.LinkLabel()
@@ -39,15 +46,10 @@ Partial Class PayrollSummaDateSelection
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.Column1 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         CType(Me.dgvpayperiod, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'dgvpayperiod
@@ -60,14 +62,14 @@ Partial Class PayrollSummaDateSelection
         Me.dgvpayperiod.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvpayperiod.ColumnHeadersHeight = 34
         Me.dgvpayperiod.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column6, Me.Column7, Me.Column4, Me.Column5})
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvpayperiod.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvpayperiod.DefaultCellStyle = DataGridViewCellStyle5
         Me.dgvpayperiod.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgvpayperiod.Location = New System.Drawing.Point(12, 41)
         Me.dgvpayperiod.MultiSelect = False
@@ -75,159 +77,6 @@ Partial Class PayrollSummaDateSelection
         Me.dgvpayperiod.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgvpayperiod.Size = New System.Drawing.Size(421, 358)
         Me.dgvpayperiod.TabIndex = 0
-        '
-        'btnClose
-        '
-        Me.btnClose.Location = New System.Drawing.Point(359, 506)
-        Me.btnClose.Name = "btnClose"
-        Me.btnClose.Size = New System.Drawing.Size(75, 35)
-        Me.btnClose.TabIndex = 9
-        Me.btnClose.Text = "Close"
-        Me.btnClose.UseVisualStyleBackColor = True
-        '
-        'btnOK
-        '
-        Me.btnOK.Location = New System.Drawing.Point(278, 506)
-        Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(75, 35)
-        Me.btnOK.TabIndex = 8
-        Me.btnOK.Text = "OK"
-        Me.btnOK.UseVisualStyleBackColor = True
-        '
-        'linkNxt
-        '
-        Me.linkNxt.AutoSize = True
-        Me.linkNxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.linkNxt.Location = New System.Drawing.Point(395, 402)
-        Me.linkNxt.Name = "linkNxt"
-        Me.linkNxt.Size = New System.Drawing.Size(39, 15)
-        Me.linkNxt.TabIndex = 6
-        Me.linkNxt.TabStop = True
-        Me.linkNxt.Text = "Next>"
-        '
-        'linkPrev
-        '
-        Me.linkPrev.AutoSize = True
-        Me.linkPrev.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.linkPrev.Location = New System.Drawing.Point(10, 402)
-        Me.linkPrev.Name = "linkPrev"
-        Me.linkPrev.Size = New System.Drawing.Size(38, 15)
-        Me.linkPrev.TabIndex = 5
-        Me.linkPrev.TabStop = True
-        Me.linkPrev.Text = "<Prev"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(56, 506)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(36, 13)
-        Me.Label1.TabIndex = 9
-        Me.Label1.Text = "From :"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(66, 528)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(26, 13)
-        Me.Label2.TabIndex = 10
-        Me.Label2.Text = "To :"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(98, 506)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(39, 13)
-        Me.Label3.TabIndex = 11
-        Me.Label3.Text = "Label3"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(98, 528)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(39, 13)
-        Me.Label4.TabIndex = 12
-        Me.Label4.Text = "Label4"
-        '
-        'cboStringParameter
-        '
-        Me.cboStringParameter.FormattingEnabled = True
-        Me.cboStringParameter.Location = New System.Drawing.Point(177, 445)
-        Me.cboStringParameter.Name = "cboStringParameter"
-        Me.cboStringParameter.Size = New System.Drawing.Size(176, 21)
-        Me.cboStringParameter.TabIndex = 7
-        Me.cboStringParameter.Visible = False
-        '
-        'TextBox1
-        '
-        Me.TextBox1.BackColor = System.Drawing.Color.White
-        Me.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox1.Location = New System.Drawing.Point(53, 453)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ReadOnly = True
-        Me.TextBox1.Size = New System.Drawing.Size(100, 13)
-        Me.TextBox1.TabIndex = 13
-        Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.TextBox1.Visible = False
-        '
-        'Label360
-        '
-        Me.Label360.AutoSize = True
-        Me.Label360.Font = New System.Drawing.Font("Gisha", 14.25!, System.Drawing.FontStyle.Bold)
-        Me.Label360.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.Label360.Location = New System.Drawing.Point(152, 445)
-        Me.Label360.Name = "Label360"
-        Me.Label360.Size = New System.Drawing.Size(19, 23)
-        Me.Label360.TabIndex = 520
-        Me.Label360.Text = "*"
-        Me.Label360.Visible = False
-        '
-        'Label5
-        '
-        Me.Label5.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(60, Byte), Integer))
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(0, 547)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(446, 20)
-        Me.Label5.TabIndex = 521
-        Me.Label5.Text = "Note ! Asterisk is a required field"
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.Label5.Visible = False
-        '
-        'TabControl1
-        '
-        Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Font = New System.Drawing.Font("Segoe UI Semibold", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TabControl1.Location = New System.Drawing.Point(12, 3)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(259, 39)
-        Me.TabControl1.TabIndex = 522
-        '
-        'TabPage1
-        '
-        Me.TabPage1.Location = New System.Drawing.Point(4, 39)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(251, 0)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "SEMI-MONTHLY"
-        Me.TabPage1.UseVisualStyleBackColor = True
-        '
-        'TabPage2
-        '
-        Me.TabPage2.Location = New System.Drawing.Point(4, 39)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(251, 0)
-        Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "WEEKLY"
-        Me.TabPage2.UseVisualStyleBackColor = True
         '
         'Column1
         '
@@ -285,22 +134,185 @@ Partial Class PayrollSummaDateSelection
         Me.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.Column5.Visible = False
         '
+        'btnClose
+        '
+        Me.btnClose.Location = New System.Drawing.Point(333, 0)
+        Me.btnClose.Name = "btnClose"
+        Me.btnClose.Size = New System.Drawing.Size(75, 35)
+        Me.btnClose.TabIndex = 9
+        Me.btnClose.Text = "Close"
+        Me.btnClose.UseVisualStyleBackColor = True
+        '
+        'btnOK
+        '
+        Me.btnOK.Location = New System.Drawing.Point(252, 0)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(75, 35)
+        Me.btnOK.TabIndex = 8
+        Me.btnOK.Text = "OK"
+        Me.btnOK.UseVisualStyleBackColor = True
+        '
+        'linkNxt
+        '
+        Me.linkNxt.AutoSize = True
+        Me.linkNxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
+        Me.linkNxt.Location = New System.Drawing.Point(395, 402)
+        Me.linkNxt.Name = "linkNxt"
+        Me.linkNxt.Size = New System.Drawing.Size(39, 15)
+        Me.linkNxt.TabIndex = 6
+        Me.linkNxt.TabStop = True
+        Me.linkNxt.Text = "Next>"
+        '
+        'linkPrev
+        '
+        Me.linkPrev.AutoSize = True
+        Me.linkPrev.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
+        Me.linkPrev.Location = New System.Drawing.Point(10, 402)
+        Me.linkPrev.Name = "linkPrev"
+        Me.linkPrev.Size = New System.Drawing.Size(38, 15)
+        Me.linkPrev.TabIndex = 5
+        Me.linkPrev.TabStop = True
+        Me.linkPrev.Text = "<Prev"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(30, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(36, 13)
+        Me.Label1.TabIndex = 9
+        Me.Label1.Text = "From :"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(40, 22)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(26, 13)
+        Me.Label2.TabIndex = 10
+        Me.Label2.Text = "To :"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(72, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(39, 13)
+        Me.Label3.TabIndex = 11
+        Me.Label3.Text = "Label3"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(72, 22)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(39, 13)
+        Me.Label4.TabIndex = 12
+        Me.Label4.Text = "Label4"
+        '
+        'cboStringParameter
+        '
+        Me.cboStringParameter.FormattingEnabled = True
+        Me.cboStringParameter.Location = New System.Drawing.Point(177, 445)
+        Me.cboStringParameter.Name = "cboStringParameter"
+        Me.cboStringParameter.Size = New System.Drawing.Size(176, 21)
+        Me.cboStringParameter.TabIndex = 7
+        Me.cboStringParameter.Visible = False
+        '
+        'TextBox1
+        '
+        Me.TextBox1.BackColor = System.Drawing.Color.White
+        Me.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox1.Location = New System.Drawing.Point(53, 453)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.ReadOnly = True
+        Me.TextBox1.Size = New System.Drawing.Size(100, 13)
+        Me.TextBox1.TabIndex = 13
+        Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.TextBox1.Visible = False
+        '
+        'Label360
+        '
+        Me.Label360.AutoSize = True
+        Me.Label360.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
+        Me.Label360.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
+        Me.Label360.Location = New System.Drawing.Point(152, 445)
+        Me.Label360.Name = "Label360"
+        Me.Label360.Size = New System.Drawing.Size(18, 24)
+        Me.Label360.TabIndex = 520
+        Me.Label360.Text = "*"
+        Me.Label360.Visible = False
+        '
+        'Label5
+        '
+        Me.Label5.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(60, Byte), Integer))
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 9.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.ForeColor = System.Drawing.Color.White
+        Me.Label5.Location = New System.Drawing.Point(0, 548)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(446, 20)
+        Me.Label5.TabIndex = 521
+        Me.Label5.Text = "Note ! Asterisk is a required field"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Label5.Visible = False
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Controls.Add(Me.TabPage1)
+        Me.TabControl1.Controls.Add(Me.TabPage2)
+        Me.TabControl1.Font = New System.Drawing.Font("Segoe UI Semibold", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TabControl1.Location = New System.Drawing.Point(12, 3)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(259, 39)
+        Me.TabControl1.TabIndex = 522
+        '
+        'TabPage1
+        '
+        Me.TabPage1.Location = New System.Drawing.Point(4, 39)
+        Me.TabPage1.Name = "TabPage1"
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage1.Size = New System.Drawing.Size(251, 0)
+        Me.TabPage1.TabIndex = 0
+        Me.TabPage1.Text = "SEMI-MONTHLY"
+        Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'TabPage2
+        '
+        Me.TabPage2.Location = New System.Drawing.Point(4, 39)
+        Me.TabPage2.Name = "TabPage2"
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage2.Size = New System.Drawing.Size(251, 0)
+        Me.TabPage2.TabIndex = 1
+        Me.TabPage2.Text = "WEEKLY"
+        Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.btnOK)
+        Me.Panel1.Controls.Add(Me.btnClose)
+        Me.Panel1.Controls.Add(Me.Label2)
+        Me.Panel1.Controls.Add(Me.Label3)
+        Me.Panel1.Controls.Add(Me.Label4)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1.Location = New System.Drawing.Point(0, 492)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(446, 56)
+        Me.Panel1.TabIndex = 523
+        '
         'PayrollSummaDateSelection
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(446, 568)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label360)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.cboStringParameter)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.btnClose)
-        Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.linkNxt)
         Me.Controls.Add(Me.linkPrev)
         Me.Controls.Add(Me.dgvpayperiod)
@@ -313,6 +325,8 @@ Partial Class PayrollSummaDateSelection
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         CType(Me.dgvpayperiod, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabControl1.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -340,4 +354,5 @@ Partial Class PayrollSummaDateSelection
     Friend WithEvents Column7 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Column4 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Column5 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
 End Class

@@ -45,10 +45,10 @@ Public Class ReportsList
                 New SQL(str_quer).GetFoundRows.Tables(0)
             'New SQL("SELECT REPLACE(l.DisplayValue, '\'', '') `DisplayValue` FROM listofval l WHERE l.`Type` = 'Report List';").GetFoundRows.Tables(0)
             'New SQL("SELECT l.DisplayValue FROM listofval l WHERE l.`Type` = 'ReportProviders';").GetFoundRows.Tables(0)
-            
+
             'Dim type = provider.GetType().Name
             Dim type = provider.GotescoReportName
-            
+
             Dim str_query = OutputText.Display("DisplayValue = '{0}'", type.Replace("'", ""))
 
             Dim found = dataTable.Select(str_query).Count >= 1

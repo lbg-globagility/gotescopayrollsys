@@ -43,10 +43,22 @@ Public Class AttendanceSheetReportProvider
         objText.Text = orgNam
 
         objText = DirectCast(report.ReportDefinition.Sections(2).ReportObjects("txtorgaddress"), TextObject)
-        objText.Text = CStr(EXECQUER(
-            String.Concat("SELECT CONCAT_WS(', ', a.StreetAddress1, a.StreetAddress2, a.Barangay, a.CityTown, a.Country, a.State) `Result`",
-                          " FROM organization o LEFT JOIN address a ON a.RowID = o.PrimaryAddressID",
-                          " WHERE o.RowID=", orgztnID, ";")))
+
+        Dim org_address As String =
+            New SQL(String.Concat("SELECT CONCAT_WS(', '",
+                                  ", IF(LENGTH(TRIM(a.StreetAddress1)) = 0, NULL, a.StreetAddress1)",
+                                  ", IF(LENGTH(TRIM(a.StreetAddress2)) = 0, NULL, a.StreetAddress2)",
+                                  ", IF(LENGTH(TRIM(a.Barangay)) = 0, NULL, a.Barangay)",
+                                  ", IF(LENGTH(TRIM(a.CityTown)) = 0, NULL, a.CityTown)",
+                                  ", IF(LENGTH(TRIM(a.Country)) = 0, NULL, a.Country)",
+                                  ", IF(LENGTH(TRIM(a.State)) = 0, NULL, a.State)",
+                                  ") `Result`",
+                                  " FROM address a",
+                                  " LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID",
+                                  " WHERE o.RowID=", orgztnID,
+                                  " AND o.PrimaryAddressID IS NOT NULL LIMIT 1;")).GetFoundRow.ToString
+
+        objText.Text = org_address
 
         Dim contactdetails = CStr(EXECQUER("SELECT GROUP_CONCAT(COALESCE(MainPhone,'')" &
                                 ",',',COALESCE(FaxNumber,'')" &

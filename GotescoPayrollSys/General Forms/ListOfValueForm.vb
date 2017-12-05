@@ -238,6 +238,7 @@ Public Class ListOfValueForm
         btnNew.Enabled = True
         cleartextbox()
         isNew = 0
+        btnCancel.Tag = True
     End Sub
 
     Dim dontUpdate As SByte = 0
@@ -299,8 +300,8 @@ Public Class ListOfValueForm
                     EXECQUER("UPDATE listofval lv" &
                              " INNER JOIN listofval lov ON lov.RowID='" & dglistofval.CurrentRow.Cells(c_rowid.Index).Value & "'" &
                              " SET lv.`Type`='" & txtType.Text.Trim & "'" &
-                             ",LastUpd=CURRENT_TIMESTAMP()" &
-                             ",LastUpdBy=" & z_User &
+                             ",lv.LastUpd=CURRENT_TIMESTAMP()" &
+                             ",lv.LastUpdBy=" & z_User &
                              " WHERE lv.`Type`=lov.`Type`;")
 
                 End If
@@ -414,11 +415,13 @@ Public Class ListOfValueForm
     End Sub
 
     Private Sub dglistofval_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dglistofval.CellClick
-        curr_type = String.Empty
+
         fillSelectedValue()
+        curr_type = String.Empty
         grplistval.Enabled = True
         btnSave.Enabled = True
         btnDelete.Enabled = True
+
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged

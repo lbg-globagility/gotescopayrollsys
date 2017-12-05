@@ -39,7 +39,6 @@ Partial Class userprivil
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label223 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.dgvpositview = New System.Windows.Forms.DataGridView()
         Me.Column9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -54,6 +53,7 @@ Partial Class userprivil
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.Label223 = New System.Windows.Forms.Label()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.tsbtnNewUserPrivil = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnSaveUserPrivil = New System.Windows.Forms.ToolStripButton()
@@ -258,16 +258,6 @@ Partial Class userprivil
         Me.Panel1.Size = New System.Drawing.Size(1020, 650)
         Me.Panel1.TabIndex = 6
         '
-        'Label223
-        '
-        Me.Label223.AutoSize = True
-        Me.Label223.ForeColor = System.Drawing.Color.White
-        Me.Label223.Location = New System.Drawing.Point(775, 557)
-        Me.Label223.Name = "Label223"
-        Me.Label223.Size = New System.Drawing.Size(37, 13)
-        Me.Label223.TabIndex = 372
-        Me.Label223.Text = "_____"
-        '
         'Label4
         '
         Me.Label4.AutoSize = True
@@ -281,9 +271,8 @@ Partial Class userprivil
         '
         'dgvpositview
         '
-        Me.dgvpositview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvpositview.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgvpositview.BackgroundColor = System.Drawing.Color.White
         Me.dgvpositview.ColumnHeadersHeight = 38
         Me.dgvpositview.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
@@ -394,6 +383,16 @@ Partial Class userprivil
         Me.CheckBox2.TabIndex = 3
         Me.CheckBox2.Text = "All Updates"
         Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'Label223
+        '
+        Me.Label223.AutoSize = True
+        Me.Label223.ForeColor = System.Drawing.Color.White
+        Me.Label223.Location = New System.Drawing.Point(775, 557)
+        Me.Label223.Name = "Label223"
+        Me.Label223.Size = New System.Drawing.Size(37, 13)
+        Me.Label223.TabIndex = 372
+        Me.Label223.Text = "_____"
         '
         'ToolStrip1
         '

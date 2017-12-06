@@ -1,5 +1,4 @@
 *.v12.suo
 GotescoPayrollSys/obj/Debug/*.*
-GotescoPayrollSys/obj/Debug/*.exe
-GotescoPayrollSys/obj/Debug/*.pdb
-GotescoPayrollSys/obj/Debug/*.manifest
+GotescoPayrollSys/bin/Debug/*.exe
+GotescoPayrollSys/bin/Debug/*.pdb

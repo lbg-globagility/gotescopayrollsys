@@ -38,7 +38,8 @@ Public Class ReportsList
                           " INNER JOIN `user` u ON u.RowID=", z_User,
                           " INNER JOIN position_view pv ON pv.PositionID = u.PositionID AND pv.OrganizationID = ", orgztnID, " AND pv.ReadOnly = 'Y'",
                           " INNER JOIN `view` v ON v.RowID=pv.ViewID AND v.ViewName=l.DisplayValue",
-                          " WHERE l.`Type` = 'Report List';")
+                          " WHERE l.`Type` = 'Report List'",
+                          " AND l.Active = 'Yes';")
 
         For Each provider In _providers 'providers
             Dim dataTable =

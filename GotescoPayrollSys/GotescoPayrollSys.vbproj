@@ -218,6 +218,12 @@
     <Compile Include="Core Forms\ReportsList.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Core Forms\REPORTS\Employee%27s Identification Number.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Employee%27s Identification Number.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core Forms\REPORTS\LoanReportByType.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -709,12 +715,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Employee%27s History of Salary Increase.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Core Forms\REPORTS\Employee%27s Identification Number.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Employee%27s Identification Number.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Core Forms\REPORTS\Employee%27s Offenses.vb">
@@ -1252,6 +1252,10 @@
     <EmbeddedResource Include="Core Forms\ReportsList.resx">
       <DependentUpon>ReportsList.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\REPORTS\Employee%27s Identification Number.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Employee%27s Identification Number.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\REPORTS\LoanReportByType.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>LoanReportByType.vb</LastGenOutput>
@@ -1503,10 +1507,6 @@
     <EmbeddedResource Include="Core Forms\REPORTS\Employee%27s History of Salary Increase.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Employee%27s History of Salary Increase.vb</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core Forms\REPORTS\Employee%27s Identification Number.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Employee%27s Identification Number.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\REPORTS\Employee%27s Offenses.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

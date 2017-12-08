@@ -142,7 +142,7 @@ Public Class LoanSummaryReportProvider
                     objText.Text =
                         String.Concat("for the period of ",
                                       DirectCast(date_from, Date).ToShortDateString,
-                                       " to ",
+                                      " to ",
                                       DirectCast(date_to, Date).ToShortDateString)
 
                     objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtOrganizationName"), TextObject)

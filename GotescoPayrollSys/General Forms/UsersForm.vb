@@ -15,7 +15,7 @@
         Try
             Dim dt As New DataTable
             dt = getDataTableForSQL("Select u.RowID, u.UserID, p.PositionName, u.LastName, u.Firstname, u.MiddleName, u.RowID, u.EmailAddress, u.DeptMngrID from User u " & _
-                                    " inner join Position p on u.PositionID = p.RowID ORDER BY u.Rowid ASC;")
+                                    " inner join Position p on u.PositionID = p.RowID AND u.RowID > 0 ORDER BY u.Rowid ASC;")
 
             'Where u.OrganizationID = '" & Z_OrganizationID & "' And Status = 'Active'
 

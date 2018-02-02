@@ -8,6 +8,8 @@ Public Class MetroLogin
 
     Protected Overrides Sub OnLoad(e As EventArgs)
 
+        Console.WriteLine(DecrypedData("ÌÔÚÑÉººº¶"))
+
         'dbconn()
 
         ReloadOrganization()

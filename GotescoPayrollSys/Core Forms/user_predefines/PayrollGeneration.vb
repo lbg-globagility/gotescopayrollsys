@@ -239,6 +239,16 @@ Public Class PayrollGeneration
 
     Sub DoProcess()
 
+        Static year2018 As Integer = 2018
+
+        Dim strquery_year2018 As String =
+            String.Concat("SELECT EXISTS(SELECT RowID",
+                          " FROM payperiod pp",
+                          " WHERE pp.RowID = ", n_PayrollRecordID,
+                          " AND pp.`Year` = ", year2018, ") `Result`;")
+
+        Dim is_year2018 As Boolean = Convert.ToBoolean(New SQL(strquery_year2018).GetFoundRow)
+
         Dim emp_dailytype_allowance,
             emp_monthlytype_allowance As New DataTable
 
@@ -966,7 +976,16 @@ Public Class PayrollGeneration
 
                         Dim phh_sql As New SQL(phh_contrib_quer, phh_param)
                         Dim caught_result As New DataTable
-                        caught_result = phh_sql.GetFoundRows.Tables(0)
+                        If is_year2018 Then
+                            Dim new2018PhilHealtContrib As String =
+                                String.Concat("SELECT GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", TRUE) `EmployeeShare`",
+                                              ", GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", FALSE) `EmployerShare`",
+                                              ";")
+
+                            caught_result = New SQL(new2018PhilHealtContrib).GetFoundRows.Tables(0)
+                        Else
+                            caught_result = phh_sql.GetFoundRows.Tables(0)
+                        End If
                         For Each phh_row As DataRow In caught_result.Rows
                             phh_ee = phh_row(0)
                             phh_er = phh_row(1)

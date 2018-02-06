@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.DBoard_ForRegularization
+-- Dumping structure for procedure gotescopayrolldb_latest.DBoard_ForRegularization
 DROP PROCEDURE IF EXISTS `DBoard_ForRegularization`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_ForRegularization`(IN `OrganizID` INT)

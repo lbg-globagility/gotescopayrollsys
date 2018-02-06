@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.DEL_specificpaystub
+-- Dumping structure for procedure gotescopayrolldb_latest.DEL_specificpaystub
 DROP PROCEDURE IF EXISTS `DEL_specificpaystub`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DEL_specificpaystub`(IN `paystub_RowID` INT)

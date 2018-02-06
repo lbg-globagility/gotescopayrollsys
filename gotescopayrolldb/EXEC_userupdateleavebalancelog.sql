@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.EXEC_userupdateleavebalancelog
+-- Dumping structure for procedure gotescopayrolldb_latest.EXEC_userupdateleavebalancelog
 DROP PROCEDURE IF EXISTS `EXEC_userupdateleavebalancelog`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `EXEC_userupdateleavebalancelog`(IN `OrganizID` INT, IN `UserRowID` INT)

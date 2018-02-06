@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.INS_employeeetimeentrygeneration
+-- Dumping structure for procedure gotescopayrolldb_latest.INS_employeeetimeentrygeneration
 DROP PROCEDURE IF EXISTS `INS_employeeetimeentrygeneration`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `INS_employeeetimeentrygeneration`(IN `ogid` INT, IN `datefrom` DATE, IN `dateto` DATE, IN `u_rowid` INT)

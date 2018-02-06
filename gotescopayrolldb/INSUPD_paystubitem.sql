@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INSUPD_paystubitem
+-- Dumping structure for function gotescopayrolldb_latest.INSUPD_paystubitem
 DROP FUNCTION IF EXISTS `INSUPD_paystubitem`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_paystubitem`(`pstubitm_RowID` INT, `pstubitm_OrganizationID` INT, `pstubitm_CreatedBy` INT, `pstubitm_LastUpdBy` INT, `pstubitm_PayStubID` INT, `pstubitm_ProductID` INT, `pstubitm_PayAmount` DECIMAL(11,2)) RETURNS int(11)

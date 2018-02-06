@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.PROCEDURE_CALLER
+-- Dumping structure for procedure gotescopayrolldb_latest.PROCEDURE_CALLER
 DROP PROCEDURE IF EXISTS `PROCEDURE_CALLER`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PROCEDURE_CALLER`(IN `user_query` VARCHAR(64))

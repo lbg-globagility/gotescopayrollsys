@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INS_audittrail_RETRowID
+-- Dumping structure for function gotescopayrolldb_latest.INS_audittrail_RETRowID
 DROP FUNCTION IF EXISTS `INS_audittrail_RETRowID`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INS_audittrail_RETRowID`(`au_CreatedBy` INT, `au_LastUpdBy` INT, `au_OrganizationID` INT, `au_ViewID` INT, `au_FieldChanged` VARCHAR(200), `au_ChangedRowID` VARCHAR(50), `au_OldValue` VARCHAR(200), `au_NewValue` VARCHAR(200), `au_ActionPerformed` VARCHAR(50)) RETURNS int(11)

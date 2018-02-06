@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.VIEW_esal_dattab
+-- Dumping structure for procedure gotescopayrolldb_latest.VIEW_esal_dattab
 DROP PROCEDURE IF EXISTS `VIEW_esal_dattab`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_esal_dattab`(IN `OrganizID` INT, IN `PayPerFrom` DATE, IN `PayPerTo` DATE)

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.I_ProdImport
+-- Dumping structure for procedure gotescopayrolldb_latest.I_ProdImport
 DROP PROCEDURE IF EXISTS `I_ProdImport`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `I_ProdImport`(IN `I_Name` VARCHAR(200), IN `I_OrganizationID` INT(11), IN `I_PartNo` VARCHAR(200), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_Category` VARCHAR(50), IN `I_Catalog` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_UnitPrice` DECIMAL(10,2), IN `I_ReorderPoint` INT(10), IN `I_UnitOfMeasure` VARCHAR(50)

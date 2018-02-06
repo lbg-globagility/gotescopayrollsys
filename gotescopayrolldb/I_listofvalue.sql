@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.I_listofvalue
+-- Dumping structure for procedure gotescopayrolldb_latest.I_listofvalue
 DROP PROCEDURE IF EXISTS `I_listofvalue`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `I_listofvalue`(IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(10), IN `I_DisplayValue` VARCHAR(100), IN `I_LIC` VARCHAR(100), IN `I_Type` VARCHAR(50), IN `I_ParentLIC` VARCHAR(100), IN `I_Status` VARCHAR(50), IN `I_Description` VARCHAR(2000), IN `I_SystemAccountFlg` CHAR(10), IN `I_DisplayAccountFlg` CHAR(10), IN `I_OrderBy` INT(10))

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.PAYTODATE_OF_NoOfPayPeriod
+-- Dumping structure for function gotescopayrolldb_latest.PAYTODATE_OF_NoOfPayPeriod
 DROP FUNCTION IF EXISTS `PAYTODATE_OF_NoOfPayPeriod`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `PAYTODATE_OF_NoOfPayPeriod`(`EmpLoanEffectiveDateFrom` DATE, `EmpLoanNoOfPayPeriod` INT, `Employee_RowID` INT, `LoanDeductSched` VARCHAR(100)) RETURNS date

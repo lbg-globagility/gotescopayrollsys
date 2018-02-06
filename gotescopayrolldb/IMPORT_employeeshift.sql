@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.IMPORT_employeeshift
+-- Dumping structure for procedure gotescopayrolldb_latest.IMPORT_employeeshift
 DROP PROCEDURE IF EXISTS `IMPORT_employeeshift`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `IMPORT_employeeshift`(IN `i_EmployeeID` VARCHAR(50), IN `OrganizID` INT, IN `CreatedLastUpdBy` INT, IN `i_TimeFrom` TIME, IN `i_TimeTo` TIME, IN `i_DateFrom` DATE, IN `i_DateTo` DATE, IN `i_SchedType` TEXT)

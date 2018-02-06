@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.INSUPD_paystub_proc
+-- Dumping structure for procedure gotescopayrolldb_latest.INSUPD_paystub_proc
 DROP PROCEDURE IF EXISTS `INSUPD_paystub_proc`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystub_proc`(IN `pstub_RowID` INT, IN `pstub_OrganizationID` INT, IN `pstub_CreatedBy` INT, IN `pstub_LastUpdBy` INT, IN `pstub_PayPeriodID` INT, IN `pstub_EmployeeID` INT, IN `pstub_TimeEntryID` INT, IN `pstub_PayFromDate` DATE, IN `pstub_PayToDate` DATE, IN `pstub_TotalGrossSalary` DECIMAL(10,2), IN `pstub_TotalNetSalary` DECIMAL(10,2), IN `pstub_TotalTaxableSalary` DECIMAL(10,2), IN `pstub_TotalEmpSSS` DECIMAL(10,2), IN `pstub_TotalEmpWithholdingTax` DECIMAL(10,2), IN `pstub_TotalCompSSS` DECIMAL(10,2), IN `pstub_TotalEmpPhilhealth` DECIMAL(10,2), IN `pstub_TotalCompPhilhealth` DECIMAL(10,2), IN `pstub_TotalEmpHDMF` DECIMAL(10,2), IN `pstub_TotalCompHDMF` DECIMAL(10,2), IN `pstub_TotalVacationDaysLeft` DECIMAL(10,2), IN `pstub_TotalLoans` DECIMAL(10,2), IN `pstub_TotalBonus` DECIMAL(10,2), IN `pstub_TotalAllowance` DECIMAL(10,2), IN `pstub_NondeductibleTotalLoans` DECIMAL(10,2))

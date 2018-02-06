@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INSUPD_employeeattachments
+-- Dumping structure for function gotescopayrolldb_latest.INSUPD_employeeattachments
 DROP FUNCTION IF EXISTS `INSUPD_employeeattachments`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeeattachments`(`eatta_RowID` INT, `eatta_CreatedBy` INT, `eatta_LastUpdBy` INT, `eatta_EmployeeID` INT, `eatta_Type` VARCHAR(50), `eatta_AttachedFile` LONGBLOB, `eatta_FileType` VARCHAR(50), `eatta_FileName` VARCHAR(50)) RETURNS int(11)

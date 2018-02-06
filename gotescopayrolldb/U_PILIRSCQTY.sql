@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.U_PILIRSCQTY
+-- Dumping structure for procedure gotescopayrolldb_latest.U_PILIRSCQTY
 DROP PROCEDURE IF EXISTS `U_PILIRSCQTY`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `U_PILIRSCQTY`(IN `U_ProdInvLocID` INT(10), IN `U_AvailableQty` INT(10), IN `U_RackNo` INT(10), IN `U_ShelfNo` INT(10), IN `U_ColumnNo` INT(10)

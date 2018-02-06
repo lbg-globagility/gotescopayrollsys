@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INSUPD_payperiod
+-- Dumping structure for function gotescopayrolldb_latest.INSUPD_payperiod
 DROP FUNCTION IF EXISTS `INSUPD_payperiod`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_payperiod`(`payp_RowID` INT, `payp_OrganizationID` INT, `payp_CreatedBy` INT, `payp_LastUpdBy` INT, `payp_PayFromDate` DATE, `payp_PayToDate` DATE, `payp_TotalGrossSalary` DECIMAL(10,2), `payp_TotalNetSalary` DECIMAL(10,2), `payp_TotalEmpSSS` DECIMAL(10,2), `payp_TotalEmpWithholdingTax` DECIMAL(10,2), `payp_TotalCompSSS` DECIMAL(10,2), `payp_TotalEmpPhilhealth` DECIMAL(10,2), `payp_TotalCompPhilhealth` DECIMAL(10,2), `payp_TotalEmpHDMF` DECIMAL(10,2), `payp_TotalCompHDMF` DECIMAL(10,2)) RETURNS int(11)

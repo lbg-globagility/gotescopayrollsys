@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.DBoard_BirthdayCelebrantThisMonth
+-- Dumping structure for procedure gotescopayrolldb_latest.DBoard_BirthdayCelebrantThisMonth
 DROP PROCEDURE IF EXISTS `DBoard_BirthdayCelebrantThisMonth`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_BirthdayCelebrantThisMonth`(IN `OrganizID` INT)

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.VIEW_privilege
+-- Dumping structure for function gotescopayrolldb_latest.VIEW_privilege
 DROP FUNCTION IF EXISTS `VIEW_privilege`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `VIEW_privilege`(`vw_ViewName` VARCHAR(150), `vw_OrganizationID` INT) RETURNS int(11)

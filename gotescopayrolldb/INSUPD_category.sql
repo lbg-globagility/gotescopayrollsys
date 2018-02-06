@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INSUPD_category
+-- Dumping structure for function gotescopayrolldb_latest.INSUPD_category
 DROP FUNCTION IF EXISTS `INSUPD_category`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_category`(`cat_RowID` INT, `cat_CategoryName` VARCHAR(50), `cat_OrganizationID` INT, `cat_CatalogID` INT) RETURNS int(11)

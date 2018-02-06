@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INSUPD_employeemedicalrecord
+-- Dumping structure for function gotescopayrolldb_latest.INSUPD_employeemedicalrecord
 DROP FUNCTION IF EXISTS `INSUPD_employeemedicalrecord`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeemedicalrecord`(`emedrec_RowID` INT, `emedrec_OrganizationID` INT, `emedrec_Created` TIMESTAMP, `emedrec_CreatedBy` INT, `emedrec_LastUpdBy` INT, `emedrec_EmployeeID` INT, `emedrec_DateFrom` DATE, `emedrec_DateTo` DATE, `emedrec_ProductID` INT, `emedrec_Finding` VARCHAR(50)) RETURNS int(11)

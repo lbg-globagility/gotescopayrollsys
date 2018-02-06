@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.I_address
+-- Dumping structure for procedure gotescopayrolldb_latest.I_address
 DROP PROCEDURE IF EXISTS `I_address`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `I_address`(IN `I_StreetAddress1` VARCHAR(200), IN `I_StreetAddress2` VARCHAR(50), IN `I_CityTown` VARCHAR(50), IN `I_Country` VARCHAR(50), IN `I_State` VARCHAR(50), IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_ZipCode` VARCHAR(50), IN `I_Barangay` VARCHAR(50))

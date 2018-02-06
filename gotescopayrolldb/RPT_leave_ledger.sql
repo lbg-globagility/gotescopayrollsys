@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.RPT_leave_ledger
+-- Dumping structure for procedure gotescopayrolldb_latest.RPT_leave_ledger
 DROP PROCEDURE IF EXISTS `RPT_leave_ledger`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_leave_ledger`(IN `OrganizID` INT, IN `paramDateFrom` DATE, IN `paramDateTo` DATE, IN `PayPeriodDateFromID` INT, IN `PayPeriodDateToID` INT)

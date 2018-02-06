@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.RPT_PAGIBIG_Monthly
+-- Dumping structure for procedure gotescopayrolldb_latest.RPT_PAGIBIG_Monthly
 DROP PROCEDURE IF EXISTS `RPT_PAGIBIG_Monthly`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_PAGIBIG_Monthly`(IN `OrganizID` INT, IN `paramDate` DATE)

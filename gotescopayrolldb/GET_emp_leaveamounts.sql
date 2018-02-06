@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.GET_emp_leaveamounts
+-- Dumping structure for procedure gotescopayrolldb_latest.GET_emp_leaveamounts
 DROP PROCEDURE IF EXISTS `GET_emp_leaveamounts`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `GET_emp_leaveamounts`(IN `e_rowid` INT)

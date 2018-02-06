@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.RECOMPUTE_thirteenthmonthpay
+-- Dumping structure for procedure gotescopayrolldb_latest.RECOMPUTE_thirteenthmonthpay
 DROP PROCEDURE IF EXISTS `RECOMPUTE_thirteenthmonthpay`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RECOMPUTE_thirteenthmonthpay`(IN `OrganizID` INT, IN `PayPRowID` INT, IN `UserRowID` INT)

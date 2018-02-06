@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INSUPD_prodinvlocinventory_for_repairs
+-- Dumping structure for function gotescopayrolldb_latest.INSUPD_prodinvlocinventory_for_repairs
 DROP FUNCTION IF EXISTS `INSUPD_prodinvlocinventory_for_repairs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_prodinvlocinventory_for_repairs`(`pili_RowID` INT, `pili_OrganizationID` INT, `pili_ProdInvLocID` INT, `pili_CreatedBy` INT, `pili_LastUpdBy` INT, `pili_AvailableQty` INT, `pili_RackNo` VARCHAR(50), `pili_ShelfNo` VARCHAR(50), `pili_ColumnNo` VARCHAR(50)) RETURNS int(11)

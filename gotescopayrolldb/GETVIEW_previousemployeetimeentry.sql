@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.GETVIEW_previousemployeetimeentry
+-- Dumping structure for procedure gotescopayrolldb_latest.GETVIEW_previousemployeetimeentry
 DROP PROCEDURE IF EXISTS `GETVIEW_previousemployeetimeentry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETVIEW_previousemployeetimeentry`(IN `OrganizID` INT, IN `prev_payperiodID` INT, IN `WeeklySSSSchedPayPeriodID` INT)

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.ECOLA_forSSScontrib
+-- Dumping structure for procedure gotescopayrolldb_latest.ECOLA_forSSScontrib
 DROP PROCEDURE IF EXISTS `ECOLA_forSSScontrib`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ECOLA_forSSScontrib`(IN `og_rowid` INT, IN `date_from` DATE, IN `date_to` DATE)

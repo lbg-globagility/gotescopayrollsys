@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.GET_employeetaxableincome
+-- Dumping structure for function gotescopayrolldb_latest.GET_employeetaxableincome
 DROP FUNCTION IF EXISTS `GET_employeetaxableincome`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeetaxableincome`(`ps_EmployeeID` INT, `ps_OrganizID` INT, `ps_Date` DATE, `addvalue` DECIMAL(12,2)) RETURNS text CHARSET latin1

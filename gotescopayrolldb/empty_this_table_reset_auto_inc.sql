@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.empty_this_table_reset_auto_inc
+-- Dumping structure for procedure gotescopayrolldb_latest.empty_this_table_reset_auto_inc
 DROP PROCEDURE IF EXISTS `empty_this_table_reset_auto_inc`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `empty_this_table_reset_auto_inc`(IN `table_name` VARCHAR(150))

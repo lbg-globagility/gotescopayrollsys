@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.sp_employeeshiftentry
+-- Dumping structure for procedure gotescopayrolldb_latest.sp_employeeshiftentry
 DROP PROCEDURE IF EXISTS `sp_employeeshiftentry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_employeeshiftentry`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpd` DATETIME, IN `I_LastUpdby` INT(10), IN `I_EmployeeID` INT(10), IN `I_ShiftID` INT(10), IN `I_EffectiveFrom` DATE, IN `I_EffectiveTo` DATE, IN `I_NightShift` CHAR(50), IN `I_RestDay` CHAR(50))

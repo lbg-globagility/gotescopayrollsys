@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.I_ProdInvLoc
+-- Dumping structure for procedure gotescopayrolldb_latest.I_ProdInvLoc
 DROP PROCEDURE IF EXISTS `I_ProdInvLoc`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `I_ProdInvLoc`(IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_OrganizationID` INT(11), IN `I_LastShippedToLocDate` DATE, IN `I_LastCycleCountDate` DATE, IN `I_LastUpdBy` INT(11), IN `I_ProdInvLocID` INT(10), IN `I_AvailableQty` INT(10), IN `I_ReservedQty` INT(10), IN `I_RackNo` INT(10), IN `I_ShelfNo` INT(10), IN `I_ColumnNo` INT(10)

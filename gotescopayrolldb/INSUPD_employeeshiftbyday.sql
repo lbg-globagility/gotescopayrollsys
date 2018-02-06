@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INSUPD_employeeshiftbyday
+-- Dumping structure for function gotescopayrolldb_latest.INSUPD_employeeshiftbyday
 DROP FUNCTION IF EXISTS `INSUPD_employeeshiftbyday`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_employeeshiftbyday`(`OrganizID` INT, `UserRowID` INT, `EmployeeRowID` INT, `ShiftRowID` INT, `NameOfTheDay` VARCHAR(50), `IsNightShift` CHAR(1), `IsRestDay` CHAR(1), `ByOrderValue` INT, `AsNewRecord` CHAR(1)) RETURNS int(11)

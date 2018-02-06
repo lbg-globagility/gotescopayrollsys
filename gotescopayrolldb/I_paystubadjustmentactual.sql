@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.I_paystubadjustmentactual
+-- Dumping structure for function gotescopayrolldb_latest.I_paystubadjustmentactual
 DROP FUNCTION IF EXISTS `I_paystubadjustmentactual`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `I_paystubadjustmentactual`(`pa_OrganizationID` INT, `pa_CurrentUser` INT, `pa_ProductID` INT, `pa_PayAmount` DECIMAL(10,2), `pa_Comment` VARCHAR(200), `pa_EmployeeID` VARCHAR(50), `pa_PayPeriodID` INT, `psa_RowID` INT) RETURNS int(11)

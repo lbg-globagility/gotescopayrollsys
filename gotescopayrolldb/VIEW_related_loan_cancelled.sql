@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.VIEW_related_loan_cancelled
+-- Dumping structure for procedure gotescopayrolldb_latest.VIEW_related_loan_cancelled
 DROP PROCEDURE IF EXISTS `VIEW_related_loan_cancelled`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_related_loan_cancelled`(IN `OrganizID` INT, IN `LoanCancelledRowID` INT)

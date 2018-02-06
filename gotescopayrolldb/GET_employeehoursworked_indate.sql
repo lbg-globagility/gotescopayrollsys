@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.GET_employeehoursworked_indate
+-- Dumping structure for function gotescopayrolldb_latest.GET_employeehoursworked_indate
 DROP FUNCTION IF EXISTS `GET_employeehoursworked_indate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeehoursworked_indate`(`employee_ID` INT, `d_from` DATE, `d_to` DATE, `organiz_ID` INT) RETURNS decimal(10,2)

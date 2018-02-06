@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.GET_employeeundeclaredsalarypercent
+-- Dumping structure for function gotescopayrolldb_latest.GET_employeeundeclaredsalarypercent
 DROP FUNCTION IF EXISTS `GET_employeeundeclaredsalarypercent`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeeundeclaredsalarypercent`(`EmpRowID` INT, `OrganizID` INT, `PayPFrom` DATE, `PayPTo` DATE) RETURNS decimal(11,6)

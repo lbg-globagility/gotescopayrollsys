@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.GET_employeeallowance
+-- Dumping structure for function gotescopayrolldb_latest.GET_employeeallowance
 DROP FUNCTION IF EXISTS `GET_employeeallowance`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeeallowance`(`payp_From` DATE, `payp_To` DATE, `EmployeeRowID` INT, `OrganizationRowID` INT, `Taxable` VARCHAR(1), `Frequency` VARCHAR(50)) RETURNS decimal(10,2)

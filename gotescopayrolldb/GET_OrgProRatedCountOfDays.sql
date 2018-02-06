@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.GET_OrgProRatedCountOfDays
+-- Dumping structure for function gotescopayrolldb_latest.GET_OrgProRatedCountOfDays
 DROP FUNCTION IF EXISTS `GET_OrgProRatedCountOfDays`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_OrgProRatedCountOfDays`(`Org_WorkDays` INT, `Effective_DateFrom` DATE, `Effective_DateTo` DATE, `Frequency` TEXT) RETURNS int(11)

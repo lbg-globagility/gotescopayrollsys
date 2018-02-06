@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.CHECK_LoanNumberExistence
+-- Dumping structure for function gotescopayrolldb_latest.CHECK_LoanNumberExistence
 DROP FUNCTION IF EXISTS `CHECK_LoanNumberExistence`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `CHECK_LoanNumberExistence`(`OrganizID` INT, `EmpRowID` INT, `EmpLoanNum` VARCHAR(50)) RETURNS char(1) CHARSET latin1

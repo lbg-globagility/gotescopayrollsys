@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.GET_psimonthlysumitem
+-- Dumping structure for function gotescopayrolldb_latest.GET_psimonthlysumitem
 DROP FUNCTION IF EXISTS `GET_psimonthlysumitem`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_psimonthlysumitem`(`OrganizID` INT, `EmpRowID` INT, `ItemName` TEXT, `PayPMonth` INT, `PayPYear` INT, `EmpPayFrequencyID` INT) RETURNS decimal(11,6)

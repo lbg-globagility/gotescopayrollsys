@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.INCREASE_employee_leave_FiveToTenYearService
+-- Dumping structure for procedure gotescopayrolldb_latest.INCREASE_employee_leave_FiveToTenYearService
 DROP PROCEDURE IF EXISTS `INCREASE_employee_leave_FiveToTenYearService`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `INCREASE_employee_leave_FiveToTenYearService`(IN `OrganizID` INT)

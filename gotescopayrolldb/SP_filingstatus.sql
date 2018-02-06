@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.SP_filingstatus
+-- Dumping structure for procedure gotescopayrolldb_latest.SP_filingstatus
 DROP PROCEDURE IF EXISTS `SP_filingstatus`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_filingstatus`(IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_FilingStatus` VARCHAR(50), IN `I_MaritalStatus` VARCHAR(50), IN `I_Dependent` INT(11))

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.FN_GetPaystubIDByEmployeeIDAndPayPeriodID
+-- Dumping structure for function gotescopayrolldb_latest.FN_GetPaystubIDByEmployeeIDAndPayPeriodID
 DROP FUNCTION IF EXISTS `FN_GetPaystubIDByEmployeeIDAndPayPeriodID`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `FN_GetPaystubIDByEmployeeIDAndPayPeriodID`(`ps_EmployeeID` VARCHAR(50), `ps_PayPeriodID` INT, `OrganizID` INT) RETURNS int(11)

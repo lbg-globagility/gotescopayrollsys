@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.DEFAULT_internal_sys_user
+-- Dumping structure for function gotescopayrolldb_latest.DEFAULT_internal_sys_user
 DROP FUNCTION IF EXISTS `DEFAULT_internal_sys_user`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `DEFAULT_internal_sys_user`() RETURNS int(11)

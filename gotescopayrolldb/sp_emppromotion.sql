@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.sp_emppromotion
+-- Dumping structure for procedure gotescopayrolldb_latest.sp_emppromotion
 DROP PROCEDURE IF EXISTS `sp_emppromotion`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_emppromotion`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpd` DATETIME, IN `I_LastUpdby` INT(10), IN `I_EmployeeID` INT(10), IN `I_PositionFrom` VARCHAR(50), IN `I_PositionTo` VARCHAR(50), IN `I_EffectiveDate` DATE, IN `I_CompensationChange` CHAR(1), IN `I_EmployeeSalaryID` INT(11), IN `I_NewAmount` DECIMAL(11,2))

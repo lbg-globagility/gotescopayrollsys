@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.COMPUTE_employeeovertimeofthisdate
+-- Dumping structure for function gotescopayrolldb_latest.COMPUTE_employeeovertimeofthisdate
 DROP FUNCTION IF EXISTS `COMPUTE_employeeovertimeofthisdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `COMPUTE_employeeovertimeofthisdate`(`ot_EmployeeID` INT, `ot_OrganizationID` INT, `ot_Date` DATE, `timelogout` TIME, `ValueAsNightDiff` CHAR(1)) RETURNS decimal(11,4)

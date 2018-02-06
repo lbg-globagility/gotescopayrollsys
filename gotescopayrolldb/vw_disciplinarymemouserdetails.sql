@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for view gotescopayrolldb_oct19.vw_disciplinarymemouserdetails
+-- Dumping structure for view gotescopayrolldb_latest.vw_disciplinarymemouserdetails
 DROP VIEW IF EXISTS `vw_disciplinarymemouserdetails`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `vw_disciplinarymemouserdetails`;

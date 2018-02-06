@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.IS_WORKINGDAY_PRESENT_DURINGHOLI
+-- Dumping structure for function gotescopayrolldb_latest.IS_WORKINGDAY_PRESENT_DURINGHOLI
 DROP FUNCTION IF EXISTS `IS_WORKINGDAY_PRESENT_DURINGHOLI`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `IS_WORKINGDAY_PRESENT_DURINGHOLI`(`organiz_id` INT, `emp_rowid` INT, `et_date` DATE, `will_check_before_orelse_after` BOOL) RETURNS tinyint(4)

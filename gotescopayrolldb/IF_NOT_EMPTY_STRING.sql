@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.IF_NOT_EMPTY_STRING
+-- Dumping structure for function gotescopayrolldb_latest.IF_NOT_EMPTY_STRING
 DROP FUNCTION IF EXISTS `IF_NOT_EMPTY_STRING`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `IF_NOT_EMPTY_STRING`(`Param1` TEXT, `Param2` TEXT) RETURNS text CHARSET latin1

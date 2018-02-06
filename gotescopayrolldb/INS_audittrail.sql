@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.INS_audittrail
+-- Dumping structure for procedure gotescopayrolldb_latest.INS_audittrail
 DROP PROCEDURE IF EXISTS `INS_audittrail`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `INS_audittrail`(IN `au_CreatedBy` INT, IN `au_LastUpdBy` INT, IN `au_OrganizationID` INT, IN `au_ViewID` INT, IN `au_FieldChanged` VARCHAR(200), IN `au_ChangedRowID` VARCHAR(50), IN `au_OldValue` VARCHAR(200), IN `au_NewValue` VARCHAR(200), IN `au_ActionPerformed` VARCHAR(50))

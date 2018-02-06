@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.INSUPD_employee_01
+-- Dumping structure for function gotescopayrolldb_latest.INSUPD_employee_01
 DROP FUNCTION IF EXISTS `INSUPD_employee_01`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employee_01`(`RID` INT, `UserRowID` INT, `OrganizID` INT, `Salutat` VARCHAR(50), `FName` VARCHAR(50), `MName` VARCHAR(50), `LName` VARCHAR(50), `Surname` VARCHAR(50), `EmpID` VARCHAR(50), `TIN` VARCHAR(50), `SSS` VARCHAR(50), `HDMF` VARCHAR(50), `PhH` VARCHAR(50), `EmpStatus` VARCHAR(50), `EmailAdd` VARCHAR(50), `WorkNo` VARCHAR(50), `HomeNo` VARCHAR(50), `MobileNo` VARCHAR(50), `HAddress` VARCHAR(2000), `Nick` VARCHAR(50), `JTitle` VARCHAR(50), `Gend` VARCHAR(50), `EmpType` VARCHAR(50), `MaritStat` VARCHAR(50), `BDate` DATE, `Start_Date` DATE, `TerminatDate` DATE, `PositID` INT, `PayFreqID` INT, `NumDependent` INT, `UTOverride` VARCHAR(50), `OTOverride` VARCHAR(50), `NewEmpFlag` VARCHAR(50), `LeaveBal` DECIMAL(10,2), `SickBal` DECIMAL(10,2), `MaternBal` DECIMAL(10,2), `LeaveAllow` DECIMAL(10,2), `SickAllow` DECIMAL(10,2), `MaternAllow` DECIMAL(10,2), `Imag` MEDIUMBLOB, `LeavePayPer` DECIMAL(10,2), `SickPayPer` DECIMAL(10,2), `MaternPayPer` DECIMAL(10,2), `IsExemptAlphaList` TEXT, `Work_DaysPerYear` INT, `Day_Rest` CHAR(1), `ATM_No` VARCHAR(50), `OtherLeavePayPer` DECIMAL(10,2), `Bank_Name` VARCHAR(50), `Calc_Holiday` CHAR(1), `Calc_SpecialHoliday` CHAR(1), `Calc_NightDiff` CHAR(1), `Calc_NightDiffOT` CHAR(1), `Calc_RestDay` CHAR(1), `Calc_RestDayOT` CHAR(1), `DateOfR1A` DATE) RETURNS int(11)

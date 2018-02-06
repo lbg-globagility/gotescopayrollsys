@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.TRIGG_UPD_employeeallowance
+-- Dumping structure for function gotescopayrolldb_latest.TRIGG_UPD_employeeallowance
 DROP FUNCTION IF EXISTS `TRIGG_UPD_employeeallowance`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `TRIGG_UPD_employeeallowance`(`OrganizID` INT, `UserRowID` INT, `EmpRowID` INT, `es_datefrom` DATE, `es_dateto` DATE) RETURNS char(1) CHARSET latin1

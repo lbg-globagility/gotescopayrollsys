@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.SP_paywithholdingtax
+-- Dumping structure for procedure gotescopayrolldb_latest.SP_paywithholdingtax
 DROP PROCEDURE IF EXISTS `SP_paywithholdingtax`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_paywithholdingtax`(IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_PayFrequencyID` INT(11), IN `I_FilingStatusID` INT(11), IN `I_EffectiveDateFrom` DATE, IN `I_EffectiveDateTo` DATE, IN `I_ExemptionAmount` DECIMAL(10,2), IN `I_ExemptionInExcessAmount` DECIMAL(10,2), IN `I_TaxableIncomeFromAmount` DECIMAL(10,2), IN `I_TaxableIncomeToAmount` DECIMAL(10,2))

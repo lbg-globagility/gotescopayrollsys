@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.DEL_employeeloanschedule
+-- Dumping structure for procedure gotescopayrolldb_latest.DEL_employeeloanschedule
 DROP PROCEDURE IF EXISTS `DEL_employeeloanschedule`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `DEL_employeeloanschedule`(IN `els_rowid` INT)

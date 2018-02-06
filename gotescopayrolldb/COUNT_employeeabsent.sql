@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_oct19.COUNT_employeeabsent
+-- Dumping structure for function gotescopayrolldb_latest.COUNT_employeeabsent
 DROP FUNCTION IF EXISTS `COUNT_employeeabsent`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `COUNT_employeeabsent`(`EmpID` INT, `OrgID` INT, `EmpStartDate` DATE, `payperiodDateFrom` DATE, `payperiodDateTo` DATE) RETURNS decimal(11,2)

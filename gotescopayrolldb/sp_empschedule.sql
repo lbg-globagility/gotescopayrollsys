@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_oct19.sp_empschedule
+-- Dumping structure for procedure gotescopayrolldb_latest.sp_empschedule
 DROP PROCEDURE IF EXISTS `sp_empschedule`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_empschedule`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_Lastupd` DATETIME, IN `I_Lastupdby` INT(10), IN `I_EmployeeID` INT(10), IN `I_LoanNumber` VARCHAR(50), IN `I_DedEffectiveDateFrom` DATE, IN `I_DedEffectiveDateTo` DATE, IN `I_TotalLoanAmount` DECIMAL(10,2), IN `I_DeductionSchedule` VARCHAR(50), IN `I_TotalBalanceLeft` DECIMAL(10,2), IN `I_DeductionAmount` DECIMAL(10,2), IN `I_Status` VARCHAR(50), IN `I_DeductionPercentage` DECIMAL(10,2), IN `I_NoOfPayPeriod` DECIMAL(10,2), IN `I_Comments` VARCHAR(2000), IN `I_LoanTypeID` INT

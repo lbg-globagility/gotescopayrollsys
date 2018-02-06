@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for trigger gotescopayrolldb_oct19.AFTUPD_paywithholdingtax
+-- Dumping structure for trigger gotescopayrolldb_latest.AFTUPD_paywithholdingtax
 DROP TRIGGER IF EXISTS `AFTUPD_paywithholdingtax`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
 DELIMITER //

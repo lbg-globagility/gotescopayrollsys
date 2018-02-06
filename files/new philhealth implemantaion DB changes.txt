@@ -1,3 +1,9 @@
 ALTER TABLE `employeesalary`
 	ADD COLUMN `PhilHealthDeduction` DECIMAL(15,4) NULL DEFAULT '0' AFTER `PayPhilhealthID`;
 
+##################################################################################
+
+INSERT INTO `listofval` (`DisplayValue`, `LIC`, `Type`, `ParentLIC`, `Active`, `Description`, `Created`, `CreatedBy`, `LastUpd`, `OrderBy`, `LastUpdBy`) VALUES ('Bracket', 'DeductionType', 'PhilHealth', '', 'Yes', '`Bracket` OR `Formula`', '2018-02-05 11:52:36', 1, '2018-02-05 11:52:36', 1, 1);
+INSERT INTO `listofval` (`DisplayValue`, `LIC`, `Type`, `ParentLIC`, `Active`, `Description`, `Created`, `CreatedBy`, `LastUpd`, `OrderBy`, `LastUpdBy`) VALUES ('2.75', 'Rate', 'PhilHealth', '', 'Yes', '2.75', '2018-02-05 11:52:36', 1, '2018-02-05 11:52:36', 1, 1);
+INSERT INTO `listofval` (`DisplayValue`, `LIC`, `Type`, `ParentLIC`, `Active`, `Description`, `Created`, `CreatedBy`, `LastUpd`, `OrderBy`, `LastUpdBy`) VALUES ('275', 'MinimumContribution', 'PhilHealth', '', 'Yes', '275', '2018-02-05 11:52:36', 1, '2018-02-05 11:52:36', 1, 1);
+INSERT INTO `listofval` (`DisplayValue`, `LIC`, `Type`, `ParentLIC`, `Active`, `Description`, `Created`, `CreatedBy`, `LastUpd`, `OrderBy`, `LastUpdBy`) VALUES ('1100', 'MaximumContribution', 'PhilHealth', '', 'Yes', '1100', '2018-02-05 11:52:36', 1, '2018-02-05 11:52:36', 1, 1);

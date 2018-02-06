@@ -4,6 +4,8 @@ Imports System.Threading.Tasks
 
 Public Class PayrollGeneration
 
+    Private model1 As New Model1
+    Private new_philhealth_collect As IQueryable(Of newphilhealthimplement) = model1.NewPhilHealth.OfType(Of newphilhealthimplement)()
     Private employee_dattab As DataTable
     Private isEndOfMonth As String
     Private isorgPHHdeductsched As SByte
@@ -976,20 +978,22 @@ Public Class PayrollGeneration
 
                         Dim phh_sql As New SQL(phh_contrib_quer, phh_param)
                         Dim caught_result As New DataTable
-                        If is_year2018 Then
-                            Dim new2018PhilHealtContrib As String =
-                                String.Concat("SELECT GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", TRUE) `EmployeeShare`",
-                                              ", GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", FALSE) `EmployerShare`",
-                                              ";")
+                        If is_year2018 = False Then
+                            'Dim new2018PhilHealtContrib As String =
+                            '    String.Concat("SELECT GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", TRUE) `EmployeeShare`",
+                            '                  ", GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", FALSE) `EmployerShare`",
+                            '                  ";")
 
-                            caught_result = New SQL(new2018PhilHealtContrib).GetFoundRows.Tables(0)
+                            'caught_result = New SQL(new2018PhilHealtContrib).GetFoundRows.Tables(0)
+                            phh_ee = CalcNewPhilHealth(amount_used_to_get_sss_contrib, True)
+                            phh_er = CalcNewPhilHealth(amount_used_to_get_sss_contrib, False)
                         Else
                             caught_result = phh_sql.GetFoundRows.Tables(0)
+                            For Each phh_row As DataRow In caught_result.Rows
+                                phh_ee = phh_row(0)
+                                phh_er = phh_row(1)
+                            Next
                         End If
-                        For Each phh_row As DataRow In caught_result.Rows
-                            phh_ee = phh_row(0)
-                            phh_er = phh_row(1)
-                        Next
 
                         If isEndOfMonth = isorgPHHdeductsched Then
                             'pstub_TotalEmpPhilhealth = CDec(drowsal("EmployeeShare"))
@@ -1417,6 +1421,44 @@ Public Class PayrollGeneration
         filingStatus.Dispose()
 
     End Sub
+
+    Private Function CalcNewPhilHealth(amount_worked As Decimal, is_for_employee As Boolean) As Decimal
+        Static base_multiplier As Decimal = 0.01
+        Static half_divisor As Decimal = 2
+
+        Dim return_value As Decimal
+
+        Dim min_contrib, max_contrib, value1, value2, contrib_amout, _rate As Decimal
+
+        For Each _phh As newphilhealthimplement In new_philhealth_collect
+
+            _rate = (_phh.Rate * base_multiplier)
+
+            contrib_amout = (_rate * amount_worked)
+
+            min_contrib = _phh.MinimumContribution
+            max_contrib = _phh.MaximumContribution
+
+            If min_contrib > contrib_amout Then
+                contrib_amout = min_contrib
+            ElseIf max_contrib < contrib_amout Then
+                contrib_amout = max_contrib
+            End If
+
+            value1 = (contrib_amout / half_divisor)
+            value2 = (contrib_amout - value1)
+
+            Dim number_array = New Decimal() {value1, value2}
+
+            If is_for_employee Then
+                return_value = number_array.Min
+            Else
+                return_value = number_array.Max
+            End If
+        Next
+
+        Return return_value
+    End Function
 
     Sub PayrollGeneration_BackgourndWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
 

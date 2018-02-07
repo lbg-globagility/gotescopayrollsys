@@ -276,6 +276,7 @@
     </Compile>
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Model1.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
     <Compile Include="Core Forms\user_predefines\OutputText.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\EmployeeCollection.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\IEmployee.vb" />

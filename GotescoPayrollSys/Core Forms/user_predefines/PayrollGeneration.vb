@@ -6,6 +6,7 @@ Public Class PayrollGeneration
 
     Private model1 As New Model1
     Private new_philhealth_collect As IQueryable(Of newphilhealthimplement) = model1.NewPhilHealth.OfType(Of newphilhealthimplement)()
+    'Private wtax As IQueryable(Of WithholdingTaxBracket) = model1.NewWithholdingTax.OfType(Of WithholdingTaxBracket)()
     Private employee_dattab As DataTable
     Private isEndOfMonth As String
     Private isorgPHHdeductsched As SByte
@@ -80,6 +81,43 @@ Public Class PayrollGeneration
     Private ecola_allowance_name As String = "Ecola"
 
     Private monthlyemployee_restday_payment As New DataTable
+
+    Private str_quer As String =
+        String.Concat("CALL INSUPD_paystub_proc(",
+                "?pstub_RowID",
+                ",?pstub_OrganizationID",
+                ",?pstub_CreatedBy",
+                ",?pstub_LastUpdBy",
+                ",?pstub_PayPeriodID",
+                ",?pstub_EmployeeID",
+                ",?pstub_TimeEntryID",
+                ",?pstub_PayFromDate",
+                ",?pstub_PayToDate",
+                ",?pstub_TotalGrossSalary",
+                ",?pstub_TotalNetSalary",
+                ",?pstub_TotalTaxableSalary",
+                ",?pstub_TotalEmpSSS",
+                ",?pstub_TotalEmpWithholdingTax",
+                ",?pstub_TotalCompSSS",
+                ",?pstub_TotalEmpPhilhealth",
+                ",?pstub_TotalCompPhilhealth",
+                ",?pstub_TotalEmpHDMF",
+                ",?pstub_TotalCompHDMF",
+                ",?pstub_TotalVacationDaysLeft",
+                ",?pstub_TotalLoans",
+                ",?pstub_TotalBonus",
+                ",?pstub_TotalAllowance",
+                ",?pstub_NondeductibleTotalLoans",
+                ");")
+
+    Dim wtax_sqlquery As String =
+        String.Concat("SELECT ptx.*",
+                      " FROM paywithholdingtax ptx",
+                      " INNER JOIN payfrequency pf ON pf.PayFrequencyType='Monthly' AND ptx.PayFrequencyID=pf.RowID",
+                      " WHERE IFNULL(ptx.FilingStatusID, 0)=?fs_rowid",
+                      " AND ?amount",
+                      " BETWEEN ptx.TaxableIncomeFromAmount AND ptx.TaxableIncomeToAmount",
+                      ";")
 
     Sub New(ByVal _employee_dattab As DataTable,
                   ByVal _isEndOfMonth As String,
@@ -264,19 +302,19 @@ Public Class PayrollGeneration
         Dim emptimeentryOfHoliday As New DataTable
 
         Dim last_enddate_cutoff_thisyear =
-            New ExecuteQuery("SELECT DATE_FORMAT(pp.PayToDate,@@date_format)" &
+            New SQL("SELECT DATE_FORMAT(pp.PayToDate,@@date_format)" &
                              " FROM payperiod pp" &
                              " INNER JOIN payperiod pyp ON pyp.RowID='" & n_PayrollRecordID & "'" &
                              " AND pp.`Year`=pyp.`Year`" &
                              " AND pp.OrganizationID=pyp.OrganizationID" &
                              " AND pp.TotalGrossSalary=pyp.TotalGrossSalary" &
                              " ORDER BY pp.PayFromDate DESC,pp.PayToDate DESC" &
-                             " LIMIT 1;").Result
-        Dim GET_PREVIOUSMONTHTAXAMOUNT = New SQLQueryToDatatable("CALL GET_PREVIOUSMONTHTAXAMOUNT('" & n_PayrollRecordID & "')").ResultTable
+                             " LIMIT 1;").GetFoundRow
+        Dim GET_PREVIOUSMONTHTAXAMOUNT = New SQL("CALL GET_PREVIOUSMONTHTAXAMOUNT('" & n_PayrollRecordID & "')").GetFoundRows.Tables(0)
         emptimeentryOfLeave = New DataTable 'TotalDayPay
-        emptimeentryOfLeave = New SQLQueryToDatatable("SELECT ete.*,(ete.TotalDayPay - (ete.RegularHoursAmount + ete.OvertimeHoursAmount + ete.HolidayPayAmount)) AS LeavePayAmount FROM employeetimeentry ete INNER JOIN (SELECT pp.OrganizationID,MIN(pp1.PayFromDate) AS PayFromDate,MAX(pp2.PayToDate) AS PayToDate FROM payperiod pp INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate,PayToDate) pp1 ON pp1.`Month`=pp.`Month` AND pp1.`Year`=pp.`Year` AND pp1.OrganizationID=pp.OrganizationID AND pp1.TotalGrossSalary=pp.TotalGrossSalary INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate DESC,PayToDate DESC) pp2 ON pp2.`Month`=pp.`Month` AND pp2.`Year`=pp.`Year` AND pp2.OrganizationID=pp.OrganizationID AND pp2.TotalGrossSalary=pp.TotalGrossSalary WHERE pp.RowID='" & n_PayrollRecordID & "') i ON i.PayFromDate IS NOT NULL AND i.PayToDate IS NOT NULL AND ete.OrganizationID=i.OrganizationID AND ete.`Date` BETWEEN i.PayFromDate AND i.PayToDate AND (ete.VacationLeaveHours + ete.SickLeaveHours + ete.MaternityLeaveHours + ete.OtherLeaveHours + ete.AdditionalVLHours) > 0 AND ete.RegularHoursAmount=0 ORDER BY ete.EmployeeID,ete.`Date`;").ResultTable
+        emptimeentryOfLeave = New SQL("SELECT ete.*,(ete.TotalDayPay - (ete.RegularHoursAmount + ete.OvertimeHoursAmount + ete.HolidayPayAmount)) AS LeavePayAmount FROM employeetimeentry ete INNER JOIN (SELECT pp.OrganizationID,MIN(pp1.PayFromDate) AS PayFromDate,MAX(pp2.PayToDate) AS PayToDate FROM payperiod pp INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate,PayToDate) pp1 ON pp1.`Month`=pp.`Month` AND pp1.`Year`=pp.`Year` AND pp1.OrganizationID=pp.OrganizationID AND pp1.TotalGrossSalary=pp.TotalGrossSalary INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate DESC,PayToDate DESC) pp2 ON pp2.`Month`=pp.`Month` AND pp2.`Year`=pp.`Year` AND pp2.OrganizationID=pp.OrganizationID AND pp2.TotalGrossSalary=pp.TotalGrossSalary WHERE pp.RowID='" & n_PayrollRecordID & "') i ON i.PayFromDate IS NOT NULL AND i.PayToDate IS NOT NULL AND ete.OrganizationID=i.OrganizationID AND ete.`Date` BETWEEN i.PayFromDate AND i.PayToDate AND (ete.VacationLeaveHours + ete.SickLeaveHours + ete.MaternityLeaveHours + ete.OtherLeaveHours + ete.AdditionalVLHours) > 0 AND ete.RegularHoursAmount=0 ORDER BY ete.EmployeeID,ete.`Date`;").GetFoundRows.Tables(0)
         emptimeentryOfHoliday = New DataTable 'HolidayPayAmount
-        emptimeentryOfHoliday = New SQLQueryToDatatable("SELECT ete.*,i.* FROM employeetimeentry ete INNER JOIN payrate pr ON pr.RowID=ete.PayRateID AND pr.PayType!='Regular Day' INNER JOIN (SELECT pp.OrganizationID,MIN(pp1.PayFromDate) AS PayFromDate, MIN(pp1.PayToDate) AS PayFromDate1, MAX(pp2.PayToDate) AS PayToDate, MAX(pp2.PayFromDate) AS PayToDate1 FROM payperiod pp INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate,PayToDate) pp1 ON pp1.`Month`=pp.`Month` AND pp1.`Year`=pp.`Year` AND pp1.OrganizationID=pp.OrganizationID AND pp1.TotalGrossSalary=pp.TotalGrossSalary INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate DESC,PayToDate DESC) pp2 ON pp2.`Month`=pp.`Month` AND pp2.`Year`=pp.`Year` AND pp2.OrganizationID=pp.OrganizationID AND pp2.TotalGrossSalary=pp.TotalGrossSalary WHERE pp.RowID='" & n_PayrollRecordID & "') i ON i.PayFromDate IS NOT NULL AND i.PayToDate IS NOT NULL AND ete.OrganizationID=i.OrganizationID AND ete.`Date` BETWEEN i.PayFromDate AND i.PayToDate AND ete.HolidayPayAmount > 0 AND ete.RegularHoursAmount=0 ORDER BY ete.EmployeeID,ete.`Date`;").ResultTable
+        emptimeentryOfHoliday = New SQL("SELECT ete.*,i.* FROM employeetimeentry ete INNER JOIN payrate pr ON pr.RowID=ete.PayRateID AND pr.PayType!='Regular Day' INNER JOIN (SELECT pp.OrganizationID,MIN(pp1.PayFromDate) AS PayFromDate, MIN(pp1.PayToDate) AS PayFromDate1, MAX(pp2.PayToDate) AS PayToDate, MAX(pp2.PayFromDate) AS PayToDate1 FROM payperiod pp INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate,PayToDate) pp1 ON pp1.`Month`=pp.`Month` AND pp1.`Year`=pp.`Year` AND pp1.OrganizationID=pp.OrganizationID AND pp1.TotalGrossSalary=pp.TotalGrossSalary INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate DESC,PayToDate DESC) pp2 ON pp2.`Month`=pp.`Month` AND pp2.`Year`=pp.`Year` AND pp2.OrganizationID=pp.OrganizationID AND pp2.TotalGrossSalary=pp.TotalGrossSalary WHERE pp.RowID='" & n_PayrollRecordID & "') i ON i.PayFromDate IS NOT NULL AND i.PayToDate IS NOT NULL AND ete.OrganizationID=i.OrganizationID AND ete.`Date` BETWEEN i.PayFromDate AND i.PayToDate AND ete.HolidayPayAmount > 0 AND ete.RegularHoursAmount=0 ORDER BY ete.EmployeeID,ete.`Date`;").GetFoundRows.Tables(0)
         'Dim the_MinimumWageAmount = ValNoComma(drow("MinimumWageAmount"))
         Dim the_MinimumWageAmount = ValNoComma(New ExecuteQuery("SELECT MinimumWageValue FROM payperiod WHERE RowID='" & n_PayrollRecordID & "';").Result)
 
@@ -305,17 +343,17 @@ Public Class PayrollGeneration
 
         'End If
 
-        payWTax = New SQLQueryToDatatable("SELECT * FROM paywithholdingtax;" &
-                                          "").ResultTable
+        payWTax = New SQL("SELECT * FROM paywithholdingtax;" &
+                                          "").GetFoundRows.Tables(0)
 
-        filingStatus = New SQLQueryToDatatable("SELECT * FROM filingstatus;" &
-                                          "").ResultTable
+        filingStatus = New SQL("SELECT * FROM filingstatus;" &
+                                          "").GetFoundRows.Tables(0)
 
         Dim phh As New DataTable
-        phh = New SQLQueryToDatatable("SELECT * FROM payphilhealth;").ResultTable
+        phh = New SQL("SELECT * FROM payphilhealth;").GetFoundRows.Tables(0)
 
         Dim sss As New DataTable
-        sss = New SQLQueryToDatatable("SELECT * FROM paysocialsecurity;").ResultTable
+        sss = New SQL("SELECT * FROM paysocialsecurity;").GetFoundRows.Tables(0)
 
 
         Dim emp_count = employee_dattab.Rows.Count
@@ -978,15 +1016,16 @@ Public Class PayrollGeneration
 
                         Dim phh_sql As New SQL(phh_contrib_quer, phh_param)
                         Dim caught_result As New DataTable
-                        If is_year2018 = False Then
-                            'Dim new2018PhilHealtContrib As String =
-                            '    String.Concat("SELECT GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", TRUE) `EmployeeShare`",
-                            '                  ", GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", FALSE) `EmployerShare`",
-                            '                  ";")
+                        'If is_year2018 = False Then
+                        If is_year2018 Then
+                            ''Dim new2018PhilHealtContrib As String =
+                            ''    String.Concat("SELECT GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", TRUE) `EmployeeShare`",
+                            ''                  ", GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", FALSE) `EmployerShare`",
+                            ''                  ";")
 
-                            'caught_result = New SQL(new2018PhilHealtContrib).GetFoundRows.Tables(0)
-                            phh_ee = CalcNewPhilHealth(amount_used_to_get_sss_contrib, True)
-                            phh_er = CalcNewPhilHealth(amount_used_to_get_sss_contrib, False)
+                            ''caught_result = New SQL(new2018PhilHealtContrib).GetFoundRows.Tables(0)
+                            phh_ee = CalcNewPhilHealth(amount_used_to_get_sss_contrib, True, CDec(drowsal("PhilHealthDeduction")))
+                            phh_er = CalcNewPhilHealth(amount_used_to_get_sss_contrib, False, CDec(drowsal("PhilHealthDeduction")))
                         Else
                             caught_result = phh_sql.GetFoundRows.Tables(0)
                             For Each phh_row As DataRow In caught_result.Rows
@@ -1102,7 +1141,14 @@ Public Class PayrollGeneration
                                                   " BETWEEN ptx.TaxableIncomeFromAmount AND ptx.TaxableIncomeToAmount",
                                                   ";")
 
-                                Dim sel_wtax = New SQLQueryToDatatable(wtx_sqlquery).ResultTable
+                                If is_year2018 Then
+                                    'If is_year2018 = False Then
+                                    wtx_sqlquery = Replace(wtax_sqlquery, "?fs_rowid", "IFNULL(ptx.FilingStatusID, 0)")
+                                    wtx_sqlquery = Replace(wtx_sqlquery, "?amount", the_taxable_salary)
+                                    wtx_sqlquery = Replace(wtx_sqlquery, ";", String.Concat(" AND MAKEDATE(", year2018, ", 1) BETWEEN ptx.EffectiveDateFrom AND ptx.EffectiveDateTo;"))
+                                End If
+
+                                Dim sel_wtax = New SQL(wtx_sqlquery).GetFoundRows.Tables(0)
 
                                 'Dim sel_payWTax = payWTax.Select("FilingStatusID = " & fstat_id &
                                 '                                 " AND PayFrequencyID = 2 AND " &
@@ -1196,7 +1242,14 @@ Public Class PayrollGeneration
                                                   " BETWEEN ptx.TaxableIncomeFromAmount AND ptx.TaxableIncomeToAmount",
                                                   ";")
 
-                                Dim sel_wtax = New SQLQueryToDatatable(wtx_sqlquery).ResultTable
+                                If is_year2018 Then
+                                    'If is_year2018 = False Then
+                                    wtx_sqlquery = Replace(wtax_sqlquery, "?fs_rowid", "IFNULL(ptx.FilingStatusID, 0)")
+                                    wtx_sqlquery = Replace(wtx_sqlquery, "?amount", the_taxable_salary)
+                                    wtx_sqlquery = Replace(wtx_sqlquery, ";", String.Concat(" AND MAKEDATE(", year2018, ", 1) BETWEEN ptx.EffectiveDateFrom AND ptx.EffectiveDateTo;"))
+                                End If
+
+                                Dim sel_wtax = New SQL(wtx_sqlquery).GetFoundRows.Tables(0)
 
                                 'Dim sel_payWTax = payWTax.Select("FilingStatusID = " & fstat_id &
                                 '                                 " AND PayFrequencyID = 2 AND " &
@@ -1267,21 +1320,21 @@ Public Class PayrollGeneration
                 Next
 
                 Dim isPayStubExists As _
-                    New ExecuteQuery("SELECT EXISTS(SELECT RowID" &
+                    New SQL("SELECT EXISTS(SELECT RowID" &
                                      " FROM paystub" &
                                      " WHERE EmployeeID='" & drow("RowID") & "'" &
                                      " AND OrganizationID='" & orgztnID & "'" &
                                      " AND PayFromDate='" & n_PayrollDateFrom & "'" &
                                      " AND PayToDate='" & n_PayrollDateTo & "');")
 
-                If isPayStubExists.Result = "0" Then
+                If isPayStubExists.GetFoundRow = "0" Then
 
                     If ValNoComma(Me.VeryFirstPayPeriodIDOfThisYear) = ValNoComma(n_PayrollRecordID) Then
                         'this means, the very first cut off of this year falls here
                         'so system should reset all leave balance to zero(0)
 
                         Dim new_ExecuteQuery As _
-                            New ExecuteQuery("UPDATE employee e SET" &
+                            New SQL("UPDATE employee e SET" &
                                              " e.LeaveBalance = 0" &
                                              ",e.SickLeaveBalance = 0" &
                                              ",e.MaternityLeaveBalance = 0" &
@@ -1290,7 +1343,7 @@ Public Class PayrollGeneration
                                              ",e.LastUpdBy='" & z_User & "'" &
                                              " WHERE e.RowID='" & drow("RowID") & "'" &
                                              " AND e.OrganizationID='" & orgztnID & "';")
-
+                        new_ExecuteQuery.ExecuteQuery()
                         '",e.AdditionalVLBalance = 0" &
 
                     End If
@@ -1306,32 +1359,39 @@ Public Class PayrollGeneration
                 _net =
                     (tot_net_pay + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce + thirteenthmoval + restday_pay_formonthlyemployee)
 
-                Dim n_ExecSQLProcedure = New  _
-                    ExecSQLProcedure("INSUPD_paystub_proc", 255,
-                                     DBNull.Value,
-                                     orgztnID,
-                                     z_User,
-                                     z_User,
-                                     n_PayrollRecordID,
-                                     Convert.ToInt32(drow("RowID")),
-                                     DBNull.Value,
-                                     n_PayrollDateFrom,
-                                     n_PayrollDateTo,
-                                     _gross,
-                                     _net,
-                                     the_taxable_salary,
-                                     pstub_TotalEmpSSS,
-                                     tax_amount,
-                                     pstub_TotalCompSSS,
-                                     pstub_TotalEmpPhilhealth,
-                                     pstub_TotalCompPhilhealth,
-                                     pstub_TotalEmpHDMF,
-                                     pstub_TotalCompHDMF,
-                                     0,
-                                     valemp_loan,
-                                     totalemployeebonus + totalnotaxemployeebonus,
-                                     totalemployeeallownce + totalnotaxemployeeallownce,
-                                     loan_nondeductibleamount)
+                Dim paystub_params =
+                    New Object() {DBNull.Value,
+                                  orgztnID,
+                                  z_User,
+                                  z_User,
+                                  n_PayrollRecordID,
+                                  Convert.ToInt32(drow("RowID")),
+                                  DBNull.Value,
+                                  n_PayrollDateFrom,
+                                  n_PayrollDateTo,
+                                  _gross,
+                                  _net,
+                                  the_taxable_salary,
+                                  pstub_TotalEmpSSS,
+                                  tax_amount,
+                                  pstub_TotalCompSSS,
+                                  pstub_TotalEmpPhilhealth,
+                                  pstub_TotalCompPhilhealth,
+                                  pstub_TotalEmpHDMF,
+                                  pstub_TotalCompHDMF,
+                                  0,
+                                  valemp_loan,
+                                  totalemployeebonus + totalnotaxemployeebonus,
+                                  totalemployeeallownce + totalnotaxemployeeallownce,
+                                  loan_nondeductibleamount}
+
+                'str_quer
+                'New SQL("INSUPD_paystub_proc", 255,
+                Dim n_ExecSQLProcedure =
+                    New SQL(str_quer,
+                                         paystub_params)
+
+                n_ExecSQLProcedure.ExecuteQuery()
 
                 If n_ExecSQLProcedure.HasError Then
                     Console.WriteLine(String.Concat("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@DEAD LOCK ERROR@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
@@ -1422,40 +1482,43 @@ Public Class PayrollGeneration
 
     End Sub
 
-    Private Function CalcNewPhilHealth(amount_worked As Decimal, is_for_employee As Boolean) As Decimal
+    Private Function CalcNewPhilHealth(amount_worked As Decimal, is_for_employee As Boolean, Optional new_philhealth_deduction As Decimal = 0) As Decimal
         Static base_multiplier As Decimal = 0.01
         Static half_divisor As Decimal = 2
 
-        Dim return_value As Decimal
+        Dim return_value, value1, value2 As Decimal
 
-        Dim min_contrib, max_contrib, value1, value2, contrib_amout, _rate As Decimal
+        'Dim contrib_amout, _rate, min_contrib, max_contrib As Decimal
 
-        For Each _phh As newphilhealthimplement In new_philhealth_collect
+        'For Each _phh As newphilhealthimplement In new_philhealth_collect
 
-            _rate = (_phh.Rate * base_multiplier)
+        '    _rate = (_phh.Rate * base_multiplier)
 
-            contrib_amout = (_rate * amount_worked)
+        '    contrib_amout = (_rate * amount_worked)
 
-            min_contrib = _phh.MinimumContribution
-            max_contrib = _phh.MaximumContribution
+        '    min_contrib = _phh.MinimumContribution
+        '    max_contrib = _phh.MaximumContribution
 
-            If min_contrib > contrib_amout Then
-                contrib_amout = min_contrib
-            ElseIf max_contrib < contrib_amout Then
-                contrib_amout = max_contrib
-            End If
+        '    If min_contrib > contrib_amout Then
+        '        contrib_amout = min_contrib
+        '    ElseIf max_contrib < contrib_amout Then
+        '        contrib_amout = max_contrib
+        '    End If
 
-            value1 = (contrib_amout / half_divisor)
-            value2 = (contrib_amout - value1)
+        '    'value1 = (contrib_amout / half_divisor)
+        '    'value2 = (contrib_amout - value1)
+        '    '
+        value1 = (new_philhealth_deduction / half_divisor)
+        value2 = (new_philhealth_deduction - value1)
 
-            Dim number_array = New Decimal() {value1, value2}
+        Dim number_array = New Decimal() {value1, value2}
 
-            If is_for_employee Then
-                return_value = number_array.Min
-            Else
-                return_value = number_array.Max
-            End If
-        Next
+        If is_for_employee Then
+            return_value = number_array.Min
+        Else
+            return_value = number_array.Max
+        End If
+        'Next
 
         Return return_value
     End Function

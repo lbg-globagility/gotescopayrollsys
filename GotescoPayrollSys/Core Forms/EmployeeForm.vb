@@ -11685,7 +11685,7 @@ Public Class EmployeeForm
 
         dgvemployeesalary.Enabled = boolresult
 
-        grpbasicsalaryaddeduction.Enabled = Not boolresult
+        'grpbasicsalaryaddeduction.Enabled = Not boolresult
 
         btnSaveSal.Enabled = Not boolresult
 
@@ -11759,7 +11759,7 @@ Public Class EmployeeForm
 
         IsNewSal = 1
 
-        grpbasicsalaryaddeduction.Enabled = True
+        'grpbasicsalaryaddeduction.Enabled = True
         btnSaveSal.Enabled = True
         btnNewSal.Enabled = False
 
@@ -11907,7 +11907,7 @@ Public Class EmployeeForm
             If dgvEmp.RowCount = 0 Then
                 btnNewSal.Enabled = True
 
-                grpbasicsalaryaddeduction.Enabled = False
+                'grpbasicsalaryaddeduction.Enabled = False
                 IsNewSal = 0
 
                 listofEditEmpSal.Clear()
@@ -11931,7 +11931,7 @@ Public Class EmployeeForm
             If dontUpdateSal = 1 Then
                 btnNewSal.Enabled = True
 
-                grpbasicsalaryaddeduction.Enabled = False
+                'grpbasicsalaryaddeduction.Enabled = False
                 IsNewSal = 0
 
                 listofEditEmpSal.Clear()
@@ -11999,7 +11999,7 @@ Public Class EmployeeForm
         ' btnSave.Enabled = False
         btnNewSal.Enabled = True
 
-        grpbasicsalaryaddeduction.Enabled = False
+        'grpbasicsalaryaddeduction.Enabled = False
         IsNewSal = 0
 
         listofEditEmpSal.Clear()
@@ -12087,7 +12087,7 @@ Public Class EmployeeForm
 
         btnSaveSal.Enabled = True
         btnNewSal.Enabled = True
-        grpbasicsalaryaddeduction.Enabled = False
+        'grpbasicsalaryaddeduction.Enabled = False
         IsNewSal = 0
 
         dgvEmp.Enabled = True
@@ -12480,10 +12480,12 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                 ElseIf sendr_name = "dptFromSal" Then
                     If dgvemployeesalary.CurrentRow.Cells("c_fromdate").Value <> Format(CDate(dptFromSal.Value), "M/d/yyy") Then
                         listofEditEmpSal.Add(dgvemployeesalary.CurrentRow.Cells(c_RowIDSal.Index).Value)
+                        dgvemployeesalary.CurrentRow.Cells("c_fromdate").Value = CDate(dptFromSal.Value).ToShortDateString
                     End If
                 ElseIf sendr_name = "dtpToSal" Then
                     If dgvemployeesalary.CurrentRow.Cells("c_todate").Value <> Format(CDate(dtpToSal.Value), "M/d/yyy") Then
                         listofEditEmpSal.Add(dgvemployeesalary.CurrentRow.Cells(c_RowIDSal.Index).Value)
+                        dgvemployeesalary.CurrentRow.Cells("c_todate").Value = CDate(dtpToSal.Value).ToShortDateString
                     End If
 
                 ElseIf sendr_name = "txtPagibig" Then
@@ -12758,10 +12760,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     Private Sub dgvemployeesalary_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvemployeesalary.CellClick
 
         If btnNewSal.Enabled = True Then
-            grpbasicsalaryaddeduction.Enabled = True
+            'grpbasicsalaryaddeduction.Enabled = True
             Try
                 fillseletedEnterEmpID(dgvemployeesalary.CurrentRow.Cells(c_RowIDSal.Index).Value)
-                grpbasicsalaryaddeduction.Enabled = True
+                'grpbasicsalaryaddeduction.Enabled = True
                 btnDelSal.Enabled = True
 
                 txtpaytype.Enabled = True
@@ -13289,7 +13291,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(8, 1) = esal_MaritalStatus
         params(9, 1) = If(esal_PositionID = Nothing, DBNull.Value, esal_PositionID)
         params(10, 1) = Format(CDate(esal_EffectiveDateFrom), "yyyy-MM-dd")
-        params(11, 1) = If(esal_EffectiveDateTo = Nothing, DBNull.Value, Format(CDate(esal_EffectiveDateTo), "yyyy-MM-dd"))
+        'params(11, 1) = If(esal_EffectiveDateTo = Nothing, DBNull.Value, Format(CDate(esal_EffectiveDateTo), "yyyy-MM-dd"))
+        params(11, 1) = Format(CDate(esal_EffectiveDateTo), "yyyy-MM-dd")
 
         'params(12, 1) = If(esal_truepagibigamount > 0, esal_truepagibigamount, Val(txtPagibig.Text) * payfreqdivisor) 'FormatNumber((Val(txtPagibig.Text) * payfreqdivisor), 2).Replace(",", "")
         'params(13, 1) = If(esal_truepagibigamount > 0, esal_truepagibigamount, Val(txtPagibig.Text)) ' * payfreqdivisor

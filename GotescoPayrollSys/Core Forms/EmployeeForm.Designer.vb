@@ -151,6 +151,9 @@ Partial Class EmployeeForm
         Me.txtEmpIDChk = New System.Windows.Forms.TextBox()
         Me.tbpEmployee = New System.Windows.Forms.TabPage()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.MaskedTextBox3 = New System.Windows.Forms.MaskedTextBox()
+        Me.MaskedTextBox4 = New System.Windows.Forms.MaskedTextBox()
+        Me.MaskedTextBox5 = New System.Windows.Forms.MaskedTextBox()
         Me.btnShowEmployeeList = New System.Windows.Forms.Button()
         Me.txtRegularizationDate = New GotescoPayrollSys.CustomDateTextBox()
         Me.MaskedTextBox2 = New System.Windows.Forms.TextBox()
@@ -1529,9 +1532,6 @@ Partial Class EmployeeForm
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.BalloonToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolTipLeaveBalOverride = New System.Windows.Forms.ToolTip(Me.components)
-        Me.MaskedTextBox3 = New System.Windows.Forms.MaskedTextBox()
-        Me.MaskedTextBox4 = New System.Windows.Forms.MaskedTextBox()
-        Me.MaskedTextBox5 = New System.Windows.Forms.MaskedTextBox()
         Me.tabctrlemp.SuspendLayout
         Me.tbpempchklist.SuspendLayout
         Me.ToolStrip15.SuspendLayout
@@ -2304,9 +2304,42 @@ Partial Class EmployeeForm
         Me.SplitContainer2.Panel2.Controls.Add(Me.lblforballoon1)
         Me.SplitContainer2.Panel2.Cursor = System.Windows.Forms.Cursors.Default
         Me.SplitContainer2.Size = New System.Drawing.Size(858, 430)
-        Me.SplitContainer2.SplitterDistance = 179
+        Me.SplitContainer2.SplitterDistance = 176
         Me.SplitContainer2.SplitterWidth = 7
         Me.SplitContainer2.TabIndex = 114
+        '
+        'MaskedTextBox3
+        '
+        Me.MaskedTextBox3.Location = New System.Drawing.Point(573, 163)
+        Me.MaskedTextBox3.Mask = "0000-0000-0000"
+        Me.MaskedTextBox3.Name = "MaskedTextBox3"
+        Me.MaskedTextBox3.ShortcutsEnabled = false
+        Me.MaskedTextBox3.Size = New System.Drawing.Size(168, 20)
+        Me.MaskedTextBox3.TabIndex = 542
+        Me.MaskedTextBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.MaskedTextBox3.Visible = false
+        '
+        'MaskedTextBox4
+        '
+        Me.MaskedTextBox4.Location = New System.Drawing.Point(573, 137)
+        Me.MaskedTextBox4.Mask = "00-0000000-00"
+        Me.MaskedTextBox4.Name = "MaskedTextBox4"
+        Me.MaskedTextBox4.ShortcutsEnabled = false
+        Me.MaskedTextBox4.Size = New System.Drawing.Size(168, 20)
+        Me.MaskedTextBox4.TabIndex = 541
+        Me.MaskedTextBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.MaskedTextBox4.Visible = false
+        '
+        'MaskedTextBox5
+        '
+        Me.MaskedTextBox5.Location = New System.Drawing.Point(573, 111)
+        Me.MaskedTextBox5.Mask = "000-000-000-000"
+        Me.MaskedTextBox5.Name = "MaskedTextBox5"
+        Me.MaskedTextBox5.ShortcutsEnabled = false
+        Me.MaskedTextBox5.Size = New System.Drawing.Size(168, 20)
+        Me.MaskedTextBox5.TabIndex = 540
+        Me.MaskedTextBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.MaskedTextBox5.Visible = false
         '
         'btnShowEmployeeList
         '
@@ -3674,7 +3707,7 @@ Partial Class EmployeeForm
         Me.dgvDepen.Name = "dgvDepen"
         Me.dgvDepen.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvDepen.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvDepen.Size = New System.Drawing.Size(856, 217)
+        Me.dgvDepen.Size = New System.Drawing.Size(856, 220)
         Me.dgvDepen.TabIndex = 116
         '
         'Colmn0
@@ -4131,7 +4164,6 @@ Partial Class EmployeeForm
         Me.grpbasicsalaryaddeduction.Controls.Add(Me.Label214)
         Me.grpbasicsalaryaddeduction.Controls.Add(Me.Label213)
         Me.grpbasicsalaryaddeduction.Controls.Add(Me.Label139)
-        Me.grpbasicsalaryaddeduction.Enabled = false
         Me.grpbasicsalaryaddeduction.Location = New System.Drawing.Point(32, 91)
         Me.grpbasicsalaryaddeduction.Name = "grpbasicsalaryaddeduction"
         Me.grpbasicsalaryaddeduction.Size = New System.Drawing.Size(822, 183)
@@ -15977,39 +16009,6 @@ Partial Class EmployeeForm
         Me.ToolTipLeaveBalOverride.IsBalloon = true
         Me.ToolTipLeaveBalOverride.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipLeaveBalOverride.ToolTipTitle = "Hint"
-        '
-        'MaskedTextBox3
-        '
-        Me.MaskedTextBox3.Location = New System.Drawing.Point(573, 163)
-        Me.MaskedTextBox3.Mask = "0000-0000-0000"
-        Me.MaskedTextBox3.Name = "MaskedTextBox3"
-        Me.MaskedTextBox3.ShortcutsEnabled = false
-        Me.MaskedTextBox3.Size = New System.Drawing.Size(168, 20)
-        Me.MaskedTextBox3.TabIndex = 542
-        Me.MaskedTextBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.MaskedTextBox3.Visible = false
-        '
-        'MaskedTextBox4
-        '
-        Me.MaskedTextBox4.Location = New System.Drawing.Point(573, 137)
-        Me.MaskedTextBox4.Mask = "00-0000000-00"
-        Me.MaskedTextBox4.Name = "MaskedTextBox4"
-        Me.MaskedTextBox4.ShortcutsEnabled = false
-        Me.MaskedTextBox4.Size = New System.Drawing.Size(168, 20)
-        Me.MaskedTextBox4.TabIndex = 541
-        Me.MaskedTextBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.MaskedTextBox4.Visible = false
-        '
-        'MaskedTextBox5
-        '
-        Me.MaskedTextBox5.Location = New System.Drawing.Point(573, 111)
-        Me.MaskedTextBox5.Mask = "000-000-000-000"
-        Me.MaskedTextBox5.Name = "MaskedTextBox5"
-        Me.MaskedTextBox5.ShortcutsEnabled = false
-        Me.MaskedTextBox5.Size = New System.Drawing.Size(168, 20)
-        Me.MaskedTextBox5.TabIndex = 540
-        Me.MaskedTextBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.MaskedTextBox5.Visible = false
         '
         'EmployeeForm
         '

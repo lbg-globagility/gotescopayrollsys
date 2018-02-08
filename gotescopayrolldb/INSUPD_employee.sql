@@ -13,7 +13,7 @@
 -- Dumping structure for function gotescopayrolldb_latest.INSUPD_employee
 DROP FUNCTION IF EXISTS `INSUPD_employee`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employee`(`emplo_RowID` INT, `emplo_UserID` INT, `emplo_OrganizationID` INT, `emplo_Salutation` VARCHAR(50), `emplo_FirstName` VARCHAR(100), `emplo_MiddleName` VARCHAR(100), `emplo_LastName` VARCHAR(100), `emplo_Surname` VARCHAR(50), `emplo_EmployeeID` VARCHAR(50), `emplo_TINNo` VARCHAR(50), `emplo_SSSNo` VARCHAR(50), `emplo_HDMFNo` VARCHAR(50), `emplo_PhilHealthNo` VARCHAR(50), `emplo_EmploymentStatus` VARCHAR(50), `emplo_EmailAddress` VARCHAR(50), `emplo_WorkPhone` VARCHAR(50), `emplo_HomePhone` VARCHAR(50), `emplo_MobilePhone` VARCHAR(50), `emplo_HomeAddress` VARCHAR(1000), `emplo_Nickname` VARCHAR(50), `emplo_JobTitle` VARCHAR(50), `emplo_Gender` VARCHAR(50), `emplo_EmployeeType` VARCHAR(50), `emplo_MaritalStatus` VARCHAR(50), `emplo_Birthdate` DATE, `emplo_Startdate` DATE, `emplo_TerminationDate` DATE, `emplo_PositionID` INT, `emplo_PayFrequencyID` INT, `emplo_NoOfDependents` INT, `emplo_Image` LONGBLOB, `emplo_LeavePerPayPeriod` DECIMAL(10,2), `emplo_SickLeavePerPayPeriod` DECIMAL(10,2), `emplo_MaternityLeavePerPayPeriod` DECIMAL(10,2), `emplo_OtherLeavePerPayPeriod` DECIMAL(10,2), `emplo_UndertimeOverride` VARCHAR(1), `emplo_OvertimeOverride` VARCHAR(1), `emplo_LeaveBalance` DECIMAL(10,2), `emplo_SickLeaveBalance` DECIMAL(10,2), `emplo_MaternityLeaveBalance` DECIMAL(10,2), `emplo_OtherLeaveBalance` DECIMAL(10,2), `emplo_LeaveAllowance` DECIMAL(10,2), `emplo_SickLeaveAllowance` DECIMAL(10,2), `emplo_MaternityLeaveAllowance` DECIMAL(10,2), `emplo_OtherLeaveAllowance` DECIMAL(10,2), `emplo_AlphaListExempted` VARCHAR(50), `emplo_WorkDaysPerYear` INT, `emplo_DayOfRest` CHAR(1), `emplo_ATMNo` VARCHAR(50), `emplo_BankName` VARCHAR(50), `emplo_CalcHoliday` CHAR(1), `emplo_CalcSpecialHoliday` CHAR(1), `emplo_CalcNightDiff` CHAR(1), `emplo_CalcNightDiffOT` CHAR(1), `emplo_CalcRestDay` CHAR(1), `emplo_CalcRestDayOT` CHAR(1), `emplo_DateRegularized` DATE, `emplo_DateEvaluated` DATE, `emplo_RevealInPayroll` CHAR(1), `emplo_LateGracePeriod` DECIMAL(10,2), `emplo_AgencyID` INT, `emplo_OffsetBalance` DECIMAL(10,2), `employ_DateR1A` DATE) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employee`(`emplo_RowID` INT, `emplo_UserID` INT, `emplo_OrganizationID` INT, `emplo_Salutation` VARCHAR(50), `emplo_FirstName` VARCHAR(100), `emplo_MiddleName` VARCHAR(100), `emplo_LastName` VARCHAR(100), `emplo_Surname` VARCHAR(50), `emplo_EmployeeID` VARCHAR(50), `emplo_TINNo` VARCHAR(50), `emplo_SSSNo` VARCHAR(50), `emplo_HDMFNo` VARCHAR(50), `emplo_PhilHealthNo` VARCHAR(50), `emplo_EmploymentStatus` VARCHAR(50), `emplo_EmailAddress` VARCHAR(50), `emplo_WorkPhone` VARCHAR(50), `emplo_HomePhone` VARCHAR(50), `emplo_MobilePhone` VARCHAR(50), `emplo_HomeAddress` VARCHAR(1000), `emplo_Nickname` VARCHAR(50), `emplo_JobTitle` VARCHAR(50), `emplo_Gender` VARCHAR(50), `emplo_EmployeeType` VARCHAR(50), `emplo_MaritalStatus` VARCHAR(50), `emplo_Birthdate` DATE, `emplo_Startdate` DATE, `emplo_TerminationDate` DATE, `emplo_PositionID` INT, `emplo_PayFrequencyID` INT, `emplo_NoOfDependents` INT, `emplo_Image` LONGBLOB, `emplo_LeavePerPayPeriod` DECIMAL(10,2), `emplo_SickLeavePerPayPeriod` DECIMAL(10,2), `emplo_MaternityLeavePerPayPeriod` DECIMAL(10,2), `emplo_OtherLeavePerPayPeriod` DECIMAL(10,2), `emplo_UndertimeOverride` VARCHAR(1), `emplo_OvertimeOverride` VARCHAR(1), `emplo_LeaveBalance` DECIMAL(10,2), `emplo_SickLeaveBalance` DECIMAL(10,2), `emplo_MaternityLeaveBalance` DECIMAL(10,2), `emplo_OtherLeaveBalance` DECIMAL(10,2), `emplo_LeaveAllowance` DECIMAL(10,2), `emplo_SickLeaveAllowance` DECIMAL(10,2), `emplo_MaternityLeaveAllowance` DECIMAL(10,2), `emplo_OtherLeaveAllowance` DECIMAL(10,2), `emplo_AlphaListExempted` VARCHAR(50), `emplo_WorkDaysPerYear` INT, `emplo_DayOfRest` CHAR(1), `emplo_ATMNo` VARCHAR(50), `emplo_BankName` VARCHAR(50), `emplo_CalcHoliday` CHAR(1), `emplo_CalcSpecialHoliday` CHAR(1), `emplo_CalcNightDiff` CHAR(1), `emplo_CalcNightDiffOT` CHAR(1), `emplo_CalcRestDay` CHAR(1), `emplo_CalcRestDayOT` CHAR(1), `emplo_DateRegularized` DATE, `emplo_DateEvaluated` DATE, `emplo_RevealInPayroll` CHAR(1), `emplo_LateGracePeriod` DECIMAL(10,2), `emplo_AgencyID` INT, `emplo_OffsetBalance` DECIMAL(10,2), `employ_DateR1A` DATE, `employ_DptMngr` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 
@@ -91,6 +91,7 @@ INSERT INTO employee
 	,AgencyID
 	,OffsetBalance
 	,DateR1A
+	,DeptManager
 ) VALUES (
 	emplo_RowID
 	,emplo_UserID
@@ -158,6 +159,7 @@ INSERT INTO employee
 	,emplo_AgencyID
 	,emplo_OffsetBalance
 	,employ_DateR1A
+	,employ_DptMngr
 ) ON 
 DUPLICATE 
 KEY 
@@ -220,7 +222,8 @@ UPDATE
 	,OffsetBalance=emplo_OffsetBalance
 	,MaternityLeaveBalance=emplo_MaternityLeaveBalance
 	,OtherLeaveBalance=emplo_OtherLeaveBalance
-	,DateR1A=employ_DateR1A;SELECT @@Identity AS id INTO emploRowID;
+	,DateR1A=employ_DateR1A
+	,DeptManager = employ_DptMngr;SELECT @@Identity AS id INTO emploRowID;
 
 RETURN emploRowID;
 

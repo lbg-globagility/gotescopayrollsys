@@ -86,11 +86,11 @@ SELECT pyp.PayToDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND p
 
 
 SELECT
-	e.HDMFNo
-	,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) AS Fullname
-	,psi.PayAmount AS EmployeeContributionAmount
-	,ps.TotalCompHDMF AS EmployerContributionAmount
-	,psi.PayAmount + ps.TotalCompHDMF AS TotalContribution
+	e.HDMFNo `DatCol1`
+	,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
+	,psi.PayAmount `DatCol3`
+	,ps.TotalCompHDMF `DatCol4`
+	,psi.PayAmount + ps.TotalCompHDMF `DatCol5`
 	FROM paystubitem psi
 	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=1 AND e.EmploymentStatus='Regular'
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=semi_payfrom OR ps.PayToDate>=semi_payfrom) AND (ps.PayFromDate<=semi_payto OR ps.PayToDate<=semi_payto)
@@ -101,11 +101,11 @@ SELECT
 	AND IFNULL(psi.PayAmount,0)!=0
 UNION
 	SELECT
-	e.HDMFNo
-	,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) AS Fullname
-	,psi.PayAmount AS EmployeeContributionAmount
-	,ps.TotalCompHDMF AS EmployerContributionAmount
-	,psi.PayAmount + ps.TotalCompHDMF AS TotalContribution
+	e.HDMFNo `DatCol1`
+	,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
+	,psi.PayAmount `DatCol3`
+	,ps.TotalCompHDMF `DatCol4`
+	,psi.PayAmount + ps.TotalCompHDMF `DatCol5`
 	FROM paystubitem psi
 	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=4 AND e.EmploymentStatus='Regular'
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=weekly_payfrom OR ps.PayToDate>=weekly_payfrom) AND (ps.PayFromDate<=weekly_payto OR ps.PayToDate<=weekly_payto)

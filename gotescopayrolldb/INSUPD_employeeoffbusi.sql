@@ -19,53 +19,82 @@ BEGIN
 
 DECLARE obf_ID INT(11);
 
-INSERT INTO employeeofficialbusiness
-(
-	RowID
-	,OrganizationID
-	,Created
-	,OffBusStartTime
-	,OffBusType
-	,CreatedBy
-	,EmployeeID
-	,OffBusEndTime
-	,OffBusStartDate
-	,OffBusEndDate
-	,Reason
-	,Comments
-	,OffBusStatus
-	,Image
-) VALUES (
-	obf_RowID
-	,obf_OrganizationID
-	,CURRENT_TIMESTAMP()
-	,obf_StartTime
-	,obf_Type
-	,obf_CreatedBy
-	,obf_EmployeeID
-	,obf_EndTime
-	,obf_StartDate
-	,obf_EndDate
-	,obf_Reason
-	,obf_Comments
-	,obf_OffBusStatus
-	,obf_Image
-) ON
-DUPLICATE
-KEY
-UPDATE 
-	LastUpd=CURRENT_TIMESTAMP()
-	,LastUpdBy=obf_LastUpdBy
-	,OffBusStartTime=obf_StartTime
-	,OffBusType=obf_Type
-	,OffBusEndTime=obf_EndTime
-	,OffBusStartDate=obf_StartDate
-	,OffBusEndDate=obf_EndDate
-	,Reason=IFNULL(obf_Reason, '')
-	,Comments=IFNULL(obf_Comments, '')
-	,OffBusStatus=obf_OffBusStatus
-	,Image=obf_Image;SELECT @@Identity AS id INTO obf_ID;
+DECLARE is_deptmngr BOOL DEFAULT FALSE;
 
+SET is_deptmngr = IS_USER_DEPTMNGR(obf_OrganizationID, obf_CreatedBy);
+
+IF is_deptmngr = TRUE THEN
+
+	UPDATE employeeofficialbusiness ob
+	SET
+	ob.LastUpd=CURRENT_TIMESTAMP()
+	,ob.LastUpdBy=obf_LastUpdBy
+	,ob.OffBusStartTime=obf_StartTime
+	,ob.OffBusType=obf_Type
+	,ob.OffBusEndTime=obf_EndTime
+	,ob.OffBusStartDate=obf_StartDate
+	,ob.OffBusEndDate=obf_EndDate
+	,ob.Reason=IFNULL(obf_Reason, '')
+	,ob.Comments=IFNULL(obf_Comments, '')
+	,ob.Image=obf_Image
+	,ob.OffBusStatus2=obf_OffBusStatus
+	WHERE ob.RowID=obf_RowID;
+
+ELSE
+
+	INSERT INTO employeeofficialbusiness
+	(
+		RowID
+		,OrganizationID
+		,Created
+		,OffBusStartTime
+		,OffBusType
+		,CreatedBy
+		,EmployeeID
+		,OffBusEndTime
+		,OffBusStartDate
+		,OffBusEndDate
+		,Reason
+		,Comments
+		,OffBusStatus
+		,Image
+		,OffBusStatus2
+	) VALUES (
+		obf_RowID
+		,obf_OrganizationID
+		,CURRENT_TIMESTAMP()
+		,obf_StartTime
+		,obf_Type
+		,obf_CreatedBy
+		,obf_EmployeeID
+		,obf_EndTime
+		,obf_StartDate
+		,obf_EndDate
+		,obf_Reason
+		,obf_Comments
+		,obf_OffBusStatus
+		,obf_Image
+		,obf_OffBusStatus
+	) ON
+	DUPLICATE
+	KEY
+	UPDATE 
+		LastUpd=CURRENT_TIMESTAMP()
+		,LastUpdBy=obf_LastUpdBy
+		,OffBusStartTime=obf_StartTime
+		,OffBusType=obf_Type
+		,OffBusEndTime=obf_EndTime
+		,OffBusStartDate=obf_StartDate
+		,OffBusEndDate=obf_EndDate
+		,Reason=IFNULL(obf_Reason, '')
+		,Comments=IFNULL(obf_Comments, '')
+		,OffBusStatus=obf_OffBusStatus
+		,Image=obf_Image
+		#,OffBusStatus2=obf_OffBusStatus
+		;SELECT @@Identity AS id INTO obf_ID;
+
+END IF;
+	
 RETURN obf_ID;
 
 END//

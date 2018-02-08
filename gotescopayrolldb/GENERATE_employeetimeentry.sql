@@ -227,12 +227,12 @@ INTO  payrateRowID
 		,pr_PayType;
 
 
-SELECT IFNULL(RestDay,'0')
+SELECT IFNULL((RestDay = 1), FALSE)
 FROM employeeshift
 WHERE EmployeeID=ete_EmpRowID
 AND OrganizationID=ete_OrganizID
 AND ete_Date BETWEEN EffectiveFrom AND EffectiveTo
-AND DATEDIFF(ete_Date,EffectiveFrom) >= 0 AND COALESCE(RestDay,0)='1'
+AND DATEDIFF(ete_Date,EffectiveFrom) >= 0 AND IFNULL(RestDay,0)=1
 ORDER BY DATEDIFF(ete_Date,EffectiveFrom)
 LIMIT 1 INTO isRestDay;
 
@@ -1041,7 +1041,7 @@ IF pr_DayBefore IS NULL THEN
 		
 
 	ELSEIF yester_TotDayPay = 0 THEN
-	
+
 
 		
 		IF isRestDay = '1' THEN
@@ -1124,7 +1124,7 @@ IF pr_DayBefore IS NULL THEN
 		END IF;
 	
 	ELSE
-	
+
 			
 		
 		SELECT CAST(EXISTS(
@@ -1143,7 +1143,7 @@ IF pr_DayBefore IS NULL THEN
 			
 			
 			IF isRestDay = '1' THEN
-	
+
 				IF ete_RegHrsWorkd = 140 THEN # IF ete_RegHrsWorkd > 8 THEN
 					SET ete_RegHrsWorkd = 8;
 				
@@ -1152,12 +1152,14 @@ IF pr_DayBefore IS NULL THEN
 				/*SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * ((commonrate + restday_rate) - 1))
 											 + ((ete_OvertimeHrs * rateperhourforOT) * restdayot_rate);*/#(otrate * restdayot_rate)#((otrate + restdayot_rate) - 1))
 				
-				SET ete_TotalDayPay =	(ete_RegHrsWorkd * rateperhour) * restday_rate
+				SET ete_TotalDayPay =	((ete_RegHrsWorkd * rateperhour) * restday_rate)
 												+ (ete_OvertimeHrs * rateperhourforOT) * restdayot_rate
 												+ (ete_NDiffHrs * rateperhour) * ndiffrate;
 											 
 				SET ete_HrsLate = 0.0;
-											 
+
+SET yes_true = 1;
+
 				SELECT INSUPD_employeetimeentries(
 						anyINT
 						, ete_OrganizID
@@ -1184,7 +1186,6 @@ IF pr_DayBefore IS NULL THEN
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
 				) INTO anyINT;
-				
 				
 			ELSE
 			
@@ -1277,12 +1278,25 @@ ELSE
 	
 	IF is_valid_for_holipayment = TRUE THEN
 		SET @zero = 0;
-		
+
 	   # if this date is holiday, it's a rule that there's no late or undertime
 		SET ete_HrsUnder = @zero;
 		SET ete_HrsLate = @zero;
 		
 	END IF;
+	
+	SET @availed_leave_hrs = 0.0;
+	
+	SELECT (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours) `Result`
+	FROM employeetimeentry et
+	WHERE et.EmployeeID=ete_EmpRowID
+	AND et.OrganizationID=ete_OrganizID
+	AND et.`Date`=ete_Date
+	AND (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours) > 0
+	LIMIT 1
+	INTO @availed_leave_hrs;
+	
+	SET @availed_leave_hrs = IFNULL(@availed_leave_hrs, 0);
 	
 	SELECT
 	IFNULL(et.TotalDayPay,0)
@@ -1315,11 +1329,12 @@ ELSE
 		FROM employee e
 		WHERE e.RowID=ete_EmpRowID
 		INTO isRestDay;
-	
-		IF isRestDay = '1' THEN # it's his/her rest day yester date
 
+		IF isRestDay = '1' THEN # it's his/her rest day yester date
+			
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * ((commonrate + restday_rate) - 1))
-										 + ((ete_OvertimeHrs * rateperhourforOT) * ((commonrate + restdayot_rate) - 1));
+										 + ((ete_OvertimeHrs * rateperhourforOT) * ((commonrate + restdayot_rate) - 1))
+										 + (@availed_leave_hrs * rateperhour);
 			
 			SELECT INSUPD_employeetimeentries(
 					anyINT
@@ -1349,9 +1364,10 @@ ELSE
 			) INTO anyINT;
 			
 		ELSE
-		
+
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
-										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate);
+										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
+										 + (@availed_leave_hrs * rateperhour);
 					
 			IF (ete_TotalDayPay IS NULL 
 				OR ete_TotalDayPay = 0)
@@ -1398,7 +1414,8 @@ ELSE
 		
 				
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
-										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate);
+										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
+										 + (@availed_leave_hrs * rateperhour);
 										 
 			SELECT INSUPD_employeetimeentries(
 					anyINT
@@ -1441,10 +1458,9 @@ ELSE
 			# IF isRestDay = '1' THEN
 			IF @satisf_conditn THEN
 			
-SET yes_true = 1;
-
 				SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
-											 + ((ete_OvertimeHrs * rateperhourforOT) * otrate);
+											 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
+											 + (@availed_leave_hrs * rateperhour);
 				IF hasLeave = '1' THEN SET ete_TotalDayPay = ete_TotalDayPay + (IFNULL((SELECT VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours FROM employeetimeentry WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date),0) * rateperhour); END IF;				 
 				SELECT INSUPD_employeetimeentries(
 						anyINT

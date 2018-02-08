@@ -14,11 +14,11 @@
 DROP PROCEDURE IF EXISTS `U_Users`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `U_Users`(IN `I_RowID` INT(11), IN `I_LastName` VARCHAR(50), IN `I_FirstName` VARCHAR(50), IN `I_MiddleName` VARCHAR(50), IN `I_PositionID` INT(11), IN `I_Created` DATETIME, IN `I_LastUpdBy` INT(11), IN `I_CreatedBy` INT(11), IN `I_LastUpd` DATETIME, IN `I_Status` VARCHAR(10)
-, IN `I_EmailAddress` VARCHAR(50), IN `enc_userid` VARCHAR(50), IN `enc_pword` VARCHAR(50))
+, IN `I_EmailAddress` VARCHAR(50), IN `enc_userid` VARCHAR(50), IN `enc_pword` VARCHAR(50), IN `I_dept_mngr_rowid` INT)
     DETERMINISTIC
 BEGIN
 
-UPDATE user SET 
+UPDATE `user` SET 
 	LastName = I_LastName,
 	FirstName = I_FirstName,
 	MiddleName = I_MiddleName,
@@ -32,6 +32,7 @@ UPDATE user SET
 	,`UserID` = enc_userid
 	,`Password` = enc_pword
 	,LastUpd = CURRENT_TIMESTAMP()
+	,DeptMngrID = I_dept_mngr_rowid
 WHERE RowID = I_RowID;END//
 DELIMITER ;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -38,10 +38,15 @@ DECLARE IsFirstHalfOfMonth CHAR(1);
 DECLARE payperiod_rowid INT(11);
 
 DECLARE isRollback BOOL DEFAULT 0;
-DECLARE emp_maxpayrollpayperiodID INT(11);
-DECLARE ordinal_val1 INT(11);
-DECLARE ordinal_val2 INT(11);
+
+DECLARE emp_maxpayrollpayperiodID
+        ,ordinal_val1
+        ,ordinal_val2
+		  ,first_ordinal_value INT(11);
+
 DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET isRollback = 1;
+
+SET first_ordinal_value = 1;
 
 START TRANSACTION;
 
@@ -94,7 +99,8 @@ INTO 	vl_Amt
 
 
 
-IF ordinal_val1 >= ordinal_val2 THEN
+IF ordinal_val1 >= ordinal_val2
+   AND first_ordinal_value < ordinal_val1 THEN
 	
 	UPDATE employee e SET
 	

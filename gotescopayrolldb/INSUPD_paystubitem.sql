@@ -39,27 +39,6 @@ DECLARE isWeeklySSSContribSched CHAR(1);
 		
 DECLARE SSSContribAmount DECIMAL(11,2);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 DECLARE pstubtimID INT(11);
 
 DECLARE pstubtimRowID INT(11);
@@ -67,8 +46,9 @@ DECLARE pstubtimRowID INT(11);
 DECLARE loan_interestID INT(11);
 
 
-SELECT RowID FROM paystubitem WHERE OrganizationID=pstubitm_OrganizationID AND PayStubID=pstubitm_PayStubID AND ProductID=pstubitm_ProductID AND IFNULL(Undeclared,'0')='0' INTO pstubtimRowID;
+SELECT RowID FROM paystubitem WHERE OrganizationID=pstubitm_OrganizationID AND PayStubID=pstubitm_PayStubID AND ProductID=pstubitm_ProductID AND Undeclared=FALSE INTO pstubtimRowID;
 
+/*
 INSERT INTO paystubitem
 (
 	RowID
@@ -87,7 +67,7 @@ INSERT INTO paystubitem
 	,pstubitm_PayStubID
 	,pstubitm_ProductID
 	,pstubitm_PayAmount
-	,'0'
+	,FALSE
 ) ON 
 DUPLICATE 
 KEY 
@@ -96,7 +76,65 @@ UPDATE
 	,LastUpdBy=pstubitm_LastUpdBy
 	,ProductID=pstubitm_ProductID
 	,PayAmount=pstubitm_PayAmount
-	,Undeclared='0';SELECT @@Identity AS id INTO pstubtimID;
+	,Undeclared=FALSE; SELECT @@Identity AS id INTO pstubtimID;
+*/
+
+SET @is_exists = FALSE;
+
+SELECT
+EXISTS(SELECT p.RowID
+       FROM product p
+		 # INNER JOIN category c ON c.RowID=p.CategoryID AND c.OrganizationID=p.OrganizationID AND c.CategoryName IN ('Deductions', 'Miscellaneous', 'Totals')
+		 WHERE p.OrganizationID = pstubitm_OrganizationID
+		 AND LOCATE('.', p.PartNo) = 0
+		 AND p.`Category` IN ('Deductions', 'Miscellaneous', 'Totals')
+		 # Taxable Income , Withholding Tax
+		 AND p.PartNo != 'Withholding Tax'
+		 AND p.RowID = pstubitm_ProductID)
+INTO @is_exists;
+
+INSERT INTO paystubitem
+(
+	OrganizationID
+	,Created
+	,CreatedBy
+	,PayStubID
+	,ProductID
+	,PayAmount
+	,Undeclared
+) SELECT
+	pstubitm_OrganizationID
+	,CURRENT_TIMESTAMP()
+	,pstubitm_CreatedBy
+	,pstubitm_PayStubID
+	,pstubitm_ProductID
+	, i.`Amount`
+	, i.`Result`
+  FROM (SELECT p.RowID `ProductID`
+        ,pstubitm_PayAmount `Amount`
+        ,FALSE `Result`
+		  FROM product p
+		  WHERE p.RowID=pstubitm_ProductID
+		UNION
+		  SELECT p.RowID `ProductID`
+        ,(pstubitm_PayAmount * IF(@is_exists = TRUE, GET_employeeundeclaredsalarypercent(ps.EmployeeID, ps.OrganizationID, ps.PayFromDate, ps.PayToDate), 1))`Amount`
+		  ,TRUE `Result`
+		  FROM product p
+		  INNER JOIN paystub ps ON ps.RowID=pstubitm_PayStubID
+		  WHERE p.RowID=pstubitm_ProductID) i
+ON 
+DUPLICATE 
+KEY 
+UPDATE 
+	LastUpd=CURRENT_TIMESTAMP()
+	,LastUpdBy=pstubitm_LastUpdBy
+	,ProductID=pstubitm_ProductID
+	,PayAmount=i.`Amount`
+	,Undeclared=i.`Result`;
+	
+	SELECT @@Identity AS id INTO pstubtimID;
+	
+# SELECT INSUPD_paystubitemUndeclared(NULL, pstubitm_OrganizationID, pstubitm_CreatedBy, pstubitm_CreatedBy, pstubitm_PayStubID, pstubitm_ProductID, pstubitm_PayAmount) INTO @anyint; # pstubitm_PayAmount psi_undeclaredID 493.15
 
 	SELECT PayPeriodID,EmployeeID,PayToDate,PayFromDate FROM paystub WHERE RowID=pstubitm_PayStubID INTO paypID,selectedEmployeeID,paypDateTo,pay_fromdate;
 	
@@ -137,12 +175,8 @@ UPDATE
 			
 		END IF;
 		
-		
-		
 	END IF;
 	
-	SELECT INSUPD_paystubitemUndeclared(NULL,pstubitm_OrganizationID,pstubitm_CreatedBy,pstubitm_CreatedBy,pstubitm_PayStubID,pstubitm_ProductID,pstubitm_PayAmount) INTO psi_undeclaredID;
-
 RETURN pstubtimID;
 
 END//

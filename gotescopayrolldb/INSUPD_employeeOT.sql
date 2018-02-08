@@ -23,58 +23,85 @@ DECLARE othrscount DECIMAL(11,2);
 
 DECLARE endovertime TIME;
 
+DECLARE is_deptmngr BOOL DEFAULT FALSE;
 
+SET is_deptmngr = IS_USER_DEPTMNGR(eot_OrganizationID, eot_CreatedBy);
 
 SET endovertime = IF(HOUR(eot_OTEndTime) = 24, TIME_FORMAT(eot_OTEndTime,'00:%i:%s'), eot_OTEndTime);
 
-INSERT INTO employeeovertime
-(
-	RowID
-	,OrganizationID
-	,Created
-	,CreatedBy
-	,EmployeeID
-	,OTType
-	,OTStartTime
-	,OTEndTime
-	,OTStartDate
-	,OTEndDate
-	,OTStatus
-	,Reason
-	,Comments
-	,Image
-) VALUES (
-	eot_RowID
-	,eot_OrganizationID
-	,CURRENT_TIMESTAMP()
-	,eot_CreatedBy
-	,eot_EmployeeID
-	,eot_OTType
-	,eot_OTStartTime
-	,endovertime
-	,eot_OTStartDate
-	,eot_OTEndDate
-	,eot_OTStatus
-	,eot_Reason
-	,eot_Comments
-	,eot_Image
-) ON
-DUPLICATE
-KEY
-UPDATE 
-	LastUpd=CURRENT_TIMESTAMP()
-	,LastUpdBy=eot_LastUpdBy
-	,OTType=eot_OTType
-	,OTStartTime=eot_OTStartTime
-	,OTEndTime=endovertime
-	,OTStartDate=eot_OTStartDate
-	,OTEndDate=eot_OTEndDate
-	,OTStatus=eot_OTStatus
-	,Reason=eot_Reason
-	,Comments=eot_Comments
-	,Image=eot_Image;SELECT @@Identity AS id INTO eot_ID;
+# OTStatus2
 
+IF is_deptmngr = TRUE THEN
 
+	UPDATE employeeovertime ot
+	SET
+	ot.LastUpd=CURRENT_TIMESTAMP()
+	,ot.LastUpdBy=eot_LastUpdBy
+	,ot.OTType=eot_OTType
+	,ot.OTStartTime=eot_OTStartTime
+	,ot.OTEndTime=endovertime
+	,ot.OTStartDate=eot_OTStartDate
+	,ot.OTEndDate=eot_OTEndDate
+	,ot.Reason=eot_Reason
+	,ot.Comments=eot_Comments
+	,ot.Image=eot_Image
+	,ot.OTStatus2=eot_OTStatus
+	WHERE ot.RowID=eot_RowID;
+	
+ELSE
+
+	INSERT INTO employeeovertime
+	(
+		RowID
+		,OrganizationID
+		,Created
+		,CreatedBy
+		,EmployeeID
+		,OTType
+		,OTStartTime
+		,OTEndTime
+		,OTStartDate
+		,OTEndDate
+		,OTStatus
+		,Reason
+		,Comments
+		,Image
+		,OTStatus2
+	) VALUES (
+		eot_RowID
+		,eot_OrganizationID
+		,CURRENT_TIMESTAMP()
+		,eot_CreatedBy
+		,eot_EmployeeID
+		,eot_OTType
+		,eot_OTStartTime
+		,endovertime
+		,eot_OTStartDate
+		,eot_OTEndDate
+		,eot_OTStatus
+		,eot_Reason
+		,eot_Comments
+		,eot_Image
+		,eot_OTStatus
+	) ON
+	DUPLICATE
+	KEY
+	UPDATE 
+		LastUpd=CURRENT_TIMESTAMP()
+		,LastUpdBy=eot_LastUpdBy
+		,OTType=eot_OTType
+		,OTStartTime=eot_OTStartTime
+		,OTEndTime=endovertime
+		,OTStartDate=eot_OTStartDate
+		,OTEndDate=eot_OTEndDate
+		,OTStatus=eot_OTStatus
+		,Reason=eot_Reason
+		,Comments=eot_Comments
+		,Image=eot_Image
+		# ,OTStatus2=eot_OTStatus
+		;SELECT @@Identity AS id INTO eot_ID;
+
+END IF;
 
 RETURN eot_ID;
 

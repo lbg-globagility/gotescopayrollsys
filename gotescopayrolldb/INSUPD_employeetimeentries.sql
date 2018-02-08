@@ -87,7 +87,8 @@ INSERT INTO employeetimeentry
 	,	etent_HoursLateAmount
 	,IF(etent_HoursLateAmount = 0, '0', '1')
 	,etent_PayRateID
-	,	etent_TotalDayPay
+	# ,	etent_TotalDayPay
+	, (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount)
 	,is_valid_for_holipayment
 ) ON 
 DUPLICATE 
@@ -109,7 +110,8 @@ UPDATE
 	,HoursLate = etent_HoursLate
 	,HoursLateAmount = etent_HoursLateAmount
 	,LateFlag = IF(etent_HoursLateAmount = 0, '0', '1')
-	,TotalDayPay = etent_TotalDayPay
+	# ,TotalDayPay = etent_TotalDayPay
+	,TotalDayPay = (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount)
 	,EmployeeShiftID = etent_EmployeeShiftID
 	,EmployeeSalaryID=etent_EmployeeSalaryID
 	,IsValidForHolidayPayment=is_valid_for_holipayment;SELECT @@Identity AS id INTO etentID;

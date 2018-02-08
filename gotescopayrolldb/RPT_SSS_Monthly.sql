@@ -52,12 +52,12 @@ SELECT pyp.PayFromDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND
 SELECT pyp.PayToDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND pyp.`Year`=YEAR(paramDate) AND pyp.`Month`=(MONTH(paramDate) * 1) AND pyp.TotalGrossSalary=4 ORDER BY pyp.PayFromDate DESC, pyp.PayToDate DESC LIMIT 1 INTO wk_paydateto;
 	
 	SELECT 
-	ee.SSSNo
-	,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) AS Fullname
-	,psi.PayAmount AS EmployeeContributionAmount
-	,pss.EmployerContributionAmount
-	,pss.EmployeeECAmount 
-	,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) 'Total'
+	ee.SSSNo `DatCol1`
+	,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol2`
+	,psi.PayAmount `DatCol3`
+	,pss.EmployerContributionAmount `DatCol4`
+	,pss.EmployeeECAmount `DatCol5`
+	,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) `DatCol6`
 	FROM paystub ps
 	INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=1
 	INNER JOIN product p ON p.PartNo='.SSS' AND p.OrganizationID=OrganizID
@@ -69,12 +69,12 @@ SELECT pyp.PayToDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND p
 	AND IFNULL(psi.PayAmount,0)!=0
 UNION
 	SELECT 
-	ee.SSSNo
-	,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) AS Fullname
-	,psi.PayAmount AS EmployeeContributionAmount
-	,pss.EmployerContributionAmount
-	,pss.EmployeeECAmount 
-	,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) 'Total'
+	ee.SSSNo `DatCol1`
+	,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol2`
+	,psi.PayAmount `DatCol3`
+	,pss.EmployerContributionAmount `DatCol4`
+	,pss.EmployeeECAmount `DatCol5`
+	,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) `DatCol6`
 	FROM paystub ps
 	INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=4
 	INNER JOIN product p ON p.PartNo='.SSS' AND p.OrganizationID=OrganizID

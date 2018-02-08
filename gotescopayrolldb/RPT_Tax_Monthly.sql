@@ -24,12 +24,12 @@ SELECT PagIbigDeductionSchedule FROM organization WHERE RowID=OrganizID INTO ded
 IF deduc_sched = 'First half of next month' THEN
 
 	SELECT
-	ee.TINNo 'TIN'
-	,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) AS Fullname
-	,FORMAT(SUM(ps.TotalTaxableSalary),2) 'Taxable Gross'
-	,FORMAT(SUM(ps.TotalEmpWithholdingTax),2) 'Tax Withheld'
-	,0.0 'Year To Date Tax Gross'
-	,0.0 'Year To Date Tax Withheld'
+	ee.TINNo `DatCol1`
+	,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol2`
+	,FORMAT(SUM(ps.TotalTaxableSalary),2) `DatCol3`
+	,FORMAT(SUM(ps.TotalEmpWithholdingTax),2) `DatCol4`
+	,0.0 `DatCol5`
+	,0.0  `DatCol6`
 	FROM paystub ps
 	
 	INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.OrganizationID=ps.OrganizationID
@@ -51,12 +51,12 @@ IF deduc_sched = 'First half of next month' THEN
 ELSE
 
 	SELECT
-	ee.TINNo 'TIN'
-	,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) AS Fullname
-	,FORMAT(SUM(ps.TotalTaxableSalary),2) 'Taxable Gross'
-	,FORMAT(SUM(ps.TotalEmpWithholdingTax),2) 'Tax Withheld'
-	,(SELECT FORMAT(SUM(TotalTaxableSalary),2) FROM paystub WHERE EmployeeID=ps.EmployeeID AND OrganizationID=OrganizID AND PayFromDate>=MAKEDATE(YEAR(paramDateTo),1) AND PayToDate<=paramDateTo) 'Year To Date Tax Gross'
-	,(SELECT FORMAT(SUM(TotalEmpWithholdingTax),2) FROM paystub WHERE EmployeeID=ps.EmployeeID AND OrganizationID=OrganizID AND PayFromDate>=MAKEDATE(YEAR(paramDateTo),1) AND PayToDate<=paramDateTo) 'Year To Date Tax Withheld'
+	ee.TINNo `DatCol1`
+	,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol2`
+	,FORMAT(SUM(ps.TotalTaxableSalary),2) `DatCol3`
+	,FORMAT(SUM(ps.TotalEmpWithholdingTax),2) `DatCol4`
+	,(SELECT FORMAT(SUM(TotalTaxableSalary),2) FROM paystub WHERE EmployeeID=ps.EmployeeID AND OrganizationID=OrganizID AND PayFromDate>=MAKEDATE(YEAR(paramDateTo),1) AND PayToDate<=paramDateTo) `DatCol5`
+	,(SELECT FORMAT(SUM(TotalEmpWithholdingTax),2) FROM paystub WHERE EmployeeID=ps.EmployeeID AND OrganizationID=OrganizID AND PayFromDate>=MAKEDATE(YEAR(paramDateTo),1) AND PayToDate<=paramDateTo) `DatCol6`
 	FROM paystub ps
 	LEFT JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.OrganizationID=ps.OrganizationID
 	

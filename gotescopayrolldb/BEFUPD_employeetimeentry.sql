@@ -12,7 +12,7 @@
 
 -- Dumping structure for trigger gotescopayrolldb_latest.BEFUPD_employeetimeentry
 DROP TRIGGER IF EXISTS `BEFUPD_employeetimeentry`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `BEFUPD_employeetimeentry` BEFORE UPDATE ON `employeetimeentry` FOR EACH ROW BEGIN
 
@@ -68,7 +68,9 @@ END IF;*/
 
 SET @myperfectshifthrs = 0;
 
-SELECT (NEW.EmployeeShiftID IS NULL) INTO isRest_day; # EXISTS(SELECT RowID FROM employeeshift WHERE RowID=NEW.EmployeeShiftID AND RestDay='1')
+SELECT ((NEW.EmployeeShiftID IS NULL)
+        OR EXISTS(SELECT RowID FROM employeeshift WHERE RowID=NEW.EmployeeShiftID AND RestDay='1'))
+INTO isRest_day;
 
 SET @employee_type = '';
 
@@ -127,7 +129,7 @@ ELSE
 END IF;
 	
 SET NEW.TotalDayPay = IFNULL(NEW.TotalDayPay,0);
-
+SET NEW.TaxableDailyBonus = 0;
 IF isRest_day = '0' THEN
 
 	SELECT EXISTS(SELECT RowID FROM employeeshift esh WHERE esh.EmployeeID=NEW.EmployeeID AND esh.OrganizationID=NEW.OrganizationID AND esh.RestDay='0' AND NEW.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo LIMIT 1) INTO has_shift;
@@ -173,9 +175,9 @@ IF isRest_day = '0' THEN
 			END IF;
 			
 		END IF;
-		
+
 	ELSE
-	
+
 		IF isDateNotHoliday = '0' THEN
 		
 			SET @calclegalholi = '0';
@@ -204,7 +206,7 @@ IF isRest_day = '0' THEN
 					AND NEW.TotalDayPay = 0
 					AND (@calclegalholi = 0 AND @calcspecholi = 0) THEN
 					
-				SET NEW.Absent = @daily_pay; # 0 @daily_pay;
+				SET NEW.Absent = 0; # 0 @daily_pay;
 					
 			ELSEIF has_shift = '1' AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0
@@ -269,10 +271,10 @@ IF isRest_day = '0' THEN
 				END IF;
 					
 			END IF;
-			
+		
 		ELSE
 			SET NEW.Absent = IFNULL(NEW.Absent,0);
-		
+		SET NEW.TaxableDailyBonus = 11792;
 		END IF;
 			
 	END IF;

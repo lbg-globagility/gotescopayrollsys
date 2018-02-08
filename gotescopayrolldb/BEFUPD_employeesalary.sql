@@ -12,7 +12,7 @@
 
 -- Dumping structure for trigger gotescopayrolldb_latest.BEFUPD_employeesalary
 DROP TRIGGER IF EXISTS `BEFUPD_employeesalary`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `BEFUPD_employeesalary` BEFORE UPDATE ON `employeesalary` FOR EACH ROW BEGIN
 
@@ -84,13 +84,13 @@ END IF;
 
 # SET NEW.PayPhilhealthID = (SELECT RowID FROM payphilhealth WHERE ((NEW.BasicPay * e_workdayyear) / month_count_per_year) BETWEEN SalaryRangeFrom AND SalaryRangeTo AND NEW.OverrideDiscardPhilHealthContrib = 0 LIMIT 1);
 
-IF IFNULL(NEW.UndeclaredSalary,0) = 0 THEN
+/*IF IFNULL(NEW.UndeclaredSalary,0) = 0 THEN
 	SET NEW.UndeclaredSalary = IFNULL(NEW.TrueSalary - NEW.Salary,0);
 END IF;
 
 IF NEW.EffectiveDateTo IS NULL AND OLD.EffectiveDateTo IS NOT NULL THEN
 	SET NEW.EffectiveDateTo = OLD.EffectiveDateTo;
-END IF;
+END IF;*/
 
 END//
 DELIMITER ;

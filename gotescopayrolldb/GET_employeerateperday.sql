@@ -44,7 +44,7 @@ DECLARE org_workdaysofyear INT(11);
 DECLARE emp_sal DECIMAL(11,6);
 
 
-SELECT ShiftID FROM employeeshift WHERE EmployeeID=EmpID AND OrganizationID=OrgID AND paramDate BETWEEN DATE(COALESCE(EffectiveFrom,DATE_FORMAT(CURRENT_TIMESTAMP(),'%Y-%m-%d'))) AND DATE(COALESCE(EffectiveTo,ADDDATE(CURRENT_TIMESTAMP(), INTERVAL 3 MONTH))) AND DATEDIFF(paramDate,EffectiveFrom) >= 0 AND COALESCE(RestDay,0)=0 ORDER BY DATEDIFF(DATE_FORMAT(paramDate,'%Y-%m-%d'),EffectiveFrom) LIMIT 1 INTO shiftRowID;
+/*SELECT ShiftID FROM employeeshift WHERE EmployeeID=EmpID AND OrganizationID=OrgID AND paramDate BETWEEN DATE(COALESCE(EffectiveFrom,DATE_FORMAT(CURRENT_TIMESTAMP(),'%Y-%m-%d'))) AND DATE(COALESCE(EffectiveTo,ADDDATE(CURRENT_TIMESTAMP(), INTERVAL 3 MONTH))) AND DATEDIFF(paramDate,EffectiveFrom) >= 0 AND COALESCE(RestDay,0)=0 ORDER BY DATEDIFF(DATE_FORMAT(paramDate,'%Y-%m-%d'),EffectiveFrom) LIMIT 1 INTO shiftRowID;
 
 SELECT SUBSTRING_INDEX(TIMEDIFF(TimeFrom,IF(TimeFrom>TimeTo,ADDTIME(TimeTo,'24:00:00'),TimeTo)),'-',-1) FROM shift WHERE RowID=shiftRowID AND OrganizationID=OrgID INTO timedifference;
 
@@ -130,8 +130,34 @@ END IF;
 			
 			SET dailyrate = rateperhour;
 		
-		END IF;
+		END IF;*/
 		
+SELECT i.DailyRate
+# FROM employeesalary_withdailyrate i
+FROM (SELECT esa.*
+		 ,ROUND(
+		 (esa.Salary
+		  / (e.WorkDaysPerYear
+		     / 12 # count of months per year
+			  )), 6) `DailyRate`
+		FROM employeesalary esa
+		INNER JOIN employee e ON e.RowID=esa.EmployeeID AND e.EmployeeType IN ('Monthly', 'Fixed') AND e.RowID=EmpID AND e.OrganizationID=OrgID
+		
+	UNION
+		SELECT esa.*
+	   , ROUND(esa.BasicPay, 6) `DailyRate`
+		FROM employeesalary esa
+		INNER JOIN employee e ON e.RowID=esa.EmployeeID AND e.EmployeeType = 'Daily' AND e.RowID=EmpID AND e.OrganizationID=OrgID
+      ) i
+WHERE /*i.EmployeeID = EmpID
+AND i.OrganizationID = OrgID
+AND */
+paramDate BETWEEN i.EffectiveDateFrom AND IFNULL(i.EffectiveDateTo, paramDate)
+AND DATEDIFF(paramDate, i.EffectiveDateFrom) >= 0
+ORDER BY DATEDIFF(DATE_FORMAT(paramDate, @@date_format), i.EffectiveDateFrom)
+LIMIT 1
+INTO dailyrate;
+
 RETURN dailyrate;
 
 END//

@@ -19,7 +19,7 @@ BEGIN
 
 /*SELECT GROUP_CONCAT(ii.COLUMN_NAME)
 FROM information_schema.`COLUMNS` ii
-WHERE ii.TABLE_SCHEMA='gotescopayrolldb_oct19_marm'
+WHERE ii.TABLE_SCHEMA='gotescopayrolldb_marm'
 AND ii.TABLE_NAME='employee'
 AND ii.DATA_TYPE='decimal';*/
 

@@ -19,14 +19,14 @@ BEGIN
 
 DECLARE returnvaue INT(11) DEFAULT 0;
 
-SELECT RowID FROM user WHERE InSession='0' AND UserID=user_name AND `Password`=pass_word LIMIT 1 INTO returnvaue;
+SELECT RowID FROM `user` WHERE InSession='0' AND UserID=user_name AND `Password`=pass_word AND RowID > 0 LIMIT 1 INTO returnvaue;
 
 IF returnvaue IS NULL THEN
 	SET returnvaue = 0;
 END IF;
 
 IF returnvaue > 0 THEN
-	UPDATE user SET
+	UPDATE `user` SET
 	#InSession='1',
 	LastUpd=CURRENT_TIMESTAMP()
 	,LastUpdBy=returnvaue

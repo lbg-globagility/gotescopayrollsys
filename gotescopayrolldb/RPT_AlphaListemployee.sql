@@ -26,7 +26,7 @@ SELECT e.RowID
 ,e.HomeAddress
 ,DATE_FORMAT(e.Birthdate,'%m%d%Y') Birthdate
 , e.MobilePhone
-,IF(e.MaritalStatus = 'Single', 'ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼', '         ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼') AS ExemptionStatus
+,IF(e.MaritalStatus = 'Single', 'ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼', '         ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼') AS ExemptionStatus
 ,e.EmployeeType
 FROM employee e
 WHERE e.OrganizationID=OrganizID

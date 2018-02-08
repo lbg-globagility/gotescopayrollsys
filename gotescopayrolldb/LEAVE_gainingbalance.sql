@@ -21,7 +21,9 @@ DECLARE maximum_date DATE;
 
 DECLARE curr_year YEAR;
 
-SELECT pp.`Year` FROM payperiod pp WHERE pp.OrganizationID = OrganizID AND pp.TotalGrossSalary = 1 AND pp.PayFromDate = minimum_date AND pp.PayToDate = custom_maximum_date INTO curr_year;
+DECLARE count_semi_monthly_period_peryear INT DEFAULT 24;
+
+SELECT pp.`Year` FROM payperiod pp WHERE pp.OrganizationID = OrganizID AND pp.TotalGrossSalary = 1 AND pp.PayFromDate = minimum_date AND pp.PayToDate = custom_maximum_date LIMIT 1 INTO curr_year;
 
 IF curr_year = YEAR(CURDATE()) THEN
 
@@ -47,11 +49,11 @@ IF curr_year = YEAR(CURDATE()) THEN
 	
 	SELECT MAX(ps.PayToDate) FROM (SELECT * FROM paystub WHERE OrganizationID=OrganizID AND EmployeeID=EmpRowID) ps INNER JOIN payperiod pp ON pp.TotalGrossSalary = 1 AND pp.RowID=ps.PayPeriodID AND pp.`Year`=curr_year AND pp.OrganizationID=ps.OrganizationID WHERE ps.OrganizationID=OrganizID INTO maximum_date;
 	IF maximum_date IS NULL THEN
-		SELECT pp.PayFromDate FROM payperiod pp WHERE pp.OrdinalValue = 24 AND pp.TotalGrossSalary = 1 AND pp.`Year`=curr_year AND pp.OrganizationID=OrganizID INTO maximum_date;
+		SELECT pp.PayFromDate FROM payperiod pp WHERE pp.OrdinalValue = count_semi_monthly_period_peryear AND pp.TotalGrossSalary = 1 AND pp.`Year`=curr_year AND pp.OrganizationID=OrganizID INTO maximum_date;
 	END IF;
 
 	
-	SELECT pp.PayToDate FROM payperiod pp WHERE pp.OrdinalValue = 24 AND pp.TotalGrossSalary = 1 AND pp.`Year`=curr_year AND pp.OrganizationID=OrganizID INTO custom_maximum_date;
+	SELECT pp.PayToDate FROM payperiod pp WHERE pp.OrdinalValue = count_semi_monthly_period_peryear AND pp.TotalGrossSalary = 1 AND pp.`Year`=curr_year AND pp.OrganizationID=OrganizID INTO custom_maximum_date;
 	
 	IF custom_maximum_date IS NULL THEN
 		SET custom_maximum_date = ADDDATE(SUBDATE(minimum_date, INTERVAL 1 DAY), INTERVAL 1 YEAR);
@@ -75,21 +77,23 @@ IF curr_year = YEAR(CURDATE()) THEN
 	INNER JOIN (SELECT * FROM paystub WHERE OrganizationID=OrganizID AND EmployeeID=EmpRowID) ps ON ps.EmployeeID=e.RowID AND ps.OrganizationID=e.OrganizationID AND e.DateRegularized BETWEEN ps.PayFromDate AND ps.PayToDate
 	INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND ps.TotalGrossSalary=e.PayFrequencyID AND pp.`Year`=curr_year
 	SET
-	e.LeavePerPayPeriod =				( e.LeaveAllowance / 24 )
-	,e.SickLeavePerPayPeriod =			( e.SickLeaveAllowance / 24 )
-	,e.MaternityLeavePerPayPeriod =	( e.MaternityLeaveAllowance / 24 )
-	,e.OtherLeavePerPayPeriod =		( e.OtherLeaveAllowance / 24 )
+	e.LeavePerPayPeriod =				( e.LeaveAllowance / count_semi_monthly_period_peryear )
+	,e.SickLeavePerPayPeriod =			( e.SickLeaveAllowance / count_semi_monthly_period_peryear )
+	,e.MaternityLeavePerPayPeriod =	( e.MaternityLeaveAllowance / count_semi_monthly_period_peryear )
+	,e.OtherLeavePerPayPeriod =		( e.OtherLeaveAllowance / count_semi_monthly_period_peryear )
 	
-	,e.LeaveBalance =				( e.LeaveAllowance / 24 ) * (24 - pp.OrdinalValue)
-	,e.SickLeaveBalance =		( e.SickLeaveAllowance / 24 ) * (24 - pp.OrdinalValue)
-	,e.MaternityLeaveBalance =	( e.MaternityLeaveAllowance / 24 ) * (24 - pp.OrdinalValue)
-	,e.OtherLeaveBalance =		( e.OtherLeaveAllowance / 24 ) * (24 - pp.OrdinalValue)
+	,e.LeaveBalance =				( e.LeaveAllowance / count_semi_monthly_period_peryear ) * (count_semi_monthly_period_peryear - pp.OrdinalValue)
+	,e.SickLeaveBalance =		( e.SickLeaveAllowance / count_semi_monthly_period_peryear ) * (count_semi_monthly_period_peryear - pp.OrdinalValue)
+	,e.MaternityLeaveBalance =	( e.MaternityLeaveAllowance / count_semi_monthly_period_peryear ) * (count_semi_monthly_period_peryear - pp.OrdinalValue)
+	,e.OtherLeaveBalance =		( e.OtherLeaveAllowance / count_semi_monthly_period_peryear ) * (count_semi_monthly_period_peryear - pp.OrdinalValue)
 	
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
 	AND e.RowID = EmpRowID
 	AND e.DateRegularized BETWEEN minimum_date AND custom_maximum_date;
+	
+	SET @custom_curr_time_stamp = CURRENT_TIMESTAMP();
 	
 	UPDATE employee e
 	SET
@@ -98,7 +102,7 @@ IF curr_year = YEAR(CURDATE()) THEN
 	,e.MaternityLeaveBalance =	e.MaternityLeaveAllowance
 	,e.OtherLeaveBalance =		e.OtherLeaveAllowance
 	
-	,e.LastUpd=CURRENT_TIMESTAMP()
+	,e.LastUpd=@custom_curr_time_stamp
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
 	AND e.RowID = EmpRowID
@@ -118,12 +122,14 @@ IF curr_year = YEAR(CURDATE()) THEN
 	INNER JOIN (SELECT * FROM paystub WHERE OrganizationID=OrganizID AND EmployeeID=EmpRowID) ps ON ps.EmployeeID=e.RowID AND ps.OrganizationID=e.OrganizationID AND ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) BETWEEN ps.PayFromDate AND ps.PayToDate
 	INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND ps.TotalGrossSalary=e.PayFrequencyID AND pp.`Year`=curr_year
 	
-	SET e.AdditionalVLPerPayPeriod=( e.LeaveTenthYearService / 24 )
+	SET e.AdditionalVLPerPayPeriod=( e.LeaveTenthYearService / count_semi_monthly_period_peryear )
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
 	AND e.RowID = EmpRowID
-	AND ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) <= minimum_date;
+	AND ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) <= minimum_date
+	AND e.LastUpd != @custom_curr_time_stamp
+	;
 	# AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = curr_year;
 	# AND IF(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) BETWEEN @paypFrom AND @paypTo, @paypTo, @paypFrom)
 	# BETWEEN ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) AND ADDDATE(e.DateRegularized,INTERVAL 10 YEAR);
@@ -135,13 +141,14 @@ IF curr_year = YEAR(CURDATE()) THEN
 	INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND ps.TotalGrossSalary=e.PayFrequencyID AND pp.`Year`=curr_year
 	
 	SET
-	e.AdditionalVLBalance =		( e.AdditionalVLPerPayPeriod * (24 - pp.OrdinalValue) )
-	,e.AdditionalVLAllowance = ( e.AdditionalVLPerPayPeriod * (24 - pp.OrdinalValue) )
+	e.AdditionalVLBalance =		( e.AdditionalVLPerPayPeriod * (count_semi_monthly_period_peryear - pp.OrdinalValue) )
+	,e.AdditionalVLAllowance = ( e.AdditionalVLPerPayPeriod * (count_semi_monthly_period_peryear - pp.OrdinalValue) )
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
 	AND e.RowID = EmpRowID
-	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = curr_year;
+	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = curr_year
+	AND e.LastUpd != @custom_curr_time_stamp;
 	
 	SET @i = 6;
 	
@@ -154,7 +161,8 @@ IF curr_year = YEAR(CURDATE()) THEN
 		,e.LastUpd=CURRENT_TIMESTAMP()
 		,e.LastUpdBy=UserRowID
 		WHERE e.RowID = EmpRowID
-		AND e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date;
+		AND e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date
+		AND e.LastUpd != @custom_curr_time_stamp;
 		
 		SET @i = @i + 1;
 		
@@ -176,20 +184,22 @@ IF curr_year = YEAR(CURDATE()) THEN
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
 	AND e.RowID = EmpRowID
-	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year;
+	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year
+	AND e.LastUpd != @custom_curr_time_stamp;
 	
 	UPDATE employee e
 	INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID
 	INNER JOIN (SELECT * FROM paystub WHERE OrganizationID=OrganizID AND EmployeeID=EmpRowID) ps ON ps.EmployeeID=e.RowID AND ps.OrganizationID=e.OrganizationID AND ADDDATE(e.DateRegularized,INTERVAL 10 YEAR) BETWEEN ps.PayFromDate AND ps.PayToDate
 	INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND ps.TotalGrossSalary=e.PayFrequencyID AND pp.`Year`=curr_year
 	SET
-	e.AdditionalVLBalance = 	( e.AdditionalVLPerPayPeriod * (24 - pp.OrdinalValue) )
-	,e.AdditionalVLAllowance = ( e.AdditionalVLPerPayPeriod * (24 - pp.OrdinalValue) )
+	e.AdditionalVLBalance = 	( e.AdditionalVLPerPayPeriod * (count_semi_monthly_period_peryear - pp.OrdinalValue) )
+	,e.AdditionalVLAllowance = ( e.AdditionalVLPerPayPeriod * (count_semi_monthly_period_peryear - pp.OrdinalValue) )
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
 	AND e.RowID = EmpRowID
-	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year;
+	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year
+	AND e.LastUpd != @custom_curr_time_stamp;
 	
 	SET @i = 11;
 	
@@ -199,11 +209,12 @@ IF curr_year = YEAR(CURDATE()) THEN
 		SET
 		e.AdditionalVLAllowance =		e.LeaveFifteenthYearService
 		,e.AdditionalVLBalance =		e.LeaveFifteenthYearService
-		,e.AdditionalVLPerPayPeriod = (e.LeaveFifteenthYearService / 24)
+		,e.AdditionalVLPerPayPeriod = (e.LeaveFifteenthYearService / count_semi_monthly_period_peryear)
 		,e.LastUpd=CURRENT_TIMESTAMP()
 		,e.LastUpdBy=UserRowID
 		WHERE e.RowID = EmpRowID
-		AND e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date;
+		AND e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date
+	AND e.LastUpd != @custom_curr_time_stamp;
 		
 		SET @i = @i + 1;
 		
@@ -222,12 +233,13 @@ IF curr_year = YEAR(CURDATE()) THEN
 	SET
 	e.AdditionalVLBalance =			e.LeaveAboveFifteenthYearService
 	,e.AdditionalVLAllowance =		e.LeaveAboveFifteenthYearService
-	,e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / 24 )
+	,e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_monthly_period_peryear )
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
 	AND e.RowID = EmpRowID
-	AND ADDDATE(e.DateRegularized,INTERVAL 15 YEAR) <= minimum_date;
+	AND ADDDATE(e.DateRegularized,INTERVAL 15 YEAR) <= minimum_date
+	AND e.LastUpd != @custom_curr_time_stamp;
 	# AND minimum_date <= ADDDATE(e.DateRegularized,INTERVAL 15 YEAR)
 	
 	# ------------------------------ #
@@ -255,7 +267,8 @@ IF curr_year = YEAR(CURDATE()) THEN
 	,e.LastUpd = CURRENT_TIMESTAMP()
 	,e.LastUpdBy = UserRowID
 	WHERE e.OrganizationID = OrganizID
-	AND e.RowID = EmpRowID;
+	AND e.RowID = EmpRowID
+	AND e.LastUpd != @custom_curr_time_stamp;
 	
 END IF;
 

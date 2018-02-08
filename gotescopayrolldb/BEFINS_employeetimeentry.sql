@@ -12,7 +12,7 @@
 
 -- Dumping structure for trigger gotescopayrolldb_latest.BEFINS_employeetimeentry
 DROP TRIGGER IF EXISTS `BEFINS_employeetimeentry`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `BEFINS_employeetimeentry` BEFORE INSERT ON `employeetimeentry` FOR EACH ROW BEGIN
 
@@ -203,7 +203,7 @@ IF isRest_day = '0' THEN
 					AND NEW.TotalDayPay = 0
 					AND (@calclegalholi = 0 AND @calcspecholi = 0) THEN
 					
-				SET NEW.Absent = @daily_pay; # 0 @daily_pay;
+				SET NEW.Absent = 0; # 0 @daily_pay;
 					
 			ELSEIF has_shift = '1' AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0

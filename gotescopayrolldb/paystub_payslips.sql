@@ -1,0 +1,379 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               5.5.5-10.0.12-MariaDB - mariadb.org binary distribution
+-- Server OS:                    Win32
+-- HeidiSQL Version:             8.3.0.4694
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+-- Dumping structure for procedure gotescopayrolldb_latest.paystub_payslips
+DROP PROCEDURE IF EXISTS `paystub_payslips`;
+DELIMITER //
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(IN `og_rowid` INT, IN `pp_rowid` INT, IN `is_actual` CHAR(1)
+
+
+
+
+
+)
+    DETERMINISTIC
+BEGIN
+
+DECLARE paydate_from
+        ,paydat_to DATE;
+
+DECLARE logo MEDIUMBLOB DEFAULT NULL;
+
+/*SELECT ImageBlob
+FROM images
+WHERE (RowID=1
+       OR UniqueKey='Transprint Logo')
+LIMIT 1
+INTO logo;*/
+
+SELECT
+pp.PayFromDate
+,pp.PayToDate
+FROM payperiod pp
+WHERE pp.RowID=pp_rowid
+INTO paydate_from
+     ,paydat_to;
+
+SELECT MAX(pp.PayToDate)
+FROM payperiod pp
+INNER JOIN payperiod ppd
+        ON ppd.RowID=pp_rowid
+		     AND ppd.OrganizationID=pp.OrganizationID
+		     AND ppd.TotalGrossSalary=pp.TotalGrossSalary
+		     AND ppd.`Year`=pp.`Year`
+INTO @max_dateto;
+
+SET @basic_payment = 0.00;
+
+SET @_ordinal = 0;
+
+SELECT
+ps.RowID
+,e.EmployeeID `Column2`
+,CONCAT_WS(', ', e.LastName, e.FirstName) `Column3`
+,(@basic_payment := IFNULL(IF(ps.AsActual = 1, (esa.BasicPay * (esa.TrueSalary / esa.Salary)), esa.BasicPay), 0)) `TheBasicPay`
+
+,FORMAT(@basic_payment, 2) `Column11`
+
+,FORMAT(ps.TotalGrossSalary, 2) `Column4`
+,FORMAT(ps.TotalNetSalary, 2) `Column5`
+,FORMAT(ps.TotalAllowance, 2) `Column8`
+,FORMAT(ps.TotalBonus, 2) `Column10`
+,FORMAT(ps.TotalEmpSSS, 2) `Column12`
+,FORMAT(ps.TotalEmpPhilhealth, 2) `Column13`
+,FORMAT(ps.TotalEmpHDMF, 2) `Column14`
+,FORMAT(ps.TotalLoans, 2) `Column9`
+,FORMAT(ps.TotalTaxableSalary, 2) `Column6`
+,FORMAT(ps.TotalEmpWithholdingTax, 2) `Column7`
+,FORMAT(ps.TotalAdjustments, 2) `Column32`
+
+,IFNULL(REPLACE(psiallw.`Column34`, ',', '\n'), '') `Column34`
+,IFNULL(REPLACE(psiallw.`Column37`, ',', '\n'), '') `Column37`
+
+,IFNULL(REPLACE(psibon.`Column36`, ',', '\n'), '') `Column36`
+,IFNULL(REPLACE(psibon.`Column39`, ',', '\n'), '') `Column39`
+
+/**/ ,IFNULL(REPLACE(psiloan.`Column35`, ',', '\n'), '') `Column35`
+,IFNULL(REPLACE(psiloan.`Column38`, ',', '\n'), '') `Column38`
+,IFNULL(REPLACE(psiloan.`Column33`, ',', '\n'), '') `Column33`
+,IFNULL((LENGTH(psiloan.`Column33`) - LENGTH(REPLACE(psiloan.`Column33`, ',', ''))) + 1, 0) `Column10`
+
+,IF(e.EmployeeType = 'Daily'
+    , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)
+    , FORMAT(@basic_payment - (IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.Absent, 0) + IFNULL(et.Leavepayment, 0) + IFNULL(et.HolidayPayAmount, 0)), 2)
+    /*, IF(e.EmployeeType = 'Monthly'
+         , FORMAT(@basic_payment - IFNULL((et.UndertimeHoursAmount + et.HoursLateAmount + et.Absent + et.Leavepayment + et.HolidayPayAmount), 0), 2)
+			, @basic_payment
+			)*/
+    ) `Column18`
+
+,IFNULL(FORMAT(et.OvertimeHoursAmount, 2), '') `Column20`
+,IFNULL(FORMAT(et.NightDiffHoursAmount,2), '') `Column22`
+,IFNULL(FORMAT(et.NightDiffOTHoursAmount, 2), '') `Column24`
+,IFNULL(FORMAT(et.HolidayPayAmount, 2), '') `Column1`
+
+,IFNULL(FORMAT(et.Absent,2), 0) `Column26`
+,IFNULL(FORMAT(et.HoursLateAmount, 2), 0) `Column27`
+,IFNULL(FORMAT(et.UndertimeHoursAmount, 2), 0) `Column28`
+
+,logo `Column40`
+
+,IFNULL(REPLACE(psilv.`Column30`, ',', '\n'), '') `Column30`
+,IFNULL(REPLACE(psilv.`Column31`, ',', '\n'), '') `Column31`
+
+FROM proper_payroll ps
+
+INNER JOIN employee e
+        ON e.RowID=ps.EmployeeID AND e.OrganizationID=ps.OrganizationID
+
+INNER JOIN employeesalary esa
+        ON esa.EmployeeID=ps.EmployeeID
+		     AND esa.OrganizationID=ps.OrganizationID
+		     AND (esa.EffectiveDateFrom >= ps.PayFromDate OR IFNULL(esa.EffectiveDateTo, @max_dateto) >= ps.PayFromDate)
+		     AND (esa.EffectiveDateFrom <= ps.PayToDate OR IFNULL(esa.EffectiveDateTo, @max_dateto) <= ps.PayToDate)
+
+LEFT JOIN (SELECT
+			  et.RowID
+			  ,et.OrganizationID
+			  ,et.`Date`
+			  ,et.EmployeeShiftID
+			  ,et.EmployeeID
+			  ,et.EmployeeSalaryID
+			  ,SUM(et.RegularHoursWorked) `RegularHoursWorked`
+			  ,SUM(et.RegularHoursAmount) `RegularHoursAmount`
+			  ,SUM(et.TotalHoursWorked) `TotalHoursWorked`
+			  ,SUM(et.OvertimeHoursWorked) `OvertimeHoursWorked`
+			  ,SUM(et.OvertimeHoursAmount) `OvertimeHoursAmount`
+			  ,SUM(et.UndertimeHours) `UndertimeHours`
+			  ,SUM(et.UndertimeHoursAmount) `UndertimeHoursAmount`
+			  ,SUM(et.NightDifferentialHours) `NightDifferentialHours`
+			  ,SUM(et.NightDiffHoursAmount) `NightDiffHoursAmount`
+			  ,SUM(et.NightDifferentialOTHours) `NightDifferentialOTHours`
+			  ,SUM(et.NightDiffOTHoursAmount) `NightDiffOTHoursAmount`
+			  ,SUM(et.HoursLate) `HoursLate`
+			  ,SUM(et.HoursLateAmount) `HoursLateAmount`
+			  ,et.LateFlag
+			  ,et.PayRateID
+			  ,SUM(et.VacationLeaveHours) `VacationLeaveHours`
+			  ,SUM(et.SickLeaveHours) `SickLeaveHours`
+			  ,SUM(et.MaternityLeaveHours) `MaternityLeaveHours`
+			  ,SUM(et.OtherLeaveHours) `OtherLeaveHours`
+			  ,SUM(et.TotalDayPay) `TotalDayPay`
+			  ,SUM(et.Absent) `Absent`
+			  # ,et.ChargeToDivisionID
+			  ,SUM(et.TaxableDailyAllowance) `TaxableDailyAllowance`
+			  ,SUM(et.HolidayPayAmount) `HolidayPayAmount`
+			  ,SUM(et.TaxableDailyBonus) `TaxableDailyBonus`
+			  ,SUM(et.NonTaxableDailyBonus) `NonTaxableDailyBonus`
+			  ,SUM(et.Leavepayment) `Leavepayment`
+			  FROM proper_time_entry et
+			  WHERE et.OrganizationID=og_rowid
+			  AND et.AsActual=is_actual
+			  AND et.`Date` BETWEEN paydate_from AND paydat_to
+			  GROUP BY et.EmployeeID
+           ) et
+       ON et.EmployeeID=ps.EmployeeID
+
+INNER JOIN (SELECT
+           PayStubID
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column34`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column37`
+           FROM paystubitem psi
+			  INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Allowance Type' AND p.ActiveData=1
+			  WHERE psi.OrganizationID = og_rowid
+			  # AND psi.PayAmount != 0
+			  GROUP BY psi.PayStubID
+			  ORDER BY psi.RowID
+           ) psiallw
+       ON psiallw.PayStubID = ps.RowID
+       
+INNER JOIN (SELECT
+           PayStubID
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column36`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column39`
+           FROM paystubitem psi
+			  INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Bonus' AND p.ActiveData=1
+			  WHERE psi.OrganizationID = og_rowid
+			  # AND psi.PayAmount != 0
+			  GROUP BY psi.PayStubID
+			  ORDER BY psi.RowID
+           ) psibon
+       ON psibon.PayStubID = ps.RowID
+
+# #######################
+
+ LEFT JOIN (SELECT ii.*
+            ,GROUP_CONCAT(ii.LoanName) `Column35`
+            ,GROUP_CONCAT(ROUND(ii.DeductionAmount, 2)) `Column38`
+            ,GROUP_CONCAT(ROUND(ii.BalanceOfLoan, 2)) `Column33`
+            FROM (SELECT i.RowID
+						,i.EmployeeID
+						,i.TotalLoanAmount
+						,i.ppRowID
+						,i.psRowID
+						,(i.TotalLoanAmount - SUM(i.Deduction)) `BalanceOfLoan`
+						,i.LoanName
+						,MAX(i.DeductionAmount) `DeductionAmount`
+						FROM (SELECT
+								els.RowID
+								,els.OrganizationID
+								,els.EmployeeID
+								,els.TotalLoanAmount
+								,pp.RowID `ppRowID`
+								,pp.PayFromDate
+								,pp.PayToDate
+								,pp.OrdinalValue
+								,
+								(@_ordinal := (@_ordinal + 1)) `AscOrder`
+								
+								,(@_deduction :=
+								 IF(@_ordinal = els.NoOfPayPeriod
+								    , ( els.DeductionAmount + (els.TotalLoanAmount - (els.DeductionAmount * els.NoOfPayPeriod)) )
+									 , els.DeductionAmount)) `Deduction`
+								
+								,IF(pp.RowID = pp_rowid, @_deduction, 0) `DeductionAmount`
+								
+								,ps.RowID `psRowID`
+								,e.EmployeeID `EmployeeUniqueId`
+								,p.PartNo `LoanName`
+								FROM employeeloanschedule els
+								INNER JOIN employee e ON e.RowID=els.EmployeeID
+								INNER JOIN payperiod pp ON pp.OrganizationID=els.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID
+								AND (els.DedEffectiveDateFrom >= pp.PayFromDate OR els.DedEffectiveDateTo >= pp.PayFromDate)
+								AND (els.DedEffectiveDateFrom <= pp.PayToDate OR els.DedEffectiveDateTo <= pp.PayToDate)
+								
+								LEFT JOIN paystub ps ON ps.OrganizationID=els.OrganizationID AND ps.EmployeeID=els.EmployeeID AND ps.PayPeriodID=pp.RowID
+								
+								INNER JOIN product p ON p.RowID=els.LoanTypeID
+								
+								WHERE els.RowID > 0
+								AND els.OrganizationID=og_rowid
+								# paydate_from paydat_to
+								AND (els.DedEffectiveDateFrom >= paydate_from OR els.DedEffectiveDateTo >= paydate_from)
+								AND (els.DedEffectiveDateFrom <= paydat_to OR els.DedEffectiveDateTo <= paydat_to)
+								ORDER BY pp.OrdinalValue
+						) i
+						WHERE i.psRowID IS NOT NULL
+						GROUP BY i.RowID
+				      ) ii
+			  GROUP BY ii.EmployeeID
+           ) psiloan
+       ON psiloan.EmployeeID = ps.EmployeeID
+
+# #######################
+
+/*LEFT JOIN (SELECT
+           p.RowID
+           ,ls.PaystubRowID
+           ,GROUP_CONCAT(IF(ls.LoanTypeID = 0, '', p.PartNo)) `Column35`
+           ,GROUP_CONCAT(IF(ls.LoanTypeID = 0, '', ls.DeductionAmount)) `Column38`
+           ,(@sum_deduct_amt := SUM(lsc.DeductionAmount)) `Result`
+           ,GROUP_CONCAT(IF(ls.LoanTypeID = 0, '', (ls.TotalLoanAmount - @sum_deduct_amt))) `Column33`
+			  FROM product p
+			  LEFT JOIN (SELECT ls.RowID
+			             ,ls.PaystubRowID
+			             ,ls.LoanRowID
+			             ,ls.PayPeriodID
+			             ,ls.DeductionAmount
+			             ,ls.OrdinalValue
+			             ,els.LoanTypeID
+			             ,els.TotalLoanAmount
+							 FROM employeeloanschedpercutoff ls
+							 INNER JOIN employeeloanschedule els
+							         ON els.RowID=ls.LoanRowID
+							 WHERE ls.PayPeriodID=pp_rowid
+							 AND ls.OrganizationID=og_rowid
+		                ) ls
+						ON ls.PayPeriodID = pp_rowid
+			  LEFT JOIN employeeloanschedpercutoff lsc
+			         ON lsc.LoanRowID=ls.LoanRowID
+						   AND lsc.LoanRowID=ls.LoanRowID
+							AND lsc.PaystubRowID IS NOT NULL
+							AND lsc.OrdinalValue <= ls.OrdinalValue
+			  WHERE p.RowID=ls.LoanTypeID
+			  AND p.`Category`='Loan Type'
+			  AND p.OrganizationID=og_rowid
+			  AND p.ActiveData=1
+			  # GROUP BY p.RowID
+			  ORDER BY p.PartNo
+			  ) psiloan
+		  ON psiloan.PaystubRowID = ps.RowID*/
+
+/*LEFT JOIN (SELECT i.PaystubRowID
+           ,GROUP_CONCAT(i.PartNo) `Column35`
+			  ,GROUP_CONCAT(i.DeductionAmount) `Column38`
+			  # ,(@sum_deduct_amt := SUM(lsc.DeductionAmount)) `Result`
+			  ,GROUP_CONCAT(i.`Result`) `Column33`
+           FROM (SELECT
+			        ls.RowID
+					  ,ls.PaystubRowID
+					  ,p.PartNo
+					  ,ROUND(ls.DeductionAmount, 2) `DeductionAmount`
+		           ,ROUND((els.TotalLoanAmount - SUM(lsc.DeductionAmount)), 2) `Result`
+					  FROM employeeloanschedpercutoff ls
+					  INNER JOIN employeeloanschedule els
+			                ON els.RowID=ls.LoanRowID
+					  INNER JOIN product p
+				             ON p.RowID=els.LoanTypeID AND p.`Category`='Loan Type' AND p.OrganizationID=ls.OrganizationID AND p.ActiveData=1
+					  INNER JOIN employeeloanschedpercutoff lsc
+				             ON lsc.LoanRowID=ls.LoanRowID AND lsc.PaystubRowID IS NOT NULL AND lsc.OrdinalValue <= ls.OrdinalValue
+					  WHERE ls.OrganizationID=og_rowid
+					        AND ls.PayPeriodID=pp_rowid
+					  GROUP BY lsc.LoanRowID
+                 ) i
+           GROUP BY i.PaystubRowID
+           ) psiloan
+       ON psiloan.PaystubRowID = ps.RowID*/
+
+/*
+SELECT p.PartNo `Allowance name`
+	,FORMAT(psi.PayAmount ,2) `Amount`
+	FROM paystubitem psi
+	INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Allowance Type'
+	WHERE psi.OrganizationID = og_rowid
+	AND psi.PayStubID = ps_rowid
+	AND psi.PayAmount != 0;
+	
+	SELECT p.PartNo `Bonus name`
+	,FORMAT(psi.PayAmount, 2) `Amount`
+	FROM paystubitem psi
+	INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Bonus'
+	WHERE psi.OrganizationID = og_rowid
+	AND psi.PayStubID = ps_rowid
+	AND psi.PayAmount != 0;
+	
+	SELECT
+		p.PartNo `Loan type`
+		,FORMAT(ls.DeductionAmount, 2) `Amount deducted`
+		,FORMAT((els.TotalLoanAmount - SUM(lsc.DeductionAmount)), 2) `Balance as of`
+		,FORMAT(els.TotalLoanAmount, 2) `Total loan amount`
+	FROM employeeloanschedpercutoff ls
+	INNER JOIN employeeloanschedule els
+	        ON els.RowID=ls.LoanRowID
+	INNER JOIN product p
+	        ON p.RowID=els.LoanTypeID AND p.`Category`='Loan Type' AND p.OrganizationID=ls.OrganizationID
+	INNER JOIN employeeloanschedpercutoff lsc
+	        ON lsc.LoanRowID=ls.LoanRowID AND lsc.PaystubRowID IS NOT NULL AND lsc.OrdinalValue <= ls.OrdinalValue
+	WHERE ls.PaystubRowID=ps_rowid
+	AND ls.OrganizationID=og_rowid
+	GROUP BY ls.RowID;
+*/
+
+ LEFT JOIN product p
+        ON p.OrganizationID=ps.OrganizationID AND p.PartNo='Regular amount worked' AND p.ActiveData=1
+ LEFT JOIN paystubitem psi
+        ON psi.PayStubID=ps.RowID AND psi.ProductID=p.RowID AND psi.Undeclared=ps.AsActual
+       
+INNER JOIN (SELECT
+           PayStubID
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column30`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column31`
+           FROM paystubitem psi
+			  INNER JOIN product p ON p.RowID=psi.ProductID AND p.OrganizationID=psi.OrganizationID AND p.`Category`='Leave Type' AND p.ActiveData=1
+			  WHERE psi.OrganizationID = og_rowid
+			  AND psi.Undeclared = FALSE
+			  GROUP BY psi.PayStubID
+			  ORDER BY psi.RowID
+           ) psilv
+       ON psilv.PayStubID = ps.RowID
+
+WHERE ps.OrganizationID=og_rowid
+AND ps.PayPeriodID=pp_rowid
+AND ps.AsActual=is_actual
+ORDER BY CONCAT(e.LastName, e.FirstName)
+;
+
+END//
+DELIMITER ;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

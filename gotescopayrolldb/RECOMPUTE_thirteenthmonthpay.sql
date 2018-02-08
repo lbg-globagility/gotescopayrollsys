@@ -74,8 +74,8 @@ IF ispayperiodendofmonth = '0' THEN
 		FROM
 		(
 			SELECT
-			SUM(ete.RegularHoursAmount) AS BasicAmount
-			,ete.EmployeeID
+			ete.EmployeeID
+			,SUM(ete.RegularHoursAmount) AS BasicAmount
 			FROM employeetimeentry ete
 			INNER JOIN (SELECT * FROM employee WHERE OrganizationID=OrganizID AND EmployeeType='Daily' AND PayFrequencyID=emppayfreqID) e ON e.RowID=ete.EmployeeID
 			WHERE ete.OrganizationID=OrganizID
@@ -83,8 +83,8 @@ IF ispayperiodendofmonth = '0' THEN
 			GROUP BY ete.EmployeeID
 		UNION
 			SELECT
-			SUM(es.Salary) AS BasicAmount
-			,e.RowID AS EmployeeID
+			e.RowID AS EmployeeID
+			,SUM(es.Salary) AS BasicAmount
 			FROM employee e
 			INNER JOIN employeesalary es ON es.EmployeeID=e.RowID AND last_date BETWEEN es.EffectiveDateFrom AND IFNULL(es.EffectiveDateTo,last_date)
 			WHERE e.PayFrequencyID=emppayfreqID

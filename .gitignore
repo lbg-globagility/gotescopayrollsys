@@ -4,3 +4,6 @@ GotescoPayrollSys/bin/Debug/*.exe
 GotescoPayrollSys/bin/Debug/*.pdb
 *.exe
 Output/
+
+*.pdb
+*.suo

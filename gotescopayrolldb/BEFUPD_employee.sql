@@ -12,7 +12,7 @@
 
 -- Dumping structure for trigger gotescopayrolldb_latest.BEFUPD_employee
 DROP TRIGGER IF EXISTS `BEFUPD_employee`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `BEFUPD_employee` BEFORE UPDATE ON `employee` FOR EACH ROW BEGIN
 
@@ -36,7 +36,7 @@ SELECT EXISTS(SELECT pv.RowID FROM position_view pv INNER JOIN user u ON u.RowID
 IF hasPrivilege='1' AND OLD.EmploymentStatus NOT IN ('Resigned','Terminated') AND NEW.EmploymentStatus IN ('Resigned','Terminated') THEN
 	SET anyvchar = '';
 
-	SELECT RowID,PayFromDate,PayToDate,`Half` FROM payperiod WHERE OrganizationID=NEW.OrganizationID AND CURDATE() BETWEEN PayFromDate AND PayToDate INTO payp_ID,first_date,terminate_date,eom_payp;
+	SELECT RowID,PayFromDate,PayToDate,`Half` FROM payperiod WHERE OrganizationID=NEW.OrganizationID AND TotalGrossSalary=NEW.PayFrequencyID AND NEW.TerminationDate BETWEEN PayFromDate AND PayToDate INTO payp_ID,first_date,terminate_date,eom_payp;
 
 	SET NEW.TerminationDate = terminate_date;
 

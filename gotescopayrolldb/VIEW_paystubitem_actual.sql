@@ -92,6 +92,8 @@ SELECT psa.RowID
 # ,IF(@is_mwe = TRUE, 0, psa.TotalTaxableSalary) `TotalTaxableSalary`
 ,psa.TotalTaxableSalary
 
+,IFNULL(psi_rest.PayAmount, 0) `RestDayPayment`
+
 FROM paystubactual psa
 LEFT JOIN paystubactual ps2 ON ps2.EmployeeID=EmpRowID AND ps2.OrganizationID=OrganizID AND ps2.PayFromDate=startdate_ofpreviousmonth AND ps2.PayToDate=enddate_ofpreviousmonth
 INNER JOIN employee e ON e.RowID=psa.EmployeeID AND e.OrganizationID=psa.OrganizationID
@@ -138,6 +140,9 @@ INNER JOIN organization og ON og.RowID=psa.OrganizationID
 INNER JOIN paystub pstb ON pstb.RowID=psa.RowID
 
 LEFT JOIN (SELECT RowID,SUM(TotalDayPay - (RegularHoursAmount + OvertimeHoursAmount + HolidayPayAmount)) AS PaidLeaveAmount,SUM((VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours + AdditionalVLHours)) AS PaidLeaveHours FROM employeetimeentryactual WHERE (VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours + AdditionalVLHours) > 0 AND EmployeeID=EmpRowID AND OrganizationID=OrganizID AND `Date` BETWEEN pay_date_from AND pay_date_to) paidleave ON paidleave.RowID IS NOT NULL
+
+LEFT JOIN product p_rest ON p_rest.OrganizationID=psa.OrganizationID AND p_rest.PartNo='Restday pay'
+LEFT JOIN paystubitem psi_rest ON psi_rest.ProductID=p_rest.RowID AND psi_rest.PayStubID=psa.RowID AND psi_rest.Undeclared=TRUE
 
 WHERE psa.EmployeeID=EmpRowID
 AND psa.OrganizationID=OrganizID

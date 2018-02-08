@@ -1558,19 +1558,19 @@ Public Class PayrollGeneration
             Dim sql2 As New SQL(str_query2, _params)
 
             Try
-                'Dim _task As Task = Task.Run(Sub()
-                '                                 sql.ExecuteQuery()
-                '                                 sql2.ExecuteQuery()
-                '                             End Sub)
-                '_task.Wait()
+                Dim _task As Task = Task.Run(Sub()
+                                                 sql.ExecuteQuery()
+                                                 sql2.ExecuteQuery()
+                                             End Sub)
+                _task.Wait()
                 '###################################################################
-                Dim _task As New Thread(AddressOf sql.ExecuteQuery) _
-                    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
-                _task.Start()
+                'Dim _task As New Thread(AddressOf sql.ExecuteQuery) _
+                '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+                '_task.Start()
 
-                Dim _task2 As New Thread(AddressOf sql2.ExecuteQuery) _
-                    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
-                _task2.Start()
+                'Dim _task2 As New Thread(AddressOf sql2.ExecuteQuery) _
+                '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+                '_task2.Start()
 
                 Console.WriteLine(String.Concat("Executing Task", i))
             Catch ex As Exception

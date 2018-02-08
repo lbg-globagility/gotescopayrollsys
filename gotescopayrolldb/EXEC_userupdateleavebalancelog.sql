@@ -27,6 +27,8 @@ DECLARE custom_maximum_date DATE;
 
 DECLARE curr_year YEAR;
 
+DECLARE count_semi_monthly_period_peryear INT DEFAULT 24;
+
 SET curr_year = YEAR(CURDATE());
 
 SELECT EXISTS(SELECT RowID FROM userupdateleavebalancelog uu WHERE uu.OrganizationID=OrganizID AND uu.YearValue=curr_year) INTO hasupdate;
@@ -97,6 +99,8 @@ IF hasupdate = 0 THEN
 	WHERE e.OrganizationID=OrganizID
 	AND e.DateRegularized BETWEEN minimum_date AND custom_maximum_date;
 	
+	SET @custom_curr_time_stamp = CURRENT_TIMESTAMP();
+	
 	UPDATE employee e
 	SET
 	e.LeaveBalance =				e.LeaveAllowance
@@ -104,7 +108,7 @@ IF hasupdate = 0 THEN
 	,e.MaternityLeaveBalance =	e.MaternityLeaveAllowance
 	,e.OtherLeaveBalance =		e.OtherLeaveAllowance
 	
-	,e.LastUpd=CURRENT_TIMESTAMP()
+	,e.LastUpd=@custom_curr_time_stamp
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
 	AND e.DateRegularized < minimum_date
@@ -127,7 +131,8 @@ IF hasupdate = 0 THEN
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
-	AND ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) <= minimum_date;
+	AND ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) <= minimum_date
+	AND e.LastUpd != @custom_curr_time_stamp;
 	# AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = curr_year;
 	# AND IF(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) BETWEEN @paypFrom AND @paypTo, @paypTo, @paypFrom)
 	# BETWEEN ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) AND ADDDATE(e.DateRegularized,INTERVAL 10 YEAR);
@@ -143,7 +148,8 @@ IF hasupdate = 0 THEN
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
-	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = curr_year;
+	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = curr_year
+	AND e.LastUpd != @custom_curr_time_stamp;
 	
 	SET @i = 6;
 	
@@ -154,7 +160,8 @@ IF hasupdate = 0 THEN
 		e.AdditionalVLBalance = e.LeaveTenthYearService
 		,e.LastUpd=CURRENT_TIMESTAMP()
 		,e.LastUpdBy=UserRowID
-		WHERE e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date;
+		WHERE e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date
+		AND e.LastUpd != @custom_curr_time_stamp;
 		
 		SET @i = @i + 1;
 		
@@ -174,7 +181,8 @@ IF hasupdate = 0 THEN
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
-	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year;
+	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year
+	AND e.LastUpd != @custom_curr_time_stamp;
 	
 	UPDATE employee e
 	INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID
@@ -185,7 +193,8 @@ IF hasupdate = 0 THEN
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
-	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year;
+	AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year
+	AND e.LastUpd != @custom_curr_time_stamp;
 	
 	SET @i = 11;
 	
@@ -198,7 +207,8 @@ IF hasupdate = 0 THEN
 		,e.AdditionalVLPerPayPeriod = (e.LeaveFifteenthYearService / 24)
 		,e.LastUpd=CURRENT_TIMESTAMP()
 		,e.LastUpdBy=UserRowID
-		WHERE e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date;
+		WHERE e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date
+		AND e.LastUpd != @custom_curr_time_stamp;
 		
 		SET @i = @i + 1;
 		
@@ -221,7 +231,8 @@ IF hasupdate = 0 THEN
 	,e.LastUpd=CURRENT_TIMESTAMP()
 	,e.LastUpdBy=UserRowID
 	WHERE e.OrganizationID=OrganizID
-	AND ADDDATE(e.DateRegularized,INTERVAL 15 YEAR) <= minimum_date; # AND minimum_date <= ADDDATE(e.DateRegularized,INTERVAL 15 YEAR)
+	AND ADDDATE(e.DateRegularized,INTERVAL 15 YEAR) <= minimum_date
+	AND e.LastUpd != @custom_curr_time_stamp; # AND minimum_date <= ADDDATE(e.DateRegularized,INTERVAL 15 YEAR)
 	
 	# ------------------------------ #
 	
@@ -261,7 +272,8 @@ IF hasupdate = 0 THEN
 	,e.AdditionalVLBalance = e.AdditionalVLBalance - IFNULL(ete.AdditionalVLHours,0)
 	,e.LastUpd = CURRENT_TIMESTAMP()
 	,e.LastUpdBy = UserRowID
-	WHERE e.OrganizationID = OrganizID;
+	WHERE e.OrganizationID = OrganizID
+	AND e.LastUpd != @custom_curr_time_stamp;
 	# AND (ADDDATE(e.StartDate, INTERVAL 2 YEAR) <= curr_year
 			# OR ADDDATE(e.StartDate, INTERVAL 1 YEAR) BETWEEN minimum_date AND custom_maximum_date);
 			

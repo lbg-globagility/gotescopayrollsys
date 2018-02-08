@@ -13,31 +13,93 @@
 -- Dumping structure for procedure gotescopayrolldb_latest.VIEW_employeeoffbusi
 DROP PROCEDURE IF EXISTS `VIEW_employeeoffbusi`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeoffbusi`(IN `obf_EmployeeID` INT, IN `obf_OrganizationID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeoffbusi`(IN `obf_EmployeeID` INT, IN `obf_OrganizationID` INT, IN `user_rowid` INT)
     DETERMINISTIC
 BEGIN
 
+DECLARE is_deptmngr BOOL DEFAULT FALSE;
 
+DECLARE dept_mngr_rowid INT(11);
 
-SELECT
-obf.RowID
-,COALESCE(obf.OffBusType,'') 'LeaveType'
-,IF(obf.OffBusStartTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(obf.OffBusStartTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(obf.OffBusStartTime,'%r'),3))) 'OffBusStartTime'
-,IF(obf.OffBusEndTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(obf.OffBusEndTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(obf.OffBusEndTime,'%r'),3))) 'OffBusEndTime'
-,COALESCE(DATE_FORMAT(obf.OffBusStartDate,'%m/%d/%Y'),'') 'OTStartDate'
-,COALESCE(DATE_FORMAT(obf.OffBusEndDate,'%m/%d/%Y'),'') 'OTEndDate'
-,COALESCE(OffBusStatus,'') 'OffBusStatus'
-,COALESCE(obf.Reason,'') 'Reason'
-,COALESCE(obf.Comments,'') 'Comments'
-,COALESCE(obf.Image,'') 'Image'
-,'view this'
-,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND Type=CONCAT('Official Business@',obf.RowID)),'') 'FileName'
-,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND Type=CONCAT('Official Business@',obf.RowID)),'') 'FileExtens'
-FROM employeeofficialbusiness obf 
-WHERE obf.OrganizationID=obf_OrganizationID
-AND obf.EmployeeID=obf_EmployeeID
-ORDER BY obf.OffBusStartDate,obf.OffBusEndDate;
+SET is_deptmngr = IS_USER_DEPTMNGR(obf_OrganizationID, user_rowid);
 
+SELECT u.PositionID # u.DeptMngrID
+FROM `user` u
+WHERE u.RowID=user_rowid
+INTO dept_mngr_rowid;
+	
+IF is_deptmngr = TRUE THEN
+
+	SELECT
+	obf.RowID
+	,COALESCE(obf.OffBusType,'') `LeaveType`
+	,IF(obf.OffBusStartTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(obf.OffBusStartTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(obf.OffBusStartTime,'%r'),3))) `OffBusStartTime`
+	,IF(obf.OffBusEndTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(obf.OffBusEndTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(obf.OffBusEndTime,'%r'),3))) `OffBusEndTime`
+	,COALESCE(DATE_FORMAT(obf.OffBusStartDate,'%m/%d/%Y'),'') `OTStartDate`
+	,COALESCE(DATE_FORMAT(obf.OffBusEndDate,'%m/%d/%Y'),'') `OTEndDate`
+	,COALESCE(obf.OffBusStatus2,'') `OffBusStatus`
+	,COALESCE(obf.Reason,'') `Reason`
+	,COALESCE(obf.Comments,'') `Comments`
+	,COALESCE(obf.Image,'') `Image`
+	,'view this'
+	,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileName`
+	,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileExtens`
+	FROM employeeofficialbusiness obf
+	INNER JOIN employee e ON e.RowID=obf.EmployeeID AND e.OrganizationID=obf.OrganizationID AND e.DeptManager=dept_mngr_rowid
+	WHERE obf.OrganizationID=obf_OrganizationID
+	AND obf.EmployeeID=obf_EmployeeID
+	ORDER BY obf.OffBusStartDate,obf.OffBusEndDate;
+
+ELSE
+
+	SELECT i.*
+	FROM (SELECT
+			obf.RowID
+			,COALESCE(obf.OffBusType,'') `LeaveType`
+			,IF(obf.OffBusStartTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(obf.OffBusStartTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(obf.OffBusStartTime,'%r'),3))) `OffBusStartTime`
+			,IF(obf.OffBusEndTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(obf.OffBusEndTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(obf.OffBusEndTime,'%r'),3))) `OffBusEndTime`
+			,COALESCE(DATE_FORMAT(obf.OffBusStartDate,'%m/%d/%Y'),'') `OTStartDate`
+			,COALESCE(DATE_FORMAT(obf.OffBusEndDate,'%m/%d/%Y'),'') `OTEndDate`
+			,COALESCE(obf.OffBusStatus,'') `OffBusStatus`
+			,COALESCE(obf.Reason,'') `Reason`
+			,COALESCE(obf.Comments,'') `Comments`
+			,COALESCE(obf.Image,'') `Image`
+			,'view this'
+			,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileName`
+			,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileExtens`
+			FROM employeeofficialbusiness obf
+			INNER JOIN employee e ON e.RowID=obf.EmployeeID AND e.OrganizationID=obf.OrganizationID AND e.DeptManager IS NULL
+			WHERE obf.OrganizationID=obf_OrganizationID
+			AND obf.EmployeeID=obf_EmployeeID
+			
+		UNION
+			SELECT
+			obf.RowID
+			,COALESCE(obf.OffBusType,'') `LeaveType`
+			,IF(obf.OffBusStartTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(obf.OffBusStartTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(obf.OffBusStartTime,'%r'),3))) `OffBusStartTime`
+			,IF(obf.OffBusEndTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(obf.OffBusEndTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(obf.OffBusEndTime,'%r'),3))) `OffBusEndTime`
+			,COALESCE(DATE_FORMAT(obf.OffBusStartDate,'%m/%d/%Y'),'') `OTStartDate`
+			,COALESCE(DATE_FORMAT(obf.OffBusEndDate,'%m/%d/%Y'),'') `OTEndDate`
+			,COALESCE(obf.OffBusStatus,'') `OffBusStatus`
+			,COALESCE(obf.Reason,'') `Reason`
+			,COALESCE(obf.Comments,'') `Comments`
+			,COALESCE(obf.Image,'') `Image`
+			,'view this'
+			,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileName`
+			,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileExtens`
+			FROM employeeofficialbusiness obf
+			INNER JOIN employee e
+				     ON e.RowID=obf.EmployeeID
+						  AND e.OrganizationID=obf.OrganizationID
+						  AND e.DeptManager IS NOT NULL
+						  AND obf.OffBusStatus2 = 'Approved'
+			WHERE obf.OrganizationID=obf_OrganizationID
+			AND obf.EmployeeID=obf_EmployeeID) i
+	
+	ORDER BY i.`OTStartDate`, i.`OTEndDate`
+;
+
+END IF;
 
 END//
 DELIMITER ;

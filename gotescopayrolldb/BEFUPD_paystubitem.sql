@@ -12,11 +12,11 @@
 
 -- Dumping structure for trigger gotescopayrolldb_latest.BEFUPD_paystubitem
 DROP TRIGGER IF EXISTS `BEFUPD_paystubitem`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `BEFUPD_paystubitem` BEFORE UPDATE ON `paystubitem` FOR EACH ROW BEGIN
 
-SET NEW.PayAmount = IFNULL(NEW.PayAmount,0.0);
+SET NEW.PayAmount = IFNULL(NEW.PayAmount, 0);
 
 END//
 DELIMITER ;

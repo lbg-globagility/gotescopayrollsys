@@ -23,27 +23,18 @@ DECLARE month_count_peryear INT(11) DEFAULT 12;
 
 DECLARE divided_into_half INT(11) DEFAULT 2;
 
+DECLARE default_min_workhrs INT(11) DEFAULT 8;
+
 DECLARE ecola_name
-        ,sss_deduct_sched VARCHAR(50);
+        ,sss_deduct_sched
+		  ,philhealt_deduct_sched VARCHAR(50);
 
 SELECT og.SSSDeductionSchedule
+,og.PhilhealthDeductionSchedule
 FROM organization og
 WHERE og.RowID=og_rowid
-INTO sss_deduct_sched;
-
-IF sss_deduct_sched = 'End of the month' THEN
-	
-	SELECT MIN(pp.PayFromDate)
-	,MAX(pp.PayToDate)
-	FROM payperiod pp
-	INNER JOIN payperiod pyp ON pyp.OrganizationID=pp.OrganizationID AND pyp.PayFromDate=date_from AND pyp.PayToDate=date_to
-	WHERE pp.OrganizationID=og_rowid
-	AND pp.`Year`=pyp.`Year`
-	AND pp.`Month`=pyp.`Month`
-	INTO date_from
-	     ,date_to;
-	
-END IF;
+INTO sss_deduct_sched
+     ,philhealt_deduct_sched;
 
 SELECT p.RowID
 ,p.PartNo
@@ -54,6 +45,51 @@ AND p.`Category`='Allowance Type'
 LIMIT 1
 INTO ecola_rowid
      ,ecola_name;
+
+	/*SELECT i.*
+	FROM () i
+	WHERE i.`Date` >= date_from
+	;*/
+	SELECT
+   i.*
+	,(# i.TotalAllowanceAmt -
+     (i.HoursToLess
+     * (((i.TotalAllowanceAmt * 2) / (e.WorkDaysPerYear / month_count_peryear)) / IF(i.DivisorToDailyRate = 0, default_min_workhrs, i.DivisorToDailyRate)))) `DeductAllowance`
+	FROM paystubitem_sum_semimon_allowance_group_prodid i
+	INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.OrganizationID=i.OrganizationID
+	WHERE i.OrganizationID=og_rowid
+	AND i.`Date` BETWEEN date_from AND date_to
+	AND i.ProductID = ecola_rowid
+	# GROUP BY i.EmployeeID, i.`Date`, i.ProductID
+	# HAVING i.RowID IS NOT NULL
+	ORDER BY i.EmployeeID, i.`Date`
+	;
+
+SELECT
+EXISTS(SELECT pp.RowID
+       FROM payperiod pp
+		 WHERE pp.OrganizationID=og_rowid
+		 AND pp.PayFromDate=date_from
+		 AND pp.PayToDate=date_to
+		 AND pp.TotalGrossSalary=1
+		 AND pp.Half=0)
+INTO @is_end_ofmonth;
+
+IF sss_deduct_sched = 'End of the month'
+   AND @is_end_ofmonth = TRUE THEN
+	
+	SELECT MIN(pp.PayFromDate)
+	,MAX(pp.PayToDate)
+	FROM payperiod pp
+	INNER JOIN organization og ON og.RowID=pp.OrganizationID
+	INNER JOIN payperiod pyp ON pyp.OrganizationID=pp.OrganizationID AND pyp.PayFromDate=date_from AND pyp.PayToDate=date_to AND pyp.TotalGrossSalary=og.PayFrequencyID
+	WHERE pp.OrganizationID=og_rowid
+	AND pp.`Year`=pyp.`Year`
+	AND pp.`Month`=pyp.`Month`
+	INTO date_from
+	     ,date_to;
+	
+END IF;
 
 	SET @day_pay = 0.0;SET @day_pay1 = 0.0;SET @day_pay2 = 0.0;
 
@@ -219,11 +255,12 @@ INTO ecola_rowid
 			AND (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0 AND et.TotalDayPay > 0
 			
 			) i
+	WHERE i.`Date` BETWEEN date_from AND date_to
 	GROUP BY i.RowID
 	ORDER BY i.EmployeeID, i.`Date`
 	;
 	
-	SELECT ea.ProductID
+	/*SELECT ea.ProductID
    , ea.EmployeeID
    , og_rowid `OrganizationID`
    , '1900-01-01' `Date`
@@ -251,7 +288,7 @@ INTO ecola_rowid
 			  ON xy.EmployeeID = e.RowID
 	WHERE ea.OrganizationID=og_rowid
 	AND ea.ProductID=ecola_rowid
-	AND ea.AllowanceFrequency='Semi-monthly';
+	AND ea.AllowanceFrequency='Semi-monthly';*/
 	
 END//
 DELIMITER ;

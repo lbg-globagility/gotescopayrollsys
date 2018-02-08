@@ -25,67 +25,98 @@ DECLARE emp_employment_stat TEXT;
 
 DECLARE elv_LeaveTypeID INT(11) DEFAULT NULL;
 
+DECLARE is_deptmngr BOOL DEFAULT FALSE;
+
+SET is_deptmngr = IS_USER_DEPTMNGR(elv_OrganizationID, elv_CreatedBy);
+
 SELECT EmploymentStatus FROM employee WHERE RowID=elv_EmployeeID INTO emp_employment_stat;
 
 SELECT p.RowID FROM product p WHERE p.PartNo=elv_LeaveType AND p.OrganizationID=elv_OrganizationID AND p.`Category`='Leave Type' LIMIT 1 INTO elv_LeaveTypeID;
 SET emp_employment_stat = 'Regular';
 IF emp_employment_stat = 'Regular' THEN
-	
-	INSERT INTO employeeleave
-	(
-		RowID
-		,OrganizationID
-		,Created
-		,LeaveStartTime
-		,LeaveType
-		,CreatedBy
-		,LastUpdBy
-		,EmployeeID
-		,LeaveEndTime
-		,LeaveStartDate
-		,LeaveEndDate
-		,Reason
-		,Comments
-		,Image
-		,`Status`
-		,LeaveTypeID
-		,AdditionalOverrideLeaveBalance
-	) VALUES (
-		elv_RowID
-		,elv_OrganizationID
-		,CURRENT_TIMESTAMP()
-		,elv_LeaveStartTime
-		,elv_LeaveType
-		,elv_CreatedBy
-		,elv_LastUpdBy
-		,elv_EmployeeID
-		,elv_LeaveEndTime
-		,elv_LeaveStartDate
-		,elv_LeaveEndDate
-		,elv_Reason
-		,elv_Comments
-		,elv_Image
-		,IF(elv_Status = '', 'Pending', elv_Status)
-		,elv_LeaveTypeID
-		,elv_OverrideLeaveBal
-	) ON 
-	DUPLICATE 
-	KEY 
-	UPDATE 
-		LeaveStartTime=elv_LeaveStartTime
-		,LeaveType=elv_LeaveType
-		,LastUpd=CURRENT_TIMESTAMP()
-		,LastUpdBy=elv_LastUpdBy
-		,LeaveEndTime=elv_LeaveEndTime
-		,LeaveStartDate=elv_LeaveStartDate
-		,LeaveEndDate=elv_LeaveEndDate
-		,Reason=elv_Reason
-		,Comments=elv_Comments
-		,Image=elv_Image
-		,`Status`=IF(elv_Status = '', 'Pending', elv_Status)
-		,LeaveTypeID=elv_LeaveTypeID
-		,AdditionalOverrideLeaveBalance=elv_OverrideLeaveBal;SELECT @@Identity AS id INTO empleaveID;
 
+	IF is_deptmngr = TRUE THEN
+	
+		UPDATE employeeleave elv
+		SET
+		elv.LeaveStartTime=elv_LeaveStartTime
+		,elv.LeaveType=elv_LeaveType
+		,elv.LastUpd=CURRENT_TIMESTAMP()
+		,elv.LastUpdBy=elv_LastUpdBy
+		,elv.LeaveEndTime=elv_LeaveEndTime
+		,elv.LeaveStartDate=elv_LeaveStartDate
+		,elv.LeaveEndDate=elv_LeaveEndDate
+		,elv.Reason=elv_Reason
+		,elv.Comments=elv_Comments
+		,elv.Image=elv_Image
+		,elv.Status2=IF(elv_Status = '', 'Pending', elv_Status)
+		,elv.LeaveTypeID=elv_LeaveTypeID
+		,elv.AdditionalOverrideLeaveBalance=elv_OverrideLeaveBal
+		WHERE RowID=elv_RowID;
+		
+	ELSE
+	
+		INSERT INTO employeeleave
+		(
+			RowID
+			,OrganizationID
+			,Created
+			,LeaveStartTime
+			,LeaveType
+			,CreatedBy
+			,LastUpdBy
+			,EmployeeID
+			,LeaveEndTime
+			,LeaveStartDate
+			,LeaveEndDate
+			,Reason
+			,Comments
+			,Image
+			,`Status`
+			,LeaveTypeID
+			,AdditionalOverrideLeaveBalance
+			,Status2
+		) VALUES (
+			elv_RowID
+			,elv_OrganizationID
+			,CURRENT_TIMESTAMP()
+			,elv_LeaveStartTime
+			,elv_LeaveType
+			,elv_CreatedBy
+			,elv_LastUpdBy
+			,elv_EmployeeID
+			,elv_LeaveEndTime
+			,elv_LeaveStartDate
+			,elv_LeaveEndDate
+			,elv_Reason
+			,elv_Comments
+			,elv_Image
+			,IF(elv_Status = '', 'Pending', elv_Status)
+			,elv_LeaveTypeID
+			,elv_OverrideLeaveBal
+			,IF(elv_Status = '', 'Pending', elv_Status)
+		) ON 
+		DUPLICATE 
+		KEY 
+		UPDATE 
+			LeaveStartTime=elv_LeaveStartTime
+			,LeaveType=elv_LeaveType
+			,LastUpd=CURRENT_TIMESTAMP()
+			,LastUpdBy=elv_LastUpdBy
+			,LeaveEndTime=elv_LeaveEndTime
+			,LeaveStartDate=elv_LeaveStartDate
+			,LeaveEndDate=elv_LeaveEndDate
+			,Reason=elv_Reason
+			,Comments=elv_Comments
+			,Image=elv_Image
+			,`Status`=IF(elv_Status = '', 'Pending', elv_Status)
+			,LeaveTypeID=elv_LeaveTypeID
+			,AdditionalOverrideLeaveBalance=elv_OverrideLeaveBal
+			# ,Status2=IF(elv_Status = '', 'Pending', elv_Status)
+			;SELECT @@Identity AS id INTO empleaveID;
+
+	END IF;
+	
 ELSE
 
 	SIGNAL specialty

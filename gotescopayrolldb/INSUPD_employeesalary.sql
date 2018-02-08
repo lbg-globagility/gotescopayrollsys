@@ -70,11 +70,11 @@ DECLARE pay_freq_type VARCHAR(50);
 
 SELECT (LCASE(e.EmploymentStatus) = 'contractual'),pf.PayFrequencyType FROM employee e INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID WHERE e.RowID=esal_EmployeeID INTO isEmpStatusContractual, pay_freq_type;
 
-IF isEmpStatusContractual = '0' THEN
+/*IF isEmpStatusContractual = '0' THEN
 
 	SELECT NULL INTO esal_EffectiveDateTo;
 	
-END IF;
+END IF;*/
 
 
 SELECT RowID FROM `view` WHERE ViewName='Employee Salary' AND OrganizationID=esal_OrganizationID LIMIT 1 INTO viewID;
@@ -276,7 +276,7 @@ SELECT COUNT(RowID) FROM employeesalary WHERE EmployeeID=esal_EmployeeID AND Org
 		,EffectiveDateFrom=esal_EffectiveDateFrom
 		,TrueSalary=esal_TrueSalary
 		,UndeclaredSalary=esal_TrueSalary - esal_Salary
-		#,EffectiveDateTo=esal_EffectiveDateTo
+		,EffectiveDateTo=esal_EffectiveDateTo
 		,OverrideDiscardSSSContrib=esal_DiscardSSS
 		,OverrideDiscardPhilHealthContrib=esal_DiscardPhH;SELECT @@Identity AS id INTO esalID;
 	

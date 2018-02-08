@@ -48,9 +48,11 @@ SELECT ps.RowID , ps.AsActual, es.RowID, es.EffectiveDateFrom, es.EffectiveDateT
 ,CONCAT_WS(', ',e.LastName,e.FirstName) `Column3`
 ,es.BasicPay `Column11`, es.`SalaryGroup`
 
+# TODO : what about for Fixed employee ?
+
 ,IFNULL(ete.RegularHoursWorked,0) `Column17`,	ete.RegularHoursAmount `Column18`
 ,IFNULL(ete.OvertimeHoursWorked,0) `Column19`,	ete.OvertimeHoursAmount `Column20`
-	
+
 ,ete.NightDifferentialHours `Column21`,			ete.NightDiffHoursAmount `Column22`
 ,ete.NightDifferentialOTHours `Column23`,			ete.NightDiffOTHoursAmount `Column24`
 
@@ -64,7 +66,7 @@ SELECT ps.RowID , ps.AsActual, es.RowID, es.EffectiveDateFrom, es.EffectiveDateT
 	) `Column15`
 
 ,IFNULL(ete.Absent,0) `Column26`
-						
+
 ,ete.HoursLateAmount `Column27`
 ,ete.UndertimeHoursAmount `Column28`
 
@@ -95,7 +97,7 @@ SELECT ps.RowID , ps.AsActual, es.RowID, es.EffectiveDateFrom, es.EffectiveDateT
 			AND psi_loan.PayAmount > 0
 			ORDER BY p_loan.PartNo
 			), filler_blank_loanitems) `Column38`
-	
+
 ,(@virtual_erowid := ps.EmployeeID) `employeerowid`
 
 ,IFNULL((SELECT
@@ -107,7 +109,7 @@ SELECT ps.RowID , ps.AsActual, es.RowID, es.EffectiveDateFrom, es.EffectiveDateT
 					AND els.EmployeeID=@virtual_erowid
 					AND (els.DedEffectiveDateFrom >= pp.PayFromDate OR els.DedEffectiveDateTo >= pp.PayFromDate)
 					AND (els.DedEffectiveDateFrom <= pp.PayToDate OR els.DedEffectiveDateTo <= pp.PayToDate)
-					
+
 			WHERE p.OrganizationID=OrganizID
 			AND p.`Category`='Loan Type'
 			ORDER BY p.PartNo
@@ -123,9 +125,9 @@ SELECT ps.RowID , ps.AsActual, es.RowID, es.EffectiveDateFrom, es.EffectiveDateT
 					AND els.EmployeeID=@virtual_erowid
 					AND (els.DedEffectiveDateFrom >= pp.PayFromDate OR els.DedEffectiveDateTo >= pp.PayFromDate)
 					AND (els.DedEffectiveDateFrom <= pp.PayToDate OR els.DedEffectiveDateTo <= pp.PayToDate)
-					
+
 			LEFT JOIN employeeloanschedulebacktrack lbt ON lbt.RowID=els.RowID
-			
+
 			WHERE p.OrganizationID=OrganizID
 			AND p.`Category`='Loan Type'
 			ORDER BY p.PartNo
@@ -143,7 +145,7 @@ SELECT ps.RowID , ps.AsActual, es.RowID, es.EffectiveDateFrom, es.EffectiveDateT
 ,IFNULL(REPLACE(psibon.`Column39`, ',', '\n'), '') `Column39`
 
 FROM v_uni_paystub ps
-		
+
 INNER JOIN payperiod pp ON pp.RowID = ps.PayPeriodID AND pp.RowID = PayPeriodRowID
 
 INNER JOIN employee e

@@ -33,7 +33,7 @@ IF ExceptThisAllowance = '' THEN
 	INNER JOIN payperiod pyp ON pyp.PayFromDate=effective_datefrom AND pyp.PayToDate=effective_dateto AND pyp.OrganizationID=eallow_OrganizationID
 	INNER JOIN paystub ps ON ps.EmployeeID=eallow_EmployeeID AND ps.OrganizationID=eallow_OrganizationID AND ps.PayPeriodID=pyp.RowID AND psi.PayStubID=ps.RowID
 	INNER JOIN product p ON p.RowID=psi.ProductID
-	WHERE p.Category='Allowance Type'
+	WHERE p.`Category`='Allowance Type'
 	AND IFNULL(psi.PayAmount,0)!=0;
 
 ELSE
@@ -51,7 +51,7 @@ ELSE
 	INNER JOIN payperiod pyp ON pyp.PayFromDate=effective_datefrom AND pyp.PayToDate=effective_dateto AND pyp.OrganizationID=eallow_OrganizationID
 	INNER JOIN paystub ps ON ps.EmployeeID=eallow_EmployeeID AND ps.OrganizationID=eallow_OrganizationID AND ps.PayPeriodID=pyp.RowID AND psi.PayStubID=ps.RowID
 	INNER JOIN product p ON p.RowID=psi.ProductID
-	WHERE p.Category='Allowance Type'
+	WHERE p.`Category`='Allowance Type'
 	AND p.PartNo != ExceptThisAllowance
 	AND IFNULL(psi.PayAmount,0)!=0;
 

@@ -241,7 +241,8 @@ SELECT RowID FROM product WHERE OrganizationID=NEW.OrganizationID AND LCASE(Part
 
 SET @day_pay = 0.0;SET @day_pay1 = 0.0;SET @day_pay2 = 0.0;
 
-INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,PayAmount,Undeclared)
+#######################################################################OVER HERE
+/*INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,PayAmount,Undeclared)
 	SELECT
 	ii.ProductID
 	,NEW.OrganizationID
@@ -396,7 +397,8 @@ KEY
 UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	,LastUpdBy=NEW.LastUpdBy
-	,PayAmount=ii.TotalAllowanceAmount;
+	,PayAmount=ii.TotalAllowanceAmount;*/
+#######################################################################OVER HERE
 	
 /*INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,PayAmount,Undeclared)
 	SELECT i.ProductID
@@ -419,7 +421,8 @@ UPDATE
 	,LastUpdBy=NEW.LastUpdBy
 	,PayAmount=i.AllowanceAmount;*/
 
-INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,PayAmount,Undeclared)
+################################################################################
+/*INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,PayAmount,Undeclared)
 	SELECT i.ProductID
 	,NEW.OrganizationID
 	,CURRENT_TIMESTAMP()
@@ -443,7 +446,8 @@ KEY
 UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	,LastUpdBy=NEW.LastUpdBy
-	,PayAmount=i.AllowanceAmount;
+	,PayAmount=i.AllowanceAmount;*/
+################################################################################
 
 IF FALSE THEN # IF IsrbxpayrollFirstHalfOfMonth = '0' THEN
 

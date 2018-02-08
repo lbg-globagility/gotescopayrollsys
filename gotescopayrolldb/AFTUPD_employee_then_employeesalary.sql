@@ -12,7 +12,7 @@
 
 -- Dumping structure for trigger gotescopayrolldb_latest.AFTUPD_employee_then_employeesalary
 DROP TRIGGER IF EXISTS `AFTUPD_employee_then_employeesalary`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `AFTUPD_employee_then_employeesalary` AFTER UPDATE ON `employee` FOR EACH ROW BEGIN
 
@@ -121,7 +121,7 @@ IF NEW.NoOfDependents != OLD.NoOfDependents OR NEW.MaritalStatus != COALESCE(OLD
 		
 		
 	
-		SELECT ADDDATE(EffectiveDateTo, INTERVAL 1 DAY) FROM employeesalary WHERE RowID=prevesalRowID INTO preEffDateToEmpSallatest;
+		SELECT ADDDATE(EffectiveDateTo, INTERVAL 1 DAY) FROM employeesalary WHERE RowID=prevesalRowID LIMIT 1 INTO preEffDateToEmpSallatest;
 		SET @emp_true_sal = (SELECT TrueSalary FROM employeesalary WHERE RowID=prevesalRowID);
 		
 		SET @default_hdmf_amount = 100;
@@ -337,6 +337,7 @@ IF NEW.WorkDaysPerYear != OLD.WorkDaysPerYear THEN
 	WHERE EmployeeID=NEW.RowID
 	AND OrganizationID=NEW.OrganizationID
 	AND EffectiveDateTo IS NULL
+	LIMIT 1
 	INTO current_salaryeffectivedate
 			,emp_fullmonthsalary;
 

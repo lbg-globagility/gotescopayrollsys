@@ -13,7 +13,7 @@
 -- Dumping structure for procedure gotescopayrolldb_latest.MASS_generate_employeetimeentry
 DROP PROCEDURE IF EXISTS `MASS_generate_employeetimeentry`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `MASS_generate_employeetimeentry`(IN `OrganizID` INT, IN `Pay_FrequencyType` TEXT, IN `UserRowID` INT, IN `periodDateFrom` DATE, IN `periodDateTo` DATE)
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `MASS_generate_employeetimeentry`(IN `OrganizID` INT, IN `Pay_FrequencyType` TEXT, IN `UserRowID` INT, IN `periodDateFrom` DATE, IN `periodDateTo` DATE, IN `DivisionRowID` INT)
     NO SQL
     DETERMINISTIC
 BEGIN
@@ -24,7 +24,9 @@ SET @rec_count = 0;
 
 SELECT GENERATE_employeetimeentry(e.RowID,OrganizID,d.DateValue,UserRowID)
 FROM dates d
-INNER JOIN employee e ON e.OrganizationID=OrganizID
+INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+INNER JOIN `position` pos ON pos.RowID=e.PositionID
+INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID)
 INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID AND pf.PayFrequencyType=Pay_FrequencyType
 WHERE d.DateValue BETWEEN periodDateFrom AND periodDateTo
 ORDER BY e.RowID,d.DateValue;

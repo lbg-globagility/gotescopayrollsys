@@ -25,7 +25,7 @@ SELECT RowID FROM `user` WHERE RowID=default_zero INTO default_internal_sys_user
 
 IF default_internal_sys_user_rowid IS NULL THEN
 
-	INSERT INTO `user` (`RowID`, `LastName`, `FirstName`, `MiddleName`, `UserID`, `Password`, `OrganizationID`, `PositionID`, `Created`, `LastUpdBy`, `CreatedBy`, `LastUpd`, `Status`, `EmailAddress`, `AllowLimitedAccess`, `InSession`) VALUES (0, 'user', 'user', 'user', 'æéòîóóîòéæ', 'æéòîóóîòéæ', 1, 1, '2017-03-09 00:00:00', 1, 1, '2017-10-06 09:33:49', 'Active', 'user@email.com.ph', '1', '1'); SELECT @@identity INTO default_internal_sys_user_rowid;
+	INSERT INTO `user` (`RowID`, `LastName`, `FirstName`, `MiddleName`, `UserID`, `Password`, `OrganizationID`, `PositionID`, `Created`, `LastUpdBy`, `CreatedBy`, `LastUpd`, `Status`, `EmailAddress`, `AllowLimitedAccess`, `InSession`) VALUES (0, 'user', 'user', 'user', 'ÃƒÂ¦ÃƒÂ©ÃƒÂ²ÃƒÂ®ÃƒÂ³ÃƒÂ³ÃƒÂ®ÃƒÂ²ÃƒÂ©ÃƒÂ¦', 'ÃƒÂ¦ÃƒÂ©ÃƒÂ²ÃƒÂ®ÃƒÂ³ÃƒÂ³ÃƒÂ®ÃƒÂ²ÃƒÂ©ÃƒÂ¦', 1, 1, '2017-03-09 00:00:00', 1, 1, '2017-10-06 09:33:49', 'Active', 'user@email.com.ph', '1', '1'); SELECT @@identity INTO default_internal_sys_user_rowid;
 
    UPDATE `user` SET RowID=default_zero WHERE RowID=default_internal_sys_user_rowid;
 

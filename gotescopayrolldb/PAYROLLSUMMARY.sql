@@ -42,11 +42,16 @@ IFNULL(
 											UNION
 												SELECT RowID,OrganizationID,`Date`,EmployeeShiftID,EmployeeID,EmployeeSalaryID,EmployeeFixedSalaryFlag,RegularHoursWorked,RegularHoursAmount,TotalHoursWorked,OvertimeHoursWorked,OvertimeHoursAmount,UndertimeHours,UndertimeHoursAmount,NightDifferentialHours,NightDiffHoursAmount,NightDifferentialOTHours,NightDiffOTHoursAmount,HoursLate,HoursLateAmount,LateFlag,PayRateID,VacationLeaveHours,SickLeaveHours,MaternityLeaveHours,OtherLeaveHours,AdditionalVLHours,TotalDayPay,Absent,TaxableDailyAllowance,HolidayPayAmount,TaxableDailyBonus,NonTaxableDailyBonus
 												FROM employeetimeentryactual
-												WHERE psi_undeclared='1' AND OrganizationID=ps_OrganizationID) i LEFT JOIN employeesalary es ON es.RowID=i.EmployeeSalaryID WHERE i.EmployeeID=ps.EmployeeID AND i.`Date` BETWEEN paypdatefrom AND paypdateto)
-,0)
+												WHERE psi_undeclared='1'
+												AND OrganizationID=ps_OrganizationID) i LEFT JOIN employeesalary es ON es.RowID=i.EmployeeSalaryID WHERE i.EmployeeID=ps.EmployeeID AND i.`Date` BETWEEN paypdatefrom AND paypdateto
+												AND e.EmployeeType = 'Daily')
+, emsal.BasicPay)
 												AS BasicPay
-,SUM(IFNULL(pst6.PayAmount,0)) 'TotalGrossSalary'
-,SUM(IFNULL(pst7.PayAmount,0)) 'TotalNetSalary'
+
+/*,SUM(IFNULL(pst6.PayAmount,0)) 'TotalGrossSalary'
+,SUM(IFNULL(pst7.PayAmount,0)) 'TotalNetSalary'*/
+,ps.TotalGrossSalary
+,ps.TotalNetSalary
 
 ,IF(pp.MinimumWageValue >= (SELECT IF(e.EmployeeType = 'Daily', esa.BasicPay, (esa.Salary / (e.WorkDaysPerYear / month_count_peryear)))
                             FROM employeesalary esa
@@ -73,12 +78,13 @@ IFNULL(
 ,UCASE(p.PositionName) 'PositionName'
 ,UCASE(d.Name) 'DivisionName'
 ,e.RowID 'EmployeeRowID'
-,SUM(IFNULL(pst.PayAmount,0)) AS Tardiness
-,SUM(IFNULL(pst1.PayAmount,0)) AS Undertime
-,SUM(IFNULL(pst2.PayAmount,0)) AS NightDifftl
-,SUM(IFNULL(pst3.PayAmount,0)) AS HolidayPay
-,SUM(IFNULL(pst4.PayAmount,0)) AS OverTime
-,SUM(IFNULL(pst5.PayAmount,0)) AS NightDifftlOT
+# ,SUM(IFNULL(pst.PayAmount,0)) AS Tardiness
+, SUM(IFNULL(pst.PayAmount,0)) AS Tardiness
+, SUM(IFNULL(pst1.PayAmount,0)) AS Undertime
+, SUM(IFNULL(pst2.PayAmount,0)) AS NightDifftl
+, SUM(IFNULL(pst3.PayAmount,0)) AS HolidayPay
+, SUM(IFNULL(pst4.PayAmount,0)) AS OverTime
+, SUM(IFNULL(pst5.PayAmount,0)) AS NightDifftlOT
 FROM (SELECT RowID,OrganizationID,PayPeriodID,EmployeeID,TimeEntryID,PayFromDate,PayToDate,TotalGrossSalary,TotalNetSalary,TotalTaxableSalary,TotalEmpSSS,TotalEmpWithholdingTax,TotalCompSSS,TotalEmpPhilhealth,TotalCompPhilhealth,TotalEmpHDMF,TotalCompHDMF,TotalVacationDaysLeft,TotalLoans,TotalBonus,TotalAllowance,TotalAdjustments,ThirteenthMonthInclusion,NondeductibleTotalLoans,'Declared' AS Result FROM paystub WHERE psi_undeclared='0' AND OrganizationID=ps_OrganizationID
 UNION
 SELECT RowID,OrganizationID,PayPeriodID,EmployeeID,TimeEntryID,PayFromDate,PayToDate,TotalGrossSalary,TotalNetSalary,TotalTaxableSalary,TotalEmpSSS,TotalEmpWithholdingTax,TotalCompSSS,TotalEmpPhilhealth,TotalCompPhilhealth,TotalEmpHDMF,TotalCompHDMF,TotalVacationDaysLeft,TotalLoans,TotalBonus,TotalAllowance,TotalAdjustments,ThirteenthMonthInclusion,NondeductibleTotalLoans,'Actual' AS Result FROM paystubactual WHERE psi_undeclared='1' AND OrganizationID=ps_OrganizationID) ps
@@ -116,6 +122,13 @@ INNER JOIN product pd9 ON pd9.OrganizationID=ps_OrganizationID AND pd9.PartNo='W
 LEFT JOIN paystubitem pst9 ON pst9.PayStubID=ps.RowID AND pst9.ProductID=pd9.RowID AND pst9.`Undeclared`=psi_undeclared
 
 INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID
+
+INNER JOIN (SELECT i.*
+				FROM salary_for_paystub i
+				WHERE i.OrganizationID=ps_OrganizationID
+				AND i.PayPeriodID=ps_PayPeriodID1
+				GROUP BY i.RowID) emsal
+        ON emsal.EmployeeID=ps.EmployeeID
 
 WHERE ps.OrganizationID=ps_OrganizationID
 #AND ps.TotalNetSalary > 0

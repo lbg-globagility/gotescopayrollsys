@@ -114,13 +114,13 @@ SET @correct_date = CURDATE();
         SELECT
 
 
+        INSUPD_employeetimeentries(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, d.DateValue, esh.RowID, NEW.EmployeeID, es.RowID, 0, 0, 0, 0, 0, 0, 0, pr.RowID, 0, 0, 0, 0, 0, 0, 0, 0)
 
 
 
-
-
-
-        INSERTUPDATE_employeetimeentry(NULL,NEW.OrganizationID,NEW.CreatedBy,d.DateValue,esh.RowID,NEW.EmployeeID,es.RowID,'0',0,0,0,0,0,0,0,0,0,0,0,0,0,'0',pr.RowID,0,0,IF(sh.DutyHoursCount > 5.0, (sh.DutyHoursCount - 1.0), sh.DutyHoursCount),0,0,0,NULL)
+        # INSERTUPDATE_employeetimeentry
+        # INSUPD_employeetimeentries(NULL,NEW.OrganizationID,NEW.CreatedBy,d.DateValue,esh.RowID,NEW.EmployeeID,es.RowID,'0',0,0,0,0,0,0,0,0,0,0,0,0,0,'0',pr.RowID,0,0,IF(sh.DutyHoursCount > 5.0, (sh.DutyHoursCount - 1.0), sh.DutyHoursCount),0,0,0,NULL)
+        
         FROM dates d
 
 

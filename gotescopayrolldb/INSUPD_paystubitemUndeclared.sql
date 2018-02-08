@@ -13,67 +13,98 @@
 -- Dumping structure for function gotescopayrolldb_latest.INSUPD_paystubitemUndeclared
 DROP FUNCTION IF EXISTS `INSUPD_paystubitemUndeclared`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_paystubitemUndeclared`(`psi_RowID` INT, `psi_OrganizationID` INT, `psi_CreatedBy` INT, `psi_LastUpdBy` INT, `psi_PayStubID` INT, `psi_ProductID` INT, `psi_PayAmount` DECIMAL(11,2)) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_paystubitemUndeclared`(`pstubitm_RowID` INT, `pstubitm_OrganizationID` INT, `pstubitm_CreatedBy` INT, `pstubitm_LastUpdBy` INT, `pstubitm_PayStubID` INT, `pstubitm_ProductID` INT, `pstubitm_PayAmount` DECIMAL(11,2)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 
-DECLARE returnvalue INT(11) DEFAULT 0;
+DECLARE paypID INT(11);
 
-DECLARE psiRowID INT(11);
+DECLARE paypDateTo DATE;
 
-DECLARE undeclaredamount DECIMAL(11,5);
+DECLARE pay_fromdate DATE;
 
-DECLARE e_RowID INT(11);
+DECLARE amountloan DECIMAL(11,2);
 
-DECLARE ps_DateFrom DATE;
+DECLARE deductamount DECIMAL(11,2);
 
-DECLARE ps_DateTo DATE;
+DECLARE selectedEmployeeID VARCHAR(100);
 
-IF psi_ProductID IN (SELECT p.RowID
-							FROM product p
-							INNER JOIN category c ON c.RowID=p.CategoryID
-							WHERE c.CategoryName IN ('Deductions','Miscellaneous','Totals')
-							AND p.OrganizationID=psi_OrganizationID
-							AND LOCATE('.',p.PartNo) = 0
-							ORDER BY p.Category) THEN
-	
-	SELECT EmployeeID,PayFromDate,PayToDate FROM paystub WHERE RowID=psi_PayStubID INTO e_RowID,ps_DateFrom,ps_DateTo;
-	
-	SELECT GET_employeeundeclaredsalarypercent(e_RowID,psi_OrganizationID,ps_DateFrom,ps_DateTo) INTO undeclaredamount;
-	
-	SELECT RowID FROM paystubitem WHERE OrganizationID=psi_OrganizationID AND ProductID=psi_ProductID AND PayStubID=psi_PayStubID AND Undeclared='1' INTO psiRowID;
-	
-	INSERT INTO paystubitem
-	(
-		RowID
-		,OrganizationID
-		,Created
-		,CreatedBy
-		,PayStubID
-		,ProductID
-		,PayAmount
-		,Undeclared
-	) VALUES (
-		IF(psi_RowID IS NULL, psiRowID, psi_RowID)
-		,psi_OrganizationID
-		,CURRENT_TIMESTAMP()
-		,psi_CreatedBy
-		,psi_PayStubID
-		,psi_ProductID
-		,psi_PayAmount + (psi_PayAmount * undeclaredamount)
-		,'1'
-	) ON
-	DUPLICATE
-	KEY
-	UPDATE
-		LastUpd=CURRENT_TIMESTAMP()
-		,LastUpdBy=psi_LastUpdBy
-		,PayAmount=psi_PayAmount + (psi_PayAmount * undeclaredamount)
-		,Undeclared='1';SELECT @@Identity AS ID INTO returnvalue;
+DECLARE psi_undeclaredID INT(11);
+
+DECLARE SSSContribProductRowID INT(11);
 		
+DECLARE WeeklyPayFreqID INT(11);
+		
+DECLARE isWeeklySSSContribSched CHAR(1);
+		
+DECLARE SSSContribAmount DECIMAL(11,2);
+
+DECLARE pstubtimID INT(11);
+
+DECLARE pstubtimRowID INT(11);
+
+DECLARE loan_interestID INT(11);
+
+DECLARE _value DECIMAL(11, 2);
+
+SELECT RowID FROM paystubitem WHERE OrganizationID=pstubitm_OrganizationID AND PayStubID=pstubitm_PayStubID AND ProductID=pstubitm_ProductID AND IFNULL(Undeclared,'0')='0' INTO pstubtimRowID;
+
+SET @is_exists = FALSE;
+
+SELECT
+EXISTS(SELECT p.RowID
+       FROM product p
+		 # INNER JOIN category c ON c.RowID=p.CategoryID AND c.OrganizationID=p.OrganizationID AND c.CategoryName IN ('Deductions', 'Miscellaneous', 'Totals')
+		 WHERE p.OrganizationID=pstubitm_OrganizationID
+		 AND LOCATE('.', p.PartNo) = 0
+		 AND p.`Category` IN ('Deductions', 'Miscellaneous', 'Totals')
+		 AND p.RowID = pstubitm_ProductID
+		 ORDER BY p.`Category`)
+INTO @is_exists;
+
+IF @is_exists = TRUE THEN
+	
+	SELECT (pstubitm_PayAmount * GET_employeeundeclaredsalarypercent(ps.EmployeeID, ps.OrganizationID, ps.PayFromDate, ps.PayToDate))
+	FROM paystub ps
+	WHERE ps.RowID=pstubitm_PayStubID
+	INTO _value;
+	
+ELSE
+
+	SET _value = pstubitm_PayAmount;
+
 END IF;
 
-RETURN returnvalue;
+INSERT INTO paystubitem
+(
+	# RowID,
+	OrganizationID
+	,Created
+	,CreatedBy
+	,PayStubID
+	,ProductID
+	,PayAmount
+	,Undeclared
+) VALUES (
+	# IF(pstubitm_RowID IS NULL, pstubtimRowID, pstubitm_RowID),
+	pstubitm_OrganizationID
+	,CURRENT_TIMESTAMP()
+	,pstubitm_CreatedBy
+	,pstubitm_PayStubID
+	,pstubitm_ProductID
+	,_value
+	,TRUE
+) ON 
+DUPLICATE 
+KEY 
+UPDATE 
+	LastUpd=CURRENT_TIMESTAMP()
+	,LastUpdBy=pstubitm_LastUpdBy
+	,ProductID=pstubitm_ProductID
+	,PayAmount=_value
+	,Undeclared=TRUE; SELECT @@Identity AS id INTO pstubtimID;
+	
+RETURN pstubtimID;
 
 END//
 DELIMITER ;

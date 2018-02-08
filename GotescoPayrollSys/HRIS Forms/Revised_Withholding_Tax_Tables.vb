@@ -12,7 +12,18 @@ Public Class Revised_Withholding_Tax_Tables
     End Sub
     Private Sub fillFilingStatus()
         Dim dt As New DataTable
-        dt = getDataTableForSQL("select * from filingstatus")
+        dt = getDataTableForSQL(
+            String.Concat("SELECT *",
+                          " FROM filingstatus",
+                          " UNION",
+                          " SELECT 0 `RowID`",
+                          ", CURRENT_TIMESTAMP() `Created`",
+                          ", CURRENT_TIMESTAMP() `LastUpd`",
+                          ", 1 `CreatedBy`",
+                          ", 1 `LastUpdBy`",
+                          ", 'None' `FilingStatus`",
+                          ", 'None' `MaritalStatus`",
+                          ", 0 `Dependent`;"))
 
         dgvfilingstatus.Rows.Clear()
 
@@ -31,7 +42,11 @@ Public Class Revised_Withholding_Tax_Tables
         If dgvfilingstatus.RowCount <> 0 Then
 
             Dim dt As New DataTable
-            dt = getDataTableForSQL("select * from paywithholdingtax where filingstatusid = '" & dgvfilingstatus.CurrentRow.Cells(c_FID.Index).Value & "' and payfrequencyid = '" & getpf & "'")
+            'dt = getDataTableForSQL("select * from paywithholdingtax where filingstatusid = '" & dgvfilingstatus.CurrentRow.Cells(c_FID.Index).Value & "' and payfrequencyid = '" & getpf & "'")
+            Dim params =
+                New Object() {dgvfilingstatus.CurrentRow.Cells(c_FID.Index).Value, getpf}
+            dt = New SQL("SELECT * FROM paywithholdingtax WHERE IFNULL(FilingStatusID, 0) = ?fstat_id AND PayFrequencyID = ?pf_rowid;",
+                         params).GetFoundRows.Tables(0)
             dgvlisttaxableamt.Rows.Clear()
 
             For Each drow As DataRow In dt.Rows

@@ -14,12 +14,12 @@ Public Class MetroLogin
 
         ReloadOrganization()
 
-        'Dim thisfilepath = "C:\Users\GLOBAL-D\Documents\Visual Studio 2013\Other Projects\GotescoPayrollSys\GotescoPayrollSys\bin\Debug"
+        'Dim thisfilepath = "D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys\bin\Debug"
 
         'Dim files() = Directory.GetFiles(thisfilepath, "*.*")
 
         'For Each strval In files
-        '    File.AppendAllText("C:\Users\GLOBAL-D\Desktop\gotescobindebug.txt", strval & Environment.NewLine)
+        '    File.AppendAllText("C:\Users\GLOBAL-D-PC\Desktop\gotescobindebug.txt", strval & Environment.NewLine)
         'Next
 
         MyBase.OnLoad(e)

@@ -208,7 +208,7 @@ SET @dailyallowanceamount = 0.00;
 
 SET @timediffcount = 0.00;
 
-INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,PayAmount,Undeclared)
+/*INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,PayAmount,Undeclared)
 	SELECT
 	ii.ProductID
 	,NEW.OrganizationID
@@ -219,7 +219,7 @@ INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,Pay
 	,'0'
 	FROM
 	(
-		SELECT ii.AllowanceAmount - (SUM(i.HoursToLess) * ((i.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * 12))) / 8)) AS TotalAllowanceAmount,ii.ProductID
+		SELECT ii.AllowanceAmount - (SUM(i.HoursToLess) * ((ii.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * 12))) / 8)) AS TotalAllowanceAmount,ii.ProductID
 			FROM paystubitem_sum_semimon_allowance_group_prodid i
 			INNER JOIN (SELECT ea.*,MIN(d.DateValue) AS DateRange1,MAX(d.DateValue) AS DateRange2 FROM dates d INNER JOIN employeeallowance ea ON ea.ProductID != ecola_rowid AND ea.AllowanceFrequency='Semi-monthly' AND ea.EmployeeID=NEW.EmployeeID AND ea.OrganizationID=NEW.OrganizationID AND d.DateValue BETWEEN ea.EffectiveStartDate AND ea.EffectiveEndDate WHERE d.DateValue BETWEEN NEW.PayFromDate AND NEW.PayToDate GROUP BY ea.RowID ORDER BY d.DateValue) ii ON i.EmployeeID=ii.EmployeeID AND i.OrganizationID=ii.OrganizationID AND i.`Date` BETWEEN ii.DateRange1 AND ii.DateRange2
 		
@@ -232,7 +232,7 @@ KEY
 UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	,LastUpdBy=NEW.CreatedBy
-	,PayAmount=ii.TotalAllowanceAmount;
+	,PayAmount=ii.TotalAllowanceAmount;*/
 		
 
 SET @timediffcount = 0.00;
@@ -427,29 +427,16 @@ INSERT INTO paystubitem(ProductID,OrganizationID,Created,CreatedBy,PayStubID,Pay
 	,NEW.RowID
 	,i.AllowanceAmount
 	,0
-	FROM (/*SELECT ea.ProductID, ea.AllowanceAmount
-			FROM employeeallowance ea WHERE ea.ProductID=ecola_rowid AND ea.AllowanceFrequency='Semi-monthly' AND ea.EmployeeID=NEW.EmployeeID AND ea.OrganizationID=NEW.OrganizationID AND (ea.EffectiveStartDate >= NEW.PayFromDate OR ea.EffectiveEndDate >= NEW.PayFromDate) AND (ea.EffectiveStartDate <= NEW.PayToDate OR ea.EffectiveEndDate <= NEW.PayToDate)*/
-			SELECT ii.ProductID
-			,(ii.AllowanceAmount - (SUM(i.HoursToLess) * ((i.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * MonthCount))) / default_min_hrswork))) `AllowanceAmount`
-			FROM paystubitem_sum_semimon_allowance_group_prodid i
-			INNER JOIN (SELECT ea.*
-			            ,MIN(d.DateValue) `DateRange1`
-							,MAX(d.DateValue) `DateRange2`
-			            FROM dates d
-							INNER JOIN employeeallowance ea
-							        ON ea.AllowanceFrequency='Semi-monthly'
-									     # AND TaxableFlag=IsTaxable
-										  AND ea.OrganizationID=NEW.OrganizationID
-										  AND ea.EmployeeID=NEW.EmployeeID
-										  AND d.DateValue BETWEEN ea.EffectiveStartDate AND ea.EffectiveEndDate
-							WHERE d.DateValue BETWEEN NEW.PayFromDate AND NEW.PayToDate
-							GROUP BY ea.RowID ORDER BY d.DateValue) ii
-			        ON i.EmployeeID=ii.EmployeeID
-					     AND i.OrganizationID=ii.OrganizationID
-						  AND i.`Date` BETWEEN ii.DateRange1 AND ii.DateRange2
-						  AND i.`Fixed`=0
-			GROUP BY ii.RowID
-			) i
+	FROM (SELECT i.ProductID
+	      ,i.EmployeeID
+	      ,( i.AllowanceAmount - (SUM(i.HoursToLess) * ((i.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * 12))) / 8)) ) `AllowanceAmount`
+	      FROM paystubitem_sum_semimon_allowance_group_prodid i
+			WHERE i.OrganizationID=NEW.OrganizationID
+			AND i.EmployeeID=NEW.EmployeeID
+			# AND i.TaxableFlag = FALSE
+			AND i.`Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate
+			# GROUP BY i.EmployeeID,ii.RowID,ii.ProductID
+			GROUP BY i.ProductID, i.TaxableFlag) i
 ON
 DUPLICATE
 KEY
@@ -457,8 +444,8 @@ UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	,LastUpdBy=NEW.LastUpdBy
 	,PayAmount=i.AllowanceAmount;
-	
-IF IsrbxpayrollFirstHalfOfMonth = '0' THEN 
+
+IF FALSE THEN # IF IsrbxpayrollFirstHalfOfMonth = '0' THEN
 
 	SET @dailyallowanceamount = 0.00;
 
@@ -779,7 +766,7 @@ IF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '1' THEN
 		
 ELSEIF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '0' THEN
 	
-	IF e_type = 'Monthly' THEN
+	IF e_type IN ('Fixed','Monthly') THEN
 	
 		SELECT (TrueSalary / PAYFREQUENCY_DIVISOR(pftype)) FROM employeesalary es WHERE es.EmployeeID=NEW.EmployeeID AND es.OrganizationID=NEW.OrganizationID AND (es.EffectiveDateFrom >= NEW.PayFromDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) >= NEW.PayFromDate) AND (es.EffectiveDateFrom <= NEW.PayToDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) <= NEW.PayToDate) ORDER BY es.EffectiveDateFrom DESC LIMIT 1 INTO totalworkamount;
 		
@@ -797,7 +784,7 @@ ELSEIF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '0' THEN
 		
 		SET totalworkamount = IFNULL(totalworkamount,0);
 
-	ELSEIF e_type = 'Fixed' THEN
+	ELSEIF e_type = 'Fixed employee' THEN
 	
 		SELECT es.BasicPay FROM employeesalary es WHERE es.EmployeeID=NEW.EmployeeID AND es.OrganizationID=NEW.OrganizationID AND (es.EffectiveDateFrom >= NEW.PayFromDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) >= NEW.PayFromDate) AND (es.EffectiveDateFrom <= NEW.PayToDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) <= NEW.PayToDate) ORDER BY es.EffectiveDateFrom DESC LIMIT 1 INTO totalworkamount;
 
@@ -1009,9 +996,65 @@ ELSE
 	
 END IF;
 
+/*INSERT INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, `PayAmount`, `Undeclared`)
+SELECT p.OrganizationID
+,CURRENT_TIMESTAMP()
+,NEW.LastUpdBy
+,CURRENT_TIMESTAMP()
+,NEW.LastUpdBy
+,NEW.RowID
+,p.RowID
+,IFNULL(i.`AddtlRestDayPayment`, 0)
+,FALSE
+FROM product p
+LEFT JOIN (SELECT
+           SUM(i.AddtlRestDayPayment) `AddtlRestDayPayment`
+			  FROM monthlyemployee_restday_payment i
+			  INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.OrganizationID=i.OrganizationID AND e.RowID=NEW.EmployeeID
+			  WHERE i.`Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate
+			  AND i.OrganizationID=NEW.OrganizationID) i ON i.`AddtlRestDayPayment` IS NOT NULL
+WHERE p.PartNo='Restday pay'
+AND p.OrganizationID=NEW.OrganizationID
+ON 
+DUPLICATE 
+KEY 
+UPDATE 
+	LastUpd=CURRENT_TIMESTAMP()
+	,LastUpdBy=NEW.LastUpdBy
+	,ProductID=p.RowID
+	,PayAmount=IFNULL(i.`AddtlRestDayPayment`, 0)
+	,Undeclared=FALSE
+;
 
-	
-
+INSERT INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, `PayAmount`, `Undeclared`)
+SELECT p.OrganizationID
+,CURRENT_TIMESTAMP()
+,NEW.LastUpdBy
+,CURRENT_TIMESTAMP()
+,NEW.LastUpdBy
+,NEW.RowID
+,p.RowID
+,IFNULL(i.`AddtlRestDayPayment`, 0)
+,TRUE
+FROM product p
+LEFT JOIN (SELECT
+           (i.ActualPercentage * SUM(i.AddtlRestDayPayment)) `AddtlRestDayPayment`
+			  FROM monthlyemployee_restday_payment i
+			  INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.OrganizationID=i.OrganizationID AND e.RowID=NEW.EmployeeID
+			  WHERE i.`Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate
+			  AND i.OrganizationID=NEW.OrganizationID) i ON i.`AddtlRestDayPayment` IS NOT NULL
+WHERE p.PartNo='Restday pay'
+AND p.OrganizationID=NEW.OrganizationID
+ON 
+DUPLICATE 
+KEY 
+UPDATE 
+	LastUpd=CURRENT_TIMESTAMP()
+	,LastUpdBy=NEW.LastUpdBy
+	,ProductID=p.RowID
+	,PayAmount=IFNULL(i.`AddtlRestDayPayment`, 0)
+	,Undeclared=TRUE
+;*/
 
 END//
 DELIMITER ;

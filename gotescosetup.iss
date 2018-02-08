@@ -35,7 +35,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CollapsibleGroupBox.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.CrystalReports.Engine.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportAppServer.ClientDoc.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -54,9 +53,16 @@ Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportSource.dll"; DestD
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.Shared.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.Windows.Forms.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\DevComponents.DotNetBar2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.SqlServer.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.SqlServer.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\EPPlus.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\EPPlus.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\EWSoftware.ListControls.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\Femiani.Forms.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\FlashControlV71.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -69,10 +75,14 @@ Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.dll"; DestDir: "{app}"; Fl
 Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.Fonts.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\Microsoft.Office.Interop.Excel.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.Entity.EF6.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\MySqlBackup.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\OCRTools.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\ShockwaveFlashObjects.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\stdole.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\Core Forms\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\GotescoPayrollSys\bin\Debug\rpt\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Source: "D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
                                                  

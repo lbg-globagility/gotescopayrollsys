@@ -2940,8 +2940,9 @@ Public Class PayStub
                                 Dim n_bgwork As New System.ComponentModel.BackgroundWorker() With {.WorkerReportsProgress = True, .WorkerSupportsCancellation = True}
 
                                 array_bgwork(i) = n_bgwork
-
+                                
                                 AddHandler array_bgwork(i).DoWork, AddressOf .PayrollGeneration_BackgourndWork
+                                AddHandler array_bgwork(i).RunWorkerCompleted, AddressOf .PayrollGeneration_RunWorkerCompleted
                                 If i = 0 Then
                                     Console.WriteLine(String.Concat("PROCESS STARTS @ ", Now.ToShortTimeString, "....."))
                                 End If

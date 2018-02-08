@@ -119,6 +119,10 @@ Public Class PayrollGeneration
                       " BETWEEN ptx.TaxableIncomeFromAmount AND ptx.TaxableIncomeToAmount",
                       ";")
 
+    Const strquery_monthemprestdaypay As String = "CALL INSUPD_monthlyemployeerestdaypayment(?og_rowid, ?e_rowid, ?pp_rowid, ?u_rowid);"
+
+    Private employee_rowid_list As New List(Of Integer)
+
     Sub New(ByVal _employee_dattab As DataTable,
                   ByVal _isEndOfMonth As String,
                   ByVal _esal_dattab As DataTable,
@@ -1396,6 +1400,7 @@ Public Class PayrollGeneration
                 If n_ExecSQLProcedure.HasError Then
                     Console.WriteLine(String.Concat("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@DEAD LOCK ERROR@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
                                                     Convert.ToInt32(drow("RowID"))))
+                    Throw n_ExecSQLProcedure.ErrorException
                 End If
 
                 Dim i_progress As Integer = CInt((100 * progress_index) / emp_count)
@@ -1443,7 +1448,7 @@ Public Class PayrollGeneration
                 '    Console.WriteLine(String.Concat("Error occured for employee - ", Convert.ToInt32(drow("RowID")), vbNewLine, exec_quer.ErrorMessage))
 
                 'End If
-
+                employee_rowid_list.Add(Convert.ToInt32(drow("RowID")))
             End Try
 
         Next
@@ -1533,6 +1538,48 @@ Public Class PayrollGeneration
 
         'Dim dfsd As String = DirectCast(sender, System.ComponentModel.BackgroundWorker).ToString
         'Console.WriteLine(String.Concat(dfsd, " @@ ", employee_dattab.TableName))
+
+    End Sub
+    '
+    Sub PayrollGeneration_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs)
+
+        Static str_query As String = "CALL INSUPD_monthlyemployeerestdaypayment(?og_rowid, ?e_rowid, ?pp_rowid, ?u_rowid);"
+        Static str_query2 As String = "CALL INSUPD_paystubitemallowances(?og_rowid, ?e_rowid, ?pp_rowid, ?u_rowid);"
+
+        Dim i = 0
+
+        For Each e_rowid In employee_rowid_list
+
+            Dim _params =
+                New Object() {orgztnID, e_rowid, n_PayrollRecordID, z_User}
+            
+            Dim sql As New SQL(str_query, _params)
+
+            Dim sql2 As New SQL(str_query2, _params)
+
+            Try
+                'Dim _task As Task = Task.Run(Sub()
+                '                                 sql.ExecuteQuery()
+                '                                 sql2.ExecuteQuery()
+                '                             End Sub)
+                '_task.Wait()
+                '###################################################################
+                Dim _task As New Thread(AddressOf sql.ExecuteQuery) _
+                    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+                _task.Start()
+
+                Dim _task2 As New Thread(AddressOf sql2.ExecuteQuery) _
+                    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+                _task2.Start()
+
+                Console.WriteLine(String.Concat("Executing Task", i))
+            Catch ex As Exception
+                Console.WriteLine(String.Concat("Error in Task", i, " : ", ex.Message))
+            Finally
+                i += 1
+            End Try
+
+        Next
 
     End Sub
 

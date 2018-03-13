@@ -128,7 +128,7 @@
         End If
         fillshiftentry()
 
-        view_ID = VIEW_privilege("Duty shifting", orgztnID)
+        view_ID = VIEW_privilege("Duty shifting", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -299,7 +299,7 @@
         Else
 
             If IsNew = 1 Then
-                sp_shift(z_datetime, z_User, z_datetime, z_OrganizationID, z_User, dtpTimeFrom.Value, dtpTimeTo.Value)
+                sp_shift(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, dtpTimeFrom.Value, dtpTimeTo.Value)
 
                 myBalloon("Successfully Save", "Saving...", btnSave, , -65)
                 Dim shiftid As String = getStringItem("Select MAX(RowID) From Shift")
@@ -319,7 +319,7 @@
                 If chkHasLunchBreak.Checked Then
                     str_quer =
                         String.Concat("UPDATE shift SET LastUpd = CURRENT_TIMESTAMP()",
-                                      ", LastUpdBy = '", z_User, "'",
+                                      ", LastUpdBy = '", user_row_id, "'",
                                       ", TimeFrom = '", Format(CDate(dtpTimeFrom.Value), "HH:mm"), "'",
                                       ", TimeTo = '", Format(CDate(dtpTimeTo.Value), "HH:mm"), "'",
                                       ", BreakTimeFrom = '", dtpBreakTimeFrom.Tag, "'",
@@ -329,7 +329,7 @@
                 Else
                     str_quer =
                         String.Concat("UPDATE shift SET LastUpd = CURRENT_TIMESTAMP()",
-                                      ", LastUpdBy = '", z_User, "'",
+                                      ", LastUpdBy = '", user_row_id, "'",
                                       ", TimeFrom = '", Format(CDate(dtpTimeFrom.Value), "HH:mm"), "'",
                                       ", TimeTo = '", Format(CDate(dtpTimeTo.Value), "HH:mm"), "'",
                                       ", BreakTimeFrom = NULL",

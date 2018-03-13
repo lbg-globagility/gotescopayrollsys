@@ -30,8 +30,8 @@ Namespace My
                 New ExecuteQuery("UPDATE user" &
                                  " SET InSession='0'" &
                                  ",LastUpd=CURRENT_TIMESTAMP()" &
-                                 ",LastUpdBy='" & z_User & "'" &
-                                 " WHERE RowID='" & z_User & "';")
+                                 ",LastUpdBy='" & user_row_id & "'" &
+                                 " WHERE RowID='" & user_row_id & "';")
 
             If MachineLocalization IsNot Nothing Then
 

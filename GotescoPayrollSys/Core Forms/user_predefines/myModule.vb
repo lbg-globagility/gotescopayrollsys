@@ -35,7 +35,7 @@ Module myModule
     Public isgetFromProd As Boolean = False
     Public sys_servername, sys_userid, sys_password, sys_db, sys_apppath As String
     Public prodImage As New DataTable
-    Public orgztnID As String
+    Public org_rowid As String
     Public orgNam As String
     Public me_Name As String
 
@@ -920,51 +920,51 @@ Module myModule
                     If IsNumeric(.Text) = True Then
                         If formFunctn = "Delivery Report" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & orgztnID & ")" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
                                 " AND o.Type='" & formFunctn & "'" & _
-                                " OR o.RelatedMRFId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Merchandise Requisition' AND OrganizationID=" & orgztnID & ")" & _
+                                " OR o.RelatedMRFId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Merchandise Requisition' AND OrganizationID=" & org_rowid & ")" & _
                                 " AND o.Type='" & formFunctn & "'" & _
-                                " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Merchandise Requisition" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & orgztnID & ")" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedDRId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Delivery Report' AND OrganizationID=" & orgztnID & ")" & _
+                                    " OR o.RelatedDRId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Delivery Report' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                    " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Packing List" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & orgztnID & ")" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedPRSId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Purchase Requisition' AND OrganizationID=" & orgztnID & ")" & _
+                                    " OR o.RelatedPRSId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Purchase Requisition' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                    " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Purchase Requisition" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & orgztnID & ")" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedPLId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Packing List' AND OrganizationID=" & orgztnID & ")" & _
+                                    " OR o.RelatedPLId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Packing List' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                    " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Receiving Report" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & orgztnID & ")" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedPRSId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Purchase Requisition' AND OrganizationID=" & orgztnID & ")" & _
+                                    " OR o.RelatedPRSId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Purchase Requisition' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedPLId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Packing List' AND OrganizationID=" & orgztnID & ")" & _
+                                    " OR o.RelatedPLId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Packing List' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                    " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Repairs" Then
 
-                            fillDGV(s_query & " r.RepairNo = (SELECT RepairNo FROM repairs WHERE RepairNo=" & Trim(.Text) & " AND OrganizationID=" & orgztnID & " GROUP BY RepairNo)" & _
+                            fillDGV(s_query & " r.RepairNo = (SELECT RepairNo FROM repairs WHERE RepairNo=" & Trim(.Text) & " AND OrganizationID=" & org_rowid & " GROUP BY RepairNo)" & _
                                     " OR r.ReferenceNumber = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND RowID LIKE r.ReferenceNumber LIMIT 1)" & _
-                                    " AND r.OrganizationID=" & orgztnID & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
+                                    " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
 
                             'DI MO PA NAGAGAWA UNG SA ReferenceNumber sa repairs Simple Search
 
@@ -976,13 +976,13 @@ Module myModule
                             'kung FaxNumber ba?
 
                             fillDGV(s_query & " ac.MainPhone = '" & .Text & "'" & _
-                                    " AND ac.OrganizationID='" & orgztnID & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
+                                    " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                         ElseIf formFunctn = "Stock Adjustment" Then
 
-                            fillDGV(s_query & " o.OrderNumber=(SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & orgztnID & ")" & _
+                            fillDGV(s_query & " o.OrderNumber=(SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft)
+                                    " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft)
 
                         End If
                         'order Date OR Creation
@@ -998,13 +998,13 @@ Module myModule
 
                             fillDGV(s_query & " r.Created LIKE '%" & .Text & "%'" & _
                                     " OR r.LastUpd LIKE '%" & .Text & "%'" & _
-                                    " AND r.OrganizationID=" & orgztnID & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
+                                    " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
                         ElseIf formFunctn = "Supplier" Then
 
                             fillDGV(s_query & " ac.Created LIKE '" & .Text & "'" & _
                                     " AND ac.AccountType='Supplier'" & _
                                     " OR ac.LastUpd LIKE '" & .Text & "'" & _
-                                    " AND ac.OrganizationID='" & orgztnID & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
+                                    " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                         Else
 
@@ -1013,30 +1013,30 @@ Module myModule
 
                             fillDGV(s_query & " o.OrderDate LIKE '%" & _dat & "%'" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                    " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                             '" OR o.Created LIKE '%" & _dat & "%'" & _
                             '" AND o.Type='" & formFunctn & "'" & _
                         End If
 
                         'user
-                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM user WHERE OrganizationID=" & orgztnID & _
+                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM user WHERE OrganizationID=" & org_rowid & _
                                 " AND CONCAT(LastName,', ',FirstName) = '" & .Text & "')") = 1 Then
                         'tinignan ulit kung may match sa contact
-                        If EXECQUER("SELECT EXISTS(SELECT RowID FROM contact WHERE OrganizationID=" & orgztnID & _
+                        If EXECQUER("SELECT EXISTS(SELECT RowID FROM contact WHERE OrganizationID=" & org_rowid & _
                                     " AND CONCAT(LastName,', ',FirstName) = '" & .Text & "')") = 1 Then
 
                             If formFunctn = "Repairs" Then
 
                                 fillDGV(s_query & " r.CreatedBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
                                         " OR r.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
-                                        " AND r.OrganizationID=" & orgztnID & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
+                                        " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
 
                             Else
 
                                 fillDGV(s_query & " o.ContactID=(SELECT RowID FROM contact WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
                                         " AND o.Type='" & formFunctn & "'" & _
-                                        " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                        " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                             End If
 
@@ -1045,7 +1045,7 @@ Module myModule
 
                                 fillDGV(s_query & " CONCAT(u.LastName ,',',u.FirstName) = '" & .Text & "'" & _
                                         " OR ac.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
-                                        "' AND ac.OrganizationID='" & orgztnID & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
+                                        "' AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                             Else
 
@@ -1053,13 +1053,13 @@ Module myModule
                                         " AND o.Type='" & formFunctn & "'" & _
                                         " OR o.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
                                         " AND o.Type='" & formFunctn & "'" & _
-                                        " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                        " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                             End If
                         End If
 
                         'contact
-                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM contact WHERE OrganizationID=" & orgztnID & _
+                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM contact WHERE OrganizationID=" & org_rowid & _
                                     " AND CONCAT(LastName,', ',FirstName) = '" & .Text & "')") = 1 Then
 
                         If formFunctn = "Repairs" Then
@@ -1067,31 +1067,31 @@ Module myModule
                         ElseIf formFunctn = "Supplier" Then
 
                             fillDGV(s_query & " CONCAT(c.LastName ,', ',c.FirstName) = '" & Trim(.Text) & _
-                                    "' AND ac.OrganizationID='" & orgztnID & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
+                                    "' AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                         Else
 
                             fillDGV(s_query & " o.ContactID=(SELECT RowID FROM contact WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                    " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         End If
 
                         'inventorylocation
-                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM inventorylocation WHERE OrganizationID=" & orgztnID & _
+                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM inventorylocation WHERE OrganizationID=" & org_rowid & _
                                 " AND Name = '" & .Text & "')") = 1 Then
 
                         If formFunctn = "Repairs" Then
 
                             fillDGV(s_query & " r.InventoryLocationID=(SELECT RowID FROM inventorylocation WHERE Name = '" & .Text & "' AND Status='Active' AND Type='Main')" & _
-                                    " AND r.OrganizationID=" & orgztnID & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
+                                    " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
 
                         Else
 
                             'AND Type!='Main'
                             fillDGV(s_query & " o.InventoryLocationID=(SELECT RowID FROM inventorylocation WHERE Name = '" & .Text & "' AND Status='Active')" & _
                                     " AND o.Type='" & formFunctn & "'" & _
-                                    " AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                    " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         End If
 
@@ -1100,7 +1100,7 @@ Module myModule
                         If formFunctn = "Repairs" Then
 
                             fillDGV(s_query & " r.Type = '" & Trim(.Text) & _
-                                    "' AND r.OrganizationID=" & orgztnID & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
+                                    "' AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
 
                         ElseIf formFunctn = "Supplier" Then
 
@@ -1108,14 +1108,14 @@ Module myModule
                                 'kung Email Address ba?     'If str.Contains("TOP") = True Then
 
                                 fillDGV(s_query & " ac.EmailAddress = '" & .Text & "'" & _
-                                        " AND ac.OrganizationID='" & orgztnID & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
+                                        " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                             Else
                                 'kung Address ba?
                                 'CONCAT(COALESCE(StreetAddress1,''),', ',COALESCE(StreetAddress2,''),', ',COALESCE(Barangay,''),', ',COALESCE(CityTown,''),', ',COALESCE(State,''),', ',COALESCE(Country,''),', ',COALESCE(ZipCode,''))
 
                                 fillDGV(s_query & " ac.CompanyName = '" & Trim(.Text) & "'" & _
-                                    " AND ac.OrganizationID='" & orgztnID & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
+                                    " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                             End If
 
@@ -1125,7 +1125,7 @@ Module myModule
                                 "' AND o.Type='" & formFunctn & "'" & _
                                 " OR o.StatusAsOf = '" & Trim(.Text) & _
                                 "' AND o.Type='" & formFunctn & "'" & _
-                                " AND o.Type='" & formFunctn & "' AND o.OrganizationID=" & orgztnID & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
+                                " AND o.Type='" & formFunctn & "' AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         End If
 
@@ -1202,7 +1202,7 @@ Module myModule
 
             If mySaveFileDialog.ShowDialog() = DialogResult.OK Then
 
-                Dim mainBranchID = EXECQUER(SYS_MAIN_BRNCH_ID & " AND OrganizationID=" & orgztnID)
+                Dim mainBranchID = EXECQUER(SYS_MAIN_BRNCH_ID & " AND OrganizationID=" & org_rowid)
 
                 savePath = Path.GetFullPath(mySaveFileDialog.FileName)
 
@@ -1225,7 +1225,7 @@ Module myModule
                                                  " FROM product p " & _
                                                  "JOIN productinventorylocation pil " & _
                                                  "ON pil.ProductID=p.RowID" & _
-                                                 " WHERE p.OrganizationID=" & orgztnID & " AND pil.InventoryLocationID='" & mainBranchID & _
+                                                 " WHERE p.OrganizationID=" & org_rowid & " AND pil.InventoryLocationID='" & mainBranchID & _
                                                  "' GROUP BY p.RowID ORDER BY p.PartNo ASC;")
 
                     If mySaveFileDialog.FilterIndex = 1 Then
@@ -1468,8 +1468,8 @@ Module myModule
 
         Dim getpaysocialsecurity = EXECQUER("INSERT INTO paysocialsecurity (CreatedBy,LastUpdBy,RangeFromAmount,RangeToAmount,MonthlySalaryCredit,EmployeeContributionAmount," & _
         "EmployerContributionAmount,EmployeeECAmount) VALUES (" & _
-        "" & z_User & _
-        "," & z_User & _
+        "" & user_row_id & _
+        "," & user_row_id & _
         "," & RangeFromAmount & _
         "," & RangeToAmount & _
         "," & MonthlySalaryCredit & _
@@ -1508,8 +1508,8 @@ Module myModule
         'TotalMonthlyPremium,
         Dim getpaysocialsecurity = EXECQUER("INSERT INTO payphilhealth (CreatedBy,LastUpdBy,SalaryBracket,SalaryRangeFrom,SalaryRangeTo,SalaryBase," & _
         "EmployeeShare,EmployerShare) VALUES (" & _
-        "" & z_User & _
-        "," & z_User & _
+        "" & user_row_id & _
+        "," & user_row_id & _
         "," & SalaryBracket & _
         "," & SalaryRangeFrom & _
         "," & SalaryRangeTo & _
@@ -1525,7 +1525,7 @@ Module myModule
         " AND SalaryBase=" & SalaryBase & _
         " AND EmployeeShare=" & EmployeeShare & _
         " AND EmployerShare=" & EmployerShare & _
-        " AND CreatedBy=" & z_User)
+        " AND CreatedBy=" & user_row_id)
 
         Return getpaysocialsecurity
     End Function
@@ -1559,9 +1559,9 @@ Module myModule
         Dim getpaysocialsecurity = EXECQUER("INSERT INTO employee (CreatedBy,LastUpdBy,OrganizationID,EmployeeID,EmploymentStatus,Gender,JobTitle," & _
         "PositionID,Salutation,FirstName,MiddleName,LastName,Nickname,Birthdate,TINNo,SSSNo,HDMFNo,PhilHealthNo,EmailAddress,WorkPhone,HomePhone,MobilePhone,HomeAddress," & _
         "PayFrequencyID,UndertimeOverride,OvertimeOverride,Surname,MaritalStatus,NoOfDependents,LeavePerPayPeriod,EmployeeType) VALUES (" & _
-        "" & z_User & _
-        "," & z_User & _
-        "," & orgztnID & _
+        "" & user_row_id & _
+        "," & user_row_id & _
+        "," & org_rowid & _
         "," & EmployeeID & _
         ",'" & EmploymentStatus & _
         "','" & Gender & _
@@ -1593,9 +1593,9 @@ Module myModule
         ");" & _
         "SELECT RowID " & _
         "FROM employee " & _
-        "WHERE CreatedBy=" & z_User & _
-        " AND LastUpdBy=" & z_User & _
-        " AND OrganizationID=" & orgztnID & _
+        "WHERE CreatedBy=" & user_row_id & _
+        " AND LastUpdBy=" & user_row_id & _
+        " AND OrganizationID=" & org_rowid & _
         " AND EmployeeID" & If(EmployeeID = "NULL", " IS NULL", "=" & EmployeeID) & _
         " AND EmploymentStatus='" & EmploymentStatus & _
         "' AND Gender='" & Gender & _
@@ -1653,8 +1653,8 @@ Module myModule
         Dim getemployeedepen = EXECQUER("INSERT INTO employeedependents (CreatedBy,OrganizationID,Salutation,FirstName,MiddleName,LastName," & _
                                         "Surname,ParentEmployeeID,TINNo,SSSNo,HDMFNo,PhilHealthNo,EmailAddress,WorkPhone,HomePhone,MobilePhone,HomeAddress," & _
                                         "Nickname,JobTitle,Gender,RelationToEmployee,ActiveFlag,Birthdate) VALUES (" & _
-                                        "" & z_User & _
-                                        "," & orgztnID & _
+                                        "" & user_row_id & _
+                                        "," & org_rowid & _
                                         "," & Salutation & _
                                         "," & FirstName & _
                                         "," & MiddleName & _
@@ -1677,8 +1677,8 @@ Module myModule
                                         ",'" & ActiveFlag & _
                                         "','" & Birthdate & _
                                         "');SELECT RowID FROM employeedependents WHERE " & _
-                                        "CreatedBy=" & z_User & _
-                                        " AND OrganizationID=" & orgztnID & _
+                                        "CreatedBy=" & user_row_id & _
+                                        " AND OrganizationID=" & org_rowid & _
                                         " AND Salutation" & If(Salutation = "NULL", " IS NULL", "=" & Salutation) & _
                                         " AND FirstName" & If(FirstName = "NULL", " IS NULL", "=" & FirstName) & _
                                         " AND MiddleName" & If(MiddleName = "NULL", " IS NULL", "=" & MiddleName) & _
@@ -1750,7 +1750,7 @@ Module myModule
     Public Function INSGet_View(ByVal ViewName As String) As String '                             ' & orgztnID 
         Dim _str = EXECQUER("INSERT INTO view (ViewName,OrganizationID) VALUES('" & ViewName & "',1" & _
                                             ");SELECT RowID FROM view WHERE ViewName='" & ViewName & _
-                                                "' AND OrganizationID='" & orgztnID & "' LIMIT 1;") '" & orgztnID & "
+                                                "' AND OrganizationID='" & org_rowid & "' LIMIT 1;") '" & orgztnID & "
         Return _str
     End Function
 
@@ -1762,13 +1762,13 @@ Module myModule
         ParentDivisionID = If(ParentDivisionID = Nothing, "NULL", ParentDivisionID)
 
         Dim _str = EXECQUER("INSERT INTO position (CreatedBy,OrganizationID,PositionName,ParentPositionID,DivisionId) " & _
-        "VALUES(" & 1 & "," & orgztnID & ",'" & PositionName & _
+        "VALUES(" & 1 & "," & org_rowid & ",'" & PositionName & _
         "'," & ParentPositionID & "," & ParentDivisionID & ");" & _
         "SELECT RowID FROM position WHERE PositionName='" & PositionName & _
-        "' AND OrganizationID=" & orgztnID & _
+        "' AND OrganizationID=" & org_rowid & _
         " AND ParentPositionID" & If(ParentPositionID = "NULL", " IS NULL", "=" & ParentPositionID) & _
         " AND DivisionId" & If(ParentDivisionID = "NULL", " IS NULL", "=" & ParentDivisionID) & _
-        " AND CreatedBy=" & z_User & ";")
+        " AND CreatedBy=" & user_row_id & ";")
         Return _str
 
     End Function
@@ -1909,7 +1909,7 @@ Module myModule
 
                 .Parameters.AddWithValue("cat_RowID", If(cat_RowID = Nothing, DBNull.Value, cat_RowID))
                 .Parameters.AddWithValue("cat_CategoryName", If(cat_CategoryName = Nothing, DBNull.Value, cat_CategoryName))
-                .Parameters.AddWithValue("cat_OrganizationID", orgztnID) 'orgztnID 
+                .Parameters.AddWithValue("cat_OrganizationID", org_rowid) 'orgztnID 
                 .Parameters.AddWithValue("cat_CatalogID", If(cat_CatalogID = Nothing, DBNull.Value, cat_CatalogID)) 'orgztnID 
 
                 .Parameters("cat_ID").Direction = ParameterDirection.ReturnValue

@@ -30,7 +30,7 @@ Public Class MDIPrimaryForm
     Protected Overrides Sub OnLoad(e As EventArgs)
 
         Dim sql As New SQL(str_quer_restricted_user,
-                           New Object() {z_User, orgztnID})
+                           New Object() {user_row_id, org_rowid})
 
         SplitContainer1.Visible = (Not CBool(Convert.ToInt16(sql.GetFoundRow)))
 
@@ -84,14 +84,14 @@ Public Class MDIPrimaryForm
 
         Panel1.Focus()
 
-        EXECQUER("CALL CREATE_employeesalary_senior_citizen('" & orgztnID & "','" & z_User & "');")
+        EXECQUER("CALL CREATE_employeesalary_senior_citizen('" & org_rowid & "','" & user_row_id & "');")
 
         BackgroundWorker1.RunWorkerAsync()
 
         LoadVersionNo()
 
         MyBase.OnLoad(e)
-        
+
         MetroLogin.Hide()
 
     End Sub
@@ -214,7 +214,7 @@ Public Class MDIPrimaryForm
                     If ExemptedForms.Contains(frmName) Then
                         Continue For
                     Else
-                        
+
                         If listofExtraForm.Contains(frmName) Then
                             Continue For
                             'ReDim Preserve listofExtraFrm(itemindex + 1)
@@ -258,8 +258,8 @@ Public Class MDIPrimaryForm
                     New ExecuteQuery("UPDATE user" &
                                      " SET InSession='0'" &
                                      ",LastUpd=CURRENT_TIMESTAMP()" &
-                                     ",LastUpdBy='" & z_User & "'" &
-                                     " WHERE RowID='" & z_User & "';")
+                                     ",LastUpdBy='" & user_row_id & "'" &
+                                     " WHERE RowID='" & user_row_id & "';")
 
                 If openform_count >= 5 Then
                     Thread.Sleep(1175)
@@ -1114,7 +1114,7 @@ Public Class MDIPrimaryForm
                                                              " FROM position" & _
                                                              " WHERE CURRENT_DATE()" & _
                                                              " IN (DATE_FORMAT(Created,'%Y-%m-%d'),DATE_FORMAT(LastUpd,'%Y-%m-%d'))" & _
-                                                             " AND OrganizationID=" & orgztnID & " LIMIT 1);")
+                                                             " AND OrganizationID=" & org_rowid & " LIMIT 1);")
 
                                 If isTableChange = 1 Then
 
@@ -1432,7 +1432,7 @@ Public Class MDIPrimaryForm
 
         params(0, 0) = "OrganizID"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
 
 
         n_bgwAge21Dependents = New DashBoardDataExtractor(params, _
@@ -1517,13 +1517,13 @@ Public Class MDIPrimaryForm
 
 
         Dim n_ExecuteQuery As _
-            New ExecuteQuery("CALL INCREASE_employee_leave_TwoToFiveYearService('" & orgztnID & "');")
+            New ExecuteQuery("CALL INCREASE_employee_leave_TwoToFiveYearService('" & org_rowid & "');")
 
         n_ExecuteQuery = _
-            New ExecuteQuery("CALL INCREASE_employee_leave_FiveToTenYearService('" & orgztnID & "');")
+            New ExecuteQuery("CALL INCREASE_employee_leave_FiveToTenYearService('" & org_rowid & "');")
 
         n_ExecuteQuery = _
-            New ExecuteQuery("CALL INCREASE_employee_leave_TenToFifteenYearService('" & orgztnID & "');")
+            New ExecuteQuery("CALL INCREASE_employee_leave_TenToFifteenYearService('" & org_rowid & "');")
 
     End Sub
 
@@ -1806,7 +1806,7 @@ Public Class MDIPrimaryForm
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         If e.Cancel = False Then
-            Dim param_array = New String() {orgztnID, z_User}
+            Dim param_array = New String() {org_rowid, user_row_id}
 
             Dim n_ExecuteQuery As New ExecSQLProcedure("EXEC_userupdateleavebalancelog", 192,
                                                        param_array)
@@ -1959,7 +1959,7 @@ Public Class UserLog
     Dim syslogViewID = Nothing
 
     Sub New()
-        syslogViewID = EXECQUER("SELECT RowID FROM `view` WHERE ViewName='Login Form' AND OrganizationID='" & orgztnID & "';")
+        syslogViewID = EXECQUER("SELECT RowID FROM `view` WHERE ViewName='Login Form' AND OrganizationID='" & org_rowid & "';")
 
     End Sub
 
@@ -1977,8 +1977,8 @@ Public Class UserLog
 
         EXECQUER("UPDATE `audittrail`" & _
                  " SET NewValue='OUT'" & _
-                 " WHERE CreatedBy='" & z_User & "'" & _
-                 " AND OrganizationID='" & orgztnID & "'" & _
+                 " WHERE CreatedBy='" & user_row_id & "'" & _
+                 " AND OrganizationID='" & org_rowid & "'" & _
                  " AND NewValue=''" & _
                  " AND ViewID='" & syslogViewID & "';")
 
@@ -2002,11 +2002,11 @@ Public Class UserLog
 
                 .CommandType = CommandType.StoredProcedure
 
-                .Parameters.AddWithValue("au_CreatedBy", z_User)
+                .Parameters.AddWithValue("au_CreatedBy", user_row_id)
 
-                .Parameters.AddWithValue("au_LastUpdBy", z_User)
+                .Parameters.AddWithValue("au_LastUpdBy", user_row_id)
 
-                .Parameters.AddWithValue("au_OrganizationID", orgztnID)
+                .Parameters.AddWithValue("au_OrganizationID", org_rowid)
 
                 .Parameters.AddWithValue("au_ViewID", syslogViewID)
 

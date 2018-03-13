@@ -45,7 +45,7 @@
 
         Dim sel_query = ""
 
-        Dim hasAnEmployee = EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE OrganizationID=" & orgztnID & " LIMIT 1);")
+        Dim hasAnEmployee = EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE OrganizationID=" & org_rowid & " LIMIT 1);")
 
         If hasAnEmployee = 1 Then
             sel_query = "SELECT pp.PayFrequencyType FROM payfrequency pp INNER JOIN employee e ON e.PayFrequencyID=pp.RowID GROUP BY pp.RowID;"
@@ -107,7 +107,7 @@
 
 
 
-        orgpayfreqID = EXECQUER("SELECT PayFrequencyID FROM organization WHERE RowID='" & orgztnID & "';")
+        orgpayfreqID = EXECQUER("SELECT PayFrequencyID FROM organization WHERE RowID='" & org_rowid & "';")
 
     End Sub
 
@@ -184,7 +184,7 @@
         params(2, 0) = "isotherformat"
         params(3, 0) = "PayFreqType"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = If(param_Date = Nothing, DBNull.Value, param_Date & "-01-01")
         params(2, 1) = "0"
         params(3, 1) = PayFreqType
@@ -287,7 +287,7 @@
                     PriorPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
                                                 " FROM payperiod pyp" & _
                                                 " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & orgztnID & "'" & _
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
                                                 " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
                                                 " AND pyp.RowID BETWEEN (" & CurrentPayPeriodID & " - 10)" & _
                                                 " AND pp.RowID" & _
@@ -320,7 +320,7 @@
                     NextPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
                                                 " FROM payperiod pyp" & _
                                                 " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & orgztnID & "'" & _
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
                                                 " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
                                                 " AND pyp.RowID BETWEEN pp.RowID" & _
                                                 " AND (" & CurrentPayPeriodID & " + 10)" & _
@@ -466,7 +466,7 @@
                                          " SET" &
                                          " MinimumWageValue=" & min_wage_val & "" &
                                          ",LastUpd=CURRENT_TIMESTAMP()" &
-                                         ",LastUpdBy='" & z_User & "'" &
+                                         ",LastUpdBy='" & user_row_id & "'" &
                                          " WHERE RowID='" & dgvpaypers.Item("Column1", e.RowIndex).Value & "';")
 
                 End If
@@ -546,7 +546,7 @@
                     Dim n_ExecuteQuery As _
                             New ExecuteQuery("SELECT EXISTS(SELECT RowID" & _
                                             " FROM paystub" & _
-                                            " WHERE OrganizationID='" & orgztnID & "'" & _
+                                            " WHERE OrganizationID='" & org_rowid & "'" & _
                                             " AND ThirteenthMonthInclusion='1'" & _
                                             " AND (YEAR(PayFromDate)='" & yearnow & "' OR YEAR(PayToDate)='" & yearnow & "')" & _
                                             " LIMIT 1);")
@@ -648,7 +648,7 @@
                     PriorPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
                                                 " FROM payperiod pyp" & _
                                                 " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & orgztnID & "'" & _
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
                                                 " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
                                                 " AND pyp.RowID BETWEEN (" & CurrentPayPeriodID & " - 10)" & _
                                                 " AND pp.RowID" & _
@@ -676,7 +676,7 @@
                     NextPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
                                                 " FROM payperiod pyp" & _
                                                 " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & orgztnID & "'" & _
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
                                                 " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
                                                 " AND pyp.RowID BETWEEN pp.RowID" & _
                                                 " AND (" & CurrentPayPeriodID & " + 10)" & _

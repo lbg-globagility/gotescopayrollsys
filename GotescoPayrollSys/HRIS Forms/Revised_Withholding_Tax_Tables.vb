@@ -100,7 +100,7 @@ Public Class Revised_Withholding_Tax_Tables
         fillpaytype()
         fillFilingStatus()
 
-        view_ID = VIEW_privilege("Withholding Tax Table", orgztnID)
+        view_ID = VIEW_privilege("Withholding Tax Table", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -410,8 +410,8 @@ Public Class Revised_Withholding_Tax_Tables
         params(10, 0) = "wtx_TaxableIncomeToAmount"
 
         params(0, 1) = If(wtx_RowID = Nothing, DBNull.Value, wtx_RowID)
-        params(1, 1) = z_User
-        params(2, 1) = z_User
+        params(1, 1) = user_row_id
+        params(2, 1) = user_row_id
         params(3, 1) = If(imp_PayFreqID = Nothing, DBNull.Value, imp_PayFreqID)
         params(4, 1) = If(imp_FilingstatID = Nothing, DBNull.Value, imp_FilingstatID)
         params(5, 1) = DBNull.Value '"wtx_EffectiveDateFrom"

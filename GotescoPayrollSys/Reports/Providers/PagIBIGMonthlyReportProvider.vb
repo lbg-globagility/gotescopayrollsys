@@ -21,7 +21,7 @@ Public Class PagIBIGMonthlyReportProvider
         params(0, 0) = "OrganizID"
         params(1, 0) = "paramDate"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
 
         Dim thedatevalue = Format(CDate(n_selectMonth.MonthValue), "yyyy-MM-dd")
 

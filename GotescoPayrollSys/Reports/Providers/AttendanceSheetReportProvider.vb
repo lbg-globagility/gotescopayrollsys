@@ -28,7 +28,7 @@ Public Class AttendanceSheetReportProvider
         params(1, 0) = "FromDate"
         params(2, 0) = "ToDate"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = d_from
         params(2, 1) = d_to
 
@@ -55,7 +55,7 @@ Public Class AttendanceSheetReportProvider
                                   ") `Result`",
                                   " FROM address a",
                                   " LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID",
-                                  " WHERE o.RowID=", orgztnID,
+                                  " WHERE o.RowID=", org_rowid,
                                   " AND o.PrimaryAddressID IS NOT NULL LIMIT 1;")).GetFoundRow.ToString
 
         objText.Text = org_address
@@ -64,7 +64,7 @@ Public Class AttendanceSheetReportProvider
                                 ",',',COALESCE(FaxNumber,'')" &
                                 ",',',COALESCE(EmailAddress,'')" &
                                 ",',',COALESCE(TINNo,''))" &
-                                " FROM organization WHERE RowID=" & orgztnID & ";"))
+                                " FROM organization WHERE RowID=" & org_rowid & ";"))
         Dim contactdet = Split(contactdetails, ",")
 
         objText = DirectCast(report.ReportDefinition.Sections(2).ReportObjects("txtorgcontactno"), TextObject)

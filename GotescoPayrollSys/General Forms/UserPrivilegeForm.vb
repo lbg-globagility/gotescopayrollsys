@@ -119,7 +119,7 @@
                 read = IIf(drow.Cells(4).FormattedValue = True, "Y", "N")
 
                 DirectCommand("UPDATE position_view SET creates = '" & add & "', ReadOnly = '" & read & "', " & _
-                              "Updates = '" & modify & "', Deleting = '" & delete & "', LastUpd = '" & datenow & "', LastUpdBy = '" & z_User & "' Where RowID = " & ID & "")
+                              "Updates = '" & modify & "', Deleting = '" & delete & "', LastUpd = '" & datenow & "', LastUpdBy = '" & user_row_id & "' Where RowID = " & ID & "")
 
             Else
 
@@ -133,7 +133,7 @@
                 delete = IIf(drow.Cells(3).FormattedValue = True, "Y", "N")
                 read = IIf(drow.Cells(4).FormattedValue = True, "Y", "N")
 
-                I_PositionViewproc(getPostID, getviewid, add, z_OrganizationID, read, modify, delete, datenow, z_User, datenow, z_User)
+                I_PositionViewproc(getPostID, getviewid, add, z_OrganizationID, read, modify, delete, datenow, user_row_id, datenow, user_row_id)
 
             End If
         Next
@@ -167,7 +167,7 @@
                 read = IIf(drow1.Cells(4).FormattedValue = True, "Y", "N")
 
                 DirectCommand("UPDATE position_view SET creates = '" & add & "', ReadOnly = '" & read & "', " & _
-                              "Updates = '" & modify & "', Deleting = '" & delete & "', LastUpd = '" & datenow & "', LastUpdBy = '" & z_User & "' Where RowID = " & ID & "")
+                              "Updates = '" & modify & "', Deleting = '" & delete & "', LastUpd = '" & datenow & "', LastUpdBy = '" & user_row_id & "' Where RowID = " & ID & "")
 
 
             Else
@@ -182,7 +182,7 @@
                 delete = IIf(drow1.Cells(3).FormattedValue = True, "Y", "N")
                 read = IIf(drow1.Cells(4).FormattedValue = True, "Y", "N")
 
-                I_PositionViewproc(getPostID, getviewid, add, z_OrganizationID, read, modify, delete, datenow, z_User, datenow, z_User)
+                I_PositionViewproc(getPostID, getviewid, add, z_OrganizationID, read, modify, delete, datenow, user_row_id, datenow, user_row_id)
 
             End If
         Next

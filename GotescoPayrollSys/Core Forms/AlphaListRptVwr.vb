@@ -97,7 +97,7 @@ Public Class AlphaListRptVwr
         params(2, 0) = "AnnualDateTo"
         params(3, 0) = "IsActual"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = Format(CDate(TaxDateFrom), "yyyy-MM-dd")
         params(2, 1) = Format(CDate(TaxDateTo), "yyyy-MM-dd")
         params(3, 1) = "0"
@@ -113,7 +113,7 @@ Public Class AlphaListRptVwr
         paramet(1, 0) = "LastDateOfFinancialYear"
         paramet(2, 0) = "FirstDateOfFinancialYear"
 
-        paramet(0, 1) = orgztnID
+        paramet(0, 1) = org_rowid
         paramet(1, 1) = Format(CDate(TaxDateTo), "yyyy-MM-dd")
         paramet(2, 1) = Format(CDate(TaxDateFrom), "yyyy-MM-dd")
 
@@ -130,7 +130,7 @@ Public Class AlphaListRptVwr
 
         enlistTheLists("SELECT e.RowID FROM" & _
                         " employee e" & _
-                        " WHERE e.OrganizationID='" & orgztnID & "'" & _
+                        " WHERE e.OrganizationID='" & org_rowid & "'" & _
                         " ORDER BY e.LastName DESC;", _
                         employee_RowID) 'RowID
 
@@ -265,7 +265,7 @@ Public Class AlphaListRptVwr
 
     Private Sub AlphaListRptVwr_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        collectEmployeeID = EXECQUER("SELECT GROUP_CONCAT(EmployeeID) FROM employee WHERE OrganizationID='" & orgztnID & "';")
+        collectEmployeeID = EXECQUER("SELECT GROUP_CONCAT(EmployeeID) FROM employee WHERE OrganizationID='" & org_rowid & "';")
 
         bgwEmployeeID.RunWorkerAsync()
 
@@ -339,7 +339,7 @@ Public Class AlphaListRptVwr
                          " FROM employee e" & _
                          " LEFT JOIN position po ON po.RowID=e.PositionID" & _
                          " WHERE e.EmployeeID='" & AutoCompleteTextBox1.Text.Trim & "'" & _
-                         " AND e.OrganizationID='" & orgztnID & "';")
+                         " AND e.OrganizationID='" & org_rowid & "';")
 
             If emp_RowID = String.Empty Then
 
@@ -428,11 +428,11 @@ Public Class AlphaListRptVwr
         Dim emp_dependent As New DataTable
 
 
-        all_employee = retAsDatTbl("CALL `RPT_AlphaListemployee`('" & orgztnID & "');")
+        all_employee = retAsDatTbl("CALL `RPT_AlphaListemployee`('" & org_rowid & "');")
 
-        emp_dependent = retAsDatTbl("CALL `RPT_AlphaListempdependents`('" & orgztnID & "');")
+        emp_dependent = retAsDatTbl("CALL `RPT_AlphaListempdependents`('" & org_rowid & "');")
 
-        emp_prevEmployer = retAsDatTbl("CALL `RPT_AlphaListemppreviousemployer`('" & orgztnID & "');")
+        emp_prevEmployer = retAsDatTbl("CALL `RPT_AlphaListemppreviousemployer`('" & org_rowid & "');")
 
         org_details = retAsDatTbl("SELECT IFNULL(og.TINNo,'') TINNo" & _
                                   ",og.Name" & _
@@ -449,7 +449,7 @@ Public Class AlphaListRptVwr
                                   ",SUM(1)" & _
                                   " FROM organization og" & _
                                   " LEFT JOIN address ad ON ad.RowID=og.PrimaryAddressID" & _
-                                  " WHERE og.RowID='" & orgztnID & "';")
+                                  " WHERE og.RowID='" & org_rowid & "';")
 
 
 
@@ -570,7 +570,7 @@ Public Class AlphaListRptVwr
                     Dim val_ndiffotpay = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(NightDiffOT)", "EmployeeID = " & e_row("RowID")))
 
                     Dim value_holiday = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(HolidayPay)", "EmployeeID = " & e_row("RowID")))
-                    
+
                     Dim value_otpay = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(OvertimePay)", "EmployeeID = " & e_row("RowID")))
 
                     Dim val_ndiffpay = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(NightDiffPay)", "EmployeeID = " & e_row("RowID")))
@@ -593,7 +593,7 @@ Public Class AlphaListRptVwr
                     n_row("COL49") = ValNoComma(val_tmpay) '13th month pay
 
                     n_row("COL50") = Nothing 'De Minimis & Other Benefits
-                    
+
                     Dim val_sss = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(TotalEmpSSS)", "EmployeeID = " & e_row("RowID")))
 
                     Dim val_phh = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(TotalEmpPhilhealth)", "EmployeeID = " & e_row("RowID")))
@@ -620,10 +620,10 @@ Public Class AlphaListRptVwr
 
                     Dim val_ndiffotpay = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(NightDiffOT)", "EmployeeID = " & e_row("RowID")))
 
-                    Dim value_holiday = If(AnnualizedWithholdingTax.Rows.Count =0,0,AnnualizedWithholdingTax.Compute("SUM(HolidayPay)", "EmployeeID = " & e_row("RowID")))
-                    
+                    Dim value_holiday = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(HolidayPay)", "EmployeeID = " & e_row("RowID")))
+
                     Dim value_otpay = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(OvertimePay)", "EmployeeID = " & e_row("RowID")))
-                    
+
                     Dim val_ndiffpay = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(NightDiffPay)", "EmployeeID = " & e_row("RowID")))
 
                     val_tmpay = ValNoComma(val_tmpay) -
@@ -638,11 +638,11 @@ Public Class AlphaListRptVwr
                     n_row("COL47") = Format(ValNoComma(val_ndiffpay), "###0.00") 'Night Differential Pay
 
                     n_row("COL48") = Nothing 'Hazard Pay
-                    
+
                     n_row("COL49") = If(sel_getGrossCompensation.Count = 0, 0, ValNoComma(sel_getGrossCompensation(0)("ThirteenthMonthPay"))) '13th month pay
 
                     n_row("COL50") = Nothing 'De Minimis & Other Benefits
-                    
+
                     Dim val_sss = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(TotalEmpSSS)", "EmployeeID = " & e_row("RowID")))
 
                     Dim val_phh = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(TotalEmpPhilhealth)", "EmployeeID = " & e_row("RowID")))
@@ -695,7 +695,7 @@ Public Class AlphaListRptVwr
                 n_row("COL49") = ValNoComma(If(sel_getGrossCompensation.Count = 0, 0, sel_getGrossCompensation(0)("ThirteenthMonthPay"))) '13th month pay
 
                 n_row("COL50") = Nothing 'De Minimis & Other Benefits
-                
+
                 Dim val_sss = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(TotalEmpSSS)", "EmployeeID = " & e_row("RowID")))
 
                 Dim val_phh = If(AnnualizedWithholdingTax.Rows.Count = 0, 0, AnnualizedWithholdingTax.Compute("SUM(TotalEmpPhilhealth)", "EmployeeID = " & e_row("RowID")))
@@ -758,7 +758,7 @@ Public Class AlphaListRptVwr
                 'n_row("COL31") = org_details.Rows(0)("MainEmployer")
             Next
 
-            
+
             dt_catchtable.Rows.Add(n_row)
 
         Next
@@ -785,7 +785,7 @@ Public Class AlphaListRptVwr
 
         'End If
 
-        
+
     End Sub
 
     Private Sub bgReport_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgReport.ProgressChanged

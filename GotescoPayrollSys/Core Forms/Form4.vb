@@ -41,7 +41,7 @@ Public Class Form4
         "INNER JOIN user u ON e.CreatedBy=u.RowID " & _
         "LEFT JOIN position pos ON e.PositionID=pos.RowID " & _
         "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " & _
-        "WHERE e.OrganizationID=" & orgztnID
+        "WHERE e.OrganizationID=" & org_rowid
 
     Dim allproduct As New DataTable
 
@@ -51,19 +51,19 @@ Public Class Form4
         loadDivis()
         'loadEmployees()
 
-        Dim custompostbl As New MySqlDataAdapter("SELECT * FROM position WHERE OrganizationID=" & orgztnID, _
+        Dim custompostbl As New MySqlDataAdapter("SELECT * FROM position WHERE OrganizationID=" & org_rowid, _
                                              conn) 'ParentDivisionID
 
         'Dim customdivtblParent As New MySqlDataAdapter("SELECT * FROM division WHERE ParentDivisionID IS NULL AND OrganizationID=" & orgztnID, _
         '                                     conn)
 
-        Dim customdivtbl As New MySqlDataAdapter("SELECT * FROM division WHERE OrganizationID=" & orgztnID, _
+        Dim customdivtbl As New MySqlDataAdapter("SELECT * FROM division WHERE OrganizationID=" & org_rowid, _
                                              conn)
 
-        Dim customemptbl As New MySqlDataAdapter("SELECT * FROM employee WHERE OrganizationID=" & orgztnID, _
+        Dim customemptbl As New MySqlDataAdapter("SELECT * FROM employee WHERE OrganizationID=" & org_rowid, _
                                              conn)
 
-        customTbl = fillDattbl("SELECT pos.RowID 'pos_RowID',pos.PositionName,pos.ParentPositionID,pos.DivisionId,divis.RowID 'divis_RowID' ,divis.Name ,COALESCE(CONCAT(emp.FirstName,' ',IF(emp.MiddleName IS NULL,'',CONCAT(emp.MiddleName,' ')),emp.LastName,' ',IF(emp.Surname IS NULL,'',emp.Surname)),'Open') 'Emp Full name' FROM position pos LEFT JOIN division divis ON divis.RowID=pos.DivisionId LEFT JOIN employee emp ON emp.PositionID=pos.RowID WHERE pos.OrganizationID=" & orgztnID & ";")
+        customTbl = fillDattbl("SELECT pos.RowID 'pos_RowID',pos.PositionName,pos.ParentPositionID,pos.DivisionId,divis.RowID 'divis_RowID' ,divis.Name ,COALESCE(CONCAT(emp.FirstName,' ',IF(emp.MiddleName IS NULL,'',CONCAT(emp.MiddleName,' ')),emp.LastName,' ',IF(emp.Surname IS NULL,'',emp.Surname)),'Open') 'Emp Full name' FROM position pos LEFT JOIN division divis ON divis.RowID=pos.DivisionId LEFT JOIN employee emp ON emp.PositionID=pos.RowID WHERE pos.OrganizationID=" & org_rowid & ";")
 
         custompostbl.Fill(customDatset, "custompostbl")
 
@@ -243,19 +243,19 @@ Public Class Form4
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) 'Handles Button1.Click
 
-        Dim custompostbl As New MySqlDataAdapter("SELECT * FROM position WHERE OrganizationID=" & orgztnID, _
+        Dim custompostbl As New MySqlDataAdapter("SELECT * FROM position WHERE OrganizationID=" & org_rowid, _
                                              conn) 'ParentDivisionID
 
         'Dim customdivtblParent As New MySqlDataAdapter("SELECT * FROM division WHERE ParentDivisionID IS NULL AND OrganizationID=" & orgztnID, _
         '                                     conn)
 
-        Dim customdivtbl As New MySqlDataAdapter("SELECT * FROM division WHERE OrganizationID=" & orgztnID, _
+        Dim customdivtbl As New MySqlDataAdapter("SELECT * FROM division WHERE OrganizationID=" & org_rowid, _
                                              conn)
 
-        Dim customemptbl As New MySqlDataAdapter("SELECT * FROM employee WHERE OrganizationID=" & orgztnID, _
+        Dim customemptbl As New MySqlDataAdapter("SELECT * FROM employee WHERE OrganizationID=" & org_rowid, _
                                              conn)
 
-        customTbl = fillDattbl("SELECT pos.RowID 'pos_RowID',pos.PositionName,pos.ParentPositionID,pos.DivisionId,divis.RowID 'divis_RowID' ,divis.Name ,COALESCE(CONCAT(emp.FirstName,' ',IF(emp.MiddleName IS NULL,'',CONCAT(emp.MiddleName,' ')),emp.LastName,' ',IF(emp.Surname IS NULL,'',emp.Surname)),'Open') 'Emp Full name' FROM position pos LEFT JOIN division divis ON divis.RowID=pos.DivisionId LEFT JOIN employee emp ON emp.PositionID=pos.RowID WHERE pos.OrganizationID=" & orgztnID & ";")
+        customTbl = fillDattbl("SELECT pos.RowID 'pos_RowID',pos.PositionName,pos.ParentPositionID,pos.DivisionId,divis.RowID 'divis_RowID' ,divis.Name ,COALESCE(CONCAT(emp.FirstName,' ',IF(emp.MiddleName IS NULL,'',CONCAT(emp.MiddleName,' ')),emp.LastName,' ',IF(emp.Surname IS NULL,'',emp.Surname)),'Open') 'Emp Full name' FROM position pos LEFT JOIN division divis ON divis.RowID=pos.DivisionId LEFT JOIN employee emp ON emp.PositionID=pos.RowID WHERE pos.OrganizationID=" & org_rowid & ";")
 
         custompostbl.Fill(customDatset, "custompostbl")
 
@@ -626,7 +626,7 @@ Public Class Form4
             'End If
             Dim dt As New DataTable
             'position
-            dt = retAsDatTbl("SELECT * FROM division WHERE OrganizationID=" & orgztnID & ";") 'categoryId='" & CatID & "' and 
+            dt = retAsDatTbl("SELECT * FROM division WHERE OrganizationID=" & org_rowid & ";") 'categoryId='" & CatID & "' and 
             dattabDivis.Columns.Add("RowID", GetType(Integer))
             'dattabDivis.Columns.Add("PositionName", GetType(String))
             dattabDivis.Columns.Add("Name", GetType(String)) 'PositionName

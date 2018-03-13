@@ -57,7 +57,7 @@ Public Class PayStub
         "LEFT JOIN position pos ON e.PositionID=pos.RowID " & _
         "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " & _
         "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents " & _
-        "WHERE e.OrganizationID=" & orgztnID
+        "WHERE e.OrganizationID=" & org_rowid
 
     '",COALESCE(LEFT(Image,256),'') 'Image'" & _
 
@@ -139,7 +139,7 @@ Public Class PayStub
 
         'dbconn()
 
-        viewID = VIEW_privilege("Employee Pay Slip", orgztnID)
+        viewID = VIEW_privilege("Employee Pay Slip", org_rowid)
 
         new_conn.ConnectionString = db_connectinstring 'conn.ConnectionString
 
@@ -152,7 +152,7 @@ Public Class PayStub
 
         dgvpayper.Focus()
 
-        orgpayfreqID = EXECQUER("SELECT COALESCE(PayFrequencyID,'') FROM organization WHERE RowID=" & orgztnID & ";")
+        orgpayfreqID = EXECQUER("SELECT COALESCE(PayFrequencyID,'') FROM organization WHERE RowID=" & org_rowid & ";")
 
         ''dgvpayper_SelectionChanged(sender, e)
 
@@ -167,7 +167,7 @@ Public Class PayStub
         dattabl_deductsched = retAsDatTbl("SELECT COALESCE(PhilhealthDeductionSchedule,'" & govdeducsched.Item(2).ToString & "') 'PhilhealthDeductionSchedule'" & _
                                           ",COALESCE(SSSDeductionSchedule,'" & govdeducsched.Item(2).ToString & "') 'SSSDeductionSchedule'" & _
                                           ",COALESCE(PagIbigDeductionSchedule,'" & govdeducsched.Item(2).ToString & "') 'PagIbigDeductionSchedule'" & _
-                                          " FROM organization WHERE RowID=" & orgztnID & ";")
+                                          " FROM organization WHERE RowID=" & org_rowid & ";")
 
         'For Each drown As DataRow In dattabl_deductsched.Rows
         '    isorgPHHdeductsched = CSByte(drown("PhilhealthDeductionSchedule"))
@@ -241,7 +241,7 @@ Public Class PayStub
         linkPrev.Text = "← " & (current_year - 1)
         linkNxt.Text = (current_year + 1) & " →"
 
-        prodPartNo = retAsDatTbl("SELECT PartNo FROM product WHERE OrganizationID=" & orgztnID & ";")
+        prodPartNo = retAsDatTbl("SELECT PartNo FROM product WHERE OrganizationID=" & org_rowid & ";")
 
         If dgvemployees.RowCount <> 0 Then
             dgvemployees.Item("EmployeeID", 0).Selected = 1
@@ -308,7 +308,7 @@ Public Class PayStub
         cboProducts.DisplayMember = "ProductName"
 
         cboProducts.DataSource = New SQLQueryToDatatable("SELECT RowID AS 'ProductID', Name AS 'ProductName', Category FROM product WHERE Category IN ('Allowance Type', 'Bonus', 'Adjustment Type')" & _
-                                                  " AND OrganizationID='" & orgztnID & "';").ResultTable
+                                                  " AND OrganizationID='" & org_rowid & "';").ResultTable
 
         dgvAdjustments.AutoGenerateColumns = False
 
@@ -340,7 +340,7 @@ Public Class PayStub
                                   DBNull.Value)
 
         Dim sql As New SQL(str_quer_view_payperiodofyear,
-                           New Object() {orgztnID, param_date_value})
+                           New Object() {org_rowid, param_date_value})
 
         Dim catch_dt As New DataTable
 
@@ -383,7 +383,7 @@ Public Class PayStub
             param(0, 0) = "e_OrganizationID"
             param(1, 0) = "pagination"
 
-            param(0, 1) = orgztnID
+            param(0, 1) = org_rowid
             param(1, 1) = pagination
 
             filltable(dgvemployees, "VIEW_employee", param, 1)
@@ -513,7 +513,7 @@ Public Class PayStub
             If dgvemployees.RowCount > 0 Then
                 dgvemployees.Item("EmployeeID", 0).Selected = True
             End If
-            employeepicture = New SQLQueryToDatatable("SELECT RowID,Image FROM employee WHERE Image IS NOT NULL AND OrganizationID=" & orgztnID & ";").ResultTable 'retAsDatTbl("SELECT RowID,Image FROM employee WHERE OrganizationID=" & orgztnID & ";")
+            employeepicture = New SQLQueryToDatatable("SELECT RowID,Image FROM employee WHERE Image IS NOT NULL AND OrganizationID=" & org_rowid & ";").ResultTable 'retAsDatTbl("SELECT RowID,Image FROM employee WHERE OrganizationID=" & orgztnID & ";")
 
         End If
 
@@ -730,7 +730,7 @@ Public Class PayStub
                 Dim lastpage = Val(EXECQUER("SELECT COUNT(e.RowID) / 20" &
                                             " FROM employee e" &
                                             " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
-                                            " WHERE e.OrganizationID=" & orgztnID & " " & Trim(quer_empPayFreq) & ";"))
+                                            " WHERE e.OrganizationID=" & org_rowid & " " & Trim(quer_empPayFreq) & ";"))
 
                 Dim remender = lastpage Mod 1
 
@@ -1321,7 +1321,7 @@ Public Class PayStub
         params(1, 0) = "paystb_EmployeeID"
         params(2, 0) = "paystb_PayPeriodID"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = EmpID
         params(2, 1) = PayPeriodID
 
@@ -1355,7 +1355,7 @@ Public Class PayStub
         params(2, 0) = "esal_Date"
 
         params(0, 1) = esal_EmployeeID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = esal_Date
 
         EXEC_VIEW_PROCEDURE(params, _
@@ -1375,7 +1375,7 @@ Public Class PayStub
         params(2, 0) = "etent_Date"
         params(3, 0) = "etent_DateTo"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = etent_EmployeeID
         params(2, 1) = etent_Date
         params(3, 1) = etent_DateTo
@@ -1407,7 +1407,7 @@ Public Class PayStub
                 .Parameters.Add("absentcount", MySqlDbType.Decimal)
 
                 .Parameters.AddWithValue("EmpID", EmpID)
-                .Parameters.AddWithValue("OrgID", orgztnID)
+                .Parameters.AddWithValue("OrgID", org_rowid)
                 '.Parameters.AddWithValue("EmpStartDate", Format(CDate(EmpStartDate), "yyyy-MM-dd"))
                 .Parameters.AddWithValue("EmpStartDate", New ExecuteQuery("SELECT StartDate FROM employee WHERE RowID='" & EmpID & "';").Result)
                 .Parameters.AddWithValue("payperiodDateFrom", Format(CDate(payperiodDateFrom), "yyyy-MM-dd"))
@@ -1451,7 +1451,7 @@ Public Class PayStub
                 .Parameters.Add("rateperhour", MySqlDbType.Int32)
 
                 .Parameters.AddWithValue("EmpID", EmpID)
-                .Parameters.AddWithValue("OrgID", orgztnID)
+                .Parameters.AddWithValue("OrgID", org_rowid)
                 .Parameters.AddWithValue("paramDate", Format(CDate(paramDate), "yyyy-MM-dd"))
 
                 .Parameters("rateperhour").Direction = ParameterDirection.ReturnValue
@@ -1650,7 +1650,7 @@ Public Class PayStub
 
                                   etent_dattab = New SQL(String.Concat("SELECT RowID,OrganizationID,Created,CreatedBy,COALESCE(LastUpd,'') 'LastUpd',COALESCE(LastUpdBy,'') 'LastUpdBy',Date,COALESCE(EmployeeShiftID,'') 'EmployeeShiftID',COALESCE(EmployeeID,'') 'EmployeeID',COALESCE(EmployeeSalaryID,'') 'EmployeeSalaryID',COALESCE(EmployeeFixedSalaryFlag,0) '',COALESCE(RegularHoursWorked,0) 'RegularHoursWorked',COALESCE(OvertimeHoursWorked,0) 'OvertimeHoursWorked',COALESCE(UndertimeHours,0) 'UndertimeHours',COALESCE(NightDifferentialHours,0) 'NightDifferentialHours',COALESCE(NightDifferentialOTHours,0) 'NightDifferentialOTHours',COALESCE(HoursLate,0) 'HoursLate',COALESCE(LateFlag,0) 'LateFlag',COALESCE(PayRateID,'') 'PayRateID',COALESCE(VacationLeaveHours,0) 'VacationLeaveHours',COALESCE(SickLeaveHours,0) 'SickLeaveHours',COALESCE(TotalDayPay,0) 'TotalDayPay'", _
                                                               " FROM employeetimeentry", _
-                                                              " WHERE OrganizationID=", orgztnID, "", _
+                                                              " WHERE OrganizationID=", org_rowid, "", _
                                                               " AND Date", _
                                                               " BETWEEN '", paypFrom, "'", _
                                                               " AND '", paypTo, "'", _
@@ -1673,7 +1673,7 @@ Public Class PayStub
                                                                   " INNER JOIN organization og ON og.RowID=e.OrganizationID",
                                                                   " LEFT JOIN listofval lv ON lv.`Type`='Minimum Wage Rate'",
                                                                   " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID",
-                                                                  " WHERE e.OrganizationID=", orgztnID,
+                                                                  " WHERE e.OrganizationID=", org_rowid,
                                                                   " AND '", paypTo, "' BETWEEN esal.EffectiveDateFrom AND COALESCE(esal.EffectiveDateTo,'", paypTo, "')",
                                                                   " GROUP BY e.RowID",
                                                                   " ORDER BY e.RowID DESC;")).GetFoundRows.Tables(0)
@@ -1728,7 +1728,7 @@ Public Class PayStub
                                                                 ",SUM(ete.NonTaxableDailyBonus) AS NonTaxableDailyBonus",
                                                                 " FROM employeetimeentry ete", _
                                                                 " LEFT JOIN employee e ON e.RowID=ete.EmployeeID", _
-                                                                " WHERE ete.OrganizationID=", orgztnID, _
+                                                                " WHERE ete.OrganizationID=", org_rowid, _
                                                                 " AND ete.Date", _
                                                                 " BETWEEN IF('", paypFrom, "' < e.StartDate, e.StartDate, '", paypFrom, "')", _
                                                                 " AND '", paypTo, "'", _
@@ -1779,7 +1779,7 @@ Public Class PayStub
                                                   ",p.Strength AS Nondeductible" &
                                                   " FROM employeeloanschedule els" &
                                                   " INNER JOIN product p ON p.RowID=els.LoanTypeID" &
-                                                  " WHERE els.OrganizationID='" & orgztnID & "'" &
+                                                  " WHERE els.OrganizationID='" & org_rowid & "'" &
                                                   " AND IF(els.SubstituteEndDate IS NULL, els.`Status`, '" & loan_inprogress_status & "') IN ('In Progress', 'Complete')" &
                                                   " AND els.LoanPayPeriodLeft IS NOT NULL" &
                                                   " AND els.DeductionSchedule IN ('First half','Per pay period')" &
@@ -1811,7 +1811,7 @@ Public Class PayStub
                                                   ",p.Strength AS Nondeductible" &
                                                   " FROM employeeloanschedule els" &
                                                   " INNER JOIN product p ON p.RowID=els.LoanTypeID" &
-                                                  " WHERE els.OrganizationID='" & orgztnID & "'" &
+                                                  " WHERE els.OrganizationID='" & org_rowid & "'" &
                                                   " AND IF(els.SubstituteEndDate IS NULL, els.`Status`, '" & loan_inprogress_status & "') IN ('In Progress', 'Complete')" &
                                                   " AND els.LoanPayPeriodLeft IS NOT NULL" &
                                                   " AND els.DeductionSchedule IN ('End of the month','Per pay period')" &
@@ -1836,7 +1836,7 @@ Public Class PayStub
                                                           ",p.Strength AS Nondeductible" &
                                                           " FROM employeeloanschedule els" &
                                                           " INNER JOIN product p ON p.RowID=els.LoanTypeID" &
-                                                          " WHERE els.OrganizationID=" & orgztnID & _
+                                                          " WHERE els.OrganizationID=" & org_rowid & _
                                                           " AND IF(els.DedEffectiveDateFrom < '" & paypTo & "'" & _
                                                           " ,IF(MONTH(els.DedEffectiveDateFrom) = MONTH('" & paypTo & "'), IF(DAY(els.DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), els.DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', els.DedEffectiveDateFrom<='" & paypTo & "'), els.DedEffectiveDateFrom<='" & paypTo & "')" & _
                                                           " ,els.<='" & paypTo & "')" &
@@ -1854,7 +1854,7 @@ Public Class PayStub
                                                           ",p.Strength AS Nondeductible" &
                                                           " FROM employeeloanschedule els" & _
                                                           " INNER JOIN product p ON p.RowID=els.LoanTypeID" &
-                                                          " WHERE els.OrganizationID=" & orgztnID & _
+                                                          " WHERE els.OrganizationID=" & org_rowid & _
                                                           " AND IF(els.DedEffectiveDateFrom < '" & paypTo & "'" & _
                                                           " ,IF(MONTH(els.DedEffectiveDateFrom) = MONTH('" & paypTo & "'), IF(DAY(els.DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), els.DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', els.DedEffectiveDateFrom<='" & paypTo & "'), els.DedEffectiveDateFrom<='" & paypTo & "')" & _
                                                           " ,els.DedEffectiveDateFrom<='" & paypTo & "')" &
@@ -1872,7 +1872,7 @@ Public Class PayStub
                                                           ",p.Strength AS Nondeductible" &
                                                           " FROM employeeloanschedule els" & _
                                                           " INNER JOIN product p ON p.RowID=els.LoanTypeID" &
-                                                          " WHERE els.OrganizationID=" & orgztnID & _
+                                                          " WHERE els.OrganizationID=" & org_rowid & _
                                                           " AND IF(els.DedEffectiveDateFrom < '" & paypTo & "'" & _
                                                           " ,IF(MONTH(els.DedEffectiveDateFrom) = MONTH('" & paypTo & "'), IF(DAY(els.DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), els.DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', els.DedEffectiveDateFrom<='" & paypTo & "'), els.DedEffectiveDateFrom<='" & paypTo & "')" & _
                                                           " ,els.DedEffectiveDateFrom<='" & paypTo & "')" &
@@ -1921,7 +1921,7 @@ Public Class PayStub
 
                                               segregate_emp_loan = "SELECT LoanTypeID,DeductionAmount,DeductionPercentage,EmployeeID,IF(LoanPayPeriodLeft BETWEEN 1 AND 1.99, '1', '0') 'LoanDueDate',TotalLoanAmount,DeductionAmount,NoOfPayPeriod" & _
                                                                   " FROM employeeloanschedule" & _
-                                                                  " WHERE OrganizationID=" & orgztnID & _
+                                                                  " WHERE OrganizationID=" & org_rowid & _
                                                                   " AND IF(DedEffectiveDateFrom < '" & paypTo & "'" & _
                                                                   " ,IF(MONTH(DedEffectiveDateFrom) = MONTH('" & paypTo & "'), IF(DAY(DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', DedEffectiveDateFrom<='" & paypTo & "'), DedEffectiveDateFrom<='" & paypTo & "')" & _
                                                                   " ,DedEffectiveDateFrom<='" & paypTo & "')" &
@@ -1950,7 +1950,7 @@ Public Class PayStub
 
                                               segregate_emp_loan = "SELECT LoanTypeID,DeductionAmount,DeductionPercentage,EmployeeID,IF(LoanPayPeriodLeft BETWEEN 1 AND 1.99, '1', '0') 'LoanDueDate',TotalLoanAmount,DeductionAmount,NoOfPayPeriod" & _
                                                                   " FROM employeeloanschedule" & _
-                                                                  " WHERE OrganizationID=" & orgztnID & _
+                                                                  " WHERE OrganizationID=" & org_rowid & _
                                                                   " AND IF(DedEffectiveDateFrom < '" & paypTo & "'" & _
                                                                   " ,IF(MONTH(DedEffectiveDateFrom) = MONTH('" & paypTo & "'), IF(DAY(DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', DedEffectiveDateFrom<='" & paypTo & "'), DedEffectiveDateFrom<='" & paypTo & "')" & _
                                                                   " ,DedEffectiveDateFrom<='" & paypTo & "')" &
@@ -1970,7 +1970,7 @@ Public Class PayStub
 
                                               segregate_emp_loan = "SELECT LoanTypeID,DeductionAmount,DeductionPercentage,EmployeeID,IF(LoanPayPeriodLeft BETWEEN 1 AND 1.99, '1', '0') 'LoanDueDate',TotalLoanAmount,DeductionAmount,NoOfPayPeriod" & _
                                                                   " FROM employeeloanschedule" & _
-                                                                  " WHERE OrganizationID=" & orgztnID & _
+                                                                  " WHERE OrganizationID=" & org_rowid & _
                                                                   " AND IF(DedEffectiveDateFrom < '" & paypTo & "'" & _
                                                                   " ,IF(MONTH(DedEffectiveDateFrom) = MONTH('" & paypTo & "'), IF(DAY(DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', DedEffectiveDateFrom<='" & paypTo & "'), DedEffectiveDateFrom<='" & paypTo & "')" & _
                                                                   " ,DedEffectiveDateFrom<='" & paypTo & "')" &
@@ -1982,7 +1982,7 @@ Public Class PayStub
 
                                               segregate_emp_loan = "SELECT LoanTypeID,DeductionAmount,DeductionPercentage,EmployeeID,IF(LoanPayPeriodLeft BETWEEN 1 AND 1.99, '1', '0') 'LoanDueDate',TotalLoanAmount,DeductionAmount,NoOfPayPeriod" & _
                                                                   " FROM employeeloanschedule" & _
-                                                                  " WHERE OrganizationID=" & orgztnID & _
+                                                                  " WHERE OrganizationID=" & org_rowid & _
                                                                   " AND IF(DedEffectiveDateFrom < '" & paypTo & "'" & _
                                                                   " ,IF(MONTH(DedEffectiveDateFrom) = MONTH('" & paypTo & "'), IF(DAY(DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', DedEffectiveDateFrom<='" & paypTo & "'), DedEffectiveDateFrom<='" & paypTo & "')" & _
                                                                   " ,DedEffectiveDateFrom<='" & paypTo & "')" &
@@ -1994,7 +1994,7 @@ Public Class PayStub
 
                                               segregate_emp_loan = "SELECT LoanTypeID,DeductionAmount,DeductionPercentage,EmployeeID,IF(LoanPayPeriodLeft BETWEEN 1 AND 1.99, '1', '0') 'LoanDueDate',TotalLoanAmount,DeductionAmount,NoOfPayPeriod" & _
                                                                   " FROM employeeloanschedule" & _
-                                                                  " WHERE OrganizationID=" & orgztnID & _
+                                                                  " WHERE OrganizationID=" & org_rowid & _
                                                                   " AND IF(DedEffectiveDateFrom < '" & paypTo & "'" & _
                                                                   " ,IF(MONTH(DedEffectiveDateFrom) = MONTH('" & paypTo & "'), IF(DAY(DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', DedEffectiveDateFrom<='" & paypTo & "'), DedEffectiveDateFrom<='" & paypTo & "')" & _
                                                                   " ,DedEffectiveDateFrom<='" & paypTo & "')" &
@@ -2031,7 +2031,7 @@ Public Class PayStub
                                   emp_bonus = New SQL(String.Concat("SELECT SUM(COALESCE(BonusAmount,0)) 'BonusAmount'", _
                                                           ",EmployeeID", _
                                                           " FROM employeebonus", _
-                                                          " WHERE OrganizationID=", orgztnID, _
+                                                          " WHERE OrganizationID=", org_rowid, _
                                                           " AND EffectiveStartDate>='", paypFrom, "'", _
                                                           " AND EffectiveEndDate<='", paypTo, "'", _
                                                           " AND TaxableFlag='1'", _
@@ -2089,14 +2089,14 @@ Public Class PayStub
                                   '                              " GROUP BY EmployeeID;")
 
                                   emp_allowanceDaily = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                       New Object() {orgztnID,
+                                                                                       New Object() {org_rowid,
                                                                                        "Daily",
                                                                                        "1",
                                                                                        paypFrom,
                                                                                        paypTo}).GetFoundRows.Tables(0)
 
                                   notax_allowanceDaily = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                       New Object() {orgztnID,
+                                                                                       New Object() {org_rowid,
                                                                                        "Daily",
                                                                                        "0",
                                                                                        paypFrom,
@@ -2124,7 +2124,7 @@ Public Class PayStub
                                   '                              " GROUP BY EmployeeID;")
 
                                   emp_bonusDaily = New SQL("CALL GET_employee_bonusofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                   New Object() {orgztnID,
+                                                                                   New Object() {org_rowid,
                                                                                    "Daily",
                                                                                    "1",
                                                                                    paypFrom,
@@ -2152,7 +2152,7 @@ Public Class PayStub
                                   '                              " GROUP BY EmployeeID;")
 
                                   notax_bonusDaily = New SQL("CALL GET_employee_bonusofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                     New Object() {orgztnID,
+                                                                                     New Object() {org_rowid,
                                                                                      "Daily",
                                                                                      "0",
                                                                                      paypFrom,
@@ -2206,14 +2206,14 @@ Public Class PayStub
                                   '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
                                   emp_allowanceMonthly = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                       New Object() {orgztnID,
+                                                                                       New Object() {org_rowid,
                                                                                        "Monthly",
                                                                                        "1",
                                                                                        paypFrom,
                                                                                        paypTo}).GetFoundRows.Tables(0)
 
                                   notax_allowanceMonthly = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                       New Object() {orgztnID,
+                                                                                       New Object() {org_rowid,
                                                                                        "Monthly",
                                                                                        "0",
                                                                                        paypFrom,
@@ -2241,7 +2241,7 @@ Public Class PayStub
                                   '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
                                   emp_bonusMonthly = New SQL("CALL GET_employee_bonusofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                     New Object() {orgztnID,
+                                                                                     New Object() {org_rowid,
                                                                                      "Monthly",
                                                                                      "1",
                                                                                      paypFrom,
@@ -2269,7 +2269,7 @@ Public Class PayStub
                                   '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
                                   notax_bonusMonthly = New SQL("CALL GET_employee_bonusofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                       New Object() {orgztnID,
+                                                                                       New Object() {org_rowid,
                                                                                        "Monthly",
                                                                                        "0",
                                                                                        paypFrom,
@@ -2296,7 +2296,7 @@ Public Class PayStub
 
                                   emp_allowanceOnce = New SQL(String.Concat("SELECT SUM(COALESCE(AllowanceAmount,0)) 'TotalAllowanceAmount',EmployeeID", _
                                                                 " FROM employeeallowance", _
-                                                                " WHERE OrganizationID=", orgztnID, _
+                                                                " WHERE OrganizationID=", org_rowid, _
                                                                 " AND TaxableFlag='1'", _
                                                                 " AND AllowanceFrequency='", onceallowfreq, "'", _
                                                                 " AND EffectiveStartDate BETWEEN '", paypFrom, "' AND '", paypTo, "'", _
@@ -2305,7 +2305,7 @@ Public Class PayStub
 
                                   notax_allowanceOnce = New SQL(String.Concat("SELECT SUM(COALESCE(AllowanceAmount,0)) 'TotalAllowanceAmount',EmployeeID", _
                                                                 " FROM employeeallowance", _
-                                                                " WHERE OrganizationID=", orgztnID, _
+                                                                " WHERE OrganizationID=", org_rowid, _
                                                                 " AND TaxableFlag='0'", _
                                                                 " AND AllowanceFrequency='", onceallowfreq, "'", _
                                                                 " AND EffectiveStartDate BETWEEN '", paypFrom, "' AND '", paypTo, "'", _
@@ -2323,7 +2323,7 @@ Public Class PayStub
                                   '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
                                   emp_bonusOnce = New SQL("CALL GET_employee_bonusofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                  New Object() {orgztnID,
+                                                                                  New Object() {org_rowid,
                                                                                   "One time",
                                                                                   "1",
                                                                                   paypFrom,
@@ -2340,7 +2340,7 @@ Public Class PayStub
                                   '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
                                   notax_bonusOnce = New SQL("CALL GET_employee_bonusofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                    New Object() {orgztnID,
+                                                                                    New Object() {org_rowid,
                                                                                     "One time",
                                                                                     "0",
                                                                                     paypFrom,
@@ -2370,7 +2370,7 @@ Public Class PayStub
                                   '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
                                   emp_bonusSemiM = New SQL("CALL GET_employee_bonusofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to)",
-                                                                                   New Object() {orgztnID,
+                                                                                   New Object() {org_rowid,
                                                                                    "Semi-monthly",
                                                                                    "1",
                                                                                    paypFrom,
@@ -2387,7 +2387,7 @@ Public Class PayStub
                                   '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
                                   notax_bonusSemiM = New SQL("CALL GET_employee_bonusofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                     New Object() {orgztnID,
+                                                                                     New Object() {org_rowid,
                                                                                      "Semi-monthly",
                                                                                      "0",
                                                                                      paypFrom,
@@ -2403,14 +2403,14 @@ Public Class PayStub
                                   '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
                                   emp_allowanceSemiM = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                       New Object() {orgztnID,
+                                                                                       New Object() {org_rowid,
                                                                                        "Semi-monthly",
                                                                                        "1",
                                                                                        paypFrom,
                                                                                        paypTo}).GetFoundRows.Tables(0)
 
                                   notax_allowanceSemiM = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
-                                                                                       New Object() {orgztnID,
+                                                                                       New Object() {org_rowid,
                                                                                        "Semi-monthly",
                                                                                        "0",
                                                                                        paypFrom,
@@ -2450,7 +2450,7 @@ Public Class PayStub
                                   emp_bonusWeekly = New SQL(String.Concat("SELECT SUM(COALESCE(BonusAmount,0)) 'BonusAmount'", _
                                                               ",EmployeeID", _
                                                               " FROM employeebonus", _
-                                                                " WHERE OrganizationID=", orgztnID, _
+                                                                " WHERE OrganizationID=", org_rowid, _
                                                                 " AND TaxableFlag='1'", _
                                                                 " AND AllowanceFrequency='", semimallowfreq, "'", _
                                                                 " AND EffectiveStartDate BETWEEN '", paypFrom, "' AND '", paypTo, "'", _
@@ -2460,7 +2460,7 @@ Public Class PayStub
                                   notax_bonusWeekly = New SQL(String.Concat("SELECT SUM(COALESCE(BonusAmount,0)) 'BonusAmount'", _
                                                               ",EmployeeID", _
                                                               " FROM employeebonus", _
-                                                                " WHERE OrganizationID=", orgztnID, _
+                                                                " WHERE OrganizationID=", org_rowid, _
                                                                 " AND TaxableFlag='0'", _
                                                                 " AND AllowanceFrequency='Weekly'", _
                                                                 " AND EffectiveStartDate BETWEEN '", paypFrom, "' AND '", paypTo, "'", _
@@ -2470,7 +2470,7 @@ Public Class PayStub
 
                                   emp_allowanceWeekly = New SQL(String.Concat("SELECT SUM(COALESCE(AllowanceAmount,0)) 'TotalAllowanceAmount',EmployeeID", _
                                                                 " FROM employeeallowance", _
-                                                                " WHERE OrganizationID=", orgztnID, _
+                                                                " WHERE OrganizationID=", org_rowid, _
                                                                 " AND TaxableFlag='1'", _
                                                                 " AND AllowanceFrequency='", semimallowfreq, "'", _
                                                                 " AND EffectiveStartDate BETWEEN '", paypFrom, "' AND '", paypTo, "'", _
@@ -2479,7 +2479,7 @@ Public Class PayStub
 
                                   notax_allowanceWeekly = New SQL(String.Concat("SELECT SUM(COALESCE(AllowanceAmount,0)) 'TotalAllowanceAmount',EmployeeID", _
                                                                 " FROM employeeallowance", _
-                                                                " WHERE OrganizationID=", orgztnID, _
+                                                                " WHERE OrganizationID=", org_rowid, _
                                                                 " AND TaxableFlag='0'", _
                                                                 " AND AllowanceFrequency='", semimallowfreq, "'", _
                                                                 " AND EffectiveStartDate BETWEEN '", paypFrom, "' AND '", paypTo, "'", _
@@ -2561,7 +2561,7 @@ Public Class PayStub
                                                               " INNER JOIN employee e ON e.OrganizationID=es.OrganizationID AND es.EmployeeID=e.RowID",
                                                               " LEFT JOIN payphilhealth phh ON phh.RowID=es.PayPhilhealthID",
                                                               " LEFT JOIN paysocialsecurity pss ON pss.RowID=es.PaySocialSecurityID",
-                                                              " WHERE es.OrganizationID=", orgztnID,
+                                                              " WHERE es.OrganizationID=", org_rowid,
                                                               " AND (es.EffectiveDateFrom >= '", paypFrom, "' OR IFNULL(es.EffectiveDateTo,'", paypFrom, "') >= '", paypFrom, "')",
                                                               " AND (es.EffectiveDateFrom <= '", paypTo, "' OR IFNULL(es.EffectiveDateTo,'", paypTo, "') <= '", paypTo, "')",
                                                               " GROUP BY es.EmployeeID",
@@ -2577,37 +2577,37 @@ Public Class PayStub
                                                                 ",SUM((TIME_TO_SEC(TIMEDIFF(TimeOut,TimeIn)) / 60) / 60) 'SumHours'", _
                                                                 ",EmployeeID", _
                                                                 " FROM employeetimeentrydetails", _
-                                                                " WHERE OrganizationID=", orgztnID, "", _
+                                                                " WHERE OrganizationID=", org_rowid, "", _
                                                                 " AND Date BETWEEN '", paypFrom, "' AND '", paypTo, "'", _
                                                                 " GROUP BY EmployeeID;")).GetFoundRows.Tables(0)
 
                                   'Clothing,Meal,Rice,Transportation
-                                  allowtyp = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & orgztnID & "' AND Category='Allowance Type' ORDER BY PartNo;")
+                                  allowtyp = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & org_rowid & "' AND Category='Allowance Type' ORDER BY PartNo;")
                                   'CategoryName
                                   allow_type = Split(allowtyp, ",")
 
                                   'Absent,Tardiness,Undertime,.PAGIBIG,.PhilHealth,.SSS
-                                  deductions = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & orgztnID & "' AND Category='Deductions' ORDER BY PartNo;")
+                                  deductions = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & org_rowid & "' AND Category='Deductions' ORDER BY PartNo;")
 
                                   arraydeduction = Split(deductions, ",")
 
                                   'PhilHealth,SSS,PAGIBIG
-                                  loan_type = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & orgztnID & "' AND Category='Loan Type' ORDER BY PartNo;")
+                                  loan_type = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & org_rowid & "' AND Category='Loan Type' ORDER BY PartNo;")
 
                                   loantyp = Split(loan_type, ",")
 
                                   'Miscellaneous - Overtime,Night differential OT,Holiday pay
-                                  misc = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & orgztnID & "' AND Category='Miscellaneous' ORDER BY PartNo;")
+                                  misc = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & org_rowid & "' AND Category='Miscellaneous' ORDER BY PartNo;")
 
                                   miscs = Split(misc, ",")
 
                                   'Totals - Withholding Tax,Gross Income,Net Income,Taxable Income
-                                  totals = EXECQUER("SELECT GROUP_CONCAT(CONCAT(PartNo,';',RowID)) FROM product WHERE OrganizationID='" & orgztnID & "' AND Category='Totals' ORDER BY PartNo;") 'BusinessUnitID
+                                  totals = EXECQUER("SELECT GROUP_CONCAT(CONCAT(PartNo,';',RowID)) FROM product WHERE OrganizationID='" & org_rowid & "' AND Category='Totals' ORDER BY PartNo;") 'BusinessUnitID
                                   'GROUP_CONCAT(RowID)
                                   emp_totals = Split(totals, ",")
 
                                   'Leave Type - Vacation leave,Sick leave,Maternity/paternity leave,Others
-                                  leavetype = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & orgztnID & "' AND Category='Leave Type' ORDER BY PartNo;")
+                                  leavetype = EXECQUER("SELECT GROUP_CONCAT(RowID) FROM product WHERE OrganizationID='" & org_rowid & "' AND Category='Leave Type' ORDER BY PartNo;")
 
                                   leavtyp = Split(leavetype, ",")
 
@@ -2634,9 +2634,9 @@ Public Class PayStub
                                                           ",SUM((DATEDIFF(COALESCE(elv.LeaveEndDate,elv.LeaveStartDate),elv.LeaveStartDate) + 1)) 'NumOfDaysLeave'", _
                                                           ",COALESCE(((TIME_TO_SEC(TIMEDIFF(elv.LeaveEndTime,elv.LeaveStartTime)) / 60) / 60),0) 'NumOfHoursLeave'", _
                                                           ",e.LeavePerPayPeriod", _
-                                                          ",COALESCE((SELECT RowID FROM product WHERE PartNo=elv.LeaveType AND OrganizationID=", orgztnID, "),'') 'ProductID'", _
+                                                          ",COALESCE((SELECT RowID FROM product WHERE PartNo=elv.LeaveType AND OrganizationID=", org_rowid, "),'') 'ProductID'", _
                                                           " FROM employeeleave elv LEFT JOIN employee e ON e.RowID=elv.EmployeeID", _
-                                                          " WHERE elv.OrganizationID=", orgztnID, _
+                                                          " WHERE elv.OrganizationID=", org_rowid, _
                                                           " AND IF(elv.LeaveStartDate > '", paypFrom, "' AND elv.LeaveEndDate > '", paypTo, "'", _
                                                           ", elv.LeaveStartDate BETWEEN '", paypFrom, "' AND '", paypTo, "'", _
                                                           ", IF(elv.LeaveStartDate < '", paypFrom, "' AND elv.LeaveEndDate < '", paypTo, "'", _
@@ -2659,7 +2659,7 @@ Public Class PayStub
                                       params(0, 0) = "param_OrganizationID"
                                       params(1, 0) = "param_year"
 
-                                      params(0, 1) = orgztnID
+                                      params(0, 1) = org_rowid
                                       params(1, 1) = paypTo
 
                                       empthirteenmonthtable = _
@@ -2678,7 +2678,7 @@ Public Class PayStub
                                   param(1, 0) = "etentDateFrom"
                                   param(2, 0) = "etentDateTo"
 
-                                  param(0, 1) = orgztnID
+                                  param(0, 1) = org_rowid
                                   param(1, 1) = paypFrom
                                   param(2, 1) = paypTo
 
@@ -2691,7 +2691,7 @@ Public Class PayStub
                                   paramets(1, 0) = "payp_FromDate"
                                   paramets(2, 0) = "payp_ToDate"
 
-                                  paramets(0, 1) = orgztnID
+                                  paramets(0, 1) = org_rowid
                                   paramets(1, 1) = paypFrom
                                   paramets(2, 1) = paypTo
 
@@ -2700,7 +2700,7 @@ Public Class PayStub
                                                        "GETVIEW_employeeTardinessUndertime")
 
                                   prev_empTimeEntry = New SQL("CALL GETVIEW_previousemployeetimeentry(?og_rowid, ?pp_rowid1, ?pp_rowid2);",
-                                                                                      New Object() {orgztnID,
+                                                                                      New Object() {org_rowid,
                                                                                       paypRowID,
                                                                                       paypRowID}).GetFoundRows.Tables(0)
                                   'prev_empTimeEntry
@@ -2720,7 +2720,7 @@ Public Class PayStub
                                                               " FROM employeetimeentry ete",
                                                               " INNER JOIN employee e ON ete.EmployeeID=e.RowID AND e.EmployeeType='Daily'",
                                                               " WHERE ete.TotalDayPay!=0",
-                                                              " AND ete.OrganizationID='", orgztnID, "'",
+                                                              " AND ete.OrganizationID='", org_rowid, "'",
                                                               " AND ete.`Date`",
                                                               " BETWEEN '", paypFrom, "'",
                                                               " AND '", paypTo, "'",
@@ -2817,7 +2817,7 @@ Public Class PayStub
                     .CommandTimeout = 5000
                     .CommandType = CommandType.StoredProcedure
                     .Parameters.Clear()
-                    .Parameters.AddWithValue("OrganizID", orgztnID)
+                    .Parameters.AddWithValue("OrganizID", org_rowid)
                     .Parameters.AddWithValue("Pay_Date_From", paypFrom)
                     .Parameters.AddWithValue("Pay_Date_To", paypTo)
                     .Parameters.AddWithValue("max_rec_perpage", max_rec_perpage)
@@ -3035,9 +3035,9 @@ Public Class PayStub
 
                             Dim str_query As String =
                                 String.Concat("CALL",
-                                              " LEAVE_gainingbalance(", orgztnID,
+                                              " LEAVE_gainingbalance(", org_rowid,
                                               ", ", emp_rowid,
-                                              ", ", z_User,
+                                              ", ", user_row_id,
                                               ", '", payPeriodDateFrom, "'",
                                               ", '", payPeriodDateTo, "');") 'paypFrom paypTo
 
@@ -3117,13 +3117,13 @@ Public Class PayStub
                                         ",IF(Country IS NULL,'',CONCAT(', ',Country))" & _
                                         ",IF(State IS NULL,'',CONCAT(', ',State)))" & _
                                         " FROM address a LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID" & _
-                                        " WHERE o.RowID=" & orgztnID & ";")
+                                        " WHERE o.RowID=" & org_rowid & ";")
 
                 Dim contactdetails = EXECQUER("SELECT GROUP_CONCAT(COALESCE(MainPhone,'')" & _
                                         ",',',COALESCE(FaxNumber,'')" & _
                                         ",',',COALESCE(EmailAddress,'')" & _
                                         ",',',COALESCE(TINNo,''))" & _
-                                        " FROM organization WHERE RowID=" & orgztnID & ";")
+                                        " FROM organization WHERE RowID=" & org_rowid & ";")
 
                 Dim contactdet = Split(contactdetails, ",")
 
@@ -3431,7 +3431,7 @@ Public Class PayStub
         current_tsitem = DirectCast(sender, ToolStripMenuItem)
 
         Dim param_values =
-            New Object() {orgztnID,
+            New Object() {org_rowid,
                           If(paypRowID = Nothing, DBNull.Value, paypRowID),
                           Convert.ToInt16(current_tsitem.Tag)}
 
@@ -3512,9 +3512,9 @@ Public Class PayStub
                                  ",p1.RowID AS p1RowID" & _
                                  ",p2.RowID AS p2RowID" & _
                                  " FROM product p" & _
-                                 " INNER JOIN product p1 ON p1.OrganizationID='" & orgztnID & "' AND p1.PartNo='.PhilHealth'" & _
-                                 " INNER JOIN product p2 ON p2.OrganizationID='" & orgztnID & "' AND p2.PartNo='.PAGIBIG'" & _
-                                 " WHERE p.OrganizationID='" & orgztnID & "'" & _
+                                 " INNER JOIN product p1 ON p1.OrganizationID='" & org_rowid & "' AND p1.PartNo='.PhilHealth'" & _
+                                 " INNER JOIN product p2 ON p2.OrganizationID='" & org_rowid & "' AND p2.PartNo='.PAGIBIG'" & _
+                                 " WHERE p.OrganizationID='" & org_rowid & "'" & _
                                  " AND p.PartNo='.SSS';")
 
         For Each drrow As DataRow In dtprod.Rows
@@ -3548,7 +3548,7 @@ Public Class PayStub
                                   " LEFT JOIN product p ON p.RowID = pi.ProductID" & _
                                   " LEFT JOIN paystub ps ON ps.RowID = pi.PayStubID" & _
                                   " WHERE p.Category='Leave Type'" & _
-                                  " AND p.OrganizationID=" & orgztnID & _
+                                  " AND p.OrganizationID=" & org_rowid & _
                                   " AND ps.PayPeriodID='" & paypRowID & "';") 'this is for leave balances
 
         Dim rptdattab As New DataTable
@@ -3632,7 +3632,7 @@ Public Class PayStub
                                       ",ps.RowID as psRowID" & _
                                       " FROM employee e LEFT JOIN employeesalary esal ON e.RowID=esal.EmployeeID" & _
                                       " LEFT JOIN paystub ps ON ps.EmployeeID=e.RowID AND ps.OrganizationID=e.OrganizationID AND ps.PayPeriodID='" & paypRowID & "'" & _
-                                      " WHERE e.OrganizationID=" & orgztnID & _
+                                      " WHERE e.OrganizationID=" & org_rowid & _
                                       " AND e.PayFrequencyID='" & paypPayFreqID & "'" & _
                                       " AND '" & paypTo & "' BETWEEN esal.EffectiveDateFrom AND COALESCE(esal.EffectiveDateTo,'" & paypTo & "')" & _
                                       " GROUP BY e.RowID" & _
@@ -3640,7 +3640,7 @@ Public Class PayStub
 
         Dim employeeloanfulldetails As New DataTable
 
-        employeeloanfulldetails = retAsDatTbl("CALL employeeloanfulldetails('" & orgztnID & "'" & _
+        employeeloanfulldetails = retAsDatTbl("CALL employeeloanfulldetails('" & org_rowid & "'" & _
                                               ",'" & paypPayFreqID & "'" & _
                                               ",'" & paypFrom & "'" & _
                                               ",'" & paypTo & "');")
@@ -3942,7 +3942,7 @@ Public Class PayStub
                     Else
 
                         Dim undeclaredpercent = ValNoComma(EXECQUER("SELECT `GET_employeeundeclaredsalarypercent`('" & drow("RowID") & "'" & _
-                                                                    ", '" & orgztnID & "'" & _
+                                                                    ", '" & org_rowid & "'" & _
                                                                     ", '" & paypFrom & "'" & _
                                                                     ", '" & paypTo & "');"))
 
@@ -4210,7 +4210,7 @@ Public Class PayStub
                                     ",IF(IFNULL(Country,'')='','',CONCAT(', ',Country))" & _
                                     ",IF(IFNULL(State,'')='','',CONCAT(', ',State)))" & _
                                     " FROM address a LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID" & _
-                                    " WHERE o.RowID=" & orgztnID & ";")
+                                    " WHERE o.RowID=" & org_rowid & ";")
 
             objText.Text = orgaddress
 
@@ -4222,7 +4222,7 @@ Public Class PayStub
                                     ",',',COALESCE(FaxNumber,'')" & _
                                     ",',',COALESCE(EmailAddress,'')" & _
                                     ",',',COALESCE(TINNo,''))" & _
-                                    " FROM organization WHERE RowID=" & orgztnID & ";")
+                                    " FROM organization WHERE RowID=" & org_rowid & ";")
 
             Dim contactdet = Split(contactdetails, ",")
 
@@ -4345,7 +4345,7 @@ Public Class PayStub
                                         ",MinWageEmpPhHContrib" & _
                                         ",MinWageEmpHDMFContrib" & _
                                         " FROM organization" & _
-                                        " WHERE RowID='" & orgztnID & "';")
+                                        " WHERE RowID='" & org_rowid & "';")
 
         'Dim MinWageEmpSSSContrib = ValNoComma(0)
         'Dim MinWageEmplyrSSSContrib = ValNoComma(0)
@@ -4391,7 +4391,7 @@ Public Class PayStub
 
         backgroundworking = 1
 
-        EcolaProductID = EXECQUER("SELECT RowID FROM product WHERE PartNo='Ecola' AND OrganizationID='" & orgztnID & "' AND Category='Allowance Type' LIMIT 1;")
+        EcolaProductID = EXECQUER("SELECT RowID FROM product WHERE PartNo='Ecola' AND OrganizationID='" & org_rowid & "' AND Category='Allowance Type' LIMIT 1;")
 
         'Dim date_differ = DateDiff(DateInterval.Day, CDate(paypFrom), CDate(paypTo))
 
@@ -4513,7 +4513,7 @@ Public Class PayStub
 
                 Dim divisorMonthlys = If(drow("PayFrequencyID") = 1, 2, _
                                          If(drow("PayFrequencyID") = 2, 1, _
-                                            If(drow("PayFrequencyID") = 3, EXECQUER("SELECT COUNT(RowID) FROM employeetimeentry WHERE EmployeeID='" & employee_ID & "' AND Date BETWEEN '" & paypFrom & "' AND '" & paypTo & "' AND IFNULL(TotalDayPay,0)!=0 AND OrganizationID='" & orgztnID & "';"), _
+                                            If(drow("PayFrequencyID") = 3, EXECQUER("SELECT COUNT(RowID) FROM employeetimeentry WHERE EmployeeID='" & employee_ID & "' AND Date BETWEEN '" & paypFrom & "' AND '" & paypTo & "' AND IFNULL(TotalDayPay,0)!=0 AND OrganizationID='" & org_rowid & "';"), _
                                                numberofweeksthismonth)))
 
                 Dim rowempsal = esal_dattab.Select("EmployeeID = " & drow("RowID").ToString)
@@ -5146,7 +5146,7 @@ Public Class PayStub
                                                                 " ORDER BY DATEDIFF(CURRENT_DATE(),COALESCE(EffectiveDateTo,COALESCE(EffectiveDateFrom,CURRENT_DATE())))" & _
                                                                 " LIMIT 1;")
 
-                            Dim GET_employeetaxableincome = EXECQUER("SELECT `GET_employeetaxableincome`('" & drow("RowID") & "', '" & orgztnID & "', '" & paypFrom & "','" & taxab_salval & "');")
+                            Dim GET_employeetaxableincome = EXECQUER("SELECT `GET_employeetaxableincome`('" & drow("RowID") & "', '" & org_rowid & "', '" & paypFrom & "','" & taxab_salval & "');")
 
                             For Each drowtax As DataRow In paywithholdingtax.rows
 
@@ -5798,7 +5798,7 @@ Public Class PayStub
                         tax_amount = 0
 
                         Dim empDailyRate = _
-                            EXECQUER("SELECT `GET_employeerateperday`('" & drow("RowID") & "', '" & orgztnID & "', '" & paypTo & "');")
+                            EXECQUER("SELECT `GET_employeerateperday`('" & drow("RowID") & "', '" & org_rowid & "', '" & paypTo & "');")
 
                         If isEndOfMonth = 1 And MinimumWageAmount < ValNoComma(empDailyRate) Then
 
@@ -5811,7 +5811,7 @@ Public Class PayStub
                                                                 " ORDER BY DATEDIFF(CURRENT_DATE(),COALESCE(EffectiveDateTo,COALESCE(EffectiveDateFrom,CURRENT_DATE())))" & _
                                                                 " LIMIT 1;")
 
-                            Dim GET_employeetaxableincome = EXECQUER("SELECT `GET_employeetaxableincome`('" & drow("RowID") & "', '" & orgztnID & "', '" & paypFrom & "','" & taxab_salval & "');")
+                            Dim GET_employeetaxableincome = EXECQUER("SELECT `GET_employeetaxableincome`('" & drow("RowID") & "', '" & org_rowid & "', '" & paypFrom & "','" & taxab_salval & "');")
 
                             For Each drowtax As DataRow In paywithholdingtax.rows
 
@@ -5893,7 +5893,7 @@ Public Class PayStub
                 End If
 
                 Dim isexisting = EXECQUER("SELECT EXISTS(SELECT RowID FROM paystub WHERE EmployeeID='" & drow("RowID").ToString & _
-                                       "' AND OrganizationID=" & orgztnID & _
+                                       "' AND OrganizationID=" & org_rowid & _
                                        " AND PayPeriodID='" & paypRowID & "');")
 
                 Dim isexist = 0
@@ -6043,7 +6043,7 @@ Public Class PayStub
                     Dim e_bon As New DataTable
                     e_bon = retAsDatTbl("SELECT ProductID,BonusAmount" & _
                                             " FROM employeebonus" & _
-                                            " WHERE OrganizationID=" & orgztnID & _
+                                            " WHERE OrganizationID=" & org_rowid & _
                                             " AND EmployeeID='" & drow("RowID").ToString & _
                                             "' AND TaxableFlag='1'" & _
                                             " AND IF(EffectiveEndDate IS NULL" & _
@@ -6245,7 +6245,7 @@ Public Class PayStub
                                          ",SickLeaveBalance=COALESCE(SickLeaveBalance,0) + SickLeavePerPayPeriod" & _
                                          ",MaternityLeaveBalance=COALESCE(MaternityLeaveBalance,0) + MaternityLeavePerPayPeriod" & _
                                          ",OtherLeaveBalance=COALESCE(OtherLeaveBalance,0) + OtherLeavePerPayPeriod" & _
-                                         ",LastUpdBy=" & z_User & _
+                                         ",LastUpdBy=" & user_row_id & _
                                          " WHERE RowID='" & drow("RowID").ToString & "';") 'OrganizationID=" & orgztnID & " AND 
 
                                 'leavebalances'leavebalan
@@ -6256,7 +6256,7 @@ Public Class PayStub
                                                          ",',',COALESCE(SickLeaveBalance,0)" & _
                                                          ",',',COALESCE(OtherLeaveBalance,0)" & _
                                                          ",',',COALESCE(LeaveBalance,0))" & _
-                                                         " FROM employee WHERE OrganizationID=" & orgztnID & " AND RowID='" & drow("RowID").ToString & "';")
+                                                         " FROM employee WHERE OrganizationID=" & org_rowid & " AND RowID='" & drow("RowID").ToString & "';")
 
                                 leavebalan = Split(leavebalances, ",")
 
@@ -6358,7 +6358,7 @@ Public Class PayStub
                                          ",SickLeaveBalance=(COALESCE(SickLeaveBalance,0) + SickLeavePerPayPeriod) - " & sickbal & "" & _
                                          ",MaternityLeaveBalance=(COALESCE(MaternityLeaveBalance,0) + MaternityLeavePerPayPeriod) - " & maternbal & "" & _
                                          ",OtherLeaveBalance=(COALESCE(OtherLeaveBalance,0) + OtherLeavePerPayPeriod) - " & othersbal & "" & _
-                                         " WHERE OrganizationID=" & orgztnID & " AND RowID='" & drow("RowID").ToString & "';")
+                                         " WHERE OrganizationID=" & org_rowid & " AND RowID='" & drow("RowID").ToString & "';")
 
                                 'leavebalances = EXECQUER("SELECT CONCAT(COALESCE(LeaveBalance,0),',',COALESCE(SickLeaveBalance,0),',',COALESCE(MaternityLeaveBalance,0)) FROM employee WHERE OrganizationID=" & orgztnID & " AND RowID='" & drow("RowID").ToString & "';")
 
@@ -6367,7 +6367,7 @@ Public Class PayStub
                                                          ",',',COALESCE(SickLeaveBalance,0)" & _
                                                          ",',',COALESCE(OtherLeaveBalance,0)" & _
                                                          ",',',COALESCE(LeaveBalance,0))" & _
-                                                         " FROM employee WHERE OrganizationID=" & orgztnID & " AND RowID='" & drow("RowID").ToString & "';")
+                                                         " FROM employee WHERE OrganizationID=" & org_rowid & " AND RowID='" & drow("RowID").ToString & "';")
 
                                 leavebalan = Split(leavebalances, ",")
 
@@ -6527,7 +6527,7 @@ Public Class PayStub
 
             Next
 
-            EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & orgztnID & "','" & paypRowID & "','" & z_User & "');")
+            EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & org_rowid & "','" & paypRowID & "','" & user_row_id & "');")
 
         End If
 
@@ -6584,7 +6584,7 @@ Public Class PayStub
 
             loademployee(quer_empPayFreq)
 
-            EXECQUER("UPDATE employeeloanschedule SET `Status`='Completed' WHERE LoanPayPeriodLeft <= 0 AND OrganizationID=" & orgztnID & ";")
+            EXECQUER("UPDATE employeeloanschedule SET `Status`='Completed' WHERE LoanPayPeriodLeft <= 0 AND OrganizationID=" & org_rowid & ";")
 
             employee_dattab = Nothing
 
@@ -6644,7 +6644,7 @@ Public Class PayStub
 
             dtempalldistrib.Rows.Clear()
 
-            EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & orgztnID & "','" & paypRowID & "','" & z_User & "');")
+            EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & org_rowid & "','" & paypRowID & "','" & user_row_id & "');")
 
             MsgBox("Done generating payroll", _
                    MsgBoxStyle.Information)
@@ -6723,9 +6723,9 @@ Public Class PayStub
                 .Parameters.Add("paystubID", MySqlDbType.Int32)
 
                 .Parameters.AddWithValue("pstub_RowID", DBNull.Value)
-                .Parameters.AddWithValue("pstub_OrganizationID", orgztnID)
-                .Parameters.AddWithValue("pstub_CreatedBy", z_User)
-                .Parameters.AddWithValue("pstub_LastUpdBy", z_User)
+                .Parameters.AddWithValue("pstub_OrganizationID", org_rowid)
+                .Parameters.AddWithValue("pstub_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("pstub_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("pstub_PayPeriodID", pstub_PayPeriodID)
                 .Parameters.AddWithValue("pstub_EmployeeID", etent_EmployeeID)
 
@@ -6794,9 +6794,9 @@ Public Class PayStub
                 .Parameters.Add("pstubtimID", MySqlDbType.Int32)
 
                 .Parameters.AddWithValue("pstubitm_RowID", If(pstubitm_RowID = Nothing, DBNull.Value, pstubitm_RowID))
-                .Parameters.AddWithValue("pstubitm_OrganizationID", orgztnID)
-                .Parameters.AddWithValue("pstubitm_CreatedBy", z_User)
-                .Parameters.AddWithValue("pstubitm_LastUpdBy", z_User)
+                .Parameters.AddWithValue("pstubitm_OrganizationID", org_rowid)
+                .Parameters.AddWithValue("pstubitm_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("pstubitm_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("pstubitm_PayStubID", pstubitm_PayStubID)
                 .Parameters.AddWithValue("pstubitm_ProductID", pstubitm_ProductID)
                 .Parameters.AddWithValue("pstubitm_PayAmount", ValNoComma(pstubitm_PayAmount))
@@ -6960,7 +6960,7 @@ Public Class PayStub
         param(4, 0) = "ExceptThisAllowance"
 
         param(0, 1) = eallow_EmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
         param(2, 1) = datefrom
         param(3, 1) = If(dateto = Nothing, DBNull.Value, dateto)
         param(4, 1) = If(AllowanceExcept = Nothing, String.Empty, AllowanceExcept)
@@ -7004,7 +7004,7 @@ Public Class PayStub
         params(3, 0) = "effectivedateto"
 
         params(0, 1) = eloan_EmployeeID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = datefrom
         params(3, 1) = dateto
 
@@ -7046,7 +7046,7 @@ Public Class PayStub
         params(3, 0) = "effectivedateto"
 
         params(0, 1) = ebon_EmployeeID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = datefrom
         params(3, 1) = dateto
 
@@ -7132,7 +7132,7 @@ Public Class PayStub
                                        " OR e.SSSNo LIKE '%" & Trim(tsSearch.Text) & "%'" & _
                                        " OR e.HDMFNo LIKE '%" & Trim(tsSearch.Text) & "%'" & _
                                        " OR e.PhilHealthNo LIKE '%" & Trim(tsSearch.Text) & "%')" & _
-                                       " AND e.OrganizationID=" & orgztnID & " ORDER BY e.RowID DESC LIMIT " & pagination & ",100;")
+                                       " AND e.OrganizationID=" & org_rowid & " ORDER BY e.RowID DESC LIMIT " & pagination & ",100;")
 
             '" WHERE MATCH (e.FirstName,e.MiddleName,e.LastName,e.Surname,e.EmployeeID,e.TINNo,e.SSSNo,e.HDMFNo,e.PhilHealthNo)" & _
             '" AGAINST ('" & Trim(tsSearch.Text) & "') AND e.OrganizationID=" & orgztnID & " ORDER BY e.RowID DESC LIMIT " & pagination & ",100;")
@@ -7321,7 +7321,7 @@ Public Class PayStub
         If once = 0 Then
             once = 1
 
-            ECOLA_RowID = EXECQUER("SELECT RowID FROM product WHERE PartNo='Ecola' AND OrganizationID='" & orgztnID & "' LIMIT 1;")
+            ECOLA_RowID = EXECQUER("SELECT RowID FROM product WHERE PartNo='Ecola' AND OrganizationID='" & org_rowid & "' LIMIT 1;")
 
             dtempalldistrib.Columns.Add("ProductID")
 
@@ -7364,7 +7364,7 @@ Public Class PayStub
                 Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT SUM(COALESCE(AllowanceAmount,0)) 'TotalAllowanceAmount'" & _
                                               ",ProductID" & _
                                               " FROM employeeallowance" & _
-                                              " WHERE OrganizationID=" & orgztnID & _
+                                              " WHERE OrganizationID=" & org_rowid & _
                                               " AND EmployeeID='" & employeeRowID & "'" & _
                                               " AND TaxableFlag='" & istaxab & "'" & _
                                               " AND AllowanceFrequency='" & allowancefrequensi & "'" & _
@@ -7474,7 +7474,7 @@ Public Class PayStub
                 Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT SUM(COALESCE(AllowanceAmount,0)) 'TotalAllowanceAmount'" & _
                                               ",ProductID" & _
                                               " FROM employeeallowance" & _
-                                              " WHERE OrganizationID=" & orgztnID & _
+                                              " WHERE OrganizationID=" & org_rowid & _
                                               " AND EmployeeID='" & employeeRowID & "'" & _
                                               " AND TaxableFlag='" & istaxab & "'" & _
                                               " AND AllowanceFrequency='" & allowancefrequensi & "'" & _
@@ -7533,10 +7533,10 @@ Public Class PayStub
                                                  " FROM payrate pr" & _
                                                  " LEFT JOIN employeetimeentry ete ON ete.Date=pr.Date AND ete.OrganizationID=pr.OrganizationID AND ete.EmployeeID='" & employeeRowID & "'" & _
                                                  " LEFT JOIN employeetimeentrydetails etd ON etd.Date=pr.Date AND etd.OrganizationID=pr.OrganizationID AND etd.EmployeeID='" & employeeRowID & "'" & _
-                                                 " LEFT JOIN (SELECT * FROM employeeshift WHERE OrganizationID='" & orgztnID & "' AND EmployeeID='" & employeeRowID & "') esh ON esh.RowID=ete.EmployeeShiftID" & _
+                                                 " LEFT JOIN (SELECT * FROM employeeshift WHERE OrganizationID='" & org_rowid & "' AND EmployeeID='" & employeeRowID & "') esh ON esh.RowID=ete.EmployeeShiftID" & _
                                                  " LEFT JOIN shift sh ON sh.RowID=esh.ShiftID" & _
                                                  " INNER JOIN employee e ON e.RowID=ete.EmployeeID AND e.OrganizationID=pr.OrganizationID" & _
-                                                 " WHERE pr.OrganizationID='" & orgztnID & "'" & _
+                                                 " WHERE pr.OrganizationID='" & org_rowid & "'" & _
                                                  " AND ete.TotalDayPay != 0" & _
                                                  " AND pr.`Date` BETWEEN '" & payperiod_fromdate & "' AND '" & payperiod_todate & "';")
 
@@ -7619,7 +7619,7 @@ Public Class PayStub
                                                  " FROM employeeshift esh" & _
                                                  " LEFT JOIN shift sh ON sh.RowID=esh.ShiftID" & _
                                                  " WHERE esh.EmployeeID='" & employeeRowID & "'" & _
-                                                 " AND esh.OrganizationID='" & orgztnID & "'" & _
+                                                 " AND esh.OrganizationID='" & org_rowid & "'" & _
                                                  " AND '" & dateloop & "'" & _
                                                  " BETWEEN DATE(COALESCE(esh.EffectiveFrom, DATE_FORMAT(CURRENT_TIMESTAMP(),'%Y-%m-%d')))" & _
                                                  " AND DATE(COALESCE(esh.EffectiveTo, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL 1 MONTH)))" & _
@@ -7654,7 +7654,7 @@ Public Class PayStub
                                                                   ",ProductID" & _
                                                                   " FROM employeeallowance" & _
                                                                   " WHERE EmployeeID='" & employeeRowID & "'" & _
-                                                                  " AND OrganizationID='" & orgztnID & "'" & _
+                                                                  " AND OrganizationID='" & org_rowid & "'" & _
                                                                   " AND TaxableFlag='" & istaxab & "'" & _
                                                                   " AND AllowanceFrequency='" & allowancefrequensi & "'" & _
                                                                   " AND ProductID='" & ECOLA_RowID & "'" & _
@@ -7694,7 +7694,7 @@ Public Class PayStub
                                                               ",ProductID" & _
                                                               " FROM employeeallowance" & _
                                                               " WHERE EmployeeID='" & employeeRowID & "'" & _
-                                                              " AND OrganizationID='" & orgztnID & "'" & _
+                                                              " AND OrganizationID='" & org_rowid & "'" & _
                                                               " AND TaxableFlag='" & istaxab & "'" & _
                                                               " AND AllowanceFrequency='" & allowancefrequensi & "'" & _
                                                               " AND '" & dateloop & "'" & _
@@ -7898,7 +7898,7 @@ Public Class PayStub
             params(3, 0) = "psi_undeclared"
             params(4, 0) = "strSalaryDistrib"
 
-            params(0, 1) = orgztnID
+            params(0, 1) = org_rowid
             params(1, 1) = n_PayrollSummaDateSelection.DateFromID
             params(2, 1) = n_PayrollSummaDateSelection.DateToID
 
@@ -8058,7 +8058,7 @@ Public Class PayStub
             paramets(2, 0) = "param_PayPeriodID1"
             paramets(3, 0) = "param_PayPeriodID2"
 
-            paramets(0, 1) = orgztnID
+            paramets(0, 1) = org_rowid
             'paramets(1, 1) = drow("EmployeeRowID")
             paramets(2, 1) = n_PayrollSummaDateSelection.DateFromID
             paramets(3, 1) = n_PayrollSummaDateSelection.DateToID
@@ -8298,7 +8298,7 @@ Public Class PayStub
                                                        ") `Result`",
                                                        " FROM address a",
                                                        " LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID",
-                                                       " WHERE o.RowID=", orgztnID,
+                                                       " WHERE o.RowID=", org_rowid,
                                                        " AND o.PrimaryAddressID IS NOT NULL LIMIT 1;"))
 
                 If obj_value = Nothing Then
@@ -8370,7 +8370,7 @@ Public Class PayStub
 
             Dim sel_query = ""
 
-            Dim hasAnEmployee = EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE OrganizationID=" & orgztnID & " LIMIT 1);")
+            Dim hasAnEmployee = EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE OrganizationID=" & org_rowid & " LIMIT 1);")
 
             If hasAnEmployee = 1 Then
                 sel_query = "SELECT pp.PayFrequencyType FROM payfrequency pp INNER JOIN employee e ON e.PayFrequencyID=pp.RowID GROUP BY pp.RowID;"
@@ -8671,9 +8671,9 @@ Public Class PayStub
                 .Parameters.Add("paystubID", MySqlDbType.Int32)
 
                 .Parameters.AddWithValue("pstub_RowID", DBNull.Value)
-                .Parameters.AddWithValue("pstub_OrganizationID", orgztnID)
-                .Parameters.AddWithValue("pstub_CreatedBy", z_User)
-                .Parameters.AddWithValue("pstub_LastUpdBy", z_User)
+                .Parameters.AddWithValue("pstub_OrganizationID", org_rowid)
+                .Parameters.AddWithValue("pstub_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("pstub_LastUpdBy", user_row_id)
                 '.Parameters.AddWithValue("pstub_PayPeriodID", pstub_PayPeriodID)
                 '.Parameters.AddWithValue("pstub_EmployeeID", etent_EmployeeID)
 
@@ -8791,7 +8791,7 @@ Public Class PayStub
                     If productRowID IsNot Nothing And dgvRow.IsNewRow = False Then 'If Not dgvRow.Cells(0).Value Is Nothing AndAlso Not dgvRow.Cells(1).Value Is Nothing AndAlso IsNumeric(dgvRow.Cells(1).Value) Then
                         If TypeOf dgvRow.Cells("cboProducts").Value Is String Then
                             productRowID = _
-                            EXECQUER("SELECT RowID FROM product WHERE OrganizationID='" & orgztnID & "' AND PartNo='" & dgvRow.Cells("cboProducts").Value & "' LIMIT 1;")
+                            EXECQUER("SELECT RowID FROM product WHERE OrganizationID='" & org_rowid & "' AND PartNo='" & dgvRow.Cells("cboProducts").Value & "' LIMIT 1;")
                         End If
                         Dim returned_value = Nothing
                         'SavePaystubAdjustments(productRowID,ValNoComma(dgvRow.Cells("DataGridViewTextBoxColumn66").Value),If(IsNothing(dgvRow.Cells(comment_columnname).Value) Or IsDBNull(dgvRow.Cells(comment_columnname).Value), "", dgvRow.Cells(comment_columnname).Value),dgvRow.Cells("psaRowID").Value)
@@ -8799,8 +8799,8 @@ Public Class PayStub
                         Dim n_ReadSQLFunction As _
                             New ReadSQLFunction(SQLFunctionName,
                                                     "returnvalue",
-                                                orgztnID,
-                                                z_User,
+                                                org_rowid,
+                                                user_row_id,
                                                 productRowID,
                                                 ValNoComma(dgvRow.Cells("DataGridViewTextBoxColumn66").Value),
                                                 dgvRow.Cells("DataGridViewTextBoxColumn64").Value,
@@ -8841,7 +8841,7 @@ Public Class PayStub
 
                 .Parameters.AddWithValue("pa_EmployeeID", Me.currentEmployeeID)
                 .Parameters.AddWithValue("pa_PayPeriodID", dgvpayper.SelectedRows(0).Cells(0).Value)
-                .Parameters.AddWithValue("User_RowID", z_User)
+                .Parameters.AddWithValue("User_RowID", user_row_id)
 
             End With
 
@@ -8919,7 +8919,7 @@ Public Class PayStub
                 .CommandType = CommandType.StoredProcedure
                 .Parameters.Add("returnvalue", MySqlDbType.Int32)
                 .Parameters.AddWithValue("pa_OrganizationID", z_OrganizationID)
-                .Parameters.AddWithValue("pa_CurrentUser", z_User)
+                .Parameters.AddWithValue("pa_CurrentUser", user_row_id)
                 .Parameters.AddWithValue("pa_ProductID", productID)
                 .Parameters.AddWithValue("pa_PayAmount", payAmount)
                 .Parameters.AddWithValue("pa_Comment", comment)
@@ -9095,7 +9095,7 @@ Public Class PayStub
 
         Dim n_SQLQueryToDatatable As _
             New ReadSQLProcedureToDatatable("VIEW_paystubitem_declared",
-                                            orgztnID,
+                                            org_rowid,
                                             EmployeeRowID,
                                             paypFrom,
                                             paypTo)
@@ -9381,7 +9381,7 @@ Public Class PayStub
 
         Dim n_SQLQueryToDatatable As _
             New ReadSQLProcedureToDatatable("VIEW_paystubitem_actual",
-                                            orgztnID,
+                                            org_rowid,
                                             EmployeeRowID,
                                             paypFrom,
                                             paypTo)
@@ -9576,7 +9576,7 @@ Public Class PayStub
 
             Dim undeclaredSalPercent = _
             EXECQUER("SELECT `GET_employeeundeclaredsalarypercent`('" & dgvemployees.CurrentRow.Cells("RowID").Value & "'" & _
-                     ", '" & orgztnID & "'" & _
+                     ", '" & org_rowid & "'" & _
                      ", '" & paypFrom & "'" & _
                      ", '" & paypTo & "');")
 
@@ -9671,7 +9671,7 @@ Public Class PayStub
                 keep_declaredvalues(2) = ValNoComma(txtgrosssal.Text)
 
                 keep_declaredvalues(3) = _
-                EXECQUER("SELECT GET_paystubitemallowanceecola('" & orgztnID & "'" & _
+                EXECQUER("SELECT GET_paystubitemallowanceecola('" & org_rowid & "'" & _
                          ", '" & dgvemployees.CurrentRow.Cells("RowID").Value & "'" & _
                          ", '" & dgvpayper.CurrentRow.Cells("Column1").Value & "');")
 
@@ -9785,7 +9785,7 @@ Public Class PayStub
         employee_dattab = retAsDatTbl("SELECT e.*" & _
                                       ",CONCAT(UCASE(e.LastName),', ',UCASE(e.FirstName),', ',INITIALS(e.MiddleName,'.','1')) AS FullName" & _
                                       " FROM employee e LEFT JOIN employeesalary esal ON e.RowID=esal.EmployeeID" & _
-                                      " WHERE e.OrganizationID=" & orgztnID & _
+                                      " WHERE e.OrganizationID=" & org_rowid & _
                                       " AND CURDATE() BETWEEN esal.EffectiveDateFrom AND COALESCE(esal.EffectiveDateTo,CURDATE())" & _
                                       " GROUP BY e.RowID" & _
                                       " ORDER BY e.LastName;") 'RowID DESC
@@ -9833,7 +9833,7 @@ Public Class PayStub
                                     ",IF(Country IS NULL,'',CONCAT(', ',Country))" & _
                                     ",IF(State IS NULL,'',CONCAT(', ',State)))" & _
                                     " FROM address a LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID" & _
-                                    " WHERE o.RowID=" & orgztnID & ";")
+                                    " WHERE o.RowID=" & org_rowid & ";")
 
             objText.Text = orgaddress
 
@@ -9841,7 +9841,7 @@ Public Class PayStub
                                     ",',',COALESCE(FaxNumber,'')" & _
                                     ",',',COALESCE(EmailAddress,'')" & _
                                     ",',',COALESCE(TINNo,''))" & _
-                                    " FROM organization WHERE RowID=" & orgztnID & ";")
+                                    " FROM organization WHERE RowID=" & org_rowid & ";")
 
             Dim contactdet = Split(contactdetails, ",")
 
@@ -9917,7 +9917,7 @@ Public Class PayStub
         If once Then : Exit Sub : End If
 
         Dim undeclaredpercent = ValNoComma(EXECQUER("SELECT `GET_employeeundeclaredsalarypercent`('" & dgvemployees.CurrentRow.Cells("RowID").Value & "'" & _
-                                                    ", '" & orgztnID & "'" & _
+                                                    ", '" & org_rowid & "'" & _
                                                     ", '" & paypFrom & "'" & _
                                                     ", '" & paypTo & "');"))
 
@@ -9949,13 +9949,13 @@ Public Class PayStub
                                         ",IF(Country IS NULL,'',CONCAT(', ',Country))" & _
                                         ",IF(State IS NULL,'',CONCAT(', ',State)))" & _
                                         " FROM address a LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID" & _
-                                        " WHERE o.RowID=" & orgztnID & ";")
+                                        " WHERE o.RowID=" & org_rowid & ";")
 
                 Dim contactdetails = EXECQUER("SELECT GROUP_CONCAT(COALESCE(MainPhone,'')" & _
                                         ",',',COALESCE(FaxNumber,'')" & _
                                         ",',',COALESCE(EmailAddress,'')" & _
                                         ",',',COALESCE(TINNo,''))" & _
-                                        " FROM organization WHERE RowID=" & orgztnID & ";")
+                                        " FROM organization WHERE RowID=" & org_rowid & ";")
 
                 Dim contactdet = Split(contactdetails, ",")
 
@@ -10280,7 +10280,7 @@ Public Class PayStub
         current_tsitem = DirectCast(sender, ToolStripMenuItem)
 
         Dim param_values =
-            New Object() {orgztnID,
+            New Object() {org_rowid,
                           If(paypRowID = Nothing, DBNull.Value, paypRowID),
                           Convert.ToInt16(current_tsitem.Tag),
                           If(Convert.ToInt32(dgvemployees.Tag) = Nothing, DBNull.Value, Convert.ToInt32(dgvemployees.Tag))}
@@ -10366,7 +10366,7 @@ Public Class PayStub
                 .Parameters.Clear()
 
                 With .Parameters
-                    .AddWithValue("?og_id", orgztnID)
+                    .AddWithValue("?og_id", org_rowid)
                     .AddWithValue("?e_rowid", Convert.ToInt32(dgvemployees.Tag))
                     .AddWithValue("?pp_rowid", Convert.ToInt32(paypRowID))
                     .AddWithValue("?is_actual", Convert.ToInt32(sender_obj.AccessibleDescription))
@@ -10430,9 +10430,9 @@ Public Class PayStub
                                  ",p1.RowID AS p1RowID" & _
                                  ",p2.RowID AS p2RowID" & _
                                  " FROM product p" & _
-                                 " INNER JOIN product p1 ON p1.OrganizationID='" & orgztnID & "' AND p1.PartNo='.PhilHealth'" & _
-                                 " INNER JOIN product p2 ON p2.OrganizationID='" & orgztnID & "' AND p2.PartNo='.PAGIBIG'" & _
-                                 " WHERE p.OrganizationID='" & orgztnID & "'" & _
+                                 " INNER JOIN product p1 ON p1.OrganizationID='" & org_rowid & "' AND p1.PartNo='.PhilHealth'" & _
+                                 " INNER JOIN product p2 ON p2.OrganizationID='" & org_rowid & "' AND p2.PartNo='.PAGIBIG'" & _
+                                 " WHERE p.OrganizationID='" & org_rowid & "'" & _
                                  " AND p.PartNo='.SSS';")
 
         For Each drrow As DataRow In dtprod.Rows
@@ -10466,7 +10466,7 @@ Public Class PayStub
                                   " LEFT JOIN product p ON p.RowID = pi.ProductID" & _
                                   " LEFT JOIN paystub ps ON ps.RowID = pi.PayStubID" & _
                                   " WHERE p.Category='Leave Type'" & _
-                                  " AND p.OrganizationID=" & orgztnID & _
+                                  " AND p.OrganizationID=" & org_rowid & _
                                   " AND ps.PayPeriodID='" & paypRowID & "';") 'this is for leave balances
 
         Dim rptdattab As New DataTable
@@ -10543,7 +10543,7 @@ Public Class PayStub
                                       ",ps.RowID as psRowID" & _
                                       " FROM employee e LEFT JOIN employeesalary esal ON e.RowID=esal.EmployeeID" & _
                                       " LEFT JOIN paystub ps ON ps.EmployeeID=e.RowID AND ps.OrganizationID=e.OrganizationID AND ps.PayPeriodID='" & paypRowID & "'" & _
-                                      " WHERE e.OrganizationID=" & orgztnID & _
+                                      " WHERE e.OrganizationID=" & org_rowid & _
                                       " AND e.PayFrequencyID='" & paypPayFreqID & "'" & _
                                       " AND '" & paypTo & "' BETWEEN esal.EffectiveDateFrom AND COALESCE(esal.EffectiveDateTo,'" & paypTo & "')" & _
                                       " GROUP BY e.RowID" & _
@@ -10551,7 +10551,7 @@ Public Class PayStub
 
         Dim employeeloanfulldetails As New DataTable
 
-        employeeloanfulldetails = retAsDatTbl("CALL employeeloanfulldetails('" & orgztnID & "'" & _
+        employeeloanfulldetails = retAsDatTbl("CALL employeeloanfulldetails('" & org_rowid & "'" & _
                                               ",'" & paypPayFreqID & "'" & _
                                               ",'" & paypFrom & "'" & _
                                               ",'" & paypTo & "');")
@@ -10725,7 +10725,7 @@ Public Class PayStub
             Dim theEmpBasicPayFix = 0.0
 
             Dim undeclaredpercent = ValNoComma(EXECQUER("SELECT `GET_employeeundeclaredsalarypercent`('" & drow("RowID") & "'" & _
-                                                        ", '" & orgztnID & "'" & _
+                                                        ", '" & org_rowid & "'" & _
                                                         ", '" & paypFrom & "'" & _
                                                         ", '" & paypTo & "');"))
 
@@ -11151,7 +11151,7 @@ Public Class PayStub
                                     ",IF(IFNULL(Country,'')='','',CONCAT(', ',Country))" & _
                                     ",IF(IFNULL(State,'')='','',CONCAT(', ',State)))" & _
                                     " FROM address a LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID" & _
-                                    " WHERE o.RowID=" & orgztnID & ";")
+                                    " WHERE o.RowID=" & org_rowid & ";")
 
             objText.Text = orgaddress
 
@@ -11163,7 +11163,7 @@ Public Class PayStub
                                     ",',',COALESCE(FaxNumber,'')" & _
                                     ",',',COALESCE(EmailAddress,'')" & _
                                     ",',',COALESCE(TINNo,''))" & _
-                                    " FROM organization WHERE RowID=" & orgztnID & ";")
+                                    " FROM organization WHERE RowID=" & org_rowid & ";")
 
             Dim contactdet = Split(contactdetails, ",")
 
@@ -11244,7 +11244,7 @@ Public Class PayStub
                 cboProducts.DisplayMember = "ProductName"
 
                 cboProducts.DataSource = New SQLQueryToDatatable("SELECT RowID AS 'ProductID', Name AS 'ProductName', Category FROM product WHERE Category IN ('Allowance Type', 'Bonus', 'Adjustment Type')" & _
-                                                          " AND OrganizationID='" & orgztnID & "';").ResultTable
+                                                          " AND OrganizationID='" & org_rowid & "';").ResultTable
 
             End If
 
@@ -11418,7 +11418,7 @@ Public Class PayStub
 
                 Dim divisorMonthlys = If(drow("PayFrequencyID") = 1, 2, _
                                          If(drow("PayFrequencyID") = 2, 1, _
-                                            If(drow("PayFrequencyID") = 3, EXECQUER("SELECT COUNT(RowID) FROM employeetimeentry WHERE EmployeeID='" & employee_ID & "' AND Date BETWEEN '" & paypFrom & "' AND '" & paypTo & "' AND IFNULL(TotalDayPay,0)!=0 AND OrganizationID='" & orgztnID & "';"), _
+                                            If(drow("PayFrequencyID") = 3, EXECQUER("SELECT COUNT(RowID) FROM employeetimeentry WHERE EmployeeID='" & employee_ID & "' AND Date BETWEEN '" & paypFrom & "' AND '" & paypTo & "' AND IFNULL(TotalDayPay,0)!=0 AND OrganizationID='" & org_rowid & "';"), _
                                                numberofweeksthismonth)))
 
 
@@ -12156,7 +12156,7 @@ Public Class PayStub
                     New ExecuteQuery("SELECT EXISTS(SELECT RowID" &
                                      " FROM paystub" &
                                      " WHERE EmployeeID='" & drow("RowID") & "'" &
-                                     " AND OrganizationID='" & orgztnID & "'" &
+                                     " AND OrganizationID='" & org_rowid & "'" &
                                      " AND PayFromDate='" & paypFrom & "'" &
                                      " AND PayToDate='" & paypTo & "');")
 
@@ -12173,9 +12173,9 @@ Public Class PayStub
                                              ",e.MaternityLeaveBalance = 0" &
                                              ",e.OtherLeaveBalance = 0" &
                                              ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                                             ",e.LastUpdBy='" & z_User & "'" &
+                                             ",e.LastUpdBy='" & user_row_id & "'" &
                                              " WHERE e.RowID='" & drow("RowID") & "'" &
-                                             " AND e.OrganizationID='" & orgztnID & "';")
+                                             " AND e.OrganizationID='" & org_rowid & "';")
 
                         '",e.AdditionalVLBalance = 0" &
 
@@ -12348,9 +12348,9 @@ Public Class PayStub
 
                 End If
 
-                Dim procparam_array = New String() {orgztnID,
+                Dim procparam_array = New String() {org_rowid,
                                                     Convert.ToInt32(drow("RowID")),
-                                                    z_User,
+                                                    user_row_id,
                                                     paypFrom, paypTo}
                 Dim n_ExecSQLProcedure As New  _
                     ExecSQLProcedure("LEAVE_gainingbalance", 192,
@@ -12388,11 +12388,11 @@ Public Class PayStub
 
             Next
 
-            EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & orgztnID & "','" & paypRowID & "','" & z_User & "');")
+            EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & org_rowid & "','" & paypRowID & "','" & user_row_id & "');")
 
             If withthirteenthmonthpay = 1 Then
 
-                EXECQUER("CALL `RELEASE_thirteenthmonthpay`('" & orgztnID & "','" & paypRowID & "','" & z_User & "');")
+                EXECQUER("CALL `RELEASE_thirteenthmonthpay`('" & org_rowid & "','" & paypRowID & "','" & user_row_id & "');")
 
             End If
 
@@ -12458,7 +12458,7 @@ Public Class PayStub
                 Dim n_ExecuteQuery As New ExecuteQuery("SELECT RowID" &
                                                        " FROM paystub" &
                                                        " WHERE EmployeeID='" & dgvemployees.Tag & "'" &
-                                                       " AND OrganizationID='" & orgztnID & "'" &
+                                                       " AND OrganizationID='" & org_rowid & "'" &
                                                        " AND PayPeriodID='" & paypRowID & "'" &
                                                        " LIMIT 1;")
 
@@ -12566,7 +12566,7 @@ Friend Class PrintAllPaySlipOfficialFormat
 
         'catchdt = n_SQLQueryToDatatable.ResultTable
 
-        Dim param_values = New String() {orgztnID, n_PayPeriodRowID, n_IsPrintingAsActual}
+        Dim param_values = New String() {org_rowid, n_PayPeriodRowID, n_IsPrintingAsActual}
 
         Dim n_ReadSQLProcedureToDatatable As _
             New ReadSQLProcedureToDatatable("paystub_payslip",

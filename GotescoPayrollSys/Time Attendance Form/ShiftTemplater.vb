@@ -152,7 +152,7 @@ Public Class ShiftTemplater
                                                ") AS ResultValue" &
                                                " FROM shift" &
                                                " WHERE RowID='" & shift_value & "'" &
-                                               " AND OrganizationID='" & orgztnID & "';").Result
+                                               " AND OrganizationID='" & org_rowid & "';").Result
 
             End If
 
@@ -462,7 +462,7 @@ Public Class ShiftTemplater
                                      ",LastName" &
                                      ",FirstName" &
                                      " FROM employee" &
-                                     " WHERE OrganizationID='" & orgztnID & "'" &
+                                     " WHERE OrganizationID='" & org_rowid & "'" &
                                      " AND EmploymentStatus IN ('Regular','Probationary')" &
                                      " AND RevealInPayroll='1';").ResultTable
 
@@ -498,7 +498,7 @@ Public Class ShiftTemplater
 
         dt = New SQLQueryToDatatable("SELECT PositionName" &
                                      " FROM position" &
-                                     " WHERE OrganizationID='" & orgztnID & "'" &
+                                     " WHERE OrganizationID='" & org_rowid & "'" &
                                      " AND DivisionID IS NOT NULL;").ResultTable
 
         Dim dtcolcount = (dt.Columns.Count - 1)

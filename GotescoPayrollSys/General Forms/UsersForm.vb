@@ -185,8 +185,8 @@
                                z_OrganizationID, _
                                     getposition, _
                                     Date.Now.ToString("yyyy-MM-dd HH:mm:ss"), _
-                               z_User, _
-                                    z_User, _
+                               user_row_id, _
+                                    user_row_id, _
                                     Date.Now.ToString("yyyy-MM-dd HH:mm:ss"), _
                                     status, _
                                     txtEmailAdd.Text,
@@ -233,7 +233,7 @@
 
                         ElseIf position_count > 1 Then
 
-                            getposition = getStringItem("SELECT PositionID FROM user WHERE RowID = '" & z_User & "';")
+                            getposition = getStringItem("SELECT PositionID FROM user WHERE RowID = '" & user_row_id & "';")
 
                         End If
 
@@ -248,8 +248,8 @@
                                         txtMiddleName.Text, _
                                         getposition, _
                                         Today.Date, _
-                                        z_User, _
-                                        z_User, _
+                                        user_row_id, _
+                                        user_row_id, _
                                         Today.Date, _
                                         status, _
                                         txtEmailAdd.Text,
@@ -304,7 +304,7 @@
 
         End If
 
-        view_ID = VIEW_privilege("Users", orgztnID)
+        view_ID = VIEW_privilege("Users", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 

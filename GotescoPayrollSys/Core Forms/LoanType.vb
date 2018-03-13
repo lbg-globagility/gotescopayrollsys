@@ -78,8 +78,8 @@
                                            ",p.PartNo" &
                                            ",IF(p.Strength='1',TRUE,FALSE) AS Strength" &
                                            " FROM product p" &
-                                           " INNER JOIN category cg ON cg.OrganizationID='" & orgztnID & "' AND p.CategoryID=cg.RowID AND cg.CategoryName='Loan Type'" &
-                                           " WHERE p.OrganizationID='" & orgztnID & "';").ResultTable
+                                           " INNER JOIN category cg ON cg.OrganizationID='" & org_rowid & "' AND p.CategoryID=cg.RowID AND cg.CategoryName='Loan Type'" &
+                                           " WHERE p.OrganizationID='" & org_rowid & "';").ResultTable
 
         dgvproduct.Rows.Clear()
 
@@ -148,10 +148,10 @@
                                             "prod_RowID",
                                             dgvproduct.Item("RowID", e.RowIndex).Value,
                                             dgvproduct.Item("PartNo", e.RowIndex).Value,
-                                            orgztnID,
+                                            org_rowid,
                                             dgvproduct.Item("PartNo", e.RowIndex).Value,
-                                            z_User,
-                                            z_User,
+                                            user_row_id,
+                                            user_row_id,
                                             0,
                                             0,
                                             0,

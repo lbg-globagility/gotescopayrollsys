@@ -123,14 +123,14 @@ Public Class LoanScheduleForm
         Dim empid As Integer = dgvEmpList.CurrentRow.Cells(c_ID.Index).Value
         If IsNew = 1 Then
 
-            SP_LoadSchedule(z_User, z_User, z_datetime, z_datetime, Val(txtloannumber.Text), datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"), _
+            SP_LoadSchedule(user_row_id, user_row_id, z_datetime, z_datetime, Val(txtloannumber.Text), datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"), _
                             z_OrganizationID, Val(empid), CDec(txtloanamt.Text), cmbdedsched.Text, CDec(txtbal.Text), CDec(txtdedamt.Text), _
                             CDec(txtnoofpayper.Text), txtremarks.Text, cmbStatus.Text, CDec(txtdedpercent.Text))
             fillloadsched()
             fillloadschedselected()
             myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
         Else
-            SP_UpdateLoadSchedule(z_User, z_datetime, Val(txtloannumber.Text), datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"), _
+            SP_UpdateLoadSchedule(user_row_id, z_datetime, Val(txtloannumber.Text), datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"), _
                                  CDec(txtloanamt.Text), cmbdedsched.Text, CDec(txtdedamt.Text), _
                                  CDec(txtnoofpayper.Text), txtremarks.Text, cmbStatus.Text, CDec(txtdedpercent.Text), dgvLoanList.CurrentRow.Cells(c_rowid.Index).Value)
             fillloadsched()

@@ -8,7 +8,7 @@ Public Class newPostion
                                                              " UNION" & _
                                                              " SELECT RowID,PositionName" & _
                                                              " FROM position" & _
-                                                             " WHERE OrganizationID='" & orgztnID & "';")
+                                                             " WHERE OrganizationID='" & org_rowid & "';")
 
         With n_SQLQueryToDatatable.ResultTable
 
@@ -24,7 +24,7 @@ Public Class newPostion
                                                              " UNION" & _
                                                              " SELECT RowID,Name" & _
                                                              " FROM `division`" & _
-                                                             " WHERE OrganizationID='" & orgztnID & "';")
+                                                             " WHERE OrganizationID='" & org_rowid & "';")
 
 
         With n_SQLQueryToDatatable.ResultTable
@@ -107,7 +107,7 @@ Public Class newPostion
         ElseIf txtPositName.Text = "" Then
             txtPositName.Focus()
             WarnBalloon("Please input a Position Name.", "Invalid Position Name", txtPositName, txtPositName.Width - 16, -69) : Exit Sub
-        ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM position WHERE PositionName='" & txtPositName.Text & "' AND OrganizationID=" & orgztnID & ")") = 1 Then
+        ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM position WHERE PositionName='" & txtPositName.Text & "' AND OrganizationID=" & org_rowid & ")") = 1 Then
             txtPositName.Focus()
             WarnBalloon("Position Name '" & txtPositName.Text & "' has already exists. Please try another.", "Invalid Position Name", txtPositName, txtPositName.Width - 16, -69) : Exit Sub
 
@@ -156,9 +156,9 @@ Public Class newPostion
 
                 .Parameters.AddWithValue("pos_RowID", If(pos_RowID = Nothing, DBNull.Value, pos_RowID))
                 .Parameters.AddWithValue("pos_PositionName", Trim(pos_PositionName))
-                .Parameters.AddWithValue("pos_CreatedBy", z_User)
-                .Parameters.AddWithValue("pos_OrganizationID", orgztnID)
-                .Parameters.AddWithValue("pos_LastUpdBy", z_User)
+                .Parameters.AddWithValue("pos_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("pos_OrganizationID", org_rowid)
+                .Parameters.AddWithValue("pos_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("pos_ParentPositionID", If(pos_ParentPositionID = Nothing, DBNull.Value, pos_ParentPositionID))
                 .Parameters.AddWithValue("pos_DivisionId", If(pos_DivisionId = Nothing, DBNull.Value, pos_DivisionId))
 
@@ -233,7 +233,7 @@ Public Class newPostion
 
         Else
 
-            divisionRowID = EXECQUER("SELECT RowID FROM division WHERE OrganizationID='" & orgztnID & "' ORDER BY Name LIMIT " & cboDivis.SelectedIndex & ",1;")
+            divisionRowID = EXECQUER("SELECT RowID FROM division WHERE OrganizationID='" & org_rowid & "' ORDER BY Name LIMIT " & cboDivis.SelectedIndex & ",1;")
 
         End If
 

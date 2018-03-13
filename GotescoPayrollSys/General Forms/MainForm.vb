@@ -103,7 +103,7 @@ Public Class MainForm
 
 
         Dim position As String = getStringItem("Select p.PositionName From User u inner join Position p on u.PositionID = p.RowID " & _
-                                             "Where u.RowID = '" & z_User & "' And u.OrganizationID = " & z_OrganizationID & "")
+                                             "Where u.RowID = '" & user_row_id & "' And u.OrganizationID = " & z_OrganizationID & "")
         Dim getposition As String = position
 
         lblUser.Text = LoginForm.UsernameTextBox.Text

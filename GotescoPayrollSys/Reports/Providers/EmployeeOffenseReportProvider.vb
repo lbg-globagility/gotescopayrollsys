@@ -20,7 +20,7 @@ Public Class EmployeeOffenseReportProvider
         Dim dateTo = CDate(payperiodSelector.DateTo)
 
         Dim params = New Object(,) {
-            {"organizationID", orgztnID},
+            {"organizationID", org_rowid},
             {"dateFrom", dateFrom},
             {"dateTo", dateTo}
         }

@@ -32,7 +32,7 @@ Public Class ShiftList
                                             ",TIME_FORMAT(TimeFrom,'%l:%i %p') AS TimeFrom" &
                                             ",TIME_FORMAT(TimeTo,'%l:%i %p') AS TimeTo" &
                                             " FROM shift" &
-                                            " WHERE OrganizationID='" & orgztnID & "'" &
+                                            " WHERE OrganizationID='" & org_rowid & "'" &
                                             " AND TimeFrom IS NOT NULL" &
                                             " AND TimeTo IS NOT NULL" &
                                             " ORDER BY TIME_FORMAT(TimeFrom,'%p%h%i%s'),TIME_FORMAT(TimeTo,'%p%h%i%s');").ResultTable 'orgztnID

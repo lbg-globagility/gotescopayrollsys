@@ -167,7 +167,7 @@ Public Class OBFForm
 
         param(0, 1) = If(OBFRowID = Nothing, DBNull.Value, OBFRowID)
         param(1, 1) = EXECQUER("SELECT OrganizationID FROM employee WHERE RowID='" & e_rowid & "';") 'TxtEmployeeNumber1.RowIDValue
-        param(2, 1) = If(z_User = 0, DBNull.Value, z_User)
+        param(2, 1) = If(user_row_id = 0, DBNull.Value, user_row_id)
         param(3, 1) = param(2, 1) 'z_User
         param(4, 1) = e_rowid 'TxtEmployeeNumber1.RowIDValue
         param(5, 1) = OBFtypeString

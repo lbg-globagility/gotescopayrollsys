@@ -68,7 +68,7 @@ Public Class EmpPosition
         "LEFT JOIN position pos ON e.PositionID=pos.RowID " & _
         "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " & _
         "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents " & _
-        "WHERE e.OrganizationID=" & orgztnID
+        "WHERE e.OrganizationID=" & org_rowid
 
     '",Image 'Image'" & _
 
@@ -80,7 +80,7 @@ Public Class EmpPosition
 
     Dim alphadivision As New DataTable
 
-    Dim view_ID As Integer = VIEW_privilege("Position", orgztnID)
+    Dim view_ID As Integer = VIEW_privilege("Position", org_rowid)
 
     Private Sub EmpPosition_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
@@ -137,7 +137,7 @@ Public Class EmpPosition
         End If
 
         If view_ID = Nothing Then
-            view_ID = VIEW_privilege("Position", orgztnID)
+            view_ID = VIEW_privilege("Position", org_rowid)
         End If
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
@@ -188,23 +188,23 @@ Public Class EmpPosition
     Sub reload()
 
         positiontable = retAsDatTbl("SELECT *" & _
-                                    ",COALESCE((SELECT CONCAT('(',FirstName,IF(COALESCE(MiddleName,'')='','',CONCAT(' ',LEFT(MiddleName,1))),IF(LastName IS NULL,'',CONCAT(' ',LastName)),')') FROM employee WHERE OrganizationID=" & orgztnID & " AND PositionID=p.RowID AND TerminationDate IS NULL LIMIT 1),'(Open)') 'positionstats'" & _
+                                    ",COALESCE((SELECT CONCAT('(',FirstName,IF(COALESCE(MiddleName,'')='','',CONCAT(' ',LEFT(MiddleName,1))),IF(LastName IS NULL,'',CONCAT(' ',LastName)),')') FROM employee WHERE OrganizationID=" & org_rowid & " AND PositionID=p.RowID AND TerminationDate IS NULL LIMIT 1),'(Open)') 'positionstats'" & _
                                     " FROM position p" & _
-                                    " WHERE p.OrganizationID=" & orgztnID & "" & _
-                                    " AND p.RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & orgztnID & ");")
+                                    " WHERE p.OrganizationID=" & org_rowid & "" & _
+                                    " AND p.RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & org_rowid & ");")
 
         'alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & orgztnID & " AND ParentPositionID IS NOT NULL AND ParentPositionID!=RowID GROUP BY ParentPositionID;")
 
-        alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & orgztnID & " AND ParentPositionID IS NULL" & _
-                                    " AND RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & orgztnID & ");")
+        alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & org_rowid & " AND ParentPositionID IS NULL" & _
+                                    " AND RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & org_rowid & ");")
 
         'For Each drow As DataRow In alphaposition.Rows
         '    Positiontreeviewfiller(drow("RowID"), drow("PositionName"), )
         'Next
 
-        divisiontable = retAsDatTbl("SELECT * FROM division WHERE OrganizationID=" & orgztnID & ";")
+        divisiontable = retAsDatTbl("SELECT * FROM division WHERE OrganizationID=" & org_rowid & ";")
 
-        alphadivision = retAsDatTbl("SELECT * FROM division WHERE OrganizationID=" & orgztnID & " AND ParentDivisionID IS NULL;")
+        alphadivision = retAsDatTbl("SELECT * FROM division WHERE OrganizationID=" & org_rowid & " AND ParentDivisionID IS NULL;")
 
         tv2.Nodes.Clear()
 
@@ -609,7 +609,7 @@ Public Class EmpPosition
 
             End If
         ElseIf sendrname = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM employee WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM employee WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 1
 
@@ -842,21 +842,21 @@ Public Class EmpPosition
 
             RemoveHandler tv2.AfterSelect, AddressOf tv2_AfterSelect
 
-            EXECQUER("UPDATE employee SET PositionID=NULL,LastUpdBy=" & z_User & " WHERE PositionID='" & selPositionID & "' AND OrganizationID=" & orgztnID & ";" & _
-                     "DELETE FROM `position_view` WHERE PositionID='" & selPositionID & "' AND OrganizationID=" & orgztnID & ";" & _
+            EXECQUER("UPDATE employee SET PositionID=NULL,LastUpdBy=" & user_row_id & " WHERE PositionID='" & selPositionID & "' AND OrganizationID=" & org_rowid & ";" & _
+                     "DELETE FROM `position_view` WHERE PositionID='" & selPositionID & "' AND OrganizationID=" & org_rowid & ";" & _
                      "DELETE FROM position WHERE RowID='" & selPositionID & "';" & _
                      "ALTER TABLE position AUTO_INCREMENT = 0;")
 
             positiontable = retAsDatTbl("SELECT *" & _
-                                        ",COALESCE((SELECT CONCAT('(',FirstName,IF(MiddleName IS NULL,'',CONCAT(' ',LEFT(MiddleName,1))),IF(LastName IS NULL,'',CONCAT(' ',LEFT(LastName,1))),')') FROM employee WHERE OrganizationID=" & orgztnID & " AND PositionID=p.RowID AND TerminationDate IS NULL),'(Open)') 'positionstats'" & _
+                                        ",COALESCE((SELECT CONCAT('(',FirstName,IF(MiddleName IS NULL,'',CONCAT(' ',LEFT(MiddleName,1))),IF(LastName IS NULL,'',CONCAT(' ',LEFT(LastName,1))),')') FROM employee WHERE OrganizationID=" & org_rowid & " AND PositionID=p.RowID AND TerminationDate IS NULL),'(Open)') 'positionstats'" & _
                                         " FROM position p" & _
-                                        " WHERE p.OrganizationID=" & orgztnID & "" & _
-                                        " AND p.RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & orgztnID & ");")
+                                        " WHERE p.OrganizationID=" & org_rowid & "" & _
+                                        " AND p.RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & org_rowid & ");")
 
             'alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & orgztnID & " AND ParentPositionID IS NOT NULL AND ParentPositionID!=RowID GROUP BY ParentPositionID;")
 
-            alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & orgztnID & " AND ParentPositionID IS NULL" & _
-                                        " AND RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & orgztnID & ");")
+            alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & org_rowid & " AND ParentPositionID IS NULL" & _
+                                        " AND RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & org_rowid & ");")
 
             For Each drow As DataRow In alphadivision.Rows
 
@@ -912,9 +912,9 @@ Public Class EmpPosition
 
                 .Parameters.AddWithValue("pos_RowID", If(pos_RowID = Nothing, DBNull.Value, pos_RowID))
                 .Parameters.AddWithValue("pos_PositionName", Trim(pos_PositionName))
-                .Parameters.AddWithValue("pos_CreatedBy", z_User)
-                .Parameters.AddWithValue("pos_OrganizationID", orgztnID)
-                .Parameters.AddWithValue("pos_LastUpdBy", z_User)
+                .Parameters.AddWithValue("pos_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("pos_OrganizationID", org_rowid)
+                .Parameters.AddWithValue("pos_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("pos_ParentPositionID", If(pos_ParentPositionID = Nothing, DBNull.Value, pos_ParentPositionID))
                 .Parameters.AddWithValue("pos_DivisionId", If(pos_DivisionId = Nothing, DBNull.Value, pos_DivisionId))
 

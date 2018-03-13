@@ -59,7 +59,7 @@ Public Class EmployeeForm
 
         End If
 
-        view_IDEmpLoan = VIEW_privilege("Employee Loan History", orgztnID)
+        view_IDEmpLoan = VIEW_privilege("Employee Loan History", org_rowid)
 
         tabIndx = 0 'TabControl1.SelectedIndex
 
@@ -96,7 +96,7 @@ Public Class EmployeeForm
                     .CommandType = CommandType.StoredProcedure
 
                     .Parameters.AddWithValue("echk_EmployeeID", emp_rowid)
-                    .Parameters.AddWithValue("echk_OrganizationID", orgztnID)
+                    .Parameters.AddWithValue("echk_OrganizationID", org_rowid)
 
                     Dim datread As MySqlDataReader
 
@@ -634,12 +634,12 @@ Public Class EmployeeForm
         "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " & _
         "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents " & _
         "LEFT JOIN agency ag ON ag.RowID=e.AgencyID " & _
-        "WHERE e.OrganizationID=" & orgztnID
+        "WHERE e.OrganizationID=" & org_rowid
 
     Dim _by As String = "(SELECT CONCAT(CONCAT(UCASE(LEFT(FirstName, 1)), SUBSTRING(FirstName, 2)),' ',CONCAT(UCASE(LEFT(LastName, 1)), SUBSTRING(LastName, 2)))  FROM user WHERE RowID="
 
     Public q_empldependents As String = "SELECT  edep.RowID, edep.ParentEmployeeID, COALESCE(edep.Salutation,''),  `FirstName`,  COALESCE(edep.MiddleName,''),  edep.LastName,  COALESCE(edep.Surname,''),  edep.RelationToEmployee,  COALESCE(edep.TINNo,''),  COALESCE(edep.SSSNo,''),  COALESCE(edep.HDMFNo,''),  COALESCE(PhilHealthNo,''),  COALESCE(EmailAddress,''),  COALESCE(edep.WorkPhone,''),  COALESCE(edep.HomePhone,''),  COALESCE(edep.MobilePhone,''),  COALESCE(HomeAddress,''),  COALESCE(Nickname,''),  COALESCE(edep.JobTitle,''), COALESCE(edep.Gender,''),  IF(edep.ActiveFlag='Y','TRUE','FALSE'),  COALESCE(DATE_FORMAT(edep.Birthdate,'%m-%d-%Y'),'')," & _
-        _by & "edep.CreatedBy), DATE_FORMAT(edep.Created,'%m-%d-%Y')," & _by & "edep.LastUpdBy),  COALESCE(DATE_FORMAT(edep.LastUpd,'%m-%d-%Y'),'') FROM employeedependents edep WHERE edep.OrganizationID=" & orgztnID & " AND edep.ParentEmployeeID="
+        _by & "edep.CreatedBy), DATE_FORMAT(edep.Created,'%m-%d-%Y')," & _by & "edep.LastUpdBy),  COALESCE(DATE_FORMAT(edep.LastUpd,'%m-%d-%Y'),'') FROM employeedependents edep WHERE edep.OrganizationID=" & org_rowid & " AND edep.ParentEmployeeID="
 
     Public q_salut As String = "SELECT DisplayValue FROM listofval lov WHERE lov.Type='Salutation' AND Active='Yes';"
 
@@ -772,7 +772,7 @@ Public Class EmployeeForm
         RemoveHandler dgvEmp.SelectionChanged, AddressOf dgvEmp_SelectionChanged
 
         If tsbtnNewEmp.Enabled = False And _
-            EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE EmployeeID='" & Trim(txtEmpID.Text) & "' AND OrganizationID=" & orgztnID & ");") = 1 Then
+            EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE EmployeeID='" & Trim(txtEmpID.Text) & "' AND OrganizationID=" & org_rowid & ");") = 1 Then
             AddHandler dgvEmp.SelectionChanged, AddressOf dgvEmp_SelectionChanged
 
             WarnBalloon("Employee ID has already exist.", "Invalid employee ID", lblforballoon, 0, -69)
@@ -832,7 +832,7 @@ Public Class EmployeeForm
 
         ElseIf positID = "" Then
 
-            positID = EXECQUER("SELECT RowID FROM position WHERE PositionName='" & cboPosit.Text & "' AND OrganizationID='" & orgztnID & "';")
+            positID = EXECQUER("SELECT RowID FROM position WHERE PositionName='" & cboPosit.Text & "' AND OrganizationID='" & org_rowid & "';")
 
             If positID = "" Then
 
@@ -882,8 +882,8 @@ Public Class EmployeeForm
             positID = cboPosit.SelectedValue
             new_eRowID = _
             INSUPDemployee(employee_RowID,
-                           z_User,
-                           orgztnID,
+                           user_row_id,
+                           org_rowid,
                            cboSalut.Text.Trim,
                            txtFName.Text.Trim,
                            txtMName.Text.Trim,
@@ -1102,7 +1102,7 @@ Public Class EmployeeForm
         RemoveHandler dgvEmp.SelectionChanged, AddressOf dgvEmp_SelectionChanged
 
         If tsbtnNewEmp.Enabled = False And _
-            EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE EmployeeID='" & Trim(txtEmpID.Text) & "' AND OrganizationID=" & orgztnID & ");") = 1 Then
+            EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE EmployeeID='" & Trim(txtEmpID.Text) & "' AND OrganizationID=" & org_rowid & ");") = 1 Then
             AddHandler dgvEmp.SelectionChanged, AddressOf dgvEmp_SelectionChanged
 
             WarnBalloon("Employee ID has already exist.", "Invalid employee ID", lblforballoon, 0, -69)
@@ -1237,9 +1237,9 @@ Public Class EmployeeForm
                 params(0, 1) = DBNull.Value
             End If
 
-            params(1, 1) = z_User 'CreaBy
+            params(1, 1) = user_row_id 'CreaBy
 
-            params(2, 1) = orgztnID 'OrganizID
+            params(2, 1) = org_rowid 'OrganizID
 
             params(4, 1) = Trim(cboSalut.Text) 'Salutat
 
@@ -1321,7 +1321,7 @@ Public Class EmployeeForm
                                      " LEFT JOIN employee e ON e.RowID=edep.ParentEmployeeID AND e.OrganizationID=edep.OrganizationID" & _
                                      " WHERE e.RowID='" & Employee_RowID_ID & "'" & _
                                      " AND edep.ActiveFlag='Y'" & _
-                                     " AND edep.OrganizationID='" & orgztnID & "';") 'NumDependent
+                                     " AND edep.OrganizationID='" & org_rowid & "';") 'NumDependent
 
             count_Dependents = IntVal(count_Dependents)
 
@@ -1889,9 +1889,9 @@ Public Class EmployeeForm
                        " WHERE pos.RowID NOT IN" & _
                        " (SELECT COALESCE(emp.PositionID,'')" & _
                        " FROM employee emp" & _
-                       " WHERE emp.OrganizationID=" & orgztnID & "" & _
-                       " GROUP BY emp.PositionID UNION SELECT DISTINCT(PositionID) FROM user WHERE PositionID IS NOT NULL AND OrganizationID=" & orgztnID & ")" & _
-                       " AND OrganizationID=" & orgztnID & "" & _
+                       " WHERE emp.OrganizationID=" & org_rowid & "" & _
+                       " GROUP BY emp.PositionID UNION SELECT DISTINCT(PositionID) FROM user WHERE PositionID IS NOT NULL AND OrganizationID=" & org_rowid & ")" & _
+                       " AND OrganizationID=" & org_rowid & "" & _
                        " ORDER BY pos.PositionName;", _
                        positn)
 
@@ -1913,7 +1913,7 @@ Public Class EmployeeForm
 
         Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT RowID,PositionName" & _
                                                              " FROM position" & _
-                                                             " WHERE OrganizationID=" & orgztnID & _
+                                                             " WHERE OrganizationID=" & org_rowid & _
                                                              " AND RowID!='" & String.Empty & "';")
         Static once As SByte = 0
 
@@ -1943,7 +1943,7 @@ Public Class EmployeeForm
         params(0, 0) = "organization_ID"
         params(1, 0) = "PayFrequencyID"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = PayFreqRowID
 
         Dim _divisor = EXEC_INSUPD_PROCEDURE(params, _
@@ -1969,14 +1969,14 @@ Public Class EmployeeForm
         previousForm = Me
 
         'dbconn()
-        view_ID = VIEW_privilege("Employee Personal Profile", orgztnID)
+        view_ID = VIEW_privilege("Employee Personal Profile", org_rowid)
 
         loademployee()
         'loadPayFreqType()
 
-        u_nem = EXECQUER(USERNameStrPropr & z_User)
+        u_nem = EXECQUER(USERNameStrPropr & user_row_id)
 
-        paytypestring = EXECQUER("SELECT PayFrequencyType FROM payfrequency pfq LEFT JOIN organization org ON org.PayFrequencyID=pfq.RowID WHERE org.RowID='" & orgztnID & "' LIMIT 1;")
+        paytypestring = EXECQUER("SELECT PayFrequencyType FROM payfrequency pfq LEFT JOIN organization org ON org.PayFrequencyID=pfq.RowID WHERE org.RowID='" & org_rowid & "' LIMIT 1;")
 
         'dtpBDate.MaxDate = Date.Parse(dbnow)
 
@@ -2017,7 +2017,7 @@ Public Class EmployeeForm
 
         'employeepix = retAsDatTbl("SELECT e.RowID,COALESCE(e.Image,'') 'Image' FROM employee e LEFT JOIN user u ON e.CreatedBy=u.RowID LEFT JOIN position pos ON e.PositionID=pos.RowID LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID WHERE e.OrganizationID=" & orgztnID & " ORDER BY e.RowID DESC")
 
-        employeepix = retAsDatTbl("SELECT e.RowID,COALESCE(e.Image,'') 'Image' FROM employee e WHERE e.OrganizationID=" & orgztnID & " ORDER BY e.RowID DESC;")
+        employeepix = retAsDatTbl("SELECT e.RowID,COALESCE(e.Image,'') 'Image' FROM employee e WHERE e.OrganizationID=" & org_rowid & " ORDER BY e.RowID DESC;")
 
         'payp_count()
 
@@ -2425,19 +2425,19 @@ Public Class EmployeeForm
                         txtslallow.Text = .Cells("slallowance").Value
                         txtmlallow.Text = .Cells("mlallowance").Value
                         txtaddvlallow.Text = ValNoComma(New ExecuteQuery("SELECT AdditionalVLAllowance FROM employee WHERE RowID='" & publicEmpRowID & "'" &
-                                                                         " AND OrganizationID='" & orgztnID & "';").Result)
+                                                                         " AND OrganizationID='" & org_rowid & "';").Result)
 
                         txtvlbal.Text = .Cells("Column35").Value
                         txtslbal.Text = .Cells("slbalance").Value
                         txtmlbal.Text = .Cells("mlbalance").Value
                         txtaddvlbal.Text = ValNoComma(New ExecuteQuery("SELECT AdditionalVLBalance FROM employee WHERE RowID='" & publicEmpRowID & "'" &
-                                                                       " AND OrganizationID='" & orgztnID & "';").Result)
+                                                                       " AND OrganizationID='" & org_rowid & "';").Result)
 
                         txtvlpayp.Text = .Cells("Column33").Value
                         txtslpayp.Text = .Cells("slpayp").Value
                         txtmlpayp.Text = .Cells("mlpayp").Value
                         txtaddvlpayp.Text = ValNoComma(New ExecuteQuery("SELECT AdditionalVLPerPayPeriod FROM employee WHERE RowID='" & publicEmpRowID & "'" &
-                                                                        " AND OrganizationID='" & orgztnID & "';").Result)
+                                                                        " AND OrganizationID='" & org_rowid & "';").Result)
 
                         chkutflag.Checked = If(.Cells("Column23").Value = 1, True, False)
                         chkotflag.Checked = If(.Cells("Column24").Value = 1, True, False)
@@ -2500,7 +2500,7 @@ Public Class EmployeeForm
                                           " WHERE e.RowID = ?e_rowid",
                                           " AND e.OrganizationID = ?og_id;")
                         dt_dptmngr = New SQL(str_quer,
-                                             New Object() {publicEmpRowID, orgztnID}).GetFoundRows.Tables(0)
+                                             New Object() {publicEmpRowID, org_rowid}).GetFoundRows.Tables(0)
                         For Each drow As DataRow In dt_dptmngr.Rows
 
                             txtboxDeptMngr.Text = Convert.ToString(drow("FullName"))
@@ -3318,7 +3318,7 @@ Public Class EmployeeForm
                                         ",CAST((SickLeaveDays) / 26 AS DECIMAL(11,2)) 'sl_payp'" & _
                                         ",CAST((MaternityLeaveDays) / 26 AS DECIMAL(11,2)) 'ml_payp'" & _
                                         " FROM organization" & _
-                                        " WHERE RowID=" & orgztnID & ";")
+                                        " WHERE RowID=" & org_rowid & ";")
 
         For Each drow As DataRow In leavedefaults.Rows
 
@@ -3463,7 +3463,7 @@ Public Class EmployeeForm
                             Dim sql As New SQL(str_quer,
                                                New Object() {n_SetEmployeeEndDate.ReturnDateValue,
                                                              cboEmpStat.Text.Trim,
-                                                             z_User,
+                                                             user_row_id,
                                                              publicEmpRowID})
 
                             sql.ExecuteQuery()
@@ -4508,10 +4508,10 @@ Public Class EmployeeForm
                         .Parameters.Add("empdepenID", MySqlDbType.Int32)
 
                         .Parameters.AddWithValue("emp_RowID", If(Val(r.Cells("Colmn0").Value) <> 0, r.Cells("Colmn0").Value, DBNull.Value))
-                        .Parameters.AddWithValue("emp_CreatedBy", z_User) 'Z_User
-                        .Parameters.AddWithValue("emp_LastUpdBy", z_User) 'Z_User
+                        .Parameters.AddWithValue("emp_CreatedBy", user_row_id) 'Z_User
+                        .Parameters.AddWithValue("emp_LastUpdBy", user_row_id) 'Z_User
                         .Parameters.AddWithValue("emp_LastUpd", _naw)
-                        .Parameters.AddWithValue("emp_OrganizationID", orgztnID) 'orgztnID
+                        .Parameters.AddWithValue("emp_OrganizationID", org_rowid) 'orgztnID
                         .Parameters.AddWithValue("emp_Salutation", If(Trim(r.Cells("Colmn24").Value) <> "", r.Cells("Colmn24").Value, DBNull.Value))
                         .Parameters.AddWithValue("emp_FirstName", If(Trim(r.Cells("Colmn3").Value) <> "", r.Cells("Colmn3").Value, DBNull.Value))
                         .Parameters.AddWithValue("emp_MiddleName", If(Trim(r.Cells("Colmn4").Value) <> "", r.Cells("Colmn4").Value, DBNull.Value))
@@ -4550,10 +4550,10 @@ Public Class EmployeeForm
                         .Parameters.Add("empdepenID", MySqlDbType.Int32)
 
                         .Parameters.AddWithValue("emp_RowID", If(Val(r.Cells("Colmn0").Value) <> 0, r.Cells("Colmn0").Value, DBNull.Value))
-                        .Parameters.AddWithValue("emp_CreatedBy", z_User) 'Z_User
-                        .Parameters.AddWithValue("emp_LastUpdBy", z_User) 'Z_User
+                        .Parameters.AddWithValue("emp_CreatedBy", user_row_id) 'Z_User
+                        .Parameters.AddWithValue("emp_LastUpdBy", user_row_id) 'Z_User
                         .Parameters.AddWithValue("emp_LastUpd", _naw)
-                        .Parameters.AddWithValue("emp_OrganizationID", orgztnID) 'orgztnID
+                        .Parameters.AddWithValue("emp_OrganizationID", org_rowid) 'orgztnID
                         .Parameters.AddWithValue("emp_Salutation", If(Trim(r.Cells("Colmn24").Value) <> "", r.Cells("Colmn24").Value, DBNull.Value))
                         .Parameters.AddWithValue("emp_FirstName", If(Trim(r.Cells("Colmn3").Value) <> "", r.Cells("Colmn3").Value, DBNull.Value))
                         .Parameters.AddWithValue("emp_MiddleName", If(Trim(r.Cells("Colmn4").Value) <> "", r.Cells("Colmn4").Value, DBNull.Value))
@@ -4751,7 +4751,7 @@ Public Class EmployeeForm
         param(1, 0) = "edep_OrganizationID"
 
         param(0, 1) = ParentEmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
 
         'EXEC_VIEW_PROCEDURE(param, _
         '                   "VIEW_employeedependents", _
@@ -4760,7 +4760,7 @@ Public Class EmployeeForm
         Dim n_ReadSQLProcedureToDatatable As _
             New ReadSQLProcedureToDatatable("VIEW_employeedependents",
                                             ParentEmployeeID,
-                                            orgztnID)
+                                            org_rowid)
 
         Dim catchdt As New DataTable
 
@@ -4960,7 +4960,7 @@ Public Class EmployeeForm
 
             End If
         ElseIf sendrname = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM employee WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM employee WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 1
 
@@ -5046,7 +5046,7 @@ Public Class EmployeeForm
 
             Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT '' AS RowID, '' AS AgencyName" & _
                                                                  " UNION" & _
-                                                                 " SELECT RowID,AgencyName FROM agency WHERE OrganizationID='" & orgztnID & "';")
+                                                                 " SELECT RowID,AgencyName FROM agency WHERE OrganizationID='" & org_rowid & "';")
 
             Dim dt_agency As New DataTable
 
@@ -5068,7 +5068,7 @@ Public Class EmployeeForm
 
             dtpempstartdate.Value = dbnow 'Format(CDate(dbnow), machineShortDateFormat)
 
-            view_ID = VIEW_privilege("Employee Personal Profile", orgztnID)
+            view_ID = VIEW_privilege("Employee Personal Profile", org_rowid)
 
             For Each strval In cboSalut.Items
                 Colmn2.Items.Add(strval)
@@ -5818,10 +5818,10 @@ Public Class EmployeeForm
                                       midname,
                                       EncrypedData(emp_uniqueid),
                                       EncrypedData(emp_uniqueid),
-                                      orgztnID,
+                                      org_rowid,
                                       positn_rowid,
-                                      z_User,
-                                      z_User,
+                                      user_row_id,
+                                      user_row_id,
                                       e_mailadd,
                                       emp_rowid_as_deptmngr}
 
@@ -5866,7 +5866,7 @@ Public Class EmployeeForm
         Static once As SByte = 0
         If once = 0 Then
             once = 1
-            view_IDAwar = VIEW_privilege("Employee Award", orgztnID)
+            view_IDAwar = VIEW_privilege("Employee Award", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDAwar)
 
@@ -5930,7 +5930,7 @@ Public Class EmployeeForm
         param(1, 0) = "eawar_OrganizationID"
 
         param(0, 1) = EmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
 
         EXEC_VIEW_PROCEDURE(param, _
                            "VIEW_employeeawards", _
@@ -5983,11 +5983,11 @@ Public Class EmployeeForm
 
                 If r.IsNewRow = False Then
                     param(0, 1) = DBNull.Value
-                    param(1, 1) = orgztnID
+                    param(1, 1) = org_rowid
                     param(2, 1) = dbnow
-                    param(3, 1) = z_User  'CreatedBy
+                    param(3, 1) = user_row_id  'CreatedBy
                     param(4, 1) = dbnow 'Created
-                    param(5, 1) = z_User 'LastUpdBy
+                    param(5, 1) = user_row_id 'LastUpdBy
                     param(6, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                     param(7, 1) = If(r.Cells("eawar_Type").Value = Nothing, DBNull.Value, r.Cells("eawar_Type").Value)
                     param(8, 1) = If(r.Cells("eawar_Description").Value = Nothing, DBNull.Value, r.Cells("eawar_Description").Value)
@@ -6008,11 +6008,11 @@ Public Class EmployeeForm
 
                 If listofEditRowAward.Contains(r.Cells("eawar_RowID").Value) Then
                     param(0, 1) = r.Cells("eawar_RowID").Value
-                    param(1, 1) = orgztnID
+                    param(1, 1) = org_rowid
                     param(2, 1) = dbnow
-                    param(3, 1) = z_User 'CreatedBy
+                    param(3, 1) = user_row_id 'CreatedBy
                     param(4, 1) = dbnow 'Created
-                    param(5, 1) = z_User 'LastUpdBy
+                    param(5, 1) = user_row_id 'LastUpdBy
                     param(6, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                     param(7, 1) = If(r.Cells("eawar_Type").Value = Nothing, DBNull.Value, r.Cells("eawar_Type").Value)
                     param(8, 1) = If(r.Cells("eawar_Description").Value = Nothing, DBNull.Value, r.Cells("eawar_Description").Value)
@@ -6090,7 +6090,7 @@ Public Class EmployeeForm
         Static once As SByte = 0
         If once = 0 Then
             once = 1
-            view_IDCert = VIEW_privilege("Employee Certification", orgztnID)
+            view_IDCert = VIEW_privilege("Employee Certification", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDCert)
 
@@ -6154,7 +6154,7 @@ Public Class EmployeeForm
         param(1, 0) = "ecert_OrganizationID"
 
         param(0, 1) = EmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
 
         EXEC_VIEW_PROCEDURE(param, _
                             "VIEW_employeecertification", _
@@ -6215,11 +6215,11 @@ Public Class EmployeeForm
 
                 If r.IsNewRow = False Then
                     param(0, 1) = DBNull.Value
-                    param(1, 1) = orgztnID
+                    param(1, 1) = org_rowid
                     param(2, 1) = dbnow
-                    param(3, 1) = z_User
+                    param(3, 1) = user_row_id
                     param(4, 1) = DBNull.Value
-                    param(5, 1) = z_User
+                    param(5, 1) = user_row_id
                     param(6, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                     param(7, 1) = If(r.Cells("ecert_Type").Value = Nothing, DBNull.Value, Trim(r.Cells("ecert_Type").Value))
                     param(8, 1) = If(r.Cells("ecert_IssuingAuth").Value = Nothing, DBNull.Value, Trim(r.Cells("ecert_IssuingAuth").Value))
@@ -6234,11 +6234,11 @@ Public Class EmployeeForm
 
                 If listofEditRowCert.Contains(r.Cells("ecert_RowID").Value) Then
                     param(0, 1) = r.Cells("ecert_RowID").Value
-                    param(1, 1) = orgztnID
+                    param(1, 1) = org_rowid
                     param(2, 1) = dbnow
-                    param(3, 1) = z_User
+                    param(3, 1) = user_row_id
                     param(4, 1) = DBNull.Value
-                    param(5, 1) = z_User
+                    param(5, 1) = user_row_id
                     param(6, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                     param(7, 1) = If(r.Cells("ecert_Type").Value = Nothing, DBNull.Value, Trim(r.Cells("ecert_Type").Value))
                     param(8, 1) = If(r.Cells("ecert_IssuingAuth").Value = Nothing, DBNull.Value, Trim(r.Cells("ecert_IssuingAuth").Value))
@@ -6368,16 +6368,16 @@ Public Class EmployeeForm
             enlistToCboBox("SELECT DisplayValue FROM listofval WHERE `Type`='Employee Leave Status' AND Active='Yes' ORDER BY OrderBy;", _
                            cboleavestatus)
 
-            view_IDLeave = VIEW_privilege("Employee Leave", orgztnID)
+            view_IDLeave = VIEW_privilege("Employee Leave", org_rowid)
 
             '48
-            categleavID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & orgztnID & " AND CategoryName='" & "Leave Type" & "' LIMIT 1;")
+            categleavID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & org_rowid & " AND CategoryName='" & "Leave Type" & "' LIMIT 1;")
 
             If Val(categleavID) = 0 Then
                 categleavID = INSUPD_category(, "Leave Type")
             End If
 
-            enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categleavID & "' AND OrganizationID=" & orgztnID & ";", _
+            enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categleavID & "' AND OrganizationID=" & org_rowid & ";", _
                            leave_type) 'cboallowtype
 
             cboleavetypes.Items.Clear()
@@ -6453,8 +6453,8 @@ Public Class EmployeeForm
         param(2, 0) = "user_rowid"
 
         param(0, 1) = EmployeeID
-        param(1, 1) = orgztnID
-        param(2, 1) = z_User
+        param(1, 1) = org_rowid
+        param(2, 1) = user_row_id
 
         EXEC_VIEW_PROCEDURE(param, _
                             "VIEW_employeeleave", _
@@ -6601,11 +6601,11 @@ Public Class EmployeeForm
                         And r.Cells("elv_StartDate").Value <> Nothing And r.Cells("elv_EndDate").Value <> Nothing Then
 
                         param(0, 1) = DBNull.Value
-                        param(1, 1) = orgztnID
+                        param(1, 1) = org_rowid
                         param(2, 1) = MilitTime(r.Cells("elv_StartTime").Value) 'If(r.Cells("Column3").Value = Nothing, DBNull.Value, r.Cells("Column3").Value) 'Start time
                         param(3, 1) = If(r.Cells("elv_Type").Value = Nothing, DBNull.Value, r.Cells("elv_Type").Value) 'Leave type
-                        param(4, 1) = z_User 'CreatedBy
-                        param(5, 1) = z_User 'LastUpdBy
+                        param(4, 1) = user_row_id 'CreatedBy
+                        param(5, 1) = user_row_id 'LastUpdBy
                         param(6, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                         param(7, 1) = MilitTime(r.Cells("elv_EndTime").Value) 'If(r.Cells("Column4").Value = Nothing, DBNull.Value, r.Cells("Column4").Value) 'End time
                         param(8, 1) = If(r.Cells("elv_StartDate").Value = Nothing, DBNull.Value, Format(CDate(r.Cells("elv_StartDate").Value), "yyyy-MM-dd")) 'Start date
@@ -6638,11 +6638,11 @@ Public Class EmployeeForm
                         And r.Cells("elv_StartDate").Value <> Nothing And r.Cells("elv_EndDate").Value <> Nothing Then
 
                         param(0, 1) = r.Cells("elv_RowID").Value
-                        param(1, 1) = orgztnID
+                        param(1, 1) = org_rowid
                         param(2, 1) = MilitTime(r.Cells("elv_StartTime").Value) 'If(r.Cells("Column3").Value = Nothing, DBNull.Value, r.Cells("Column3").Value) 'Start time
                         param(3, 1) = If(r.Cells("elv_Type").Value = Nothing, DBNull.Value, r.Cells("elv_Type").Value) 'Leave type
-                        param(4, 1) = z_User 'CreatedBy
-                        param(5, 1) = z_User 'LastUpdBy
+                        param(4, 1) = user_row_id 'CreatedBy
+                        param(5, 1) = user_row_id 'LastUpdBy
                         param(6, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                         param(7, 1) = MilitTime(r.Cells("elv_EndTime").Value)  'End time
                         param(8, 1) = If(r.Cells("elv_StartDate").Value = Nothing, DBNull.Value, Format(CDate(r.Cells("elv_StartDate").Value), "yyyy-MM-dd")) 'Start date
@@ -6701,8 +6701,8 @@ Public Class EmployeeForm
         params(7, 0) = "eatta_FileName"
 
         params(0, 1) = If(eatta_RowID = Nothing, DBNull.Value, eatta_RowID)
-        params(1, 1) = z_User
-        params(2, 1) = z_User
+        params(1, 1) = user_row_id
+        params(2, 1) = user_row_id
         params(3, 1) = eatta_EmployeeID
         params(4, 1) = eatta_Type '"Employee Leave@RowIDemployeeleave"
         params(5, 1) = DBNull.Value
@@ -6934,7 +6934,7 @@ Public Class EmployeeForm
 
                         Dim sql_result =
                             New SQL(str_quer,
-                                    New Object() {z_User,
+                                    New Object() {user_row_id,
                                                   .Cells("elv_RowID").Value}).GetFoundRow
 
                         Dim bool_result As Boolean =
@@ -7060,7 +7060,7 @@ Public Class EmployeeForm
                                                     " WHERE DATE BETWEEN '" & _from & "'" & _
                                                     " AND '" & _to & "'" & _
                                                     " AND EmployeeID=" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                                    " AND OrganizationID=" & orgztnID & ");")
+                                                    " AND OrganizationID=" & org_rowid & ");")
 
                         If invalidleave = 0 Then
                             invalidleave = EXECQUER("SELECT EXISTS(SELECT RowID" & _
@@ -7068,7 +7068,7 @@ Public Class EmployeeForm
                                                     " WHERE " & _
                                                     " ('" & _from & "' IN (LeaveStartDate,LeaveEndDate) OR '" & _to & "' IN (LeaveStartDate,LeaveEndDate))" & _
                                                     " AND EmployeeID=" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                                    " AND OrganizationID=" & orgztnID & ");")
+                                                    " AND OrganizationID=" & org_rowid & ");")
                         End If
                     End If
 
@@ -7856,7 +7856,7 @@ Public Class EmployeeForm
                                                     " WHERE DATE BETWEEN '" & _from & "'" & _
                                                     " AND '" & _to & "'" & _
                                                     " AND EmployeeID=" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                                    " AND OrganizationID=" & orgztnID & ");")
+                                                    " AND OrganizationID=" & org_rowid & ");")
 
                         If invalidleave = 0 Then
                             invalidleave = EXECQUER("SELECT EXISTS(SELECT RowID" & _
@@ -7864,7 +7864,7 @@ Public Class EmployeeForm
                                                     " WHERE " & _
                                                     " ('" & _from & "' IN (LeaveStartDate,LeaveEndDate) OR '" & _to & "' IN (LeaveStartDate,LeaveEndDate))" & _
                                                     " AND EmployeeID=" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                                    " AND OrganizationID=" & orgztnID & ");")
+                                                    " AND OrganizationID=" & org_rowid & ");")
                         End If
                     End If
 
@@ -7987,7 +7987,7 @@ Public Class EmployeeForm
                                                     " WHERE DATE BETWEEN '" & _from & "'" & _
                                                     " AND '" & _to & "'" & _
                                                     " AND EmployeeID=" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                                    " AND OrganizationID=" & orgztnID & ");")
+                                                    " AND OrganizationID=" & org_rowid & ");")
 
                         If invalidleave = 0 Then
                             invalidleave = EXECQUER("SELECT EXISTS(SELECT RowID" & _
@@ -7995,7 +7995,7 @@ Public Class EmployeeForm
                                                     " WHERE " & _
                                                     " ('" & _from & "' IN (LeaveStartDate,LeaveEndDate) OR '" & _to & "' IN (LeaveStartDate,LeaveEndDate))" & _
                                                     " AND EmployeeID=" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                                    " AND OrganizationID=" & orgztnID & ");")
+                                                    " AND OrganizationID=" & org_rowid & ");")
                         End If
                     End If
 
@@ -8197,7 +8197,7 @@ Public Class EmployeeForm
         param(1, 1) = If(emedrecord_DateFrom = Nothing, DBNull.Value, Format(CDate(emedrecord_DateFrom), "yyyy-MM-dd"))
         param(2, 1) = If(emedrecord_DateTo = Nothing, DBNull.Value, Format(CDate(emedrecord_DateTo), "yyyy-MM-dd"))
         param(3, 1) = If(emedrecord_ProductID = Nothing, DBNull.Value, CInt(emedrecord_ProductID))
-        param(4, 1) = orgztnID
+        param(4, 1) = org_rowid
 
         Dim returnval = EXEC_INSUPD_PROCEDURE(param, _
                                               "VIEW_employeemedrecordID", _
@@ -8233,11 +8233,11 @@ Public Class EmployeeForm
                 .Parameters.Add("emedrecID", MySqlDbType.Int32)
 
                 .Parameters.AddWithValue("emedrec_RowID", If(emedrec_RowID = Nothing, DBNull.Value, emedrec_RowID))
-                .Parameters.AddWithValue("emedrec_OrganizationID", orgztnID) 'orgztnID
+                .Parameters.AddWithValue("emedrec_OrganizationID", org_rowid) 'orgztnID
                 .Parameters.AddWithValue("emedrec_Created", _naw)
                 .Parameters.AddWithValue("emedrec_LastUpd", _naw)
-                .Parameters.AddWithValue("emedrec_CreatedBy", z_User)
-                .Parameters.AddWithValue("emedrec_LastUpdBy", z_User)
+                .Parameters.AddWithValue("emedrec_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("emedrec_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("emedrec_EmployeeID", If(emedrec_EmployeeID = Nothing, DBNull.Value, emedrec_EmployeeID))
                 .Parameters.AddWithValue("emedrec_DateFrom", If(emedrec_DateFrom = Nothing, DBNull.Value, Format(CDate(emedrec_DateFrom), "yyyy-MM-dd")))
                 .Parameters.AddWithValue("emedrec_DateTo", If(emedrec_DateTo = Nothing, DBNull.Value, Format(CDate(emedrec_DateTo), "yyyy-MM-dd")))
@@ -8291,11 +8291,11 @@ Public Class EmployeeForm
 
                 .Parameters.AddWithValue("p_RowID", DBNull.Value)
                 .Parameters.AddWithValue("p_Name", p_Name)
-                .Parameters.AddWithValue("p_OrganizationID", orgztnID) 'orgztnID
+                .Parameters.AddWithValue("p_OrganizationID", org_rowid) 'orgztnID
                 .Parameters.AddWithValue("p_PartNo", p_PartNo)
                 .Parameters.AddWithValue("p_LastUpd", DBNull.Value)
-                .Parameters.AddWithValue("p_CreatedBy", z_User)
-                .Parameters.AddWithValue("p_LastUpdBy", z_User)
+                .Parameters.AddWithValue("p_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("p_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("p_Category", p_CategName)
                 .Parameters.AddWithValue("p_CategoryID", DBNull.Value) 'KELANGAN MA-RETRIEVE KO UNG ROWID SA CATEGORY WHERE CATEGORYNAME = 'MEDICAL RECORD'
                 .Parameters.AddWithValue("p_Status", p_Status)
@@ -8358,7 +8358,7 @@ Public Class EmployeeForm
             dtpFrom.Value = Format(CDate(dbnow), machineShortDateFormat)
             dtpTo.Value = Format(CDate(dbnow), machineShortDateFormat)
 
-            categDiscipID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & orgztnID & " AND CategoryName='" & "Employee Disciplinary" & "' LIMIT 1;")
+            categDiscipID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & org_rowid & " AND CategoryName='" & "Employee Disciplinary" & "' LIMIT 1;")
 
             If Val(categDiscipID) = 0 Then
                 categDiscipID = INSUPD_category(, "Employee Disciplinary")
@@ -8378,7 +8378,7 @@ Public Class EmployeeForm
                 cboAction.Items.Add(Trim(drow("DisplayValue").ToString))
             Next
 
-            view_IDDiscip = VIEW_privilege("Employee Disciplinary Action", orgztnID)
+            view_IDDiscip = VIEW_privilege("Employee Disciplinary Action", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDDiscip)
 
@@ -8595,10 +8595,10 @@ Public Class EmployeeForm
                 Dim getfID As Integer = Val(fID)
 
                 sp_employeedisciplinaryaction(z_datetime, _
-                                              z_User, _
+                                              user_row_id, _
                                               z_datetime, _
                                               z_OrganizationID, _
-                                              z_User, _
+                                              user_row_id, _
                                               Trim(cboAction.Text), _
                                               txtcomments.Text, _
                                               txtDesc.Text, _
@@ -8695,7 +8695,7 @@ Public Class EmployeeForm
             DateTimePicker2.Value = Format(CDate(dbnow), machineShortDateFormat)
             DateTimePicker1.Value = Format(CDate(dbnow), machineShortDateFormat)
 
-            view_IDEduc = VIEW_privilege("Employee Educational Background", orgztnID)
+            view_IDEduc = VIEW_privilege("Employee Educational Background", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDEduc)
 
@@ -8821,7 +8821,7 @@ Public Class EmployeeForm
 
             If btnNewEduc.Enabled = False Then
 
-                SP_EducBackGround(z_datetime, z_User, z_datetime, z_User, z_OrganizationID, dgvEmp.CurrentRow.Cells("RowID").Value, _
+                SP_EducBackGround(z_datetime, user_row_id, z_datetime, user_row_id, z_OrganizationID, dgvEmp.CurrentRow.Cells("RowID").Value, _
                                   dtpFrom.Value.ToString(machineShortDateFormat), dtpTo.Value.ToString(machineShortDateFormat), _
                                   txtCourse.Text, txtSchool.Text, txtDegree.Text, txtMinor.Text, cmbEducType.Text, txtRemarks.Text)
 
@@ -8951,7 +8951,7 @@ Public Class EmployeeForm
 
         If once = 0 Then
             once = 1
-            view_IDPrevEmp = VIEW_privilege("Employee Previous Employer", orgztnID)
+            view_IDPrevEmp = VIEW_privilege("Employee Previous Employer", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDPrevEmp)
 
@@ -9047,7 +9047,7 @@ Public Class EmployeeForm
 
                 SP_employeepreviousemployer(txtCompanyName.Text, txtTradeName.Text, z_OrganizationID, txtMainPhone.Text, txtFaxNo.Text, txtJobTitle.Text, _
                                        Format(CDate(dtpExfromto.Value), "yyyy-MM-dd") & "@" & Trim(dateExpTo), txtCompAddr.Text, txtContactName.Text, txtEmailAdd.Text, txtAltEmailAdd.Text, txtAltPhone.Text, _
-                                      txtUrl.Text, Trim(txtTinNo.Text), txtJobFunction.Text, z_datetime, z_User, z_datetime, z_User, txtOrganizationType.Text, _
+                                      txtUrl.Text, Trim(txtTinNo.Text), txtJobFunction.Text, z_datetime, user_row_id, z_datetime, user_row_id, txtOrganizationType.Text, _
                                       dgvEmp.CurrentRow.Cells("RowID").Value)
                 fillemployerlist()
 
@@ -9312,7 +9312,7 @@ Public Class EmployeeForm
                                         " UNION SELECT pos.RowID,pos.PositionName" &
                                         " FROM position pos" &
                                         " LEFT JOIN employee e ON e.PositionID!=pos.RowID AND e.RowID='" & sameEmpID & "'" &
-                                        " WHERE pos.OrganizationID='" & orgztnID & "';")
+                                        " WHERE pos.OrganizationID='" & org_rowid & "';")
 
             With n_SQLQueryToDatatable
 
@@ -9328,7 +9328,7 @@ Public Class EmployeeForm
             fillPositionFrom()
             'fillpromotions()
             'fillselectedpromotions()
-            view_IDPromot = VIEW_privilege("Employee Promotion", orgztnID)
+            view_IDPromot = VIEW_privilege("Employee Promotion", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDPromot)
 
@@ -9438,7 +9438,7 @@ Public Class EmployeeForm
                                     " UNION SELECT pos.RowID,pos.PositionName" &
                                     " FROM position pos" &
                                     " LEFT JOIN employee e ON e.PositionID!=pos.RowID AND e.RowID='" & sameEmpID & "'" &
-                                    " WHERE pos.OrganizationID='" & orgztnID & "';")
+                                    " WHERE pos.OrganizationID='" & org_rowid & "';")
 
         With n_SQLQueryToDatatable
 
@@ -9457,7 +9457,7 @@ Public Class EmployeeForm
                                     " FROM employeesalary es" &
                                     " INNER JOIN employee e ON e.RowID=es.EmployeeID" &
                                     " LEFT JOIN position pos ON pos.RowID=e.PositionID" &
-                                    " WHERE es.OrganizationID='" & orgztnID & "'" &
+                                    " WHERE es.OrganizationID='" & org_rowid & "'" &
                                     " AND es.EmployeeID='" & sameEmpID & "'" &
                                     " ORDER BY es.EffectiveDateFrom DESC" &
                                     " LIMIT 1;")
@@ -9494,7 +9494,7 @@ Public Class EmployeeForm
         txtempcurrbasicpay.Text =
             New ExecuteQuery("SELECT Salary" &
                                 " FROM employeesalary" &
-                                " WHERE OrganizationID='" & orgztnID & "'" &
+                                " WHERE OrganizationID='" & org_rowid & "'" &
                                 " AND EmployeeID='" & sameEmpID & "'" &
                                 " ORDER BY EffectiveDateFrom DESC" &
                                 " LIMIT 1;").Result
@@ -9523,10 +9523,10 @@ Public Class EmployeeForm
                 cmbto.Items.Clear()
                 'cmbfrom.Text
                 'If Trim(txtpositfrompromot.Text) = "" Then
-                fillCombobox("SELECT PositionName from Position Where OrganizationID = '" & orgztnID & _
-                             "' And RowID NOT IN (SELECT PositionID FROM employee WHERE OrganizationID=" & orgztnID & _
+                fillCombobox("SELECT PositionName from Position Where OrganizationID = '" & org_rowid & _
+                             "' And RowID NOT IN (SELECT PositionID FROM employee WHERE OrganizationID=" & org_rowid & _
                              " AND PositionID IS NOT NULL GROUP BY PositionID" & _
-                             " UNION SELECT PositionID FROM user WHERE OrganizationID='" & orgztnID & _
+                             " UNION SELECT PositionID FROM user WHERE OrganizationID='" & org_rowid & _
                              "' GROUP BY PositionID);", _
                              cmbto)
                 'Else
@@ -9540,7 +9540,7 @@ Public Class EmployeeForm
             Dim getsalarnearnow = EXECQUER("SELECT COALESCE(Salary,0)" & _
                                    " FROM employeesalary" & _
                                    " WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                   "' AND OrganizationID='" & orgztnID & _
+                                   "' AND OrganizationID='" & org_rowid & _
                                    "' AND EffectiveDateTo IS NULL" & _
                                    " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveDateFrom)" & _
                                    " LIMIT 1;")
@@ -9553,7 +9553,7 @@ Public Class EmployeeForm
                                    ",EffectiveDateTo" & _
                                    " FROM employeesalary" & _
                                    " WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                   "' AND OrganizationID='" & orgztnID & _
+                                   "' AND OrganizationID='" & org_rowid & _
                                    "' ORDER BY EffectiveDateFrom DESC;")
 
             If EffDateBeforCurrent.Rows.Count = 1 Then
@@ -9836,8 +9836,8 @@ Public Class EmployeeForm
 
         Dim paramValues(10)
 
-        paramValues(1) = orgztnID
-        paramValues(2) = z_User
+        paramValues(1) = org_rowid
+        paramValues(2) = user_row_id
         paramValues(3) = sameEmpID
         paramValues(4) = txtpositfrompromot.Text
         paramValues(5) = cmbto.Text
@@ -9981,11 +9981,11 @@ Public Class EmployeeForm
 
                 'getsID = EXECQUER("SELECT MAX(RowID) FROM employeesalary WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "' AND OrganizationID='" & orgztnID & "';")
 
-                Dim latest_salaryID = EXECQUER("SELECT RowID FROM employeesalary WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "' AND OrganizationID='" & orgztnID & "' AND EffectiveDateTo IS NULL LIMIT 1;")
+                Dim latest_salaryID = EXECQUER("SELECT RowID FROM employeesalary WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "' AND OrganizationID='" & org_rowid & "' AND EffectiveDateTo IS NULL LIMIT 1;")
 
                 getsID = Val(latest_salaryID)
 
-                sp_promotion(z_datetime, z_User, z_datetime, z_OrganizationID, z_User, dtpEffectivityDate.Value.ToString("yyyy-MM-dd"), txtpositfrompromot.Text, cmbto.Text, _
+                sp_promotion(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, dtpEffectivityDate.Value.ToString("yyyy-MM-dd"), txtpositfrompromot.Text, cmbto.Text, _
                              getsID, flg, dgvEmp.CurrentRow.Cells("RowID").Value, _
                              txtReasonPromot.Text, ValNoComma(txtbasicpay.Text))
 
@@ -10028,7 +10028,7 @@ Public Class EmployeeForm
                 End If
                 ', EmployeeSalaryID = '" & getsID & "'
                 DirectCommand("UPDATE employeepromotions SET Effectivedate = '" & dtpEffectivityDate.Value.ToString("yyyy-MM-dd") & "', " & _
-                              "LastUpd = '" & z_datetime & "', lastupdby = '" & z_User & "', PositionFrom = '" & cmbfrom.Text & "', PositionTo = '" & cmbto.Text & _
+                              "LastUpd = '" & z_datetime & "', lastupdby = '" & user_row_id & "', PositionFrom = '" & cmbfrom.Text & "', PositionTo = '" & cmbto.Text & _
                               "', CompensationChange = '" & flg & "', Reason = '" & txtReasonPromot.Text & "' Where rowid = '" & dgvPromotionList.CurrentRow.Cells(c_promotRowID.Index).Value & "'")
             Else
 
@@ -10039,7 +10039,7 @@ Public Class EmployeeForm
                     flg = 0
                 End If
 
-                DirectCommand("UPDATE employeepromotions SET Effectivedate = '" & dtpEffectivityDate.Value.ToString("yyyy-MM-dd") & "', LastUpd = '" & z_datetime & "', lastupdby = '" & z_User & "'," & _
+                DirectCommand("UPDATE employeepromotions SET Effectivedate = '" & dtpEffectivityDate.Value.ToString("yyyy-MM-dd") & "', LastUpd = '" & z_datetime & "', lastupdby = '" & user_row_id & "'," & _
                        "PositionFrom = '" & cmbfrom.Text & "', PositionTo = '" & cmbto.Text & _
                        "', CompensationChange = '" & flg & "', Reason = '" & txtReasonPromot.Text & "' Where rowid = '" & dgvPromotionList.CurrentRow.Cells(c_promotRowID.Index).Value & "'")
 
@@ -10361,9 +10361,9 @@ Public Class EmployeeForm
 
             OjbAssignNoContextMenu(cmbdedsched)
 
-            view_IDLoan = VIEW_privilege("Employee Loan Schedule", orgztnID)
+            view_IDLoan = VIEW_privilege("Employee Loan Schedule", org_rowid)
 
-            categloantypeID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & orgztnID & " AND CategoryName='" & "Loan Type" & "' LIMIT 1;")
+            categloantypeID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & org_rowid & " AND CategoryName='" & "Loan Type" & "' LIMIT 1;")
 
             If Val(categloantypeID) = 0 Then
                 categloantypeID = INSUPD_category(, "Loan Type")
@@ -10377,8 +10377,8 @@ Public Class EmployeeForm
                 cmbdedsched.Items.Add(strval)
             Next
 
-            enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categloantypeID & "' AND OrganizationID='" & orgztnID & "' AND PartNo IN ('Calamity', 'Cash Advance', 'PAGIBIG', 'PhilHealth', 'SSS')" & _
-                           " UNION SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categloantypeID & "' AND OrganizationID='" & orgztnID & "';",
+            enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categloantypeID & "' AND OrganizationID='" & org_rowid & "' AND PartNo IN ('Calamity', 'Cash Advance', 'PAGIBIG', 'PhilHealth', 'SSS')" & _
+                           " UNION SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categloantypeID & "' AND OrganizationID='" & org_rowid & "';",
                            loan_type)
 
             For Each strval In loan_type
@@ -10451,7 +10451,7 @@ Public Class EmployeeForm
 
         Dim n_ReadSQLProcedureToDatatable As _
             New ReadSQLProcedureToDatatable("VIEW_employeeloanschedule",
-                                            orgztnID,
+                                            org_rowid,
                                             dgvEmp.CurrentRow.Cells("RowID").Value)
 
         dt = n_ReadSQLProcedureToDatatable.ResultTable
@@ -10682,7 +10682,7 @@ Public Class EmployeeForm
                                                                  dgvEmp.CurrentRow.Cells("RowID").Value,
                                                                  cmbdedsched.Text.Trim)
 
-            SP_LoadSchedule(z_User, z_User, z_datetime, z_datetime, txtloannumber.Text.Trim, datefrom.Value.ToString("yyyy-MM-dd"), Format(CDate(LoanPayPeriodToDate), "yyyy-MM-dd"), _
+            SP_LoadSchedule(user_row_id, user_row_id, z_datetime, z_datetime, txtloannumber.Text.Trim, datefrom.Value.ToString("yyyy-MM-dd"), Format(CDate(LoanPayPeriodToDate), "yyyy-MM-dd"), _
                             z_OrganizationID, Val(empid), ValNoComma(txtloanamt.Text), Trim(cmbdedsched.Text), ValNoComma(txtbal.Text), ValNoComma(txtdedamt.Text), _
                             ValNoComma(txtnoofpayper.Text), txtRemarks.Text, cmbStatus.Text, ValNoComma(txtloaninterest.Text), loantypeID, _
                             cmbdedsched.Text) 'Val(txtdedpercent.Text)
@@ -10693,7 +10693,7 @@ Public Class EmployeeForm
             If dontUpdateLoan = 1 Then
                 Exit Sub
             End If
-            SP_UpdateLoadSchedule(z_User, z_datetime, txtloannumber.Text.Trim, datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"), _
+            SP_UpdateLoadSchedule(user_row_id, z_datetime, txtloannumber.Text.Trim, datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"), _
                                  Val(txtloanamt.Text.Replace(",", "")), "", Val(txtdedamt.Text.Replace(",", "")), _
                                  Val(txtnoofpayper.Text), Trim(TextBox6.Text), cmbStatus.Text, 0, dgvLoanList.CurrentRow.Cells(c_RowIDLoan.Index).Value, _
                                  loantypeID, _
@@ -10936,7 +10936,7 @@ Public Class EmployeeForm
             Dim n_ReadSQLFunction As _
                 New ReadSQLFunction("CHECK_LoanNumberExistence",
                                     "returnvalue",
-                                    orgztnID,
+                                    org_rowid,
                                     customEmpID,
                                     txtloannumber.Text.Trim)
 
@@ -11403,7 +11403,7 @@ Public Class EmployeeForm
         Static once As SByte = 0
         If once = 0 Then
             once = 1
-            view_IDHisto = VIEW_privilege("Employee Loan History", orgztnID)
+            view_IDHisto = VIEW_privilege("Employee Loan History", org_rowid)
 
             AddHandler dgvloanhisto.SelectionChanged, AddressOf dgvloanhisto_SelectionChanged
 
@@ -11487,7 +11487,7 @@ Public Class EmployeeForm
         params(1, 0) = "ehist_OrganizationID"
 
         params(0, 1) = EmployeeRowID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
 
         EXEC_VIEW_PROCEDURE(params, _
                             "VIEW_employeeloanhistory", _
@@ -11507,9 +11507,9 @@ Public Class EmployeeForm
 
             enlistToCboBox("SELECT p.PartNo" & _
                            " FROM product p" & _
-                           " INNER JOIN category c ON c.OrganizationID='" & orgztnID & "' AND c.CategoryName='Loan Type'" & _
+                           " INNER JOIN category c ON c.OrganizationID='" & org_rowid & "' AND c.CategoryName='Loan Type'" & _
                            " WHERE p.CategoryID=c.RowID" & _
-                           " AND p.OrganizationID=" & orgztnID & ";",
+                           " AND p.OrganizationID=" & org_rowid & ";",
                            cbohistoloantype)
 
             cbohistoloantype.Enabled = True
@@ -11535,7 +11535,7 @@ Public Class EmployeeForm
                                      ",RowID" & _
                                      " FROM employeeloanhistory" & _
                                      " WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "'" & _
-                                     " AND OrganizationID='" & orgztnID & "'" & _
+                                     " AND OrganizationID='" & org_rowid & "'" & _
                                      " AND Comments='" & cbohistoloantype.Text & "'" & _
                                      " ORDER BY DeductionDate DESC;")
 
@@ -11594,7 +11594,7 @@ Public Class EmployeeForm
             dptFromSal.Value = Format(CDate(dbnow), machineShortDateFormat)
             dtpToSal.Value = Format(CDate(dbnow), machineShortDateFormat)
 
-            view_IDSal = VIEW_privilege("Employee Salary", orgztnID)
+            view_IDSal = VIEW_privilege("Employee Salary", org_rowid)
 
             enlistTheLists("SELECT DisplayValue FROM listofval WHERE `Type`='Government deduction schedule' AND Active='Yes' ORDER BY OrderBy;", govdeducsched)
 
@@ -11646,7 +11646,7 @@ Public Class EmployeeForm
             dattabl_deductsched = retAsDatTbl("SELECT IF(COALESCE(PhilhealthDeductionSchedule,'" & govdeducsched.Item(0).ToString & "') = '" & govdeducsched.Item(0).ToString & "',1,0) 'PhilhealthDeductionSchedule'" & _
                                               ",IF(COALESCE(SSSDeductionSchedule,'" & govdeducsched.Item(0).ToString & "') = '" & govdeducsched.Item(0).ToString & "',1,0) 'SSSDeductionSchedule'" & _
                                               ",IF(COALESCE(PagIbigDeductionSchedule,'" & govdeducsched.Item(0).ToString & "') = '" & govdeducsched.Item(0).ToString & "',1,0) 'PagIbigDeductionSchedule'" & _
-                                              " FROM organization WHERE RowID=" & orgztnID & ";")
+                                              " FROM organization WHERE RowID=" & org_rowid & ";")
 
             For Each drown As DataRow In dattabl_deductsched.Rows
                 isorgPHHdeductsched = CSByte(drown("PhilhealthDeductionSchedule"))
@@ -11709,7 +11709,7 @@ Public Class EmployeeForm
                                         " INNER JOIN employee e ON e.RowID=es.EmployeeID" &
                                         " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
                                         " LEFT JOIN position pos ON pos.RowID=e.PositionID" &
-                                        " WHERE es.OrganizationID='" & orgztnID & "'" &
+                                        " WHERE es.OrganizationID='" & org_rowid & "'" &
                                         " AND es.EmployeeID='" & sameEmpID & "'" &
                                         " ORDER BY es.EffectiveDateFrom DESC" &
                                         " LIMIT 1;")
@@ -11777,7 +11777,7 @@ Public Class EmployeeForm
                 Dim emplatestdate As Object = EXECQUER("SELECT IF(EffectiveDateFrom > COALESCE(EffectiveDateTo,CURRENT_DATE()),EffectiveDateFrom,COALESCE(EffectiveDateTo,CURRENT_DATE())) 'FinalLatesDate'" & _
                                                        " FROM employeesalary" & _
                                                        " WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "'" & _
-                                                       " AND OrganizationID=" & orgztnID & _
+                                                       " AND OrganizationID=" & org_rowid & _
                                                        " ORDER BY EffectiveDateFrom ASC LIMIT 1;")
 
                 dptFromSal.Value = CDate(emplatestdate).AddDays(1)
@@ -11792,7 +11792,7 @@ Public Class EmployeeForm
                                    ",EffectiveDateTo" & _
                                    " FROM employeesalary" & _
                                    " WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                   "' AND OrganizationID='" & orgztnID & _
+                                   "' AND OrganizationID='" & org_rowid & _
                                    "' ORDER BY EffectiveDateFrom DESC;")
 
             If EffDateBeforCurrent.Rows.Count = 1 Then
@@ -12046,13 +12046,13 @@ Public Class EmployeeForm
 
                 Dim n_ExecuteQuery As _
                     New ExecuteQuery("UPDATE employeesalary es" &
-                                     " INNER JOIN (SELECT * FROM employeesalary WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "' AND OrganizationID=" & orgztnID & " ORDER BY EffectiveDateFrom DESC LIMIT 1,1) esa ON esa.RowID > 0" &
+                                     " INNER JOIN (SELECT * FROM employeesalary WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "' AND OrganizationID=" & org_rowid & " ORDER BY EffectiveDateFrom DESC LIMIT 1,1) esa ON esa.RowID > 0" &
                                      " SET es.EffectiveDateTo=NULL" &
                                      ",es.LastUpd=CURRENT_TIMESTAMP()" &
-                                     ",es.LastUpdBy='" & z_User & "'" &
+                                     ",es.LastUpdBy='" & user_row_id & "'" &
                                      " WHERE es.RowID=esa.RowID" &
-                                     " AND es.OrganizationID='" & orgztnID & "';" &
-                                     "UPDATE employeesalary SET LastUpdBy='" & z_User & "'  WHERE RowID='" & dgvemployeesalary.CurrentRow.Cells("c_RowIDSal").Value & "';")
+                                     " AND es.OrganizationID='" & org_rowid & "';" &
+                                     "UPDATE employeesalary SET LastUpdBy='" & user_row_id & "'  WHERE RowID='" & dgvemployeesalary.CurrentRow.Cells("c_RowIDSal").Value & "';")
 
                 n_ExecuteQuery = New ExecuteQuery("DELETE FROM employeesalary WHERE RowID = '" & dgvemployeesalary.CurrentRow.Cells("c_RowIDSal").Value & "';" &
                                                   "ALTER TABLE employeesalary AUTO_INCREMENT = 0;")
@@ -12278,7 +12278,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                                     " LEFT JOIN organization d ON d.RowID=e.OrganizationID" &
                                                     " LEFT JOIN agency ag ON ag.RowID=e.AgencyID" &
                                                     " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
-                                                    " WHERE e.OrganizationID='" & orgztnID & "'" &
+                                                    " WHERE e.OrganizationID='" & org_rowid & "'" &
                                                     " AND e.RowID='" & If(sameEmpID < 0, String.Empty, sameEmpID) & "'" &
                                                     " LIMIT 1;").ResultTable
 
@@ -13235,7 +13235,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         param(1, 0) = "esal_EmployeeID"
         param(2, 0) = "esal_Date"
 
-        param(0, 1) = orgztnID
+        param(0, 1) = org_rowid
         param(1, 1) = Employee_ID
         param(2, 1) = DBNull.Value
 
@@ -13282,9 +13282,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
         params(0, 1) = If(esal_RowID = Nothing, DBNull.Value, esal_RowID)
         params(1, 1) = esal_EmployeeID
-        params(2, 1) = z_User 'CreatedBy
-        params(3, 1) = z_User 'LastUpdBy
-        params(4, 1) = orgztnID
+        params(2, 1) = user_row_id 'CreatedBy
+        params(3, 1) = user_row_id 'LastUpdBy
+        params(4, 1) = org_rowid
         params(5, 1) = esal_BasicPay
         params(6, 1) = esal_Salary
         params(7, 1) = esal_NoofDependents
@@ -13314,8 +13314,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         Dim n_readsqlfunction As _
             New ReadSQLFunction("TRIGG_UPD_employeeallowance",
                                     "returnvalue",
-                                orgztnID,
-                                z_User,
+                                org_rowid,
+                                user_row_id,
                                 esal_EmployeeID,
                                 params(10, 1),
                                 params(11, 1))
@@ -13427,7 +13427,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             linkPrev.Text = "← " & (Val(paypyearnow) - 1)
             linkNxt.Text = (Val(paypyearnow) + 1) & " →"
 
-            viewIDPaySlip = VIEW_privilege("Employee Pay Slip", orgztnID)
+            viewIDPaySlip = VIEW_privilege("Employee Pay Slip", org_rowid)
 
             AddHandler dgvpayper.SelectionChanged, AddressOf dgvpayper_SelectionChanged
 
@@ -13872,7 +13872,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(0, 0) = "payp_OrganizationID"
         params(1, 0) = "param_Date"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = If(param_Date = Nothing, DBNull.Value, param_Date & "-01-01")
 
         EXEC_VIEW_PROCEDURE(params, _
@@ -13890,7 +13890,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(1, 0) = "paystb_EmployeeID"
         params(2, 0) = "paystb_PayPeriodID"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = EmpID
         params(2, 1) = PayPeriodID
 
@@ -13924,7 +13924,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(2, 0) = "esal_Date"
 
         params(0, 1) = esal_EmployeeID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = esal_Date
 
         EXEC_VIEW_PROCEDURE(params, _
@@ -13944,7 +13944,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(2, 0) = "etent_Date"
         params(3, 0) = "etent_DateTo"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = etent_EmployeeID
         params(2, 1) = etent_Date
         params(3, 1) = etent_DateTo
@@ -13975,7 +13975,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                 .Parameters.Add("absentcount", MySqlDbType.Decimal)
 
                 .Parameters.AddWithValue("EmpID", EmpID)
-                .Parameters.AddWithValue("OrgID", orgztnID)
+                .Parameters.AddWithValue("OrgID", org_rowid)
                 .Parameters.AddWithValue("EmpStartDate", Format(CDate(EmpStartDate), "yyyy-MM-dd"))
                 .Parameters.AddWithValue("payperiodDateFrom", Format(CDate(payperiodDateFrom), "yyyy-MM-dd"))
                 .Parameters.AddWithValue("payperiodDateTo", Format(CDate(payperiodDateTo), "yyyy-MM-dd"))
@@ -14029,13 +14029,13 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                         ",IF(Country IS NULL,'',CONCAT(', ',Country))" & _
                                         ",IF(State IS NULL,'',CONCAT(', ',State)))" & _
                                         " FROM address a LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID" & _
-                                        " WHERE o.RowID=" & orgztnID & ";")
+                                        " WHERE o.RowID=" & org_rowid & ";")
 
                 Dim contactdetails = EXECQUER("SELECT GROUP_CONCAT(COALESCE(MainPhone,'')" & _
                                         ",',',COALESCE(FaxNumber,'')" & _
                                         ",',',COALESCE(EmailAddress,'')" & _
                                         ",',',COALESCE(TINNo,''))" & _
-                                        " FROM organization WHERE RowID=" & orgztnID & ";")
+                                        " FROM organization WHERE RowID=" & org_rowid & ";")
 
                 Dim contactdet = Split(contactdetails, ",")
 
@@ -14305,7 +14305,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                       " LEFT JOIN product p ON p.RowID = pi.ProductID" & _
                                       " LEFT JOIN paystub ps ON ps.RowID = pi.PayStubID" & _
                                       " WHERE p.Category='Leave Type'" & _
-                                      " AND p.OrganizationID=" & orgztnID & _
+                                      " AND p.OrganizationID=" & org_rowid & _
                                       " AND ps.PayPeriodID='" & paypRowID & "';") 'this is for leave balances
 
             Dim rptdattab As New DataTable
@@ -14378,7 +14378,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
             employee_dattab = retAsDatTbl("SELECT e.* FROM" & _
                                           " employee e LEFT JOIN employeesalary esal ON e.RowID=esal.EmployeeID" & _
-                                          " WHERE e.OrganizationID=" & orgztnID & _
+                                          " WHERE e.OrganizationID=" & org_rowid & _
                                           " AND '" & paypTo & "' BETWEEN esal.EffectiveDateFrom AND COALESCE(esal.EffectiveDateTo,'" & paypTo & "')" & _
                                           " GROUP BY e.RowID" & _
                                           " ORDER BY e.RowID DESC;")
@@ -14799,7 +14799,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                         ",IF(Country IS NULL,'',CONCAT(', ',Country))" & _
                                         ",IF(State IS NULL,'',CONCAT(', ',State)))" & _
                                         " FROM address a LEFT JOIN organization o ON o.PrimaryAddressID=a.RowID" & _
-                                        " WHERE o.RowID=" & orgztnID & ";")
+                                        " WHERE o.RowID=" & org_rowid & ";")
 
                 objText.Text = orgaddress
 
@@ -14811,7 +14811,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                         ",',',COALESCE(FaxNumber,'')" & _
                                         ",',',COALESCE(EmailAddress,'')" & _
                                         ",',',COALESCE(TINNo,''))" & _
-                                        " FROM organization WHERE RowID=" & orgztnID & ";")
+                                        " FROM organization WHERE RowID=" & org_rowid & ";")
 
                 Dim contactdet = Split(contactdetails, ",")
 
@@ -14875,7 +14875,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         param(4, 0) = "numweekdays"
 
         param(0, 1) = eallow_EmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
         param(2, 1) = datefrom
         param(3, 1) = If(dateto = Nothing, DBNull.Value, dateto)
         param(4, 1) = Val(numofweekdays)
@@ -14898,7 +14898,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(3, 0) = "effectivedateto"
 
         params(0, 1) = eloan_EmployeeID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = datefrom
         params(3, 1) = dateto
 
@@ -14920,7 +14920,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(3, 0) = "effectivedateto"
 
         params(0, 1) = ebon_EmployeeID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = datefrom
         params(3, 1) = dateto
 
@@ -14963,7 +14963,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             cboallowtype.ContextMenu = New ContextMenu
 
             '48
-            categallowID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & orgztnID & " AND CategoryName='" & "Allowance Type" & "' LIMIT 1;")
+            categallowID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & org_rowid & " AND CategoryName='" & "Allowance Type" & "' LIMIT 1;")
 
             If Val(categallowID) = 0 Then
                 categallowID = INSUPD_category(, "Allowance Type")
@@ -14976,7 +14976,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                            " FROM product p" & _
                            " INNER JOIN category c ON c.RowID=p.CategoryID" & _
                            " WHERE c.CategoryName='Allowance Type'" & _
-                           " AND p.OrganizationID='" & orgztnID & "';", _
+                           " AND p.OrganizationID='" & org_rowid & "';", _
                            allowance_type) 'cboallowtype
 
             For Each strval In allowance_type
@@ -14993,7 +14993,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
             AddHandler dgvempallowance.SelectionChanged, AddressOf dgvempallowance_SelectionChanged
 
-            view_IDAllow = VIEW_privilege("Employee Allowance", orgztnID)
+            view_IDAllow = VIEW_privilege("Employee Allowance", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDAllow)
 
@@ -15170,10 +15170,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(9, 0) = "eall_Amount"
 
         params(0, 1) = If(eall_RowID = Nothing, DBNull.Value, eall_RowID)
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = eall_EmployeeID
-        params(3, 1) = z_User
-        params(4, 1) = z_User
+        params(3, 1) = user_row_id
+        params(4, 1) = user_row_id
         params(5, 1) = eall_ProductID
         params(6, 1) = eall_AllowanceFrequency
         params(7, 1) = Format(CDate(eall_EffectiveStartDate), "yyyy-MM-dd")
@@ -15870,7 +15870,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         param(1, 0) = "eallow_OrganizationID"
 
         param(0, 1) = eallow_EmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
 
         EXEC_VIEW_PROCEDURE(param, _
                            "VIEW_employeeallowance", _
@@ -16009,7 +16009,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             enlistToCboBox("SELECT DisplayValue FROM listofval WHERE Type='Employee Overtime Status' AND Active='Yes' ORDER BY OrderBy;", _
                            cboStatusEmpOT)
 
-            view_IDEmpOT = VIEW_privilege("Employee Overtime", orgztnID)
+            view_IDEmpOT = VIEW_privilege("Employee Overtime", org_rowid)
 
             AddHandler dgvempOT.SelectionChanged, AddressOf dgvEmpOT_SelectionChanged
 
@@ -16080,9 +16080,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         param(3, 0) = "user_rowid"
 
         param(0, 1) = EmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
         param(2, 1) = pagenumberOT
-        param(3, 1) = z_User
+        param(3, 1) = user_row_id
 
         EXEC_VIEW_PROCEDURE(param, _
                            "VIEW_employeeOT", _
@@ -16236,9 +16236,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         And r.Cells("eot_StartDate").Value <> Nothing Then ' And r.Cells("eot_EndDate").Value <> Nothing
 
                         param(0, 1) = DBNull.Value
-                        param(1, 1) = orgztnID
-                        param(2, 1) = z_User 'CreatedBy
-                        param(3, 1) = z_User 'LastUpdBy
+                        param(1, 1) = org_rowid
+                        param(2, 1) = user_row_id 'CreatedBy
+                        param(3, 1) = user_row_id 'LastUpdBy
                         param(4, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                         param(5, 1) = If(r.Cells("eot_Type").Value = Nothing, DBNull.Value, r.Cells("eot_Type").Value) 'EmpOT type
                         param(6, 1) = MilitTime(r.Cells("eot_StartTime").Value) 'If(r.Cells("Column3").Value = Nothing, DBNull.Value, r.Cells("Column3").Value) 'Start time
@@ -16272,9 +16272,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         And r.Cells("eot_StartDate").Value <> Nothing And r.Cells("eot_EndDate").Value <> Nothing Then
 
                         param(0, 1) = r.Cells("eot_RowID").Value
-                        param(1, 1) = orgztnID
-                        param(2, 1) = z_User 'CreatedBy
-                        param(3, 1) = z_User 'LastUpdBy
+                        param(1, 1) = org_rowid
+                        param(2, 1) = user_row_id 'CreatedBy
+                        param(3, 1) = user_row_id 'LastUpdBy
                         param(4, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                         param(5, 1) = If(r.Cells("eot_Type").Value = Nothing, DBNull.Value, r.Cells("eot_Type").Value) 'EmpOT type
                         param(6, 1) = MilitTime(r.Cells("eot_StartTime").Value) 'If(r.Cells("Column3").Value = Nothing, DBNull.Value, r.Cells("Column3").Value) 'Start time
@@ -16496,7 +16496,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                     Dim sql_result =
                         New SQL(str_quer,
-                                New Object() {z_User,
+                                New Object() {user_row_id,
                                               .Cells("eot_RowID").Value}).GetFoundRow
 
                     Dim bool_result As Boolean =
@@ -16619,7 +16619,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                                     " WHERE DATE BETWEEN '" & _from & "'" & _
                                                     " AND '" & _to & "'" & _
                                                     " AND EmployeeID=" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                                    " AND OrganizationID=" & orgztnID & ");")
+                                                    " AND OrganizationID=" & org_rowid & ");")
 
                         If invalidEmpOT = 0 Then
                             invalidEmpOT = EXECQUER("SELECT EXISTS(SELECT RowID" & _
@@ -16627,7 +16627,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                                     " WHERE " & _
                                                     " ('" & _from & "' IN (OTStartDate,OTEndDate) OR '" & _to & "' IN (OTStartDate,OTEndDate))" & _
                                                     " AND EmployeeID=" & dgvEmp.CurrentRow.Cells("RowID").Value & _
-                                                    " AND OrganizationID=" & orgztnID & ");")
+                                                    " AND OrganizationID=" & org_rowid & ");")
                         End If
                     End If
 
@@ -17819,7 +17819,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             enlistToCboBox("SELECT DisplayValue FROM listofval WHERE Type='Employee Overtime Status' AND Active='Yes' ORDER BY OrderBy;", _
                            cboOBFstatus)
 
-            view_IDOBF = VIEW_privilege("Official Business filing", orgztnID)
+            view_IDOBF = VIEW_privilege("Official Business filing", org_rowid)
 
             AddHandler dgvOBF.SelectionChanged, AddressOf dgvOBF_SelectionChanged
 
@@ -17881,8 +17881,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(2, 0) = "user_rowid"
 
         params(0, 1) = Employee_ID
-        params(1, 1) = orgztnID
-        params(2, 1) = z_User
+        params(1, 1) = org_rowid
+        params(2, 1) = user_row_id
 
         EXEC_VIEW_PROCEDURE(params, _
                             "VIEW_employeeoffbusi", _
@@ -18029,9 +18029,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     'End If
 
                     param(0, 1) = DBNull.Value
-                    param(1, 1) = orgztnID
-                    param(2, 1) = z_User 'CreatedBy
-                    param(3, 1) = z_User 'LastUpdBy
+                    param(1, 1) = org_rowid
+                    param(2, 1) = user_row_id 'CreatedBy
+                    param(3, 1) = user_row_id 'LastUpdBy
                     param(4, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                     param(5, 1) = If(r.Cells("obf_Type").Value = Nothing, DBNull.Value, r.Cells("obf_Type").Value) 'EmpOT type
                     param(6, 1) = MilitTime(r.Cells("obf_StartTime").Value) 'If(r.Cells("Column3").Value = Nothing, DBNull.Value, r.Cells("Column3").Value) 'Start time
@@ -18065,9 +18065,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     'End If
 
                     param(0, 1) = r.Cells("obf_RowID").Value
-                    param(1, 1) = orgztnID
-                    param(2, 1) = z_User 'CreatedBy
-                    param(3, 1) = z_User 'LastUpdBy
+                    param(1, 1) = org_rowid
+                    param(2, 1) = user_row_id 'CreatedBy
+                    param(3, 1) = user_row_id 'LastUpdBy
                     param(4, 1) = dgvEmp.CurrentRow.Cells("RowID").Value
                     param(5, 1) = If(r.Cells("obf_Type").Value = Nothing, DBNull.Value, r.Cells("obf_Type").Value) 'EmpOT type
                     param(6, 1) = MilitTime(r.Cells("obf_StartTime").Value) 'If(r.Cells("Column3").Value = Nothing, DBNull.Value, r.Cells("Column3").Value) 'Start time
@@ -18262,7 +18262,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                     Dim sql_result =
                         New SQL(str_quer,
-                                New Object() {z_User,
+                                New Object() {user_row_id,
                                               .Cells("obf_RowID").Value}).GetFoundRow
 
                     Dim bool_result As Boolean =
@@ -19225,13 +19225,13 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
             cbobonfreq.ContextMenu = New ContextMenu
 
-            categBonusID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & orgztnID & " AND CategoryName='" & "Bonus" & "' LIMIT 1;")
+            categBonusID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & org_rowid & " AND CategoryName='" & "Bonus" & "' LIMIT 1;")
 
             If Val(categBonusID) = 0 Then
                 categBonusID = INSUPD_category(, "Bonus")
             End If
 
-            enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categBonusID & "' AND OrganizationID=" & orgztnID & ";", _
+            enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categBonusID & "' AND OrganizationID=" & org_rowid & ";", _
                            bonus_type) 'cboallowtype
 
             For Each strval In bonus_type
@@ -19251,7 +19251,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
             AddHandler dgvempbon.SelectionChanged, AddressOf dgvempbon_SelectionChanged
 
-            view_IDBon = VIEW_privilege("Employee Bonus", orgztnID)
+            view_IDBon = VIEW_privilege("Employee Bonus", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDBon)
 
@@ -19310,7 +19310,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         param(1, 0) = "ebon_OrganizationID"
 
         param(0, 1) = bon_EmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
 
         EXEC_VIEW_PROCEDURE(param, _
                            "VIEW_employeebonus", _
@@ -19340,10 +19340,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(9, 0) = "bon_BonusAmount"
 
         params(0, 1) = If(bon_RowID = Nothing, DBNull.Value, bon_RowID)
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = bon_EmployeeID
-        params(3, 1) = z_User
-        params(4, 1) = z_User
+        params(3, 1) = user_row_id
+        params(4, 1) = user_row_id
         params(5, 1) = bon_ProductID
         params(6, 1) = bon_AllowanceFrequency
         params(7, 1) = Format(CDate(bon_EffectiveStartDate), "yyyy-MM-dd")
@@ -20136,7 +20136,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
             dgvempatta.Focus()
 
-            view_IDAttach = VIEW_privilege("Employee Attachment", orgztnID)
+            view_IDAttach = VIEW_privilege("Employee Attachment", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & view_IDAttach)
 
@@ -20335,8 +20335,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
         params(0, 1) = If(eatta_RowID = Nothing, DBNull.Value, eatta_RowID)
         params(1, 1) = eatta_EmployeeID
-        params(2, 1) = z_User
-        params(3, 1) = z_User
+        params(2, 1) = user_row_id
+        params(3, 1) = user_row_id
         params(4, 1) = eatta_Type
         params(5, 1) = Trim(eatta_FileName)
         params(6, 1) = Trim(eatta_FileType)
@@ -20698,7 +20698,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         If once = 0 Then
             once = 1
 
-            view_IDDependents = VIEW_privilege("Employee Dependents", orgztnID)
+            view_IDDependents = VIEW_privilege("Employee Dependents", org_rowid)
 
         End If
 
@@ -21036,8 +21036,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         End Try
 
                         INSUPD_employee(DBNull.Value,
-                                        z_User,
-                                        orgztnID,
+                                        user_row_id,
+                                        org_rowid,
                                         drow(8),
                                         drow(2),
                                         drow(3),
@@ -21232,7 +21232,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                                         " FROM employee e" &
                                                         " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
                                                         " WHERE e.EmployeeID='" & emp_RowID & "'" &
-                                                        " AND e.OrganizationID='" & orgztnID & "';").ResultTable
+                                                        " AND e.OrganizationID='" & org_rowid & "';").ResultTable
 
                             For Each erow As DataRow In dtrowrecord.Rows
                                 catchEmpRow = erow.ItemArray()
@@ -21247,7 +21247,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                                 EmpRowID = catchEmpRow(0)
 
-                                EmpNumDepen = EXECQUER("SELECT COUNT(RowID) FROM employeedependents WHERE ParentEmployeeID='" & EmpRowID & "' AND OrganizationID=" & orgztnID & " AND ActiveFlag='Y';")
+                                EmpNumDepen = EXECQUER("SELECT COUNT(RowID) FROM employeedependents WHERE ParentEmployeeID='" & EmpRowID & "' AND OrganizationID=" & org_rowid & " AND ActiveFlag='Y';")
 
                                 EmpMaritStat = catchEmpRow(1)
 
@@ -21651,10 +21651,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(26, 0) = "emp_IsDoneByImporting"
 
         params(0, 1) = If(emp_RowID = Nothing, DBNull.Value, emp_RowID)
-        params(1, 1) = z_User
-        params(2, 1) = z_User
+        params(1, 1) = user_row_id
+        params(2, 1) = user_row_id
         params(3, 1) = 0
-        params(4, 1) = orgztnID
+        params(4, 1) = org_rowid
         params(5, 1) = If(IsDBNull(emp_Salutation), "", Trim(emp_Salutation))
         params(6, 1) = If(IsDBNull(emp_FirstName), "", Trim(emp_FirstName))
         params(7, 1) = If(IsDBNull(emp_MiddleName), "", Trim(emp_MiddleName))
@@ -21666,7 +21666,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             params(10, 1) = DBNull.Value
         Else
 
-            Dim Emp_RID = EXECQUER("SELECT RowID FROM employee WHERE EmployeeID='" & emp_ParentEmployeeID & "' AND OrganizationID=" & orgztnID & " LIMIT 1;")
+            Dim Emp_RID = EXECQUER("SELECT RowID FROM employee WHERE EmployeeID='" & emp_ParentEmployeeID & "' AND OrganizationID=" & org_rowid & " LIMIT 1;")
 
             Dim ParentEmpRID = emp_ParentEmployeeID
 
@@ -21753,9 +21753,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                 .Parameters.AddWithValue("pos_RowID", If(pos_RowID = Nothing, DBNull.Value, pos_RowID))
                 .Parameters.AddWithValue("pos_PositionName", Trim(pos_PositionName))
-                .Parameters.AddWithValue("pos_CreatedBy", z_User)
-                .Parameters.AddWithValue("pos_OrganizationID", orgztnID)
-                .Parameters.AddWithValue("pos_LastUpdBy", z_User)
+                .Parameters.AddWithValue("pos_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("pos_OrganizationID", org_rowid)
+                .Parameters.AddWithValue("pos_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("pos_ParentPositionID", If(pos_ParentPositionID = Nothing, DBNull.Value, pos_ParentPositionID))
                 .Parameters.AddWithValue("pos_DivisionId", If(pos_DivisionId = Nothing, DBNull.Value, pos_DivisionId))
 
@@ -21946,7 +21946,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                      ", '" & myValue.ToString.Trim & "'" & _
                      ", 'Yes'" & _
                      ", '" & myValue.ToString.Trim & "'" & _
-                     ", '" & z_User & "'" & _
+                     ", '" & user_row_id & "'" & _
                      ", '1');")
 
             cbobank.Items.Add(myValue.ToString.Trim)
@@ -22064,7 +22064,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
             'End If
 
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 10 FROM employeeovertime WHERE OrganizationID='" & orgztnID & "' AND EmployeeID='" & publicEmpRowID & "';"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 10 FROM employeeovertime WHERE OrganizationID='" & org_rowid & "' AND EmployeeID='" & publicEmpRowID & "';"))
 
             Dim remender = lastpage Mod 1
 
@@ -22315,7 +22315,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                                   " INNER JOIN product p ON p.PartNo='Additional VL' AND p.OrganizationID=ps.OrganizationID" &
                                                   " INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.ProductID=p.RowID" &
                                                   " WHERE ps.EmployeeID='" & publicEmpRowID & "'" &
-                                                  " AND ps.OrganizationID='" & orgztnID & "'" &
+                                                  " AND ps.OrganizationID='" & org_rowid & "'" &
                                                   " ORDER BY ps.PayFromDate DESC,ps.PayToDate DESC" &
                                                   " LIMIT 1;").Result)
         Dim n_SQLQueryToDatatable As _
@@ -22405,7 +22405,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         Finally
             If view_name.Length > 0 Then
 
-                Dim view_row_id = VIEW_privilege(view_name, orgztnID)
+                Dim view_row_id = VIEW_privilege(view_name, org_rowid)
 
                 Dim formuserprivilege = position_view_table.Select("ViewID = " & view_row_id)
 

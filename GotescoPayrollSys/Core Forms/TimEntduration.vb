@@ -28,7 +28,7 @@ Public Class TimEntduration
                           " INNER JOIN `position` pos ON pos.RowID=e.PositionID",
                           " INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.OrganizationID=e.OrganizationID",
                           " INNER JOIN division dd ON dd.RowID=dv.ParentDivisionID AND dd.RowID != dv.RowID AND dd.OrganizationID=e.OrganizationID",
-                          " WHERE e.OrganizationID=", orgztnID,
+                          " WHERE e.OrganizationID=", org_rowid,
                           " GROUP BY dv.RowID",
                           " HAVING COUNT(e.RowID) > 0;")
 
@@ -89,7 +89,7 @@ Public Class TimEntduration
 
         Dim sel_query = ""
 
-        Dim hasAnEmployee = EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE OrganizationID=" & orgztnID & " LIMIT 1);")
+        Dim hasAnEmployee = EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE OrganizationID=" & org_rowid & " LIMIT 1);")
 
         If hasAnEmployee = 1 Then
             sel_query = "SELECT pp.PayFrequencyType FROM payfrequency pp INNER JOIN employee e ON e.PayFrequencyID=pp.RowID GROUP BY pp.RowID;"
@@ -278,7 +278,7 @@ Public Class TimEntduration
         Dim dt_payp As New DataTable
 
         dt_payp = New ReadSQLProcedureToDatatable("VIEW_payperiod",
-                                                  orgztnID,
+                                                  org_rowid,
                                                   If(param_Date = Nothing, Year(Now) & "-01-01", Format(CDate(param_Date), "yyyy-MM-dd")),
                                                   PayFreqType).ResultTable
 
@@ -637,7 +637,7 @@ Public Class TimEntduration
                                      " FROM employeeshift esh" & _
                                      " LEFT JOIN shift sh ON sh.RowID=esh.ShiftID" & _
                                      " WHERE esh.EmployeeID=" & .dgvEmployi.CurrentRow.Cells("RowID").Value & _
-                                     " AND esh.OrganizationID=" & orgztnID & _
+                                     " AND esh.OrganizationID=" & org_rowid & _
                                      " AND CAST('" & year_payp & "-" & month & "-" & i_dateDay & "' AS DATE)" & _
                                      " BETWEEN COALESCE(esh.EffectiveFrom,DATE_ADD(DATE('" & year_payp & "-" & month & "-" & i_dateDay & "'), INTERVAL -1 MONTH))" & _
                                      " AND COALESCE(esh.EffectiveTo,DATE_ADD(DATE('" & year_payp & "-" & month & "-" & i_dateDay & "'), INTERVAL 1 MONTH));")
@@ -707,7 +707,7 @@ Public Class TimEntduration
                                                                " FROM employeetimeentrydetails" & _
                                                                " WHERE EmployeeID=" & .dgvEmployi.CurrentRow.Cells("RowID").Value & _
                                                                " AND DATE BETWEEN DATE('" & dateFrom & "') AND DATE('" & dateTo & "')" & _
-                                                               " AND OrganizationID=" & orgztnID & _
+                                                               " AND OrganizationID=" & org_rowid & _
                                                                " ORDER BY RowID ASC;") '" ORDER BY DATE_FORMAT(Created,'%H') ASC;")
                                     Else
                                         dt_etent = Nothing
@@ -853,7 +853,7 @@ Public Class TimEntduration
                                     If .dgvEmployi.RowCount <> 0 Then
                                         '.dgvEmployi.Focus()
 
-                                        Dim nightshiftstart = EXECQUER("SELECT COALESCE(NightShiftTimeFrom,'') 'NightShiftTimeFrom' FROM organization WHERE RowID=" & orgztnID & ";")
+                                        Dim nightshiftstart = EXECQUER("SELECT COALESCE(NightShiftTimeFrom,'') 'NightShiftTimeFrom' FROM organization WHERE RowID=" & org_rowid & ";")
 
                                         nightshiftstart = If(Trim(nightshiftstart) = "", "20:00:00", nightshiftstart)
 
@@ -1037,7 +1037,7 @@ Public Class TimEntduration
                                       ",e.StartDate" & _
                                       " FROM employee e" & _
                                       " LEFT JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" & _
-                                      " WHERE e.OrganizationID=" & orgztnID & _
+                                      " WHERE e.OrganizationID=" & org_rowid & _
                                       " AND pf.PayFrequencyType='" & quer_empPayFreq & _
                                       "' GROUP BY e.RowID" & _
                                       " ORDER BY RowID;")
@@ -1049,7 +1049,7 @@ Public Class TimEntduration
         Dim blankTimeOut = _
         EXECQUER("SELECT COUNT(RowID)" & _
                  " FROM employeetimeentrydetails" & _
-                 " WHERE OrganizationID=" & orgztnID & "" & _
+                 " WHERE OrganizationID=" & org_rowid & "" & _
                  " AND EmployeeID IS NOT NULL" &
                  " AND `Date`" & _
                  " BETWEEN '" & Format(CDate(selectdayFrom), "yyyy-MM-dd") & "'" & _
@@ -1083,7 +1083,7 @@ Public Class TimEntduration
             Dim timelogs = _
         EXECQUER("SELECT EXISTS(SELECT RowID" & _
                  " FROM employeetimeentrydetails" & _
-                 " WHERE OrganizationID=" & orgztnID & "" & _
+                 " WHERE OrganizationID=" & org_rowid & "" & _
                  " AND EmployeeID IS NOT NULL" &
                  " AND `Date`" & _
                  " BETWEEN '" & Format(CDate(selectdayFrom), "yyyy-MM-dd") & "'" & _
@@ -1300,15 +1300,15 @@ Public Class TimEntduration
         '                    parram_arrays)
 
         Dim parram_arrays =
-            New Object() {z_User,
-                          orgztnID,
+            New Object() {user_row_id,
+                          org_rowid,
                           If(DivisionID = 0, DBNull.Value, DivisionID),
                           dayFrom,
                           dayTo}
 
         'String.Concat("SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid)",
         Dim str_query As String =
-            String.Concat("SELECT CONCAT('SELECT GENERATE_employeetimeentry(', e.RowID, ', ', e.OrganizationID, ', \'', d.DateValue, '\', ", z_User, ");') `Result`",
+            String.Concat("SELECT CONCAT('SELECT GENERATE_employeetimeentry(', e.RowID, ', ', e.OrganizationID, ', \'', d.DateValue, '\', ", user_row_id, ");') `Result`",
                           ", ?u_rowid `UserRowID`",
                           " FROM dates d",
                           " INNER JOIN employee e ON e.OrganizationID=?og_rowid AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')",
@@ -1487,13 +1487,13 @@ Public Class TimEntduration
 
                 .Parameters.AddWithValue("etent_EmployeeID", etent_EmployeeID)
 
-                .Parameters.AddWithValue("etent_OrganizationID", orgztnID)
+                .Parameters.AddWithValue("etent_OrganizationID", org_rowid)
 
                 .Parameters.AddWithValue("etent_Date", etent_Date)
 
-                .Parameters.AddWithValue("etent_CreatedBy", z_User)
+                .Parameters.AddWithValue("etent_CreatedBy", user_row_id)
 
-                .Parameters.AddWithValue("etent_LastUpdBy", z_User)
+                .Parameters.AddWithValue("etent_LastUpdBy", user_row_id)
 
                 .Parameters.AddWithValue("EmployeeStartDate", employee_startdate)
 
@@ -1596,7 +1596,7 @@ Public Class TimEntduration
         '                                       ", '" & quer_empPayFreq & "', " & DivisionID & ");", 999999)
 
         Dim sql As New SQL("CALL RESET_employeeleave_duplicate(?og_rowid, ?day_from, ?day_to, ?pay_freq, ?div_rowid);",
-                           New Object() {orgztnID,
+                           New Object() {org_rowid,
                                          dayFrom,
                                          dayTo,
                                          quer_empPayFreq,
@@ -1611,7 +1611,7 @@ Public Class TimEntduration
             bgworkRECOMPUTE_employeeleave.ReportProgress(25, "")
 
             Dim sql1 As New SQL("CALL RECOMPUTE_employeeleave(?og_rowid, ?day_from, ?day_to, ?div_rowid);",
-                                New Object() {orgztnID,
+                                New Object() {org_rowid,
                                               dayFrom,
                                               dayTo,
                                               If(DivisionID = 0, DBNull.Value, DivisionID)})

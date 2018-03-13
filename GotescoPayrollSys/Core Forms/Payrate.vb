@@ -67,7 +67,7 @@ Public Class Payrate
 
         addhandlr(sender, e)
 
-        view_ID = VIEW_privilege("Pay rate", orgztnID)
+        view_ID = VIEW_privilege("Pay rate", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -146,7 +146,7 @@ Public Class Payrate
                                  ",COALESCE(RestDayOvertimeRate,1) 'RestDayOvertimeRate'" & _
                                  " FROM payrate prate" & _
                                  " WHERE DATE_FORMAT(prate.Date,'%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')" & _
-                                 " AND prate.OrganizationID='" & orgztnID & "'" & _
+                                 " AND prate.OrganizationID='" & org_rowid & "'" & _
                                  " ORDER BY prate.Date;")
             'MONTH(prate.Date)=MONTH(NOW()) AND YEAR(prate.Date)=YEAR(NOW());
             'DISTINCT(DATE_FORMAT(DATE,'%m-%d-%Y')),
@@ -202,7 +202,7 @@ Public Class Payrate
                                  ", COALESCE(RestDayOvertimeRate,1) 'RestDayOvertimeRate'" & _
                                  " FROM payrate prate" & _
                                  " WHERE DATE_FORMAT(prate.Date,'%Y-%m')=DATE_FORMAT('" & querdate & "','%Y-%m')" & _
-                                 " AND prate.OrganizationID='" & orgztnID & "'" & _
+                                 " AND prate.OrganizationID='" & org_rowid & "'" & _
                                  " ORDER BY prate.Date;")
             'MONTH(prate.Date)=MONTH('" & querdate & "') AND YEAR(prate.Date)=YEAR('" & querdate & "');
             'DISTINCT(DATE_FORMAT(DATE,'%m-%d-%Y')),
@@ -926,9 +926,9 @@ Public Class Payrate
         params(12, 0) = "prate_RestDayOvertimeRate"
 
         params(0, 1) = prate_RowID 'If(prate_RowID = Nothing, DBNull.Value, prate_RowID)
-        params(1, 1) = orgztnID
-        params(2, 1) = z_User 'CreatedBy
-        params(3, 1) = z_User 'LastUpdBy
+        params(1, 1) = org_rowid
+        params(2, 1) = user_row_id 'CreatedBy
+        params(3, 1) = user_row_id 'LastUpdBy
         params(4, 1) = prate_Date
         params(5, 1) = If(prate_PayType = Nothing, "Regular Day", prate_PayType)
         params(6, 1) = If(prate_Description = Nothing, "", prate_Description)

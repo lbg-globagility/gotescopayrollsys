@@ -71,7 +71,7 @@ Public Class PhiHealth
 
         u_nem = EXECQUER(USERNameStrPropr & 1)
 
-        view_ID = VIEW_privilege("PhilHealth Contribution Table", orgztnID)
+        view_ID = VIEW_privilege("PhilHealth Contribution Table", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -242,7 +242,7 @@ Public Class PhiHealth
                     ",EmployeeShare=" & Val(.Cells("Column6").Value) & _
                     ",EmployerShare=" & Val(.Cells("Column7").Value) & _
                     ",LastUpd=CURRENT_TIMESTAMP()" & _
-                    ",LastUpdBy=" & z_User & _
+                    ",LastUpdBy=" & user_row_id & _
                     " WHERE RowID='" & _rID & "'")
 
                     .Cells("Column11").Value = _now
@@ -336,7 +336,7 @@ Public Class PhiHealth
                 dgvPhHlth.EndEdit(True)
                 With dgvPhHlth.CurrentRow
                     If .Cells("Column1").Value <> "" Then
-                        
+
                         INS_audittrail("SalaryRangeFrom", _
                                        .Cells("Column1").Value, _
                                        .Cells("Column3").Value, _
@@ -475,8 +475,8 @@ Public Class PhiHealth
         params(9, 0) = "phh_SalaryBracket"
 
         params(0, 1) = If(phh_RowID = Nothing, DBNull.Value, phh_RowID)
-        params(1, 1) = z_User
-        params(2, 1) = z_User
+        params(1, 1) = user_row_id
+        params(2, 1) = user_row_id
         params(3, 1) = Val(phh_SalaryRangeFrom)
         params(4, 1) = Val(phh_SalaryRangeTo)
         params(5, 1) = Val(phh_SalaryBase)
@@ -631,11 +631,11 @@ Public Class PhiHealth
 
                 '.Parameters.Add(returnName, MySql_DbType)
 
-                .Parameters.AddWithValue("au_CreatedBy", z_User)
+                .Parameters.AddWithValue("au_CreatedBy", user_row_id)
 
-                .Parameters.AddWithValue("au_LastUpdBy", z_User)
+                .Parameters.AddWithValue("au_LastUpdBy", user_row_id)
 
-                .Parameters.AddWithValue("au_OrganizationID", orgztnID)
+                .Parameters.AddWithValue("au_OrganizationID", org_rowid)
 
                 .Parameters.AddWithValue("au_ViewID", view_ID)
 

@@ -412,9 +412,9 @@ Public Class LoginForm
 
             Dim user As String = getStringItem("Select RowID From user where UserID = '" & EncrypedData(UsernameTextBox.Text) & "' And Password = '" & EncrypedData(PasswordTextBox.Text) & "';")
             ' And OrganizationID = '" & z_OrganizationID & "'
-            z_User = Val(user)
+            user_row_id = Val(user)
 
-            Dim pName As String = getStringItem("select p.PositionName from position p inner join user u on u.RowID = '" & z_User & "' where p.RowID = u.PositionID;")
+            Dim pName As String = getStringItem("select p.PositionName from position p inner join user u on u.RowID = '" & user_row_id & "' where p.RowID = u.PositionID;")
             'getStringItem("select p.PositionName from position p inner join user u on p.RowID = u.PositionID where u.OrganizationID = '" & z_OrganizationID & "' and u.UserID = '" & EncrypedData(UsernameTextBox.Text) & "' and u.Password = '" & EncrypedData(PasswordTextBox.Text) & "'")
             z_postName = pName
             z_CompanyName = cmbBranchName.Text
@@ -441,7 +441,7 @@ Public Class LoginForm
 
             Dim dt As New DataTable
             'dt = getDataTableForSQL("Select * From User u Inner join Organization o on u.OrganizationID = o.RowID Where u.UserID = '" & EncrypedData(UsernameTextBox.Text.Trim).ToString & "' And u.Password = '" & EncrypedData(PasswordTextBox.Text.Trim).ToString & "' And o.Name = '" & cmbBranchName.Text & "'")
-            dt = getDataTableForSQL("Select * From User u Inner join Organization o on u.OrganizationID = o.RowID Where u.RowID = '" & z_User & "';")
+            dt = getDataTableForSQL("Select * From User u Inner join Organization o on u.OrganizationID = o.RowID Where u.RowID = '" & user_row_id & "';")
 
             Dim pos As String = pName ' getStringItem("select pos.PositionName From Position pos inner join user u on pos.RowID = u.PositionID Where u.UserID = '" & z_User & "'")
             'getStringItem("select pos.PositionName From Position pos inner join user u on pos.RowID = u.PositionID Where u.UserID = '" & EncrypedData(UsernameTextBox.Text) & "'")
@@ -463,11 +463,11 @@ Public Class LoginForm
 
                     If passn2 = passn And usname = usname1 Then
 
-                        If Val(z_User) = 0 Then
+                        If Val(user_row_id) = 0 Then
 
                         Else
 
-                            Dim userFNameLName = EXECQUER("SELECT CONCAT(COALESCE(FirstName,'.'),',',COALESCE(LastName,'.')) FROM user WHERE RowID=" & z_User & ";")
+                            Dim userFNameLName = EXECQUER("SELECT CONCAT(COALESCE(FirstName,'.'),',',COALESCE(LastName,'.')) FROM user WHERE RowID=" & user_row_id & ";")
 
                             Dim splitFNameLName = Split(userFNameLName, ",")
 
@@ -497,19 +497,19 @@ Public Class LoginForm
                         If cmbBranchName.SelectedIndex <> -1 Then
                             orgNam = cmbBranchName.SelectedItem 'Text'SelectedItem
 
-                            orgztnID = EXECQUER(SYS_ORGZTN_ID & orgNam & "'")
+                            org_rowid = EXECQUER(SYS_ORGZTN_ID & orgNam & "'")
 
                             numofdaysthisyear = EXECQUER("SELECT DAYOFYEAR(LAST_DAY(CONCAT(YEAR(CURRENT_DATE()),'-12-01')));")
 
-                            If freq <> orgztnID Then
-                                freq = orgztnID
+                            If freq <> org_rowid Then
+                                freq = org_rowid
 
                             End If
 
                             position_view_table = retAsDatTbl("SELECT *" & _
                                                               " FROM position_view" & _
-                                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & z_User & ")" & _
-                                                              " AND OrganizationID='" & orgztnID & "';")
+                                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" & _
+                                                              " AND OrganizationID='" & org_rowid & "';")
 
                             Dim i = position_view_table.Rows.Count
 

@@ -278,6 +278,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
     <Compile Include="Core Forms\user_predefines\OutputText.vb" />
+    <Compile Include="Core Forms\user_predefines\TimeInTimeOutParser.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\EmployeeCollection.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\IEmployee.vb" />
     <Compile Include="General Forms\AddListOfValueForm.Designer.vb">

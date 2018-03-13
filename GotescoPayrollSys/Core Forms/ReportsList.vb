@@ -35,8 +35,8 @@ Public Class ReportsList
         Dim str_quer As String =
             String.Concat("SELECT REPLACE(l.DisplayValue, '\'', '') `DisplayValue`",
                           " FROM listofval l",
-                          " INNER JOIN `user` u ON u.RowID=", z_User,
-                          " INNER JOIN position_view pv ON pv.PositionID = u.PositionID AND pv.OrganizationID = ", orgztnID, " AND pv.ReadOnly = 'Y'",
+                          " INNER JOIN `user` u ON u.RowID=", user_row_id,
+                          " INNER JOIN position_view pv ON pv.PositionID = u.PositionID AND pv.OrganizationID = ", org_rowid, " AND pv.ReadOnly = 'Y'",
                           " INNER JOIN `view` v ON v.RowID=pv.ViewID AND v.ViewName=l.DisplayValue",
                           " WHERE l.`Type` = 'Report List'",
                           " AND l.Active = 'Yes';")

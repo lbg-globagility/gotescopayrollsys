@@ -22,7 +22,7 @@ Public Class ThirteenthMonthPayReportProvider
 
             Dim sql_print_13thmonth_pay_detailedsummary As _
                 New SQL("CALL RPT_13thmonthpayDetailed(?og_rowid, ?date_from, ?date_to);",
-                        New Object() {orgztnID, date_from, date_to})
+                        New Object() {org_rowid, date_from, date_to})
 
             Try
 

@@ -55,7 +55,7 @@ Public Class SelectFromEmployee
         Static samesearchquery As String = Nothing
 
         If SearchQuery = Nothing Then
-            empTable = retAsDatTbl(loadEmpQuery & " WHERE emp.OrganizationID=" & orgztnID & " ORDER BY emp.RowID DESC LIMIT " & pagination & ",100;")
+            empTable = retAsDatTbl(loadEmpQuery & " WHERE emp.OrganizationID=" & org_rowid & " ORDER BY emp.RowID DESC LIMIT " & pagination & ",100;")
 
             searchString = Nothing
             samesearchquery = Nothing
@@ -66,9 +66,9 @@ Public Class SelectFromEmployee
 
                 pagination = 0
 
-                empTable = retAsDatTbl(loadEmpQuery & " WHERE " & SearchQuery & " AND emp.OrganizationID=" & orgztnID & " ORDER BY emp.RowID DESC LIMIT " & pagination & ",100;")
+                empTable = retAsDatTbl(loadEmpQuery & " WHERE " & SearchQuery & " AND emp.OrganizationID=" & org_rowid & " ORDER BY emp.RowID DESC LIMIT " & pagination & ",100;")
 
-                samesearchquery = loadEmpQuery & " WHERE " & SearchQuery & " emp.OrganizationID=" & orgztnID & " ORDER BY emp.RowID DESC LIMIT "
+                samesearchquery = loadEmpQuery & " WHERE " & SearchQuery & " emp.OrganizationID=" & org_rowid & " ORDER BY emp.RowID DESC LIMIT "
             Else
 
                 empTable = retAsDatTbl(samesearchquery & pagination & ",100;")
@@ -660,10 +660,10 @@ Public Class SelectFromEmployee
         ElseIf sender_linklabel.Name = "First" Then
             pagination = 0
         ElseIf sender_linklabel.Name = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM employee WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM employee WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 1
-            
+
             pagination = (lastpage - remender) * 100
 
             If pagination - 100 < 100 Then
@@ -718,7 +718,7 @@ Public Class SelectFromEmployee
                              ",LastName" & _
                              ",Surname" & _
                              " FROM employee" & _
-                             " WHERE OrganizationID='" & orgztnID & "'" & _
+                             " WHERE OrganizationID='" & org_rowid & "'" & _
                              " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
 
         If dattbl IsNot Nothing Then
@@ -731,7 +731,7 @@ Public Class SelectFromEmployee
                     autcoEmpID.Items.Add(New AutoCompleteEntry(CStr(drow("EmployeeID")), StringToArray(CStr(drow("EmployeeID")))))
 
                 End If
-                
+
             Next
 
             dattbl.Dispose()

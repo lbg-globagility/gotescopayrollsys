@@ -126,7 +126,7 @@
         Dim str_searching As Object = tsSearch.Text.Trim
 
         Dim param_vals() =
-            New Object() {orgztnID,
+            New Object() {org_rowid,
                           str_searching,
                           0,
                           Integer.MaxValue,

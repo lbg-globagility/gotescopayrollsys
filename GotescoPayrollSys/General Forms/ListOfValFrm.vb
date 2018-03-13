@@ -606,17 +606,17 @@ Public Class ListOfValFrm
                     If MessageBox.Show("Would you like to save the changes on this page? ", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                         getListOfValTypeID(cboLOVType.Text)
                         If listofvaltype = 0 Then
-                            I_ListOfVal(nowDate, z_User, nowDate, z_User, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, "N", "Y", DBNull.Value)
+                            I_ListOfVal(nowDate, user_row_id, nowDate, user_row_id, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, "N", "Y", DBNull.Value)
 
                         Else
                             getListOfValDetails(txtDisplayValue.Text, cboLOVType.Text)
                             If listofvaldisplayvalue = 0 Then
-                                I_ListOfVal(nowDate, z_User, nowDate, z_User, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, "N", "Y", DBNull.Value)
+                                I_ListOfVal(nowDate, user_row_id, nowDate, user_row_id, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, "N", "Y", DBNull.Value)
                             Else
                                 If listofvalsystemaccntflg = "Y" Then
-                                    U_ListOfVal(listofvaldisplayvalue, nowDate, z_User, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, listofvalsystemaccntflg, listofvaldisplayaccntflg, DBNull.Value)
+                                    U_ListOfVal(listofvaldisplayvalue, nowDate, user_row_id, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, listofvalsystemaccntflg, listofvaldisplayaccntflg, DBNull.Value)
                                 Else
-                                    U_ListOfVal(listofvaldisplayvalue, nowDate, z_User, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, "N", "Y", DBNull.Value)
+                                    U_ListOfVal(listofvaldisplayvalue, nowDate, user_row_id, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, "N", "Y", DBNull.Value)
                                 End If
                             End If
                         End If
@@ -644,14 +644,14 @@ Public Class ListOfValFrm
                                     If dgUnknown.Rows(a).Cells("lv_systemaccountflg").Value <> "Y" Then
                                         getListOfValTypeID(dgUnknown.Rows(a).Cells("lv_type").Value)
                                         If listofvaltype = 0 Then
-                                            I_ListOfVal(nowDate, z_User, nowDate, z_User, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_type").Value, dgUnknown.Rows(a).Cells("lv_parentvalue").Value, dgUnknown.Rows(a).Cells("lv_status").Value, dgUnknown.Rows(a).Cells("lv_comments").Value, "N", "Y", DBNull.Value)
+                                            I_ListOfVal(nowDate, user_row_id, nowDate, user_row_id, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_type").Value, dgUnknown.Rows(a).Cells("lv_parentvalue").Value, dgUnknown.Rows(a).Cells("lv_status").Value, dgUnknown.Rows(a).Cells("lv_comments").Value, "N", "Y", DBNull.Value)
                                         Else
                                             getListOfValDetails(dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_type").Value)
                                             If listofvaldisplayvalue = 0 Then
-                                                I_ListOfVal(nowDate, z_User, nowDate, z_User, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_type").Value, dgUnknown.Rows(a).Cells("lv_parentvalue").Value, dgUnknown.Rows(a).Cells("lv_status").Value, dgUnknown.Rows(a).Cells("lv_comments").Value, "N", "Y", DBNull.Value)
+                                                I_ListOfVal(nowDate, user_row_id, nowDate, user_row_id, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_type").Value, dgUnknown.Rows(a).Cells("lv_parentvalue").Value, dgUnknown.Rows(a).Cells("lv_status").Value, dgUnknown.Rows(a).Cells("lv_comments").Value, "N", "Y", DBNull.Value)
                                             Else
                                                 If listofvalsystemaccntflg <> "Y" Then
-                                                    U_ListOfVal(listofvaldisplayvalue, nowDate, z_User, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_type").Value, dgUnknown.Rows(a).Cells("lv_parentvalue").Value, dgUnknown.Rows(a).Cells("lv_status").Value, dgUnknown.Rows(a).Cells("lv_comments").Value, "N", "Y", DBNull.Value)
+                                                    U_ListOfVal(listofvaldisplayvalue, nowDate, user_row_id, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_displayvalue").Value, dgUnknown.Rows(a).Cells("lv_type").Value, dgUnknown.Rows(a).Cells("lv_parentvalue").Value, dgUnknown.Rows(a).Cells("lv_status").Value, dgUnknown.Rows(a).Cells("lv_comments").Value, "N", "Y", DBNull.Value)
                                                 End If
                                             End If
                                         End If

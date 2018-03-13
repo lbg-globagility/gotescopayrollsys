@@ -12,6 +12,9 @@ Public Class EmpTimeDetail
 
     Dim view_ID As Object
 
+    Private str_query_insupd_timeentrylogs As String =
+        "SELECT INSUPD_timeentrylogs(?og_id, ?emp_unique_key, ?timestamp_log, ?max_importid);"
+
     Private Sub Form8_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'dbconn()
 
@@ -50,7 +53,7 @@ Public Class EmpTimeDetail
 
         AddHandler dgvetentd.SelectionChanged, AddressOf dgvetentd_SelectionChanged
 
-        view_ID = VIEW_privilege("Employee Time Entry logs", orgztnID)
+        view_ID = VIEW_privilege("Employee Time Entry logs", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -129,7 +132,7 @@ Public Class EmpTimeDetail
         'End If
         dgvetentd.Rows.Clear()
         Dim n_SQLQueryToDatatable As _
-            New SQLQueryToDatatable("CALL `VIEW_timeentrydetails`('" & orgztnID & "', '" & pagination & "');")
+            New SQLQueryToDatatable("CALL `VIEW_timeentrydetails`('" & org_rowid & "', '" & pagination & "');")
         Dim catchdt As New DataTable
         catchdt = n_SQLQueryToDatatable.ResultTable
         For Each drow As DataRow In catchdt.Rows
@@ -149,7 +152,7 @@ Public Class EmpTimeDetail
         param(2, 0) = "etd_EmployeeNumber"
 
         param(0, 1) = date_created
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
         param(2, 1) = EmployeeNumber
 
         EXEC_VIEW_PROCEDURE(param, _
@@ -186,8 +189,9 @@ Public Class EmpTimeDetail
                 Panel1.Enabled = False
 
                 ToolStripProgressBar1.Visible = True
-
-                bgworkImport.RunWorkerAsync()
+                
+                'bgworkImport.RunWorkerAsync()
+                bgworkTypicalImport.RunWorkerAsync()
 
             Else
 
@@ -380,7 +384,7 @@ Public Class EmpTimeDetail
     Sub fillDTTimeLog(Optional pathoffile As String = Nothing)
 
         'With dtTimeLogs.Columns
-        
+
         '.Add("EmpID", Type.GetType("System.String"))
         '.Add("TimeLog", Type.GetType("System.String"))
         '.Add("DateLog", Type.GetType("System.String"))
@@ -467,9 +471,9 @@ Public Class EmpTimeDetail
             For Each strval As String In listofstr
                 Try
                     'returnval = CDate(strval)
-                    
+
                     If strval.Length = 10 Then
-                        
+
                         If strval.Contains("-") Then
                             returnval = Format(CDate(strval), "yyyy-MM-dd")
                             Exit For
@@ -503,7 +507,7 @@ Public Class EmpTimeDetail
                     Else
                         Continue For
                     End If
-                    
+
                 Catch ex As Exception
                     returnval = Nothing
                     Continue For
@@ -748,10 +752,10 @@ Public Class EmpTimeDetail
                 'MsgBox(rowid.ToString)
 
                 .Parameters.AddWithValue("etentd_RowID", If(etentd_RowID = Nothing, DBNull.Value, etentd_RowID))
-                .Parameters.AddWithValue("etentd_OrganizationID", orgztnID)
-                .Parameters.AddWithValue("etentd_CreatedBy", z_User)
+                .Parameters.AddWithValue("etentd_OrganizationID", org_rowid)
+                .Parameters.AddWithValue("etentd_CreatedBy", user_row_id)
                 .Parameters.AddWithValue("etentd_Created", etentd_Created)
-                .Parameters.AddWithValue("etentd_LastUpdBy", z_User)
+                .Parameters.AddWithValue("etentd_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("etentd_EmployeeID", If(etentd_EmployeeID = Nothing, DBNull.Value, etentd_EmployeeID))
 
                 If IsDBNull(etentd_TimeIn) Then
@@ -1137,7 +1141,7 @@ Public Class EmpTimeDetail
 
         Next
 
-        EXECQUER("UPDATE employeetimeentrydetails SET TimeScheduleType='' WHERE TimeScheduleType IS NULL AND OrganizationID='" & orgztnID & "';")
+        EXECQUER("UPDATE employeetimeentrydetails SET TimeScheduleType='' WHERE TimeScheduleType IS NULL AND OrganizationID='" & org_rowid & "';")
 
         'For Each drow As DataRow In dattabLogs.Rows
         '    'drow("logging").ToString
@@ -1484,10 +1488,10 @@ Public Class EmpTimeDetail
         ElseIf sendrname = "Nxt" Then
             pagination += 100
         ElseIf sendrname = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(DISTINCT(Created)) / 100 FROM employeetimeentrydetails WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(DISTINCT(Created)) / 100 FROM employeetimeentrydetails WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 1
-            
+
             pagination = (lastpage - remender) * 100
 
             If pagination - 100 < 100 Then
@@ -1989,6 +1993,140 @@ Public Class EmpTimeDetail
     Protected Overrides Sub OnDeactivate(e As EventArgs)
         'Me.KeyPreview = False
         MyBase.OnDeactivate(e)
+    End Sub
+
+    Private Function ImportConventionalFormatTimeLogs() As Integer
+
+        Dim return_value As Integer = 0
+
+        Dim max_importid = New SQL(String.Concat("SELECT MAX(ImportID) FROM timeentrylogs WHERE OrganizationID=", org_rowid, ";")).GetFoundRow
+        max_importid = (Convert.ToDouble(max_importid) + 1)
+
+        Dim emp_unique_key, datetime_attended As Object
+
+        Dim parser = New TimeInTimeOutParser()
+        Dim timeEntries = parser.ParseConventionalTimeLogs(thefilepath)
+
+        Dim i = 1
+
+        Dim line_content_count As Integer = timeEntries.Count
+
+        Console.WriteLine(line_content_count)
+
+        For Each timeEntry In timeEntries
+
+            emp_unique_key =
+                timeEntry.EmployeUniqueKey
+
+            datetime_attended =
+                timeEntry.DateAndTime
+
+            Dim param_values =
+                New Object() {org_rowid,
+                              emp_unique_key,
+                              Convert.ToString(datetime_attended),
+                              max_importid}
+
+            Dim sql As New SQL(str_query_insupd_timeentrylogs,
+                               param_values)
+            sql.ExecuteQuery()
+
+            If sql.HasError Then
+
+                MsgBox(sql.ErrorMessage)
+
+            End If
+
+            return_value = ((i / line_content_count) * 100)
+
+            bgworkTypicalImport.
+                ReportProgress(return_value)
+
+            i += 1
+
+        Next
+
+        'Return return_value
+        Return max_importid
+
+    End Function
+
+    Private Sub bgworkTypicalImport_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgworkTypicalImport.DoWork
+
+        Dim import_id =
+            ImportConventionalFormatTimeLogs()
+
+        Dim param_values =
+            New Object() {org_rowid,
+                          user_row_id,
+                          DBNull.Value,
+                          DBNull.Value,
+                          import_id}
+
+        Dim sql As New SQL("CALL BULK_INSUPD_employeetimeentrydetails(?og_id, ?user_id, ?from_date, ?to_date, ?id_import);",
+                           param_values)
+        sql.ExecuteQuery()
+
+        If sql.HasError Then
+            Throw sql.ErrorException
+        End If
+
+    End Sub
+
+    Private Sub bgworkTypicalImport_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgworkTypicalImport.ProgressChanged
+
+        ToolStripProgressBar1.Value = e.ProgressPercentage
+
+    End Sub
+
+    Private Sub bgworkTypicalImport_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgworkTypicalImport.RunWorkerCompleted
+
+        Dim balloon_x = lblforballoon.Location.X
+
+        If e.Error IsNot Nothing Then
+            Try
+                Throw e.Error
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            Finally
+                tsbtnNew.Enabled = True
+            End Try
+
+        ElseIf e.Cancelled Then
+
+            MessageBox.Show("Background work cancelled.")
+
+            tsbtnNew.Enabled = True
+
+        Else
+
+            loademployeetimeentrydetails(0)
+
+            InfoBalloon(, , lblforballoon, , , 1)
+
+            InfoBalloon(IO.Path.GetFileName(thefilepath) & " imported successfully.", _
+                      "Importing file finished", lblforballoon, 0, -69)
+
+        End If
+
+        ToolStripProgressBar1.Visible = False
+
+        ToolStripProgressBar1.Value = 0
+
+        progress_value = 0
+
+        tsbtnNew.Enabled = True
+
+        Panel1.Enabled = True
+
+        backgroundworking = 0
+
+        dgvetentd_SelectionChanged(sender, e)
+
+        AddHandler dgvetentd.SelectionChanged, AddressOf dgvetentd_SelectionChanged
+
+        lblforballoon.Location = New Point(balloon_x, lblforballoon.Location.Y)
+
     End Sub
 
 End Class

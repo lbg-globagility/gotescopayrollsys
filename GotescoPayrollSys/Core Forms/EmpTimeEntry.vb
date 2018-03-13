@@ -54,7 +54,7 @@ Public Class EmpTimeEntry
             "LEFT JOIN position pos ON e.PositionID=pos.RowID " & _
             "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " & _
             "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents " & _
-            "WHERE e.OrganizationID=" & orgztnID
+            "WHERE e.OrganizationID=" & org_rowid
 
     Public Simple As New AutoCompleteStringCollection
 
@@ -143,7 +143,7 @@ Public Class EmpTimeEntry
         'BackgroundWorker1.RunWorkerAsync
         txtshftEffFrom.Focus()
 
-        view_ID = VIEW_privilege("Employee Time Entry", orgztnID)
+        view_ID = VIEW_privilege("Employee Time Entry", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -215,7 +215,7 @@ Public Class EmpTimeEntry
                                  ",COALESCE(prate.RestDayOvertimeRate,1) 'RestDayOvertimeRate'" & _
                                  ",DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date'" & _
                                  " FROM payrate prate" & _
-                                 " WHERE prate.OrganizationID='" & orgztnID & "'" & _
+                                 " WHERE prate.OrganizationID='" & org_rowid & "'" & _
                                  " AND MONTH(prate.Date)=MONTH(NOW())" & _
                                  " AND YEAR(prate.Date)=YEAR(NOW())" & _
                                  " AND DAY(prate.Date)<=(SELECT IF(DAY(NOW())<=15,15,DAY(LAST_DAY(NOW()))));")
@@ -260,9 +260,9 @@ Public Class EmpTimeEntry
             'Label1.Text = Format(CDate(prate_date), "MMMM dd, yyyy")
 
             If curr_dd - 15 <= 0 Then
-                dattab = retAsDatTbl("SELECT prate.RowID,DAY(prate.Date) 'dateday', DAYOFWEEK(prate.Date) 'dayofwk', DAY(LAST_DAY(prate.Date)) 'maxday',COALESCE(prate.PayType,'') 'PayType',COALESCE(prate.Description,'') 'Description',COALESCE(prate.PayRate,1) 'PayRate',COALESCE(prate.OvertimeRate,1) 'OvertimeRate',COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate',COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate',COALESCE(prate.RestDayRate,1) 'RestDayRate',COALESCE(prate.RestDayOvertimeRate,1) 'RestDayOvertimeRate',DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date' FROM payrate prate WHERE MONTH(prate.Date)=MONTH('" & querdate & "') AND YEAR(prate.Date)=YEAR('" & querdate & "') AND DAY(prate.Date)<=15 AND prate.OrganizationID='" & orgztnID & "';")
+                dattab = retAsDatTbl("SELECT prate.RowID,DAY(prate.Date) 'dateday', DAYOFWEEK(prate.Date) 'dayofwk', DAY(LAST_DAY(prate.Date)) 'maxday',COALESCE(prate.PayType,'') 'PayType',COALESCE(prate.Description,'') 'Description',COALESCE(prate.PayRate,1) 'PayRate',COALESCE(prate.OvertimeRate,1) 'OvertimeRate',COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate',COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate',COALESCE(prate.RestDayRate,1) 'RestDayRate',COALESCE(prate.RestDayOvertimeRate,1) 'RestDayOvertimeRate',DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date' FROM payrate prate WHERE MONTH(prate.Date)=MONTH('" & querdate & "') AND YEAR(prate.Date)=YEAR('" & querdate & "') AND DAY(prate.Date)<=15 AND prate.OrganizationID='" & org_rowid & "';")
             Else
-                dattab = retAsDatTbl("SELECT prate.RowID,DAY(prate.Date) 'dateday', DAYOFWEEK(prate.Date) 'dayofwk', DAY(LAST_DAY(prate.Date)) 'maxday',COALESCE(prate.PayType,'') 'PayType',COALESCE(prate.Description,'') 'Description',COALESCE(prate.PayRate,1) 'PayRate',COALESCE(prate.OvertimeRate,1) 'OvertimeRate',COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate',COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate',COALESCE(prate.RestDayRate,1) 'RestDayRate',COALESCE(prate.RestDayOvertimeRate,1) 'RestDayOvertimeRate',DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date' FROM payrate prate WHERE MONTH(prate.Date)=MONTH('" & querdate & "') AND YEAR(prate.Date)=YEAR('" & querdate & "') AND DAY(prate.Date)>15 AND prate.OrganizationID='" & orgztnID & "';")
+                dattab = retAsDatTbl("SELECT prate.RowID,DAY(prate.Date) 'dateday', DAYOFWEEK(prate.Date) 'dayofwk', DAY(LAST_DAY(prate.Date)) 'maxday',COALESCE(prate.PayType,'') 'PayType',COALESCE(prate.Description,'') 'Description',COALESCE(prate.PayRate,1) 'PayRate',COALESCE(prate.OvertimeRate,1) 'OvertimeRate',COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate',COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate',COALESCE(prate.RestDayRate,1) 'RestDayRate',COALESCE(prate.RestDayOvertimeRate,1) 'RestDayOvertimeRate',DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date' FROM payrate prate WHERE MONTH(prate.Date)=MONTH('" & querdate & "') AND YEAR(prate.Date)=YEAR('" & querdate & "') AND DAY(prate.Date)>15 AND prate.OrganizationID='" & org_rowid & "';")
             End If
             'dattab = retAsDatTbl("SELECT prate.RowID,DAY(prate.Date) 'dateday', DAYOFWEEK(prate.Date) 'dayofwk', DAY(LAST_DAY(prate.Date)) 'maxday',COALESCE(prate.PayType,'') 'PayType',COALESCE(prate.Description,'') 'Description',COALESCE(prate.PayRate,1) 'PayRate',COALESCE(prate.OvertimeRate,1) 'OvertimeRate',COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate',COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate',DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date' FROM payrate prate WHERE MONTH(prate.Date)=MONTH('" & querdate & "') AND YEAR(prate.Date)=YEAR('" & querdate & "');")
             'DISTINCT(DATE_FORMAT(DATE,'%m-%d-%Y')),
@@ -657,12 +657,12 @@ Public Class EmpTimeEntry
 
                 Try
                     EXECQUER("SELECT COALESCE(RestDay,0) FROM employeeshift WHERE EmployeeID='" & dgvEmployi.CurrentRow.Cells("cemp_RowID").Value & _
-                                                   "' AND OrganizationID=" & orgztnID & _
+                                                   "' AND OrganizationID=" & org_rowid & _
                                                    " AND '" & curr_YYYY & "-" & curr_mm & "-" & dgvcalendar.CurrentRow.Cells(curr_CalendCol).Value & _
                                                    "' BETWEEN EffectiveFrom AND COALESCE(EffectiveTo,EffectiveFrom) AND COALESCE(RestDay,0)=1 LIMIT 1;")
                 Catch ex As Exception
                     EXECQUER("SELECT COALESCE(RestDay,0) FROM employeeshift WHERE EmployeeID='" & dgvEmployi.CurrentRow.Cells("cemp_RowID").Value & _
-                                                   "' AND OrganizationID=" & orgztnID & _
+                                                   "' AND OrganizationID=" & org_rowid & _
                                                    " AND '" & curr_YYYY & "-" & curr_mm & "-01" & _
                                                    "' BETWEEN EffectiveFrom AND COALESCE(EffectiveTo,EffectiveFrom) AND COALESCE(RestDay,0)=1 LIMIT 1;")
                 End Try
@@ -746,7 +746,7 @@ Public Class EmpTimeEntry
                     Dim currentSalary = EXECQUER("SELECT COALESCE(SUM(BasicPay),0)" & _
                                                    " FROM employeesalary" & _
                                                    " WHERE EmployeeID='" & theEmployeeRowID & "'" & _
-                                                   " AND OrganizationID=" & orgztnID & _
+                                                   " AND OrganizationID=" & org_rowid & _
                                                    " AND '" & curr_YYYY & "-" & curr_mm & "-" & currsel_day & "' BETWEEN EffectiveDateFrom AND IFNULL(EffectiveDateTo,'" & curr_YYYY & "-" & curr_mm & "-" & currsel_day & "')" & _
                                                    " ORDER BY RowID DESC" & _
                                                    " LIMIT 1;") 'EffectiveDateFrom'" AND EffectiveDateTo IS NULL" & _
@@ -819,7 +819,7 @@ Public Class EmpTimeEntry
                 Dim currentSalary = EXECQUER("SELECT COALESCE(SUM(BasicPay),0)" & _
                                                " FROM employeesalary" & _
                                                " WHERE EmployeeID='" & theEmployeeRowID & "'" & _
-                                               " AND OrganizationID=" & orgztnID & _
+                                               " AND OrganizationID=" & org_rowid & _
                                                " AND EffectiveDateTo IS NULL" & _
                                                " ORDER BY RowID DESC" & _
                                                " LIMIT 1;")
@@ -1304,7 +1304,7 @@ Public Class EmpTimeEntry
                                      " FROM employeeshift esh" & _
                                      " LEFT JOIN shift sh ON sh.RowID=esh.ShiftID" & _
                                      " WHERE esh.EmployeeID=" & dgvEmployi.CurrentRow.Cells("cemp_RowID").Value & _
-                                     " AND esh.OrganizationID=" & orgztnID & _
+                                     " AND esh.OrganizationID=" & org_rowid & _
                                      " AND COALESCE(esh.RestDay,0)=0" & _
                                      " AND CAST('" & curr_YYYY & "-" & curr_mm & "-" & curr_dd & "' AS DATE)" & _
                                      " BETWEEN COALESCE(esh.EffectiveFrom,DATE_ADD(DATE('" & curr_YYYY & "-" & curr_mm & "-" & curr_dd & "'), INTERVAL -1 MONTH))" & _
@@ -2127,9 +2127,9 @@ Public Class EmpTimeEntry
         params(10, 0) = "prate_NightDifferentialOTRate"
 
         params(0, 1) = If(prate_RowID = Nothing, DBNull.Value, prate_RowID)
-        params(1, 1) = orgztnID
-        params(2, 1) = z_User 'CreatedBy
-        params(3, 1) = z_User 'LastUpdBy
+        params(1, 1) = org_rowid
+        params(2, 1) = user_row_id 'CreatedBy
+        params(3, 1) = user_row_id 'LastUpdBy
         params(4, 1) = prate_Date
         params(5, 1) = If(prate_PayType = Nothing, DBNull.Value, prate_PayType)
         params(6, 1) = If(prate_Description = Nothing, DBNull.Value, prate_Description)
@@ -2430,7 +2430,7 @@ Public Class EmpTimeEntry
                                      " FROM employeeshift esh" & _
                                      " LEFT JOIN shift sh ON sh.RowID=esh.ShiftID" & _
                                      " WHERE esh.EmployeeID=" & dgvEmployi.CurrentRow.Cells("cemp_RowID").Value & _
-                                     " AND esh.OrganizationID=" & orgztnID & _
+                                     " AND esh.OrganizationID=" & org_rowid & _
                                      " AND CAST('" & curr_YYYY & "-" & curr_mm & "-" & dgvcalendar.CurrentRow.Cells(curr_CalendCol).Value & "' AS DATE) BETWEEN esh.EffectiveFrom AND esh.EffectiveTo;")
 
                 currEShiftID = ""
@@ -2521,7 +2521,7 @@ Public Class EmpTimeEntry
                                        ", COALESCE(CAST(SUBSTRING_INDEX(TIMEDIFF(TIME_FORMAT(TimeOut,'%H:%i:%s'),'" & curr_NightTimeToMILIT & "'),':',1) AS DECIMAL) + (CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(TIMEDIFF(TIME_FORMAT(TimeOut,'%H:%i:%s'),'" & curr_NightTimeToMILIT & "'),':',-2),':',1) AS DECIMAL) / 60),'') 'OTNight'" & _
                                        " FROM employeetimeentrydetails" & _
                                        " WHERE EmployeeID=" & dgvEmployi.CurrentRow.Cells("cemp_RowID").Value & _
-                                       " AND OrganizationID=" & orgztnID & _
+                                       " AND OrganizationID=" & org_rowid & _
                                        " AND DATE BETWEEN '" & curr_YYYY & "-" & curr_mm & "-15' AND LAST_DAY('" & curr_YYYY & "-" & curr_mm & "-00')" & _
                                        " ORDER BY DATE,TIME_FORMAT(TimeIn,'%H') ASC;")
                 '*******************************************************************************
@@ -2682,9 +2682,9 @@ Public Class EmpTimeEntry
         params(14, 0) = "payp_TotalCompHDMF"
 
         params(0, 1) = If(payp_RowID = Nothing, DBNull.Value, payp_RowID)
-        params(1, 1) = orgztnID
-        params(2, 1) = z_User 'CreatedBy
-        params(3, 1) = z_User 'LastUpdBy
+        params(1, 1) = org_rowid
+        params(2, 1) = user_row_id 'CreatedBy
+        params(3, 1) = user_row_id 'LastUpdBy
         params(4, 1) = payp_PayFromDate
         params(5, 1) = payp_PayToDate
         params(6, 1) = If(payp_TotalGrossSalary = Nothing, DBNull.Value, payp_TotalGrossSalary)
@@ -2720,7 +2720,7 @@ Public Class EmpTimeEntry
                                  ",COALESCE(TotalEmpHDMF,0) 'TotalEmpHDMF'" & _
                                  ",COALESCE(TotalCompHDMF,0) 'TotalCompHDMF'" & _
                                  ",IF(DATE_FORMAT(NOW(),'%Y-%m-%d') BETWEEN PayFromDate AND PayToDate,'0',IF(DATE_FORMAT(NOW(),'%Y-%m-%d') > PayFromDate,'-1','1')) 'now_origin'" & _
-                                 " FROM payperiod WHERE OrganizationID=" & orgztnID & _
+                                 " FROM payperiod WHERE OrganizationID=" & org_rowid & _
                                  " AND YEAR(NOW()) IN (YEAR(PayFromDate),YEAR(PayToDate)) ORDER BY PayFromDate;")
 
         'cbopaypfrom.Items.Clear()
@@ -2804,7 +2804,7 @@ Public Class EmpTimeEntry
             Dim bool_result = (.ShowDialog = Windows.Forms.DialogResult.OK)
 
             If bool_result Then
-                
+
                 ToolStripProgressBar1.Visible = bool_result
                 ToolStripProgressBar1.Value = 0
 
@@ -2903,9 +2903,9 @@ Public Class EmpTimeEntry
         params(28, 0) = "etent_OtherLeaveHours"
 
         params(0, 1) = etent_RowID
-        params(1, 1) = orgztnID
-        params(2, 1) = z_User 'CreatedBy
-        params(3, 1) = z_User 'LastUpdBy
+        params(1, 1) = org_rowid
+        params(2, 1) = user_row_id 'CreatedBy
+        params(3, 1) = user_row_id 'LastUpdBy
         params(4, 1) = If(etent_Date = Nothing, DBNull.Value, etent_Date)
         params(5, 1) = If(etent_EmployeeShiftID = Nothing, DBNull.Value, etent_EmployeeShiftID)
         params(6, 1) = etent_EmployeeID
@@ -2960,7 +2960,7 @@ Public Class EmpTimeEntry
         ElseIf sendrname = "Nxt" Then
             pagination += page_limiter
         ElseIf sendrname = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / " & page_limiter & " FROM employee WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / " & page_limiter & " FROM employee WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 1
 
@@ -3021,7 +3021,7 @@ Public Class EmpTimeEntry
         params(1, 0) = "etent_EmployeeID"
         params(2, 0) = "etent_Date"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = etent_EmployeeID
 
         params(2, 1) = CDate(etent_date)
@@ -3086,7 +3086,7 @@ Public Class EmpTimeEntry
 
         employeetimeentry_absent = _
             New ReadSQLProcedureToDatatable("VIEW_employeetimeentry_this_month",
-                                            orgztnID,
+                                            org_rowid,
                                             etent_EmployeeID,
                                             etent_date).ResultTable
 
@@ -3105,7 +3105,7 @@ Public Class EmpTimeEntry
         params(1, 0) = "esal_EmployeeID"
         params(2, 0) = "esal_Date"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = esal_EmployeeID
         params(2, 1) = CDate(esal_Date)
 
@@ -4061,7 +4061,7 @@ Public Class EmpTimeEntry
 
             etentsummapaypID = Val(EXECQUER("SELECT RowID FROM payperiod WHERE PayFromDate='" & the_year & "-" & sel_month & "-" & If(firstbound.ToString.Length = 1, "0" & firstbound, firstbound) & _
                                             "' AND PayToDate='" & the_year & "-" & sel_month & "-" & If(lastbound.ToString.Length = 1, "0" & lastbound, lastbound) & _
-                                            "' AND OrganizationID=" & orgztnID & " LIMIT 1;"))
+                                            "' AND OrganizationID=" & org_rowid & " LIMIT 1;"))
 
         End If
 
@@ -4436,14 +4436,14 @@ Public Class EmpTimeEntry
                 Dim etentsumma As New DataTable
 
                 etentsumma = retAsDatTbl("SELECT" & _
-" COALESCE((SELECT COUNT(EmployeeID) FROM paystub WHERE OrganizationID='" & orgztnID & "' AND '" & querydate & "' BETWEEN PayFromDate AND PayToDate),0) 'Published to Payroll'" & _
-",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentry WHERE OrganizationID='" & orgztnID & "' AND Date='" & querydate & "' AND (RegularHoursWorked!=UndertimeHours OR NightDifferentialHours!=UndertimeHours)),0) 'Perfect attendance'" & _
-",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentrydetails WHERE OrganizationID='" & orgztnID & "' AND Date='" & querydate & "' AND TimeEntryStatus='missing clock in'),0) 'Missing clock in'" & _
-",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentrydetails WHERE OrganizationID='" & orgztnID & "' AND Date='" & querydate & "' AND TimeEntryStatus='missing clock out'),0) 'Missing clock out'" & _
+" COALESCE((SELECT COUNT(EmployeeID) FROM paystub WHERE OrganizationID='" & org_rowid & "' AND '" & querydate & "' BETWEEN PayFromDate AND PayToDate),0) 'Published to Payroll'" & _
+",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentry WHERE OrganizationID='" & org_rowid & "' AND Date='" & querydate & "' AND (RegularHoursWorked!=UndertimeHours OR NightDifferentialHours!=UndertimeHours)),0) 'Perfect attendance'" & _
+",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentrydetails WHERE OrganizationID='" & org_rowid & "' AND Date='" & querydate & "' AND TimeEntryStatus='missing clock in'),0) 'Missing clock in'" & _
+",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentrydetails WHERE OrganizationID='" & org_rowid & "' AND Date='" & querydate & "' AND TimeEntryStatus='missing clock out'),0) 'Missing clock out'" & _
 ",0 'Duplicate clock in'" & _
 ",0 'Duplicate clock out'" & _
-",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentry WHERE OrganizationID='" & orgztnID & "' AND Date='" & querydate & "' AND COALESCE(HoursLate,0)>0),0) 'In late'" & _
-",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentry WHERE OrganizationID='" & orgztnID & "' AND Date='" & querydate & "' AND COALESCE(UndertimeHours,0)>0),0) 'Out early';")
+",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentry WHERE OrganizationID='" & org_rowid & "' AND Date='" & querydate & "' AND COALESCE(HoursLate,0)>0),0) 'In late'" & _
+",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentry WHERE OrganizationID='" & org_rowid & "' AND Date='" & querydate & "' AND COALESCE(UndertimeHours,0)>0),0) 'Out early';")
 
                 '",COALESCE((SELECT COUNT(EmployeeID) FROM employeetimeentry WHERE OrganizationID='" & orgztnID & "' AND Date='" & querydate & "' AND RegularHoursWorked!=UndertimeHours),0) 'Perfect attendance'" & _
 
@@ -7150,9 +7150,9 @@ Public Class EmpTimeEntry
 
         Dim n_ExecuteQuery As _
             New ExecuteQuery("SELECT GENERATE_employeetimeentry('" & etent_EmployeeID & "'" &
-                             ",'" & orgztnID & "'" &
+                             ",'" & org_rowid & "'" &
                              ",'" & etent_Date & "'" &
-                             ",'" & z_User & "');")
+                             ",'" & user_row_id & "');")
 
         Return ValNoComma(n_ExecuteQuery.Result)
 

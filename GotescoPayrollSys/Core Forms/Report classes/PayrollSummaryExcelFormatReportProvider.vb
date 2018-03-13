@@ -149,7 +149,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
         If pp_rowid_from Is Nothing Then
 
             returnvalue =
-                New Object() {orgztnID,
+                New Object() {org_rowid,
                               pp_rowid_from,
                               pp_rowid_to,
                               is_actual,
@@ -163,7 +163,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
             If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
 
                 returnvalue =
-                    New Object() {orgztnID,
+                    New Object() {org_rowid,
                                   n_PayrollSummaDateSelection.PayPeriodFromID,
                                   n_PayrollSummaDateSelection.PayPeriodToID,
                                   is_actual,

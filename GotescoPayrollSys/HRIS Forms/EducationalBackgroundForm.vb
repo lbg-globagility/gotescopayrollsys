@@ -125,7 +125,7 @@
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If isNew = 1 Then
 
-            SP_EducBackGround(z_datetime, z_User, z_datetime, z_User, z_OrganizationID, dgvEmplist.CurrentRow.Cells(c_rowID.Index).Value, _
+            SP_EducBackGround(z_datetime, user_row_id, z_datetime, user_row_id, z_OrganizationID, dgvEmplist.CurrentRow.Cells(c_rowID.Index).Value, _
                               dtpFrom.Value.ToString("MM/dd/yyyy"), dtpto.Value.ToString("MM/dd/yyyy"), _
                               txtCourse.Text, txtSchool.Text, txtDegree.Text, txtMinor.Text, cmbEducType.Text, txtRemarks.Text)
 

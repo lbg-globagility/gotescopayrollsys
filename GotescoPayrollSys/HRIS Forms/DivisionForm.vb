@@ -295,7 +295,7 @@
 
         cmbDivisionType.Focus()
 
-        divisiontbl = retAsDatTbl("SELECT RowID,Name FROM division WHERE OrganizationID=" & orgztnID & ";")
+        divisiontbl = retAsDatTbl("SELECT RowID,Name FROM division WHERE OrganizationID=" & org_rowid & ";")
 
         cmbDivision.Items.Clear()
 
@@ -321,7 +321,7 @@
         If IsNew = 1 Then
 
             SP_Division(Trim(txtname.Text), Trim(txtmainphone.Text), Trim(txtfaxno.Text), Trim(txtemailaddr.Text), Trim(txtaltemailaddr.Text), _
-                        Trim(txtaltphone.Text), Trim(txturl.Text), z_datetime, z_User, z_datetime, z_User, Trim(txttinno.Text), _
+                        Trim(txtaltphone.Text), Trim(txturl.Text), z_datetime, user_row_id, z_datetime, user_row_id, Trim(txttinno.Text), _
                         Trim(txttradename.Text), Trim(cmbDivisionType.Text), Trim(txtbusinessaddr.Text), Trim(txtcontantname.Text),
                         z_OrganizationID,
                         FormatNumber(ValNoComma(txtgraceperiod.Text), 2).Replace(",", ""),
@@ -362,7 +362,7 @@
             End If
 
             SP_DivisionUpdate(txtname.Text, txtmainphone.Text, txtfaxno.Text, txtemailaddr.Text, txtaltemailaddr.Text, _
-                       txtaltphone.Text, txturl.Text, z_datetime, z_User, txttinno.Text, _
+                       txtaltphone.Text, txturl.Text, z_datetime, user_row_id, txttinno.Text, _
                        txttradename.Text, cmbDivisionType.Text, txtbusinessaddr.Text, txtcontantname.Text, dgvDivisionList.CurrentRow.Cells(c_rowID.Index).Value,
                         FormatNumber(ValNoComma(txtgraceperiod.Text), 2).Replace(",", ""),
                         ValNoComma(txtmindayperyear.Text),
@@ -435,7 +435,7 @@
 
         'TreeView1.ExpandAll()
 
-        view_ID = VIEW_privilege("Division", orgztnID)
+        view_ID = VIEW_privilege("Division", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -686,7 +686,7 @@
 
             End If
         ElseIf sendrname = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) FROM employee WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) FROM employee WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 20
 
@@ -718,7 +718,7 @@
         VIEW_division = New DataTable
 
         Dim n_ReadSQLProcedureToDatatable As New ReadSQLProcedureToDatatable("VIEW_division",
-                                                                             orgztnID,
+                                                                             org_rowid,
                                                                              autcomptxtdivision.Text.Trim)
 
         VIEW_division = n_ReadSQLProcedureToDatatable.ResultTable

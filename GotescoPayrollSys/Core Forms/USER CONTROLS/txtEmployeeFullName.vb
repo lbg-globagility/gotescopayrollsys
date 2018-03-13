@@ -7,7 +7,7 @@ Public Class txtEmployeeFullName
     Private organization_RowID As String = String.Empty
 
     Sub New()
-        organization_RowID = orgztnID
+        organization_RowID = org_rowid
     End Sub
 
     Dim dbcol_employee As String = String.Empty

@@ -34,13 +34,13 @@ Public Class Agency
 
     End Sub
 
-    Dim agencyview_ID = VIEW_privilege("Agency", orgztnID)
+    Dim agencyview_ID = VIEW_privilege("Agency", org_rowid)
 
     Dim dontUpdateAgency = Nothing
 
     Private Sub Agency_Load(sender As Object, e As EventArgs) Handles Me.Load
         If agencyview_ID = Nothing Then
-            agencyview_ID = VIEW_privilege("Agency", orgztnID)
+            agencyview_ID = VIEW_privilege("Agency", org_rowid)
         End If
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & agencyview_ID)
@@ -141,7 +141,7 @@ Public Class Agency
 
                 Dim n_ExecuteQuery As New ExecuteQuery("UPDATE employee SET AgencyID=NULL" &
                                                        ",LastUpd=CURRENT_TIMESTAMP()" &
-                                                       ",LastUpdBy='" & z_User & "'" &
+                                                       ",LastUpdBy='" & user_row_id & "'" &
                                                        " WHERE RowID='" &
                                                        dgvemployee.CurrentRow.Cells("eRowID").Value & "';")
 
@@ -267,12 +267,12 @@ Public Class Agency
             once = 1
 
             Dim groupnames As New DataTable
-            
+
             'Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT '' AS RowID,'' AS Name" & _
             '                                                     " UNION" & _
             '                                                     " SELECT RowID,Name FROM `division` WHERE OrganizationID='" & orgztnID & "';")
 
-            Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT RowID,Name FROM `division` WHERE OrganizationID='" & orgztnID & "';")
+            Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT RowID,Name FROM `division` WHERE OrganizationID='" & org_rowid & "';")
 
             groupnames = n_SQLQueryToDatatable.ResultTable
 
@@ -291,12 +291,12 @@ Public Class Agency
 
 
             Dim positionnames As New DataTable
-            
+
             'n_SQLQueryToDatatable = New SQLQueryToDatatable("SELECT '' AS RowID,'' AS PositionName" & _
             '                                                " UNION" & _
             '                                                " SELECT RowID,PositionName FROM position WHERE OrganizationID='" & orgztnID & "' AND DivisionId IS NOT NULL;")
 
-            n_SQLQueryToDatatable = New SQLQueryToDatatable("SELECT RowID,PositionName FROM position WHERE OrganizationID='" & orgztnID & "' AND DivisionId IS NOT NULL;")
+            n_SQLQueryToDatatable = New SQLQueryToDatatable("SELECT RowID,PositionName FROM position WHERE OrganizationID='" & org_rowid & "' AND DivisionId IS NOT NULL;")
 
             positionnames = n_SQLQueryToDatatable.ResultTable
 
@@ -313,7 +313,7 @@ Public Class Agency
 
             End If
 
-            empview_ID = VIEW_privilege("Employee Personal Profile", orgztnID)
+            empview_ID = VIEW_privilege("Employee Personal Profile", org_rowid)
 
             Dim formuserprivilege = position_view_table.Select("ViewID = " & empview_ID)
 
@@ -402,9 +402,9 @@ Public Class Agency
 
         'MsgBox(String.Concat(list_total_query))
 
-        Dim n_ExecuteQuery As New ExecuteQuery("CALL MASSUPD_employee_agency('" & orgztnID &
+        Dim n_ExecuteQuery As New ExecuteQuery("CALL MASSUPD_employee_agency('" & org_rowid &
                                                "','" & agencyRowID &
-                                               "','" & z_User &
+                                               "','" & user_row_id &
                                                "','" & String.Concat(list_total_query) & "');")
 
     End Sub
@@ -501,7 +501,7 @@ Public Class Agency
         'PositionID.DataSource = Nothing
 
         Dim n_ReadSQLProcedureToDatatable As New ReadSQLProcedureToDatatable("VIEW_employeewiththisagency",
-                                                                             orgztnID,
+                                                                             org_rowid,
                                                                              Agency_row_id)
 
         Dim employee_table = n_ReadSQLProcedureToDatatable.ResultTable
@@ -542,7 +542,7 @@ Public Class Agency
         btnRefresh.Enabled = False
 
         Dim n_ReadSQLProcedureToDatatable As New ReadSQLProcedureToDatatable("VIEW_agency",
-                                                                             orgztnID,
+                                                                             org_rowid,
                                                                              autcomptxtagency.Text.Trim)
 
         agencytable = n_ReadSQLProcedureToDatatable.ResultTable
@@ -566,7 +566,7 @@ Public Class Agency
                 dgvagency.Item("agName", indx).Selected = True
 
             End If
-            
+
         End If
 
         dgvagency_SelectionChanged(sender, e)
@@ -580,7 +580,7 @@ Public Class Agency
         'autcomptxtagency
         Dim agencynames As New DataTable
 
-        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT AgencyName FROM agency WHERE OrganizationID='" & orgztnID & "';")
+        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT AgencyName FROM agency WHERE OrganizationID='" & org_rowid & "';")
 
         agencynames = n_SQLQueryToDatatable.ResultTable
 
@@ -706,8 +706,8 @@ Public Class Agency
         params(5, 0) = "ag_AddressID"
 
         params(0, 1) = If(ag_RowID = Nothing, DBNull.Value, ag_RowID)
-        params(1, 1) = orgztnID
-        params(2, 1) = z_User
+        params(1, 1) = org_rowid
+        params(2, 1) = user_row_id
         params(3, 1) = ag_AgencyName
         params(4, 1) = ValNoComma(ag_AgencyFee)
         params(5, 1) = If(ag_AddressID = Nothing, DBNull.Value, ag_AddressID)

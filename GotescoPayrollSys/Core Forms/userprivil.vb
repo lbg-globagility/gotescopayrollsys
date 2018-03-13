@@ -4,7 +4,7 @@
 
     Private Sub userprivil_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         
-        view_id = VIEW_privilege("User Privilege", orgztnID)
+        view_id = VIEW_privilege("User Privilege", org_rowid)
 
         VIEW_position_organization_user()
 
@@ -62,7 +62,7 @@
 
     Dim pagination As Integer = 0
 
-    Dim curr_user_positionRowID = ValNoComma(New ExecuteQuery("SELECT IFNULL(u.PositionID,0) AS PositionID FROM user u INNER JOIN position p ON p.RowID=u.PositionID WHERE u.RowID='" & z_User & "';").Result)
+    Dim curr_user_positionRowID = ValNoComma(New ExecuteQuery("SELECT IFNULL(u.PositionID,0) AS PositionID FROM user u INNER JOIN position p ON p.RowID=u.PositionID WHERE u.RowID='" & user_row_id & "';").Result)
 
     Sub VIEW_position_organization_user()
 
@@ -72,9 +72,9 @@
         params(1, 0) = "pagination"
         params(2, 0) = "current_userID"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = pagination
-        params(2, 1) = z_User
+        params(2, 1) = user_row_id
 
         'EXEC_VIEW_PROCEDURE(params, _
         '                     "VIEW_position_organization_user", _
@@ -82,9 +82,9 @@
 
         Dim n_ReadSQLProcedureToDatatable As _
             New ReadSQLProcedureToDatatable("VIEW_position_organization_user",
-                                            orgztnID,
+                                            org_rowid,
                                             pagination,
-                                            z_User)
+                                            user_row_id)
 
         Dim catchdt As New DataTable
 
@@ -120,7 +120,7 @@
         dgvpositview.Rows.Clear()
 
         Dim para_meters =
-            New Object() {orgztnID, PositionID}
+            New Object() {org_rowid, PositionID}
 
         Dim sql As New SQL("CALL VIEW_position_view(?og_rowid, ?pos_rowid);",
                            para_meters)
@@ -152,7 +152,7 @@
 
         params(0, 0) = "vw_OrganizationID"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
 
         EXEC_VIEW_PROCEDURE(params, _
                              "VIEW_view_of_organization", _
@@ -186,7 +186,7 @@
                 End If
 
             End With
-            
+
             CheckBox1.Checked = False
             CheckBox2.Checked = False
             CheckBox3.Checked = False
@@ -198,7 +198,7 @@
             Dim read_only = 0
 
             For Each dgvrow As DataGridViewRow In dgvpositview.Rows
-                
+
                 If dgvrow.Cells("Column11").Value = 1 Then
                     createcount += 1
                 End If
@@ -216,7 +216,7 @@
                 End If
 
             Next
-            
+
             If createcount = 0 Then
                 CheckBox1.Checked = False
             Else
@@ -314,10 +314,10 @@
 
             End If
         ElseIf sendrname = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM position WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM position WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 1
-            
+
             pagination = (lastpage - remender) * 100
 
             If pagination - 100 < 100 Then
@@ -430,8 +430,8 @@
 
         position_view_table = retAsDatTbl("SELECT *" & _
                                           " FROM position_view" & _
-                                          " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & z_User & ")" & _
-                                          " AND OrganizationID='" & orgztnID & "';")
+                                          " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" & _
+                                          " AND OrganizationID='" & org_rowid & "';")
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_id)
 
@@ -514,9 +514,9 @@
 
         params(0, 1) = If(pv_RowID = Nothing, DBNull.Value, pv_RowID)
         params(1, 1) = pv_PositionID
-        params(2, 1) = orgztnID
-        params(3, 1) = z_User
-        params(4, 1) = z_User
+        params(2, 1) = org_rowid
+        params(3, 1) = user_row_id
+        params(4, 1) = user_row_id
         params(5, 1) = pv_ViewID
         params(6, 1) = pv_Creates
         params(7, 1) = pv_ReadOnly

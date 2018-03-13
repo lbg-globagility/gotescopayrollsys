@@ -157,7 +157,7 @@ Public Class EmployeeCollection
         Get
             Static propert_value As New Collection(Of EmployeeCollection)
 
-            Static strquer_employees = String.Concat(str_quer_employees, orgztnID)
+            Static strquer_employees = String.Concat(str_quer_employees, org_rowid)
 
             Static sql As New SQL(strquer_employees)
 

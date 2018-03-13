@@ -22,7 +22,7 @@ Public Class TaxReportProvider
         params(1, 0) = "paramDateFrom"
         params(2, 0) = "paramDateTo"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = Format(CDate(n_selectMonth.MonthFirstDate), "yyyy-MM-dd")
         params(2, 1) = Format(CDate(n_selectMonth.MonthLastDate), "yyyy-MM-dd")
 

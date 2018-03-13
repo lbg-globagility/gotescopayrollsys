@@ -92,7 +92,7 @@ Public Class DiscipAction
 
         If btnNew.Enabled = False Then
 
-            EXECQUER("SELECT INSUPD_listofval('" & txtname.Text & "','" & txtname.Text & "','Employee Disciplinary Penalty','','Yes','" & txtname.Text & "','" & z_User & "',1);")
+            EXECQUER("SELECT INSUPD_listofval('" & txtname.Text & "','" & txtname.Text & "','Employee Disciplinary Penalty','','Yes','" & txtname.Text & "','" & user_row_id & "',1);")
 
             btnCancel_Click(sender, e)
 
@@ -101,7 +101,7 @@ Public Class DiscipAction
             EXECQUER("UPDATE listofval" & _
                      " SET DisplayValue='" & txtname.Text & "'" & _
                      ",LastUpd=CURRENT_TIMESTAMP()" & _
-                     ",LastUpdBy='" & z_User & "'" & _
+                     ",LastUpdBy='" & user_row_id & "'" & _
                      " WHERE RowID='" & dgvFindingsList.CurrentRow.Cells("c_rowid").Value & "'" & _
                      ";")
 

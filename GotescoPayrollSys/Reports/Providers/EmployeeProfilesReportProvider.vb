@@ -16,7 +16,7 @@ Public Class EmployeeProfilesReportProvider
     Public Sub Run() Implements IReportProvider.Run
 
         Dim sql_print_employee_profiles As New SQL("CALL PRINT_employee_profiles(?og_rowid);",
-                                                   New Object() {orgztnID})
+                                                   New Object() {org_rowid})
 
         Static one_value As Integer = 1
 

@@ -32,9 +32,9 @@
 
                 enlistToCboBox("SELECT p.PartNo" & _
                                " FROM product p" & _
-                               " INNER JOIN category c ON c.OrganizationID='" & orgztnID & "' AND c.CategoryName='Loan Type'" & _
+                               " INNER JOIN category c ON c.OrganizationID='" & org_rowid & "' AND c.CategoryName='Loan Type'" & _
                                " WHERE p.CategoryID=c.RowID" & _
-                               " AND p.OrganizationID=" & orgztnID & ";",
+                               " AND p.OrganizationID=" & org_rowid & ";",
                                cboStringParameter)
 
                 cboStringParameter.DropDownStyle = ComboBoxStyle.DropDownList
@@ -261,7 +261,7 @@
         params(2, 0) = "isotherformat"
         params(3, 0) = "PayFreqType"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = If(param_Date = Nothing, DBNull.Value, param_Date & "-01-01")
         params(2, 1) = "1"
         params(3, 1) = PayFreqType

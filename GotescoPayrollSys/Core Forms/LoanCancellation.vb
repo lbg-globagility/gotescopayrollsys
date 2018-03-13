@@ -49,7 +49,7 @@ Public Class LoanCancellation
             status_last_index_value = Trim(status_last_index_value)
 
             Dim New_SQLQueryToDatatable As _
-                New SQLQueryToDatatable("SELECT RowID,PartNo FROM product WHERE `Category`='Loan Type' AND OrganizationID='" & orgztnID & "';")
+                New SQLQueryToDatatable("SELECT RowID,PartNo FROM product WHERE `Category`='Loan Type' AND OrganizationID='" & org_rowid & "';")
 
             Dim dt As New DataTable
 
@@ -82,7 +82,7 @@ Public Class LoanCancellation
         '",els.DedEffectiveDateTo" &
         Dim NewSQLQueryToDatatable As _
             New SQLQueryToDatatable("CALL `VEIW_ref_employeeloanschedule`('" & ReferenceLoanID & "'" &
-                                    ",'" & orgztnID & "');")
+                                    ",'" & org_rowid & "');")
 
         cboloantype.Text = ""
 
@@ -147,7 +147,7 @@ Public Class LoanCancellation
         '****************************************
 
         Dim n_SQLQueryToDatatable As _
-            New SQLQueryToDatatable("CALL VIEW_related_loan_cancelled('" & orgztnID & "','" & ReferenceLoanID & "');")
+            New SQLQueryToDatatable("CALL VIEW_related_loan_cancelled('" & org_rowid & "','" & ReferenceLoanID & "');")
 
         Dim dtbl As New DataTable
 
@@ -356,8 +356,8 @@ Public Class LoanCancellation
                                 New ReadSQLFunction("INSUPD_employeeloanschedule",
                                                         "returnvalue",
                                                     If(.Cells("elsRowID").Value = Nothing, DBNull.Value, .Cells("elsRowID").Value),
-                                                    orgztnID,
-                                                    z_User,
+                                                    org_rowid,
+                                                    user_row_id,
                                                     Employee_RowID,
                                                     .Cells("elsLoanNumber").Value,
                                                     .Cells("elsDedEffectiveDateFrom").Tag,
@@ -380,8 +380,8 @@ Public Class LoanCancellation
                                 New ReadSQLFunction("INSUPD_employeeloanschedule",
                                                         "returnvalue",
                                                     If(.Cells("elsRowID").Value = Nothing, DBNull.Value, .Cells("elsRowID").Value),
-                                                    orgztnID,
-                                                    z_User,
+                                                    org_rowid,
+                                                    user_row_id,
                                                     Employee_RowID,
                                                     .Cells("elsLoanNumber").Value,
                                                     .Cells("elsDedEffectiveDateFrom").Tag,
@@ -412,9 +412,9 @@ Public Class LoanCancellation
                     New ExecuteQuery("UPDATE employeeloanschedule" &
                                      " SET `Status`='Cancelled'" &
                                      ",LastUpd=CURRENT_TIMESTAMP()" &
-                                     ",LastUpdBy='" & z_User & "'" &
+                                     ",LastUpdBy='" & user_row_id & "'" &
                                      " WHERE RowID='" & ReferenceLoanID & "'" &
-                                     " AND OrganizationID='" & orgztnID & "';")
+                                     " AND OrganizationID='" & org_rowid & "';")
 
                 'SubstituteEndDate
 

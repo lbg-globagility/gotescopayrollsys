@@ -54,7 +54,7 @@
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If IsNew = 1 Then
 
-            sp_finding(z_datetime, z_User, z_datetime, z_OrganizationID, z_User, txtname.Text, txtdesc.Text, EmployeeForm.categDiscipID)
+            sp_finding(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, txtname.Text, txtdesc.Text, EmployeeForm.categDiscipID)
             fillfinding()
             fillfindingselected()
             myBalloon("Successfully Save", "Saving..", lblSaveMsg, , -100)
@@ -65,7 +65,7 @@
             Me.Hide()
 
         Else
-            DirectCommand("UPDATE product SET PartNo = '" & txtname.Text & "', Description = '" & txtdesc.Text & "', lastupd = '" & z_datetime & "', lastupdby = '" & z_User & "' where RowID = '" & pID & "'")
+            DirectCommand("UPDATE product SET PartNo = '" & txtname.Text & "', Description = '" & txtdesc.Text & "', lastupd = '" & z_datetime & "', lastupdby = '" & user_row_id & "' where RowID = '" & pID & "'")
             fillfinding()
             myBalloon("Successfully Save", "Saving..", lblSaveMsg, , -100)
             EmpDisciplinaryActionForm.fillfindingcombobox()

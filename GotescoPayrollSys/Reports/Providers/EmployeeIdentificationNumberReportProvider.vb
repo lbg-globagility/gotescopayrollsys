@@ -21,10 +21,10 @@ Public Class EmployeeIdentificationNumberReportProvider
                           ") `Result`",
                           " FROM organization og",
                           " LEFT JOIN address ad ON ad.RowID = og.PrimaryAddressID",
-                          " WHERE og.RowID = ", orgztnID, ";")
+                          " WHERE og.RowID = ", org_rowid, ";")
 
         Dim params =
-            New Object() {orgztnID}
+            New Object() {org_rowid}
 
         Dim sql As New SQL("CALL RPT_employeeidhistory(?og_rowid);",
                            params)

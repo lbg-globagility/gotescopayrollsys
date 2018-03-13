@@ -252,7 +252,7 @@ Public Class ListOfValueForm
                 If .Cells("c_rowid").Value = Nothing Then
 
                     .Cells("c_rowid").Value = _
-                    sp_list(txtDisplayval.Text, txtLIC.Text, txtType.Text, txtParentLIC.Text, cmbStatus.Text, txtDescription.Text, z_datetime, z_User, z_datetime, 1, z_User)
+                    sp_list(txtDisplayval.Text, txtLIC.Text, txtType.Text, txtParentLIC.Text, cmbStatus.Text, txtDescription.Text, z_datetime, user_row_id, z_datetime, 1, user_row_id)
 
                 Else
 
@@ -276,7 +276,7 @@ Public Class ListOfValueForm
 
                 End If
             Else
-                sp_list(txtDisplayval.Text, txtLIC.Text, txtType.Text, txtParentLIC.Text, cmbStatus.Text, txtDescription.Text, z_datetime, z_User, z_datetime, 1, z_User)
+                sp_list(txtDisplayval.Text, txtLIC.Text, txtType.Text, txtParentLIC.Text, cmbStatus.Text, txtDescription.Text, z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
                 'filllistofvalues()
                 isNew = 0
@@ -301,12 +301,12 @@ Public Class ListOfValueForm
                              " INNER JOIN listofval lov ON lov.RowID='" & dglistofval.CurrentRow.Cells(c_rowid.Index).Value & "'" &
                              " SET lv.`Type`='" & txtType.Text.Trim & "'" &
                              ",lv.LastUpd=CURRENT_TIMESTAMP()" &
-                             ",lv.LastUpdBy=" & z_User &
+                             ",lv.LastUpdBy=" & user_row_id &
                              " WHERE lv.`Type`=lov.`Type`;")
 
                 End If
 
-                sp_listupd(dglistofval.CurrentRow.Cells(c_rowid.Index).Value, txtDisplayval.Text, txtLIC.Text, txtType.Text, txtParentLIC.Text, cmbStatus.Text, txtDescription.Text, z_datetime, z_User, z_datetime, 1, z_User)
+                sp_listupd(dglistofval.CurrentRow.Cells(c_rowid.Index).Value, txtDisplayval.Text, txtLIC.Text, txtType.Text, txtParentLIC.Text, cmbStatus.Text, txtDescription.Text, z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
                 'filllistofvalues()
                 isNew = 0
@@ -362,7 +362,7 @@ Public Class ListOfValueForm
         'filllistofvalues()
 
 
-        view_ID = VIEW_privilege("List of value", orgztnID)
+        view_ID = VIEW_privilege("List of value", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 

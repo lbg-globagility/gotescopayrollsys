@@ -207,10 +207,10 @@ Public Class EmployeeShiftEntryForm
 
         'cboshiftlist.ContextMenu = New ContextMenu
 
-        enlistToCboBox("SELECT CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', TIME_FORMAT(TimeTo,'%l:%i %p')) FROM shift WHERE OrganizationID='" & orgztnID & "' ORDER BY TimeFrom,TimeTo;", _
+        enlistToCboBox("SELECT CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', TIME_FORMAT(TimeTo,'%l:%i %p')) FROM shift WHERE OrganizationID='" & org_rowid & "' ORDER BY TimeFrom,TimeTo;", _
                        cboshiftlist)
 
-        view_ID = VIEW_privilege("Employee Shift", orgztnID)
+        view_ID = VIEW_privilege("Employee Shift", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -370,7 +370,7 @@ Public Class EmployeeShiftEntryForm
         Dim shiftRowID = EXECQUER("SELECT RowID" & _
                                   " FROM shift" & _
                                   " WHERE CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', TIME_FORMAT(TimeTo,'%l:%i %p'))='" & cboshiftlist.Text & "'" & _
-                                  " AND OrganizationID=" & orgztnID & ";")
+                                  " AND OrganizationID=" & org_rowid & ";")
 
         shiftRowID = If(shiftRowID.ToString.Length = 0, 0, shiftRowID)
 
@@ -421,7 +421,7 @@ Public Class EmployeeShiftEntryForm
 
         If IsNew = 1 Then
             '                                                                                                                                                                 'Val(lblShiftID.Text)
-            sp_employeeshiftentry(z_datetime, z_User, z_datetime, z_OrganizationID, z_User, dtpDateFrom.Value, dtpDateTo.Value, dgvEmpList.CurrentRow.Cells(c_ID.Index).Value, shiftRowID, nightshift, isrestday)
+            sp_employeeshiftentry(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, dtpDateFrom.Value, dtpDateTo.Value, dgvEmpList.CurrentRow.Cells(c_ID.Index).Value, shiftRowID, nightshift, isrestday)
 
 
             dtpDateFrom.MinDate = CDate("1/1/1753").ToShortDateString
@@ -442,7 +442,7 @@ Public Class EmployeeShiftEntryForm
             End If
             '                                                                                            'Val(lblShiftID.Text)
             DirectCommand("UPDATE employeeshift SET lastupd = '" & z_datetime & "', " & _
-                          "lastupdby = '" & z_User & "', EffectiveFrom = '" & dtpDateFrom.Value.ToString("yyyy-MM-dd") & "', " & _
+                          "lastupdby = '" & user_row_id & "', EffectiveFrom = '" & dtpDateFrom.Value.ToString("yyyy-MM-dd") & "', " & _
                           "EffectiveTo = '" & dtpDateTo.Value.ToString("yyyy-MM-dd") & "', ShiftID = '" & shiftRowID & "', NightShift = '" & nightshift & "' " & _
                           ", RestDay = '" & isrestday & "' " & _
                           "Where RowID = '" & dgvEmpShiftList.CurrentRow.Cells(c_RowIDShift.Index).Value & "'")
@@ -486,7 +486,7 @@ Public Class EmployeeShiftEntryForm
 
                 enlistToCboBox("SELECT CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', TIME_FORMAT(TimeTo,'%l:%i %p'))" & _
                                " FROM shift" & _
-                               " WHERE OrganizationID='" & orgztnID & "'" & _
+                               " WHERE OrganizationID='" & org_rowid & "'" & _
                                " ORDER BY TimeFrom,TimeTo;", _
                                cboshiftlist)
 
@@ -509,7 +509,7 @@ Public Class EmployeeShiftEntryForm
 
             If prompt = Windows.Forms.DialogResult.Yes Then
 
-                EXECQUER("UPDATE employeetimeentry SET EmployeeShiftID=NULL WHERE EmployeeShiftID='" & dgvEmpShiftList.CurrentRow.Cells("c_RowIDShift").Value & "' AND OrganizationID=" & orgztnID & ";" & _
+                EXECQUER("UPDATE employeetimeentry SET EmployeeShiftID=NULL WHERE EmployeeShiftID='" & dgvEmpShiftList.CurrentRow.Cells("c_RowIDShift").Value & "' AND OrganizationID=" & org_rowid & ";" & _
                          "DELETE FROM employeeshift WHERE RowID='" & dgvEmpShiftList.CurrentRow.Cells("c_RowIDShift").Value & "';")
 
                 'Else
@@ -698,7 +698,7 @@ Public Class EmployeeShiftEntryForm
 
         End If
 
-        EXECQUER("DELETE FROM shift WHERE OrganizationID='" & orgztnID & "' AND TimeFrom IS NULL AND TimeTo IS NULL;" & _
+        EXECQUER("DELETE FROM shift WHERE OrganizationID='" & org_rowid & "' AND TimeFrom IS NULL AND TimeTo IS NULL;" & _
                  "ALTER TABLE shift AUTO_INCREMENT = 0;")
 
     End Sub
@@ -727,7 +727,7 @@ Public Class EmployeeShiftEntryForm
 
         enlistToCboBox("SELECT CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', IF(TimeTo IS NULL, '', TIME_FORMAT(TimeTo,'%l:%i %p')))" & _
                        " FROM shift" & _
-                       " WHERE OrganizationID='" & orgztnID & "'" & _
+                       " WHERE OrganizationID='" & org_rowid & "'" & _
                        " ORDER BY TimeFrom,TimeTo;", _
                        cboshiftlist)
 
@@ -773,9 +773,9 @@ Public Class EmployeeShiftEntryForm
 
                 .Parameters.AddWithValue("i_EmployeeID", i_EmployeeID)
 
-                .Parameters.AddWithValue("OrganizID", orgztnID)
+                .Parameters.AddWithValue("OrganizID", org_rowid)
 
-                .Parameters.AddWithValue("CreatedLastUpdBy", z_User)
+                .Parameters.AddWithValue("CreatedLastUpdBy", user_row_id)
 
                 Dim ii = MilitTime(i_TimeFrom)
 
@@ -949,7 +949,7 @@ Public Class EmployeeShiftEntryForm
 
             End If
         ElseIf sendrname = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM employeeshift WHERE OrganizationID='" & orgztnID & "' AND EmployeeID='" & currentselectedEmpRowID & "';"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM employeeshift WHERE OrganizationID='" & org_rowid & "' AND EmployeeID='" & currentselectedEmpRowID & "';"))
 
             Dim remender = lastpage Mod 1
 

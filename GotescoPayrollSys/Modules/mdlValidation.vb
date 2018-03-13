@@ -5,7 +5,7 @@ Imports System.Data
 
 Module mdlValidation
     Public z_OrganizationID As Integer
-    Public z_User As Integer
+    Public user_row_id As Integer
     Public Z_UserName As String
     Public z_postName As String
     Public z_CompanyName As String
@@ -164,7 +164,7 @@ Module mdlValidation
                     End With
                 Next
             End If
-            
+
             '
         End If
 
@@ -210,7 +210,7 @@ Module mdlValidation
                 Next
             End If
 
-            
+
         End If
 
         Return True
@@ -303,7 +303,7 @@ Module mdlValidation
         For i As Integer = 0 To UpperBound
             If Not strInputArray(i, 1) = strInputArray(i, 2) Then
                 'DirectCommand("UPDATE audittrail SET ")
-                I_AuditTrail(created, Z_User, created, Z_User, Z_OrganizationID, a_ViewID, strInputArray(i, 0), a_RowID, strInputArray(i, 1), strInputArray(i, 2), "Update")
+                I_AuditTrail(created, user_row_id, created, user_row_id, Z_OrganizationID, a_ViewID, strInputArray(i, 0), a_RowID, strInputArray(i, 1), strInputArray(i, 2), "Update")
             End If
         Next
         Return True
@@ -314,7 +314,7 @@ Module mdlValidation
 
         Dim created As String = Date.Now.ToString("yyyy-MM-dd HH:mm:ss")
         For i As Integer = 0 To UpperBound
-            I_AuditTrail(created, Z_User, created, Z_User, Z_OrganizationID, a_ViewID, strInputArray(i, 0), a_RowID, "", strInputArray(i, 1), "Insert")
+            I_AuditTrail(created, user_row_id, created, user_row_id, Z_OrganizationID, a_ViewID, strInputArray(i, 0), a_RowID, "", strInputArray(i, 1), "Insert")
         Next
         Return True
     End Function

@@ -15,7 +15,7 @@ Public Class ThirteenthMonthSummaryReportProvider
         End If
 
         Dim params = New Object(,) {
-            {"OrganizID", orgztnID},
+            {"OrganizID", org_rowid},
             {"paramYear", promptYear.YearValue}
         }
 

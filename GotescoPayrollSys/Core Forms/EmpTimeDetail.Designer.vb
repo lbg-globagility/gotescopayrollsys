@@ -23,8 +23,8 @@ Partial Class EmpTimeDetail
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.bgworkImport = New System.ComponentModel.BackgroundWorker()
         Me.dgvetentdet = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -98,6 +98,7 @@ Partial Class EmpTimeDetail
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.bgworkInsertImport = New System.ComponentModel.BackgroundWorker()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.bgworkTypicalImport = New System.ComponentModel.BackgroundWorker()
         CType(Me.dgvetentdet, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip2.SuspendLayout()
         CType(Me.dgvetentd, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -129,14 +130,14 @@ Partial Class EmpTimeDetail
         Me.dgvetentdet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvetentdet.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column7, Me.Column2, Me.Column11, Me.Column12, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.timeentstat})
         Me.dgvetentdet.ContextMenuStrip = Me.ContextMenuStrip2
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvetentdet.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvetentdet.DefaultCellStyle = DataGridViewCellStyle3
         Me.dgvetentdet.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgvetentdet.Location = New System.Drawing.Point(11, 57)
         Me.dgvetentdet.MultiSelect = False
@@ -263,14 +264,14 @@ Partial Class EmpTimeDetail
         Me.dgvetentd.ColumnHeadersHeight = 38
         Me.dgvetentd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvetentd.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Created, Me.createdmilit, Me.Column8, Me.Column9, Me.Column10})
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvetentd.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvetentd.DefaultCellStyle = DataGridViewCellStyle1
         Me.dgvetentd.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgvetentd.Location = New System.Drawing.Point(12, 214)
         Me.dgvetentd.MultiSelect = False
@@ -814,6 +815,11 @@ Partial Class EmpTimeDetail
         Me.Panel1.Size = New System.Drawing.Size(1018, 496)
         Me.Panel1.TabIndex = 140
         '
+        'bgworkTypicalImport
+        '
+        Me.bgworkTypicalImport.WorkerReportsProgress = True
+        Me.bgworkTypicalImport.WorkerSupportsCancellation = True
+        '
         'EmpTimeDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -915,4 +921,5 @@ Partial Class EmpTimeDetail
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents ContextMenuStrip2 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents DeleteRowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents bgworkTypicalImport As System.ComponentModel.BackgroundWorker
 End Class

@@ -175,7 +175,7 @@ Public Class EmployeeSelection
 
         Static samesearchquery As String = Nothing
 
-        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable(loadEmpQuery & " WHERE emp.OrganizationID=" & orgztnID & " ORDER BY emp.RowID DESC LIMIT " & pagination & ",20;")
+        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable(loadEmpQuery & " WHERE emp.OrganizationID=" & org_rowid & " ORDER BY emp.RowID DESC LIMIT " & pagination & ",20;")
 
         If SearchQuery = Nothing Then
             empTable = n_SQLQueryToDatatable.ResultTable
@@ -189,11 +189,11 @@ Public Class EmployeeSelection
 
                 pagination = 0
 
-                n_SQLQueryToDatatable = New SQLQueryToDatatable(loadEmpQuery & " WHERE " & SearchQuery & " AND emp.OrganizationID=" & orgztnID & " ORDER BY emp.RowID DESC LIMIT " & pagination & ",20;")
+                n_SQLQueryToDatatable = New SQLQueryToDatatable(loadEmpQuery & " WHERE " & SearchQuery & " AND emp.OrganizationID=" & org_rowid & " ORDER BY emp.RowID DESC LIMIT " & pagination & ",20;")
 
                 empTable = n_SQLQueryToDatatable.ResultTable
 
-                samesearchquery = loadEmpQuery & " WHERE " & SearchQuery & " AND emp.OrganizationID=" & orgztnID & " ORDER BY emp.RowID DESC LIMIT "
+                samesearchquery = loadEmpQuery & " WHERE " & SearchQuery & " AND emp.OrganizationID=" & org_rowid & " ORDER BY emp.RowID DESC LIMIT "
             Else
 
                 n_SQLQueryToDatatable = New SQLQueryToDatatable(samesearchquery & pagination & ",20;")
@@ -754,10 +754,10 @@ Public Class EmployeeSelection
         ElseIf sender_linklabel.Name = "First" Then
             pagination = 0
         ElseIf sender_linklabel.Name = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM employee WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM employee WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 1
-            
+
             pagination = (lastpage - remender) * 20
 
             If pagination - 20 < 20 Then
@@ -822,7 +822,7 @@ Public Class EmployeeSelection
 
         Dim EmpIDFNameLName As New DataTable
 
-        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT EmployeeID, FirstName, LastName FROM employee WHERE OrganizationID='" & orgztnID & "' AND RevealInPayroll='1';")
+        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT EmployeeID, FirstName, LastName FROM employee WHERE OrganizationID='" & org_rowid & "' AND RevealInPayroll='1';")
 
         EmpIDFNameLName = n_SQLQueryToDatatable.ResultTable
 

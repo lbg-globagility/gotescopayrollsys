@@ -11,7 +11,7 @@
     Private Sub dutyshift_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 
-        view_ID = VIEW_privilege("Employee Shift", orgztnID)
+        view_ID = VIEW_privilege("Employee Shift", org_rowid)
 
         loadShift()
 
@@ -23,7 +23,7 @@
 
     Sub loadShift()
 
-        shifttable = retAsDatTbl("SELECT RowID,TIME_FORMAT(TimeFrom,'%h:%i %p') 'TimeFrom',TIME_FORMAT(TimeTo,'%h:%i %p') 'TimeTo' FROM shift WHERE OrganizationID=" & orgztnID & ";")
+        shifttable = retAsDatTbl("SELECT RowID,TIME_FORMAT(TimeFrom,'%h:%i %p') 'TimeFrom',TIME_FORMAT(TimeTo,'%h:%i %p') 'TimeTo' FROM shift WHERE OrganizationID=" & org_rowid & ";")
 
         dgvshift.Rows.Clear()
 
@@ -134,9 +134,9 @@
         params(5, 0) = "sh_TimeTo"
 
         params(0, 1) = If(sh_RowID = Nothing, DBNull.Value, sh_RowID)
-        params(1, 1) = orgztnID
-        params(2, 1) = z_User
-        params(3, 1) = z_User
+        params(1, 1) = org_rowid
+        params(2, 1) = user_row_id
+        params(3, 1) = user_row_id
         params(4, 1) = sh_TimeFrom
         params(5, 1) = sh_TimeTo
 

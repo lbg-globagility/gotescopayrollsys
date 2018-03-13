@@ -6,7 +6,7 @@
 
         reloadViewPrivilege()
 
-        Dim view_ID = VIEW_privilege(ViewName, orgztnID)
+        Dim view_ID = VIEW_privilege(ViewName, org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -280,7 +280,7 @@
         Dim hasPositionViewUpdate = EXECQUER("SELECT EXISTS(SELECT" & _
                                              " RowID" & _
                                              " FROM position_view" & _
-                                             " WHERE OrganizationID='" & orgztnID & "'" & _
+                                             " WHERE OrganizationID='" & org_rowid & "'" & _
                                              " AND (DATE_FORMAT(Created,'%Y-%m-%d') = CURDATE()" & _
                                              " OR DATE_FORMAT(LastUpd,'%Y-%m-%d') = CURDATE()));")
 
@@ -288,8 +288,8 @@
 
             position_view_table = retAsDatTbl("SELECT *" & _
                                               " FROM position_view" & _
-                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & z_User & ")" & _
-                                              " AND OrganizationID='" & orgztnID & "';")
+                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" & _
+                                              " AND OrganizationID='" & org_rowid & "';")
 
         End If
 

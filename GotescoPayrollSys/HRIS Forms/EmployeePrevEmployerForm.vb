@@ -155,7 +155,7 @@
             Else
                 SP_employeepreviousemployer(txtCompanyName.Text, txtTradeName.Text, z_OrganizationID, txtMainPhone.Text, txtFaxNo.Text, txtJobTitle.Text, _
                                        txtExfromto.Text, txtCompAddr.Text, txtContactName.Text, txtEmailAdd.Text, txtAltEmailAdd.Text, txtAltPhone.Text, _
-                                      txtUrl.Text, txtTinNo.Text, txtJobFunction.Text, z_datetime, z_User, z_datetime, z_User, txtOrganizationType.Text, _
+                                      txtUrl.Text, txtTinNo.Text, txtJobFunction.Text, z_datetime, user_row_id, z_datetime, user_row_id, txtOrganizationType.Text, _
                                       dgvEmpList.CurrentRow.Cells(c_LRowID.Index).Value)
                 fillemployerlist()
 

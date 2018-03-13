@@ -68,7 +68,7 @@ Public Class LeaveForm
                         " FROM product p" & _
                         " INNER JOIN category c ON c.RowID=p.CategoryID" & _
                         " WHERE c.CategoryName='Leave Type'" & _
-                        " AND p.OrganizationID='" & orgztnID & "';", _
+                        " AND p.OrganizationID='" & org_rowid & "';", _
                        cboleavetypes)
 
         enlistToCboBox("SELECT Name FROM organization WHERE NoPurpose='0' ORDER BY Name;", _
@@ -194,7 +194,7 @@ Public Class LeaveForm
 
         'param(3, 1) = LeaveTypeValue 'Leave type
         param(3, 1) = cboleavetypes.Tag(1) 'Leave type
-        param(4, 1) = If(z_User = 0, DBNull.Value, z_User)
+        param(4, 1) = If(user_row_id = 0, DBNull.Value, user_row_id)
         param(5, 1) = param(4, 1) 'z_User
         param(6, 1) = e_rowid 'TxtEmployeeNumber1.RowIDValue 'n_EmployeeRowID
 
@@ -343,7 +343,7 @@ Public Class LeaveForm
         RemoveHandler cboleavetypes.SelectedIndexChanged, AddressOf cboleavetypes_SelectedIndexChanged
         RemoveHandler cboleavetypes.SelectedValueChanged, AddressOf cboleavetypes_SelectedIndexChanged
 
-        If orgztnID = Nothing Then
+        If org_rowid = Nothing Then
             'SQLQueryToDatatable
 
             Dim dtEmp As New DataTable

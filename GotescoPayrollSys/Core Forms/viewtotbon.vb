@@ -6,13 +6,13 @@
 
     Private Sub viewtotbon_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        categBonusID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & orgztnID & " AND CategoryName='" & "Bonus" & "' LIMIT 1;")
+        categBonusID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & org_rowid & " AND CategoryName='" & "Bonus" & "' LIMIT 1;")
 
         If Val(categBonusID) = 0 Then
             categBonusID = INSUPD_category(, "Bonus")
         End If
 
-        enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categBonusID & "' AND OrganizationID=" & orgztnID & ";", _
+        enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categBonusID & "' AND OrganizationID=" & org_rowid & ";", _
                        bonus_type) 'cboallowtype
 
         'For Each strval In bonus_type
@@ -33,7 +33,7 @@
         params(3, 0) = "effectivedateto"
 
         params(0, 1) = ebon_EmployeeID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = datefrom
         params(3, 1) = dateto
 

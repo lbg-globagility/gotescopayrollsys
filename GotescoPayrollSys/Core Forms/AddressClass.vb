@@ -244,7 +244,7 @@
         params(8, 0) = "ad_ZipCode"
 
         params(0, 1) = If(ad_RowID = Nothing, DBNull.Value, ad_RowID)
-        params(1, 1) = z_User
+        params(1, 1) = user_row_id
         params(2, 1) = ad_StreetAddress1
         params(3, 1) = ad_StreetAddress2
         params(4, 1) = ad_Barangay

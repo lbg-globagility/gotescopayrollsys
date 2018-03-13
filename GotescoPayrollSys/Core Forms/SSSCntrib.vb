@@ -77,7 +77,7 @@ Public Class SSSCntrib
 
         u_nem = EXECQUER(USERNameStrPropr & 1)
 
-        view_ID = VIEW_privilege("SSS Contribution Table", orgztnID)
+        view_ID = VIEW_privilege("SSS Contribution Table", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -269,7 +269,7 @@ Public Class SSSCntrib
                     ",EmployerContributionAmount=" & Val(.Cells("Column4").Value) & _
                     ",EmployeeECAmount=" & Val(.Cells("Column6").Value) & _
                     ",LastUpd=CURRENT_TIMESTAMP()" & _
-                    ",LastUpdBy=" & z_User & _
+                    ",LastUpdBy=" & user_row_id & _
                     " WHERE RowID='" & _rID & "';")
 
                     .Cells("Column12").Value = _now
@@ -359,7 +359,7 @@ Public Class SSSCntrib
             min_range = ValNoComma(min_range)
 
             EXECQUER("INSERT INTO paysocialsecurity (Created,CreatedBy,LastUpdBy,RangeFromAmount,RangeToAmount,MonthlySalaryCredit,EmployeeContributionAmount,EmployerContributionAmount,EmployeeECAmount) VALUES " & _
-                                                "(CURRENT_TIMESTAMP(),'" & z_User & "','" & z_User & "',0,(" & min_range & " - 1),0,0,0,0) ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP(),LastUpdBy='" & z_User & "',RangeFromAmount=0,RangeToAmount=(" & min_range & " - 1),MonthlySalaryCredit=0,EmployeeContributionAmount=0,EmployerContributionAmount=0,EmployeeECAmount=0;")
+                                                "(CURRENT_TIMESTAMP(),'" & user_row_id & "','" & user_row_id & "',0,(" & min_range & " - 1),0,0,0,0) ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP(),LastUpdBy='" & user_row_id & "',RangeFromAmount=0,RangeToAmount=(" & min_range & " - 1),MonthlySalaryCredit=0,EmployeeContributionAmount=0,EmployerContributionAmount=0,EmployeeECAmount=0;")
 
         End If
 
@@ -534,8 +534,8 @@ Public Class SSSCntrib
         params(8, 0) = "sss_EmployeeECAmount"
 
         params(0, 1) = If(sss_RowID = Nothing, DBNull.Value, sss_RowID)
-        params(1, 1) = z_User
-        params(2, 1) = z_User
+        params(1, 1) = user_row_id
+        params(2, 1) = user_row_id
         params(3, 1) = Val(sss_RangeFromAmount)
         params(4, 1) = Val(sss_RangeToAmount)
         params(5, 1) = Val(sss_MonthlySalaryCredit)
@@ -686,11 +686,11 @@ Public Class SSSCntrib
 
                 '.Parameters.Add(returnName, MySql_DbType)
 
-                .Parameters.AddWithValue("au_CreatedBy", z_User)
+                .Parameters.AddWithValue("au_CreatedBy", user_row_id)
 
-                .Parameters.AddWithValue("au_LastUpdBy", z_User)
+                .Parameters.AddWithValue("au_LastUpdBy", user_row_id)
 
-                .Parameters.AddWithValue("au_OrganizationID", orgztnID)
+                .Parameters.AddWithValue("au_OrganizationID", org_rowid)
 
                 .Parameters.AddWithValue("au_ViewID", view_ID)
 

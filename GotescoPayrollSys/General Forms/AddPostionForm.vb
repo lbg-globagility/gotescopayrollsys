@@ -16,7 +16,7 @@
                 Exit Sub
             Else
 
-                I_Position(txtPosition.Text, z_datetime, z_datetime, z_User, z_OrganizationID, z_User)
+                I_Position(txtPosition.Text, z_datetime, z_datetime, user_row_id, z_OrganizationID, user_row_id)
                 txtPosition.Clear()
 
                 myBalloon("Added to database", "Done", btnSave, , -65)

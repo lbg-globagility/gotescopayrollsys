@@ -98,11 +98,11 @@ Public Class MetroLogin
 
     Private Sub btnlogin_Click(sender As Object, e As EventArgs) Handles btnlogin.Click
 
-        z_User = UserAuthentication()
+        user_row_id = UserAuthentication()
 
         Static err_count As SByte = 0
 
-        If z_User > 0 Then
+        If user_row_id > 0 Then
 
             If cbxorganiz.SelectedIndex = -1 Then
 
@@ -116,7 +116,7 @@ Public Class MetroLogin
 
             err_count = 0
 
-            Dim userFNameLName = EXECQUER("SELECT CONCAT(COALESCE(FirstName,'.'),',',COALESCE(LastName,'.')) FROM user WHERE RowID='" & z_User & "';")
+            Dim userFNameLName = EXECQUER("SELECT CONCAT(COALESCE(FirstName,'.'),',',COALESCE(LastName,'.')) FROM user WHERE RowID='" & user_row_id & "';")
 
             Dim splitFNameLName = Split(userFNameLName, ",")
 
@@ -149,24 +149,24 @@ Public Class MetroLogin
 
                 numofdaysthisyear = EXECQUER("SELECT DAYOFYEAR(LAST_DAY(CONCAT(YEAR(CURRENT_DATE()),'-12-01')));")
 
-                If freq <> orgztnID Then
-                    freq = orgztnID
+                If freq <> org_rowid Then
+                    freq = org_rowid
 
                 End If
 
                 position_view_table =
                     New SQLQueryToDatatable("SELECT *" & _
                                             " FROM position_view" & _
-                                            " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & z_User & ")" & _
-                                            " AND OrganizationID='" & orgztnID & "';").ResultTable
+                                            " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" & _
+                                            " AND OrganizationID='" & org_rowid & "';").ResultTable
 
                 Dim i = position_view_table.Rows.Count
 
             End If
 
-            z_postName = EXECQUER("SELECT p.PositionName FROM user u INNER JOIN position p ON p.RowID=u.PositionID WHERE u.RowID='" & z_User & "';")
+            z_postName = EXECQUER("SELECT p.PositionName FROM user u INNER JOIN position p ON p.RowID=u.PositionID WHERE u.RowID='" & user_row_id & "';")
 
-            If orgztnID <> Nothing Then
+            If org_rowid <> Nothing Then
 
                 MDIPrimaryForm.Show()
 
@@ -245,13 +245,13 @@ Public Class MetroLogin
 
         ''orgztnID = EXECQUER("SELECT RowID FROM organization WHERE Name='" & orgNam & "' LIMIT 1;")
 
-        orgztnID = cbxorganiz.SelectedValue
+        org_rowid = cbxorganiz.SelectedValue
 
-        z_OrganizationID = ValNoComma(orgztnID)
+        z_OrganizationID = ValNoComma(org_rowid)
 
         Dim org_emblem As New DataTable
 
-        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT Image FROM organization WHERE RowID='" & orgztnID & "' AND Image IS NOT NULL;")
+        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT Image FROM organization WHERE RowID='" & org_rowid & "' AND Image IS NOT NULL;")
 
         org_emblem = n_SQLQueryToDatatable.ResultTable
 

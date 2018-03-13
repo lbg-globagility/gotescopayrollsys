@@ -20,7 +20,7 @@ Public Class BIR_1601CForm
 
     Private Sub BIR_1601CForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        collectEmployeeID = EXECQUER("SELECT GROUP_CONCAT(EmployeeID) FROM employee WHERE OrganizationID='" & orgztnID & "';")
+        collectEmployeeID = EXECQUER("SELECT GROUP_CONCAT(EmployeeID) FROM employee WHERE OrganizationID='" & org_rowid & "';")
 
         bgwEmployeeID.RunWorkerAsync()
 

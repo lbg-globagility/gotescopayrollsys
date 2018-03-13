@@ -137,7 +137,7 @@
             Dim fID As String = getStringItem("Select RowID From product where PartNo = '" & cmbFinding.Text & "' And organizationID = '" & z_OrganizationID & "'")
             Dim getfID As Integer = Val(fID)
 
-            sp_employeedisciplinaryaction(z_datetime, z_User, z_datetime, z_OrganizationID, z_User, txtAction.Text, txtComments.Text, _
+            sp_employeedisciplinaryaction(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, txtAction.Text, txtComments.Text, _
                                           txtDesc.Text, getfID, RowID, dtpFrom.Value.ToString("yyyy-MM-dd"), dtpTo.Value.ToString("yyyy-MM-dd"))
 
             dgvEmpList.Enabled = True

@@ -152,11 +152,11 @@ Public Class OffSetting
 
                 .Parameters.AddWithValue("eosRowID", If(eosRowID = Nothing, DBNull.Value, eosRowID))
 
-                .Parameters.AddWithValue("eosOrganizationID", orgztnID)
+                .Parameters.AddWithValue("eosOrganizationID", org_rowid)
 
                 .Parameters.AddWithValue("eosEmployeeID", eosEmployeeID)
 
-                .Parameters.AddWithValue("eosUserRowID", z_User)
+                .Parameters.AddWithValue("eosUserRowID", user_row_id)
 
                 .Parameters.AddWithValue("eosType", eosType)
 
@@ -324,7 +324,7 @@ Public Class OffSetting
 
         Dim dt_eos As New DataTable
 
-        dt_eos = retAsDatTbl("CALL VIEW_employeeoffset('" & orgztnID & "','" & EmpRowID & "', '" & pagenumber & "');")
+        dt_eos = retAsDatTbl("CALL VIEW_employeeoffset('" & org_rowid & "','" & EmpRowID & "', '" & pagenumber & "');")
 
         For Each erow As DataRow In dt_eos.Rows
 
@@ -495,7 +495,7 @@ Public Class OffSetting
 
         End If
 
-        dt_emp = retAsDatTbl("CALL VIEW_employee1('" & orgztnID & "', '" & pagination & "', '" & searchstring & "');")
+        dt_emp = retAsDatTbl("CALL VIEW_employee1('" & org_rowid & "', '" & pagination & "', '" & searchstring & "');")
 
         dgvemployees.Rows.Clear()
 
@@ -576,10 +576,10 @@ Public Class OffSetting
 
             End If
         ElseIf sendrname = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM employee WHERE OrganizationID=" & orgztnID & ";"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM employee WHERE OrganizationID=" & org_rowid & ";"))
 
             Dim remender = lastpage Mod 1
-            
+
             pagination = (lastpage - remender) * 20
 
             If pagination - 20 < 20 Then
@@ -652,10 +652,10 @@ Public Class OffSetting
 
             End If
         ElseIf sendrname = "lnkLast" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM employeeoffset WHERE OrganizationID='" & orgztnID & "' AND EmployeeID='" & publicEmpRowID & "';"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM employeeoffset WHERE OrganizationID='" & org_rowid & "' AND EmployeeID='" & publicEmpRowID & "';"))
 
             Dim remender = lastpage Mod 1
-            
+
             pagenumber = (lastpage - remender) * 20
 
             If pagenumber - 20 < 20 Then
@@ -710,7 +710,7 @@ Public Class OffSetting
 
         Dim EmpIDFNameLName As New DataTable
 
-        EmpIDFNameLName = retAsDatTbl("SELECT EmployeeID, FirstName, LastName FROM employee WHERE OrganizationID='" & orgztnID & "' AND RevealInPayroll='1';")
+        EmpIDFNameLName = retAsDatTbl("SELECT EmployeeID, FirstName, LastName FROM employee WHERE OrganizationID='" & org_rowid & "' AND RevealInPayroll='1';")
 
         For Each drow As DataRow In EmpIDFNameLName.Rows
 

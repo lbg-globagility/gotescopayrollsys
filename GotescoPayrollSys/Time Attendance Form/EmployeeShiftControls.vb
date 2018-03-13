@@ -60,7 +60,7 @@ Public Class EmployeeShiftControls
 
         trvDepartment.Nodes.Clear()
 
-        ParentDiv = New SQLQueryToDatatable("SELECT * FROM `division` WHERE OrganizationID='" & orgztnID & "' AND ParentDivisionID IS NULL;").ResultTable
+        ParentDiv = New SQLQueryToDatatable("SELECT * FROM `division` WHERE OrganizationID='" & org_rowid & "' AND ParentDivisionID IS NULL;").ResultTable
 
         ChiledDiv = New SQLQueryToDatatable("SELECT d.*" &
                                             ",dd.Name AS ParentDivisionName" &
@@ -68,7 +68,7 @@ Public Class EmployeeShiftControls
                                             " FROM `division` d" &
                                             " INNER JOIN `division` dd ON dd.RowID=d.ParentDivisionID" &
                                             " INNER JOIN payfrequency pf ON pf.RowID=d.PayFrequencyID" &
-                                            " WHERE d.OrganizationID='" & orgztnID & "' AND d.ParentDivisionID IS NOT NULL;").ResultTable
+                                            " WHERE d.OrganizationID='" & org_rowid & "' AND d.ParentDivisionID IS NOT NULL;").ResultTable
 
         For Each pdiv As DataRow In ParentDiv.Rows
 
@@ -128,7 +128,7 @@ Public Class EmployeeShiftControls
                                     ", e.RowID" & _
                                     ",(esh.esdRowID IS NOT NULL) AS IsByDayEncoding" &
                                     " from employee e" & _
-                                    " LEFT JOIN (SELECT RowID AS esdRowID,EmployeeID FROM employeeshiftbyday WHERE OrganizationID='" & orgztnID & "' GROUP BY EmployeeID) esh ON esh.EmployeeID=e.RowID" &
+                                    " LEFT JOIN (SELECT RowID AS esdRowID,EmployeeID FROM employeeshiftbyday WHERE OrganizationID='" & org_rowid & "' GROUP BY EmployeeID) esh ON esh.EmployeeID=e.RowID" &
                                     " where e.organizationID = '" & z_OrganizationID & "'" & _
                                     " ORDER BY e.RowID DESC;")
 
@@ -160,7 +160,7 @@ Public Class EmployeeShiftControls
 
             Dim n_ReadSQLProcedureToDatatable As _
                 New ReadSQLProcedureToDatatable("SEARCH_employeeshift",
-                                                orgztnID,
+                                                org_rowid,
                                                 divisionRowID,
                                                 TextBox4.Text)
 
@@ -332,10 +332,10 @@ Public Class EmployeeShiftControls
 
         'cboshiftlist.ContextMenu = New ContextMenu
 
-        enlistToCboBox("SELECT CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', TIME_FORMAT(TimeTo,'%l:%i %p')) FROM shift WHERE OrganizationID='" & orgztnID & "' ORDER BY TimeFrom,TimeTo;", _
+        enlistToCboBox("SELECT CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', TIME_FORMAT(TimeTo,'%l:%i %p')) FROM shift WHERE OrganizationID='" & org_rowid & "' ORDER BY TimeFrom,TimeTo;", _
                        cboshiftlist)
 
-        view_ID = VIEW_privilege("Employee Shift", orgztnID)
+        view_ID = VIEW_privilege("Employee Shift", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -536,7 +536,7 @@ Public Class EmployeeShiftControls
                 Dim shiftRowID As String = EXECQUER("SELECT RowID" & _
                                           " FROM shift" & _
                                           " WHERE CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', TIME_FORMAT(TimeTo,'%l:%i %p'))='" & cboshiftlist.Text & "'" & _
-                                          " AND OrganizationID=" & orgztnID & ";")
+                                          " AND OrganizationID=" & org_rowid & ";")
                 'shiftRowID = If(shiftRowID.ToString.Length = 0, 0, shiftRowID)
                 shiftRowID = If(shiftRowID = Nothing, 0, shiftRowID)
 
@@ -585,7 +585,7 @@ Public Class EmployeeShiftControls
 
                 If IsNew = 1 Then
                     '                                                                                                                                                                 'Val(lblShiftID.Text)
-                    sp_employeeshiftentry(z_datetime, z_User, z_datetime, z_OrganizationID, z_User, dtpDateFrom.Value, dtpDateTo.Value, dgvEmpList.CurrentRow.Cells(c_ID.Index).Value, shiftRowID, nightshift, isrestday)
+                    sp_employeeshiftentry(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, dtpDateFrom.Value, dtpDateTo.Value, dgvEmpList.CurrentRow.Cells(c_ID.Index).Value, shiftRowID, nightshift, isrestday)
 
 
                     dtpDateFrom.MinDate = CDate("1/1/1753").ToShortDateString
@@ -606,7 +606,7 @@ Public Class EmployeeShiftControls
                     End If
                     '                                                                                            'Val(lblShiftID.Text)
                     DirectCommand("UPDATE employeeshift SET lastupd = '" & z_datetime & "', " & _
-                                  "lastupdby = '" & z_User & "', EffectiveFrom = '" & dtpDateFrom.Value.ToString("yyyy-MM-dd") & "', " & _
+                                  "lastupdby = '" & user_row_id & "', EffectiveFrom = '" & dtpDateFrom.Value.ToString("yyyy-MM-dd") & "', " & _
                                   "EffectiveTo = '" & dtpDateTo.Value.ToString("yyyy-MM-dd") & "', ShiftID = '" & shiftRowID & "', NightShift = '" & nightshift & "' " & _
                                   ", RestDay = '" & isrestday & "' " & _
                                   "Where RowID = '" & dgvEmpShiftList.CurrentRow.Cells(c_RowIDShift.Index).Value & "'")
@@ -633,7 +633,7 @@ Public Class EmployeeShiftControls
 
                 'customEmployeeShift(EmpStartDate,AddDay,ShiftRowID)
 
-                Dim EmployeeStartingDate = New ExecuteQuery("SELECT StartDate FROM employee WHERE RowID='" & dgvEmpList.Tag & "' AND OrganizationID='" & orgztnID & "';").Result
+                Dim EmployeeStartingDate = New ExecuteQuery("SELECT StartDate FROM employee WHERE RowID='" & dgvEmpList.Tag & "' AND OrganizationID='" & org_rowid & "';").Result
 
                 Dim customEmployeeShift As New DataTable
 
@@ -650,7 +650,7 @@ Public Class EmployeeShiftControls
                     New ExecuteQuery("SELECT EXISTS(SELECT RowID" &
                                      " FROM employeeshiftbyday" &
                                      " WHERE EmployeeID='" & dgvEmpList.Tag & "'" &
-                                     " AND OrganizationID='" & orgztnID & "'" &
+                                     " AND OrganizationID='" & org_rowid & "'" &
                                      " LIMIT 1);").Result
 
                 If shiftbydayIsExists = "1" Then
@@ -661,7 +661,7 @@ Public Class EmployeeShiftControls
                     Dim nothing_value =
                         New ExecuteQuery("DELETE FROM employeeshiftbyday" &
                                          " WHERE EmployeeID='" & dgvEmpList.Tag & "'" &
-                                         " AND OrganizationID='" & orgztnID & "';" &
+                                         " AND OrganizationID='" & org_rowid & "';" &
                                          " ALTER TABLE employeeshiftbyday AUTO_INCREMENT = 0;").Result
                 End If
 
@@ -708,8 +708,8 @@ Public Class EmployeeShiftControls
 
                         Dim n_ReadSQLFunction As _
                             New ReadSQLFunction("INSUPD_employeeshiftbyday", "returnvalue",
-                                                orgztnID,
-                                                z_User,
+                                                org_rowid,
+                                                user_row_id,
                                                 dgvEmpList.Tag,
                                                 If(IDShift = Nothing, DBNull.Value, IDShift),
                                                 ArrayWeekFormat(dgvcol.Index),
@@ -732,14 +732,14 @@ Public Class EmployeeShiftControls
                 If shiftbydayIsExists = "0" Then
 
                     Dim n_ExecuteQuery As _
-                        New ExecuteQuery("CALL AUTOMATICUPD_employeeshiftbyday('" & orgztnID & "','" & dgvEmpList.Tag & "');")
+                        New ExecuteQuery("CALL AUTOMATICUPD_employeeshiftbyday('" & org_rowid & "','" & dgvEmpList.Tag & "');")
 
                 Else
 
                     If chkbxNewShiftByDay.Checked Then
 
                         Dim n_ExecuteQuery As _
-                            New ExecuteQuery("CALL AUTOMATICUPD_employeeshiftbyday('" & orgztnID & "','" & dgvEmpList.Tag & "');")
+                            New ExecuteQuery("CALL AUTOMATICUPD_employeeshiftbyday('" & org_rowid & "','" & dgvEmpList.Tag & "');")
 
                     End If
 
@@ -795,7 +795,7 @@ Public Class EmployeeShiftControls
 
                 enlistToCboBox("SELECT CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', TIME_FORMAT(TimeTo,'%l:%i %p'))" & _
                                " FROM shift" & _
-                               " WHERE OrganizationID='" & orgztnID & "'" & _
+                               " WHERE OrganizationID='" & org_rowid & "'" & _
                                " ORDER BY TimeFrom,TimeTo;", _
                                cboshiftlist)
 
@@ -818,7 +818,7 @@ Public Class EmployeeShiftControls
 
             If prompt = Windows.Forms.DialogResult.Yes Then
 
-                EXECQUER("UPDATE employeetimeentry SET EmployeeShiftID=NULL WHERE EmployeeShiftID='" & dgvEmpShiftList.CurrentRow.Cells("c_RowIDShift").Value & "' AND OrganizationID=" & orgztnID & ";" & _
+                EXECQUER("UPDATE employeetimeentry SET EmployeeShiftID=NULL WHERE EmployeeShiftID='" & dgvEmpShiftList.CurrentRow.Cells("c_RowIDShift").Value & "' AND OrganizationID=" & org_rowid & ";" & _
                          "DELETE FROM employeeshift WHERE RowID='" & dgvEmpShiftList.CurrentRow.Cells("c_RowIDShift").Value & "';" &
                          "ALTER TABLE employeeshift AUTO_INCREMENT = 0;")
                 'Else
@@ -1013,7 +1013,7 @@ Public Class EmployeeShiftControls
 
         End If
 
-        EXECQUER("DELETE FROM shift WHERE OrganizationID='" & orgztnID & "' AND TimeFrom IS NULL AND TimeTo IS NULL;" & _
+        EXECQUER("DELETE FROM shift WHERE OrganizationID='" & org_rowid & "' AND TimeFrom IS NULL AND TimeTo IS NULL;" & _
                  "ALTER TABLE shift AUTO_INCREMENT = 0;")
 
     End Sub
@@ -1042,7 +1042,7 @@ Public Class EmployeeShiftControls
 
         enlistToCboBox("SELECT CONCAT(TIME_FORMAT(TimeFrom,'%l:%i %p'), ' TO ', IF(TimeTo IS NULL, '', TIME_FORMAT(TimeTo,'%l:%i %p')))" & _
                        " FROM shift" & _
-                       " WHERE OrganizationID='" & orgztnID & "'" & _
+                       " WHERE OrganizationID='" & org_rowid & "'" & _
                        " ORDER BY TimeFrom,TimeTo;", _
                        cboshiftlist)
 
@@ -1088,9 +1088,9 @@ Public Class EmployeeShiftControls
 
                 .Parameters.AddWithValue("i_EmployeeID", i_EmployeeID)
 
-                .Parameters.AddWithValue("OrganizID", orgztnID)
+                .Parameters.AddWithValue("OrganizID", org_rowid)
 
-                .Parameters.AddWithValue("CreatedLastUpdBy", z_User)
+                .Parameters.AddWithValue("CreatedLastUpdBy", user_row_id)
 
                 Dim ii = MilitTime(i_TimeFrom)
 
@@ -1241,7 +1241,7 @@ Public Class EmployeeShiftControls
             pagination += 50
         ElseIf sendrname = "Last" Then
 
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 50 FROM employeeshift WHERE OrganizationID=" & orgztnID & " AND EmployeeID='" & dgvEmpList.Tag & "';"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 50 FROM employeeshift WHERE OrganizationID=" & org_rowid & " AND EmployeeID='" & dgvEmpList.Tag & "';"))
 
             Dim remender = lastpage Mod 1
 
@@ -1255,7 +1255,7 @@ Public Class EmployeeShiftControls
 
         Dim n_ReadSQLProcedureToDatatable As _
             New ReadSQLProcedureToDatatable("VIEW_employeeshift",
-                                            orgztnID,
+                                            org_rowid,
                                             ValNoComma(dgvEmpList.Tag),
                                             pagination)
 
@@ -1446,7 +1446,7 @@ Public Class EmployeeShiftControls
                 " FROM employeeshiftbyday esd" &
                 " LEFT JOIN shift sh ON sh.RowID=esd.ShiftID AND sh.OrganizationID=esd.OrganizationID" &
                 " WHERE esd.EmployeeID='" & dgvEmpList.Tag & "'" &
-                " AND esd.OrganizationID='" & orgztnID & "'" &
+                " AND esd.OrganizationID='" & org_rowid & "'" &
                 " ORDER BY esd.OrderByValue;")
 
         Dim shiftbyday As New DataTable

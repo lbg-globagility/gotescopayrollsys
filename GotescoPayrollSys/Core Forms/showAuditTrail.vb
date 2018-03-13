@@ -44,9 +44,9 @@
         params(2, 0) = "UserID"
         params(3, 0) = "pagenumber"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = ViewRowID
-        params(2, 1) = z_User
+        params(2, 1) = user_row_id
         params(3, 1) = pagination
 
         Dim dt_audit As New DataTable
@@ -156,10 +156,10 @@
             pagination = 0
 
         ElseIf sender_linklabel.Name = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM audittrail WHERE OrganizationID=" & orgztnID & " AND ViewID='" & n_ViewRowID & "';"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM audittrail WHERE OrganizationID=" & org_rowid & " AND ViewID='" & n_ViewRowID & "';"))
 
             Dim remender = lastpage Mod 1
-            
+
             pagination = (lastpage - remender) * 20
 
             If pagination - 20 < 20 Then

@@ -230,7 +230,7 @@ Public Class PayrollGeneration
 
             '********************************************
             Dim params =
-                New Object() {orgztnID,
+                New Object() {org_rowid,
                               n_PayrollDateFrom,
                               n_PayrollDateTo}
 
@@ -482,7 +482,7 @@ Public Class PayrollGeneration
 
                 Dim divisorMonthlys = If(drow("PayFrequencyID") = 1, 2, _
                                          If(drow("PayFrequencyID") = 2, 1, _
-                                            If(drow("PayFrequencyID") = 3, EXECQUER("SELECT COUNT(RowID) FROM employeetimeentry WHERE EmployeeID='" & employee_ID & "' AND Date BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "' AND IFNULL(TotalDayPay,0)!=0 AND OrganizationID='" & orgztnID & "';"), _
+                                            If(drow("PayFrequencyID") = 3, EXECQUER("SELECT COUNT(RowID) FROM employeetimeentry WHERE EmployeeID='" & employee_ID & "' AND Date BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "' AND IFNULL(TotalDayPay,0)!=0 AND OrganizationID='" & org_rowid & "';"), _
                                                numberofweeksthismonth)))
 
 
@@ -1327,7 +1327,7 @@ Public Class PayrollGeneration
                     New SQL("SELECT EXISTS(SELECT RowID" &
                                      " FROM paystub" &
                                      " WHERE EmployeeID='" & drow("RowID") & "'" &
-                                     " AND OrganizationID='" & orgztnID & "'" &
+                                     " AND OrganizationID='" & org_rowid & "'" &
                                      " AND PayFromDate='" & n_PayrollDateFrom & "'" &
                                      " AND PayToDate='" & n_PayrollDateTo & "');")
 
@@ -1344,9 +1344,9 @@ Public Class PayrollGeneration
                                              ",e.MaternityLeaveBalance = 0" &
                                              ",e.OtherLeaveBalance = 0" &
                                              ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                                             ",e.LastUpdBy='" & z_User & "'" &
+                                             ",e.LastUpdBy='" & user_row_id & "'" &
                                              " WHERE e.RowID='" & drow("RowID") & "'" &
-                                             " AND e.OrganizationID='" & orgztnID & "';")
+                                             " AND e.OrganizationID='" & org_rowid & "';")
                         new_ExecuteQuery.ExecuteQuery()
                         '",e.AdditionalVLBalance = 0" &
 
@@ -1365,9 +1365,9 @@ Public Class PayrollGeneration
 
                 Dim paystub_params =
                     New Object() {DBNull.Value,
-                                  orgztnID,
-                                  z_User,
-                                  z_User,
+                                  org_rowid,
+                                  user_row_id,
+                                  user_row_id,
                                   n_PayrollRecordID,
                                   Convert.ToInt32(drow("RowID")),
                                   DBNull.Value,
@@ -1459,7 +1459,7 @@ Public Class PayrollGeneration
             SBConcat.ConcatResult("CALL RECOMPUTE_thirteenthmonthpay(?og_rowid, ?pp_rowid, ?u_rowid);")
 
         Dim para_meters =
-            New Object() {orgztnID, n_PayrollRecordID, z_User}
+            New Object() {org_rowid, n_PayrollRecordID, user_row_id}
 
         Dim exec_str_query_recompute_13thmonthpay As New SQL(str_query_recompute_13thmonthpay,
                                                              para_meters)
@@ -1551,8 +1551,8 @@ Public Class PayrollGeneration
         For Each e_rowid In employee_rowid_list
 
             Dim _params =
-                New Object() {orgztnID, e_rowid, n_PayrollRecordID, z_User}
-            
+                New Object() {org_rowid, e_rowid, n_PayrollRecordID, user_row_id}
+
             Dim sql As New SQL(str_query, _params)
 
             Dim sql2 As New SQL(str_query2, _params)

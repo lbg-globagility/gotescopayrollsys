@@ -179,12 +179,12 @@ Public Class PayPeriodGUI
     Protected Overrides Sub OnLoad(e As EventArgs)
         Me.DialogResult = Windows.Forms.DialogResult.None
 
-        If Convert.ToInt32(orgztnID) = 0 Then
-            orgztnID = 1
+        If Convert.ToInt32(org_rowid) = 0 Then
+            org_rowid = 1
 
         End If
 
-        z_User = 1
+        user_row_id = 1
 
         Dim n_db As New SQL("SELECT YEAR( CURDATE() );")
         yearnow = Convert.ToInt32(n_db.GetFoundRow)
@@ -299,7 +299,7 @@ Public Class PayPeriodGUI
 
         'gets the `PayFrequencyID` of this `organization`
         Dim _sql As New SQL(og_payfreq_rowid,
-                            orgztnID)
+                            org_rowid)
 
         'stores the `PayFrequencyID` of this `organization`
         orgpayfreqID = Convert.ToInt32(_sql.GetFoundRow) 'EXECQUER("SELECT PayFrequencyID FROM organization WHERE RowID='" & orgztnID & "';")
@@ -404,7 +404,7 @@ Public Class PayPeriodGUI
         'datset = exec_cmd.GetFoundRows
         'Dim param_values = New Object() {orgztnID, selected_date, 0, PayFreqType}
 
-        Dim param_values = New Object() {orgztnID, param_Date, 0, PayFreqType}
+        Dim param_values = New Object() {org_rowid, param_Date, 0, PayFreqType}
         Dim sql As New SQL(view_payp_query,
                            param_values)
         datset = sql.GetFoundRows
@@ -490,7 +490,7 @@ Public Class PayPeriodGUI
                     PriorPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
                                                 " FROM payperiod pyp" & _
                                                 " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & orgztnID & "'" & _
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
                                                 " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
                                                 " AND pyp.RowID BETWEEN (" & CurrentPayPeriodID & " - 10)" & _
                                                 " AND pp.RowID" & _
@@ -514,7 +514,7 @@ Public Class PayPeriodGUI
                     NextPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
                                                 " FROM payperiod pyp" & _
                                                 " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & orgztnID & "'" & _
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
                                                 " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
                                                 " AND pyp.RowID BETWEEN pp.RowID" & _
                                                 " AND (" & CurrentPayPeriodID & " + 10)" & _
@@ -670,7 +670,7 @@ Public Class PayPeriodGUI
 
         n_mysqlcmd.ParameterValueCollection =
             New Object() {min_wageval,
-                          z_User,
+                          user_row_id,
                           pp_rowid}
 
         Dim exec_cmd As _
@@ -735,7 +735,7 @@ Public Class PayPeriodGUI
                     Dim n_ExecuteQuery As _
                             New ExecuteQuery("SELECT EXISTS(SELECT RowID" & _
                                             " FROM paystub" & _
-                                            " WHERE OrganizationID='" & orgztnID & "'" & _
+                                            " WHERE OrganizationID='" & org_rowid & "'" & _
                                             " AND ThirteenthMonthInclusion='1'" & _
                                             " AND (YEAR(PayFromDate)='" & yearnow & "' OR YEAR(PayToDate)='" & yearnow & "')" & _
                                             " LIMIT 1);")
@@ -845,7 +845,7 @@ Public Class PayPeriodGUI
             cboxDivisions.DropDownWidth = max_drp_downwidhth 'wiidth, cb_width
 
         End Try
-        
+
     End Sub
 
     Private Sub cboxDivisions_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboxDivisions.SelectedIndexChanged
@@ -855,7 +855,7 @@ Public Class PayPeriodGUI
     Private Sub Load_Divisions(sender As Object, e As EventArgs) Handles cboxDivisions.VisibleChanged
 
         If cboxDivisions.Visible Then
-            
+
             'Dim str_query As String =
             '    String.Concat("SELECT dv.RowID",
             '                  ",dv.Name",
@@ -873,7 +873,7 @@ Public Class PayPeriodGUI
                               "		  FROM employee e",
                               "		  INNER JOIN `position` pos ON pos.RowID=e.PositionID",
                               "		  INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.OrganizationID=e.OrganizationID",
-                              "		  WHERE e.OrganizationID = ", orgztnID,
+                              "		  WHERE e.OrganizationID = ", org_rowid,
                               "		  GROUP BY dv.RowID",
                               "		  HAVING COUNT(e.RowID) > 0) i",
                               " UNION",

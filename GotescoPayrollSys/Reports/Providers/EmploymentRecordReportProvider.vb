@@ -10,7 +10,7 @@ Public Class EmploymentRecordReportProvider
 
         Dim sql_print_employment_history As _
             New SQL("CALL RPT_employment_record(?og_rowid);",
-                    New Object() {orgztnID})
+                    New Object() {org_rowid})
 
         Try
 

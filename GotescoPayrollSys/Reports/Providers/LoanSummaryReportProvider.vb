@@ -26,7 +26,7 @@ Public Class LoanSummaryReportProvider
 
             Dim sql_print_employee_loanreports As _
                 New SQL("CALL RPT_loans(?og_rowid, ?date_f, ?date_t, NULL);",
-                        New Object() {orgztnID, date_from, date_to})
+                        New Object() {org_rowid, date_from, date_to})
 
             Try
 
@@ -88,7 +88,7 @@ Public Class LoanSummaryReportProvider
 
             Dim sql_print_employee_loanreports As _
                 New SQL("CALL RPT_loansummary(?og_rowid, ?date_f, ?date_t, NULL);",
-                        New Object() {orgztnID, date_from, date_to})
+                        New Object() {org_rowid, date_from, date_to})
 
             Try
 

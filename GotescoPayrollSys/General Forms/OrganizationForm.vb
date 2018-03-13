@@ -354,7 +354,7 @@ Public Class OrganizationForm
 
             I_contact(cmbstatusCB.Text, z_datetime, z_OrganizationID, txtcontMainPhoneTxt.Text, txtlastNameTxt.Text, txtfirstNameTxt.Text, _
                   txtmiddleNameTxt.Text, txtmobilePhoneTxt.Text, txtworkPhoneTxt.Text, cmbgenderCB.Text, txtjobTitleTxt.Text, _
-                  txtemailAddTxt.Text, txtcontAltPhoneTxt.Text, txtcontFaxNumTxt.Text, z_datetime, z_User, z_User, cmbsalutationCB.Text, cmbtypeCB.Text, txtsuffixTxt.Text, getcaddrid, txttinNumTxt.Text)
+                  txtemailAddTxt.Text, txtcontAltPhoneTxt.Text, txtcontFaxNumTxt.Text, z_datetime, user_row_id, user_row_id, cmbsalutationCB.Text, cmbtypeCB.Text, txtsuffixTxt.Text, getcaddrid, txttinNumTxt.Text)
 
             Dim contID As String = getStringItem("Select MAX(RowID) from Contact")
             Dim getContID As Integer = Val(contID)
@@ -365,7 +365,7 @@ Public Class OrganizationForm
             If txtfilename.Text = Nothing Then
                 SP_Organization(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text, _
                           txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, z_datetime, _
-                          z_User, z_datetime, z_User, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, _
+                          user_row_id, z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, _
                           Val(txtvlallow.Text), _
                           Val(txtslallow.Text), _
                           Val(txtmlallow.Text), _
@@ -403,7 +403,7 @@ Public Class OrganizationForm
 
                 SP_OrganizationWithImage(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text, _
                       txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, z_datetime, _
-                      z_User, z_datetime, z_User, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, ImageData, _
+                      user_row_id, z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, ImageData, _
                           Val(txtvlallow.Text), _
                           Val(txtslallow.Text), _
                           Val(txtmlallow.Text), _
@@ -447,7 +447,7 @@ Public Class OrganizationForm
 
             I_contactUpdate(cmbstatusCB.Text, txtcontMainPhoneTxt.Text, txtlastNameTxt.Text, txtfirstNameTxt.Text, _
           txtmiddleNameTxt.Text, txtmobilePhoneTxt.Text, txtworkPhoneTxt.Text, cmbgenderCB.Text, txtjobTitleTxt.Text, _
-          txtemailAddTxt.Text, txtcontAltPhoneTxt.Text, txtcontFaxNumTxt.Text, z_datetime, z_User, cmbsalutationCB.Text, _
+          txtemailAddTxt.Text, txtcontAltPhoneTxt.Text, txtcontFaxNumTxt.Text, z_datetime, user_row_id, cmbsalutationCB.Text, _
           cmbtypeCB.Text, txtsuffixTxt.Text, getcaddrid, txttinNumTxt.Text, Val(dgvCompanyList.CurrentRow.Cells(c_ContactID.Index).Value))
 
 
@@ -467,7 +467,7 @@ Public Class OrganizationForm
             If txtfilename.Text = Nothing Then
                 SP_OrganizationUpdate(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text, _
                           txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, _
-                           z_datetime, z_User, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value, _
+                           z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value, _
                           Val(txtvlallow.Text), _
                           Val(txtslallow.Text), _
                           Val(txtmlallow.Text), _
@@ -503,7 +503,7 @@ Public Class OrganizationForm
 
                 SP_OrganizationWithImageUpdate(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text, _
                       txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, _
-                       z_datetime, z_User, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, ImageData, dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value, _
+                       z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, ImageData, dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value, _
                           Val(txtvlallow.Text), _
                           Val(txtslallow.Text), _
                           Val(txtmlallow.Text), _
@@ -525,7 +525,7 @@ Public Class OrganizationForm
                 dgvCompanyList.Enabled = True
             End If
 
-            If dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value = orgztnID Then
+            If dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value = org_rowid Then
                 MDIPrimaryForm.Text = Trim(txtcompanyName.Text)
                 orgNam = MDIPrimaryForm.Text
             End If
@@ -675,7 +675,7 @@ Public Class OrganizationForm
             cboTaxDeductSched.Items.Add(strval)
         Next
 
-        view_ID = VIEW_privilege("Organization", orgztnID)
+        view_ID = VIEW_privilege("Organization", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
 
@@ -900,7 +900,7 @@ Public Class OrganizationForm
 
         params(0, 0) = "organization_ID"
 
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
 
         Dim _divisor = EXEC_INSUPD_PROCEDURE(params, _
                                               "COUNT_payperiodthisyear", _

@@ -28,14 +28,14 @@
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
 
             Else
-                sp_list(txtname.Text, txtname.Text, "Organization Type", "", "Yes", "", z_datetime, z_User, z_datetime, 1, z_User)
+                sp_list(txtname.Text, txtname.Text, "Organization Type", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 OrganizationForm.fillorganizationtype()
                 txtname.Clear()
                 lblName.Text = ""
                 Me.Close()
             End If
 
-          
+
         ElseIf lblName.Text.Trim = "Type" Then
             dt = getDataTableForSQL("Select * From ListOFVal where Type = 'Type' And DisplayValue = '" & txtname.Text & "'")
 
@@ -43,13 +43,13 @@
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
 
             Else
-                sp_list(txtname.Text, txtname.Text, "Type", "", "Yes", "", z_datetime, z_User, z_datetime, 1, z_User)
+                sp_list(txtname.Text, txtname.Text, "Type", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 OrganizationForm.filltype()
                 txtname.Clear()
                 lblName.Text = ""
                 Me.Close()
             End If
-           
+
         ElseIf lblName.Text.Trim = "Status" Then
             dt = getDataTableForSQL("Select * From ListOFVal where Type = 'Status' And DisplayValue = '" & txtname.Text & "'")
 
@@ -57,13 +57,13 @@
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
 
             Else
-                sp_list(txtname.Text, txtname.Text, "Status", "", "Yes", "", z_datetime, z_User, z_datetime, 1, z_User)
+                sp_list(txtname.Text, txtname.Text, "Status", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 OrganizationForm.fillstatus()
                 txtname.Clear()
                 lblName.Text = ""
                 Me.Close()
             End If
-           
+
         ElseIf lblName.Text.Trim = "Personal Title" Then
             dt = getDataTableForSQL("Select * From ListOFVal where Type = 'Salutation' And DisplayValue = '" & txtname.Text & "'")
 
@@ -71,7 +71,7 @@
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
 
             Else
-                sp_list(txtname.Text, txtname.Text, "Salutation", "", "Yes", "", z_datetime, z_User, z_datetime, 1, z_User)
+                sp_list(txtname.Text, txtname.Text, "Salutation", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 OrganizationForm.fillpersonalstatus()
                 txtname.Clear()
                 lblName.Text = ""
@@ -84,7 +84,7 @@
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
 
             Else
-                sp_list(txtname.Text, txtname.Text, "Deduction Schedule", "", "Yes", "", z_datetime, z_User, z_datetime, 1, z_User)
+                sp_list(txtname.Text, txtname.Text, "Deduction Schedule", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 LoanScheduleForm.filldedsched()
                 txtname.Clear()
                 lblName.Text = ""

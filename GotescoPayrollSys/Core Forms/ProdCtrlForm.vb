@@ -31,7 +31,7 @@ Public Class ProdCtrlForm
                 EXECQUER("SELECT EXISTS(SELECT" & _
                          " RowID" & _
                          " FROM product" & _
-                         " WHERE OrganizationID='" & orgztnID & "'" & _
+                         " WHERE OrganizationID='" & org_rowid & "'" & _
                          " AND `Category`='" & n_categname & "'" & _
                          " AND (DATE_FORMAT(Created, '%Y-%m-%d') = CURDATE() OR DATE_FORMAT(LastUpd, '%Y-%m-%d') = CURDATE())" & _
                          " LIMIT 1);")
@@ -91,11 +91,11 @@ Public Class ProdCtrlForm
 
                 .Parameters.AddWithValue("p_RowID", If(prod_rowID = Nothing, DBNull.Value, prod_rowID))
                 .Parameters.AddWithValue("p_Name", p_Name)
-                .Parameters.AddWithValue("p_OrganizationID", orgztnID) 'orgztnID
+                .Parameters.AddWithValue("p_OrganizationID", org_rowid) 'orgztnID
                 .Parameters.AddWithValue("p_PartNo", p_PartNo)
                 .Parameters.AddWithValue("p_LastUpd", DBNull.Value)
-                .Parameters.AddWithValue("p_CreatedBy", z_User)
-                .Parameters.AddWithValue("p_LastUpdBy", z_User)
+                .Parameters.AddWithValue("p_CreatedBy", user_row_id)
+                .Parameters.AddWithValue("p_LastUpdBy", user_row_id)
                 .Parameters.AddWithValue("p_Category", p_CategName)
                 .Parameters.AddWithValue("p_CategoryID", DBNull.Value) 'KELANGAN MA-RETRIEVE KO UNG ROWID SA CATEGORY WHERE CATEGORYNAME = 'MEDICAL RECORD'
                 .Parameters.AddWithValue("p_Status", p_Status)
@@ -195,13 +195,13 @@ Public Class ProdCtrlForm
             Status.Items.Add("No")
 
         End If
-        
+
         Dim selectAllProduct As New DataTable
 
         selectAllProduct = retAsDatTbl("SELECT p.*, IF(p.`Status` = '0', 'No', 'Yes') AS IStatus" & _
                                        " FROM product p" & _
-                                       " INNER JOIN category c ON c.OrganizationID='" & orgztnID & "' AND CategoryName='" & n_categname & "'" & _
-                                       " WHERE p.OrganizationID='" & orgztnID & "'" & _
+                                       " INNER JOIN category c ON c.OrganizationID='" & org_rowid & "' AND CategoryName='" & n_categname & "'" & _
+                                       " WHERE p.OrganizationID='" & org_rowid & "'" & _
                                        " AND p.CategoryID=c.RowID;")
 
         'dgvproducts.Rows.Clear()

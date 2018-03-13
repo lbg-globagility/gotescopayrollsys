@@ -191,7 +191,7 @@
             Else
                 flg = 0
             End If
-            sp_promotion(z_datetime, z_User, z_datetime, z_OrganizationID, z_User, dtpEffectivityDate.Value.ToString("yyyy-MM-dd"), cmbfrom.Text, cmbto.Text, _
+            sp_promotion(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, dtpEffectivityDate.Value.ToString("yyyy-MM-dd"), cmbfrom.Text, cmbto.Text, _
                          getsID, flg, rowid)
             DirectCommand("UPDATE employeesalary SET PaysocialSecurityID = '" & z_ssid & "', PayPhilHealthID = '" & z_phID & "', BasicPay = '" & txtbasicpay.Text & "' Where RowID = '" & getsID & "'")
 
@@ -199,7 +199,7 @@
             dgvEmpList.Enabled = True
             myBalloon("Successfully Save", "Saving...", lblSaveMsg, , -100)
         Else
-           
+
             If cmbflg.Text = "Yes" Then
                 If cmbSalaryChanged.Text = "-Please Select One-" Then
                     myBalloonWarn("Please select one", "System Message", cmbSalaryChanged, , -65)
@@ -224,7 +224,7 @@
 
                 End If
                 DirectCommand("UPDATE employeepromotions SET Effectivedate = '" & dtpEffectivityDate.Value.ToString("yyyy-MM-dd") & "', EmployeeSalaryID = '" & getsID & "', " & _
-                              "LastUpd = '" & z_datetime & "', lastupdby = '" & z_User & "', PositionFrom = '" & cmbfrom.Text & "', PositionTo = '" & cmbto.Text & "', CompensationChange = '" & flg & "' Where RowID = '" & dgvPromotionList.CurrentRow.Cells(c_rowid.Index).Value & "'")
+                              "LastUpd = '" & z_datetime & "', lastupdby = '" & user_row_id & "', PositionFrom = '" & cmbfrom.Text & "', PositionTo = '" & cmbto.Text & "', CompensationChange = '" & flg & "' Where RowID = '" & dgvPromotionList.CurrentRow.Cells(c_rowid.Index).Value & "'")
 
             Else
 
@@ -234,7 +234,7 @@
                 Else
                     flg = 0
                 End If
-                DirectCommand("UPDATE employeepromotions SET Effectivedate = '" & dtpEffectivityDate.Value.ToString("yyyy-MM-dd") & "', LastUpd = '" & z_datetime & "', lastupdby = '" & z_User & "'," & _
+                DirectCommand("UPDATE employeepromotions SET Effectivedate = '" & dtpEffectivityDate.Value.ToString("yyyy-MM-dd") & "', LastUpd = '" & z_datetime & "', lastupdby = '" & user_row_id & "'," & _
                        "PositionFrom = '" & cmbfrom.Text & "', PositionTo = '" & cmbto.Text & "', CompensationChange = '" & flg & "' Where RowID = '" & dgvPromotionList.CurrentRow.Cells(c_rowid.Index).Value & "'")
 
             End If

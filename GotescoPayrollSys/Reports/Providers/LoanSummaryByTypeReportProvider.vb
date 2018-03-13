@@ -21,7 +21,7 @@ Public Class LoanSummaryByTypeReportProvider
         Dim dateTo = CDate(dateSelector.DateTo)
 
         Dim params = New Object(,) {
-            {"OrganizID", orgztnID},
+            {"OrganizID", org_rowid},
             {"PayDateFrom", CDate(dateSelector.DateFrom)},
             {"PayDateTo", CDate(dateSelector.DateTo)}
         }

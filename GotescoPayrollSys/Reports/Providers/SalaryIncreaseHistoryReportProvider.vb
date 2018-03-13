@@ -20,7 +20,7 @@ Public Class SalaryIncreaseHistoryReportProvider
         Dim dateTo = payPeriodSelector.DateTo
 
         Dim params = New Object(,) {
-            {"OrganizID", orgztnID},
+            {"OrganizID", org_rowid},
             {"PayPerDate1", dateFrom},
             {"PayPerDate2", dateTo}
         }

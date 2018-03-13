@@ -19,7 +19,7 @@ Public Class PhilHealthReportProvider
         Dim params(2, 2) As Object
         params(0, 0) = "OrganizID"
         params(1, 0) = "paramDate"
-        params(0, 1) = orgztnID
+        params(0, 1) = org_rowid
         params(1, 1) = Format(CDate(n_selectMonth.MonthValue), "yyyy-MM-dd")
 
         Dim date_from = Format(CDate(n_selectMonth.MonthValue), "MMMM  yyyy")

@@ -4,13 +4,13 @@
     Dim allowance_type As New AutoCompleteStringCollection
     Private Sub viewtotallow_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        categallowID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & orgztnID & " AND CategoryName='" & "Allowance Type" & "' LIMIT 1;")
+        categallowID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & org_rowid & " AND CategoryName='" & "Allowance Type" & "' LIMIT 1;")
 
         If Val(categallowID) = 0 Then
             categallowID = INSUPD_category(, "Allowance Type")
         End If
 
-        enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categallowID & "' AND OrganizationID=" & orgztnID & ";", _
+        enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categallowID & "' AND OrganizationID=" & org_rowid & ";", _
                        allowance_type) 'cboallowtype
 
         'For Each strval In allowance_type
@@ -41,7 +41,7 @@
         param(4, 0) = "ExceptThisAllowance"
 
         param(0, 1) = eallow_EmployeeID
-        param(1, 1) = orgztnID
+        param(1, 1) = org_rowid
         param(2, 1) = datefrom
         param(3, 1) = If(dateto = Nothing, DBNull.Value, dateto)
         param(4, 1) = If(AllowanceExcept = Nothing, String.Empty, AllowanceExcept)

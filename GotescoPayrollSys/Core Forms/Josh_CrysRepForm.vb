@@ -54,7 +54,7 @@ Public Class Josh_CrysRepForm
         '\Lambert Form
         rpt.Load(Application.StartupPath + "\rpt\discplinaryActions.rpt")
 
-        adapter.SelectCommand = New MySqlCommand("SELECT * FROM VW_DisciplinaryMemoUserDetails WHERE UserID = " & z_User)
+        adapter.SelectCommand = New MySqlCommand("SELECT * FROM VW_DisciplinaryMemoUserDetails WHERE UserID = " & user_row_id)
 
         adapter.SelectCommand.Connection = getConn()
         adapter.Fill(dt)

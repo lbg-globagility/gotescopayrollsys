@@ -16,7 +16,7 @@
         params(3, 0) = "effectivedateto"
 
         params(0, 1) = eloan_EmployeeID
-        params(1, 1) = orgztnID
+        params(1, 1) = org_rowid
         params(2, 1) = datefrom
         params(3, 1) = dateto
 

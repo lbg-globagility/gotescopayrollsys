@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Gotesco Payroll System"
-#define MyAppVersion "1.1.8"
+#define MyAppVersion "1.1.9"
 #define MyAppPublisher "Globagility, Inc."
 #define MyAppURL "http://www.globagilityinc.com/"
 #define MyAppExeName "GotescoPayrollSys.exe"
@@ -27,6 +27,7 @@ Compression=lzma
 UsePreviousAppDir=yes
 SolidCompression=yes
 VersionInfoVersion={#MyAppVersion}
+PrivilegesRequired=none
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -51,51 +52,54 @@ Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportAppServer.ReportDe
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportAppServer.XmlSerialize.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportSource.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.Shared.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.Windows.Forms.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\DevComponents.DotNetBar2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.SqlServer.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.SqlServer.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\EPPlus.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\EPPlus.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\EWSoftware.ListControls.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\Femiani.Forms.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\FlashControlV71.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\LBGClassLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\MessageBoxManager.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.Design.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.Fonts.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\Microsoft.Office.Interop.Excel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.Entity.EF6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\MySqlBackup.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\OCRTools.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\ShockwaveFlashObjects.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\stdole.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\Core Forms\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: ".\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: ".\GotescoPayrollSys\bin\Debug\rpt\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.Windows.Forms.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\DevComponents.DotNetBar2.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.SqlServer.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.SqlServer.xml"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\EntityFramework.xml"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\EPPlus.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\EPPlus.xml"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\EWSoftware.ListControls.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\Femiani.Forms.UI.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\FlashControlV71.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.pdb"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.xml"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\LBGClassLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\log4.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\log4net.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\log4net.xml"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\MessageBoxManager.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.Design.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.Fonts.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\Microsoft.Office.Interop.Excel.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.Entity.EF6.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\MySqlBackup.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\OCRTools.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\ShockwaveFlashObjects.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\stdole.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\Core Forms\*.rpt"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full recursesubdirs createallsubdirs
+Source: ".\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full recursesubdirs createallsubdirs
+Source: ".\GotescoPayrollSys\bin\Debug\rpt\*.rpt"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full recursesubdirs createallsubdirs
 ; Source: "D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
                                                  
 [Registry]
 
-Root: HKLM; Subkey: "SOFTWARE\Globagility";
-Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn";
+Root: HKLM; Subkey: "SOFTWARE\Globagility"; Permissions: everyone-full
+Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn"; Permissions: everyone-full
 
-Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "database"; ValueData: "gotescopayrolldb"
-Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "password"; ValueData: "globagility"
-Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "server"; ValueData: "localhost"
-Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "user id"; ValueData: "root"
-Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  ValueType: string; ValueName: "apppath"; ValueData: "{app}"
+Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "database"; ValueData: "gotescopayrolldb"; Permissions: everyone-full
+Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "password"; ValueData: "globagility"; Permissions: everyone-full
+Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "server"; ValueData: "localhost"; Permissions: everyone-full
+Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "user id"; ValueData: "root"; Permissions: everyone-full
+Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  ValueType: string; ValueName: "apppath"; ValueData: "{app}"; Permissions: everyone-full
                     
 Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\";  Flags: createvalueifdoesntexist;	ValueType: String; ValueName: "{app}\{#MyAppExeName}"; ValueData: "RUNASADMIN";
 
@@ -104,5 +108,5 @@ Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent shellexec
 

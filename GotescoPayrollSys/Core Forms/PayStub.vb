@@ -3027,17 +3027,17 @@ Public Class PayStub
                 '                         GainingLeaveBalances) _
                 '                         With {.IsBackground = False}
                 'n_thrd.Start()
-                Dim _task As Task =
-                    Task.Run(Sub()
-                                 GainingLeaveBalances()
-                             End Sub).ContinueWith(Sub()
-                                                       MDIPrimaryForm.CaptionMainFormStatus("finishing essential updates...")
-                                                   End Sub).ContinueWith(Sub()
-                                                                             MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll")
-                                                                             Thread.Sleep(1750)
-                                                                             MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
-                                                                         End Sub)
-                _task.Wait()
+                'Dim _task As Task =
+                '    Task.Run(Sub()
+                '                 GainingLeaveBalances()
+                '             End Sub).ContinueWith(Sub()
+                '                                       MDIPrimaryForm.CaptionMainFormStatus("finishing essential updates...")
+                '                                   End Sub).ContinueWith(Sub()
+                '                                                             MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll")
+                '                                                             Thread.Sleep(1750)
+                '                                                             MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
+                '                                                         End Sub)
+                '_task.Wait()
 
                 SpDataSet.Dispose()
 

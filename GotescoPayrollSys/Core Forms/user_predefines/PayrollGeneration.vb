@@ -1511,7 +1511,7 @@ Public Class PayrollGeneration
             'EXECQUER("CALL `RELEASE_thirteenthmonthpay`('" & orgztnID & "','" & n_PayrollRecordID & "','" & z_User & "');")
 
             Dim str_query_release_13thmonthpay As String =
-                SBConcat.ConcatResult("CALL RECOMPUTE_thirteenthmonthpay(?og_rowid, ?pp_rowid, ?u_rowid);")
+                SBConcat.ConcatResult("CALL RELEASE_thirteenthmonthpay(?og_rowid, ?pp_rowid, ?u_rowid);")
 
             Dim exec_str_query_release_13thmonthpay As New SQL(str_query_release_13thmonthpay,
                                                                para_meters)

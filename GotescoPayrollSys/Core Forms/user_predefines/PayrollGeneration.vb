@@ -1600,21 +1600,21 @@ Public Class PayrollGeneration
             Dim sql3 As New SQL("CALL LEAVE_gainingbalance(?OrganizID, ?EmpRowID, ?UserRowID, ?minimum_date, ?custom_maximum_date);", parametrs)
 
             Try
-                'Dim _task As Task = Task.Run(Sub()
-                '                                 'sql.ExecuteQuery()
-                '                                 'sql2.ExecuteQuery()
-                '                                 sql.ExecuteQueryAsync()
-                '                                 sql2.ExecuteQueryAsync()
-                '                             End Sub)
-                '_task.Wait()
+                Dim _task As Task = Task.Run(Sub()
+                                                 'sql.ExecuteQuery()
+                                                 'sql2.ExecuteQuery()
+                                                 sql.ExecuteQueryAsync()
+                                                 sql2.ExecuteQueryAsync()
+                                             End Sub)
+                _task.Wait()
                 '###################################################################
-                Dim _task As New Thread(AddressOf sql.ExecuteQueryAsync) _
-                    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
-                _task.Start()
+                'Dim _task As New Thread(AddressOf sql.ExecuteQueryAsync) _
+                '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+                '_task.Start()
 
-                Dim _task2 As New Thread(AddressOf sql2.ExecuteQueryAsync) _
-                    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
-                _task2.Start()
+                'Dim _task2 As New Thread(AddressOf sql2.ExecuteQueryAsync) _
+                '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+                '_task2.Start()
 
                 'Dim _task3 As New Thread(AddressOf sql3.ExecuteQueryAsync) _
                 '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}

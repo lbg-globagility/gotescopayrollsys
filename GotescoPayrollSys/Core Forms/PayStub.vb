@@ -3003,7 +3003,7 @@ Public Class PayStub
 
         Select Case compute_percentage
 
-            Case 100
+            Case MDIPrimaryForm.systemprogressbar.Value
 
                 MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
 
@@ -3031,16 +3031,17 @@ Public Class PayStub
                     Task.Run(Sub()
                                  GainingLeaveBalances()
                              End Sub).ContinueWith(Sub()
-                                                       MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll")
-                                                       Thread.Sleep(1750)
-                                                       MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
-                                                   End Sub)
-                MDIPrimaryForm.CaptionMainFormStatus("finishing essential updates...")
+                                                       MDIPrimaryForm.CaptionMainFormStatus("finishing essential updates...")
+                                                   End Sub).ContinueWith(Sub()
+                                                                             MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll")
+                                                                             Thread.Sleep(1750)
+                                                                             MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
+                                                                         End Sub)
                 _task.Wait()
 
                 SpDataSet.Dispose()
 
-            Case > 0
+            Case 1 To (MDIPrimaryForm.systemprogressbar.Value - 1)
 
                 MDIPrimaryForm.CaptionMainFormStatus("payroll calculation in progress...")
 

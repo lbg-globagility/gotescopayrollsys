@@ -80,8 +80,8 @@ Public Class MetroLogin
 
     End Sub
 
-    Private Sub Login_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtbxPword.KeyPress, _
-                                                                                    txtbxUserID.KeyPress, _
+    Private Sub Login_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtbxPword.KeyPress,
+                                                                                    txtbxUserID.KeyPress,
                                                                                     cbxorganiz.KeyPress
 
         Dim e_asc = Asc(e.KeyChar)
@@ -155,9 +155,9 @@ Public Class MetroLogin
                 End If
 
                 position_view_table =
-                    New SQLQueryToDatatable("SELECT *" & _
-                                            " FROM position_view" & _
-                                            " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" & _
+                    New SQLQueryToDatatable("SELECT *" &
+                                            " FROM position_view" &
+                                            " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" &
                                             " AND OrganizationID='" & org_rowid & "';").ResultTable
 
                 Dim i = position_view_table.Rows.Count
@@ -320,7 +320,7 @@ Public Class MetroLogin
 
         Else
 
-            Dim isThereSomeNewToOrganization = _
+            Dim isThereSomeNewToOrganization =
                 EXECQUER("SELECT EXISTS(SELECT RowID FROM organization WHERE DATE_FORMAT(Created,'%Y-%m-%d')=CURDATE() OR DATE_FORMAT(LastUpd,'%Y-%m-%d')=CURDATE() LIMIT 1);")
 
             If isThereSomeNewToOrganization = "1" Then

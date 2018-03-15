@@ -1,6 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports Microsoft.Win32
 Imports System.Threading
+Imports log4net
 
 Namespace My
 
@@ -70,7 +71,6 @@ Namespace My
         Private Sub MyApplication_Startup(sender As Object, e As ApplicationServices.StartupEventArgs) Handles Me.Startup
 
             Try
-
                 conn = New MySqlConnection
 
                 conn.ConnectionString = n_DataBaseConnection.GetStringMySQLConnectionString
@@ -302,7 +302,7 @@ Namespace My
 
         Private Sub MyApplication_UnhandledException(sender As Object, e As ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
 
-            MsgBox(getErrExcptn(e.Exception, MyBase.ToString))
+            _logger.Error("MyApplication_UnhandledException", e.Exception)
 
         End Sub
 

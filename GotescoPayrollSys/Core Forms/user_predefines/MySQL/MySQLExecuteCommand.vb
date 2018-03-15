@@ -1,5 +1,6 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.Text.RegularExpressions
+Imports System.Threading.Tasks
 
 Public Class MySQLExecuteCommand
 
@@ -290,6 +291,35 @@ Public Class MySQLExecuteCommand
         End Try
 
     End Sub
+
+    Public Async Function ExecuteAsync() As Task
+
+        ResetError()
+
+        Dim mysql_transac As MySqlTransaction
+
+        mysql_transac = prepared_mysqlcmd.Connection.BeginTransaction
+
+        Dim fdsfsd
+
+        Try
+
+            fdsfsd = Await prepared_mysqlcmd.ExecuteNonQueryAsync()
+
+            mysql_transac.Commit()
+
+        Catch ex As Exception
+            mysql_transac.Rollback()
+
+            AssignError(ex)
+
+        Finally
+
+            DisposeCommand()
+
+        End Try
+
+    End Function
 
     Private Sub DisposeCommand()
 

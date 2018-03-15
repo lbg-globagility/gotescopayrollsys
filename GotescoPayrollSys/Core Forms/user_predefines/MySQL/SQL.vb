@@ -80,12 +80,24 @@ Public Class SQL
     End Sub
 
     Sub ExecuteQuery()
-        Dim my_exec_cmd As New  _
+        Dim my_exec_cmd As New _
                 MySQLExecuteCommand(mysql_cmd)
 
         'Dim obj As Object = my_exec_cmd.GetFoundRow
 
         my_exec_cmd.Execute()
+
+        AssingError(my_exec_cmd)
+
+    End Sub
+
+    Async Sub ExecuteQueryAsync()
+        Dim my_exec_cmd As New _
+                MySQLExecuteCommand(mysql_cmd)
+
+        'Dim obj As Object = my_exec_cmd.GetFoundRow
+
+        Await my_exec_cmd.ExecuteAsync()
 
         AssingError(my_exec_cmd)
 

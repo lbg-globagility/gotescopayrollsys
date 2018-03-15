@@ -8,8 +8,10 @@ Imports Excel = Microsoft.Office.Interop.Excel
 'Imports Microsoft.Office.Interop.Excel
 Imports System.Data.OleDb
 Imports Microsoft.Win32
+Imports log4net
 
 Module myModule
+    Public _logger As ILog = LogManager.GetLogger("LoggerWork")
     Public Const firstchar_requiredforparametername As String = "?"
     Public conn As New MySqlConnection
     Public da As New MySqlDataAdapter
@@ -128,9 +130,9 @@ Module myModule
         Dim op_FrmNam As String = If(FormNam = Nothing, "", FormNam & ".")
         'Form Name '.' Method Name '@Line' Code Line Number
 
-        Dim mystr As String = ex.Message & vbNewLine & vbNewLine & _
-                        "ERROR occured in " & op_FrmNam & _
-                        st.GetFrame(st.FrameCount - 1).GetMethod.Name & _
+        Dim mystr As String = ex.Message & vbNewLine & vbNewLine &
+                        "ERROR occured in " & op_FrmNam &
+                        st.GetFrame(st.FrameCount - 1).GetMethod.Name &
                         " " & sf.GetFileLineNumber()
         '               'ito ung line number sa code editor
         'ErrorLog(mystr)
@@ -139,9 +141,9 @@ Module myModule
 
         'Return MsgBox(mystr, , "Unexpected Message")
     End Function
-    Sub filltable(ByVal datgrid As Object, _
-                         Optional _quer As String = Nothing, _
-                         Optional Params As Array = Nothing, _
+    Sub filltable(ByVal datgrid As Object,
+                         Optional _quer As String = Nothing,
+                         Optional Params As Array = Nothing,
                          Optional CommandType As Object = Nothing)
         'Optional ParamValue As Object = Nothing, _
         Dim publictable As New DataTable
@@ -185,7 +187,7 @@ Module myModule
 
     End Sub
 
-    Function retAsDatTbl(ByVal _quer As String, _
+    Function retAsDatTbl(ByVal _quer As String,
                          Optional dgv As DataGridView = Nothing) As Object
 
         Dim n_SQLQueryToDatatable As New SQLQueryToDatatable(_quer)
@@ -194,9 +196,9 @@ Module myModule
 
     End Function
 
-    Sub dgvRowAdder(ByVal sqlcmd As String, _
-                    ByVal dgvlistcatcher As DataGridView, _
-                    Optional xtraCatcher As AutoCompleteStringCollection = Nothing, _
+    Sub dgvRowAdder(ByVal sqlcmd As String,
+                    ByVal dgvlistcatcher As DataGridView,
+                    Optional xtraCatcher As AutoCompleteStringCollection = Nothing,
                     Optional asStringYes As SByte = 0)
         Dim dr As MySqlDataReader
         Try
@@ -270,7 +272,7 @@ Module myModule
 
     Public hasERR As SByte
 
-    Public Function EXECQUER(ByVal cmdsql As String, _
+    Public Function EXECQUER(ByVal cmdsql As String,
                              Optional errorthrower As String = Nothing) As Object 'String
 
         Dim n_ExecuteQuery As New ExecuteQuery(cmdsql)
@@ -439,11 +441,11 @@ Module myModule
             crParamFldDeftn.ApplyCurrentValues(crParamrVals)
         End If
     End Sub
-    Sub rptDefntn(obj As Object, _
-                  Optional nemofRptDefntn As String = Nothing, _
+    Sub rptDefntn(obj As Object,
+                  Optional nemofRptDefntn As String = Nothing,
                   Optional rptdocu As ReportDocument = Nothing)
 
-        Dim objText As CrystalDecisions.CrystalReports.Engine.TextObject = _
+        Dim objText As CrystalDecisions.CrystalReports.Engine.TextObject =
         rptdocu.ReportDefinition.ReportObjects.Item(nemofRptDefntn)
 
         If TypeOf obj Is TextBox Or TypeOf obj Is ComboBox Or TypeOf obj Is Label Then
@@ -498,8 +500,8 @@ Module myModule
         e.Handled = False 'TrapCharKey(Asc(e.KeyChar))
     End Sub
 
-    Sub TabControlColor(ByVal TabCntrl As TabControl, _
-                        ByVal ee As System.Windows.Forms.DrawItemEventArgs, _
+    Sub TabControlColor(ByVal TabCntrl As TabControl,
+                        ByVal ee As System.Windows.Forms.DrawItemEventArgs,
                         Optional formColor As Color = Nothing)
 
         Dim g As Graphics = ee.Graphics
@@ -860,11 +862,11 @@ Module myModule
 
     End Function
 
-    Sub mytxtSimpleSearchProp(ByVal theTxtBx As TextBox, _
-                              ByVal dgv As DataGridView, _
-                              ByVal formFunc As String, _
-                              Optional s_quer As String = Nothing, _
-                               Optional dgvAutoComp As AutoCompleteStringCollection = Nothing, _
+    Sub mytxtSimpleSearchProp(ByVal theTxtBx As TextBox,
+                              ByVal dgv As DataGridView,
+                              ByVal formFunc As String,
+                              Optional s_quer As String = Nothing,
+                               Optional dgvAutoComp As AutoCompleteStringCollection = Nothing,
                                Optional withKeyPress As SByte = Nothing)
         formFunctn = formFunc
 
@@ -920,50 +922,50 @@ Module myModule
                     If IsNumeric(.Text) = True Then
                         If formFunctn = "Delivery Report" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
-                                " AND o.Type='" & formFunctn & "'" & _
-                                " OR o.RelatedMRFId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Merchandise Requisition' AND OrganizationID=" & org_rowid & ")" & _
-                                " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" &
+                                " AND o.Type='" & formFunctn & "'" &
+                                " OR o.RelatedMRFId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Merchandise Requisition' AND OrganizationID=" & org_rowid & ")" &
+                                " AND o.Type='" & formFunctn & "'" &
                                 " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Merchandise Requisition" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedDRId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Delivery Report' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
+                                    " OR o.RelatedDRId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Delivery Report' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Packing List" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedPRSId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Purchase Requisition' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
+                                    " OR o.RelatedPRSId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Purchase Requisition' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Purchase Requisition" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedPLId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Packing List' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
+                                    " OR o.RelatedPLId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Packing List' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Receiving Report" Then
 
-                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedPRSId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Purchase Requisition' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
-                                    " OR o.RelatedPLId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Packing List' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.OrderNumber = (SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
+                                    " OR o.RelatedPRSId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Purchase Requisition' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
+                                    " OR o.RelatedPLId = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='Packing List' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         ElseIf formFunctn = "Repairs" Then
 
-                            fillDGV(s_query & " r.RepairNo = (SELECT RepairNo FROM repairs WHERE RepairNo=" & Trim(.Text) & " AND OrganizationID=" & org_rowid & " GROUP BY RepairNo)" & _
-                                    " OR r.ReferenceNumber = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND RowID LIKE r.ReferenceNumber LIMIT 1)" & _
+                            fillDGV(s_query & " r.RepairNo = (SELECT RepairNo FROM repairs WHERE RepairNo=" & Trim(.Text) & " AND OrganizationID=" & org_rowid & " GROUP BY RepairNo)" &
+                                    " OR r.ReferenceNumber = (SELECT RowID FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND RowID LIKE r.ReferenceNumber LIMIT 1)" &
                                     " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
 
                             'DI MO PA NAGAGAWA UNG SA ReferenceNumber sa repairs Simple Search
@@ -975,13 +977,13 @@ Module myModule
                             'kung Cellphone Number ba?
                             'kung FaxNumber ba?
 
-                            fillDGV(s_query & " ac.MainPhone = '" & .Text & "'" & _
+                            fillDGV(s_query & " ac.MainPhone = '" & .Text & "'" &
                                     " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                         ElseIf formFunctn = "Stock Adjustment" Then
 
-                            fillDGV(s_query & " o.OrderNumber=(SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.OrderNumber=(SELECT OrderNumber FROM `order` WHERE OrderNumber=" & Trim(.Text) & " AND Type='" & formFunctn & "' AND OrganizationID=" & org_rowid & ")" &
+                                    " AND o.Type='" & formFunctn & "'" &
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft)
 
                         End If
@@ -996,14 +998,14 @@ Module myModule
                             '                             )
                             '                          )
 
-                            fillDGV(s_query & " r.Created LIKE '%" & .Text & "%'" & _
-                                    " OR r.LastUpd LIKE '%" & .Text & "%'" & _
+                            fillDGV(s_query & " r.Created LIKE '%" & .Text & "%'" &
+                                    " OR r.LastUpd LIKE '%" & .Text & "%'" &
                                     " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
                         ElseIf formFunctn = "Supplier" Then
 
-                            fillDGV(s_query & " ac.Created LIKE '" & .Text & "'" & _
-                                    " AND ac.AccountType='Supplier'" & _
-                                    " OR ac.LastUpd LIKE '" & .Text & "'" & _
+                            fillDGV(s_query & " ac.Created LIKE '" & .Text & "'" &
+                                    " AND ac.AccountType='Supplier'" &
+                                    " OR ac.LastUpd LIKE '" & .Text & "'" &
                                     " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                         Else
@@ -1011,8 +1013,8 @@ Module myModule
                             Dim theDate As Date = Date.Parse(.Text)
                             Dim _dat = Format(theDate, "yyyy-MM-dd")
 
-                            fillDGV(s_query & " o.OrderDate LIKE '%" & _dat & "%'" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.OrderDate LIKE '%" & _dat & "%'" &
+                                    " AND o.Type='" & formFunctn & "'" &
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                             '" OR o.Created LIKE '%" & _dat & "%'" & _
@@ -1020,22 +1022,22 @@ Module myModule
                         End If
 
                         'user
-                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM user WHERE OrganizationID=" & org_rowid & _
+                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM user WHERE OrganizationID=" & org_rowid &
                                 " AND CONCAT(LastName,', ',FirstName) = '" & .Text & "')") = 1 Then
                         'tinignan ulit kung may match sa contact
-                        If EXECQUER("SELECT EXISTS(SELECT RowID FROM contact WHERE OrganizationID=" & org_rowid & _
+                        If EXECQUER("SELECT EXISTS(SELECT RowID FROM contact WHERE OrganizationID=" & org_rowid &
                                     " AND CONCAT(LastName,', ',FirstName) = '" & .Text & "')") = 1 Then
 
                             If formFunctn = "Repairs" Then
 
-                                fillDGV(s_query & " r.CreatedBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
-                                        " OR r.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
+                                fillDGV(s_query & " r.CreatedBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
+                                        " OR r.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
                                         " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
 
                             Else
 
-                                fillDGV(s_query & " o.ContactID=(SELECT RowID FROM contact WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
-                                        " AND o.Type='" & formFunctn & "'" & _
+                                fillDGV(s_query & " o.ContactID=(SELECT RowID FROM contact WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
+                                        " AND o.Type='" & formFunctn & "'" &
                                         " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                             End If
@@ -1043,54 +1045,54 @@ Module myModule
                         Else 'dito 'True' nga na galing sa user table
                             If formFunctn = "Repairs" Then
 
-                                fillDGV(s_query & " CONCAT(u.LastName ,',',u.FirstName) = '" & .Text & "'" & _
-                                        " OR ac.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
+                                fillDGV(s_query & " CONCAT(u.LastName ,',',u.FirstName) = '" & .Text & "'" &
+                                        " OR ac.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
                                         "' AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                             Else
 
-                                fillDGV(s_query & " o.CreatedBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
-                                        " AND o.Type='" & formFunctn & "'" & _
-                                        " OR o.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
-                                        " AND o.Type='" & formFunctn & "'" & _
+                                fillDGV(s_query & " o.CreatedBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
+                                        " AND o.Type='" & formFunctn & "'" &
+                                        " OR o.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
+                                        " AND o.Type='" & formFunctn & "'" &
                                         " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                             End If
                         End If
 
                         'contact
-                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM contact WHERE OrganizationID=" & org_rowid & _
+                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM contact WHERE OrganizationID=" & org_rowid &
                                     " AND CONCAT(LastName,', ',FirstName) = '" & .Text & "')") = 1 Then
 
                         If formFunctn = "Repairs" Then
 
                         ElseIf formFunctn = "Supplier" Then
 
-                            fillDGV(s_query & " CONCAT(c.LastName ,', ',c.FirstName) = '" & Trim(.Text) & _
+                            fillDGV(s_query & " CONCAT(c.LastName ,', ',c.FirstName) = '" & Trim(.Text) &
                                     "' AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                         Else
 
-                            fillDGV(s_query & " o.ContactID=(SELECT RowID FROM contact WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.ContactID=(SELECT RowID FROM contact WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
+                                    " AND o.Type='" & formFunctn & "'" &
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         End If
 
                         'inventorylocation
-                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM inventorylocation WHERE OrganizationID=" & org_rowid & _
+                    ElseIf EXECQUER("SELECT EXISTS(SELECT RowID FROM inventorylocation WHERE OrganizationID=" & org_rowid &
                                 " AND Name = '" & .Text & "')") = 1 Then
 
                         If formFunctn = "Repairs" Then
 
-                            fillDGV(s_query & " r.InventoryLocationID=(SELECT RowID FROM inventorylocation WHERE Name = '" & .Text & "' AND Status='Active' AND Type='Main')" & _
+                            fillDGV(s_query & " r.InventoryLocationID=(SELECT RowID FROM inventorylocation WHERE Name = '" & .Text & "' AND Status='Active' AND Type='Main')" &
                                     " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
 
                         Else
 
                             'AND Type!='Main'
-                            fillDGV(s_query & " o.InventoryLocationID=(SELECT RowID FROM inventorylocation WHERE Name = '" & .Text & "' AND Status='Active')" & _
-                                    " AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.InventoryLocationID=(SELECT RowID FROM inventorylocation WHERE Name = '" & .Text & "' AND Status='Active')" &
+                                    " AND o.Type='" & formFunctn & "'" &
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         End If
@@ -1099,7 +1101,7 @@ Module myModule
 
                         If formFunctn = "Repairs" Then
 
-                            fillDGV(s_query & " r.Type = '" & Trim(.Text) & _
+                            fillDGV(s_query & " r.Type = '" & Trim(.Text) &
                                     "' AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
 
                         ElseIf formFunctn = "Supplier" Then
@@ -1107,24 +1109,24 @@ Module myModule
                             If .Text.Contains("@") = True Then
                                 'kung Email Address ba?     'If str.Contains("TOP") = True Then
 
-                                fillDGV(s_query & " ac.EmailAddress = '" & .Text & "'" & _
+                                fillDGV(s_query & " ac.EmailAddress = '" & .Text & "'" &
                                         " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                             Else
                                 'kung Address ba?
                                 'CONCAT(COALESCE(StreetAddress1,''),', ',COALESCE(StreetAddress2,''),', ',COALESCE(Barangay,''),', ',COALESCE(CityTown,''),', ',COALESCE(State,''),', ',COALESCE(Country,''),', ',COALESCE(ZipCode,''))
 
-                                fillDGV(s_query & " ac.CompanyName = '" & Trim(.Text) & "'" & _
+                                fillDGV(s_query & " ac.CompanyName = '" & Trim(.Text) & "'" &
                                     " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                             End If
 
                         Else
 
-                            fillDGV(s_query & " o.`Status` = '" & Trim(.Text) & _
-                                "' AND o.Type='" & formFunctn & "'" & _
-                                " OR o.StatusAsOf = '" & Trim(.Text) & _
-                                "' AND o.Type='" & formFunctn & "'" & _
+                            fillDGV(s_query & " o.`Status` = '" & Trim(.Text) &
+                                "' AND o.Type='" & formFunctn & "'" &
+                                " OR o.StatusAsOf = '" & Trim(.Text) &
+                                "' AND o.Type='" & formFunctn & "'" &
                                 " AND o.Type='" & formFunctn & "' AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         End If
@@ -1189,8 +1191,8 @@ Module myModule
             If l <> 1 Then
                 l = 1
                 mySaveFileDialog.RestoreDirectory = True
-                mySaveFileDialog.Filter = "Microsoft Excel Workbook Documents 2007-13 (*.xlsx)|*.xlsx|" & _
-                                          "Microsoft Excel Documents 97-2003 (*.xls)|*.xls|" & _
+                mySaveFileDialog.Filter = "Microsoft Excel Workbook Documents 2007-13 (*.xlsx)|*.xlsx|" &
+                                          "Microsoft Excel Documents 97-2003 (*.xls)|*.xls|" &
                                           "OpenDocument Spreadsheet (*.ods)|*.ods" ' & _
             End If
 
@@ -1209,23 +1211,23 @@ Module myModule
                 Try
 
                     Dim dat_tab As New DataTable
-                    dat_tab = getDataTableForSQL("SELECT COALESCE(p.PartNo,'') PartNo" & _
-                                                 ",COALESCE(p.Name,'') Name" & _
-                                                 ",COALESCE(p.Category,'') Category" & _
-                                                 ",COALESCE(p.Catalog,'') Catalog" & _
-                                                 ",IF(SUBSTRING_INDEX(FORMAT(p.UnitPrice,2),'.',-1)<1,FORMAT(p.UnitPrice,0),FORMAT(p.UnitPrice,2)) UnitPrice" & _
-                                                 ",COALESCE(p.TotalShipmentCount,0) TotalShipmentCount" & _
-                                                 ",COALESCE((SELECT SUM(TotalAvailbleItemQty) FROM productinventorylocation WHERE ProductID=p.RowID),'') Total_Available_Qty" & _
-                                                 ",COALESCE(DATE_FORMAT(p.LastRcvdFromShipmentDate,'%m/%d/%Y'),'') Last_Shipment_Date" & _
-                                                 ",COALESCE(p.LastRcvdFromShipmentCount ,0) Last_Shipment_Count" & _
-                                                 ",COALESCE(p.ReOrderPoint ,0) Re_Order_Point" & _
-                                                 ",COALESCE(p.BookPageNo ,'') Book_Page_No" & _
-                                                 ",COALESCE(p.BrandName ,'') BrandName" & _
-                                                 ",COALESCE(p.UnitOfMeasure ,'') UnitOfMeasure" & _
-                                                 " FROM product p " & _
-                                                 "JOIN productinventorylocation pil " & _
-                                                 "ON pil.ProductID=p.RowID" & _
-                                                 " WHERE p.OrganizationID=" & org_rowid & " AND pil.InventoryLocationID='" & mainBranchID & _
+                    dat_tab = getDataTableForSQL("SELECT COALESCE(p.PartNo,'') PartNo" &
+                                                 ",COALESCE(p.Name,'') Name" &
+                                                 ",COALESCE(p.Category,'') Category" &
+                                                 ",COALESCE(p.Catalog,'') Catalog" &
+                                                 ",IF(SUBSTRING_INDEX(FORMAT(p.UnitPrice,2),'.',-1)<1,FORMAT(p.UnitPrice,0),FORMAT(p.UnitPrice,2)) UnitPrice" &
+                                                 ",COALESCE(p.TotalShipmentCount,0) TotalShipmentCount" &
+                                                 ",COALESCE((SELECT SUM(TotalAvailbleItemQty) FROM productinventorylocation WHERE ProductID=p.RowID),'') Total_Available_Qty" &
+                                                 ",COALESCE(DATE_FORMAT(p.LastRcvdFromShipmentDate,'%m/%d/%Y'),'') Last_Shipment_Date" &
+                                                 ",COALESCE(p.LastRcvdFromShipmentCount ,0) Last_Shipment_Count" &
+                                                 ",COALESCE(p.ReOrderPoint ,0) Re_Order_Point" &
+                                                 ",COALESCE(p.BookPageNo ,'') Book_Page_No" &
+                                                 ",COALESCE(p.BrandName ,'') BrandName" &
+                                                 ",COALESCE(p.UnitOfMeasure ,'') UnitOfMeasure" &
+                                                 " FROM product p " &
+                                                 "JOIN productinventorylocation pil " &
+                                                 "ON pil.ProductID=p.RowID" &
+                                                 " WHERE p.OrganizationID=" & org_rowid & " AND pil.InventoryLocationID='" & mainBranchID &
                                                  "' GROUP BY p.RowID ORDER BY p.PartNo ASC;")
 
                     If mySaveFileDialog.FilterIndex = 1 Then
@@ -1262,7 +1264,7 @@ Module myModule
                                 .Cells(i, 4) = r("Catalog").ToString
                                 .Cells(i, 5) = r("UnitPrice").ToString
 
-                                xclstr = If(IsDBNull(r("Total_Available_Qty")), "", _
+                                xclstr = If(IsDBNull(r("Total_Available_Qty")), "",
                                              r("Total_Available_Qty"))
 
                                 .Cells(i, 6) = xclstr
@@ -1422,41 +1424,41 @@ Module myModule
 
     Public Event An_Event()
 
-    Sub INS_LoL(Optional DisplayValue As Object = Nothing, _
-                Optional LIC As Object = Nothing, _
-                Optional Type As Object = Nothing, _
-                Optional ParentLIC As Object = Nothing, _
-                Optional Active As Object = Nothing, _
-                Optional Description As Object = Nothing, _
-                Optional Created As Object = Nothing, _
-                Optional CreatedBy As Object = Nothing, _
-                Optional LastUpd As Object = Nothing, _
-                Optional OrderBy As Object = Nothing, _
+    Sub INS_LoL(Optional DisplayValue As Object = Nothing,
+                Optional LIC As Object = Nothing,
+                Optional Type As Object = Nothing,
+                Optional ParentLIC As Object = Nothing,
+                Optional Active As Object = Nothing,
+                Optional Description As Object = Nothing,
+                Optional Created As Object = Nothing,
+                Optional CreatedBy As Object = Nothing,
+                Optional LastUpd As Object = Nothing,
+                Optional OrderBy As Object = Nothing,
                 Optional LastUpdBy As Object = Nothing)
 
-        EXECQUER("INSERT INTO listofval (DisplayValue,LIC,Type,ParentLIC,Active,Description,Created,CreatedBy,LastUpd,OrderBy," & _
-                             "LastUpdBy) VALUES (" & _
-                             "'" & DisplayValue & "'" & _
-                             "," & If(LIC = Nothing, "NULL", "'" & LIC & "'") & _
-                             "," & If(Type = Nothing, "NULL", "'" & Type & "'") & _
-                             "," & If(ParentLIC = Nothing, "NULL", "'" & ParentLIC & "'") & _
-                             "," & If(Active = Nothing, "NULL", "'" & Active & "'") & _
-                             "," & If(Description = Nothing, "NULL", "'" & Description & "'") & _
-                             ",DATE_FORMAT(NOW(),'%Y-%m-%d %h:%i:%s')" & _
-                             "," & CreatedBy & _
-                             ",DATE_FORMAT(NOW(),'%Y-%m-%d %h:%i:%s')" & _
-                             "," & If(OrderBy = Nothing, "NULL", OrderBy) & _
-                             "," & CreatedBy & _
+        EXECQUER("INSERT INTO listofval (DisplayValue,LIC,Type,ParentLIC,Active,Description,Created,CreatedBy,LastUpd,OrderBy," &
+                             "LastUpdBy) VALUES (" &
+                             "'" & DisplayValue & "'" &
+                             "," & If(LIC = Nothing, "NULL", "'" & LIC & "'") &
+                             "," & If(Type = Nothing, "NULL", "'" & Type & "'") &
+                             "," & If(ParentLIC = Nothing, "NULL", "'" & ParentLIC & "'") &
+                             "," & If(Active = Nothing, "NULL", "'" & Active & "'") &
+                             "," & If(Description = Nothing, "NULL", "'" & Description & "'") &
+                             ",DATE_FORMAT(NOW(),'%Y-%m-%d %h:%i:%s')" &
+                             "," & CreatedBy &
+                             ",DATE_FORMAT(NOW(),'%Y-%m-%d %h:%i:%s')" &
+                             "," & If(OrderBy = Nothing, "NULL", OrderBy) &
+                             "," & CreatedBy &
                              ");")
 
 
     End Sub
 
-    Function INS_paysocialsecurity(Optional RangeFromAmount As Object = Nothing, _
-                Optional RangeToAmount As Object = Nothing, _
-                Optional MonthlySalaryCredit As Object = Nothing, _
-                Optional EmployeeContributionAmount As Object = Nothing, _
-                Optional EmployerContributionAmount As Object = Nothing, _
+    Function INS_paysocialsecurity(Optional RangeFromAmount As Object = Nothing,
+                Optional RangeToAmount As Object = Nothing,
+                Optional MonthlySalaryCredit As Object = Nothing,
+                Optional EmployeeContributionAmount As Object = Nothing,
+                Optional EmployerContributionAmount As Object = Nothing,
                 Optional EmployeeECAmount As Object = Nothing) As String
 
         'RangeFromAmount = If(RangeFromAmount = Nothing, "NULL", RangeFromAmount)
@@ -1466,16 +1468,16 @@ Module myModule
         EmployerContributionAmount = If(EmployerContributionAmount = Nothing, "NULL", EmployerContributionAmount)
         EmployeeECAmount = If(EmployeeECAmount = Nothing, "NULL", EmployeeECAmount)
 
-        Dim getpaysocialsecurity = EXECQUER("INSERT INTO paysocialsecurity (CreatedBy,LastUpdBy,RangeFromAmount,RangeToAmount,MonthlySalaryCredit,EmployeeContributionAmount," & _
-        "EmployerContributionAmount,EmployeeECAmount) VALUES (" & _
-        "" & user_row_id & _
-        "," & user_row_id & _
-        "," & RangeFromAmount & _
-        "," & RangeToAmount & _
-        "," & MonthlySalaryCredit & _
-        "," & EmployeeContributionAmount & _
-        "," & EmployerContributionAmount & _
-        "," & EmployeeECAmount & _
+        Dim getpaysocialsecurity = EXECQUER("INSERT INTO paysocialsecurity (CreatedBy,LastUpdBy,RangeFromAmount,RangeToAmount,MonthlySalaryCredit,EmployeeContributionAmount," &
+        "EmployerContributionAmount,EmployeeECAmount) VALUES (" &
+        "" & user_row_id &
+        "," & user_row_id &
+        "," & RangeFromAmount &
+        "," & RangeToAmount &
+        "," & MonthlySalaryCredit &
+        "," & EmployeeContributionAmount &
+        "," & EmployerContributionAmount &
+        "," & EmployeeECAmount &
         ");") ' & _
         '"SELECT COALESCE(RowID,'') FROM paysocialsecurity " & _
         '"WHERE Createdby=" & 1 & _
@@ -1490,12 +1492,12 @@ Module myModule
 
     End Function
 
-    Function INS_payphilhealth(Optional SalaryBracket As Object = Nothing, _
-                Optional SalaryRangeFrom As Object = Nothing, _
-                Optional SalaryRangeTo As Object = Nothing, _
-                Optional SalaryBase As Object = Nothing, _
-                Optional TotalMonthlyPremium As Object = Nothing, _
-                Optional EmployeeShare As Object = Nothing, _
+    Function INS_payphilhealth(Optional SalaryBracket As Object = Nothing,
+                Optional SalaryRangeFrom As Object = Nothing,
+                Optional SalaryRangeTo As Object = Nothing,
+                Optional SalaryBase As Object = Nothing,
+                Optional TotalMonthlyPremium As Object = Nothing,
+                Optional EmployeeShare As Object = Nothing,
                 Optional EmployerShare As Object = Nothing) As String
 
         SalaryBracket = If(SalaryBracket = Nothing, "NULL", SalaryBracket)
@@ -1506,39 +1508,39 @@ Module myModule
         EmployeeShare = If(EmployeeShare = Nothing, "NULL", EmployeeShare)
         EmployerShare = If(EmployerShare = Nothing, "NULL", EmployerShare)
         'TotalMonthlyPremium,
-        Dim getpaysocialsecurity = EXECQUER("INSERT INTO payphilhealth (CreatedBy,LastUpdBy,SalaryBracket,SalaryRangeFrom,SalaryRangeTo,SalaryBase," & _
-        "EmployeeShare,EmployerShare) VALUES (" & _
-        "" & user_row_id & _
-        "," & user_row_id & _
-        "," & SalaryBracket & _
-        "," & SalaryRangeFrom & _
-        "," & SalaryRangeTo & _
-        "," & SalaryBase & _
-        "," & EmployeeShare & _
-        "," & EmployerShare & _
-        ");" & _
-        "SELECT RowID " & _
-        "FROM payphilhealth " & _
-        "WHERE SalaryBracket=" & SalaryBracket & _
-        " AND SalaryRangeFrom=" & SalaryRangeFrom & _
-        " AND SalaryRangeTo=" & SalaryRangeTo & _
-        " AND SalaryBase=" & SalaryBase & _
-        " AND EmployeeShare=" & EmployeeShare & _
-        " AND EmployerShare=" & EmployerShare & _
+        Dim getpaysocialsecurity = EXECQUER("INSERT INTO payphilhealth (CreatedBy,LastUpdBy,SalaryBracket,SalaryRangeFrom,SalaryRangeTo,SalaryBase," &
+        "EmployeeShare,EmployerShare) VALUES (" &
+        "" & user_row_id &
+        "," & user_row_id &
+        "," & SalaryBracket &
+        "," & SalaryRangeFrom &
+        "," & SalaryRangeTo &
+        "," & SalaryBase &
+        "," & EmployeeShare &
+        "," & EmployerShare &
+        ");" &
+        "SELECT RowID " &
+        "FROM payphilhealth " &
+        "WHERE SalaryBracket=" & SalaryBracket &
+        " AND SalaryRangeFrom=" & SalaryRangeFrom &
+        " AND SalaryRangeTo=" & SalaryRangeTo &
+        " AND SalaryBase=" & SalaryBase &
+        " AND EmployeeShare=" & EmployeeShare &
+        " AND EmployerShare=" & EmployerShare &
         " AND CreatedBy=" & user_row_id)
 
         Return getpaysocialsecurity
     End Function
 
-    Public Function INS_employee(Optional EmployeeID As Object = Nothing, Optional EmploymentStatus As Object = Nothing, Optional Gender As Object = Nothing, _
-                Optional JobTitle As Object = Nothing, Optional PositionID As Object = Nothing, Optional Salutation As Object = Nothing, _
-                Optional FirstName As Object = Nothing, Optional MiddleName As Object = Nothing, Optional LastName As Object = Nothing, _
-                Optional Nickname As Object = Nothing, Optional Birthdate As Object = Nothing, Optional TINNo As Object = Nothing, _
-                Optional SSSNo As Object = Nothing, Optional HDMFNo As Object = Nothing, Optional PhilHealthNo As Object = Nothing, _
-                Optional EmailAddress As Object = Nothing, Optional WorkPhone As Object = Nothing, Optional HomePhone As Object = Nothing, _
-                Optional MobilePhone As Object = Nothing, Optional HomeAddress As Object = Nothing, Optional PayFrequencyID As Object = Nothing, _
-                Optional UndertimeOverride As Object = Nothing, Optional OvertimeOverride As Object = Nothing, Optional Surname As Object = Nothing, _
-                Optional MaritalStatus As Object = Nothing, Optional NoOfDependents As String = Nothing, Optional LeavePerPayPeriod As String = Nothing, _
+    Public Function INS_employee(Optional EmployeeID As Object = Nothing, Optional EmploymentStatus As Object = Nothing, Optional Gender As Object = Nothing,
+                Optional JobTitle As Object = Nothing, Optional PositionID As Object = Nothing, Optional Salutation As Object = Nothing,
+                Optional FirstName As Object = Nothing, Optional MiddleName As Object = Nothing, Optional LastName As Object = Nothing,
+                Optional Nickname As Object = Nothing, Optional Birthdate As Object = Nothing, Optional TINNo As Object = Nothing,
+                Optional SSSNo As Object = Nothing, Optional HDMFNo As Object = Nothing, Optional PhilHealthNo As Object = Nothing,
+                Optional EmailAddress As Object = Nothing, Optional WorkPhone As Object = Nothing, Optional HomePhone As Object = Nothing,
+                Optional MobilePhone As Object = Nothing, Optional HomeAddress As Object = Nothing, Optional PayFrequencyID As Object = Nothing,
+                Optional UndertimeOverride As Object = Nothing, Optional OvertimeOverride As Object = Nothing, Optional Surname As Object = Nothing,
+                Optional MaritalStatus As Object = Nothing, Optional NoOfDependents As String = Nothing, Optional LeavePerPayPeriod As String = Nothing,
                 Optional EmployeeType As String = Nothing) As String '
 
         JobTitle = If(JobTitle = Nothing, "NULL", "'" & JobTitle & "'") : Salutation = If(Salutation = Nothing, "NULL", "'" & Salutation & "'")
@@ -1556,88 +1558,88 @@ Module myModule
         MaritalStatus = If(MaritalStatus = Nothing, "NULL", "'" & MaritalStatus & "'")
         EmployeeType = If(EmployeeType = Nothing, "NULL", "'" & EmployeeType & "'")
 
-        Dim getpaysocialsecurity = EXECQUER("INSERT INTO employee (CreatedBy,LastUpdBy,OrganizationID,EmployeeID,EmploymentStatus,Gender,JobTitle," & _
-        "PositionID,Salutation,FirstName,MiddleName,LastName,Nickname,Birthdate,TINNo,SSSNo,HDMFNo,PhilHealthNo,EmailAddress,WorkPhone,HomePhone,MobilePhone,HomeAddress," & _
-        "PayFrequencyID,UndertimeOverride,OvertimeOverride,Surname,MaritalStatus,NoOfDependents,LeavePerPayPeriod,EmployeeType) VALUES (" & _
-        "" & user_row_id & _
-        "," & user_row_id & _
-        "," & org_rowid & _
-        "," & EmployeeID & _
-        ",'" & EmploymentStatus & _
-        "','" & Gender & _
-        "'," & JobTitle & _
-        "," & PositionID & _
-        "," & Salutation & _
-        "," & FirstName & _
-        "," & MiddleName & _
-        "," & LastName & _
-        "," & Nickname & _
-        ",'" & Birthdate & _
-        "'," & TINNo & _
-        "," & SSSNo & _
-        "," & HDMFNo & _
-        "," & PhilHealthNo & _
-        "," & EmailAddress & _
-        "," & WorkPhone & _
-        "," & HomePhone & _
-        "," & MobilePhone & _
-        "," & HomeAddress & _
-        "," & PayFrequencyID & _
-        "," & UndertimeOverride & _
-        "," & OvertimeOverride & _
-        "," & Surname & _
-        "," & MaritalStatus & _
-        "," & NoOfDependents & _
-        "," & LeavePerPayPeriod & _
-        "," & EmployeeType & _
-        ");" & _
-        "SELECT RowID " & _
-        "FROM employee " & _
-        "WHERE CreatedBy=" & user_row_id & _
-        " AND LastUpdBy=" & user_row_id & _
-        " AND OrganizationID=" & org_rowid & _
-        " AND EmployeeID" & If(EmployeeID = "NULL", " IS NULL", "=" & EmployeeID) & _
-        " AND EmploymentStatus='" & EmploymentStatus & _
-        "' AND Gender='" & Gender & _
-        "' AND JobTitle" & If(JobTitle = "NULL", " IS NULL", "=" & JobTitle) & _
-        " AND PositionID" & If(PositionID = "NULL", " IS NULL", "=" & PositionID) & _
-        " AND Salutation" & If(Salutation = "NULL", " IS NULL", "=" & Salutation) & _
-        " AND FirstName" & If(FirstName = "NULL", " IS NULL", "=" & FirstName) & _
-        " AND MiddleName" & If(MiddleName = "NULL", " IS NULL", "=" & MiddleName) & _
-        " AND LastName" & If(LastName = "NULL", " IS NULL", "=" & LastName) & _
-        " AND Nickname" & If(Nickname = "NULL", " IS NULL", "=" & Nickname) & _
-        " AND Birthdate='" & Birthdate & _
-        "' AND TINNo" & If(TINNo = "NULL", " IS NULL", "=" & TINNo) & _
-        " AND SSSNo" & If(SSSNo = "NULL", " IS NULL", "=" & SSSNo) & _
-        " AND HDMFNo" & If(HDMFNo = "NULL", " IS NULL", "=" & HDMFNo) & _
-        " AND PhilHealthNo" & If(PhilHealthNo = "NULL", " IS NULL", "=" & PhilHealthNo) & _
-        " AND EmailAddress" & If(EmailAddress = "NULL", " IS NULL", "=" & EmailAddress) & _
-        " AND WorkPhone" & If(WorkPhone = "NULL", " IS NULL", "=" & WorkPhone) & _
-        " AND HomePhone" & If(HomePhone = "NULL", " IS NULL", "=" & HomePhone) & _
-        " AND MobilePhone" & If(MobilePhone = "NULL", " IS NULL", "=" & MobilePhone) & _
-        " AND HomeAddress" & If(HomeAddress = "NULL", " IS NULL", "=" & HomeAddress) & _
-        " AND PayFrequencyID" & If(PayFrequencyID = "NULL", " IS NULL", "=" & PayFrequencyID) & _
-        " AND PayFrequencyID" & If(PayFrequencyID = "NULL", " IS NULL", "=" & PayFrequencyID) & _
-        " AND UndertimeOverride=" & UndertimeOverride & _
-        " AND OvertimeOverride=" & OvertimeOverride & _
-        " AND Surname" & If(Surname = "NULL", " IS NULL", "=" & Surname) & _
-        " AND MaritalStatus" & If(MaritalStatus = "NULL", " IS NULL", "=" & MaritalStatus) & _
-        " AND NoOfDependents=" & NoOfDependents & _
-        " AND LeavePerPayPeriod=" & LeavePerPayPeriod & _
+        Dim getpaysocialsecurity = EXECQUER("INSERT INTO employee (CreatedBy,LastUpdBy,OrganizationID,EmployeeID,EmploymentStatus,Gender,JobTitle," &
+        "PositionID,Salutation,FirstName,MiddleName,LastName,Nickname,Birthdate,TINNo,SSSNo,HDMFNo,PhilHealthNo,EmailAddress,WorkPhone,HomePhone,MobilePhone,HomeAddress," &
+        "PayFrequencyID,UndertimeOverride,OvertimeOverride,Surname,MaritalStatus,NoOfDependents,LeavePerPayPeriod,EmployeeType) VALUES (" &
+        "" & user_row_id &
+        "," & user_row_id &
+        "," & org_rowid &
+        "," & EmployeeID &
+        ",'" & EmploymentStatus &
+        "','" & Gender &
+        "'," & JobTitle &
+        "," & PositionID &
+        "," & Salutation &
+        "," & FirstName &
+        "," & MiddleName &
+        "," & LastName &
+        "," & Nickname &
+        ",'" & Birthdate &
+        "'," & TINNo &
+        "," & SSSNo &
+        "," & HDMFNo &
+        "," & PhilHealthNo &
+        "," & EmailAddress &
+        "," & WorkPhone &
+        "," & HomePhone &
+        "," & MobilePhone &
+        "," & HomeAddress &
+        "," & PayFrequencyID &
+        "," & UndertimeOverride &
+        "," & OvertimeOverride &
+        "," & Surname &
+        "," & MaritalStatus &
+        "," & NoOfDependents &
+        "," & LeavePerPayPeriod &
+        "," & EmployeeType &
+        ");" &
+        "SELECT RowID " &
+        "FROM employee " &
+        "WHERE CreatedBy=" & user_row_id &
+        " AND LastUpdBy=" & user_row_id &
+        " AND OrganizationID=" & org_rowid &
+        " AND EmployeeID" & If(EmployeeID = "NULL", " IS NULL", "=" & EmployeeID) &
+        " AND EmploymentStatus='" & EmploymentStatus &
+        "' AND Gender='" & Gender &
+        "' AND JobTitle" & If(JobTitle = "NULL", " IS NULL", "=" & JobTitle) &
+        " AND PositionID" & If(PositionID = "NULL", " IS NULL", "=" & PositionID) &
+        " AND Salutation" & If(Salutation = "NULL", " IS NULL", "=" & Salutation) &
+        " AND FirstName" & If(FirstName = "NULL", " IS NULL", "=" & FirstName) &
+        " AND MiddleName" & If(MiddleName = "NULL", " IS NULL", "=" & MiddleName) &
+        " AND LastName" & If(LastName = "NULL", " IS NULL", "=" & LastName) &
+        " AND Nickname" & If(Nickname = "NULL", " IS NULL", "=" & Nickname) &
+        " AND Birthdate='" & Birthdate &
+        "' AND TINNo" & If(TINNo = "NULL", " IS NULL", "=" & TINNo) &
+        " AND SSSNo" & If(SSSNo = "NULL", " IS NULL", "=" & SSSNo) &
+        " AND HDMFNo" & If(HDMFNo = "NULL", " IS NULL", "=" & HDMFNo) &
+        " AND PhilHealthNo" & If(PhilHealthNo = "NULL", " IS NULL", "=" & PhilHealthNo) &
+        " AND EmailAddress" & If(EmailAddress = "NULL", " IS NULL", "=" & EmailAddress) &
+        " AND WorkPhone" & If(WorkPhone = "NULL", " IS NULL", "=" & WorkPhone) &
+        " AND HomePhone" & If(HomePhone = "NULL", " IS NULL", "=" & HomePhone) &
+        " AND MobilePhone" & If(MobilePhone = "NULL", " IS NULL", "=" & MobilePhone) &
+        " AND HomeAddress" & If(HomeAddress = "NULL", " IS NULL", "=" & HomeAddress) &
+        " AND PayFrequencyID" & If(PayFrequencyID = "NULL", " IS NULL", "=" & PayFrequencyID) &
+        " AND PayFrequencyID" & If(PayFrequencyID = "NULL", " IS NULL", "=" & PayFrequencyID) &
+        " AND UndertimeOverride=" & UndertimeOverride &
+        " AND OvertimeOverride=" & OvertimeOverride &
+        " AND Surname" & If(Surname = "NULL", " IS NULL", "=" & Surname) &
+        " AND MaritalStatus" & If(MaritalStatus = "NULL", " IS NULL", "=" & MaritalStatus) &
+        " AND NoOfDependents=" & NoOfDependents &
+        " AND LeavePerPayPeriod=" & LeavePerPayPeriod &
         " AND EmployeeType" & If(EmployeeType = "NULL", " IS NULL", "=" & EmployeeType) & ";")
 
         Return getpaysocialsecurity
     End Function
-    Function INS_employeedepen(Optional Salutation As Object = Nothing, Optional FirstName As Object = Nothing, _
-                               Optional MiddleName As Object = Nothing, Optional LastName As Object = Nothing, _
-                               Optional Surname As Object = Nothing, Optional ParentEmployeeID As Object = Nothing, _
-                               Optional TINNo As Object = Nothing, Optional SSSNo As Object = Nothing, _
-                               Optional HDMFNo As Object = Nothing, Optional PhilHealthNo As Object = Nothing, _
-                               Optional EmailAddress As Object = Nothing, Optional WorkPhone As Object = Nothing, _
-                               Optional HomePhone As Object = Nothing, Optional MobilePhone As Object = Nothing, _
-                               Optional HomeAddress As Object = Nothing, Optional Nickname As Object = Nothing, _
-                               Optional JobTitle As Object = Nothing, Optional Gender As Object = Nothing, _
-                               Optional RelationToEmployee As Object = Nothing, Optional ActiveFlag As Object = Nothing, _
+    Function INS_employeedepen(Optional Salutation As Object = Nothing, Optional FirstName As Object = Nothing,
+                               Optional MiddleName As Object = Nothing, Optional LastName As Object = Nothing,
+                               Optional Surname As Object = Nothing, Optional ParentEmployeeID As Object = Nothing,
+                               Optional TINNo As Object = Nothing, Optional SSSNo As Object = Nothing,
+                               Optional HDMFNo As Object = Nothing, Optional PhilHealthNo As Object = Nothing,
+                               Optional EmailAddress As Object = Nothing, Optional WorkPhone As Object = Nothing,
+                               Optional HomePhone As Object = Nothing, Optional MobilePhone As Object = Nothing,
+                               Optional HomeAddress As Object = Nothing, Optional Nickname As Object = Nothing,
+                               Optional JobTitle As Object = Nothing, Optional Gender As Object = Nothing,
+                               Optional RelationToEmployee As Object = Nothing, Optional ActiveFlag As Object = Nothing,
                                Optional Birthdate As Object = Nothing) As String
 
         Salutation = If(Salutation = Nothing, "NULL", "'" & Salutation & "'") : FirstName = If(FirstName = Nothing, "NULL", "'" & FirstName & "'")
@@ -1650,55 +1652,55 @@ Module myModule
         Nickname = If(Nickname = Nothing, "NULL", "'" & Nickname & "'") : JobTitle = If(JobTitle = Nothing, "NULL", "'" & JobTitle & "'")
         RelationToEmployee = If(RelationToEmployee = Nothing, "NULL", "'" & RelationToEmployee & "'")
 
-        Dim getemployeedepen = EXECQUER("INSERT INTO employeedependents (CreatedBy,OrganizationID,Salutation,FirstName,MiddleName,LastName," & _
-                                        "Surname,ParentEmployeeID,TINNo,SSSNo,HDMFNo,PhilHealthNo,EmailAddress,WorkPhone,HomePhone,MobilePhone,HomeAddress," & _
-                                        "Nickname,JobTitle,Gender,RelationToEmployee,ActiveFlag,Birthdate) VALUES (" & _
-                                        "" & user_row_id & _
-                                        "," & org_rowid & _
-                                        "," & Salutation & _
-                                        "," & FirstName & _
-                                        "," & MiddleName & _
-                                        "," & LastName & _
-                                        "," & Surname & _
-                                        "," & ParentEmployeeID & _
-                                        "," & TINNo & _
-                                        "," & SSSNo & _
-                                        "," & HDMFNo & _
-                                        "," & PhilHealthNo & _
-                                        "," & EmailAddress & _
-                                        "," & WorkPhone & _
-                                        "," & HomePhone & _
-                                        "," & MobilePhone & _
-                                        "," & HomeAddress & _
-                                        "," & Nickname & _
-                                        "," & JobTitle & _
-                                        ",'" & Gender & _
-                                        "'," & RelationToEmployee & _
-                                        ",'" & ActiveFlag & _
-                                        "','" & Birthdate & _
-                                        "');SELECT RowID FROM employeedependents WHERE " & _
-                                        "CreatedBy=" & user_row_id & _
-                                        " AND OrganizationID=" & org_rowid & _
-                                        " AND Salutation" & If(Salutation = "NULL", " IS NULL", "=" & Salutation) & _
-                                        " AND FirstName" & If(FirstName = "NULL", " IS NULL", "=" & FirstName) & _
-                                        " AND MiddleName" & If(MiddleName = "NULL", " IS NULL", "=" & MiddleName) & _
-                                        " AND LastName" & If(LastName = "NULL", " IS NULL", "=" & LastName) & _
-                                        " AND Surname" & If(Surname = "NULL", " IS NULL", "=" & Surname) & _
-                                        " AND ParentEmployeeID" & If(ParentEmployeeID = "NULL", " IS NULL", "=" & ParentEmployeeID) & _
-                                        " AND TINNo" & If(TINNo = "NULL", " IS NULL", "=" & TINNo) & _
-                                        " AND SSSNo" & If(SSSNo = "NULL", " IS NULL", "=" & SSSNo) & _
-                                        " AND HDMFNo" & If(HDMFNo = "NULL", " IS NULL", "=" & HDMFNo) & _
-                                        " AND PhilHealthNo" & If(PhilHealthNo = "NULL", " IS NULL", "=" & PhilHealthNo) & _
-                                        " AND EmailAddress" & If(EmailAddress = "NULL", " IS NULL", "=" & EmailAddress) & _
-                                        " AND WorkPhone" & If(WorkPhone = "NULL", " IS NULL", "=" & WorkPhone) & _
-                                        " AND HomePhone" & If(HomePhone = "NULL", " IS NULL", "=" & HomePhone) & _
-                                        " AND MobilePhone" & If(MobilePhone = "NULL", " IS NULL", "=" & MobilePhone) & _
-                                        " AND HomeAddress" & If(HomeAddress = "NULL", " IS NULL", "=" & HomeAddress) & _
-                                        " AND Nickname" & If(Nickname = "NULL", " IS NULL", "=" & Nickname) & _
-                                        " AND JobTitle" & If(JobTitle = "NULL", " IS NULL", "=" & JobTitle) & _
-                                        " AND Gender='" & Gender & "' " & _
-                                        " AND RelationToEmployee" & If(RelationToEmployee = "NULL", " IS NULL", "=" & RelationToEmployee) & _
-                                        " AND ActiveFlag='" & ActiveFlag & "' " & _
+        Dim getemployeedepen = EXECQUER("INSERT INTO employeedependents (CreatedBy,OrganizationID,Salutation,FirstName,MiddleName,LastName," &
+                                        "Surname,ParentEmployeeID,TINNo,SSSNo,HDMFNo,PhilHealthNo,EmailAddress,WorkPhone,HomePhone,MobilePhone,HomeAddress," &
+                                        "Nickname,JobTitle,Gender,RelationToEmployee,ActiveFlag,Birthdate) VALUES (" &
+                                        "" & user_row_id &
+                                        "," & org_rowid &
+                                        "," & Salutation &
+                                        "," & FirstName &
+                                        "," & MiddleName &
+                                        "," & LastName &
+                                        "," & Surname &
+                                        "," & ParentEmployeeID &
+                                        "," & TINNo &
+                                        "," & SSSNo &
+                                        "," & HDMFNo &
+                                        "," & PhilHealthNo &
+                                        "," & EmailAddress &
+                                        "," & WorkPhone &
+                                        "," & HomePhone &
+                                        "," & MobilePhone &
+                                        "," & HomeAddress &
+                                        "," & Nickname &
+                                        "," & JobTitle &
+                                        ",'" & Gender &
+                                        "'," & RelationToEmployee &
+                                        ",'" & ActiveFlag &
+                                        "','" & Birthdate &
+                                        "');SELECT RowID FROM employeedependents WHERE " &
+                                        "CreatedBy=" & user_row_id &
+                                        " AND OrganizationID=" & org_rowid &
+                                        " AND Salutation" & If(Salutation = "NULL", " IS NULL", "=" & Salutation) &
+                                        " AND FirstName" & If(FirstName = "NULL", " IS NULL", "=" & FirstName) &
+                                        " AND MiddleName" & If(MiddleName = "NULL", " IS NULL", "=" & MiddleName) &
+                                        " AND LastName" & If(LastName = "NULL", " IS NULL", "=" & LastName) &
+                                        " AND Surname" & If(Surname = "NULL", " IS NULL", "=" & Surname) &
+                                        " AND ParentEmployeeID" & If(ParentEmployeeID = "NULL", " IS NULL", "=" & ParentEmployeeID) &
+                                        " AND TINNo" & If(TINNo = "NULL", " IS NULL", "=" & TINNo) &
+                                        " AND SSSNo" & If(SSSNo = "NULL", " IS NULL", "=" & SSSNo) &
+                                        " AND HDMFNo" & If(HDMFNo = "NULL", " IS NULL", "=" & HDMFNo) &
+                                        " AND PhilHealthNo" & If(PhilHealthNo = "NULL", " IS NULL", "=" & PhilHealthNo) &
+                                        " AND EmailAddress" & If(EmailAddress = "NULL", " IS NULL", "=" & EmailAddress) &
+                                        " AND WorkPhone" & If(WorkPhone = "NULL", " IS NULL", "=" & WorkPhone) &
+                                        " AND HomePhone" & If(HomePhone = "NULL", " IS NULL", "=" & HomePhone) &
+                                        " AND MobilePhone" & If(MobilePhone = "NULL", " IS NULL", "=" & MobilePhone) &
+                                        " AND HomeAddress" & If(HomeAddress = "NULL", " IS NULL", "=" & HomeAddress) &
+                                        " AND Nickname" & If(Nickname = "NULL", " IS NULL", "=" & Nickname) &
+                                        " AND JobTitle" & If(JobTitle = "NULL", " IS NULL", "=" & JobTitle) &
+                                        " AND Gender='" & Gender & "' " &
+                                        " AND RelationToEmployee" & If(RelationToEmployee = "NULL", " IS NULL", "=" & RelationToEmployee) &
+                                        " AND ActiveFlag='" & ActiveFlag & "' " &
                                         " AND Birthdate='" & Birthdate & "';")
 
         Return getemployeedepen
@@ -1748,26 +1750,26 @@ Module myModule
 
     End Function
     Public Function INSGet_View(ByVal ViewName As String) As String '                             ' & orgztnID 
-        Dim _str = EXECQUER("INSERT INTO view (ViewName,OrganizationID) VALUES('" & ViewName & "',1" & _
-                                            ");SELECT RowID FROM view WHERE ViewName='" & ViewName & _
+        Dim _str = EXECQUER("INSERT INTO view (ViewName,OrganizationID) VALUES('" & ViewName & "',1" &
+                                            ");SELECT RowID FROM view WHERE ViewName='" & ViewName &
                                                 "' AND OrganizationID='" & org_rowid & "' LIMIT 1;") '" & orgztnID & "
         Return _str
     End Function
 
-    Public Function INS_position(ByVal PositionName As String, _
-                                 Optional ParentPositionID As String = Nothing, _
+    Public Function INS_position(ByVal PositionName As String,
+                                 Optional ParentPositionID As String = Nothing,
                                  Optional ParentDivisionID As String = Nothing) As String
         'orgztnID
         ParentPositionID = If(ParentPositionID = Nothing, "NULL", ParentPositionID)
         ParentDivisionID = If(ParentDivisionID = Nothing, "NULL", ParentDivisionID)
 
-        Dim _str = EXECQUER("INSERT INTO position (CreatedBy,OrganizationID,PositionName,ParentPositionID,DivisionId) " & _
-        "VALUES(" & 1 & "," & org_rowid & ",'" & PositionName & _
-        "'," & ParentPositionID & "," & ParentDivisionID & ");" & _
-        "SELECT RowID FROM position WHERE PositionName='" & PositionName & _
-        "' AND OrganizationID=" & org_rowid & _
-        " AND ParentPositionID" & If(ParentPositionID = "NULL", " IS NULL", "=" & ParentPositionID) & _
-        " AND DivisionId" & If(ParentDivisionID = "NULL", " IS NULL", "=" & ParentDivisionID) & _
+        Dim _str = EXECQUER("INSERT INTO position (CreatedBy,OrganizationID,PositionName,ParentPositionID,DivisionId) " &
+        "VALUES(" & 1 & "," & org_rowid & ",'" & PositionName &
+        "'," & ParentPositionID & "," & ParentDivisionID & ");" &
+        "SELECT RowID FROM position WHERE PositionName='" & PositionName &
+        "' AND OrganizationID=" & org_rowid &
+        " AND ParentPositionID" & If(ParentPositionID = "NULL", " IS NULL", "=" & ParentPositionID) &
+        " AND DivisionId" & If(ParentDivisionID = "NULL", " IS NULL", "=" & ParentDivisionID) &
         " AND CreatedBy=" & user_row_id & ";")
         Return _str
 
@@ -1871,7 +1873,7 @@ Module myModule
 
     Public OrgPic As Byte()
 
-    Sub txtDecimalPoint(ByVal _charcnt As Integer, _
+    Sub txtDecimalPoint(ByVal _charcnt As Integer,
                         ByVal txtdecim As TextBox)
         Dim _txtdecim As New TextBox
         _txtdecim = txtdecim
@@ -1886,8 +1888,8 @@ Module myModule
         _txtdecim.Select(_charcnt, 0)
     End Sub
 
-    Function INSUPD_category(Optional cat_RowID As Object = Nothing, _
-                        Optional cat_CategoryName As Object = Nothing, _
+    Function INSUPD_category(Optional cat_RowID As Object = Nothing,
+                        Optional cat_CategoryName As Object = Nothing,
                         Optional cat_CatalogID As Object = Nothing) As Object
 
         Try
@@ -1931,10 +1933,10 @@ Module myModule
 
     End Function
 
-    Sub EXEC_VIEW_PROCEDURE(Optional ParamsCollection As Array = Nothing, _
-                      Optional ProcedureName As String = Nothing, _
-                      Optional DGVCatcher As DataGridView = Nothing, _
-                      Optional isUsualDGVPopulateFALSE As SByte = 0, _
+    Sub EXEC_VIEW_PROCEDURE(Optional ParamsCollection As Array = Nothing,
+                      Optional ProcedureName As String = Nothing,
+                      Optional DGVCatcher As DataGridView = Nothing,
+                      Optional isUsualDGVPopulateFALSE As SByte = 0,
                       Optional isAutoresizeRow As SByte = 0)
 
         Try
@@ -2023,9 +2025,9 @@ Module myModule
         End Try
     End Sub
 
-    Function EXEC_INSUPD_PROCEDURE(Optional ParamsCollection As Array = Nothing, _
-                      Optional ProcedureName As String = Nothing, _
-                      Optional returnName As String = Nothing, _
+    Function EXEC_INSUPD_PROCEDURE(Optional ParamsCollection As Array = Nothing,
+                      Optional ProcedureName As String = Nothing,
+                      Optional returnName As String = Nothing,
                      Optional MySql_DbType As MySqlDbType = MySqlDbType.Int32) As Object
 
         Try
@@ -2067,8 +2069,8 @@ Module myModule
         End Try
     End Function
 
-    Function fillDattbl(Optional _quer As String = Nothing, _
-                         Optional Params As Array = Nothing, _
+    Function fillDattbl(Optional _quer As String = Nothing,
+                         Optional Params As Array = Nothing,
                          Optional CommandType As Object = Nothing) As Object
         'Optional ParamValue As Object = Nothing, _
         Dim publictable As New DataTable
@@ -2126,7 +2128,7 @@ Module myModule
 
     End Function
 
-    Function VIEW_privilege(ByVal vw_ViewName As String, _
+    Function VIEW_privilege(ByVal vw_ViewName As String,
                             ByVal vw_org As String) As Object
 
         Dim params(2, 2) As Object
@@ -2139,8 +2141,8 @@ Module myModule
 
         Dim view_RowID As Object
 
-        view_RowID = EXEC_INSUPD_PROCEDURE(params, _
-                               "VIEW_privilege", _
+        view_RowID = EXEC_INSUPD_PROCEDURE(params,
+                               "VIEW_privilege",
                                "view_RowID")
 
         Return view_RowID
@@ -2193,8 +2195,8 @@ Module myModule
 
     Dim dataread As MySqlDataReader
 
-    Function GetAsDataTable(ByVal _quer As String, _
-                         Optional CmdType As CommandType = CommandType.Text, _
+    Function GetAsDataTable(ByVal _quer As String,
+                         Optional CmdType As CommandType = CommandType.Text,
                          Optional ParamsCollection As Array = Nothing) As Object
 
         Dim pubDatTbl As New DataTable
@@ -2272,7 +2274,7 @@ Module myModule
 
     End Function
 
-    Function callProcAsDatTab(Optional ParamsCollection As Array = Nothing, _
+    Function callProcAsDatTab(Optional ParamsCollection As Array = Nothing,
                               Optional ProcedureName As String = Nothing) As Object
 
         Dim returnvalue = Nothing
@@ -2332,7 +2334,7 @@ Module myModule
     End Function
 
 
-    Function getWorkBookAsDataSet(ByVal opfiledir As String, _
+    Function getWorkBookAsDataSet(ByVal opfiledir As String,
                              Optional FormName As String = "") As Object
 
         Dim StrConn As String
@@ -2375,8 +2377,8 @@ Module myModule
             'returnvalue = datasheet
 
 
-            Dim schemaTable As DataTable = _
-                objConn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, _
+            Dim schemaTable As DataTable =
+                objConn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables,
                                             Nothing) 'New Object() {Nothing, Nothing, Nothing, "TABLE"}
 
             Dim i = 0
@@ -2436,8 +2438,8 @@ Module myModule
 
             connection.Open()
 
-            Dim schemaTable As DataTable = _
-                connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, _
+            Dim schemaTable As DataTable =
+                connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables,
                 New Object() {Nothing, Nothing, Nothing, "TABLE"})
 
             Return schemaTable
@@ -2468,7 +2470,7 @@ Module myModule
 
     End Function
 
-    Sub PopulateDGVwithDatTbl(Optional dgv As DataGridView = Nothing, _
+    Sub PopulateDGVwithDatTbl(Optional dgv As DataGridView = Nothing,
                               Optional dt As DataTable = Nothing)
 
         dgv.Rows.Clear()
@@ -2517,7 +2519,7 @@ Module myModule
 
     End Function
 
-    Function ObjectCopyToClipBoard(Optional KeyEvArgs As KeyEventArgs = Nothing, _
+    Function ObjectCopyToClipBoard(Optional KeyEvArgs As KeyEventArgs = Nothing,
                                    Optional objObject As Object = Nothing) As Boolean
 
         Dim returnvalue As Boolean = False
@@ -2702,9 +2704,9 @@ Module myModule
 
         Else
 
-            ver = regKey.GetValue("server") & vbNewLine & _
-                regKey.GetValue("user id") & vbNewLine & _
-                regKey.GetValue("password") & vbNewLine & _
+            ver = regKey.GetValue("server") & vbNewLine &
+                regKey.GetValue("user id") & vbNewLine &
+                regKey.GetValue("password") & vbNewLine &
                 regKey.GetValue("database")
 
             installerpath = regKey.GetValue("installerpath")

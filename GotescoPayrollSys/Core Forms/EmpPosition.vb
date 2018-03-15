@@ -510,7 +510,7 @@ Public Class EmpPosition
 
     Dim division_rowID As Object = Nothing
 
-    Function rootParentDivision(Optional division_ID As Object = Nothing) As Object
+    Private Sub rootParentDivision(Optional division_ID As Object = Nothing)
 
         If division_ID = Nothing Then
         Else
@@ -532,7 +532,7 @@ Public Class EmpPosition
         End If
         'Return division_rowID
 
-    End Function
+    End Sub
 
     Dim position_rowID As Object = Nothing
 

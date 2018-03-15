@@ -126,6 +126,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\LBGClassLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MessageBoxManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\MessageBoxManager.dll</HintPath>
@@ -1251,6 +1255,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="log4.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\gotescomarketing.ico" />
     <EmbeddedResource Include="AboutAndVersion.resx">
       <DependentUpon>AboutAndVersion.vb</DependentUpon>

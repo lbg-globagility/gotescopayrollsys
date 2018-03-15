@@ -78,7 +78,7 @@ Public Class AboutAndVersion
 
 #Region "Variables"
 
-    Private ver_confg = ConfigurationManager.AppSettings
+    Private ver_confg As Specialized.NameValueCollection = ConfigurationManager.AppSettings
 
 #End Region
 
@@ -110,7 +110,7 @@ Public Class AboutAndVersion
     ''' <remarks></remarks>
     ReadOnly Property VersionCode As String
         Get
-            Dim ver_code As String = ver_confg.Get("VersionCode")
+            Dim ver_code As String = ver_confg.GetValues("VersionUpdate").FirstOrDefault
 
             Return ver_code
 

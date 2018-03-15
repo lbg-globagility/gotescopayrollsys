@@ -3030,12 +3030,17 @@ Public Class PayStub
                 Dim _task As Task =
                     Task.Run(Sub()
                                  GainingLeaveBalances()
-                             End Sub)
+                             End Sub).ContinueWith(Sub()
+                                                       MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll")
+                                                       Thread.Sleep(1750)
+                                                       MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
+                                                   End Sub)
+                MDIPrimaryForm.CaptionMainFormStatus("finishing essential updates...")
                 _task.Wait()
 
                 SpDataSet.Dispose()
 
-            Case Else
+            Case > 0
 
                 MDIPrimaryForm.CaptionMainFormStatus("payroll calculation in progress...")
 

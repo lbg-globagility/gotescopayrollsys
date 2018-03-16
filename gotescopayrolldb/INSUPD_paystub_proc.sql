@@ -131,7 +131,15 @@ UPDATE
 	,NondeductibleTotalLoans=pstub_NondeductibleTotalLoans;
 
 
-# CALL LEAVE_gainingbalance(pstub_OrganizationID, pstub_EmployeeID, pstub_LastUpdBy, pstub_PayFromDate, pstub_PayToDate);
+CALL RECOMPUTE_thirteenthmonthpay(pstub_OrganizationID, pstub_PayPeriodID, pstub_CreatedBy);
+
+CALL INSUPD_monthlyemployeerestdaypayment(pstub_OrganizationID, pstub_EmployeeID, pstub_PayPeriodID, pstub_CreatedBy);
+
+CALL INSUPD_paystubitemallowances(pstub_OrganizationID, pstub_EmployeeID, pstub_PayPeriodID, pstub_CreatedBy);
+
+CALL LEAVE_gainingbalance(pstub_OrganizationID, pstub_EmployeeID, pstub_LastUpdBy, pstub_PayFromDate, pstub_PayToDate);
+
+# INSERT INTO paystubgeneration(OrganizationID, CreatedBy, LastUpdBy, PayPeriodID, EmployeeID, TimeEntryID, PayFromDate, PayToDate, TotalGrossSalary, TotalNetSalary, TotalTaxableSalary, TotalEmpSSS, TotalEmpWithholdingTax, TotalCompSSS, TotalEmpPhilhealth, TotalCompPhilhealth, TotalEmpHDMF, TotalCompHDMF, TotalVacationDaysLeft, TotalLoans, TotalBonus, TotalAllowance, NondeductibleTotalLoans) VALUES (pstub_OrganizationID,pstub_CreatedBy,pstub_LastUpdBy,pstub_PayPeriodID,pstub_EmployeeID,pstub_TimeEntryID,pstub_PayFromDate,pstub_PayToDate,pstub_TotalGrossSalary,pstub_TotalNetSalary,pstub_TotalTaxableSalary,pstub_TotalEmpSSS,pstub_TotalEmpWithholdingTax,pstub_TotalCompSSS,pstub_TotalEmpPhilhealth,pstub_TotalCompPhilhealth,pstub_TotalEmpHDMF,pstub_TotalCompHDMF,pstub_TotalVacationDaysLeft,pstub_TotalLoans,pstub_TotalBonus,pstub_TotalAllowance,pstub_NondeductibleTotalLoans);
 
 END//
 DELIMITER ;

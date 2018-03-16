@@ -1393,7 +1393,16 @@ Public Class PayrollGeneration
                                   totalemployeebonus + totalnotaxemployeebonus,
                                   totalemployeeallownce + totalnotaxemployeeallownce,
                                   loan_nondeductibleamount}
+                ',
+                'org_rowid, n_PayrollRecordID, user_row_id,
+                'org_rowid, Convert.ToInt32(drow("RowID")), n_PayrollRecordID, user_row_id,
+                'org_rowid, Convert.ToInt32(drow("RowID")), n_PayrollRecordID, user_row_id,
+                'org_rowid, Convert.ToInt32(drow("RowID")), user_row_id, n_PayrollDateFrom, n_PayrollDateTo}
 
+                Dim array_for13month = New Object() {org_rowid, n_PayrollRecordID, user_row_id}
+                Dim array_monthlyrestdaypayment = New Object() {org_rowid, Convert.ToInt32(drow("RowID")), n_PayrollRecordID, user_row_id}
+                Dim array_paystubitemallowance = New Object() {org_rowid, Convert.ToInt32(drow("RowID")), n_PayrollRecordID, user_row_id}
+                Dim array_leavegainbalance = New Object() {org_rowid, Convert.ToInt32(drow("RowID")), user_row_id, n_PayrollDateFrom, n_PayrollDateTo}
                 'Dim n_ExecSQLProcedure =
                 '    New SQL(str_quer,
                 '                         paystub_params)
@@ -1406,11 +1415,26 @@ Public Class PayrollGeneration
                 '    Throw n_ExecSQLProcedure.ErrorException
                 'End If
 
+                'paystub_params = paystub_params.
+                '    Concat(array_for13month).
+                '    Concat(array_monthlyrestdaypayment).
+                '    Concat(array_paystubitemallowance).
+                '    Concat(array_leavegainbalance).ToArray()
+
                 Using my_sqlconn As New MySqlConnection(mysql_conn_text),
-                    my_sqlcmd As New MySqlCommand(str_quer, my_sqlconn)
+                    my_sqlcmd As New MySqlCommand(
+String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstub_CreatedBy,?pstub_LastUpdBy,?pstub_PayPeriodID,?pstub_EmployeeID,?pstub_TimeEntryID,?pstub_PayFromDate,?pstub_PayToDate,?pstub_TotalGrossSalary,?pstub_TotalNetSalary,?pstub_TotalTaxableSalary,?pstub_TotalEmpSSS,?pstub_TotalEmpWithholdingTax,?pstub_TotalCompSSS,?pstub_TotalEmpPhilhealth,?pstub_TotalCompPhilhealth,?pstub_TotalEmpHDMF,?pstub_TotalCompHDMF,?pstub_TotalVacationDaysLeft,?pstub_TotalLoans,?pstub_TotalBonus,?pstub_TotalAllowance,?pstub_NondeductibleTotalLoans);",
+              ""
+              ), my_sqlconn)
+                    'my_sqlcmd As New MySqlCommand(str_quer, my_sqlconn)
+                    ',
+                    '"CALL RECOMPUTE_thirteenthmonthpay(?og_rowid2, ?pp_rowid2, ?u_rowid2);",
+                    '"CALL INSUPD_monthlyemployeerestdaypayment(?og_rowid3, ?e_rowid3, ?pp_rowid3, ?u_rowid3);",
+                    '"CALL INSUPD_paystubitemallowances(?og_rowid4, ?e_rowid4, ?pp_rowid4, ?u_rowid4);",
+                    '"CALL LEAVE_gainingbalance(?og_rowid5, ?e_rowid5, ?u_rowid5, ?minimum_date5, ?custom_maximum_date5);"
 
                     Dim param_names =
-                        Regex.Matches(str_quer,
+                        Regex.Matches(my_sqlcmd.CommandText,
                                       regex_pattern)
                     Dim _index = 0
 
@@ -1432,15 +1456,18 @@ Public Class PayrollGeneration
                     Next
 
                     Try
-                        Await my_sqlconn.OpenAsync
-                        Await my_sqlcmd.ExecuteNonQueryAsync
+                        Await _
+                            Task.WhenAll(my_sqlconn.OpenAsync(),
+                                         my_sqlcmd.ExecuteNonQueryAsync())
+
                     Catch ex As Exception
-                        errlogger.Error("Payroll generation@INSUPD_paystub_proc", ex)
+                        errlogger.Error(String.Concat("Payroll generation@INSUPD_paystub_proc(employee.RowID = ", Convert.ToInt32(drow("RowID")),
+                                                      ", employee.Id = ", Convert.ToString(drow("EmployeeID")), ")"), ex)
                     End Try
 
                 End Using
 
-                Dim i_progress As Integer = CInt((100 * progress_index) / emp_count)
+                Dim i_progress As Integer = Convert.ToInt32((100 * progress_index) / emp_count)
 
                 progress_index += 1
 
@@ -1494,16 +1521,15 @@ Public Class PayrollGeneration
 
         'EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & orgztnID & "','" & n_PayrollRecordID & "','" & z_User & "');")
 
-        Dim str_query_recompute_13thmonthpay As String =
-            SBConcat.ConcatResult("CALL RECOMPUTE_thirteenthmonthpay(?og_rowid, ?pp_rowid, ?u_rowid);")
+        'Dim str_query_recompute_13thmonthpay As String =
+        '    SBConcat.ConcatResult("CALL RECOMPUTE_thirteenthmonthpay(?og_rowid, ?pp_rowid, ?u_rowid);")
 
         Dim para_meters =
             New Object() {org_rowid, n_PayrollRecordID, user_row_id}
 
-        Dim exec_str_query_recompute_13thmonthpay As New SQL(str_query_recompute_13thmonthpay,
-                                                             para_meters)
+        'Dim exec_str_query_recompute_13thmonthpay As New SQL(str_query_recompute_13thmonthpay, para_meters)
 
-        exec_str_query_recompute_13thmonthpay.ExecuteQuery()
+        'exec_str_query_recompute_13thmonthpay.ExecuteQuery()
 
 
         If withthirteenthmonthpay = 1 Then
@@ -1587,51 +1613,53 @@ Public Class PayrollGeneration
 
         Dim i = 0
 
-        For Each e_rowid In employee_rowid_list
+#Region ""
+        'For Each e_rowid In employee_rowid_list
 
-            Dim _params =
-                New Object() {org_rowid, e_rowid, n_PayrollRecordID, user_row_id}
+        '    Dim _params =
+        '        New Object() {org_rowid, e_rowid, n_PayrollRecordID, user_row_id}
 
-            Dim sql As New SQL(str_query, _params)
+        '    Dim sql As New SQL(str_query, _params)
 
-            Dim sql2 As New SQL(str_query2, _params)
+        '    Dim sql2 As New SQL(str_query2, _params)
 
-            Dim parametrs = New Object() {org_rowid, e_rowid, user_row_id, n_PayrollDateFrom, n_PayrollDateTo}
-            Dim sql3 As New SQL("CALL LEAVE_gainingbalance(?OrganizID, ?EmpRowID, ?UserRowID, ?minimum_date, ?custom_maximum_date);", parametrs)
+        '    Dim parametrs = New Object() {org_rowid, e_rowid, user_row_id, n_PayrollDateFrom, n_PayrollDateTo}
+        '    Dim sql3 As New SQL("CALL LEAVE_gainingbalance(?OrganizID, ?EmpRowID, ?UserRowID, ?minimum_date, ?custom_maximum_date);", parametrs)
 
-            Try
-                Dim _task As Task = Task.Run(Sub()
-                                                 'sql.ExecuteQuery()
-                                                 'sql2.ExecuteQuery()
-                                                 sql.ExecuteQueryAsync()
-                                                 sql2.ExecuteQueryAsync()
-                                             End Sub)
-                _task.Wait()
-                '###################################################################
-                'Dim _task As New Thread(AddressOf sql.ExecuteQueryAsync) _
-                '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
-                '_task.Start()
+        '    Try
+        '        'Dim _task As Task = Task.Run(Sub()
+        '        '                                 'sql.ExecuteQuery()
+        '        '                                 'sql2.ExecuteQuery()
+        '        '                                 sql.ExecuteQueryAsync()
+        '        '                                 sql2.ExecuteQueryAsync()
+        '        '                             End Sub)
+        '        '_task.Wait()
+        '        '###################################################################
+        '        'Dim _task As New Thread(AddressOf sql.ExecuteQueryAsync) _
+        '        '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+        '        '_task.Start()
 
-                'Dim _task2 As New Thread(AddressOf sql2.ExecuteQueryAsync) _
-                '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
-                '_task2.Start()
+        '        'Dim _task2 As New Thread(AddressOf sql2.ExecuteQueryAsync) _
+        '        '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+        '        '_task2.Start()
 
-                'Dim _task3 As New Thread(AddressOf sql3.ExecuteQueryAsync) _
-                '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
-                '_task3.Start()
+        '        'Dim _task3 As New Thread(AddressOf sql3.ExecuteQueryAsync) _
+        '        '    With {.IsBackground = True, .Priority = ThreadPriority.Lowest}
+        '        '_task3.Start()
 
-                'Console.WriteLine(String.Concat("Executing Task", i))
-                Console.WriteLine(String.Concat("Executing task for employee.RowID ", e_rowid))
-            Catch ex As Exception
-                Console.WriteLine(String.Concat("Error in Task", i, " : ", ex.Message))
+        '        'Console.WriteLine(String.Concat("Executing Task", i))
+        '        Console.WriteLine(String.Concat("Executing task for employee.RowID ", e_rowid))
+        '    Catch ex As Exception
+        '        Console.WriteLine(String.Concat("Error in Task", i, " : ", ex.Message))
 
-                errlogger.Error("PayrollGeneration_RunWorkerCompleted", ex)
+        '        errlogger.Error("PayrollGeneration_RunWorkerCompleted", ex)
 
-            Finally
-                i += 1
-            End Try
+        '    Finally
+        '        i += 1
+        '    End Try
 
-        Next
+        'Next
+#End Region
 
     End Sub
 

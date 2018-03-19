@@ -12481,7 +12481,6 @@ Public Class PayStub
             End If
 
             Console.WriteLine("batch has finished...")
-            MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll, OK")
 
             If progress_precentage = payroll_emp_count Then
                 Timer1.Stop()
@@ -12490,14 +12489,15 @@ Public Class PayStub
 
                 MDIPrimaryForm.systemprogressbar.Visible = False
 
-                Thread.Sleep(1750)
-                MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
+                MDIPrimaryForm.CaptionMainFormStatus("finishing system tasks")
 
                 Dim task_leave_gain_balance =
                     Task.Run(Sub()
                                  GainingLeaveBalances()
+                                 MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll, OK")
                              End Sub)
                 task_leave_gain_balance.Wait()
+                MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
             Else
 
             End If

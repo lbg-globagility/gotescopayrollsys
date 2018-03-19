@@ -3055,62 +3055,18 @@ Public Class PayStub
 
 #Region "LEAVE_gainingbalance"
     Public errlogger As ILog = LogManager.GetLogger("LoggerWork")
-    Private Async Sub GainingLeaveBalances()
-        'Thread.Sleep(3000)
-        For Each dt As DataTable In SpDataSet.Tables
-            'array_thread_update_leave_balance.Clear()
-            Dim d_rows = dt.Rows.OfType(Of DataRow).Where(Function(dr) Convert.ToInt32(dr("RowID")) > 0)
-            For Each drow As DataRow In d_rows 'dt.Rows
+    Private Sub GainingLeaveBalances()
 
-                Dim emp_rowid As Object = Convert.ToInt32(drow("RowID"))
+        Dim params = New Object() {org_rowid, user_row_id, paypFrom, paypTo}
 
-                Dim str_query As String =
-                    String.Concat("CALL",
-                                  " LEAVE_gainingbalance(", org_rowid,
-                                  ", ", emp_rowid,
-                                  ", ", user_row_id,
-                                  ", '", payPeriodDateFrom, "'",
-                                  ", '", payPeriodDateTo, "');") 'paypFrom paypTo
-#Region "previous build"
-                ''string_query.Append(str_query)
+        Dim sql As New SQL("CALL LEAVE_gainingbalance(?OrganizID, NULL, ?UserRowID, ?minimum_date, ?custom_maximum_date);", params)
 
-                ''Dim exec_quer As _
-                ''    New ExecuteQuery(string_query, 1024)
+        sql.ExecuteQueryAsync()
 
-                ''Dim sql As New SQL(Convert.ToString(string_query))
-                'Dim sql As New SQL(str_query)
+        If sql.HasError Then
+            errlogger.Error("PayStub.GainingLeaveBalances", sql.ErrorException)
+        End If
 
-                ''Dim n_thrd As New Thread(AddressOf _
-                'sql.ExecuteQueryAsync() ' ) _
-                ''                                                 With {.IsBackground = True}
-                ''n_thrd.Start()
-
-                ''If exec_quer.HasError Then
-
-                'If sql.HasError Then
-                '    'Console.WriteLine(String.Concat("Error occured for employee - ", emp_rowid, vbNewLine, sql.ErrorMessage))
-                '    errlogger.Error("GainingLeaveBalances", sql.ErrorException)
-                '    MsgBox(getErrExcptn(sql.ErrorException, Name), MsgBoxStyle.Exclamation, "GainingLeaveBalances")
-                'Else
-
-                '    'array_thread_update_leave_balance.Add(n_thrd)
-                'End If
-#End Region
-                Using my_sqlconn As New MySqlConnection(mysql_conn_text),
-                    my_sqlcmd As New MySqlCommand(str_query, my_sqlconn)
-                    Try
-                        Await my_sqlconn.OpenAsync
-                        Await my_sqlcmd.ExecuteNonQueryAsync
-                        Console.WriteLine(String.Concat("LEAVE_gainingbalance, OK ", emp_rowid))
-                    Catch ex As Exception
-                        Console.WriteLine(String.Concat("LEAVE_gainingbalance, not OK ", emp_rowid))
-                        errlogger.Error(String.Concat("GainingLeaveBalances (employee.RowID = ", emp_rowid, ")"), ex)
-                    End Try
-                End Using
-
-            Next
-
-        Next
     End Sub
 #End Region
 
@@ -12530,7 +12486,11 @@ Public Class PayStub
                 Timer1.Stop()
                 Me.Enabled = True
                 Timer1.Enabled = False
-
+                Dim task_leave_gain_balance =
+                    Task.Run(Sub()
+                                 GainingLeaveBalances()
+                             End Sub)
+                task_leave_gain_balance.Wait()
             Else
 
             End If

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.INSUPD_paystubitemallowances
+-- Dumping structure for procedure gotescopayrolldb.INSUPD_paystubitemallowances
 DROP PROCEDURE IF EXISTS `INSUPD_paystubitemallowances`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystubitemallowances`(IN `og_rowid` INT, IN `e_rowid` INT, IN `pp_rowid` INT, IN `user_rowid` INT)
@@ -47,9 +47,10 @@ AND p.PartNo = 'Ecola'
 LIMIT 1
 INTO @ecola_rowid;
 
-SET SESSION low_priority_updates = ON;# LOW_PRIORITY 
+# SET SESSION low_priority_updates = ON;# LOW_PRIORITY 
 
-INSERT LOW_PRIORITY INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayStubID`,`PayAmount`,`Undeclared`)
+# INSERT LOW_PRIORITY INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayStubID`,`PayAmount`,`Undeclared`)
+INSERT INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayStubID`,`PayAmount`,`Undeclared`)
 	SELECT
 	ii.ProductID
 	,og_rowid
@@ -214,7 +215,8 @@ SET @day_pay = 0.00;
 
 # ***************************************************** # ***************************************************** #
 
-INSERT LOW_PRIORITY INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayStubID`,`PayAmount`,`Undeclared`)
+# INSERT LOW_PRIORITY INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayStubID`,`PayAmount`,`Undeclared`)
+INSERT INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayStubID`,`PayAmount`,`Undeclared`)
 	SELECT i.ProductID
 	,og_rowid
 	,CURRENT_TIMESTAMP()

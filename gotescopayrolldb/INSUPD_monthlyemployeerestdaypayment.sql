@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.INSUPD_monthlyemployeerestdaypayment
+-- Dumping structure for procedure gotescopayrolldb.INSUPD_monthlyemployeerestdaypayment
 DROP PROCEDURE IF EXISTS `INSUPD_monthlyemployeerestdaypayment`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_monthlyemployeerestdaypayment`(IN `og_rowid` INT, IN `e_rowid` INT, IN `pp_rowid` INT, IN `user_rowid` INT)
@@ -33,9 +33,10 @@ INTO ps_rowid
      ,date_from
      ,date_to;
 
-SET SESSION low_priority_updates = ON;# LOW_PRIORITY 
+# SET SESSION low_priority_updates = ON;# LOW_PRIORITY 
 
-INSERT LOW_PRIORITY INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, `PayAmount`, `Undeclared`)
+# INSERT LOW_PRIORITY INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, `PayAmount`, `Undeclared`)
+INSERT INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, `PayAmount`, `Undeclared`)
 SELECT p.OrganizationID
 ,CURRENT_TIMESTAMP()
 ,user_rowid
@@ -65,7 +66,8 @@ UPDATE
 	,Undeclared=FALSE
 ;
 
-INSERT LOW_PRIORITY INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, `PayAmount`, `Undeclared`)
+# INSERT LOW_PRIORITY INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, `PayAmount`, `Undeclared`)
+INSERT INTO `paystubitem` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PayStubID`, `ProductID`, `PayAmount`, `Undeclared`)
 SELECT p.OrganizationID
 ,CURRENT_TIMESTAMP()
 ,user_rowid

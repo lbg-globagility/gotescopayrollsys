@@ -29,13 +29,29 @@ DECLARE viewID INT(11);
 DECLARE sh_time_from
         ,sh_time_to DATETIME;
 
+DECLARE date_from
+        ,date_to DATE;
+
 SET eob_dayrange = DATEDIFF(COALESCE(NEW.OffBusEndDate,NEW.OffBusStartDate),NEW.OffBusStartDate) + 1;
 SET one_datetimestamp = (SELECT etd.Created FROM employeetimeentrydetails etd INNER JOIN (SELECT pp.RowID,pp.PayFromDate, pp.PayToDate FROM employee e INNER JOIN payperiod pp ON pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=e.OrganizationID AND NEW.OffBusStartDate BETWEEN pp.PayFromDate AND pp.PayToDate WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID LIMIT 1) i ON i.RowID IS NOT NULL OR i.RowID IS NULL WHERE etd.EmployeeID=NEW.EmployeeID AND etd.OrganizationID=NEW.OrganizationID AND etd.`Date` BETWEEN i.PayFromDate AND i.PayToDate LIMIT 1);
 SET one_datetimestamp = IFNULL(one_datetimestamp,CURRENT_TIMESTAMP());
 SET i=0;
 
 	IF NEW.OffBusStatus = 'Approved' THEN
-
+		
+		SELECT
+		pp.PayFromDate
+		, pp.PayToDate
+		FROM payperiod pp
+		INNER JOIN employee e
+		        ON e.RowID=NEW.EmployeeID
+				     AND e.PayFrequencyID=pp.TotalGrossSalary
+		WHERE (pp.PayFromDate >= NEW.OffBusStartDate OR pp.PayToDate >= NEW.OffBusStartDate)
+		AND (pp.PayFromDate <= NEW.OffBusEndDate OR pp.PayToDate <= NEW.OffBusEndDate)
+		LIMIT 1
+		INTO date_from
+		     ,date_to;
+		
 	SELECT CONCAT_DATETIME(NEW.OffBusStartDate, sh.TimeFrom) `ShifTimeFrom`
 	,CONCAT_DATETIME(ADDDATE(NEW.OffBusStartDate, INTERVAL IS_TIMERANGE_REACHTOMORROW(sh.TimeFrom, sh.TimeTo) DAY), sh.TimeTo) `ShifTimeTo`
 	FROM employeeshift esh
@@ -48,7 +64,18 @@ SET i=0;
 	INTO sh_time_from
 	     ,sh_time_to;
 		
-		SELECT CURRENT_TIMESTAMP() INTO one_datetimestamp;
+		SELECT MAX(i.Created)
+		FROM (SELECT etd.Created
+		      FROM employeetimeentrydetails etd
+		      WHERE etd.EmployeeID = NEW.EmployeeID
+		      AND etd.OrganizationID = NEW.OrganizationID
+		      AND etd.`Date` BETWEEN date_from AND date_to
+		      GROUP BY etd.Created
+		      ORDER BY etd.Created DESC
+		      ) i
+		INTO one_datetimestamp;
+		
+		IF one_datetimestamp IS NULL THEN SET one_datetimestamp = CURRENT_TIMESTAMP(); END IF;
 		
 		INSERT INTO employeetimeentrydetails
 		(

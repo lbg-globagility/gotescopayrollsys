@@ -460,7 +460,7 @@ IF FALSE THEN # IF IsrbxpayrollFirstHalfOfMonth = '0' THEN
 		ii.ProductID
 		,NEW.OrganizationID
 		,CURRENT_TIMESTAMP()
-		,NEW.LastUpdBy
+		,NEW.CreatedBy
 		,NEW.RowID
 		,ii.TotalAllowanceAmount
 		,'0'
@@ -688,7 +688,7 @@ INSERT INTO paystubitem
 	, NEW.RowID
 	, NEW.OrganizationID
 	, CURRENT_TIMESTAMP()
-	, NEW.LastUpdBy
+	, NEW.CreatedBy
 	, ii.`BonusAmount`
 	, '0'
 	FROM (SELECT i.*

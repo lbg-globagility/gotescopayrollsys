@@ -22,7 +22,7 @@ SET
 	els.LastUpdBy = I_LastUpdBy,
 	els.LoanNumber = I_LoanNumber,
 	els.DedEffectiveDateFrom = I_DedEffectiveDateFrom,
-	els.DedEffectiveDateTo = PAYTODATE_OF_NoOfPayPeriod(I_DedEffectiveDateFrom, els.NoOfPayPeriod, els.EmployeeID),
+	els.DedEffectiveDateTo = PAYTODATE_OF_NoOfPayPeriod(I_DedEffectiveDateFrom, els.NoOfPayPeriod, els.EmployeeID, I_DeductionSchedule),
 	els.TotalLoanAmount = I_TotalLoanAmount,
 	els.DeductionSchedule = I_DeductionSchedule,
 	els.DeductionAmount = I_DeductionAmount,

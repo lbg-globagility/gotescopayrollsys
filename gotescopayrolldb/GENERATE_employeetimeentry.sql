@@ -19,6 +19,7 @@ BEGIN
 
 DECLARE returnvalue INT(11);
 
+DECLARE default_work_hrs INT(11) DEFAULT 8;
 
 DECLARE pr_DayBefore DATE;
 
@@ -345,6 +346,8 @@ IF isRestDay = '1' THEN
 	
 	SET @is_timelogs_betweenbreaktime = FALSE;
 	
+	SET @break_hours = 0.00;
+	
 	SELECT
 	etd.TimeIn
 	,etd.TimeOut
@@ -373,6 +376,9 @@ IF isRestDay = '1' THEN
 										)
 									- IF(@var_is_timelogs_betweenbreaktime = TRUE, 0, COMPUTE_TimeDifference(sh.BreakTimeFrom, sh.BreakTimeTo))
 		) `Result`
+	
+	, IFNULL(TIMEDIFF(GREATEST(sh.TimeFrom, sh.TimeTo), LEAST(sh.TimeFrom, sh.TimeTo)), 0) `BreakHours`
+	
 	FROM employeetimeentrydetails etd
 	LEFT JOIN employeeshift esh ON esh.EmployeeID=etd.EmployeeID AND esh.OrganizationID=etd.OrganizationID AND etd.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
@@ -385,8 +391,13 @@ IF isRestDay = '1' THEN
 	INTO etd_TimeIn
 	     ,etd_TimeOut
 		  ,@is_timelogs_betweenbreaktime
-		  ,ete_RegHrsWorkd;
-     
+		  ,ete_RegHrsWorkd
+		  ,@break_hours;
+	
+	IF default_work_hrs < ete_RegHrsWorkd THEN SET ete_RegHrsWorkd = default_work_hrs; END IF;
+	
+	# SELECT ete_RegHrsWorkd, @break_hours INTO OUTFILE 'D:/New Downloads/result.txt';
+	
 	# SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
 	# INTO ete_RegHrsWorkd;
 	
@@ -1046,7 +1057,6 @@ IF pr_DayBefore IS NULL THEN
 		
 		IF isRestDay = '1' THEN
 		
-				
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate);
 										 

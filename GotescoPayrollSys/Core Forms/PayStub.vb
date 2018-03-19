@@ -3065,6 +3065,7 @@ Public Class PayStub
 
         If sql.HasError Then
             errlogger.Error("PayStub.GainingLeaveBalances", sql.ErrorException)
+            Console.WriteLine(String.Concat("PayStub.GainingLeaveBalances ", sql.ErrorException.Message))
         End If
 
     End Sub
@@ -12486,6 +12487,12 @@ Public Class PayStub
                 Timer1.Stop()
                 Me.Enabled = True
                 Timer1.Enabled = False
+
+                MDIPrimaryForm.systemprogressbar.Visible = False
+
+                Thread.Sleep(1750)
+                MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
+
                 Dim task_leave_gain_balance =
                     Task.Run(Sub()
                                  GainingLeaveBalances()
@@ -12494,8 +12501,6 @@ Public Class PayStub
             Else
 
             End If
-
-            MDIPrimaryForm.systemprogressbar.Visible = False
 
             ToolStrip1.Enabled = 1
 
@@ -12515,8 +12520,6 @@ Public Class PayStub
 
             backgroundworking = 0
 
-            Thread.Sleep(1750)
-            MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
             'MsgBox("Done generating payroll", MsgBoxStyle.Information)
 
         Else

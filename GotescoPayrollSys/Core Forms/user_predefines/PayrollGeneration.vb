@@ -1613,7 +1613,10 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
 
         Dim i = 0
 
-#Region ""
+        If e.Error IsNot Nothing Then
+            errlogger.Error("PayrollGeneration_RunWorkerCompleted - Error", e.Error)
+        End If
+
         'For Each e_rowid In employee_rowid_list
 
         '    Dim _params =
@@ -1659,7 +1662,7 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         '    End Try
 
         'Next
-#End Region
+
 
     End Sub
 

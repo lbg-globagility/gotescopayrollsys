@@ -10636,21 +10636,6 @@ Public Class EmployeeForm
             Exit Sub
         End If
 
-        If txtloannumber.Text.Trim.Length = 0 Then
-            txtloannumber.Focus()
-            WarnBalloon("Please input a valid loan number", "Invalid Loan number", lblforballoon, , -100)
-            Exit Sub
-        End If
-
-        If txtloannumber.Text = "" And txtbal.Text = "" And txtdedamt.Text = "" _
-            And cmbdedsched.Text = "" And txtnoofpayper.Text = "" And cmbStatus.Text = "" Then
-            If SetWarningIfEmpty(txtloannumber) And SetWarningIfEmpty(txtbal) And SetWarningIfEmpty(txtdedamt) And SetWarningIfEmpty(txtdedpercent) _
-                And SetWarningIfEmpty(cmbdedsched) And SetWarningIfEmpty(txtnoofpayper) And SetWarningIfEmpty(cmbStatus) Then
-                Exit Sub
-            End If
-            Exit Sub
-        End If
-
         Dim empid As Integer = dgvEmp.CurrentRow.Cells("RowID").Value
 
         If IsNewLoan = 1 Then

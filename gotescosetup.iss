@@ -104,6 +104,22 @@ Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  ValueType: string; V
                     
 Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\";  Flags: createvalueifdoesntexist;	ValueType: String; ValueName: "{app}\{#MyAppExeName}"; ValueData: "RUNASADMIN";
 
+; ########################### Add Take Ownership Option in Context Menu ###########################
+Root: "HKCR"; Subkey: "*\shell\runas"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: ""; ValueData: "Take ownership";
+Root: "HKCR"; Subkey: "*\shell\runas"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: "HasLUAShield"; ValueData: "";
+Root: "HKCR"; Subkey: "*\shell\runas"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: "NoWorkingDirectory"; ValueData: "";
+
+Root: "HKCR"; Subkey: "*\shell\runas\command"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: ""; ValueData: "cmd.exe /c takeown /f ""%1"" && icacls ""%1"" /grant administrators:F";
+Root: "HKCR"; Subkey: "*\shell\runas\command"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: "IsolatedCommand"; ValueData: "cmd.exe /c takeown /f ""%1"" && icacls ""%1"" /grant administrators:F";
+
+Root: "HKCR"; Subkey: "Directory\shell\runas"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: ""; ValueData: "Take ownership";
+Root: "HKCR"; Subkey: "Directory\shell\runas"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: "HasLUAShield"; ValueData: "";
+Root: "HKCR"; Subkey: "Directory\shell\runas"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: "NoWorkingDirectory"; ValueData: "";
+
+Root: "HKCR"; Subkey: "Directory\shell\runas\command"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: ""; ValueData: "cmd.exe /c takeown /f ""%1"" /r /d y && icacls ""%1"" /grant administrators:F /t";
+Root: "HKCR"; Subkey: "Directory\shell\runas\command"; Flags: createvalueifdoesntexist; ValueType: string; ValueName: "IsolatedCommand"; ValueData: "cmd.exe /c takeown /f ""%1"" /r /d y && icacls ""%1"" /grant administrators:F /t";
+; ########################### Add Take Ownership Option in Context Menu ###########################
+
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon

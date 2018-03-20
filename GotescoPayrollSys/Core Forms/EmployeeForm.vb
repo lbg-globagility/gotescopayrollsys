@@ -11688,7 +11688,7 @@ Public Class EmployeeForm
 
         'grpbasicsalaryaddeduction.Enabled = Not boolresult
 
-        btnSaveSal.Enabled = Not boolresult
+        'btnSaveSal.Enabled = Not boolresult
 
     End Sub
 
@@ -11736,9 +11736,9 @@ Public Class EmployeeForm
 
                 End If
 
-                dptFromSal.MinDate = min_date
+                'dptFromSal.MinDate = min_date
 
-                dtpToSal.MinDate = min_date
+                'dtpToSal.MinDate = min_date
 
                 txtpaytype.Text = drow("PayFrequencyType")
 
@@ -11761,7 +11761,7 @@ Public Class EmployeeForm
         IsNewSal = 1
 
         'grpbasicsalaryaddeduction.Enabled = True
-        btnSaveSal.Enabled = True
+        'btnSaveSal.Enabled = True
         btnNewSal.Enabled = False
 
         cleartextsal()
@@ -11783,7 +11783,7 @@ Public Class EmployeeForm
 
                 dptFromSal.Value = CDate(emplatestdate).AddDays(1)
 
-                dptFromSal.MinDate = CDate(emplatestdate).AddDays(1)
+                'dptFromSal.MinDate = CDate(emplatestdate).AddDays(1)
 
             End If
 
@@ -11805,7 +11805,7 @@ Public Class EmployeeForm
                 If CDate(dbCurrDate) = CDate(empEffDateFrom) Then
                     Dim thevaliddate = CDate(dbCurrDate).AddDays(2)
 
-                    dptFromSal.MinDate = Format(CDate(thevaliddate), machineShortDateFormat)
+                    'dptFromSal.MinDate = Format(CDate(thevaliddate), machineShortDateFormat)
 
                 ElseIf CDate(dbCurrDate) > CDate(empEffDateFrom) Then
 
@@ -11819,7 +11819,7 @@ Public Class EmployeeForm
                         thevaliddate = CDate(dbCurrDate)
                     End If
 
-                    dptFromSal.MinDate = Format(CDate(thevaliddate), machineShortDateFormat)
+                    'dptFromSal.MinDate = Format(CDate(thevaliddate), machineShortDateFormat)
 
                 ElseIf CDate(dbCurrDate) < CDate(empEffDateFrom) Then
 
@@ -11833,7 +11833,7 @@ Public Class EmployeeForm
                         thevaliddate = CDate(empEffDateFrom)
                     End If
 
-                    dptFromSal.MinDate = Format(CDate(thevaliddate), machineShortDateFormat)
+                    'dptFromSal.MinDate = Format(CDate(thevaliddate), machineShortDateFormat)
 
                 End If
 
@@ -11851,7 +11851,7 @@ Public Class EmployeeForm
                     thevaliddate = CDate(EffDateBeforCurrent.Rows(0)("EffectiveDateFrom"))
                 End If
 
-                dptFromSal.MinDate = Format(CDate(thevaliddate), machineShortDateFormat)
+                'dptFromSal.MinDate = Format(CDate(thevaliddate), machineShortDateFormat)
 
             End If
 
@@ -12074,9 +12074,9 @@ Public Class EmployeeForm
 
     Private Sub btnCancelSal_Click(sender As Object, e As EventArgs) Handles btnCancelSal.Click
 
-        dptFromSal.MinDate = "1/1/1900"
+        'dptFromSal.MinDate = "1/1/1900"
 
-        dtpToSal.MinDate = "1/1/1900"
+        'dtpToSal.MinDate = "1/1/1900"
 
         dgvEmp_SelectionChanged(sender, e)
 
@@ -12086,7 +12086,7 @@ Public Class EmployeeForm
         '    fillseletedEnterEmpID(dgvemployeesalary.CurrentRow.Cells(c_RowIDSal.Index).Value)
         'End If
 
-        btnSaveSal.Enabled = True
+        'btnSaveSal.Enabled = True
         btnNewSal.Enabled = True
         'grpbasicsalaryaddeduction.Enabled = False
         IsNewSal = 0
@@ -12606,7 +12606,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                 End If
             End If
 
-            dtpToSal.MinDate = Format(CDate(dptFromSal.Value).AddDays(1), machineShortDateFormat)
+            'dtpToSal.MinDate = Format(CDate(dptFromSal.Value).AddDays(1), machineShortDateFormat)
 
         End If
 
@@ -12810,8 +12810,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         errprovidSal.SetError(dptFromSal, Nothing)
         errprovidSal.SetError(dtpToSal, Nothing)
 
-        dptFromSal.MinDate = Format(CDate("1/1/1900"), machineShortDateFormat)
-        dtpToSal.MinDate = Format(CDate("1/1/1900"), machineShortDateFormat)
+        'dptFromSal.MinDate = Format(CDate("1/1/1900"), machineShortDateFormat)
+        'dtpToSal.MinDate = Format(CDate("1/1/1900"), machineShortDateFormat)
 
         If dgvEmp.Enabled = False Then
             'txtpaytype.Enabled = True

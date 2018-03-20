@@ -128,7 +128,7 @@ Public Class PayrollGeneration
     Private regex_pattern As String =
         String.Concat("\", firstchar_requiredforparametername, "\w+")
 
-    Dim year2018 As Integer = 2018
+    Const year2018 As Integer = 2018
 
     Sub New(ByVal _employee_dattab As DataTable,
                   ByVal _isEndOfMonth As String,

@@ -11887,6 +11887,9 @@ Public Class EmployeeForm
             Exit Sub
         End If
         IsNewSal = Convert.ToInt16(CBool((btnNewSal.Enabled = False)))
+
+        Dim index_dgvrow = 0
+
         If IsNewSal = 1 Then
             'SP_EmployeeSalary(z_User, z_User, z_datetime, z_datetime, filingid, mStat, noofdepd, z_OrganizationID, txtEmpID.Text, z_ssid, z_phID, txtPagibig.Text, txtBasicrateSal.Text, CDate(dptFromSal.Value).ToString("yyyy-MM-dd"), CDate(dtpTo.Value).ToString("yyyy-MM-dd"))
 
@@ -11956,7 +11959,7 @@ Public Class EmployeeForm
             For Each dgvrow As DataGridViewRow In dgvemployeesalary.Rows
 
                 If listofEditEmpSal.Contains(dgvrow.Cells("c_RowIDSal").Value) Then
-
+                    index_dgvrow = dgvrow.Index
                     INSUPD_employeesalary(dgvrow.Cells("c_RowIDSal").Value,
                                           dgvEmp.CurrentRow.Cells("RowID").Value,
                                           Val(Trim(txtBasicrateSal.Text)),
@@ -11977,8 +11980,19 @@ Public Class EmployeeForm
         End If
 
         'fillemployeelist()
-        If dgvEmp.RowCount <> 0 Then
-            fillSelectedEmpSalaryList(dgvEmp.CurrentRow.Cells("RowID").Value)
+        If dgvEmp.RowCount > 0 Then
+
+            Dim dgv_sal_currrow = dgvEmp.CurrentRow
+
+            If dgv_sal_currrow IsNot Nothing Then
+                fillSelectedEmpSalaryList(dgv_sal_currrow.Cells("RowID").Value)
+
+                dgvemployeesalary.CurrentCell = dgvemployeesalary.Item(c_maritalStatus.Index, index_dgvrow)
+
+                dgvemployeesalary_CellClick(dgvemployeesalary,
+                                            New DataGridViewCellEventArgs(c_maritalStatus.Index, index_dgvrow))
+            End If
+
             'InfoBalloon("Successfully Save", "Saved", lblforballoon, 0, -69)
             myBalloon("Successfully Save", "Saved", lblforballoon, , -100)
         End If
@@ -12748,7 +12762,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         If btnNewSal.Enabled = True Then
             'grpbasicsalaryaddeduction.Enabled = True
             Try
-                fillseletedEnterEmpID(dgvemployeesalary.CurrentRow.Cells(c_RowIDSal.Index).Value)
+                fillseletedEnterEmpID(dgvemployeesalary.Item(c_RowIDSal.Index, e.RowIndex).Value)
                 'grpbasicsalaryaddeduction.Enabled = True
                 btnDelSal.Enabled = True
 
@@ -12880,7 +12894,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                     'End If
 
-                    If dgvemployeesalary.RowCount <> 0 Then
+                    If dgvemployeesalary.RowCount > 0 Then
                         If .Item("EmployeeType").ToString = "Fixed" Then
                             txtBasicrateSal.Text = dgvemployeesalary.CurrentRow.Cells("c_BasicPaySal").Value
                         ElseIf .Item("EmployeeType").ToString = "Daily" Then
@@ -12894,7 +12908,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         End If
 
                         txtTrueSal.Text = ""
-                        txtToComputeSal.Text = ""
+                        txtToComputeSal.Text = Convert.ToDecimal(dgvemployeesalary.CurrentRow.Cells("c_ToComputeSal").Value)
 
                         txtPagibig.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_pagibig").Value)
                         txtPhilHealthSal.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_philhealth").Value)
@@ -12998,6 +13012,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     Private Function fillseletedEnterEmpID(ByVal RowID As Integer) As Boolean
 
+        Dim dgvsal_currrow As DataGridViewRow =
+            dgvemployeesalary.Rows.OfType(Of DataGridViewRow).Where(Function(dgv) dgv.Cells(c_RowIDSal.Index).Value = RowID).FirstOrDefault
+
         Dim dt As New DataTable
         dt = getDataTableForSQL("select es.*" &
                                 ",ee.*" &
@@ -13016,7 +13033,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                 " And ee.OrganizationID = '" & z_OrganizationID & "';")
 
         'cleartext()
-        If dt.Rows.Count > 0 Then
+        If dt.Rows.Count > 0 And dgvsal_currrow IsNot Nothing Then
             For Each drow As DataRow In dt.Rows
                 With drow
                     Dim ln, fn, mn, name As String
@@ -13088,18 +13105,18 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         End If
 
                         If dgvEmp.CurrentRow.Cells("Column34").Value.ToString = "Fixed" Then
-                            txtBasicrateSal.Text = dgvemployeesalary.CurrentRow.Cells("c_BasicPaySal").Value
+                            txtBasicrateSal.Text = dgvsal_currrow.Cells("c_BasicPaySal").Value
                         ElseIf dgvEmp.CurrentRow.Cells("Column34").Value.ToString = "Daily" Then
-                            txtBasicrateSal.Text = dgvemployeesalary.CurrentRow.Cells("c_BasicDailyPaySal").Value
+                            txtBasicrateSal.Text = dgvsal_currrow.Cells("c_BasicDailyPaySal").Value
                         ElseIf dgvEmp.CurrentRow.Cells("Column34").Value.ToString = "Hourly" Then
-                            txtBasicrateSal.Text = dgvemployeesalary.CurrentRow.Cells("c_BasicHourlyPaySal").Value
+                            txtBasicrateSal.Text = dgvsal_currrow.Cells("c_BasicHourlyPaySal").Value
                         Else
-                            txtBasicrateSal.Text = dgvemployeesalary.CurrentRow.Cells("c_BasicPaySal").Value
+                            txtBasicrateSal.Text = dgvsal_currrow.Cells("c_BasicPaySal").Value
                         End If
 
-                        Dim esal_Salary = Val(dgvemployeesalary.CurrentRow.Cells("c_EmpSal").Value)
+                        Dim esal_Salary = Val(dgvsal_currrow.Cells("c_EmpSal").Value)
 
-                        Dim esal_TrueSalary = Val(dgvemployeesalary.CurrentRow.Cells("c_TrueSal").Value)
+                        Dim esal_TrueSalary = Val(dgvsal_currrow.Cells("c_TrueSal").Value)
 
                         txtTrueSal.Text = esal_TrueSalary
 
@@ -13118,9 +13135,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         If isorgPHHdeductsched = 0 _
                             Or isorgPHHdeductsched = 1 Then
 
-                            txtPhilHealthSal.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_philhealth").Value)
+                            txtPhilHealthSal.Text = Val(dgvsal_currrow.Cells("c_philhealth").Value)
                         Else
-                            Dim obj_val = dgvemployeesalary.CurrentRow.Cells("c_philhealth").Value
+                            Dim obj_val = dgvsal_currrow.Cells("c_philhealth").Value
 
                             obj_val = Val(obj_val)
 
@@ -13131,9 +13148,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         If isorgSSSdeductsched = 0 _
                             Or isorgSSSdeductsched = 1 Then
 
-                            txtSSSSal.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_sss").Value)
+                            txtSSSSal.Text = Val(dgvsal_currrow.Cells("c_sss").Value)
                         Else
-                            Dim obj_val = dgvemployeesalary.CurrentRow.Cells("c_sss").Value
+                            Dim obj_val = dgvsal_currrow.Cells("c_sss").Value
 
                             obj_val = Val(obj_val)
 
@@ -13145,9 +13162,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         If isorgHDMFdeductsched = 0 _
                             Or isorgHDMFdeductsched = 1 Then
 
-                            txtPagibig.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_pagibig").Value)
+                            txtPagibig.Text = Val(dgvsal_currrow.Cells("c_pagibig").Value)
                         Else
-                            Dim obj_val = dgvemployeesalary.CurrentRow.Cells("c_pagibig").Value
+                            Dim obj_val = dgvsal_currrow.Cells("c_pagibig").Value
 
                             obj_val = Val(obj_val)
 
@@ -13155,14 +13172,14 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                         End If
                         'Else
-                        '    txtPagibig.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_pagibig").Value) / 2
+                        '    txtPagibig.Text = Val(dgvsal_currrow.Cells("c_pagibig").Value) / 2
                         'End If
 
                         'If dgvEmp.CurrentRow.Cells("Column30").Value = 1 Then
                         'Else
                         'End If
 
-                        txtEmpDeclaSal.Text = dgvemployeesalary.CurrentRow.Cells("c_EmpSal").Value
+                        txtEmpDeclaSal.Text = dgvsal_currrow.Cells("c_EmpSal").Value
 
                         If dgvEmp.RowCount <> 0 Then
                             txtEmp_type.Text = dgvEmp.CurrentRow.Cells("Column34").Value
@@ -13199,7 +13216,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     End If
 
                     'dtpToSal.Value = _
-                    '    Format(CDate(dgvemployeesalary.CurrentRow.Cells("c_todate").Value), machineShortDateFormat)
+                    '    Format(CDate(dgvsal_currrow.Cells("c_todate").Value), machineShortDateFormat)
 
                     '    'dtpToSal.Value = CDate(.Item("EffectiveDateTo")).ToString(machineShortDateFormat)
                     'End If

@@ -28,7 +28,7 @@ UsePreviousAppDir=yes
 SolidCompression=yes
 VersionInfoVersion={#MyAppVersion}
 PrivilegesRequired=none
-CloseApplications=yes
+CloseApplications=force
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

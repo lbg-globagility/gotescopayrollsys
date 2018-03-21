@@ -187,11 +187,11 @@ Public Class EmpPosition
 
     Sub reload()
 
-        positiontable = retAsDatTbl("SELECT *" & _
-                                    ",COALESCE((SELECT CONCAT('(',FirstName,IF(COALESCE(MiddleName,'')='','',CONCAT(' ',LEFT(MiddleName,1))),IF(LastName IS NULL,'',CONCAT(' ',LastName)),')') FROM employee WHERE OrganizationID=" & org_rowid & " AND PositionID=p.RowID AND TerminationDate IS NULL LIMIT 1),'(Open)') 'positionstats'" & _
-                                    " FROM position p" & _
-                                    " WHERE p.OrganizationID=" & org_rowid & "" & _
-                                    " AND p.RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & org_rowid & ");")
+        positiontable = retAsDatTbl("SELECT *" &
+                                    ",COALESCE((SELECT CONCAT('(',FirstName,IF(COALESCE(MiddleName,'')='','',CONCAT(' ',LEFT(MiddleName,1))),IF(LastName IS NULL,'',CONCAT(' ',LastName)),')') FROM employee WHERE OrganizationID=" & org_rowid & " AND PositionID=p.RowID AND TerminationDate IS NULL LIMIT 1),'(Open)') 'positionstats'" &
+                                    " FROM position p" &
+                                    " WHERE p.OrganizationID=" & org_rowid & "" &
+                                    " ;")
 
         'alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & orgztnID & " AND ParentPositionID IS NOT NULL AND ParentPositionID!=RowID GROUP BY ParentPositionID;")
 

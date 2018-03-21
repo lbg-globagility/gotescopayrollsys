@@ -396,8 +396,6 @@ IF isRestDay = '1' THEN
 	
 	IF default_work_hrs < ete_RegHrsWorkd THEN SET ete_RegHrsWorkd = default_work_hrs; END IF;
 	
-	# SELECT ete_RegHrsWorkd, @break_hours INTO OUTFILE 'D:/New Downloads/result.txt';
-	
 	# SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
 	# INTO ete_RegHrsWorkd;
 	
@@ -1000,8 +998,6 @@ END IF;
 
 IF pr_DayBefore IS NULL THEN
 
-	
-
 	SELECT
 	IFNULL(TotalDayPay,0)
 	,IFNULL(TotalHoursWorked,0)
@@ -1053,8 +1049,6 @@ IF pr_DayBefore IS NULL THEN
 
 	ELSEIF yester_TotDayPay = 0 THEN
 
-
-		
 		IF isRestDay = '1' THEN
 		
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
@@ -1090,19 +1084,25 @@ IF pr_DayBefore IS NULL THEN
 			
 		ELSEIF isRestDay = '0' THEN
 		
+			SELECT elv.OfficialValidHours
+			FROM employeeleave elv
+			INNER JOIN dates d ON d.DateValue BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
+			WHERE elv.EmployeeID = ete_EmpRowID
+			AND elv.OrganizationID = ete_OrganizID
+			AND d.DateValue = ete_Date
+			LIMIT 1 INTO
+			@leave_hours;
+			
 			IF ete_RegHrsWorkd = 0 THEN
 			
-				SET ete_TotalDayPay = 0;
-				
+				SET ete_TotalDayPay = (IFNULL(@leave_hours, 0) * rateperhour);
 			ELSE
 				
-				
-					
-				SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
+				SET ete_TotalDayPay = (IFNULL(@leave_hours, 0) * rateperhour)
+				                      + ((ete_RegHrsWorkd * rateperhour) * commonrate)
 				                    	 + ((ete_OvertimeHrs * rateperhourforOT) * otrate);
-					
 			END IF;
-									 
+			
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID

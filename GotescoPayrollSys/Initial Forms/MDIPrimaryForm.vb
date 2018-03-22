@@ -1436,83 +1436,83 @@ Public Class MDIPrimaryForm
 
 
         n_bgwAge21Dependents = New DashBoardDataExtractor(params, _
-                                                          "DBoard_Age21Dependents")
+                                                          "DBoard_Age21Dependents").getDataTable
 
-        n_bgwAge21Dependents = n_bgwAge21Dependents.getDataTable
+        'n_bgwAge21Dependents = n_bgwAge21Dependents.getDataTable
 
 
 
         n_bgwBDayCelebrant = New DashBoardDataExtractor(params, _
-                                                        "DBoard_BirthdayCelebrantThisMonth")
+                                                        "DBoard_BirthdayCelebrantThisMonth").getDataTable
 
-        n_bgwBDayCelebrant = n_bgwBDayCelebrant.getDataTable
+        'n_bgwBDayCelebrant = n_bgwBDayCelebrant.getDataTable
 
 
 
         n_bgwForEvaluation = New DashBoardDataExtractor(params, _
-                                                        "DBoard_ForEvaluation")
+                                                        "DBoard_ForEvaluation").getDataTable
 
-        n_bgwForEvaluation = n_bgwForEvaluation.getDataTable
+        'n_bgwForEvaluation = n_bgwForEvaluation.getDataTable
 
 
 
         n_bgwForRegularization = New DashBoardDataExtractor(params, _
-                                                        "DBoard_ForRegularization")
+                                                        "DBoard_ForRegularization").getDataTable
 
-        n_bgwForRegularization = n_bgwForRegularization.getDataTable
+        'n_bgwForRegularization = n_bgwForRegularization.getDataTable
 
 
 
         n_bgwForEvaluationRegular = New DashBoardDataExtractor(params, _
-                                                        "DBoard_ForEvaluationRegular")
+                                                        "DBoard_ForEvaluationRegular").getDataTable
 
-        n_bgwForEvaluationRegular = n_bgwForEvaluationRegular.getDataTable
+        'n_bgwForEvaluationRegular = n_bgwForEvaluationRegular.getDataTable
 
 
 
         n_bgwLeavePending = New DashBoardDataExtractor(params, _
-                                                        "DBoard_LeavePending")
+                                                        "DBoard_LeavePending").getDataTable
 
-        n_bgwLeavePending = n_bgwLeavePending.getDataTable
+        'n_bgwLeavePending = n_bgwLeavePending.getDataTable
 
 
 
         n_bgwOBPending = New DashBoardDataExtractor(params, _
-                                                        "DBoard_OBPending")
+                                                        "DBoard_OBPending").getDataTable
 
-        n_bgwOBPending = n_bgwOBPending.getDataTable
+        'n_bgwOBPending = n_bgwOBPending.getDataTable
 
 
 
 
         n_bgwOTPending = New DashBoardDataExtractor(params, _
-                                                        "DBoard_OTPending")
+                                                        "DBoard_OTPending").getDataTable
 
-        n_bgwOTPending = n_bgwOTPending.getDataTable
+        'n_bgwOTPending = n_bgwOTPending.getDataTable
 
 
 
 
 
         n_bgwLoanBalances = New DashBoardDataExtractor(params, _
-                                                        "DBoard_LoanBalances")
+                                                        "DBoard_LoanBalances").getDataTable
 
-        n_bgwLoanBalances = n_bgwLoanBalances.getDataTable
+        'n_bgwLoanBalances = n_bgwLoanBalances.getDataTable
 
 
 
 
         n_bgwNegaPaySlips = New DashBoardDataExtractor(params, _
-                                                        "DBoard_NegativePaySlips")
+                                                        "DBoard_NegativePaySlips").getDataTable
 
-        n_bgwNegaPaySlips = n_bgwNegaPaySlips.getDataTable
+        'n_bgwNegaPaySlips = n_bgwNegaPaySlips.getDataTable
 
 
 
         n_bgwLackRequirements = New DashBoardDataExtractor(params, _
-                                                        "DBoard_EmployeeLackRequirements")
+                                                        "DBoard_EmployeeLackRequirements").getDataTable
 
-        n_bgwLackRequirements = n_bgwLackRequirements.getDataTable
+        'n_bgwLackRequirements = n_bgwLackRequirements.getDataTable
 
 
 

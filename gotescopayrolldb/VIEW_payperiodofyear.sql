@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.VIEW_payperiodofyear
+-- Dumping structure for procedure gotescopayrolldb_server.VIEW_payperiodofyear
 DROP PROCEDURE IF EXISTS `VIEW_payperiodofyear`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_payperiodofyear`(IN `payp_OrganizationID` INT, IN `param_Date` DATE)

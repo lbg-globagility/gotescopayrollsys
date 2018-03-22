@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for view gotescopayrolldb_latest.generator_16
+-- Dumping structure for view gotescopayrolldb_server.generator_16
 DROP VIEW IF EXISTS `generator_16`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `generator_16`;

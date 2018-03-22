@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.SP_employeesalary
+-- Dumping structure for procedure gotescopayrolldb_server.SP_employeesalary
 DROP PROCEDURE IF EXISTS `SP_employeesalary`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_employeesalary`(IN `I_EmployeeID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(10), IN `I_OrganizationID` INT(10), IN `I_FilingStatusID` INT(10), IN `I_PaySocialSecurityID` INT(10), IN `I_PayPhilhealthID` INT(10), IN `I_HDMFAmount` DECIMAL(10,2), IN `I_BasicPay` DECIMAL(10,2), IN `I_NoofDependents` INT(10), IN `I_MaritalStatus` VARCHAR(50), IN `I_EffectiveDateFrom` DATE, IN `I_EffectiveDateTo` DATE)

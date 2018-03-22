@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.COUNT_pay_period
+-- Dumping structure for function gotescopayrolldb_server.COUNT_pay_period
 DROP FUNCTION IF EXISTS `COUNT_pay_period`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `COUNT_pay_period`(`paramDateFrom` DATE, `paramDateTo` DATE) RETURNS int(11)

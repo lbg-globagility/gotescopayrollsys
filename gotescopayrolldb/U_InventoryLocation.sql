@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.U_InventoryLocation
+-- Dumping structure for procedure gotescopayrolldb_server.U_InventoryLocation
 DROP PROCEDURE IF EXISTS `U_InventoryLocation`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `U_InventoryLocation`(IN `I_RowID` INT(10), IN `I_Name` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_MainPhone` VARCHAR(50), IN `I_MobilePhone` VARCHAR(50), IN `I_FaxNumber` VARCHAR(50), IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_Type` VARCHAR(50), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_MainBranch` CHAR(1)

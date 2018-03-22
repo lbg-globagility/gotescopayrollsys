@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.GET_PhilHealthContribNewImplement
+-- Dumping structure for function gotescopayrolldb_server.GET_PhilHealthContribNewImplement
 DROP FUNCTION IF EXISTS `GET_PhilHealthContribNewImplement`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_PhilHealthContribNewImplement`(`amount_worked` DECIMAL(15,4), `is_employee_share` BOOL) RETURNS decimal(15,4)

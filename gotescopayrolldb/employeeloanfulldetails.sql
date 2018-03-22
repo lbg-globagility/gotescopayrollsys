@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.employeeloanfulldetails
+-- Dumping structure for procedure gotescopayrolldb_server.employeeloanfulldetails
 DROP PROCEDURE IF EXISTS `employeeloanfulldetails`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `employeeloanfulldetails`(IN `OrganizID` INT, IN `paypPayFreqID` INT, IN `pay_fromdate` DATE, IN `pay_todate` DATE)

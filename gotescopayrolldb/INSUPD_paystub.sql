@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_paystub
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_paystub
 DROP FUNCTION IF EXISTS `INSUPD_paystub`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_paystub`(`pstub_RowID` INT, `pstub_OrganizationID` INT, `pstub_CreatedBy` INT, `pstub_LastUpdBy` INT, `pstub_PayPeriodID` INT, `pstub_EmployeeID` INT, `pstub_TimeEntryID` INT, `pstub_PayFromDate` DATE, `pstub_PayToDate` DATE, `pstub_TotalGrossSalary` DECIMAL(10,2), `pstub_TotalNetSalary` DECIMAL(10,2), `pstub_TotalTaxableSalary` DECIMAL(10,2), `pstub_TotalEmpSSS` DECIMAL(10,2), `pstub_TotalEmpWithholdingTax` DECIMAL(10,2), `pstub_TotalCompSSS` DECIMAL(10,2), `pstub_TotalEmpPhilhealth` DECIMAL(10,2), `pstub_TotalCompPhilhealth` DECIMAL(10,2), `pstub_TotalEmpHDMF` DECIMAL(10,2), `pstub_TotalCompHDMF` DECIMAL(10,2), `pstub_TotalVacationDaysLeft` DECIMAL(10,2), `pstub_TotalLoans` DECIMAL(10,2), `pstub_TotalBonus` DECIMAL(10,2), `pstub_TotalAllowance` DECIMAL(10,2), `pstub_NondeductibleTotalLoans` DECIMAL(10,2)) RETURNS int(11)

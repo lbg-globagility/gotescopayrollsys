@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.VIEW_employeetimeentry_SUM
+-- Dumping structure for procedure gotescopayrolldb_server.VIEW_employeetimeentry_SUM
 DROP PROCEDURE IF EXISTS `VIEW_employeetimeentry_SUM`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeetimeentry_SUM`(IN `etent_OrganizationID` INT, IN `etent_EmployeeID` INT, IN `etent_Date` DATE, IN `etent_DateTo` DATE)

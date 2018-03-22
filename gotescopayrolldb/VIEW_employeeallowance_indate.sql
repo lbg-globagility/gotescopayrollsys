@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.VIEW_employeeallowance_indate
+-- Dumping structure for procedure gotescopayrolldb_server.VIEW_employeeallowance_indate
 DROP PROCEDURE IF EXISTS `VIEW_employeeallowance_indate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeallowance_indate`(IN `eallow_EmployeeID` INT, IN `eallow_OrganizationID` INT, IN `effectivedatefrom` DATE, IN `effectivedateto` DATE, IN `numweekdays` INT)

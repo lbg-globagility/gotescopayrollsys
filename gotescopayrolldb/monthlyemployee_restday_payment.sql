@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for view gotescopayrolldb_latest.monthlyemployee_restday_payment
+-- Dumping structure for view gotescopayrolldb_server.monthlyemployee_restday_payment
 DROP VIEW IF EXISTS `monthlyemployee_restday_payment`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `monthlyemployee_restday_payment`;

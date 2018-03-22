@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.paystub_payslips
+-- Dumping structure for procedure gotescopayrolldb_server.paystub_payslips
 DROP PROCEDURE IF EXISTS `paystub_payslips`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(IN `og_rowid` INT, IN `pp_rowid` INT, IN `is_actual` CHAR(1)

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RECHECK_shiftforovertime
+-- Dumping structure for procedure gotescopayrolldb_server.RECHECK_shiftforovertime
 DROP PROCEDURE IF EXISTS `RECHECK_shiftforovertime`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RECHECK_shiftforovertime`(IN `OrganizID` INT)

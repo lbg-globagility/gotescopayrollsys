@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.GET_lastdateofdayname
+-- Dumping structure for function gotescopayrolldb_server.GET_lastdateofdayname
 DROP FUNCTION IF EXISTS `GET_lastdateofdayname`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `GET_lastdateofdayname`(`ParamDate` DATE, `DayNameIndex` CHAR(2)) RETURNS date

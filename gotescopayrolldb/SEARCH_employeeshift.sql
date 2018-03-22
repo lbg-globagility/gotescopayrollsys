@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.SEARCH_employeeshift
+-- Dumping structure for procedure gotescopayrolldb_server.SEARCH_employeeshift
 DROP PROCEDURE IF EXISTS `SEARCH_employeeshift`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `SEARCH_employeeshift`(IN `OrganizID` INT, IN `DivisionRowID` INT, IN `EmployeeIDString` VARCHAR(50))

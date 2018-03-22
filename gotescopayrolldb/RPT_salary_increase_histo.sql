@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RPT_salary_increase_histo
+-- Dumping structure for procedure gotescopayrolldb_server.RPT_salary_increase_histo
 DROP PROCEDURE IF EXISTS `RPT_salary_increase_histo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_salary_increase_histo`(IN `OrganizID` INT, IN `PayPerDate1` DATE, IN `PayPerDate2` DATE)

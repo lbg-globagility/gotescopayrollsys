@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb.LEAVE_gainingbalance
+-- Dumping structure for procedure gotescopayrolldb_server.LEAVE_gainingbalance
 DROP PROCEDURE IF EXISTS `LEAVE_gainingbalance`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `LEAVE_gainingbalance`(IN `OrganizID` INT, IN `EmpRowID` INT, IN `UserRowID` INT, IN `minimum_date` DATE, IN `custom_maximum_date` DATE)
@@ -23,7 +23,9 @@ DECLARE curr_year YEAR;
 
 DECLARE count_semi_monthly_period_peryear INT DEFAULT 24;
 
-DECLARE e_indx INT DEFAULT 0;
+DECLARE e_indx, e_count INT DEFAULT 0;
+
+DECLARE i INT DEFAULT 0;
 
 # SET @sleep_count = SLEEP(3);
 
@@ -31,19 +33,6 @@ SELECT pp.`Year` FROM payperiod pp WHERE pp.OrganizationID = OrganizID AND pp.To
 
 IF curr_year = YEAR(CURDATE()) THEN
 
-	SELECT
-	MIN(pp.PayFromDate) `MinPayDateFrom`
-	, MAX(pp.PayToDate) `MinPayDateTo`
-	FROM paystub ps
-	INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.OrganizationID=ps.OrganizationID
-	INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=ps.OrganizationID AND pp.`Year` = curr_year
-	WHERE ps.OrganizationID=OrganizID
-	AND ps.EmployeeID=EmpRowID
-	# GROUP BY e.RowID, pp.`Year`
-	# ORDER BY pp.`Year` DESC
-	INTO minimum_date
-	     ,maximum_date
-	;
 	/*SELECT MIN(ps.PayFromDate)
 	FROM paystub ps
 	INNER JOIN payperiod pp
@@ -89,17 +78,33 @@ IF curr_year = YEAR(CURDATE()) THEN
 	
 	SELECT pp.PayFromDate, pp.PayToDate FROM payperiod pp WHERE pp.TotalGrossSalary = 1 AND pp.OrdinalValue = 1 AND pp.`Year`=curr_year AND pp.OrganizationID=OrganizID INTO @paypFrom, @paypTo;
 	
-	SET @e_count = (SELECT COUNT(RowID) FROM employee WHERE OrganizationID=OrganizID AND EmploymentStatus NOT IN ('Terminated', 'Resigned'));
+	SET e_count = (SELECT COUNT(RowID) FROM employee WHERE OrganizationID=OrganizID AND FIND_IN_SET(EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0);
 	
-	WHILE (e_indx < @e_count) DO
+	WHILE (e_indx < e_count) DO
 		
 		SELECT e.RowID
 		FROM employee e
-		WHERE OrganizationID=OrganizID
-		AND EmploymentStatus NOT IN ('Terminated', 'Resigned')
+		WHERE e.OrganizationID=OrganizID
+		AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 		LIMIT e_indx, 1
 		INTO EmpRowID;
-			
+		
+		SELECT
+		MIN(pp.PayFromDate) `MinPayDateFrom`
+		, MAX(pp.PayToDate) `MinPayDateTo`
+		, MAX(pp.PayToDate)
+		FROM paystub ps
+		INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.OrganizationID=ps.OrganizationID
+		INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=ps.OrganizationID AND pp.`Year` = curr_year
+		WHERE ps.OrganizationID=OrganizID
+		AND ps.EmployeeID=EmpRowID
+		# GROUP BY e.RowID, pp.`Year`
+		# ORDER BY pp.`Year` DESC
+		INTO minimum_date
+		     ,maximum_date
+		     ,custom_maximum_date
+		;
+		
 		UPDATE employee e
 		SET
 		e.LeaveBalance=0
@@ -133,7 +138,8 @@ IF curr_year = YEAR(CURDATE()) THEN
 		,e.MaternityLeaveBalance =	( e.MaternityLeaveAllowance / count_semi_monthly_period_peryear ) * (count_semi_monthly_period_peryear - pp.OrdinalValue)
 		,e.OtherLeaveBalance =		( e.OtherLeaveAllowance / count_semi_monthly_period_peryear ) * (count_semi_monthly_period_peryear - pp.OrdinalValue)
 		
-		,e.LastUpd=CURRENT_TIMESTAMP()
+		# ,e.LastUpd=CURRENT_TIMESTAMP()
+		,e.LastUpd=CONCAT_DATETIME(CURDATE(), '16:00:00')
 		,e.LastUpdBy=UserRowID
 		WHERE e.OrganizationID=OrganizID
 		AND e.RowID = EmpRowID
@@ -148,12 +154,13 @@ IF curr_year = YEAR(CURDATE()) THEN
 		,e.MaternityLeaveBalance =	e.MaternityLeaveAllowance
 		,e.OtherLeaveBalance =		e.OtherLeaveAllowance
 		
-		,e.LastUpd=@custom_curr_time_stamp
+		# ,e.LastUpd=@custom_curr_time_stamp
+		,e.LastUpd=CONCAT_DATETIME(CURDATE(), '17:00:00')
 		,e.LastUpdBy=UserRowID
 		WHERE e.OrganizationID=OrganizID
 		AND e.RowID = EmpRowID
-		AND e.DateRegularized < minimum_date
-			OR e.DateRegularized < custom_maximum_date;
+		AND (e.DateRegularized < minimum_date
+			  OR e.DateRegularized < maximum_date); # custom_maximum_date
 		
 		# ------------------------------ #
 		
@@ -169,12 +176,13 @@ IF curr_year = YEAR(CURDATE()) THEN
 		INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND ps.TotalGrossSalary=e.PayFrequencyID AND pp.`Year`=curr_year
 		
 		SET e.AdditionalVLPerPayPeriod=( e.LeaveTenthYearService / count_semi_monthly_period_peryear )
-		,e.LastUpd=CURRENT_TIMESTAMP()
+		# ,e.LastUpd=CURRENT_TIMESTAMP()
+		,e.LastUpd=CONCAT_DATETIME(CURDATE(), '18:00:00')
 		,e.LastUpdBy=UserRowID
 		WHERE e.OrganizationID=OrganizID
 		AND e.RowID = EmpRowID
 		AND ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) <= minimum_date
-		AND e.LastUpd != @custom_curr_time_stamp
+		# AND e.LastUpd != @custom_curr_time_stamp
 		;
 		# AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = curr_year;
 		# AND IF(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR) BETWEEN @paypFrom AND @paypTo, @paypTo, @paypFrom)
@@ -189,30 +197,39 @@ IF curr_year = YEAR(CURDATE()) THEN
 		SET
 		e.AdditionalVLBalance =		( e.AdditionalVLPerPayPeriod * (count_semi_monthly_period_peryear - pp.OrdinalValue) )
 		,e.AdditionalVLAllowance = ( e.AdditionalVLPerPayPeriod * (count_semi_monthly_period_peryear - pp.OrdinalValue) )
-		,e.LastUpd=CURRENT_TIMESTAMP()
+		# ,e.LastUpd=CURRENT_TIMESTAMP()
+		,e.LastUpd=CONCAT_DATETIME(CURDATE(), '19:00:00')
 		,e.LastUpdBy=UserRowID
 		WHERE e.OrganizationID=OrganizID
 		AND e.RowID = EmpRowID
 		AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 5 YEAR)) = curr_year
-		AND e.LastUpd != @custom_curr_time_stamp;
+		# AND e.LastUpd != @custom_curr_time_stamp
+		;
 		
-		SET @i = 6;
+		SET i = 6;
 		
-		WHILE (@i BETWEEN 6 AND 10) DO
-		
+		/*WHILE (i BETWEEN 6 AND 10) DO
+			SET i = i + 1;
+			
+		END WHILE;*/
 			UPDATE employee e
 			SET
 			e.AdditionalVLBalance =		e.LeaveTenthYearService
 			,e.AdditionalVLAllowance = e.LeaveTenthYearService
-			,e.LastUpd=CURRENT_TIMESTAMP()
+			# ,e.LastUpd=CURRENT_TIMESTAMP()
+		   ,e.LastUpd=CONCAT_DATETIME(CURDATE(), '20:00:00')
 			,e.LastUpdBy=UserRowID
 			WHERE e.RowID = EmpRowID
-			AND e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date
-			AND e.LastUpd != @custom_curr_time_stamp;
+			AND e.OrganizationID=OrganizID
+			AND ((ADDDATE(e.DateRegularized,INTERVAL 6 YEAR) BETWEEN minimum_date AND custom_maximum_date)
+			     OR (ADDDATE(e.DateRegularized,INTERVAL 7 YEAR) BETWEEN minimum_date AND custom_maximum_date)
+			     OR (ADDDATE(e.DateRegularized,INTERVAL 8 YEAR) BETWEEN minimum_date AND custom_maximum_date)
+			     OR (ADDDATE(e.DateRegularized,INTERVAL 9 YEAR) BETWEEN minimum_date AND custom_maximum_date)
+			     OR (SUBDATE(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR), INTERVAL 1 DAY) BETWEEN minimum_date AND custom_maximum_date)
+				  )
+			# AND e.LastUpd != @custom_curr_time_stamp
+			;
 			
-			SET @i = @i + 1;
-			
-		END WHILE;
 		# ------------------------------ #
 		
 		
@@ -226,12 +243,14 @@ IF curr_year = YEAR(CURDATE()) THEN
 		INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND ps.TotalGrossSalary=e.PayFrequencyID AND pp.`Year`=curr_year
 		SET
 		e.AdditionalVLPerPayPeriod=( e.LeaveFifteenthYearService / ( PAYFREQUENCY_DIVISOR(pf.PayFrequencyType) * MONTH(SUBDATE(MAKEDATE(curr_year,1), INTERVAL 1 DAY)) ) )
-		,e.LastUpd=CURRENT_TIMESTAMP()
+		# ,e.LastUpd=CURRENT_TIMESTAMP()
+		,e.LastUpd=CONCAT_DATETIME(CURDATE(), '21:00:00')
 		,e.LastUpdBy=UserRowID
 		WHERE e.OrganizationID=OrganizID
 		AND e.RowID = EmpRowID
 		AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year
-		AND e.LastUpd != @custom_curr_time_stamp;
+		# AND e.LastUpd != @custom_curr_time_stamp
+		;
 		
 		UPDATE employee e
 		INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID
@@ -241,30 +260,39 @@ IF curr_year = YEAR(CURDATE()) THEN
 		e.AdditionalVLBalance = 	( e.AdditionalVLPerPayPeriod * (count_semi_monthly_period_peryear - pp.OrdinalValue) )
 		,e.AdditionalVLAllowance = ( e.AdditionalVLPerPayPeriod * (count_semi_monthly_period_peryear - pp.OrdinalValue) )
 		,e.LastUpd=CURRENT_TIMESTAMP()
+		# ,e.LastUpd=CONCAT_DATETIME(CURDATE(), '22:00:00')
 		,e.LastUpdBy=UserRowID
 		WHERE e.OrganizationID=OrganizID
 		AND e.RowID = EmpRowID
 		AND YEAR(ADDDATE(e.DateRegularized,INTERVAL 10 YEAR)) = curr_year
-		AND e.LastUpd != @custom_curr_time_stamp;
+		# AND e.LastUpd != @custom_curr_time_stamp
+		;
 		
-		SET @i = 11;
+		SET i = 11;
 		
-		WHILE (@i BETWEEN 11 AND 15) DO
-		
+		/*WHILE (i BETWEEN 11 AND 15) DO
+			SET i = (i + 1);
+			
+		END WHILE;*/
 			UPDATE employee e
 			SET
 			e.AdditionalVLAllowance =		e.LeaveFifteenthYearService
 			,e.AdditionalVLBalance =		e.LeaveFifteenthYearService
 			,e.AdditionalVLPerPayPeriod = (e.LeaveFifteenthYearService / count_semi_monthly_period_peryear)
-			,e.LastUpd=CURRENT_TIMESTAMP()
+			# ,e.LastUpd=CURRENT_TIMESTAMP()
+			,e.LastUpd=CONCAT_DATETIME(CURDATE(), '23:00:00')
 			,e.LastUpdBy=UserRowID
 			WHERE e.RowID = EmpRowID
-			AND e.OrganizationID=OrganizID AND ADDDATE(e.DateRegularized,INTERVAL @i YEAR) BETWEEN minimum_date AND custom_maximum_date
-		AND e.LastUpd != @custom_curr_time_stamp;
+			AND e.OrganizationID=OrganizID
+			AND ((ADDDATE(e.DateRegularized,INTERVAL 11 YEAR) BETWEEN minimum_date AND custom_maximum_date)
+			     OR (ADDDATE(e.DateRegularized,INTERVAL 12 YEAR) BETWEEN minimum_date AND custom_maximum_date)
+			     OR (ADDDATE(e.DateRegularized,INTERVAL 13 YEAR) BETWEEN minimum_date AND custom_maximum_date)
+			     OR (ADDDATE(e.DateRegularized,INTERVAL 14 YEAR) BETWEEN minimum_date AND custom_maximum_date)
+			     OR (SUBDATE(ADDDATE(e.DateRegularized,INTERVAL 15 YEAR), INTERVAL 1 DAY) BETWEEN minimum_date AND custom_maximum_date)
+				  )
+			# AND e.LastUpd != @custom_curr_time_stamp
+		   ;
 			
-			SET @i = @i + 1;
-			
-		END WHILE;
 		# ------------------------------ #
 		
 		
@@ -280,20 +308,22 @@ IF curr_year = YEAR(CURDATE()) THEN
 		e.AdditionalVLBalance =			e.LeaveAboveFifteenthYearService
 		,e.AdditionalVLAllowance =		e.LeaveAboveFifteenthYearService
 		,e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_monthly_period_peryear )
-		,e.LastUpd=CURRENT_TIMESTAMP()
+		# ,e.LastUpd=CURRENT_TIMESTAMP()
+		,e.LastUpd=CONCAT_DATETIME(CURDATE(), '23:15:00')
 		,e.LastUpdBy=UserRowID
 		WHERE e.OrganizationID=OrganizID
 		AND e.RowID = EmpRowID
 		AND ADDDATE(e.DateRegularized,INTERVAL 15 YEAR) <= minimum_date
-		AND e.LastUpd != @custom_curr_time_stamp;
+		# AND e.LastUpd != @custom_curr_time_stamp
+		;
 		# AND minimum_date <= ADDDATE(e.DateRegularized,INTERVAL 15 YEAR)
 		
 		# ------------------------------ #
 		
 		# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ #
 		
-		UPDATE employee e
-		INNER JOIN (SELECT et.RowID,et.EmployeeID
+		/**/UPDATE employee e
+		LEFT JOIN (SELECT et.RowID,et.EmployeeID
 						,SUM(et.VacationLeaveHours) `VacationLeaveHours`
 						,SUM(et.SickLeaveHours) `SickLeaveHours`
 						,SUM(et.MaternityLeaveHours) `MaternityLeaveHours`
@@ -302,19 +332,28 @@ IF curr_year = YEAR(CURDATE()) THEN
 						FROM employeetimeentry et
 						WHERE et.OrganizationID = OrganizID
 						AND (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
-						AND et.`Date` BETWEEN minimum_date AND custom_maximum_date
-						GROUP BY et.EmployeeID) ete ON ete.RowID IS NOT NULL AND ete.EmployeeID=e.RowID
+						AND et.EmployeeID = EmpRowID
+						AND et.`Date` BETWEEN minimum_date AND maximum_date # custom_maximum_date
+						GROUP BY et.EmployeeID) ete ON ete.RowID IS NOT NULL # AND ete.EmployeeID=e.RowID
 		SET
+		/*e.LeaveBalance = e.LeaveAllowance - IFNULL(ete.VacationLeaveHours,0)
+		,e.SickLeaveBalance = e.SickLeaveAllowance - IFNULL(ete.SickLeaveHours,0)
+		,e.MaternityLeaveBalance = e.MaternityLeaveAllowance - IFNULL(ete.MaternityLeaveHours,0)
+		,e.OtherLeaveBalance = e.OtherLeaveAllowance - IFNULL(ete.OtherLeaveHours,0)
+		,e.AdditionalVLBalance = e.AdditionalVLAllowance - IFNULL(ete.AdditionalVLHours,0)*/
+		
 		e.LeaveBalance = e.LeaveBalance - IFNULL(ete.VacationLeaveHours,0)
 		,e.SickLeaveBalance = e.SickLeaveBalance - IFNULL(ete.SickLeaveHours,0)
 		,e.MaternityLeaveBalance = e.MaternityLeaveBalance - IFNULL(ete.MaternityLeaveHours,0)
 		,e.OtherLeaveBalance = e.OtherLeaveBalance - IFNULL(ete.OtherLeaveHours,0)
 		,e.AdditionalVLBalance = e.AdditionalVLBalance - IFNULL(ete.AdditionalVLHours,0)
-		,e.LastUpd = CURRENT_TIMESTAMP()
+		
+		,e.LastUpd = ADDDATE(e.LastUpd, INTERVAL 30 SECOND)
 		,e.LastUpdBy = UserRowID
 		WHERE e.OrganizationID = OrganizID
 		AND e.RowID = EmpRowID
-		AND e.LastUpd != @custom_curr_time_stamp;
+		# AND e.LastUpd != @custom_curr_time_stamp
+		;
 		
 		SET e_indx = (e_indx + 1);
 		
@@ -324,6 +363,8 @@ IF curr_year = YEAR(CURDATE()) THEN
 
 	
 END IF;
+
+# SELECT minimum_date, maximum_date, custom_maximum_date INTO OUTFILE 'D:/New Downloads/result.txt';
 
 END//
 DELIMITER ;

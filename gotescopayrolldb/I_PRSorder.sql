@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.I_PRSorder
+-- Dumping structure for procedure gotescopayrolldb_server.I_PRSorder
 DROP PROCEDURE IF EXISTS `I_PRSorder`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `I_PRSorder`(IN `I_Created` DATETIME, IN `I_OrganizationID` INT(11), IN `I_OrderNumber` VARCHAR(10), IN `I_OrderDate` DATETIME, IN `I_Type` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_StatusAsOf` VARCHAR(50), IN `I_InvoiceNo` INT(11), IN `I_LastUpd` DATETIME, IN `I_reatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_InventoryLocationID` INT(11), IN `I_RelatedPRSId` INT(11), IN `I_RelatedRRId` INT(11)

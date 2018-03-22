@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.SP_UpdatePaystubAdjustment
+-- Dumping structure for procedure gotescopayrolldb_server.SP_UpdatePaystubAdjustment
 DROP PROCEDURE IF EXISTS `SP_UpdatePaystubAdjustment`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UpdatePaystubAdjustment`(IN `pa_EmployeeID` VARCHAR(50), IN `pa_PayPeriodID` INT, IN `User_RowID` INT)

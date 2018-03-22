@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.GRACE_PERIOD
+-- Dumping structure for function gotescopayrolldb_server.GRACE_PERIOD
 DROP FUNCTION IF EXISTS `GRACE_PERIOD`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GRACE_PERIOD`(`Time_IN` TIME, `ShiftTimeFrom` TIME, `GracePeriodValue` DECIMAL(10,2)) RETURNS time

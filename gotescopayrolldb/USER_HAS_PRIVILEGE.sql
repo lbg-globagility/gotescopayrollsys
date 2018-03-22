@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.USER_HAS_PRIVILEGE
+-- Dumping structure for function gotescopayrolldb_server.USER_HAS_PRIVILEGE
 DROP FUNCTION IF EXISTS `USER_HAS_PRIVILEGE`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `USER_HAS_PRIVILEGE`(`UserRowID` INT, `AccessingOrganizID` INT, `ViewRowID` INT) RETURNS char(1) CHARSET latin1

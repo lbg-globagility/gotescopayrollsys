@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.view_employee_paystub
+-- Dumping structure for procedure gotescopayrolldb_server.view_employee_paystub
 DROP PROCEDURE IF EXISTS `view_employee_paystub`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `view_employee_paystub`(IN `organizid` INT, IN `str_search` VARCHAR(50), IN `page_number` INT, IN `maxdisplay_count` INT, IN `is_display_last` BOOL, IN `payfreq_rowid` INT)

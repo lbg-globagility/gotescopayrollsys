@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.MASSUPD_employee_agency
+-- Dumping structure for procedure gotescopayrolldb_server.MASSUPD_employee_agency
 DROP PROCEDURE IF EXISTS `MASSUPD_employee_agency`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `MASSUPD_employee_agency`(IN `OrganizID` INT, IN `AgencyRowID` INT, IN `UserRowID` INT, IN `EmployeeListRowID` VARCHAR(1000))

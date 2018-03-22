@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_timeentry
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_timeentry
 DROP FUNCTION IF EXISTS `INSUPD_timeentry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_timeentry`(`timent_RowID` INT, `timent_OrganizationID` INT, `timent_CreatedBy` INT, `timent_LastUpdBy` INT, `timent_PayPeriodID` INT, `timent_EmployeeID` INT, `timent_TotalPay` DECIMAL(10,2), `timent_TotalHoursWorked` DECIMAL(10,2), `timent_TotalVLConsumed` DECIMAL(10,2), `timent_TotalSLConsumed` DECIMAL(10,2)) RETURNS int(11)

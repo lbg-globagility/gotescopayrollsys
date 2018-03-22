@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.GET_paystubadjustmenttaxabornontaxab
+-- Dumping structure for function gotescopayrolldb_server.GET_paystubadjustmenttaxabornontaxab
 DROP FUNCTION IF EXISTS `GET_paystubadjustmenttaxabornontaxab`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `GET_paystubadjustmenttaxabornontaxab`(`PayStubRowID` INT, `IsTaxable` CHAR(50)) RETURNS decimal(11,6)

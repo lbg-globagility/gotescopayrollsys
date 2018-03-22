@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for trigger gotescopayrolldb_latest.AFTDEL_employeeleave_retain_employee_leave
+-- Dumping structure for trigger gotescopayrolldb_server.AFTDEL_employeeleave_retain_employee_leave
 DROP TRIGGER IF EXISTS `AFTDEL_employeeleave_retain_employee_leave`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
 DELIMITER //

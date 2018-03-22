@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_employeeleave
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_employeeleave
 DROP FUNCTION IF EXISTS `INSUPD_employeeleave`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeeleave`(`elv_RowID` INT, `elv_OrganizationID` INT, `elv_LeaveStartTime` TIME, `elv_LeaveType` VARCHAR(50), `elv_CreatedBy` INT, `elv_LastUpdBy` INT, `elv_EmployeeID` INT, `elv_LeaveEndTime` TIME, `elv_LeaveStartDate` DATE, `elv_LeaveEndDate` DATE, `elv_Reason` VARCHAR(500), `elv_Comments` VARCHAR(2000), `elv_Image` LONGBLOB, `elv_Status` VARCHAR(50), `elv_OverrideLeaveBal` DECIMAL(11,2)) RETURNS int(11)

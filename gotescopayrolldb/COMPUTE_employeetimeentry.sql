@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.COMPUTE_employeetimeentry
+-- Dumping structure for function gotescopayrolldb_server.COMPUTE_employeetimeentry
 DROP FUNCTION IF EXISTS `COMPUTE_employeetimeentry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `COMPUTE_employeetimeentry`(`etent_EmployeeID` INT, `etent_OrganizationID` INT, `etent_Date` DATE, `etent_CreatedBy` INT, `etent_LastUpdBy` INT, `EmployeeStartDate` DATE) RETURNS int(11)

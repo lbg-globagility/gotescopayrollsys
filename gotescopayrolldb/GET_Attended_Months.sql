@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.GET_Attended_Months
+-- Dumping structure for procedure gotescopayrolldb_server.GET_Attended_Months
 DROP PROCEDURE IF EXISTS `GET_Attended_Months`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_Attended_Months`(IN `param_OrganizationID` INT, IN `param_year` DATE)

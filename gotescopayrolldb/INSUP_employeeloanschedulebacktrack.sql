@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUP_employeeloanschedulebacktrack
+-- Dumping structure for function gotescopayrolldb_server.INSUP_employeeloanschedulebacktrack
 DROP FUNCTION IF EXISTS `INSUP_employeeloanschedulebacktrack`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUP_employeeloanschedulebacktrack`(`OrganizID` INT, `UserRowID` INT, `EmpRowID` INT, `PaystubRowID` INT, `LoanSchedRowID` INT, `LoanBalance` DECIMAL(12,6), `LoanPayPeriodLeft` DECIMAL(12,6), `AmountPerDeduct` DECIMAL(12,6), `Estatus` CHAR(12)) RETURNS int(11)

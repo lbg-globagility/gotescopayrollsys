@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_address
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_address
 DROP FUNCTION IF EXISTS `INSUPD_address`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_address`(`ad_RowID` INT, `ad_UserRowID` INT, `ad_StreetAddress1` VARBINARY(150), `ad_StreetAddress2` VARBINARY(150), `ad_Barangay` VARBINARY(150), `ad_CityTown` VARBINARY(150), `ad_State` VARBINARY(150), `ad_Country` VARBINARY(150), `ad_ZipCode` VARBINARY(150)) RETURNS int(11)

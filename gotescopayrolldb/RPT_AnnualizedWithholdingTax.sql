@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RPT_AnnualizedWithholdingTax
+-- Dumping structure for procedure gotescopayrolldb_server.RPT_AnnualizedWithholdingTax
 DROP PROCEDURE IF EXISTS `RPT_AnnualizedWithholdingTax`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_AnnualizedWithholdingTax`(IN `OrganizID` INT, IN `AnnualDateFrom` DATE, IN `AnnualDateTo` DATE, IN `IsActual` CHAR(1))

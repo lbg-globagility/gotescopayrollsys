@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.RPT_LastDateOfFinancialYear
+-- Dumping structure for function gotescopayrolldb_server.RPT_LastDateOfFinancialYear
 DROP FUNCTION IF EXISTS `RPT_LastDateOfFinancialYear`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `RPT_LastDateOfFinancialYear`() RETURNS text CHARSET latin1

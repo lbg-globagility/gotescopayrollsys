@@ -10,10 +10,10 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb.INSUPD_paystub_proc
+-- Dumping structure for procedure gotescopayrolldb_server.INSUPD_paystub_proc
 DROP PROCEDURE IF EXISTS `INSUPD_paystub_proc`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystub_proc`(IN `pstub_RowID` INT, IN `pstub_OrganizationID` INT, IN `pstub_CreatedBy` INT, IN `pstub_LastUpdBy` INT, IN `pstub_PayPeriodID` INT, IN `pstub_EmployeeID` INT, IN `pstub_TimeEntryID` INT, IN `pstub_PayFromDate` DATE, IN `pstub_PayToDate` DATE, IN `pstub_TotalGrossSalary` DECIMAL(10,2), IN `pstub_TotalNetSalary` DECIMAL(10,2), IN `pstub_TotalTaxableSalary` DECIMAL(10,2), IN `pstub_TotalEmpSSS` DECIMAL(10,2), IN `pstub_TotalEmpWithholdingTax` DECIMAL(10,2), IN `pstub_TotalCompSSS` DECIMAL(10,2), IN `pstub_TotalEmpPhilhealth` DECIMAL(10,2), IN `pstub_TotalCompPhilhealth` DECIMAL(10,2), IN `pstub_TotalEmpHDMF` DECIMAL(10,2), IN `pstub_TotalCompHDMF` DECIMAL(10,2), IN `pstub_TotalVacationDaysLeft` DECIMAL(10,2), IN `pstub_TotalLoans` DECIMAL(10,2), IN `pstub_TotalBonus` DECIMAL(10,2), IN `pstub_TotalAllowance` DECIMAL(10,2), IN `pstub_NondeductibleTotalLoans` DECIMAL(10,2))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystub_proc`(IN `pstub_RowID` INT, IN `pstub_OrganizationID` INT, IN `pstub_CreatedBy` INT, IN `pstub_LastUpdBy` INT, IN `pstub_PayPeriodID` INT, IN `pstub_EmployeeID` INT, IN `pstub_TimeEntryID` INT, IN `pstub_PayFromDate` DATE, IN `pstub_PayToDate` DATE, IN `pstub_TotalGrossSalary` DECIMAL(15,5), IN `pstub_TotalNetSalary` DECIMAL(15,5), IN `pstub_TotalTaxableSalary` DECIMAL(15,4), IN `pstub_TotalEmpSSS` DECIMAL(15,4), IN `pstub_TotalEmpWithholdingTax` DECIMAL(15,4), IN `pstub_TotalCompSSS` DECIMAL(15,4), IN `pstub_TotalEmpPhilhealth` DECIMAL(15,4), IN `pstub_TotalCompPhilhealth` DECIMAL(15,4), IN `pstub_TotalEmpHDMF` DECIMAL(15,4), IN `pstub_TotalCompHDMF` DECIMAL(15,4), IN `pstub_TotalVacationDaysLeft` DECIMAL(15,4), IN `pstub_TotalLoans` DECIMAL(15,4), IN `pstub_TotalBonus` DECIMAL(15,4), IN `pstub_TotalAllowance` DECIMAL(15,5), IN `pstub_NondeductibleTotalLoans` DECIMAL(15,4))
     DETERMINISTIC
 BEGIN
 
@@ -23,7 +23,7 @@ DECLARE existingrowrecord INT(11);
 
 DECLARE isexist INT(1);
 
-DECLARE SumPayStubAdjustments DECIMAL(11,2);
+DECLARE SumPayStubAdjustments DECIMAL(15,4) DEFAULT 0;
 
 DECLARE ps_TotalUndeclaredSalary DECIMAL(20,6) DEFAULT 0.0;
 DECLARE ps_rowIDs VARCHAR(2000);
@@ -34,7 +34,8 @@ DELETE FROM paystubactual WHERE RowID != ps_rowIDs AND EmployeeID=pstub_Employee
 SELECT RowID FROM paystub WHERE PayPeriodID=pstub_PayPeriodID AND EmployeeID=pstub_EmployeeID AND OrganizationID=pstub_OrganizationID AND PayFromDate=pstub_PayFromDate AND PayToDate=pstub_PayToDate LIMIT 1 INTO existingrowrecord;
 
 
-SELECT SUM(psa.PayAmount) FROM paystubadjustment psa INNER JOIN paystub ps ON ps.EmployeeID=pstub_EmployeeID AND ps.PayPeriodID=pstub_PayPeriodID AND ps.OrganizationID=psa.OrganizationID AND ps.RowID=psa.PayStubID  WHERE psa.OrganizationID=pstub_OrganizationID INTO SumPayStubAdjustments;SET SumPayStubAdjustments = IFNULL(SumPayStubAdjustments,0);
+SELECT SUM(psa.PayAmount) FROM paystubadjustment psa INNER JOIN paystub ps ON ps.EmployeeID=pstub_EmployeeID AND ps.PayPeriodID=pstub_PayPeriodID AND ps.OrganizationID=psa.OrganizationID AND ps.RowID=psa.PayStubID  WHERE psa.OrganizationID=pstub_OrganizationID INTO SumPayStubAdjustments; SET SumPayStubAdjustments = IFNULL(SumPayStubAdjustments, 0);
+
 SELECT GET_employeeundeclaredsalarypercent(pstub_EmployeeID,pstub_OrganizationID,pstub_PayFromDate,pstub_PayToDate) INTO ps_TotalUndeclaredSalary;
 
 IF ps_TotalUndeclaredSalary < 1.0 THEN
@@ -86,7 +87,7 @@ INSERT INTO paystub
 	,pstub_PayFromDate
 	,pstub_PayToDate
 	,pstub_TotalGrossSalary
-	,pstub_TotalNetSalary + SumPayStubAdjustments
+	,pstub_TotalNetSalary + (SumPayStubAdjustments)
 	,pstub_TotalTaxableSalary
 	,pstub_TotalEmpSSS
 	,pstub_TotalEmpWithholdingTax
@@ -99,7 +100,7 @@ INSERT INTO paystub
 	,pstub_TotalLoans
 	,pstub_TotalBonus
 	,pstub_TotalAllowance
-	,SumPayStubAdjustments
+	,(SumPayStubAdjustments)
 	,ps_TotalUndeclaredSalary
 	,pstub_NondeductibleTotalLoans
 ) ON 
@@ -114,7 +115,7 @@ UPDATE
 	,PayFromDate=pstub_PayFromDate
 	,PayToDate=pstub_PayToDate
 	,TotalGrossSalary=pstub_TotalGrossSalary
-	,TotalNetSalary=pstub_TotalNetSalary + SumPayStubAdjustments
+	,TotalNetSalary=pstub_TotalNetSalary + (SumPayStubAdjustments)
 	,TotalTaxableSalary=pstub_TotalTaxableSalary
 	,TotalEmpSSS=pstub_TotalEmpSSS
 	,TotalEmpWithholdingTax=pstub_TotalEmpWithholdingTax
@@ -126,7 +127,7 @@ UPDATE
 	,TotalLoans=pstub_TotalLoans
 	,TotalBonus=pstub_TotalBonus
 	,TotalAllowance=pstub_TotalAllowance
-	,TotalAdjustments=SumPayStubAdjustments
+	,TotalAdjustments=(SumPayStubAdjustments)
 	,TotalUndeclaredSalary=ps_TotalUndeclaredSalary
 	,NondeductibleTotalLoans=pstub_NondeductibleTotalLoans;
 

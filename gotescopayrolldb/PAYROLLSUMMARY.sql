@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.PAYROLLSUMMARY
+-- Dumping structure for procedure gotescopayrolldb_server.PAYROLLSUMMARY
 DROP PROCEDURE IF EXISTS `PAYROLLSUMMARY`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PAYROLLSUMMARY`(IN `ps_OrganizationID` INT, IN `ps_PayPeriodID1` INT, IN `ps_PayPeriodID2` INT, IN `psi_undeclared` CHAR(1), IN `strSalaryDistrib` VARCHAR(50)

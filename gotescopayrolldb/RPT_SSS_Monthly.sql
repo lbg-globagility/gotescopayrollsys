@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RPT_SSS_Monthly
+-- Dumping structure for procedure gotescopayrolldb_server.RPT_SSS_Monthly
 DROP PROCEDURE IF EXISTS `RPT_SSS_Monthly`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_SSS_Monthly`(IN `OrganizID` INT, IN `paramDate` DATE)
@@ -59,7 +59,7 @@ SELECT pyp.PayToDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND p
 	,pss.EmployeeECAmount `DatCol5`
 	,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) `DatCol6`
 	FROM paystub ps
-	INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=1
+	INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=1 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 	INNER JOIN product p ON p.PartNo='.SSS' AND p.OrganizationID=OrganizID
 	INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.OrganizationID=OrganizID AND psi.ProductID=p.RowID
 	INNER JOIN paysocialsecurity pss ON pss.EmployeeContributionAmount=psi.PayAmount
@@ -76,7 +76,7 @@ UNION
 	,pss.EmployeeECAmount `DatCol5`
 	,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) `DatCol6`
 	FROM paystub ps
-	INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=4
+	INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=4 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 	INNER JOIN product p ON p.PartNo='.SSS' AND p.OrganizationID=OrganizID
 	INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.OrganizationID=OrganizID AND psi.ProductID=p.RowID
 	INNER JOIN paysocialsecurity pss ON pss.EmployeeContributionAmount=psi.PayAmount

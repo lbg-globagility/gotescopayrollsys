@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_position_view
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_position_view
 DROP FUNCTION IF EXISTS `INSUPD_position_view`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_position_view`(`pv_RowID` INT, `pv_PositionID` INT, `pv_OrganizationID` INT, `pv_CreatedBy` INT, `pv_LastUpdBy` INT, `pv_ViewID` INT, `pv_Creates` CHAR(1), `pv_ReadOnly` CHAR(1), `pv_Updates` CHAR(1), `pv_Deleting` CHAR(1)) RETURNS int(11)

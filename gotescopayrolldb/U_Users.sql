@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.U_Users
+-- Dumping structure for procedure gotescopayrolldb_server.U_Users
 DROP PROCEDURE IF EXISTS `U_Users`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `U_Users`(IN `I_RowID` INT(11), IN `I_LastName` VARCHAR(50), IN `I_FirstName` VARCHAR(50), IN `I_MiddleName` VARCHAR(50), IN `I_PositionID` INT(11), IN `I_Created` DATETIME, IN `I_LastUpdBy` INT(11), IN `I_CreatedBy` INT(11), IN `I_LastUpd` DATETIME, IN `I_Status` VARCHAR(10)

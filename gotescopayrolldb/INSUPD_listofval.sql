@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_listofval
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_listofval
 DROP FUNCTION IF EXISTS `INSUPD_listofval`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_listofval`(`DispVal` VARCHAR(50), `paramLIC` VARCHAR(50), `paramType` VARCHAR(50), `Parent_LIC` VARCHAR(50), `paramActive` CHAR(5), `Descript` VARCHAR(500), `UserRowID` INT, `Order_By` INT) RETURNS int(11)

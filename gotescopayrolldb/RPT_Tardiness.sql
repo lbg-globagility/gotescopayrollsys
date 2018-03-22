@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RPT_Tardiness
+-- Dumping structure for procedure gotescopayrolldb_server.RPT_Tardiness
 DROP PROCEDURE IF EXISTS `RPT_Tardiness`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_Tardiness`(IN `OrganizID` INT, IN `DateLateFrom` DATE, IN `DateLateTo` DATE)

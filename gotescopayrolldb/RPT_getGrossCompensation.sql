@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RPT_getGrossCompensation
+-- Dumping structure for procedure gotescopayrolldb_server.RPT_getGrossCompensation
 DROP PROCEDURE IF EXISTS `RPT_getGrossCompensation`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_getGrossCompensation`(IN `OrganizID` INT, IN `LastDateOfFinancialYear` DATE, IN `FirstDateOfFinancialYear` DATE)

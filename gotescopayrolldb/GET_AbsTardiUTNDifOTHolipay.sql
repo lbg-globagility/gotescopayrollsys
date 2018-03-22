@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.GET_AbsTardiUTNDifOTHolipay
+-- Dumping structure for procedure gotescopayrolldb_server.GET_AbsTardiUTNDifOTHolipay
 DROP PROCEDURE IF EXISTS `GET_AbsTardiUTNDifOTHolipay`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_AbsTardiUTNDifOTHolipay`(IN `param_OrganizationID` INT, IN `param_EmployeeRowID` INT, IN `param_PayPeriodID1` INT, IN `param_PayPeriodID2` INT)

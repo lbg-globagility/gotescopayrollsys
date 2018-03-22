@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.GET_SumPayStubAdjustments
+-- Dumping structure for function gotescopayrolldb_server.GET_SumPayStubAdjustments
 DROP FUNCTION IF EXISTS `GET_SumPayStubAdjustments`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_SumPayStubAdjustments`(`p_PayStubID` INT) RETURNS decimal(10,2)

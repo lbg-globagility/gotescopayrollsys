@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.VIEW_paywithholdingtax
+-- Dumping structure for procedure gotescopayrolldb_server.VIEW_paywithholdingtax
 DROP PROCEDURE IF EXISTS `VIEW_paywithholdingtax`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_paywithholdingtax`(IN `Taxable_Income` DECIMAL(10,6), IN `e_EmployeeID` INT, IN `e_OrganizationID` INT)

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.VIEW_position_view
+-- Dumping structure for procedure gotescopayrolldb_server.VIEW_position_view
 DROP PROCEDURE IF EXISTS `VIEW_position_view`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_position_view`(IN `pv_OrganizationID` INT, IN `pv_PositionID` INT)

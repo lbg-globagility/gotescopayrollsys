@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.MASSUPD_NewPhilHealthDeduction
+-- Dumping structure for procedure gotescopayrolldb_server.MASSUPD_NewPhilHealthDeduction
 DROP PROCEDURE IF EXISTS `MASSUPD_NewPhilHealthDeduction`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `MASSUPD_NewPhilHealthDeduction`(IN `org_rowid` INT)

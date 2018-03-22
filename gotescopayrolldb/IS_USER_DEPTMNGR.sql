@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.IS_USER_DEPTMNGR
+-- Dumping structure for function gotescopayrolldb_server.IS_USER_DEPTMNGR
 DROP FUNCTION IF EXISTS `IS_USER_DEPTMNGR`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `IS_USER_DEPTMNGR`(`org_rowid` INT, `user_rowid` INT) RETURNS tinyint(1)

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.I_payment
+-- Dumping structure for procedure gotescopayrolldb_server.I_payment
 DROP PROCEDURE IF EXISTS `I_payment`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `I_payment`(IN `I_OrganizationID` INT(10), IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_PaymentType` VARCHAR(50), IN `I_Amount` DECIMAL(10,2), IN `I_BankAccountNumber` VARCHAR(10), IN `I_BankCheckNumber` VARCHAR(10), IN `I_BankRoutingNumber` VARCHAR(10), IN `I_CardHolder` VARCHAR(100), IN `I_CardNumber` VARCHAR(10), IN `I_CreditMemoNumber` VARCHAR(10), IN `I_RequestedAmount` DECIMAL(10,2), IN `I_RemainingBalance` DECIMAL(10,2), IN `I_PaymentNo` INT(10), IN `I_PaymentDate` DATE, IN `I_PaymentMethod` VARCHAR(50))

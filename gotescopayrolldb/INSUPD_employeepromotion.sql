@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_employeepromotion
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_employeepromotion
 DROP FUNCTION IF EXISTS `INSUPD_employeepromotion`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_employeepromotion`(`epro_RowID` INT, `OrganizID` INT, `UserRowID` INT, `epro_EmpRowID` INT, `epro_PositionFrom` VARCHAR(50), `epro_PositionTo` VARCHAR(50), `epro_EffectiveDate` DATE, `epro_CompensationChange` CHAR(1), `epro_CompensationValue` DECIMAL(11,2), `epro_EmpSalID` INT, `epro_Reason` VARCHAR(200)) RETURNS int(11)

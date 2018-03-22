@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.GET_MinimumWageRate
+-- Dumping structure for function gotescopayrolldb_server.GET_MinimumWageRate
 DROP FUNCTION IF EXISTS `GET_MinimumWageRate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `GET_MinimumWageRate`() RETURNS decimal(11,2)

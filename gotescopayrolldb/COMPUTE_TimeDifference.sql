@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.COMPUTE_TimeDifference
+-- Dumping structure for function gotescopayrolldb_server.COMPUTE_TimeDifference
 DROP FUNCTION IF EXISTS `COMPUTE_TimeDifference`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `COMPUTE_TimeDifference`(`TimeOne` TIME, `TimeTwo` TIME) RETURNS decimal(11,6)

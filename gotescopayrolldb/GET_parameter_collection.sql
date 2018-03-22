@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.GET_parameter_collection
+-- Dumping structure for procedure gotescopayrolldb_server.GET_parameter_collection
 DROP PROCEDURE IF EXISTS `GET_parameter_collection`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `GET_parameter_collection`(IN `data_base_name` VARCHAR(50), IN `sql_object_name` VARCHAR(50))

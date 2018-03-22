@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_agency
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_agency
 DROP FUNCTION IF EXISTS `INSUPD_agency`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_agency`(`ag_RowID` INT, `ag_OrganizationID` INT, `ag_UserRowID` INT, `ag_AgencyName` VARCHAR(50), `ag_AgencyFee` DECIMAL(11,2), `ag_AddressID` INT) RETURNS int(11)

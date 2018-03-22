@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_employeeawards
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_employeeawards
 DROP FUNCTION IF EXISTS `INSUPD_employeeawards`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeeawards`(`eawa_RowID` INT, `eawa_OrganizationID` INT, `eawa_Created` TIMESTAMP, `eawa_CreatedBy` INT, `eawa_LastUpd` DATETIME, `eawa_LastUpdBy` INT, `eawa_EmployeeID` INT, `eawa_AwardType` VARCHAR(500), `eawa_AwardDescription` VARCHAR(500), `eawa_AwardDate` VARCHAR(500)) RETURNS int(11)

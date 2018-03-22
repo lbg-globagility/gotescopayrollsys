@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.SP_GET_SumPayStubAdjustments
+-- Dumping structure for procedure gotescopayrolldb_server.SP_GET_SumPayStubAdjustments
 DROP PROCEDURE IF EXISTS `SP_GET_SumPayStubAdjustments`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GET_SumPayStubAdjustments`(IN `pa_EmployeeID` VARCHAR(50), IN `pa_PayPeriodID` INT)

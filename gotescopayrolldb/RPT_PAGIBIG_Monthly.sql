@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RPT_PAGIBIG_Monthly
+-- Dumping structure for procedure gotescopayrolldb_server.RPT_PAGIBIG_Monthly
 DROP PROCEDURE IF EXISTS `RPT_PAGIBIG_Monthly`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_PAGIBIG_Monthly`(IN `OrganizID` INT, IN `paramDate` DATE)
@@ -92,7 +92,7 @@ SELECT
 	,ps.TotalCompHDMF `DatCol4`
 	,psi.PayAmount + ps.TotalCompHDMF `DatCol5`
 	FROM paystubitem psi
-	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=1 AND e.EmploymentStatus='Regular'
+	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=1 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=semi_payfrom OR ps.PayToDate>=semi_payfrom) AND (ps.PayFromDate<=semi_payto OR ps.PayToDate<=semi_payto)
 	JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
 	JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PAGIBIG'
@@ -107,7 +107,7 @@ UNION
 	,ps.TotalCompHDMF `DatCol4`
 	,psi.PayAmount + ps.TotalCompHDMF `DatCol5`
 	FROM paystubitem psi
-	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=4 AND e.EmploymentStatus='Regular'
+	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=4 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=weekly_payfrom OR ps.PayToDate>=weekly_payfrom) AND (ps.PayFromDate<=weekly_payto OR ps.PayToDate<=weekly_payto)
 	JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
 	JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PAGIBIG'

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.sp_updateemploan
+-- Dumping structure for procedure gotescopayrolldb_server.sp_updateemploan
 DROP PROCEDURE IF EXISTS `sp_updateemploan`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_updateemploan`(IN `I_Lastupd` DATETIME, IN `I_Lastupdby` INT(10), IN `I_LoanNumber` VARCHAR(50), IN `I_DedEffectiveDateFrom` DATE, IN `I_DedEffectiveDateTo` DATE, IN `I_TotalLoanAmount` DECIMAL(10,2), IN `I_DeductionSchedule` VARCHAR(50), IN `I_DeductionAmount` DECIMAL(10,2), IN `I_Status` VARCHAR(50), IN `I_DeductionPercentage` DECIMAL(10,2), IN `I_NoOfPayPeriod` DECIMAL(10,2), IN `I_Comments` VARCHAR(2000), IN `I_RowID` INT(10), IN `I_LoanTypeID` INT)

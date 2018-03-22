@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.INSUPD_employeedependents
+-- Dumping structure for function gotescopayrolldb_server.INSUPD_employeedependents
 DROP FUNCTION IF EXISTS `INSUPD_employeedependents`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeedependents`(`emp_RowID` INT, `emp_CreatedBy` INT, `emp_LastUpdBy` INT, `emp_LastUpd` DATETIME, `emp_OrganizationID` INT, `emp_Salutation` VARCHAR(50), `emp_FirstName` VARCHAR(50), `emp_MiddleName` VARCHAR(50), `emp_LastName` VARCHAR(50), `emp_SurName` VARCHAR(50), `emp_ParentEmployeeID` VARCHAR(50), `emp_TINNo` VARCHAR(50), `emp_SSSNo` VARCHAR(50), `emp_HDMFNo` VARCHAR(50), `emp_PhilHealthNo` VARCHAR(50), `emp_EmailAddress` VARCHAR(50), `emp_WorkPhone` VARCHAR(50), `emp_HomePhone` VARCHAR(50), `emp_MobilePhone` VARCHAR(50), `emp_HomeAddress` VARCHAR(2000), `emp_Nickname` VARCHAR(50), `emp_JobTitle` VARCHAR(50), `emp_Gender` VARCHAR(50), `emp_RelationToEmployee` VARCHAR(50), `emp_ActiveFlag` VARCHAR(50), `emp_Birthdate` DATE, `emp_IsDoneByImporting` TEXT) RETURNS int(11)

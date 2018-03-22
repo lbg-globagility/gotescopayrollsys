@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.EMPLOYEE_payrollgen_paginate
+-- Dumping structure for procedure gotescopayrolldb_server.EMPLOYEE_payrollgen_paginate
 DROP PROCEDURE IF EXISTS `EMPLOYEE_payrollgen_paginate`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `EMPLOYEE_payrollgen_paginate`(IN `OrganizID` INT, IN `Pay_Date_From` DATE, IN `Pay_Date_To` DATE, IN `max_rec_perpage` INT

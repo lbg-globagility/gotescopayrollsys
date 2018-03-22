@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb.INSUPD_monthlyemployeerestdaypayment
+-- Dumping structure for procedure gotescopayrolldb_server.INSUPD_monthlyemployeerestdaypayment
 DROP PROCEDURE IF EXISTS `INSUPD_monthlyemployeerestdaypayment`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_monthlyemployeerestdaypayment`(IN `og_rowid` INT, IN `e_rowid` INT, IN `pp_rowid` INT, IN `user_rowid` INT)

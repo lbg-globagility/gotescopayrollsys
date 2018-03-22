@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RPT_payroll_legder
+-- Dumping structure for procedure gotescopayrolldb_server.RPT_payroll_legder
 DROP PROCEDURE IF EXISTS `RPT_payroll_legder`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_payroll_legder`(IN `OrganizID` INT, IN `PayPerID1` INT, IN `PayPerID2` INT, IN `psi_undeclared` CHAR(1))

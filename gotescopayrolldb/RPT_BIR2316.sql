@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.RPT_BIR2316
+-- Dumping structure for procedure gotescopayrolldb_server.RPT_BIR2316
 DROP PROCEDURE IF EXISTS `RPT_BIR2316`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_BIR2316`(IN `OrganizID` INT, IN `paramDateFrom` DATE, IN `paramDateTo` DATE)

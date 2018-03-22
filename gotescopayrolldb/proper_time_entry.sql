@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for view gotescopayrolldb_latest.proper_time_entry
+-- Dumping structure for view gotescopayrolldb_server.proper_time_entry
 DROP VIEW IF EXISTS `proper_time_entry`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `proper_time_entry`;

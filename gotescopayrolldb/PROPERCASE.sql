@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for function gotescopayrolldb_latest.PROPERCASE
+-- Dumping structure for function gotescopayrolldb_server.PROPERCASE
 DROP FUNCTION IF EXISTS `PROPERCASE`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `PROPERCASE`(`str` VARCHAR(128) ) RETURNS varchar(128) CHARSET latin1

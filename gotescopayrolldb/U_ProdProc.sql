@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.U_ProdProc
+-- Dumping structure for procedure gotescopayrolldb_server.U_ProdProc
 DROP PROCEDURE IF EXISTS `U_ProdProc`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `U_ProdProc`(IN `I_RowID` INT(10), IN `I_Name` VARCHAR(200), IN `I_Description` VARCHAR(500), IN `I_PartNo` VARCHAR(200), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_Category` VARCHAR(50), IN `I_Catalog` VARCHAR(50), IN `I_Comments` VARCHAR(2000), IN `I_Status` VARCHAR(50), IN `I_UnitPrice` DECIMAL(10,2), IN `I_CostPrice` DECIMAL(10,2), IN `I_UnitOfMeasure` VARCHAR(50), IN `I_SKU` VARCHAR(50), IN `I_LeadTime` INT(10), IN `I_BarCode` VARCHAR(50), IN `I_BusinessUnitID` INT(11), IN `I_LastRcvdFromShipmentDate` DATE, IN `I_LastRcvdFromShipmentCount` INT(11), IN `I_BookPageNo` VARCHAR(10), IN `I_ReOrderPoint` INT(11), IN `I_AllocateBelowSafetyFlag` CHAR(1), IN `I_Strength` VARCHAR(30), IN `I_UnitsBackordered` INT(10), IN `I_UnitsBackorderAsOf` DATETIME, IN `I_DateLastInventoryCount` DATETIME

@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_latest.DBoard_LoanBalances
+-- Dumping structure for procedure gotescopayrolldb_server.DBoard_LoanBalances
 DROP PROCEDURE IF EXISTS `DBoard_LoanBalances`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_LoanBalances`(IN `OrganizID` INT)

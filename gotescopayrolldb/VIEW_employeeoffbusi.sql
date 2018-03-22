@@ -44,6 +44,7 @@ IF is_deptmngr = TRUE THEN
 	,'view this'
 	,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileName`
 	,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileExtens`
+	, DATE_FORMAT(obf.Created, '%c/%e/%Y %h:%i %p') `Created`
 	FROM employeeofficialbusiness obf
 	INNER JOIN employee e ON e.RowID=obf.EmployeeID AND e.OrganizationID=obf.OrganizationID AND e.DeptManager=dept_mngr_rowid
 	WHERE obf.OrganizationID=obf_OrganizationID
@@ -67,6 +68,7 @@ ELSE
 			,'view this'
 			,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileName`
 			,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileExtens`
+	      , DATE_FORMAT(obf.Created, '%c/%e/%Y %h:%i %p') `Created`
 			FROM employeeofficialbusiness obf
 			INNER JOIN employee e ON e.RowID=obf.EmployeeID AND e.OrganizationID=obf.OrganizationID AND e.DeptManager IS NULL
 			WHERE obf.OrganizationID=obf_OrganizationID
@@ -87,6 +89,7 @@ ELSE
 			,'view this'
 			,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileName`
 			,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileExtens`
+	      , DATE_FORMAT(obf.Created, '%c/%e/%Y %h:%i %p') `Created`
 			FROM employeeofficialbusiness obf
 			INNER JOIN employee e
 				     ON e.RowID=obf.EmployeeID

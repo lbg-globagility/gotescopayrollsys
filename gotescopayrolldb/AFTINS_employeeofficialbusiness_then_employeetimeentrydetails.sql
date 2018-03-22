@@ -64,7 +64,7 @@ SET i=0;
 	INTO sh_time_from
 	     ,sh_time_to;
 		
-		SELECT MAX(i.Created)
+		SELECT MIN(i.Created)
 		FROM (SELECT etd.Created
 		      FROM employeetimeentrydetails etd
 		      WHERE etd.EmployeeID = NEW.EmployeeID

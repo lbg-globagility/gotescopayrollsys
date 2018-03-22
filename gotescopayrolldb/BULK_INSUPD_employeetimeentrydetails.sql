@@ -1,9 +1,16 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               5.5.5-10.0.12-MariaDB - mariadb.org binary distribution
+-- Server OS:                    Win32
+-- HeidiSQL Version:             8.3.0.4694
+-- --------------------------------------------------------
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- Dumping structure for procedure gotescopayrolldb_server.BULK_INSUPD_employeetimeentrydetails
 DROP PROCEDURE IF EXISTS `BULK_INSUPD_employeetimeentrydetails`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `BULK_INSUPD_employeetimeentrydetails`(IN `organiz_rowid` INT, IN `user_rowid` INT, IN `date_from` DATE, IN `date_to` DATE, IN `import_id` INT)
@@ -47,21 +54,33 @@ SET @comput_sec2 = 0;
 SET @less_5hours = 18000; # (total_secs_per_hour * 5)
 SET @add_10hours = 36000; # (total_secs_per_hour * 10)
 
+SELECT
+DATE( MIN(tlg.TimeStampLog) )
+, DATE( MAX(tlg.TimeStampLog) )
+FROM timeentrylogs tlg
+WHERE tlg.OrganizationID = organiz_rowid
+AND tlg.ImportID = import_id
+INTO date_from
+     , date_to;
+
+SELECT organiz_rowid, date_from, date_to INTO OUTFILE 'D:/New Downloads/result.txt';
+
 INSERT INTO employeetimeentrydetails
 (
 	OrganizationID
+	,EmployeeID
 	,Created
 	,CreatedBy
-	,EmployeeID
 	,TimeIn
 	,TimeOut
 	,`Date`
 	,TimeentrylogsImportID
 ) SELECT
 	organiz_rowid
-	,this_curr_timestamp
-	,user_rowid
 	,etd.EmployeeID
+	,IFNULL(GET_PROPER_IMPORDATETIME(organiz_rowid, etd.EmployeeID, date_from, date_to)
+	        , this_curr_timestamp)
+	,user_rowid
 	,TIME(etd.`TimeIn`)
 	,TIME(etd.`TimeOut`)
 	,etd.DateValue
@@ -178,7 +197,6 @@ AND etd.`Date` BETWEEN @min_date AND @max_date;*/
 
 END//
 DELIMITER ;
-
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

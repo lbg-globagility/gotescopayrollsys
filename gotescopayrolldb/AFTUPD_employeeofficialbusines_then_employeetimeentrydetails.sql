@@ -35,12 +35,43 @@ DECLARE one_datetimestamp DATETIME DEFAULT CURRENT_TIMESTAMP();
 DECLARE sh_time_from
         ,sh_time_to DATETIME;
 
+DECLARE date_from
+        ,date_to DATE;
+
 SET prev_dayrange = COALESCE(DATEDIFF(COALESCE(OLD.OffBusEndDate,OLD.OffBusStartDate),OLD.OffBusStartDate),0) + 1;
 
 SET eob_dayrange = COALESCE(DATEDIFF(COALESCE(NEW.OffBusEndDate,NEW.OffBusStartDate),NEW.OffBusStartDate),0) + 1;
 
 SET i=0;
+	
+	SELECT
+	pp.PayFromDate
+	, pp.PayToDate
+	FROM payperiod pp
+	INNER JOIN employee e
+	        ON e.RowID=NEW.EmployeeID
+			     AND e.PayFrequencyID=pp.TotalGrossSalary
+	WHERE (pp.PayFromDate >= NEW.OffBusStartDate OR pp.PayToDate >= NEW.OffBusStartDate)
+	AND (pp.PayFromDate <= NEW.OffBusEndDate OR pp.PayToDate <= NEW.OffBusEndDate)
+	AND pp.OrganizationID=NEW.OrganizationID
+	LIMIT 1
+	INTO date_from
+	     ,date_to;
+	
+	SELECT MIN(i.Created)
+	FROM (SELECT etd.Created
+	      FROM employeetimeentrydetails etd
+	      WHERE etd.EmployeeID = NEW.EmployeeID
+	      AND etd.OrganizationID = NEW.OrganizationID
+			AND etd.`Date` BETWEEN date_from AND date_to
+	      # AND etd.`Date` BETWEEN '2018-09-28' AND '2018-10-27'
+	      GROUP BY etd.Created
+	      ORDER BY etd.Created DESC
+	      ) i
+	INTO one_datetimestamp;
 
+	IF one_datetimestamp IS NULL THEN SET one_datetimestamp = CURRENT_TIMESTAMP(); END IF;
+	
 IF (OLD.OffBusStatus != 'Approved' AND NEW.OffBusStatus = 'Approved')
    OR (OLD.OffBusStartTime != NEW.OffBusStartTime
 	    OR OLD.OffBusEndTime != NEW.OffBusEndTime

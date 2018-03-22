@@ -294,7 +294,7 @@ Public Class PayrollGeneration
             String.Concat("SELECT EXISTS(SELECT RowID",
                           " FROM payperiod pp",
                           " WHERE pp.RowID = ", n_PayrollRecordID,
-                          " AND pp.`Year` = ", year2018, ") `Result`;")
+                          " AND pp.`Year` >= ", year2018, ") `Result`;")
 
         Dim is_year2018 As Boolean = Convert.ToBoolean(New SQL(strquery_year2018).GetFoundRow)
 

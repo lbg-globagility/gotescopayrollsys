@@ -34,12 +34,18 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `newphilhealthimpleme
             WHERE lv.`Type`='PhilHealth'
 				AND lv.LIC = 'MinimumContribution'
             ) `MinimumContribution`
-            
+
 , (SELECT lv.DisplayValue
             FROM listofval lv
             WHERE lv.`Type`='PhilHealth'
 				AND lv.LIC = 'MaximumContribution'
-            ) `MaximumContribution` ;
+            ) `MaximumContribution`
+            
+, (SELECT lv.DisplayValue
+            FROM listofval lv
+            WHERE lv.`Type`='PhilHealth'
+				AND lv.LIC = 'YearOfEffect'
+            ) `YearOfEffect` ;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -74,37 +74,40 @@ SELECT pyp.PayToDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND p
 
 
 
-
-
-	SELECT
-	e.HDMFNo `DatCol1`
-	,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
-	,psi.PayAmount `DatCol3`
-	,phh.EmployerShare `DatCol4`
-	,psi.PayAmount + phh.EmployerShare `DatCol5`
-	FROM paystubitem psi
-	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=1 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=semi_payfrom OR ps.PayToDate>=semi_payfrom) AND (ps.PayFromDate<=semi_payto OR ps.PayToDate<=semi_payto)
-	JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
-	JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PhilHealth'
-	INNER JOIN payphilhealth phh ON phh.EmployeeShare=psi.PayAmount
-	WHERE psi.ProductID=p.RowID
-	AND psi.PayStubID=ps.RowID
-UNION
-	SELECT
-	e.HDMFNo `DatCol1`
-	,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
-	,psi.PayAmount `DatCol3`
-	,phh.EmployerShare `DatCol4`
-	,psi.PayAmount + phh.EmployerShare `DatCol5`
-	FROM paystubitem psi
-	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=4 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=weekly_payfrom OR ps.PayToDate>=weekly_payfrom) AND (ps.PayFromDate<=weekly_payto OR ps.PayToDate<=weekly_payto)
-	JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
-	JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PhilHealth'
-	INNER JOIN payphilhealth phh ON phh.EmployeeShare=psi.PayAmount
-	WHERE psi.ProductID=p.RowID
-	AND psi.PayStubID=ps.RowID;
+SELECT i.*
+FROM (
+		SELECT
+		e.HDMFNo `DatCol1`
+		,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
+		,psi.PayAmount `DatCol3`
+		,phh.EmployerShare `DatCol4`
+		,psi.PayAmount + phh.EmployerShare `DatCol5`
+		FROM paystubitem psi
+		INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=1 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+		INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=semi_payfrom OR ps.PayToDate>=semi_payfrom) AND (ps.PayFromDate<=semi_payto OR ps.PayToDate<=semi_payto)
+		JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
+		JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PhilHealth'
+		INNER JOIN payphilhealth phh ON phh.EmployeeShare=psi.PayAmount
+		WHERE psi.ProductID=p.RowID
+		AND psi.PayStubID=ps.RowID
+	UNION
+		SELECT
+		e.HDMFNo `DatCol1`
+		,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
+		,psi.PayAmount `DatCol3`
+		,phh.EmployerShare `DatCol4`
+		,psi.PayAmount + phh.EmployerShare `DatCol5`
+		FROM paystubitem psi
+		INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=4 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+		INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=weekly_payfrom OR ps.PayToDate>=weekly_payfrom) AND (ps.PayFromDate<=weekly_payto OR ps.PayToDate<=weekly_payto)
+		JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
+		JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PhilHealth'
+		INNER JOIN payphilhealth phh ON phh.EmployeeShare=psi.PayAmount
+		WHERE psi.ProductID=p.RowID
+		AND psi.PayStubID=ps.RowID
+		) i
+ORDER BY i.`DatCol2`
+;
 
 END//
 DELIMITER ;

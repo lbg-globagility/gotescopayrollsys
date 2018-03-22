@@ -16,8 +16,29 @@ SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTIT
 DELIMITER //
 CREATE TRIGGER `BEFINS_employeesalary` BEFORE INSERT ON `employeesalary` FOR EACH ROW BEGIN
 
+DECLARE e_type VARCHAR(50);
+
+DECLARE month_count INT(11) DEFAULT 11;
+
+DECLARE e_workdays_peryear DECIMAL(15, 4);
+
+SELECT e.EmployeeType
+, e.WorkDaysPerYear
+FROM employee e
+WHERE e.RowID = NEW.RowID
+INTO e_type
+     ,e_workdays_peryear;
+
 IF IFNULL(NEW.UndeclaredSalary,0) = 0 THEN
 	SET NEW.UndeclaredSalary = IFNULL(NEW.TrueSalary - NEW.Salary,0);
+END IF;
+
+IF e_type = 'Daily' THEN
+
+	SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(((NEW.Salary * e_workdays_peryear) / month_count), TRUE);
+ELSE
+
+	SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement((NEW.Salary / (e_workdays_peryear / month_count)), TRUE);
 END IF;
 
 END//

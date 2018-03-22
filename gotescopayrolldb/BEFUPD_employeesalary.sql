@@ -92,6 +92,12 @@ IF NEW.EffectiveDateTo IS NULL AND OLD.EffectiveDateTo IS NOT NULL THEN
 	SET NEW.EffectiveDateTo = OLD.EffectiveDateTo;
 END IF;*/
 
+SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(
+											IFNULL((SELECT s.MonthlySalary
+											        FROM employeesalary_withdailyrate s
+													  WHERE s.RowID = NEW.RowID
+													  LIMIT 1), 0), TRUE);
+
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;

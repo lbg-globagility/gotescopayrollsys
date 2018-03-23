@@ -7868,8 +7868,52 @@ Public Class PayStub
 
     Dim PayrollSummaChosenData As String = String.Empty
 
-    Private Sub tsbtnPayrollSumma_Click(sender As Object, e As EventArgs) Handles DeclaredToolStripMenuItem2.Click,
-                                                                                  ActualToolStripMenuItem2.Click 'tsbtnPayrollSumma.Click
+    Private Sub PrintPayrollSummary(sender As Object, e As EventArgs) _
+        Handles DeclaredToolStripMenuItem2.Click,
+        ActualToolStripMenuItem2.Click
+
+        DeclaredToolStripMenuItem2.Tag = False
+        ActualToolStripMenuItem2.Tag = True
+
+        Dim obj_sender = DirectCast(sender, ToolStripMenuItem)
+
+        Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
+
+        n_PayrollSummaDateSelection.ReportIndex = 6
+
+        If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
+
+            Dim parameters = New Object() {org_rowid,
+                                           n_PayrollSummaDateSelection.DateFromID,
+                                           n_PayrollSummaDateSelection.DateToID,
+                                           obj_sender.Tag,
+                                           n_PayrollSummaDateSelection.cboStringParameter.Text}
+
+            Dim sql As New SQL("CALL PAYROLLSUMMARY(?ps_OrganizationID, ?ps_PayPeriodID1, ?ps_PayPeriodID2, ?psi_undeclared, ?strSalaryDistrib);",
+                               parameters)
+
+            Try
+
+                Dim dt As New DataTable
+                'dt = sql.GetFoundRows.Tables(0)
+                dt = sql.GetFoundRows.Tables.OfType(Of DataTable).FirstOrDefault
+
+                Dim rpt As New PayrollSumma
+                rpt.SetDataSource(dt)
+
+                Dim crvwr As New CrysRepForm
+                crvwr.crysrepvwr.ReportSource = rpt
+                crvwr.Show()
+
+            Catch ex As Exception
+                errlogger.Error("PrintPayrollSummary", ex)
+            End Try
+
+        End If
+
+    End Sub
+
+    Private Sub tsbtnPayrollSumma_Click(sender As Object, e As EventArgs) 'Handles DeclaredToolStripMenuItem2.Click,ActualToolStripMenuItem2.Click 'tsbtnPayrollSumma.Click
 
         Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
 
@@ -12339,7 +12383,7 @@ Public Class PayStub
                                                     Convert.ToInt32(drow("RowID")),
                                                     user_row_id,
                                                     paypFrom, paypTo}
-                Dim n_ExecSQLProcedure As New _
+                Dim n_ExecSQLProcedure As New  _
                     ExecSQLProcedure("LEAVE_gainingbalance", 192,
                                      procparam_array)
 

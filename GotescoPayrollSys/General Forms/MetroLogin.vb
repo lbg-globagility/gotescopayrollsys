@@ -7,6 +7,11 @@ Public Class MetroLogin
     'Public n_FileObserver As New FileObserver(sys_apppath)
 
     Protected Overrides Sub OnLoad(e As EventArgs)
+        'GWSI
+        'gw0001
+
+        'FINANCE1
+        '9988
 
         Console.WriteLine(DecrypedData("ÌÔÚÑÉººº¶"))
 

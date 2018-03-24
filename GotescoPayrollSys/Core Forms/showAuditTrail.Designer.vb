@@ -22,7 +22,8 @@ Partial Class showAuditTrail
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgvaudit = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ViewID = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -39,8 +40,10 @@ Partial Class showAuditTrail
         Me.Prev = New System.Windows.Forms.LinkLabel()
         Me.First = New System.Windows.Forms.LinkLabel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.DataGridViewX1 = New DevComponents.DotNetBar.Controls.DataGridViewX()
         CType(Me.dgvaudit, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
+        CType(Me.DataGridViewX1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'dgvaudit
@@ -52,14 +55,14 @@ Partial Class showAuditTrail
         Me.dgvaudit.ColumnHeadersHeight = 35
         Me.dgvaudit.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvaudit.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.RowID, Me.ViewID, Me.ChangeRowID, Me.Createds, Me.CreatedBy, Me.ViewName, Me.FieldChange, Me.OldValue, Me.NewValue, Me.ActionPerformed})
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvaudit.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvaudit.DefaultCellStyle = DataGridViewCellStyle2
         Me.dgvaudit.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgvaudit.Location = New System.Drawing.Point(12, 12)
         Me.dgvaudit.MultiSelect = False
@@ -67,7 +70,7 @@ Partial Class showAuditTrail
         Me.dgvaudit.ReadOnly = True
         Me.dgvaudit.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvaudit.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvaudit.Size = New System.Drawing.Size(1165, 436)
+        Me.dgvaudit.Size = New System.Drawing.Size(463, 436)
         Me.dgvaudit.TabIndex = 0
         '
         'RowID
@@ -207,12 +210,39 @@ Partial Class showAuditTrail
         Me.Panel1.Size = New System.Drawing.Size(1189, 24)
         Me.Panel1.TabIndex = 155
         '
+        'DataGridViewX1
+        '
+        Me.DataGridViewX1.AllowUserToAddRows = False
+        Me.DataGridViewX1.AllowUserToDeleteRows = False
+        Me.DataGridViewX1.AllowUserToOrderColumns = True
+        Me.DataGridViewX1.BackgroundColor = System.Drawing.Color.White
+        Me.DataGridViewX1.ColumnHeadersHeight = 35
+        Me.DataGridViewX1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX1.DefaultCellStyle = DataGridViewCellStyle3
+        Me.DataGridViewX1.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.DataGridViewX1.Location = New System.Drawing.Point(481, 12)
+        Me.DataGridViewX1.MultiSelect = False
+        Me.DataGridViewX1.Name = "DataGridViewX1"
+        Me.DataGridViewX1.ReadOnly = True
+        Me.DataGridViewX1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.DataGridViewX1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridViewX1.Size = New System.Drawing.Size(463, 436)
+        Me.DataGridViewX1.TabIndex = 156
+        '
         'showAuditTrail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(1189, 478)
+        Me.Controls.Add(Me.DataGridViewX1)
         Me.Controls.Add(Me.dgvaudit)
         Me.Controls.Add(Me.Panel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -225,6 +255,7 @@ Partial Class showAuditTrail
         CType(Me.dgvaudit, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        CType(Me.DataGridViewX1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -244,4 +275,5 @@ Partial Class showAuditTrail
     Friend WithEvents Prev As System.Windows.Forms.LinkLabel
     Friend WithEvents First As System.Windows.Forms.LinkLabel
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents DataGridViewX1 As DevComponents.DotNetBar.Controls.DataGridViewX
 End Class

@@ -38,6 +38,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: ".\GotescoPayrollSys\bin\Debug\CollapsibleGroupBox.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\GotescoPayrollSys\bin\Debug\app.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.CrystalReports.Engine.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportAppServer.ClientDoc.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportAppServer.CommLayer.dll"; DestDir: "{app}"; Flags: ignoreversion

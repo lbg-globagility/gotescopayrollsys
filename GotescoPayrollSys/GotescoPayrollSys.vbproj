@@ -344,8 +344,11 @@
       <DependentUpon>ThirteenthMonthPayDetailSummary.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Model1.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\ProperDisplayAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
     <Compile Include="Core Forms\user_predefines\OutputText.vb" />
     <Compile Include="Core Forms\user_predefines\TimeInTimeOutParser.vb" />
@@ -1858,6 +1861,7 @@
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="GotescoPayrollSys_TemporaryKey.pfx" />
     <None Include="Core Forms\Dataset\DS1.xsc">

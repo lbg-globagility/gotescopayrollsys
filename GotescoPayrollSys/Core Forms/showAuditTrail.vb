@@ -1,5 +1,11 @@
 ﻿Public Class showAuditTrail
 
+    Private mod1 As New Model1
+
+    Private _audittrails As IQueryable(Of ProperDisplayAuditTrail) = mod1.AuditTrail.OfType(Of ProperDisplayAuditTrail)()
+
+    Const twenty = 20
+
     Private Sub showAuditTrail_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
         MDIPrimaryForm.Enabled = True
@@ -51,36 +57,39 @@
 
         Dim dt_audit As New DataTable
 
-        dt_audit = callProcAsDatTab(params, _
-                                    "VIEW_audittrail")
+        'dt_audit = callProcAsDatTab(params, _
+        '                            "VIEW_audittrail")
+
+        'dt_audit =
+        '    New SQL("CALL VIEW_audittrail(?OrganizID, ?View_ID, ?UserID, ?pagenumber);",
+        '            New Object() {org_rowid, ViewRowID, user_row_id, pagination}).GetFoundRows.Tables(0)
 
         'dt_audit = retAsDatTbl("CALL VIEW_audittrail('" & orgztnID & "','" & ViewRowID & "','" & z_User & "','" & pagination & "')")
 
+        Dim audit_trails =
+            _audittrails.
+            Where(Function(_at) _at.ViewID = ViewRowID And _at.OrganizationID = org_rowid).
+            OrderByDescending(Function(_at) _at.Created)
+
+        audit_trails = audit_trails.Skip(pagination).Take(twenty)
+
         dgvaudit.Rows.Clear()
 
-        If dt_audit IsNot Nothing Then
+        DataGridViewX1.DataSource = audit_trails.ToList
 
-            Dim drowColCount = dt_audit.Columns.Count - 1
+        'If dt_audit IsNot Nothing Then
 
-            For Each drow As DataRow In dt_audit.Rows
+        '    Dim drowColCount = dt_audit.Columns.Count - 1
 
-                Dim row_array = drow.ItemArray
+        '    For Each drow As DataRow In dt_audit.Rows
 
-                dgvaudit.Rows.Add(row_array)
+        '        Dim row_array = drow.ItemArray
 
-                'Dim r = dgvaudit.Rows.Add()
+        '        dgvaudit.Rows.Add(row_array)
 
-                'For c = 0 To drowColCount
+        '    Next
 
-                '    Dim dr_val = If(IsDBNull(drow(c)), "", drow(c))
-
-                '    dgvaudit.Item(c, r).Value = dr_val
-
-                'Next
-
-            Next
-
-        End If
+        'End If
 
     End Sub
 
@@ -114,17 +123,17 @@
         Dim sender_linklabel = DirectCast(sender, LinkLabel)
 
         If sender_linklabel.Name = "Prev" Then
-            'If pagination - 20 < 0 Then
+            'If pagination - twenty < 0 Then
             '    pagination = 0
             'Else
-            '    pagination -= 20
+            '    pagination -= twenty
             'End If
 
-            Dim modcent = pagination Mod 20
+            Dim modcent = pagination Mod twenty
 
             If modcent = 0 Then
 
-                pagination -= 20
+                pagination -= twenty
 
             Else
 
@@ -140,15 +149,15 @@
 
         ElseIf sender_linklabel.Name = "Nxt" Then
 
-            Dim modcent = pagination Mod 20
+            Dim modcent = pagination Mod twenty
 
             If modcent = 0 Then
-                pagination += 20
+                pagination += twenty
 
             Else
                 pagination -= modcent
 
-                pagination += 20
+                pagination += twenty
 
             End If
 
@@ -156,19 +165,19 @@
             pagination = 0
 
         ElseIf sender_linklabel.Name = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 20 FROM audittrail WHERE OrganizationID=" & org_rowid & " AND ViewID='" & n_ViewRowID & "';"))
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / twenty FROM audittrail WHERE OrganizationID=" & org_rowid & " AND ViewID='" & n_ViewRowID & "';"))
 
             Dim remender = lastpage Mod 1
 
-            pagination = (lastpage - remender) * 20
+            pagination = (lastpage - remender) * twenty
 
-            If pagination - 20 < 20 Then
+            If pagination - twenty < twenty Then
                 'pagination = 0
 
             End If
 
-            'pagination = If(lastpage - 20 >= 20, _
-            '                lastpage - 20, _
+            'pagination = If(lastpage - twenty >= twenty, _
+            '                lastpage - twenty, _
             '                lastpage)
         End If
 

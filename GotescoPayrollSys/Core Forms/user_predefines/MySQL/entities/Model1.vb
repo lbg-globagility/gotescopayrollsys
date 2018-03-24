@@ -23,6 +23,10 @@ Public Class Model1
 
     Public Overridable Property NewWithholdingTax() As DbSet(Of WithholdingTaxBracket)
 
+    Public Overridable Property AuditTrail() As DbSet(Of AuditTrail)
+
+    Public Overridable Property ProperDisplayAuditTrail() As DbSet(Of ProperDisplayAuditTrail)
+
 End Class
 
 'Public Class MyEntity

@@ -3,11 +3,14 @@ Imports System.IO
 Imports CrystalDecisions.CrystalReports.Engine
 Imports OfficeOpenXml
 Imports OfficeOpenXml.Style
+Imports log4net
 
 Public Class PayrollSummaryExcelFormatReportProvider
     Implements IReportProvider
 
 #Region "Vairable declarations"
+
+    Private errlogger As ILog = LogManager.GetLogger("LoggerWork")
 
     Private basic_alphabet() As String =
         New String() {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
@@ -179,6 +182,158 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     Public Sub Run() Implements IReportProvider.Run
 
+        Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
+
+        n_PayrollSummaDateSelection.ReportIndex = 6
+
+        If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
+
+            Dim parameters = New Object() {org_rowid,
+                                           n_PayrollSummaDateSelection.DateFromID,
+                                           n_PayrollSummaDateSelection.DateToID,
+                                           is_actual,
+                                           n_PayrollSummaDateSelection.cboStringParameter.Text}
+
+            Dim sql As New SQL("CALL PAYROLLSUMMARY(?ps_OrganizationID, ?ps_PayPeriodID1, ?ps_PayPeriodID2, ?psi_undeclared, ?strSalaryDistrib);",
+                               parameters)
+
+            Try
+
+                Dim dt As New DataTable
+                'dt = sql.GetFoundRows.Tables(0)
+                dt = sql.GetFoundRows.Tables.OfType(Of DataTable).FirstOrDefault
+
+                Dim ndt =
+                    (From row In dt.AsEnumerable
+                     Group By val = Convert.ToString(row("DivisionName"))
+                     Into Group
+                     Where val.Length > 0
+                     Select val)
+
+                'Dim rpt As New PayrollSumma
+                'rpt.SetDataSource(dt)
+
+                'Dim crvwr As New CrysRepForm
+                'crvwr.crysrepvwr.ReportSource = rpt
+                'crvwr.Show()
+
+                Dim fullpathfile As String = String.Concat(Path.GetTempPath, "payrollsummary.xlsx")
+
+                Dim report_header As String =
+                    Convert.ToString(New SQL(String.Concat("SELECT CONCAT('PAYROLL SUMMARY REPORT - ', og.Name) `Result`",
+                                          " FROM organization og WHERE og.RowID = ", org_rowid, ";")).GetFoundRow)
+
+                Dim report_cutoff As String =
+                        Convert.ToString(New SQL(String.Concat("SELECT CONCAT('for the period of '",
+                                              ", CONCAT_WS(' to ', DATE_FORMAT(pp.PayFromDate, '%c/%e/%Y'), DATE_FORMAT(pp.PayToDate, '%c/%e/%Y')))",
+                                              " `Cutoff`",
+                                              " FROM payperiod pp WHERE pp.RowID = ?p_rowid LIMIT 1;"),
+                            New Object() {n_PayrollSummaDateSelection.DateFromID}).GetFoundRow)
+
+                Dim nfile As New FileInfo(fullpathfile)
+
+                If nfile.Exists Then
+                    nfile.Delete()
+                End If
+
+                Using xcl As New ExcelPackage(nfile)
+
+                    For Each division_name In ndt
+                        Dim wsheet = xcl.Workbook.Worksheets(division_name)
+
+                        If wsheet IsNot Nothing Then
+                            xcl.Workbook.Worksheets.Delete(wsheet)
+                        End If
+
+                        wsheet = xcl.Workbook.Worksheets.Add(division_name)
+
+                        Dim col_count = (dt.Columns.Count - 1)
+
+                        Dim rowindex = 1
+                        wsheet.Row(rowindex).Style.Font.Bold = True
+                        wsheet.Cells(rowindex, 2).Value = report_header
+
+                        rowindex = 2
+                        wsheet.Row(rowindex).Style.Font.Bold = True
+                        wsheet.Cells(rowindex, 2).Value = report_cutoff
+
+                        rowindex = 3
+
+                        Dim dtcolindx = 1
+                        For Each dcol As DataColumn In dt.Columns
+
+                            wsheet.Cells(rowindex, dtcolindx).Value = dcol.ColumnName
+                            dtcolindx += 1
+                            wsheet.Row(rowindex).Style.Font.Bold = True
+                        Next
+
+                        rowindex += 1
+                        Dim details_start_rowindex = rowindex
+
+                        Dim emp_payroll =
+                            dt.Select(String.Concat("DivisionName='", division_name, "'"))
+
+                        For Each drow As DataRow In emp_payroll 'dt.Rows
+                            For col = 0 To col_count
+
+                                Dim colindx = (col + 1)
+
+                                wsheet.Cells(rowindex, colindx).Value =
+                                    drow(dt.Columns(col).ColumnName)
+                            Next
+                            rowindex += 1
+                        Next
+
+                        wsheet.DeleteColumn(1)
+
+                        Dim sum_cell_range = String.Join(":",
+                                                         String.Concat("C", rowindex),
+                                                         String.Concat("V", rowindex))
+                        ''FromRow, FromColumn, ToRow, ToColumn
+                        'wsheet.Cells(sum_cell_range).Formula = String.Format("SUBTOTAL(9,{0})") ', New ExcelAddress(2, 3, 4, 3).Address)
+
+                        wsheet.Cells(sum_cell_range).Formula =
+                                String.Format("SUM({0})",
+                                              New ExcelAddress(details_start_rowindex,
+                                                               3,
+                                                               (rowindex - 1),
+                                                               3).Address) 'column_headers.Count
+
+                        wsheet.Cells(sum_cell_range).Style.Font.Bold = True
+
+                        wsheet.PrinterSettings.Orientation = eOrientation.Landscape
+
+                        wsheet.PrinterSettings.PaperSize = ePaperSize.Legal
+
+                        wsheet.PrinterSettings.TopMargin = margin_size(1)
+                        wsheet.PrinterSettings.BottomMargin = margin_size(1)
+                        wsheet.PrinterSettings.LeftMargin = margin_size(0)
+                        wsheet.PrinterSettings.RightMargin = margin_size(0)
+
+                        wsheet.Cells.AutoFitColumns(2, 22.71)
+
+                        wsheet.Cells("A1").AutoFitColumns(4.9, 5.3)
+
+                        wsheet.DeleteColumn(23)
+
+                    Next
+
+                    xcl.Save()
+                End Using
+
+                Process.Start(fullpathfile)
+
+            Catch ex As Exception
+                errlogger.Error("PrintPayrollSummary", ex)
+                MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
+            End Try
+
+        End If
+
+    End Sub
+
+    Private Sub Runs()
+
         Static last_cell_column As String = basic_alphabet.Last
 
         Dim bool_result As Short = Convert.ToInt16(is_actual) 'Convert.ToInt16(SalaryActualDeclared)
@@ -219,7 +374,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                   " WHERE pp.RowID = ", parameters(2))
 
                 Dim pp_sql As New SQL(str_period)
-                
+
                 Dim cut_offs = Split(CStr(pp_sql.GetFoundRow), ",")
 
                 Dim short_dates() As String =

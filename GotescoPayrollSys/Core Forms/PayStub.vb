@@ -5,6 +5,7 @@ Imports System.Threading
 Imports System.Text
 Imports System.ComponentModel
 Imports log4net
+Imports OfficeOpenXml
 
 Public Class PayStub
     Public q_employee As String = "SELECT e.RowID," &
@@ -7877,39 +7878,9 @@ Public Class PayStub
 
         Dim obj_sender = DirectCast(sender, ToolStripMenuItem)
 
-        Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
+        Dim paysum As New PayrollSummaryExcelFormatReportProvider With {.IsActual = obj_sender.Tag}
 
-        n_PayrollSummaDateSelection.ReportIndex = 6
-
-        If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
-
-            Dim parameters = New Object() {org_rowid,
-                                           n_PayrollSummaDateSelection.DateFromID,
-                                           n_PayrollSummaDateSelection.DateToID,
-                                           obj_sender.Tag,
-                                           n_PayrollSummaDateSelection.cboStringParameter.Text}
-
-            Dim sql As New SQL("CALL PAYROLLSUMMARY(?ps_OrganizationID, ?ps_PayPeriodID1, ?ps_PayPeriodID2, ?psi_undeclared, ?strSalaryDistrib);",
-                               parameters)
-
-            Try
-
-                Dim dt As New DataTable
-                'dt = sql.GetFoundRows.Tables(0)
-                dt = sql.GetFoundRows.Tables.OfType(Of DataTable).FirstOrDefault
-
-                Dim rpt As New PayrollSumma
-                rpt.SetDataSource(dt)
-
-                Dim crvwr As New CrysRepForm
-                crvwr.crysrepvwr.ReportSource = rpt
-                crvwr.Show()
-
-            Catch ex As Exception
-                errlogger.Error("PrintPayrollSummary", ex)
-            End Try
-
-        End If
+        paysum.Run()
 
     End Sub
 

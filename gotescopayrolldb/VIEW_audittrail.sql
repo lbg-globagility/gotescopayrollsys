@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
 -- Server version:               5.5.5-10.0.12-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win32
+-- Server OS:                    Win64
 -- HeidiSQL Version:             8.3.0.4694
 -- --------------------------------------------------------
 
@@ -30,7 +30,7 @@ BEGIN
 	LEFT JOIN `view` v ON v.RowID = aut.ViewID
 	WHERE aut.OrganizationID=OrganizID
 	AND aut.ViewID=View_ID
-	AND aut.CreatedBy=UserID
+	# AND aut.CreatedBy=UserID
 	AND aut.ActionPerformed IN ('Insert','Update')
 	ORDER BY aut.Created DESC
 	LIMIT pagenumber,20;

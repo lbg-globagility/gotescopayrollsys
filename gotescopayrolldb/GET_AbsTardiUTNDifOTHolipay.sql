@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
 -- Server version:               5.5.5-10.0.12-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win32
+-- Server OS:                    Win64
 -- HeidiSQL Version:             8.3.0.4694
 -- --------------------------------------------------------
 
@@ -25,7 +25,7 @@ INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category` IN ('Deductions',
 INNER JOIN payperiod pp1 ON pp1.RowID=param_PayPeriodID1
 INNER JOIN payperiod pp2 ON pp2.RowID=param_PayPeriodID2
 INNER JOIN paystub ps ON ps.RowID=psi.PayStubID AND ps.EmployeeID=param_EmployeeRowID
-AND ps.OrganizationID < 0#=param_OrganizationID
+AND ps.OrganizationID < 0 # =param_OrganizationID
 AND ps.PayToDate BETWEEN pp1.PayFromDate AND pp2.PayToDate;
 
 

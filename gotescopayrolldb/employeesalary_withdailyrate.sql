@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
 -- Server version:               5.5.5-10.0.12-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win32
+-- Server OS:                    Win64
 -- HeidiSQL Version:             8.3.0.4694
 -- --------------------------------------------------------
 
@@ -21,6 +21,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `employeesalary_withd
 	     / 12 # count of months per year
 		  )), 6) `DailyRate`
 	, ROUND(esa.Salary, 6) `MonthlySalary`
+	, (esa.TrueSalary / esa.Salary) `Percentage`
 	FROM employeesalary esa
 	INNER JOIN employee e ON e.RowID=esa.EmployeeID AND e.EmployeeType IN ('Monthly', 'Fixed')
 	
@@ -28,6 +29,7 @@ UNION
 	SELECT esa.*
 	, ROUND(esa.BasicPay, 6) `DailyRate`
 	, ROUND( (esa.BasicPay * (e.WorkDaysPerYear / 12)) , 6) `MonthlySalary`
+	, (esa.TrueSalary / esa.Salary) `Percentage`
 	FROM employeesalary esa
 	INNER JOIN employee e ON e.RowID=esa.EmployeeID AND e.EmployeeType = 'Daily' ;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

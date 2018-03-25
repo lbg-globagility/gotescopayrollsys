@@ -161,7 +161,7 @@ SELECT ii.* FROM (
 			, SUM(et.RegularHoursAmount) `Basic rate` # `DatCol21` # `BasicPay`
 			, SUM(et.OvertimeHoursAmount) `OT` # `DatCol37` # `OverTime`
 			# , IFNULL(pst3.PayAmount, 0) `DatCol36` # `HolidayPay`
-			, SUM(et.HolidayPayAmount) `Holiday` # `DatCol36` # `HolidayPay`
+			, ROUND(SUM(et.HolidayPayAmount), 2) `Holiday` # `DatCol36` # `HolidayPay`
 			, SUM(et.NightDiffHoursAmount) `N.Diff` # `DatCol35` # `NightDifftl`
 			# , IFNULL(psrd.PayAmount, 0) `DatCol39` # Restday pay
 			, IFNULL(rd.`SumRestDay`, 0) `Restday` # `DatCol39` # Restday pay
@@ -202,7 +202,10 @@ SELECT ii.* FROM (
 			LEFT JOIN product prd ON prd.OrganizationID=ps.OrganizationID AND prd.PartNo='Restday pay'
 			LEFT JOIN paystubitem psrd ON psrd.PayStubID=ps.RowID AND psrd.ProductID=pd3.RowID AND psrd.OrganizationID=ps.OrganizationID AND psrd.`Undeclared`=psi_undeclared
 			
-			INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.EmployeeType = 'Daily'
+			INNER JOIN employee e
+			        ON e.RowID=ps.EmployeeID
+					     AND e.EmployeeType = 'Daily'
+						  AND IFNULL(TRIM(e.ATMNo), '') = IF(strSalaryDistrib = 'Cash', '', e.ATMNo)
 			INNER JOIN employeetimeentry et ON et.EmployeeID = e.RowID AND et.OrganizationID = ps.OrganizationID AND et.`Date` BETWEEN ps.PayFromDate AND ps.PayToDate
 			
 			LEFT JOIN (SELECT rd.*
@@ -244,7 +247,12 @@ UNION
 			, IFNULL(esa.BasicPay, 0) `Basic rate` # `DatCol21` # `BasicPay`
 			, SUM(et.OvertimeHoursAmount) `OT` # `DatCol37` # `OverTime`
 			# , IFNULL(pst3.PayAmount, 0) `DatCol36` # `HolidayPay`
-			, SUM(et.HolidayPayAmount) `Holiday` # `DatCol36` # `HolidayPay`
+			# , ROUND(SUM(et.HolidayPayAmount), 2) `Holiday` # `DatCol36` # `HolidayPay`
+			, ROUND(SUM(IF(IFNULL(ROUND(et.TotalDayPay,2), 0) = IFNULL(ROUND(et.HolidayPayAmount,2), 0)
+			               , 0, et.HolidayPayAmount)
+			            )
+			        , 2) `Holiday` # `DatCol36` # `HolidayPay`
+			        
 			, SUM(et.NightDiffHoursAmount) `N.Diff` # `DatCol35` # `NightDifftl`
 			# , IFNULL(psrd.PayAmount, 0) `DatCol39` # Restday pay
 			, IFNULL(rd.`SumRestDay`, 0) `Restday` # `DatCol39` # Restday pay
@@ -285,7 +293,8 @@ UNION
 			LEFT JOIN product prd ON prd.OrganizationID=ps.OrganizationID AND prd.PartNo='Restday pay'
 			LEFT JOIN paystubitem psrd ON psrd.PayStubID=ps.RowID AND psrd.ProductID=pd3.RowID AND psrd.OrganizationID=ps.OrganizationID AND psrd.`Undeclared`=psi_undeclared
 			
-			INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.EmployeeType IN ('Fixed', 'Monthly') 
+			INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.EmployeeType IN ('Fixed', 'Monthly')
+						  AND IFNULL(TRIM(e.ATMNo), '') = IF(strSalaryDistrib = 'Cash', '', e.ATMNo)
 			INNER JOIN employeetimeentry et ON et.EmployeeID = e.RowID AND et.OrganizationID = ps.OrganizationID AND et.`Date` BETWEEN ps.PayFromDate AND ps.PayToDate
 			
 			LEFT JOIN (SELECT rd.*
@@ -333,7 +342,7 @@ SELECT ii.* FROM (
 			, SUM(et.RegularHoursAmount) `Basic rate` # `DatCol21` # `BasicPay`
 			, SUM(et.OvertimeHoursAmount) `OT` # `DatCol37` # `OverTime`
 			# , IFNULL(pst3.PayAmount, 0) `DatCol36` # `HolidayPay`
-			, SUM(et.HolidayPayAmount) `Holiday` # `DatCol36` # `HolidayPay`
+			, ROUND(SUM(et.HolidayPayAmount), 2) `Holiday` # `DatCol36` # `HolidayPay`
 			, SUM(et.NightDiffHoursAmount) `N.Diff` # `DatCol35` # `NightDifftl`
 			# , IFNULL(psrd.PayAmount, 0) `DatCol39` # Restday pay
 			, IFNULL(rd.`SumRestDay`, 0) `Restday` # `DatCol39` # Restday pay
@@ -375,6 +384,7 @@ SELECT ii.* FROM (
 			LEFT JOIN paystubitem psrd ON psrd.PayStubID=ps.RowID AND psrd.ProductID=pd3.RowID AND psrd.OrganizationID=ps.OrganizationID AND psrd.`Undeclared`=psi_undeclared
 			
 			INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.EmployeeType = 'Daily'
+						  AND IFNULL(TRIM(e.ATMNo), '') = IF(strSalaryDistrib = 'Cash', '', e.ATMNo)
 			INNER JOIN employeetimeentryactual et ON et.EmployeeID = e.RowID AND et.OrganizationID = ps.OrganizationID AND et.`Date` BETWEEN ps.PayFromDate AND ps.PayToDate
 			
 			LEFT JOIN (SELECT rd.*
@@ -418,7 +428,12 @@ UNION
 			, ROUND(IFNULL(esa.BasicPay * IFNULL(esad.Percentage, 1), 0), 2) `Basic rate` # `DatCol21` # `BasicPay`
 			, SUM(et.OvertimeHoursAmount) `OT` # `DatCol37` # `OverTime`
 			# , IFNULL(pst3.PayAmount, 0) `DatCol36` # `HolidayPay`
-			, SUM(et.HolidayPayAmount) `Holiday` # `DatCol36` # `HolidayPay`
+			# , ROUND(SUM(et.HolidayPayAmount), 2) `Holiday` # `DatCol36` # `HolidayPay`
+			, ROUND(SUM(IF(IFNULL(ROUND(et.TotalDayPay,2), 0) = IFNULL(ROUND(et.HolidayPayAmount,2), 0)
+			               , 0, et.HolidayPayAmount)
+			            )
+			        , 2) `Holiday` # `DatCol36` # `HolidayPay`
+			
 			, SUM(et.NightDiffHoursAmount) `N.Diff` # `DatCol35` # `NightDifftl`
 			# , IFNULL(psrd.PayAmount, 0) `DatCol39` # Restday pay
 			, IFNULL(rd.`SumRestDay`, 0) `Restday` # `DatCol39` # Restday pay
@@ -459,7 +474,8 @@ UNION
 			LEFT JOIN product prd ON prd.OrganizationID=ps.OrganizationID AND prd.PartNo='Restday pay'
 			LEFT JOIN paystubitem psrd ON psrd.PayStubID=ps.RowID AND psrd.ProductID=pd3.RowID AND psrd.OrganizationID=ps.OrganizationID AND psrd.`Undeclared`=psi_undeclared
 			
-			INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.EmployeeType IN ('Fixed', 'Monthly') 
+			INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.EmployeeType IN ('Fixed', 'Monthly')
+						  AND IFNULL(TRIM(e.ATMNo), '') = IF(strSalaryDistrib = 'Cash', '', e.ATMNo)
 			INNER JOIN employeetimeentryactual et ON et.EmployeeID = e.RowID AND et.OrganizationID = ps.OrganizationID AND et.`Date` BETWEEN ps.PayFromDate AND ps.PayToDate
 			
 			LEFT JOIN (SELECT rd.*

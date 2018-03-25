@@ -57,9 +57,15 @@ FROM (
 		ee.SSSNo `DatCol1`
 		,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol2`
 		,psi.PayAmount `DatCol3`
-		,pss.EmployerContributionAmount `DatCol4`
+		
+		/*,pss.EmployerContributionAmount `DatCol4`
 		,pss.EmployeeECAmount `DatCol5`
-		,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) `DatCol6`
+		,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) `DatCol6`*/
+		
+		, ps.TotalCompSSS `DatCol4`
+		, pss.EmployeeECAmount `DatCol5`
+		, (pss.EmployeeECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
+		
 		FROM paystub ps
 		INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=1 AND FIND_IN_SET(ee.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 		INNER JOIN product p ON p.PartNo='.SSS' AND p.OrganizationID=OrganizID
@@ -74,9 +80,15 @@ FROM (
 		ee.SSSNo `DatCol1`
 		,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol2`
 		,psi.PayAmount `DatCol3`
-		,pss.EmployerContributionAmount `DatCol4`
+		
+		/*,pss.EmployerContributionAmount `DatCol4`
 		,pss.EmployeeECAmount `DatCol5`
-		,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) `DatCol6`
+		,(psi.PayAmount + (pss.EmployerContributionAmount + pss.EmployeeECAmount)) `DatCol6`*/
+		
+		, ps.TotalCompSSS `DatCol4`
+		, pss.EmployeeECAmount `DatCol5`
+		, (pss.EmployeeECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
+		
 		FROM paystub ps
 		INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=4 AND FIND_IN_SET(ee.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 		INNER JOIN product p ON p.PartNo='.SSS' AND p.OrganizationID=OrganizID

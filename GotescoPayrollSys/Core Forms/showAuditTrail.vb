@@ -2,7 +2,8 @@
 
     Private mod1 As New Model1
 
-    Private _audittrails As IQueryable(Of ProperDisplayAuditTrail) = mod1.AuditTrail.OfType(Of ProperDisplayAuditTrail)()
+    Private _audittrails As IQueryable(Of ProperDisplayAuditTrail) = mod1.ProperDisplayAuditTrail.OfType(Of ProperDisplayAuditTrail)()
+    'Private _audittrails As IQueryable(Of AuditTrail) = mod1.AuditTrail.OfType(Of AuditTrail)()
 
     Const twenty = 20
 
@@ -73,9 +74,17 @@
 
         audit_trails = audit_trails.Skip(pagination).Take(twenty)
 
+        Dim data_source =
+            From au In audit_trails
+            Where au.RowID > 0
+            Select au.Created, au.CreatedBy, au.ModuleName, au.FieldChanged, au.PreviouisValue, au.NewValue, au.ActionPerformed
+                          
+
+
         dgvaudit.Rows.Clear()
 
-        DataGridViewX1.DataSource = audit_trails.ToList
+        'DataGridViewX1.DataSource = audit_trails.ToList
+        DataGridViewX1.DataSource = data_source.ToList
 
         'If dt_audit IsNot Nothing Then
 

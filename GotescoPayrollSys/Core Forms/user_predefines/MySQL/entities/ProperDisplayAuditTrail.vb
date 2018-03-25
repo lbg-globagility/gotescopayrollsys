@@ -14,7 +14,7 @@ Public Class ProperDisplayAuditTrail
     <Column("Module")>
     Public Property ModuleName As String
 
-    <Column("Module")>
+    <Column("Field Changed")>
     Public Property FieldChanged As String
 
     ''Created	Created By	Module	Field Changed	Previous Value	New Value	ActionPerformed	ViewID	OrganizationID
@@ -32,5 +32,8 @@ Public Class ProperDisplayAuditTrail
 
     <Column("OrganizationID")>
     Public Property OrganizationId As Integer
+
+    <Key>
+    Public Property RowID As Integer
 
 End Class

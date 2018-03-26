@@ -66,26 +66,28 @@
         '            New Object() {org_rowid, ViewRowID, user_row_id, pagination}).GetFoundRows.Tables(0)
 
         'dt_audit = retAsDatTbl("CALL VIEW_audittrail('" & orgztnID & "','" & ViewRowID & "','" & z_User & "','" & pagination & "')")
+        Try
 
-        Dim audit_trails =
-            _audittrails.
-            Where(Function(_at) _at.ViewID = ViewRowID And _at.OrganizationID = org_rowid).
-            OrderByDescending(Function(_at) _at.Created)
+            Dim audit_trails =
+                _audittrails.
+                Where(Function(_at) _at.ViewId = ViewRowID And _at.OrganizationId = org_rowid).
+                OrderByDescending(Function(_at) _at.Created)
 
-        audit_trails = audit_trails.Skip(pagination).Take(twenty)
+            audit_trails = audit_trails.Skip(pagination).Take(twenty)
 
-        Dim data_source =
-            From au In audit_trails
-            Where au.RowID > 0
-            Select au.Created, au.CreatedBy, au.ModuleName, au.FieldChanged, au.PreviouisValue, au.NewValue, au.ActionPerformed
-                          
+            Dim data_source =
+                From au In audit_trails
+                Where au.RowID > 0
+                Select au.Created, au.CreatedBy, au.ModuleName, au.FieldChanged, au.PreviouisValue, au.NewValue, au.ActionPerformed
 
+            dgvaudit.Rows.Clear()
 
-        dgvaudit.Rows.Clear()
+            DataGridViewX1.DataSource = data_source.ToList
 
-        'DataGridViewX1.DataSource = audit_trails.ToList
-        DataGridViewX1.DataSource = data_source.ToList
-
+        Catch ex As Exception
+            MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
+            _logger.Error(String.Concat("loadAudTrail", " - (view_id=", ViewRowID, ", page=", pagination, ")"), ex)
+        End Try
         'If dt_audit IsNot Nothing Then
 
         '    Dim drowColCount = dt_audit.Columns.Count - 1
@@ -174,7 +176,7 @@
             pagination = 0
 
         ElseIf sender_linklabel.Name = "Last" Then
-            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / twenty FROM audittrail WHERE OrganizationID=" & org_rowid & " AND ViewID='" & n_ViewRowID & "';"))
+            Dim lastpage = Val(EXECQUER(String.Concat("SELECT COUNT(RowID) / ", twenty, " FROM audittrail WHERE OrganizationID=", org_rowid, " AND ViewID='", n_ViewRowID, "';")))
 
             Dim remender = lastpage Mod 1
 

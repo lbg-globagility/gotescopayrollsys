@@ -20,14 +20,20 @@ BEGIN
 DECLARE primary_datefrom DATE;
 DECLARE primary_dateto DATE;
 
-SELECT pyp.PayFromDate
+DECLARE addl_lbal VARCHAR(50) DEFAULT 'Additional VL';
+DECLARE mp_lbal VARCHAR(50) DEFAULT 'Maternity/paternity leave';
+DECLARE o_lbal VARCHAR(50) DEFAULT 'Others';
+DECLARE s_lbal VARCHAR(50) DEFAULT 'Sick leave';
+DECLARE v_lbal VARCHAR(50) DEFAULT 'Vacation leave';
+
+SELECT MIN(pyp.PayFromDate) `PayFromDate`
 ,pp.PayToDate
 FROM payperiod pp
 INNER JOIN paystub ps ON ps.RowID=paystitm_PayStubID AND ps.PayPeriodID=pp.RowID
 INNER JOIN payperiod pyp ON pyp.`Year`=pp.`Year` AND pyp.TotalGrossSalary=pp.TotalGrossSalary AND pyp.OrganizationID=ps.OrganizationID
 
-ORDER BY pyp.PayFromDate,pyp.PayToDate
-LIMIT 1
+# ORDER BY pyp.PayFromDate,pyp.PayToDate
+# LIMIT 1
 INTO primary_datefrom,primary_dateto;
 	
 	SELECT paystitm.RowID 'paystitmID'
@@ -37,9 +43,9 @@ INTO primary_datefrom,primary_dateto;
 	,paystitm.PayAmount 'PayAmount'
 	FROM paystubitem paystitm
 	INNER JOIN product p ON p.RowID=paystitm.ProductID AND p.`Category`!='Leave Type'
-	WHERE PayStubID=paystitm_PayStubID
-	AND Undeclared = '0'
-UNION ALL
+	WHERE paystitm.PayStubID=paystitm_PayStubID
+	AND paystitm.Undeclared = '0'
+/*UNION ALL
 	SELECT paystitm.RowID 'paystitmID'
 	,paystitm.PayStubID 'PayStubID'
 	,paystitm.ProductID 'ProductID'
@@ -67,10 +73,51 @@ UNION ALL
 	
 	LEFT JOIN (SELECT OrganizationID,EmployeeID,`Date`,SUM(AdditionalVLHours) AS LeaveHours,'Additional VL' AS ItemName FROM employeetimeentry WHERE AdditionalVLHours > 0 AND `Date` BETWEEN primary_datefrom AND primary_dateto GROUP BY EmployeeID) et4 ON et4.OrganizationID=ps.OrganizationID AND et4.EmployeeID=ps.EmployeeID
 	
-	
 	INNER JOIN product p ON p.RowID=paystitm.ProductID AND p.`Category`='Leave Type' AND p.OrganizationID=ps.OrganizationID
 	WHERE paystitm.Undeclared='0'
-	GROUP BY paystitm.RowID;
+	GROUP BY paystitm.RowID*/
+	
+UNION
+	SELECT paystitm.RowID `paystitmID`
+	,paystitm.PayStubID
+	,paystitm.ProductID
+	,SUBSTRING_INDEX(p.PartNo,'.',-1) `Item`
+# addl_lbal mp_lbal o_lbal s_lbal v_lbal
+	,IF(p.PartNo = addl_lbal
+	    , (e.AdditionalVLAllowance - IFNULL(et4.LeaveHours, 0))
+		 , IF(p.PartNo = mp_lbal
+		      , (e.MaternityLeaveAllowance - IFNULL(et2.LeaveHours, 0))
+				, IF(p.PartNo = o_lbal
+				     , (e.OtherLeaveAllowance - IFNULL(et3.LeaveHours, 0))
+					  , IF(p.PartNo = s_lbal
+					       , (e.SickLeaveAllowance - IFNULL(et1.LeaveHours, 0))
+							 , (e.LeaveAllowance - IFNULL(et0.LeaveHours, 0))
+							 )
+					  )
+				)
+		 ) `PayAmount`
+	FROM paystubitem paystitm
+	INNER JOIN paystub ps ON ps.RowID=paystitm.PayStubID
+	INNER JOIN employee e ON e.RowID=ps.EmployeeID
+	
+	LEFT JOIN (SELECT et.OrganizationID,et.EmployeeID,et.`Date`,SUM(VacationLeaveHours) AS LeaveHours, v_lbal AS ItemName FROM employeetimeentry et WHERE et.VacationLeaveHours > 0 AND et.`Date` BETWEEN primary_datefrom AND primary_dateto GROUP BY et.EmployeeID) et0 ON et0.OrganizationID=ps.OrganizationID AND et0.EmployeeID=ps.EmployeeID
+	
+	
+	LEFT JOIN (SELECT et.OrganizationID,et.EmployeeID,et.`Date`,SUM(SickLeaveHours) AS LeaveHours, s_lbal AS ItemName FROM employeetimeentry et WHERE et.SickLeaveHours > 0 AND et.`Date` BETWEEN primary_datefrom AND primary_dateto GROUP BY et.EmployeeID) et1 ON et1.OrganizationID=ps.OrganizationID AND et1.EmployeeID=ps.EmployeeID
+	
+	
+	LEFT JOIN (SELECT et.OrganizationID,et.EmployeeID,et.`Date`,SUM(MaternityLeaveHours) AS LeaveHours, mp_lbal AS ItemName FROM employeetimeentry et WHERE et.MaternityLeaveHours > 0 AND et.`Date` BETWEEN primary_datefrom AND primary_dateto GROUP BY et.EmployeeID) et2 ON et2.OrganizationID=ps.OrganizationID AND et2.EmployeeID=ps.EmployeeID
+	
+	
+	LEFT JOIN (SELECT et.OrganizationID,et.EmployeeID,et.`Date`,SUM(OtherLeaveHours) AS LeaveHours, o_lbal AS ItemName FROM employeetimeentry et WHERE et.OtherLeaveHours > 0 AND et.`Date` BETWEEN primary_datefrom AND primary_dateto GROUP BY et.EmployeeID) et3 ON et3.OrganizationID=ps.OrganizationID AND et3.EmployeeID=ps.EmployeeID
+	
+	
+	LEFT JOIN (SELECT et.OrganizationID,et.EmployeeID,et.`Date`,SUM(AdditionalVLHours) AS LeaveHours, addl_lbal AS ItemName FROM employeetimeentry et WHERE et.AdditionalVLHours > 0 AND et.`Date` BETWEEN primary_datefrom AND primary_dateto GROUP BY et.EmployeeID) et4 ON et4.OrganizationID=ps.OrganizationID AND et4.EmployeeID=ps.EmployeeID
+	
+	INNER JOIN product p ON p.RowID=paystitm.ProductID AND p.`Category` = 'Leave Type'
+	WHERE paystitm.PayStubID=paystitm_PayStubID
+	AND paystitm.Undeclared = '0'
+	;
 
 
 

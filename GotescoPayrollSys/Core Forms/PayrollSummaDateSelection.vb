@@ -54,11 +54,16 @@
 
                     .Visible = True
 
-                    .Items.Add("Cash")
-                    .Items.Add("Direct Deposit")
+                    Dim cash_or_depo =
+                        New String() {"Cash", "Direct Deposit"}
+
+                    For Each _str In cash_or_depo
+                        .Items.Add(_str)
+                    Next
 
                     .DropDownStyle = ComboBoxStyle.DropDownList
 
+                    .Text = cash_or_depo.First
                 End With
 
                 TextBox1.Text = "Salary Distribution"

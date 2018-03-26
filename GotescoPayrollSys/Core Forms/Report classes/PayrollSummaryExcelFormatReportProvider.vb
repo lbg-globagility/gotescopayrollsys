@@ -188,11 +188,13 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
         If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
 
+            Dim cash_or_depo As String = n_PayrollSummaDateSelection.cboStringParameter.Text
+
             Dim parameters = New Object() {org_rowid,
                                            n_PayrollSummaDateSelection.DateFromID,
                                            n_PayrollSummaDateSelection.DateToID,
                                            is_actual,
-                                           n_PayrollSummaDateSelection.cboStringParameter.Text}
+                                           cash_or_depo}
 
             Dim sql As New SQL("CALL PAYROLLSUMMARY(?ps_OrganizationID, ?ps_PayPeriodID1, ?ps_PayPeriodID2, ?psi_undeclared, ?strSalaryDistrib);",
                                parameters)
@@ -217,7 +219,10 @@ Public Class PayrollSummaryExcelFormatReportProvider
                 'crvwr.crysrepvwr.ReportSource = rpt
                 'crvwr.Show()
 
-                Dim fullpathfile As String = String.Concat(Path.GetTempPath, "payrollsummary.xlsx")
+                Dim fullpathfile As String =
+                    String.Concat(Path.GetTempPath,
+                                  "payrollsummary_", cash_or_depo.Replace(" ", "").ToLower,
+                                  ".xlsx")
 
                 Dim report_header As String =
                     Convert.ToString(New SQL(String.Concat("SELECT CONCAT('PAYROLL SUMMARY REPORT - ', og.Name) `Result`",

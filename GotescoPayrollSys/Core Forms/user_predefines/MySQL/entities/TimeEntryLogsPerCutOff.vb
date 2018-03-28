@@ -52,5 +52,4 @@ Public Class TimeEntryLogsPerCutOff
 
     Public Property FullName As String
 
-
 End Class

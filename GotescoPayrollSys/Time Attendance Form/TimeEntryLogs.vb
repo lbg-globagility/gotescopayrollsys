@@ -114,6 +114,10 @@ Public Class TimeEntryLogs
         Console.WriteLine("DataGridViewX2_CurrentCellChanged")
     End Sub
 
+    Private Sub TimeEntryLogs_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        mod1.Dispose()
+    End Sub
+
 #End Region
 
 #Region "Functions & Methods"
@@ -199,7 +203,6 @@ Public Class TimeEntryLogs
         Else
             page_num += (twenty * Convert.ToInt32(lnklabel.AccessibleDescription))
         End If
-        Console.WriteLine(page_num)
 
         LoadEmployees(page_num)
     End Sub

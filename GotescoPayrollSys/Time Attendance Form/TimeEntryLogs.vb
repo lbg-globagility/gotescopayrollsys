@@ -163,6 +163,28 @@ Public Class TimeEntryLogs
 
     End Sub
 
+    Private Sub SearchEmployees()
+
+        Dim str_search As String
+
+        str_search = TextBox1.Text.Trim
+
+        Dim _employees =
+            (From t In _timeentrylogs
+             Where t.YearValue = this_year And t.OrganizationId = organization_rowid And (t.EmployeeUniqueKey.Contains(str_search) Or t.FullName.Contains(str_search))
+             Group By t.EmployeeID
+             Into tl = Group
+             Let employeeinfo = tl.FirstOrDefault
+             Select New With {.Employee_ID = employeeinfo.EmployeeUniqueKey,
+                              .Full_Name = employeeinfo.FullName}
+             ).
+            OrderBy(Function(e) e.Full_Name).
+            Skip(0).Take(twenty)
+
+        DataGridViewX2.DataSource = _employees.ToList
+
+    End Sub
+
     Private Sub LoadTimeLogs()
 
         Dim _timelogs =

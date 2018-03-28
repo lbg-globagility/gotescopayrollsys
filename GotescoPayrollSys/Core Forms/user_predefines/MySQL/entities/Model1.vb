@@ -27,6 +27,8 @@ Public Class Model1
 
     Public Overridable Property ProperDisplayAuditTrail() As DbSet(Of ProperDisplayAuditTrail)
 
+    Public Overridable Property TimeEntryLogsPerCutOff() As DbSet(Of TimeEntryLogsPerCutOff)
+
 End Class
 
 'Public Class MyEntity

@@ -26,7 +26,7 @@ Public Class TimeEntryLogsPerCutOff
     Public Property TimeOut As TimeSpan?
 
     <Column("Date")>
-    Public Property DateValue As Date
+    Public Property DateValue As Date?
 
     Public Property TimeScheduleType As String
 

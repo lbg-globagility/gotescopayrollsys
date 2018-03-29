@@ -16,6 +16,8 @@ Public Class TimeEntryLogs
 
     Private organization_rowid As Integer = 1
 
+    Private e_uniq_id As String
+
 #End Region
 
 #Region "Event Handlers"
@@ -105,18 +107,50 @@ Public Class TimeEntryLogs
     End Sub
 
     Private Sub DataGridViewX1_CurrentCellChanged(sender As Object, e As EventArgs) Handles DataGridViewX1.CurrentCellChanged
-        Console.WriteLine("DataGridViewX1_CurrentCellChanged")
+
+        If DataGridViewX2.RowCount > 0 Then
+
+            DataGridViewX2_CurrentCellChanged(DataGridViewX2, New EventArgs)
+
+        End If
+
     End Sub
+
+
+    Private Sub PayPeriodAndEmployee_CurrentCellChanged(sender As Object, e As EventArgs) _
+        Handles DataGridViewX1.CurrentCellChanged,
+        DataGridViewX2.CurrentCellChanged
+
+    End Sub
+
 
     Private Sub DataGridViewX2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewX2.CellContentClick
 
     End Sub
 
     Private Sub DataGridViewX2_CurrentCellChanged(sender As Object, e As EventArgs) Handles DataGridViewX2.CurrentCellChanged
-        Console.WriteLine("DataGridViewX2_CurrentCellChanged")
+
+        LoadTimeLogs()
+
     End Sub
 
     Private Sub TimeEntryLogs_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        SearchEmployees()
+    End Sub
+
+    Private Sub TextBox1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox1.KeyPress
+        Dim e_asc = Asc(e.KeyChar)
+
+        If e_asc = 13 Then
+            Button1_Click(Button1, New EventArgs)
+        End If
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
 
     End Sub
 
@@ -126,14 +160,12 @@ Public Class TimeEntryLogs
 
     Private Sub LoadPayPeriods()
 
-        Dim _payperiods As IQueryable(Of TimeEntryLogsPerCutOff)
-
         Try
             Using _mod = New Model1
 
-                _payperiods =
+                Dim _payperiods =
                     (From t In _mod.TimeEntryLogsPerCutOff
-                     Order By t.MonthValue Descending, t.OrdinalValue Descending
+                     Order By t.PayFromDate Descending,t.PayToDate
                      Where t.YearValue = this_year And t.OrganizationId = organization_rowid
                      Group By t.PayPeriodID
                      Into tl = Group
@@ -142,9 +174,9 @@ Public Class TimeEntryLogs
                                       .PayToDate = uniquepayperiod.PayToDate}
                      )
 
-            End Using
+                DataGridViewX1.DataSource = _payperiods.ToList
 
-            DataGridViewX1.DataSource = _payperiods.ToList
+            End Using
 
         Catch ex As Exception
             ErrorNotif(ex)
@@ -162,12 +194,10 @@ Public Class TimeEntryLogs
         Try
             Using _mod = New Model1
                 Dim _employees =
-                    (From t In _mod.TimeEntryLogsPerCutOff
-                     Where t.YearValue = this_year And t.OrganizationId = organization_rowid
-                     Group By t.EmployeeID
-                     Into tl = Group
-                     Let employeeinfo = tl.FirstOrDefault
-                     Select New With {.Employee_ID = employeeinfo.EmployeeUniqueKey,
+                    (From e In _mod.EmployeeEntity
+                     Where e.OrganizationID = organization_rowid
+                     Let employeeinfo = e
+                     Select New With {.Employee_ID = employeeinfo.EmployeeID,
                                       .Full_Name = employeeinfo.FullName}
                      ).
                  OrderBy(Function(e) e.Full_Name).
@@ -188,28 +218,30 @@ Public Class TimeEntryLogs
 
         str_search = TextBox1.Text.Trim
 
-        Try
-            Using _mod = New Model1
-                Dim _employees =
-                    (From t In _mod.TimeEntryLogsPerCutOff
-                     Where t.YearValue = this_year And
-                     t.OrganizationId = organization_rowid And
-                     (t.EmployeeUniqueKey.Contains(str_search) Or t.FullName.Contains(str_search))
-                     Group By t.EmployeeID
-                     Into tl = Group
-                     Let employeeinfo = tl.FirstOrDefault
-                     Select New With {.Employee_ID = employeeinfo.EmployeeUniqueKey,
-                                      .Full_Name = employeeinfo.FullName}
-                     ).
-                    OrderBy(Function(e) e.Full_Name)
+        If str_search.Length > 0 Then
+            Try
+                Using _mod = New Model1
+                    Dim _employees =
+                        (From e In _mod.EmployeeEntity
+                         Where e.OrganizationID = organization_rowid And
+                         e.FullName.Contains(str_search)
+                         Let employeeinfo = e
+                         Select New With {.Employee_ID = employeeinfo.EmployeeID,
+                                          .Full_Name = employeeinfo.FullName}
+                         ).
+                     OrderBy(Function(e) e.Full_Name)
 
-                DataGridViewX2.DataSource = _employees.ToList
+                    DataGridViewX2.DataSource = _employees.ToList
 
-            End Using
+                End Using
 
-        Catch ex As Exception
-            ErrorNotif(ex)
-        End Try
+            Catch ex As Exception
+                ErrorNotif(ex)
+            End Try
+        Else
+            First_LinkClicked(First, New LinkLabelLinkClickedEventArgs(New LinkLabel.Link))
+        End If
+
     End Sub
 
     Private Sub LoadTimeLogs()
@@ -222,17 +254,16 @@ Public Class TimeEntryLogs
                 Dim pp_curr_row = DataGridViewX1.Rows.OfType(Of DataGridViewRow).Where(Function(dgvr) dgvr.Selected).FirstOrDefault
 
                 If pp_curr_row IsNot Nothing Then
-                    datef = Date.Parse(pp_curr_row.Cells(0).Value)
-                    datet = Date.Parse(pp_curr_row.Cells(1).Value)
+                    datef = Date.Parse(pp_curr_row.Cells(0).Value).ToShortDateString
+                    datet = Date.Parse(pp_curr_row.Cells(1).Value).ToShortDateString
                 End If
 
 
-                Dim e_uniq_id As String
-
                 Dim emp_curr_row = DataGridViewX2.Rows.OfType(Of DataGridViewRow).Where(Function(dgvr) dgvr.Selected).FirstOrDefault
 
+                e_uniq_id = Nothing
                 If emp_curr_row IsNot Nothing Then
-                    e_uniq_id = Date.Parse(pp_curr_row.Cells(0).Value)
+                    e_uniq_id = Convert.ToString(emp_curr_row.Cells(0).Value)
 
                 End If
 
@@ -241,7 +272,7 @@ Public Class TimeEntryLogs
                     (From t In _mod.TimeEntryLogsPerCutOff
                      Where t.YearValue = this_year And
                      t.OrganizationId = organization_rowid And
-                     t.EmployeeUniqueKey = e_uniq_id And
+                     String.Equals(t.EmployeeUniqueKey, e_uniq_id) And
                      (t.DateValue >= datef And t.DateValue <= datet)
                      Let timeloginfo = t
                      Select New With {.Time_In = timeloginfo.TimeIn,
@@ -262,19 +293,16 @@ Public Class TimeEntryLogs
         If Last.Name = lnklabel.Name Then
             Using _mod = New Model1
                 Dim _employees =
-                (From t In _mod.TimeEntryLogsPerCutOff
-                 Order By t.FullName
-                 Where t.YearValue = this_year And t.OrganizationId = organization_rowid
-                 Group By t.EmployeeID
-                 Into tl = Group
-                 )
+                    (From e In _mod.EmployeeEntity
+                     Where e.OrganizationID = organization_rowid
+                     )
 
                 Dim e_count = _employees.ToList.Count
 
                 page_num = (e_count - (e_count Mod twenty))
 
             End Using
-            
+
         ElseIf First.Name = lnklabel.Name Then
             page_num = 0
         Else
@@ -296,7 +324,11 @@ Public Class TimeEntryLogs
 
     Private Sub ErrorNotif(ex As Exception)
         MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
-        _logger.Error("LoadPayPeriods", ex)
+
+        Dim st As StackTrace = New StackTrace(ex, True)
+        Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
+
+        _logger.Error(sf.GetMethod.Name, ex)
     End Sub
 
 #End Region

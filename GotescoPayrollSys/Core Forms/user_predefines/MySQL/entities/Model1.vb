@@ -29,6 +29,8 @@ Public Class Model1
 
     Public Overridable Property TimeEntryLogsPerCutOff() As DbSet(Of TimeEntryLogsPerCutOff)
 
+    Public Overridable Property EmployeeEntity() As DbSet(Of EmployeeEntity)
+
 End Class
 
 'Public Class MyEntity

@@ -22,9 +22,9 @@ Partial Class TimeEntryLogs
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DataGridViewX1 = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel6 = New System.Windows.Forms.Panel()
@@ -45,14 +45,25 @@ Partial Class TimeEntryLogs
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.DataGridViewX3 = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.colDateValue = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.tsbtnNew = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnSave = New System.Windows.Forms.ToolStripButton()
         Me.tsbtndel = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnCancel = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
+        Me.tsbtnImport = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnClose = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnAudittrail = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
+        Me.bgworkTypicalImport = New System.ComponentModel.BackgroundWorker()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colTimeIn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colTimeOut = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.WasEdited = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.DataGridViewX1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -75,14 +86,14 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX1.BackgroundColor = System.Drawing.Color.White
         Me.DataGridViewX1.ColumnHeadersHeight = 35
         Me.DataGridViewX1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX1.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX1.DefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridViewX1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewX1.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX1.Location = New System.Drawing.Point(0, 0)
@@ -182,14 +193,14 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX2.BackgroundColor = System.Drawing.Color.White
         Me.DataGridViewX2.ColumnHeadersHeight = 35
         Me.DataGridViewX2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX2.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX2.DefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridViewX2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewX2.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX2.Location = New System.Drawing.Point(0, 41)
@@ -213,7 +224,7 @@ Partial Class TimeEntryLogs
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(216, 13)
+        Me.Button1.Location = New System.Drawing.Point(260, 13)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 20)
         Me.Button1.TabIndex = 1
@@ -224,7 +235,7 @@ Partial Class TimeEntryLogs
         '
         Me.TextBox1.Location = New System.Drawing.Point(6, 12)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(204, 20)
+        Me.TextBox1.Size = New System.Drawing.Size(248, 20)
         Me.TextBox1.TabIndex = 0
         '
         'Panel7
@@ -321,29 +332,67 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX3.BackgroundColor = System.Drawing.Color.White
         Me.DataGridViewX3.ColumnHeadersHeight = 35
         Me.DataGridViewX3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX3.DefaultCellStyle = DataGridViewCellStyle6
+        Me.DataGridViewX3.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.colTimeIn, Me.colTimeOut, Me.colDateValue, Me.WasEdited})
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX3.DefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridViewX3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewX3.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX3.Location = New System.Drawing.Point(0, 25)
         Me.DataGridViewX3.MultiSelect = False
         Me.DataGridViewX3.Name = "DataGridViewX3"
         Me.DataGridViewX3.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.DataGridViewX3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewX3.Size = New System.Drawing.Size(653, 541)
         Me.DataGridViewX3.TabIndex = 160
+        '
+        'colDateValue
+        '
+        '
+        '
+        '
+        Me.colDateValue.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.colDateValue.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.colDateValue.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.colDateValue.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.colDateValue.HeaderText = "Date Attended"
+        Me.colDateValue.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.colDateValue.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.colDateValue.MonthCalendar.BackgroundStyle.Class = ""
+        Me.colDateValue.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.colDateValue.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.colDateValue.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.colDateValue.MonthCalendar.DisplayMonth = New Date(2018, 3, 1, 0, 0, 0, 0)
+        Me.colDateValue.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.colDateValue.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.colDateValue.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.colDateValue.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.colDateValue.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.colDateValue.Name = "colDateValue"
+        Me.colDateValue.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.colDateValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'ToolStrip1
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.White
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNew, Me.tsbtnSave, Me.tsbtndel, Me.tsbtnCancel, Me.tsbtnClose, Me.tsbtnAudittrail, Me.ToolStripProgressBar1})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNew, Me.tsbtnSave, Me.tsbtndel, Me.tsbtnCancel, Me.ToolStripLabel1, Me.tsbtnImport, Me.tsbtnClose, Me.tsbtnAudittrail, Me.ToolStripProgressBar1})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(653, 25)
@@ -352,11 +401,11 @@ Partial Class TimeEntryLogs
         '
         'tsbtnNew
         '
-        Me.tsbtnNew.Image = Global.GotescoPayrollSys.My.Resources.Resources._new
+        Me.tsbtnNew.Image = Global.GotescoPayrollSys.My.Resources.Resources.Add
         Me.tsbtnNew.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnNew.Name = "tsbtnNew"
-        Me.tsbtnNew.Size = New System.Drawing.Size(120, 22)
-        Me.tsbtnNew.Text = "Import time e&ntry"
+        Me.tsbtnNew.Size = New System.Drawing.Size(108, 22)
+        Me.tsbtnNew.Text = "&New time entry"
         '
         'tsbtnSave
         '
@@ -381,6 +430,20 @@ Partial Class TimeEntryLogs
         Me.tsbtnCancel.Name = "tsbtnCancel"
         Me.tsbtnCancel.Size = New System.Drawing.Size(63, 22)
         Me.tsbtnCancel.Text = "Cancel"
+        '
+        'ToolStripLabel1
+        '
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(52, 22)
+        Me.ToolStripLabel1.Text = "               "
+        '
+        'tsbtnImport
+        '
+        Me.tsbtnImport.Image = Global.GotescoPayrollSys.My.Resources.Resources._new
+        Me.tsbtnImport.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tsbtnImport.Name = "tsbtnImport"
+        Me.tsbtnImport.Size = New System.Drawing.Size(63, 22)
+        Me.tsbtnImport.Text = "Import"
         '
         'tsbtnClose
         '
@@ -407,6 +470,57 @@ Partial Class TimeEntryLogs
         Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
         Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 22)
         Me.ToolStripProgressBar1.Visible = False
+        '
+        'bgworkTypicalImport
+        '
+        Me.bgworkTypicalImport.WorkerReportsProgress = True
+        Me.bgworkTypicalImport.WorkerSupportsCancellation = True
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.HeaderText = "Time In"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.DataGridViewTextBoxColumn1.Width = 139
+        '
+        'DataGridViewTextBoxColumn2
+        '
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Time Out"
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        Me.DataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.DataGridViewTextBoxColumn2.Width = 140
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.HeaderText = "Date Attended"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        Me.DataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.DataGridViewTextBoxColumn3.Visible = False
+        Me.DataGridViewTextBoxColumn3.Width = 139
+        '
+        'colTimeIn
+        '
+        Me.colTimeIn.HeaderText = "Time In"
+        Me.colTimeIn.Name = "colTimeIn"
+        Me.colTimeIn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'colTimeOut
+        '
+        Me.colTimeOut.HeaderText = "Time Out"
+        Me.colTimeOut.Name = "colTimeOut"
+        Me.colTimeOut.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'WasEdited
+        '
+        Me.WasEdited.HeaderText = "WasEdited"
+        Me.WasEdited.Name = "WasEdited"
+        Me.WasEdited.Visible = False
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.HeaderText = "WasEdited"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        Me.DataGridViewTextBoxColumn4.Visible = False
         '
         'TimeEntryLogs
         '
@@ -464,11 +578,22 @@ Partial Class TimeEntryLogs
     Friend WithEvents lblYear As System.Windows.Forms.Label
     Friend WithEvents DataGridViewX3 As DevComponents.DotNetBar.Controls.DataGridViewX
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
-    Friend WithEvents tsbtnNew As System.Windows.Forms.ToolStripButton
+    Friend WithEvents tsbtnImport As System.Windows.Forms.ToolStripButton
     Friend WithEvents tsbtnSave As System.Windows.Forms.ToolStripButton
     Friend WithEvents tsbtndel As System.Windows.Forms.ToolStripButton
     Friend WithEvents tsbtnCancel As System.Windows.Forms.ToolStripButton
     Friend WithEvents tsbtnClose As System.Windows.Forms.ToolStripButton
     Friend WithEvents tsbtnAudittrail As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripProgressBar1 As System.Windows.Forms.ToolStripProgressBar
+    Friend WithEvents ToolStripLabel1 As System.Windows.Forms.ToolStripLabel
+    Friend WithEvents tsbtnNew As System.Windows.Forms.ToolStripButton
+    Friend WithEvents DataGridViewTextBoxColumn1 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents bgworkTypicalImport As System.ComponentModel.BackgroundWorker
+    Friend WithEvents DataGridViewTextBoxColumn4 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents colTimeIn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents colTimeOut As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents colDateValue As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents WasEdited As System.Windows.Forms.DataGridViewTextBoxColumn
 End Class

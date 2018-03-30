@@ -346,6 +346,7 @@
     </Compile>
     <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeEntity.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeTimeEntryDetails.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Model1.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />

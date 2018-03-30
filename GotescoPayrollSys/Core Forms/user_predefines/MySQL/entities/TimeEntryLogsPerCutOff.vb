@@ -52,4 +52,8 @@ Public Class TimeEntryLogsPerCutOff
 
     Public Property FullName As String
 
+    Public Property TimeInText As String
+
+    Public Property TimeOutText As String
+
 End Class

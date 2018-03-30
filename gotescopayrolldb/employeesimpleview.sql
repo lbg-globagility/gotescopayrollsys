@@ -12,22 +12,10 @@
 
 -- Dumping structure for view gotescopayrolldb_server.employeesimpleview
 DROP VIEW IF EXISTS `employeesimpleview`;
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `employeesimpleview` (
-	`RowID` INT(10) NOT NULL,
-	`LastName` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
-	`FirstName` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
-	`MiddleName` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
-	`OrganizationID` INT(10) NULL,
-	`FullName` VARCHAR(128) NULL COLLATE 'latin1_swedish_ci'
-) ENGINE=MyISAM;
-
-
--- Dumping structure for view gotescopayrolldb_server.employeesimpleview
-DROP VIEW IF EXISTS `employeesimpleview`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `employeesimpleview`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `employeesimpleview` AS SELECT e.RowID
+, e.EmployeeID
 , e.LastName
 , e.FirstName
 , e.MiddleName

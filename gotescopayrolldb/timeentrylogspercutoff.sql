@@ -12,34 +12,6 @@
 
 -- Dumping structure for view gotescopayrolldb_server.timeentrylogspercutoff
 DROP VIEW IF EXISTS `timeentrylogspercutoff`;
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `timeentrylogspercutoff` (
-	`RowID` INT(10) NOT NULL,
-	`OrganizationId` INT(10) NOT NULL,
-	`Created` TIMESTAMP NOT NULL,
-	`CreatedBy` INT(10) NULL,
-	`LastUpd` DATETIME NULL,
-	`LastUpdBy` INT(10) NULL,
-	`EmployeeID` INT(10) NULL,
-	`TimeIn` TIME NULL,
-	`TimeOut` TIME NULL,
-	`Date` DATE NULL,
-	`TimeScheduleType` VARCHAR(50) NULL COMMENT 'F-Flexible' COLLATE 'latin1_swedish_ci',
-	`TimeEntryStatus` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
-	`TimeentrylogsImportID` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
-	`PayPeriodID` INT(10) NOT NULL,
-	`PayFromDate` DATE NULL,
-	`PayToDate` DATE NULL,
-	`Month` INT(11) NULL,
-	`Year` CHAR(4) NULL COLLATE 'latin1_swedish_ci',
-	`OrdinalValue` INT(11) NULL,
-	`EmployeeUniqueKey` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
-	`FullName` VARCHAR(128) NULL COLLATE 'latin1_swedish_ci'
-) ENGINE=MyISAM;
-
-
--- Dumping structure for view gotescopayrolldb_server.timeentrylogspercutoff
-DROP VIEW IF EXISTS `timeentrylogspercutoff`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `timeentrylogspercutoff`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `timeentrylogspercutoff` AS SELECT etd.RowID
@@ -66,10 +38,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `timeentrylogspercuto
 , e.EmployeeID `EmployeeUniqueKey`
 , PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
 
+, TIME_FORMAT(etd.TimeIn, '%k:%i %p') `TimeInText`
+, TIME_FORMAT(etd.TimeOut, '%k:%i %p') `TimeOutText`
+
 FROM employeetimeentrydetails etd
 INNER JOIN organization og ON og.RowID = etd.OrganizationID AND og.NoPurpose = 0
 INNER JOIN employee e ON e.RowID = etd.EmployeeID AND e.OrganizationID = og.RowID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-INNER JOIN payperiod pp ON pp.OrganizationID = e.OrganizationID AND pp.TotalGrossSalary = e.PayFrequencyID AND etd.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate ;
+INNER JOIN payperiod pp ON pp.OrganizationID = e.OrganizationID AND pp.TotalGrossSalary = e.PayFrequencyID AND etd.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
+WHERE etd.EmployeeID IS NOT NULL
+ORDER BY pp.`Year` DESC, pp.OrdinalValue DESC ;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

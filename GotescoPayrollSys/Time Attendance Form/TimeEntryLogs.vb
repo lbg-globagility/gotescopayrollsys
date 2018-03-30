@@ -16,7 +16,14 @@ Public Class TimeEntryLogs
 
     Private organization_rowid As Integer = 1
 
-    Private e_uniq_id As String
+    Private e_uniq_id, e_primkey As String
+
+    Private timelog_row As DataGridViewRow
+
+    Private str_query_insupd_timeentrylogs As String =
+        "SELECT INSUPD_timeentrylogs(?og_id, ?emp_unique_key, ?timestamp_log, ?max_importid);"
+
+    Dim thefilepath As String = String.Empty
 
 #End Region
 
@@ -134,6 +141,31 @@ Public Class TimeEntryLogs
 
     End Sub
 
+    Private Sub tsbtnCancel_Click(sender As Object, e As EventArgs) Handles tsbtnCancel.Click
+
+        timelog_row =
+            DataGridViewX3.Rows.OfType(Of DataGridViewRow).Where(Function(dgv) dgv.Selected).FirstOrDefault
+
+        Dim _rowindex = 0
+        If timelog_row IsNot Nothing Then
+            _rowindex = 0
+        Else
+            _rowindex = timelog_row.Index
+        End If
+
+        DataGridViewX2_CurrentCellChanged(DataGridViewX2, New EventArgs)
+
+        If _rowindex > 0 Then
+            Dim _col =
+                DataGridViewX3.Columns.OfType(Of DataGridViewColumn).Where(Function(dgcol) dgcol.Visible).LastOrDefault
+
+            Dim dgcolname = _col.Name
+
+            DataGridViewX3.CurrentCell = DataGridViewX3.Item(0, _rowindex)
+        End If
+
+    End Sub
+
     Private Sub TimeEntryLogs_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
     End Sub
@@ -154,6 +186,192 @@ Public Class TimeEntryLogs
 
     End Sub
 
+    Private Sub tsbtnClose_Click(sender As Object, e As EventArgs) Handles tsbtnClose.Click
+        Close()
+    End Sub
+
+    Private Sub tsbtnAudittrail_Click(sender As Object, e As EventArgs) Handles tsbtnAudittrail.Click
+
+    End Sub
+
+    Private Sub tsbtndel_Click(sender As Object, e As EventArgs) Handles tsbtndel.Click
+
+    End Sub
+
+    Private Sub tsbtnSave_Click(sender As Object, e As EventArgs) Handles tsbtnSave.Click
+
+        DataGridViewX3.EndEdit()
+
+        Dim dgvrows =
+            DataGridViewX3.Rows.OfType(Of DataGridViewRow).
+            Where(Function(dgvrow) dgvrow.Cells(WasEdited.Index).Value = True)
+
+        Try
+            If e_primkey IsNot Nothing Then
+                Using _mod = New Model1
+                    For Each dgrow In dgvrows
+
+                        Dim tl_date =
+                            CDate(dgrow.Cells(colDateValue.Index).Value)
+
+                        Dim ted =
+                            New EmployeeTimeEntryDetails _
+                            With {.EmployeeId = Convert.ToInt32(e_primkey),
+                                  .TimeIn = New TimeSpan(8, 0, 0),
+                                  .TimeOut = New TimeSpan(17, 0, 0),
+                                  .DateValue = tl_date,
+                                  .OrganizationId = organization_rowid,
+                                  .CreatedBy = 1,
+                                  .LastUpdBy = 1,
+                                  .Created = Now}
+
+                        _mod.EmployeeTimeEntryDetails.Add(ted)
+                    Next
+
+                    _mod.SaveChanges()
+                End Using
+                
+            End If
+            
+        Catch ex As Exception
+            ErrorNotif(ex)
+        End Try
+        
+    End Sub
+
+    Private Sub tsbtnImport_Click(sender As Object, e As EventArgs) Handles tsbtnImport.Click
+
+        Static employeeleaveRowID As Integer = -1
+
+        Try
+            Dim browsefile As OpenFileDialog = New OpenFileDialog()
+            browsefile.Filter =
+                String.Concat("Text Documents (*.txt)|*.txt",
+                              "|All files (*.*)|*.*")
+
+            If browsefile.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                
+                thefilepath = browsefile.FileName
+
+                bgworkTypicalImport.RunWorkerAsync()
+
+            Else
+
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message & " Error on file initialization")
+        Finally
+            'AddHandler dgvetentdet.SelectionChanged, AddressOf dgvetentdet_SelectionChanged
+        End Try
+
+    End Sub
+
+    Private Sub bgworkTypicalImport_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgworkTypicalImport.DoWork
+
+        Dim import_id =
+            ImportConventionalFormatTimeLogs()
+
+        Dim param_values =
+            New Object() {org_rowid,
+                          user_row_id,
+                          DBNull.Value,
+                          DBNull.Value,
+                          import_id}
+
+        Dim sql As New SQL("CALL BULK_INSUPD_employeetimeentrydetails(?og_id, ?user_id, ?from_date, ?to_date, ?id_import);",
+                           param_values)
+        sql.ExecuteQuery()
+
+        If sql.HasError Then
+            Throw sql.ErrorException
+        End If
+
+    End Sub
+
+    Private Sub bgworkTypicalImport_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgworkTypicalImport.ProgressChanged
+
+        ToolStripProgressBar1.Value = e.ProgressPercentage
+
+    End Sub
+
+    Private Sub tsbtnNew_Click(sender As Object, e As EventArgs) Handles tsbtnNew.Click
+        Dim has_newrow =
+            DataGridViewX3.Rows.OfType(Of DataGridViewRow).Where(Function(dgrow) dgrow.IsNewRow).FirstOrDefault
+
+        If has_newrow IsNot Nothing Then
+            DataGridViewX3.CurrentCell = DataGridViewX3.Item(0, has_newrow.Index)
+        End If
+
+    End Sub
+
+    Private Sub DataGridViewX3_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewX3.CellContentClick
+
+    End Sub
+
+    Private Sub DataGridViewX3_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewX3.CellEndEdit
+
+        Dim colName As String = DataGridViewX3.Columns(e.ColumnIndex).Name
+
+        Dim rowindx = e.RowIndex
+
+        Dim _cols = New String() {colTimeIn.Name, colTimeOut.Name}
+
+        If _cols.Contains(colName) Then
+
+            If Trim(DataGridViewX3.Item(colName, rowindx).Value) <> "" Then
+                Dim dateobj As Object = Trim(DataGridViewX3.Item(colName, rowindx).Value).Replace(" ", ":")
+
+                Dim ampm As String = Nothing
+
+                Try
+                    If dateobj.ToString.Contains("A") Or _
+                        dateobj.ToString.Contains("P") Or _
+                        dateobj.ToString.Contains("M") Then
+
+                        ampm = " " & StrReverse(getStrBetween(StrReverse(dateobj.ToString), "", ":"))
+                        ampm = Microsoft.VisualBasic.Left(ampm, 2) & "M"
+                        dateobj = dateobj.ToString.Replace(":", " ")
+                        dateobj = Trim(dateobj.ToString.Substring(0, 5)) 'dateobj.ToString.Substring(0, 4)
+                        dateobj = dateobj.ToString.Replace(" ", ":")
+
+                    End If
+
+                    Dim valtime As DateTime = DateTime.Parse(dateobj).ToString("hh:mm tt")
+                    If ampm = Nothing Then
+                        DataGridViewX3.Item(colName, rowindx).Value = valtime.ToShortTimeString
+                    Else
+                        DataGridViewX3.Item(colName, rowindx).Value = Trim(valtime.ToShortTimeString.Substring(0, 5)) & ampm
+                    End If
+
+                    DataGridViewX3.Item(colName, rowindx).ErrorText = Nothing
+                Catch ex As Exception
+                    Try
+                        dateobj = dateobj.ToString.Replace(":", " ")
+                        dateobj = Trim(dateobj.ToString.Substring(0, 5))
+                        dateobj = dateobj.ToString.Replace(" ", ":")
+
+                        Dim valtime As DateTime = DateTime.Parse(dateobj).ToString("HH:mm")
+
+                        DataGridViewX3.Item(colName, rowindx).Value = valtime.ToShortTimeString
+
+                        DataGridViewX3.Item(colName, rowindx).ErrorText = Nothing
+                    Catch ex_1 As Exception
+
+                        DataGridViewX3.Item(colName, rowindx).ErrorText = "     Invalid time value"
+                    End Try
+                Finally
+                    DataGridViewX3.Item(WasEdited.Index, e.RowIndex).Value = True
+                End Try
+
+            Else
+
+                DataGridViewX3.Item(colName, rowindx).ErrorText = Nothing
+            End If
+
+        End If
+
+    End Sub
+
 #End Region
 
 #Region "Functions & Methods"
@@ -165,7 +383,6 @@ Public Class TimeEntryLogs
 
                 Dim _payperiods =
                     (From t In _mod.TimeEntryLogsPerCutOff
-                     Order By t.PayFromDate Descending,t.PayToDate
                      Where t.YearValue = this_year And t.OrganizationId = organization_rowid
                      Group By t.PayPeriodID
                      Into tl = Group
@@ -198,7 +415,8 @@ Public Class TimeEntryLogs
                      Where e.OrganizationID = organization_rowid
                      Let employeeinfo = e
                      Select New With {.Employee_ID = employeeinfo.EmployeeID,
-                                      .Full_Name = employeeinfo.FullName}
+                                      .Full_Name = employeeinfo.FullName,
+                                      .EPrimaryKey = employeeinfo.RowID}
                      ).
                  OrderBy(Function(e) e.Full_Name).
                  Skip(_page).Take(twenty)
@@ -246,6 +464,8 @@ Public Class TimeEntryLogs
 
     Private Sub LoadTimeLogs()
 
+        DataGridViewX3.Rows.Clear()
+
         Try
             Using _mod = New Model1
 
@@ -262,8 +482,10 @@ Public Class TimeEntryLogs
                 Dim emp_curr_row = DataGridViewX2.Rows.OfType(Of DataGridViewRow).Where(Function(dgvr) dgvr.Selected).FirstOrDefault
 
                 e_uniq_id = Nothing
+                e_primkey = Nothing
                 If emp_curr_row IsNot Nothing Then
                     e_uniq_id = Convert.ToString(emp_curr_row.Cells(0).Value)
+                    e_primkey = Convert.ToString(emp_curr_row.Cells(2).Value)
 
                 End If
 
@@ -274,13 +496,20 @@ Public Class TimeEntryLogs
                      t.OrganizationId = organization_rowid And
                      String.Equals(t.EmployeeUniqueKey, e_uniq_id) And
                      (t.DateValue >= datef And t.DateValue <= datet)
+                     Order By t.DateValue
                      Let timeloginfo = t
-                     Select New With {.Time_In = timeloginfo.TimeIn,
-                                      .Time_Out = timeloginfo.TimeOut,
+                     Select New With {.Time_In = timeloginfo.TimeInText,
+                                      .Time_Out = timeloginfo.TimeOutText,
                                       .Date_Attended = timeloginfo.DateValue}
                      )
 
-                DataGridViewX3.DataSource = _timelogs.ToList
+                'DataGridViewX3.DataSource = _timelogs.ToList
+                For Each _item In _timelogs.ToList
+
+                    DataGridViewX3.Rows.Add(_item.Time_In,
+                                            _item.Time_Out,
+                                            _item.Date_Attended)
+                Next
 
             End Using
         Catch ex As Exception
@@ -331,6 +560,61 @@ Public Class TimeEntryLogs
         _logger.Error(sf.GetMethod.Name, ex)
     End Sub
 
+    Private Function ImportConventionalFormatTimeLogs() As Integer
+
+        Dim return_value As Integer = 0
+
+        Dim max_importid = New SQL(String.Concat("SELECT MAX(ImportID) FROM timeentrylogs WHERE OrganizationID=", org_rowid, ";")).GetFoundRow
+        max_importid = (Convert.ToDouble(max_importid) + 1)
+
+        Dim emp_unique_key, datetime_attended As Object
+
+        Dim parser = New TimeInTimeOutParser()
+        Dim timeEntries = parser.ParseConventionalTimeLogs(thefilepath)
+
+        Dim i = 1
+
+        Dim line_content_count As Integer = timeEntries.Count
+
+        Console.WriteLine(line_content_count)
+
+        For Each timeEntry In timeEntries
+
+            emp_unique_key =
+                timeEntry.EmployeUniqueKey
+
+            datetime_attended =
+                timeEntry.DateAndTime
+
+            Dim param_values =
+                New Object() {org_rowid,
+                              emp_unique_key,
+                              Convert.ToString(datetime_attended),
+                              max_importid}
+
+            Dim sql As New SQL(str_query_insupd_timeentrylogs,
+                               param_values)
+            sql.ExecuteQuery()
+
+            If sql.HasError Then
+
+                MsgBox(sql.ErrorMessage)
+
+            End If
+
+            return_value = ((i / line_content_count) * 100)
+
+            bgworkTypicalImport.
+                ReportProgress(return_value)
+
+            i += 1
+
+        Next
+
+        'Return return_value
+        Return max_importid
+
+    End Function
 #End Region
 
 #Region "Properties"

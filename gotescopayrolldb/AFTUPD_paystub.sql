@@ -797,7 +797,7 @@ ELSEIF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '0' THEN
 	
 		SELECT (TrueSalary / PAYFREQUENCY_DIVISOR(pftype)) FROM employeesalary es WHERE es.EmployeeID=NEW.EmployeeID AND es.OrganizationID=NEW.OrganizationID AND (es.EffectiveDateFrom >= NEW.PayFromDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) >= NEW.PayFromDate) AND (es.EffectiveDateFrom <= NEW.PayToDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) <= NEW.PayToDate) ORDER BY es.EffectiveDateFrom DESC LIMIT 1 INTO totalworkamount;
 		
-		SELECT ( (totalworkamount - (SUM(HoursLateAmount) + SUM(UndertimeHoursAmount) + SUM(Absent))) + SUM(OvertimeHoursAmount) ) FROM employeetimeentryactual WHERE OrganizationID=NEW.OrganizationID AND EmployeeID=NEW.EmployeeID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO totalworkamount;
+		SELECT ( (totalworkamount - (SUM(et.HoursLateAmount) + SUM(et.UndertimeHoursAmount) + SUM(et.Absent))) + SUM(et.OvertimeHoursAmount) + SUM(IFNULL(rd.RestDayActualPay, 0))) FROM employeetimeentryactual et LEFT JOIN restdaytimeentry rd ON rd.RowID = et.RowID WHERE et.OrganizationID=NEW.OrganizationID AND et.EmployeeID=NEW.EmployeeID AND et.`Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO totalworkamount;
 		
 		IF totalworkamount IS NULL THEN
 			
@@ -810,7 +810,7 @@ ELSEIF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '0' THEN
 		END IF;
 		
 		SET totalworkamount = IFNULL(totalworkamount,0);
-
+		
 	ELSEIF e_type = 'Fixed employee' THEN
 	
 		SELECT es.BasicPay FROM employeesalary es WHERE es.EmployeeID=NEW.EmployeeID AND es.OrganizationID=NEW.OrganizationID AND (es.EffectiveDateFrom >= NEW.PayFromDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) >= NEW.PayFromDate) AND (es.EffectiveDateFrom <= NEW.PayToDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) <= NEW.PayToDate) ORDER BY es.EffectiveDateFrom DESC LIMIT 1 INTO totalworkamount;

@@ -344,11 +344,17 @@
       <DependentUpon>ThirteenthMonthPayDetailSummary.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\USER CONTROLS\CustomBalloonToolTip.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeEntity.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeTimeEntryDetails.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Model1.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\ProperDisplayAuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\TimeEntryLogsPerCutOff.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
     <Compile Include="Core Forms\user_predefines\OutputText.vb" />
     <Compile Include="Core Forms\user_predefines\TimeInTimeOutParser.vb" />
@@ -1322,8 +1328,17 @@
     <Compile Include="Time Attendance Form\ShiftTemplater.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Time Attendance Form\TimeEntryLogs.Designer.vb">
+      <DependentUpon>TimeEntryLogs.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Time Attendance Form\TimeEntryLogs.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Time Attendance Form\TimeEntryLogs.resx">
+      <DependentUpon>TimeEntryLogs.vb</DependentUpon>
+    </EmbeddedResource>
     <None Include="log4.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

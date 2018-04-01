@@ -7,6 +7,7 @@ Imports System.ComponentModel.DataAnnotations
 Public Class EmployeeEntity
 
     <Key>
+    <System.ComponentModel.Browsable(False)>
     Public Property RowID As Integer
 
     Public Property EmployeeID As String

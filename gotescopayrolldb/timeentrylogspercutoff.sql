@@ -38,8 +38,8 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `timeentrylogspercuto
 , e.EmployeeID `EmployeeUniqueKey`
 , PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
 
-, TIME_FORMAT(etd.TimeIn, '%k:%i %p') `TimeInText`
-, TIME_FORMAT(etd.TimeOut, '%k:%i %p') `TimeOutText`
+, TIME_FORMAT(etd.TimeIn, '%l:%i %p') `TimeInText`
+, TIME_FORMAT(etd.TimeOut, '%l:%i %p') `TimeOutText`
 
 FROM employeetimeentrydetails etd
 INNER JOIN organization og ON og.RowID = etd.OrganizationID AND og.NoPurpose = 0

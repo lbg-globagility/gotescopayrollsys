@@ -16,16 +16,16 @@ Public Class EmployeeTimeEntryDetails
 
     Public Property CreatedBy As Integer
 
-    Public Property LastUpd As DateTime
+    Public Property LastUpd As DateTime?
 
-    Public Property LastUpdBy As Integer
+    Public Property LastUpdBy As Integer?
 
     <Column("EmployeeID")>
     Public Property EmployeeId As Integer
 
-    Public Property TimeIn As TimeSpan
+    Public Property TimeIn As TimeSpan?
 
-    Public Property TimeOut As TimeSpan
+    Public Property TimeOut As TimeSpan?
 
     <Column("Date")>
     Public Property DateValue As Date

@@ -30,14 +30,14 @@ Public Class TimeEntryLogs
 #Region "Event Handlers"
 
     Protected Overrides Sub OnLoad(e As EventArgs)
-        
+
         PrevYear.Text = (this_year - 1)
         NxtYear.Text = (this_year + 1)
 
         MyBase.OnLoad(e)
 
         organization_rowid = 1 'org_rowid
-
+        user_row_id = 1
 
         lblYear.Text = this_year
     End Sub
@@ -191,16 +191,111 @@ Public Class TimeEntryLogs
     End Sub
 
     Private Sub tsbtnAudittrail_Click(sender As Object, e As EventArgs) Handles tsbtnAudittrail.Click
-
+        
     End Sub
 
     Private Sub tsbtndel_Click(sender As Object, e As EventArgs) Handles tsbtndel.Click
+
+        DataGridViewX3.EndEdit()
+
+        Dim dgvrows =
+            DataGridViewX3.Rows.OfType(Of DataGridViewRow).
+            Where(Function(dgvrow) dgvrow.IsNewRow = False And
+                      dgvrow.Selected)
+
+        If dgvrows.Count = 0 Then
+            Return
+        End If
+
+        Try
+            Dim prompt =
+                MessageBox.Show(String.Concat("Delete ", dgvrows.Count, " time log(s) ?"),
+                                "Confirm deleting time logs",
+                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+
+            Dim _agrees = (prompt = Windows.Forms.DialogResult.Yes)
+
+            If e_primkey IsNot Nothing And _agrees Then
+
+                Dim _count = 0
+
+                Using _mod = New Model1
+
+                    For Each dgrow In dgvrows
+
+                        Dim tl_date =
+                            CDate(dgrow.Cells(colDateValue.Index).Value)
+
+                        Dim var_erowid = Convert.ToInt32(e_primkey)
+
+                        Dim timelog_record =
+                            _mod.EmployeeTimeEntryDetails.OfType(Of EmployeeTimeEntryDetails).
+                            Where(Function(etd) etd.OrganizationId = organization_rowid And
+                                      etd.EmployeeId = var_erowid And
+                                      etd.DateValue = tl_date)
+
+                        For Each _item In timelog_record.ToList
+                            _count += 1
+                        Next
+                        Console.WriteLine(_count)
+
+                        Dim should_update_record As Boolean = (_count > 0)
+
+                        If should_update_record Then
+                            For Each etd In timelog_record
+
+                                _mod.EmployeeTimeEntryDetails.Remove(etd)
+                                _mod.Entry(etd).State = Entity.EntityState.Deleted
+
+                            Next
+
+                        End If
+
+                        DataGridViewX3.Rows.Remove(dgrow)
+                    Next
+
+                    _mod.SaveChanges()
+                End Using
+
+                Dim ct As New CustomBalloonToolTip(Label3, "Deleting time logs")
+                If _count > 1 Then
+                    ct.ShowInfoBallon("Time logs removed successfully.")
+                ElseIf _count > 0 Then
+                    ct.ShowInfoBallon("Time log removed successfully.")
+                End If
+
+            End If
+
+        Catch ex As Exception
+            ErrorNotif(ex)
+        End Try
 
     End Sub
 
     Private Sub tsbtnSave_Click(sender As Object, e As EventArgs) Handles tsbtnSave.Click
 
         DataGridViewX3.EndEdit()
+
+        Try
+
+            Dim row_errors =
+                DataGridViewX3.Rows.OfType(Of DataGridViewRow).
+                Where(Function(dgrow) dgrow.Cells(colTimeIn.Name).ErrorText.Length > 0 Or
+                          dgrow.Cells(colTimeOut.Name).ErrorText.Length > 0)
+
+            Dim has_errors As Boolean = (row_errors.Count > 0)
+
+            If has_errors Then
+                Dim ct As New CustomBalloonToolTip(Label1, "Saving time logs")
+                ct.ShowWarningBallon("Please correct the error first.")
+
+                DataGridViewX3.CurrentCell = row_errors.FirstOrDefault.Cells(0)
+                Return
+            End If
+
+        Catch ex As Exception
+            ErrorNotif(ex)
+        End Try
 
         Dim dgvrows =
             DataGridViewX3.Rows.OfType(Of DataGridViewRow).
@@ -209,34 +304,93 @@ Public Class TimeEntryLogs
         Try
             If e_primkey IsNot Nothing Then
                 Using _mod = New Model1
+
                     For Each dgrow In dgvrows
+
+                        Dim time_in_input =
+                            dgrow.Cells(colTimeIn.Name).Value
+
+                        Dim time_out_input =
+                            dgrow.Cells(colTimeOut.Name).Value
+
+                        Dim time_in, time_out As TimeSpan?
+
+                        If time_in_input IsNot Nothing Then
+                            Dim _date = Convert.ToDateTime(time_in_input)
+                            time_in = New TimeSpan(_date.Hour, _date.Minute, 0)
+                        End If
+
+                        If time_out_input IsNot Nothing Then
+                            Dim _date = Convert.ToDateTime(time_out_input)
+                            time_out = New TimeSpan(_date.Hour, _date.Minute, 0)
+                        End If
 
                         Dim tl_date =
                             CDate(dgrow.Cells(colDateValue.Index).Value)
 
-                        Dim ted =
-                            New EmployeeTimeEntryDetails _
-                            With {.EmployeeId = Convert.ToInt32(e_primkey),
-                                  .TimeIn = New TimeSpan(8, 0, 0),
-                                  .TimeOut = New TimeSpan(17, 0, 0),
-                                  .DateValue = tl_date,
-                                  .OrganizationId = organization_rowid,
-                                  .CreatedBy = 1,
-                                  .LastUpdBy = 1,
-                                  .Created = Now}
+                        Dim var_erowid = Convert.ToInt32(e_primkey)
 
-                        _mod.EmployeeTimeEntryDetails.Add(ted)
+                        Dim timelog_record =
+                            _mod.EmployeeTimeEntryDetails.OfType(Of EmployeeTimeEntryDetails).
+                            Where(Function(etd) etd.OrganizationId = organization_rowid And
+                                      etd.EmployeeId = var_erowid And
+                                      etd.DateValue = tl_date)
+
+                        Dim _count = 0
+                        For Each _item In timelog_record.ToList
+                            _count += 1
+                        Next
+                        Console.WriteLine(_count)
+
+                        Dim should_update_record As Boolean = (_count > 0)
+
+                        If should_update_record Then
+                            For Each etd In timelog_record
+                                With etd
+                                    .EmployeeId = var_erowid
+                                    .TimeIn = time_in
+                                    .TimeOut = time_out
+                                    .DateValue = tl_date
+                                    .OrganizationId = organization_rowid
+                                    .LastUpdBy = user_row_id
+                                    .LastUpd = Now
+                                End With
+
+                                _mod.EmployeeTimeEntryDetails.Add(etd)
+                                _mod.Entry(etd).State = Entity.EntityState.Modified
+
+                            Next
+
+                        Else
+                            Dim ted =
+                                    New EmployeeTimeEntryDetails _
+                                    With {.EmployeeId = var_erowid,
+                                          .TimeIn = time_in,
+                                          .TimeOut = time_out,
+                                          .DateValue = tl_date,
+                                          .OrganizationId = organization_rowid,
+                                          .CreatedBy = user_row_id,
+                                          .LastUpdBy = user_row_id,
+                                          .Created = Now}
+
+                            _mod.EmployeeTimeEntryDetails.Add(ted)
+
+                        End If
+
                     Next
 
                     _mod.SaveChanges()
                 End Using
-                
+
+                Dim ct As New CustomBalloonToolTip(Label1, "Saving time logs")
+                ct.ShowInfoBallon("Changes saved successfully.")
+
             End If
-            
+
         Catch ex As Exception
             ErrorNotif(ex)
         End Try
-        
+
     End Sub
 
     Private Sub tsbtnImport_Click(sender As Object, e As EventArgs) Handles tsbtnImport.Click
@@ -250,8 +404,11 @@ Public Class TimeEntryLogs
                               "|All files (*.*)|*.*")
 
             If browsefile.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                
+
                 thefilepath = browsefile.FileName
+
+                Dim ct As New CustomBalloonToolTip(Label2, "Importing time logs")
+                ct.ShowInfoBallon("Please wait while the system doing the importation.")
 
                 bgworkTypicalImport.RunWorkerAsync()
 
@@ -294,7 +451,26 @@ Public Class TimeEntryLogs
 
     End Sub
 
+    Private Sub bgworkTypicalImport_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgworkTypicalImport.RunWorkerCompleted
+
+        If e.Error IsNot Nothing Then
+            ErrorNotif(e.Error)
+        ElseIf e.Cancelled Then
+
+        Else
+            Dim ct As New CustomBalloonToolTip(Label2, "Importing time logs")
+            ct.ShowInfoBallon("Time logs imported successfully.")
+
+            DataGridViewX2_CurrentCellChanged(DataGridViewX2, New EventArgs)
+
+        End If
+
+    End Sub
+
     Private Sub tsbtnNew_Click(sender As Object, e As EventArgs) Handles tsbtnNew.Click
+
+        DataGridViewX3.EndEdit()
+
         Dim has_newrow =
             DataGridViewX3.Rows.OfType(Of DataGridViewRow).Where(Function(dgrow) dgrow.IsNewRow).FirstOrDefault
 
@@ -359,8 +535,6 @@ Public Class TimeEntryLogs
 
                         DataGridViewX3.Item(colName, rowindx).ErrorText = "     Invalid time value"
                     End Try
-                Finally
-                    DataGridViewX3.Item(WasEdited.Index, e.RowIndex).Value = True
                 End Try
 
             Else
@@ -368,6 +542,7 @@ Public Class TimeEntryLogs
                 DataGridViewX3.Item(colName, rowindx).ErrorText = Nothing
             End If
 
+            DataGridViewX3.Item(WasEdited.Index, e.RowIndex).Value = True
         End If
 
     End Sub
@@ -402,7 +577,7 @@ Public Class TimeEntryLogs
     End Sub
 
     Private Sub LoadEmployees(_page As Integer)
-
+        DataGridViewX2.Rows.Clear()
         If _page < 0 Then
             _page = 0
             page_num = 0
@@ -421,7 +596,14 @@ Public Class TimeEntryLogs
                  OrderBy(Function(e) e.Full_Name).
                  Skip(_page).Take(twenty)
 
-                DataGridViewX2.DataSource = _employees.ToList
+                'DataGridViewX2.AutoGenerateColumns = False
+                'DataGridViewX2.DataSource = _employees.ToList
+                For Each _employee In _employees.ToList
+
+                    DataGridViewX2.Rows.Add(_employee.Employee_ID,
+                                            _employee.Full_Name,
+                                            _employee.EPrimaryKey)
+                Next
 
             End Using
 
@@ -431,7 +613,7 @@ Public Class TimeEntryLogs
     End Sub
 
     Private Sub SearchEmployees()
-
+        DataGridViewX2.Rows.Clear()
         Dim str_search As String
 
         str_search = TextBox1.Text.Trim
@@ -445,11 +627,18 @@ Public Class TimeEntryLogs
                          e.FullName.Contains(str_search)
                          Let employeeinfo = e
                          Select New With {.Employee_ID = employeeinfo.EmployeeID,
-                                          .Full_Name = employeeinfo.FullName}
+                                          .Full_Name = employeeinfo.FullName,
+                                          .EPrimaryKey = employeeinfo.RowID}
                          ).
                      OrderBy(Function(e) e.Full_Name)
 
-                    DataGridViewX2.DataSource = _employees.ToList
+                    'DataGridViewX2.DataSource = _employees.ToList
+                    For Each _employee In _employees.ToList
+
+                        DataGridViewX2.Rows.Add(_employee.Employee_ID,
+                                                _employee.Full_Name,
+                                                _employee.EPrimaryKey)
+                    Next
 
                 End Using
 

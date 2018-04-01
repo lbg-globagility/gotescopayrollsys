@@ -344,6 +344,9 @@
       <DependentUpon>ThirteenthMonthPayDetailSummary.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\USER CONTROLS\CustomBalloonToolTip.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeEntity.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeTimeEntryDetails.vb" />

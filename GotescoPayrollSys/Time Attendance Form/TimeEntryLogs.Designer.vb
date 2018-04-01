@@ -56,14 +56,22 @@ Partial Class TimeEntryLogs
         Me.tsbtnClose = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnAudittrail = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.bgworkTypicalImport = New System.ComponentModel.BackgroundWorker()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colTimeIn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colTimeOut = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.WasEdited = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.EId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.EFullName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.E_RowId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Label3 = New System.Windows.Forms.Label()
         CType(Me.DataGridViewX1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -189,10 +197,10 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX2.AllowUserToDeleteRows = False
         Me.DataGridViewX2.AllowUserToResizeColumns = False
         Me.DataGridViewX2.AllowUserToResizeRows = False
-        Me.DataGridViewX2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.DataGridViewX2.BackgroundColor = System.Drawing.Color.White
         Me.DataGridViewX2.ColumnHeadersHeight = 35
         Me.DataGridViewX2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        Me.DataGridViewX2.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.EId, Me.EFullName, Me.E_RowId})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -317,6 +325,9 @@ Partial Class TimeEntryLogs
         '
         Me.Panel5.Controls.Add(Me.DataGridViewX3)
         Me.Panel5.Controls.Add(Me.ToolStrip1)
+        Me.Panel5.Controls.Add(Me.Label2)
+        Me.Panel5.Controls.Add(Me.Label3)
+        Me.Panel5.Controls.Add(Me.Label1)
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel5.Location = New System.Drawing.Point(616, 0)
         Me.Panel5.Name = "Panel5"
@@ -344,7 +355,6 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewX3.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX3.Location = New System.Drawing.Point(0, 25)
-        Me.DataGridViewX3.MultiSelect = False
         Me.DataGridViewX3.Name = "DataGridViewX3"
         Me.DataGridViewX3.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.DataGridViewX3.Size = New System.Drawing.Size(653, 541)
@@ -471,6 +481,24 @@ Partial Class TimeEntryLogs
         Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 22)
         Me.ToolStripProgressBar1.Visible = False
         '
+        'Label2
+        '
+        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label2.Location = New System.Drawing.Point(466, 0)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(108, 22)
+        Me.Label2.TabIndex = 162
+        Me.Label2.Text = "Import"
+        '
+        'Label1
+        '
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label1.Location = New System.Drawing.Point(125, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(108, 22)
+        Me.Label1.TabIndex = 162
+        Me.Label1.Text = "Save time entry"
+        '
         'bgworkTypicalImport
         '
         Me.bgworkTypicalImport.WorkerReportsProgress = True
@@ -498,6 +526,27 @@ Partial Class TimeEntryLogs
         Me.DataGridViewTextBoxColumn3.Visible = False
         Me.DataGridViewTextBoxColumn3.Width = 139
         '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.HeaderText = "WasEdited"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        Me.DataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.DataGridViewTextBoxColumn4.Visible = False
+        Me.DataGridViewTextBoxColumn4.Width = 203
+        '
+        'DataGridViewTextBoxColumn5
+        '
+        Me.DataGridViewTextBoxColumn5.HeaderText = "Time Out"
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        Me.DataGridViewTextBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.DataGridViewTextBoxColumn5.Width = 204
+        '
+        'DataGridViewTextBoxColumn6
+        '
+        Me.DataGridViewTextBoxColumn6.HeaderText = "WasEdited"
+        Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
+        Me.DataGridViewTextBoxColumn6.Visible = False
+        '
         'colTimeIn
         '
         Me.colTimeIn.HeaderText = "Time In"
@@ -516,11 +565,37 @@ Partial Class TimeEntryLogs
         Me.WasEdited.Name = "WasEdited"
         Me.WasEdited.Visible = False
         '
-        'DataGridViewTextBoxColumn4
+        'EId
         '
-        Me.DataGridViewTextBoxColumn4.HeaderText = "WasEdited"
-        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
-        Me.DataGridViewTextBoxColumn4.Visible = False
+        Me.EId.HeaderText = "Employee ID"
+        Me.EId.Name = "EId"
+        Me.EId.ReadOnly = True
+        Me.EId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.EId.Width = 149
+        '
+        'EFullName
+        '
+        Me.EFullName.HeaderText = "Full Name"
+        Me.EFullName.Name = "EFullName"
+        Me.EFullName.ReadOnly = True
+        Me.EFullName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.EFullName.Width = 149
+        '
+        'E_RowId
+        '
+        Me.E_RowId.HeaderText = "RowID"
+        Me.E_RowId.Name = "E_RowId"
+        Me.E_RowId.ReadOnly = True
+        Me.E_RowId.Visible = False
+        '
+        'Label3
+        '
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label3.Location = New System.Drawing.Point(233, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(108, 22)
+        Me.Label3.TabIndex = 162
+        Me.Label3.Text = "Delete time entry"
         '
         'TimeEntryLogs
         '
@@ -596,4 +671,12 @@ Partial Class TimeEntryLogs
     Friend WithEvents colTimeOut As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents colDateValue As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
     Friend WithEvents WasEdited As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents EId As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents EFullName As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents E_RowId As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn6 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Label3 As System.Windows.Forms.Label
 End Class

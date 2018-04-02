@@ -110,10 +110,14 @@ ps.RowID
 ,IFNULL(REPLACE(psilv.`Column30`, ',', '\n'), '') `Column30`
 ,IFNULL(REPLACE(psilv.`Column31`, ',', '\n'), '') `Column31`
 
+# , IFNULL(rd.`RestDayAmount`, 0) `Column16`
+, IFNULL(ROUND(et.`RestDayAmount`, 2), 0) `Column16`
+
 FROM proper_payroll ps
 
 INNER JOIN employee e
         ON e.RowID=ps.EmployeeID AND e.OrganizationID=ps.OrganizationID
+        AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 
 INNER JOIN employeesalary esa
         ON esa.EmployeeID=ps.EmployeeID
@@ -155,7 +159,13 @@ LEFT JOIN (SELECT
 			  ,SUM(et.TaxableDailyBonus) `TaxableDailyBonus`
 			  ,SUM(et.NonTaxableDailyBonus) `NonTaxableDailyBonus`
 			  ,SUM(et.Leavepayment) `Leavepayment`
+			  , IF(is_actual = 1
+			       , SUM(i.RestDayActualPay)
+					 , SUM(i.RestDayAmount)) `RestDayAmount`
 			  FROM proper_time_entry et
+			  
+			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
+			  
 			  WHERE et.OrganizationID=og_rowid
 			  AND et.AsActual=is_actual
 			  AND et.`Date` BETWEEN paydate_from AND paydat_to
@@ -366,9 +376,21 @@ INNER JOIN (SELECT
            ) psilv
        ON psilv.PayStubID = ps.RowID
 
+/*LEFT JOIN (SELECT
+           i.EmployeeID
+			  , IF(is_actual = 1
+			       , SUM(i.RestDayActualPay)
+					 , SUM(i.RestDayAmount)) `RestDayAmount`
+			  FROM restdaytimeentry i
+			  WHERE i.OrganizationID = og_rowid
+			  AND i.`Date` BETWEEN paydate_from AND paydat_to
+			  GROUP BY i.EmployeeID
+           ) rd ON rd.EmployeeID = ps.EmployeeID*/
+
 WHERE ps.OrganizationID=og_rowid
 AND ps.PayPeriodID=pp_rowid
 AND ps.AsActual=is_actual
+GROUP BY ps.RowID
 ORDER BY CONCAT(e.LastName, e.FirstName)
 ;
 

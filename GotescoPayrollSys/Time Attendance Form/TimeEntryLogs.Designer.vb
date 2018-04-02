@@ -22,9 +22,9 @@ Partial Class TimeEntryLogs
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DataGridViewX1 = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel6 = New System.Windows.Forms.Panel()
@@ -34,6 +34,9 @@ Partial Class TimeEntryLogs
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.DataGridViewX2 = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.EId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.EFullName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.E_RowId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Panel8 = New System.Windows.Forms.Panel()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -45,7 +48,10 @@ Partial Class TimeEntryLogs
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.DataGridViewX3 = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.colTimeIn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colTimeOut = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colDateValue = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.WasEdited = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.tsbtnNew = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnSave = New System.Windows.Forms.ToolStripButton()
@@ -57,6 +63,7 @@ Partial Class TimeEntryLogs
         Me.tsbtnAudittrail = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.bgworkTypicalImport = New System.ComponentModel.BackgroundWorker()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -65,13 +72,6 @@ Partial Class TimeEntryLogs
         Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colTimeIn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colTimeOut = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.WasEdited = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.EId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.EFullName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.E_RowId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Label3 = New System.Windows.Forms.Label()
         CType(Me.DataGridViewX1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -90,18 +90,17 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX1.AllowUserToDeleteRows = False
         Me.DataGridViewX1.AllowUserToResizeColumns = False
         Me.DataGridViewX1.AllowUserToResizeRows = False
-        Me.DataGridViewX1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.DataGridViewX1.BackgroundColor = System.Drawing.Color.White
         Me.DataGridViewX1.ColumnHeadersHeight = 35
         Me.DataGridViewX1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX1.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX1.DefaultCellStyle = DataGridViewCellStyle4
         Me.DataGridViewX1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewX1.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX1.Location = New System.Drawing.Point(0, 0)
@@ -201,14 +200,14 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX2.ColumnHeadersHeight = 35
         Me.DataGridViewX2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DataGridViewX2.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.EId, Me.EFullName, Me.E_RowId})
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX2.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX2.DefaultCellStyle = DataGridViewCellStyle5
         Me.DataGridViewX2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewX2.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX2.Location = New System.Drawing.Point(0, 41)
@@ -219,6 +218,29 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewX2.Size = New System.Drawing.Size(341, 510)
         Me.DataGridViewX2.TabIndex = 159
+        '
+        'EId
+        '
+        Me.EId.HeaderText = "Employee ID"
+        Me.EId.Name = "EId"
+        Me.EId.ReadOnly = True
+        Me.EId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.EId.Width = 149
+        '
+        'EFullName
+        '
+        Me.EFullName.HeaderText = "Full Name"
+        Me.EFullName.Name = "EFullName"
+        Me.EFullName.ReadOnly = True
+        Me.EFullName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.EFullName.Width = 149
+        '
+        'E_RowId
+        '
+        Me.E_RowId.HeaderText = "RowID"
+        Me.E_RowId.Name = "E_RowId"
+        Me.E_RowId.ReadOnly = True
+        Me.E_RowId.Visible = False
         '
         'Panel8
         '
@@ -232,7 +254,7 @@ Partial Class TimeEntryLogs
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(260, 13)
+        Me.Button1.Location = New System.Drawing.Point(266, 13)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 20)
         Me.Button1.TabIndex = 1
@@ -241,9 +263,9 @@ Partial Class TimeEntryLogs
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(6, 12)
+        Me.TextBox1.Location = New System.Drawing.Point(0, 12)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(248, 20)
+        Me.TextBox1.Size = New System.Drawing.Size(260, 20)
         Me.TextBox1.TabIndex = 0
         '
         'Panel7
@@ -339,19 +361,18 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX3.AllowUserToDeleteRows = False
         Me.DataGridViewX3.AllowUserToResizeColumns = False
         Me.DataGridViewX3.AllowUserToResizeRows = False
-        Me.DataGridViewX3.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.DataGridViewX3.BackgroundColor = System.Drawing.Color.White
         Me.DataGridViewX3.ColumnHeadersHeight = 35
         Me.DataGridViewX3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DataGridViewX3.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.colTimeIn, Me.colTimeOut, Me.colDateValue, Me.WasEdited})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX3.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX3.DefaultCellStyle = DataGridViewCellStyle6
         Me.DataGridViewX3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewX3.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX3.Location = New System.Drawing.Point(0, 25)
@@ -359,6 +380,20 @@ Partial Class TimeEntryLogs
         Me.DataGridViewX3.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.DataGridViewX3.Size = New System.Drawing.Size(653, 541)
         Me.DataGridViewX3.TabIndex = 160
+        '
+        'colTimeIn
+        '
+        Me.colTimeIn.HeaderText = "Time In"
+        Me.colTimeIn.Name = "colTimeIn"
+        Me.colTimeIn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.colTimeIn.Width = 203
+        '
+        'colTimeOut
+        '
+        Me.colTimeOut.HeaderText = "Time Out"
+        Me.colTimeOut.Name = "colTimeOut"
+        Me.colTimeOut.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.colTimeOut.Width = 204
         '
         'colDateValue
         '
@@ -397,6 +432,13 @@ Partial Class TimeEntryLogs
         Me.colDateValue.Name = "colDateValue"
         Me.colDateValue.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.colDateValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.colDateValue.Width = 203
+        '
+        'WasEdited
+        '
+        Me.WasEdited.HeaderText = "WasEdited"
+        Me.WasEdited.Name = "WasEdited"
+        Me.WasEdited.Visible = False
         '
         'ToolStrip1
         '
@@ -461,7 +503,8 @@ Partial Class TimeEntryLogs
         Me.tsbtnClose.Image = Global.GotescoPayrollSys.My.Resources.Resources.Button_Delete_icon
         Me.tsbtnClose.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnClose.Name = "tsbtnClose"
-        Me.tsbtnClose.Size = New System.Drawing.Size(23, 22)
+        Me.tsbtnClose.Size = New System.Drawing.Size(56, 22)
+        Me.tsbtnClose.Text = "Close"
         '
         'tsbtnAudittrail
         '
@@ -489,6 +532,15 @@ Partial Class TimeEntryLogs
         Me.Label2.Size = New System.Drawing.Size(108, 22)
         Me.Label2.TabIndex = 162
         Me.Label2.Text = "Import"
+        '
+        'Label3
+        '
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label3.Location = New System.Drawing.Point(233, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(108, 22)
+        Me.Label3.TabIndex = 162
+        Me.Label3.Text = "Delete time entry"
         '
         'Label1
         '
@@ -546,56 +598,6 @@ Partial Class TimeEntryLogs
         Me.DataGridViewTextBoxColumn6.HeaderText = "WasEdited"
         Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
         Me.DataGridViewTextBoxColumn6.Visible = False
-        '
-        'colTimeIn
-        '
-        Me.colTimeIn.HeaderText = "Time In"
-        Me.colTimeIn.Name = "colTimeIn"
-        Me.colTimeIn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'colTimeOut
-        '
-        Me.colTimeOut.HeaderText = "Time Out"
-        Me.colTimeOut.Name = "colTimeOut"
-        Me.colTimeOut.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'WasEdited
-        '
-        Me.WasEdited.HeaderText = "WasEdited"
-        Me.WasEdited.Name = "WasEdited"
-        Me.WasEdited.Visible = False
-        '
-        'EId
-        '
-        Me.EId.HeaderText = "Employee ID"
-        Me.EId.Name = "EId"
-        Me.EId.ReadOnly = True
-        Me.EId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.EId.Width = 149
-        '
-        'EFullName
-        '
-        Me.EFullName.HeaderText = "Full Name"
-        Me.EFullName.Name = "EFullName"
-        Me.EFullName.ReadOnly = True
-        Me.EFullName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.EFullName.Width = 149
-        '
-        'E_RowId
-        '
-        Me.E_RowId.HeaderText = "RowID"
-        Me.E_RowId.Name = "E_RowId"
-        Me.E_RowId.ReadOnly = True
-        Me.E_RowId.Visible = False
-        '
-        'Label3
-        '
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label3.Location = New System.Drawing.Point(233, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(108, 22)
-        Me.Label3.TabIndex = 162
-        Me.Label3.Text = "Delete time entry"
         '
         'TimeEntryLogs
         '

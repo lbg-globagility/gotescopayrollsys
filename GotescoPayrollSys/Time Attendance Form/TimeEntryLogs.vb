@@ -38,8 +38,6 @@ Public Class TimeEntryLogs
 
         ' Add any initialization after the InitializeComponent() call.
 
-        HotkeyManager.Current.AddOrReplace("MacroKey_Control_R", (Keys.Control + Keys.R), AddressOf MacroKey_ContrlKey_RKey)
-
     End Sub
 
     Sub TimeEntryLogs()
@@ -47,6 +45,8 @@ Public Class TimeEntryLogs
     End Sub
 
     Protected Overrides Sub OnLoad(e As EventArgs)
+
+        HotkeyManager.Current.AddOrReplace("MacroKey_Control_R", (Keys.Control + Keys.R), AddressOf MacroKey_ContrlKey_RKey)
 
         PrevYear.Text = (this_year - 1)
         NxtYear.Text = (this_year + 1)

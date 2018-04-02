@@ -1,4 +1,6 @@
 ﻿'Option Strict On
+Imports NHotkey.WindowsForms
+Imports NHotkey
 
 Public Class TimeEntryLogs
 
@@ -18,7 +20,7 @@ Public Class TimeEntryLogs
 
     Private e_uniq_id, e_primkey As String
 
-    Private timelog_row As DataGridViewRow
+    Private timelog_row As DataGridViewCell 'DataGridViewRow
 
     Private str_query_insupd_timeentrylogs As String =
         "SELECT INSUPD_timeentrylogs(?og_id, ?emp_unique_key, ?timestamp_log, ?max_importid);"
@@ -29,6 +31,21 @@ Public Class TimeEntryLogs
 
 #Region "Event Handlers"
 
+    Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+        HotkeyManager.Current.AddOrReplace("MacroKey_Control_R", (Keys.Control + Keys.R), AddressOf MacroKey_ContrlKey_RKey)
+
+    End Sub
+
+    Sub TimeEntryLogs()
+
+    End Sub
+
     Protected Overrides Sub OnLoad(e As EventArgs)
 
         PrevYear.Text = (this_year - 1)
@@ -36,8 +53,8 @@ Public Class TimeEntryLogs
 
         MyBase.OnLoad(e)
 
-        organization_rowid = 1 'org_rowid
-        user_row_id = 1
+        'organization_rowid = 1 'org_rowid
+        'user_row_id = 1
 
         lblYear.Text = this_year
     End Sub
@@ -143,26 +160,38 @@ Public Class TimeEntryLogs
 
     Private Sub tsbtnCancel_Click(sender As Object, e As EventArgs) Handles tsbtnCancel.Click
 
-        timelog_row =
-            DataGridViewX3.Rows.OfType(Of DataGridViewRow).Where(Function(dgv) dgv.Selected).FirstOrDefault
+        DataGridViewX3.EndEdit()
 
-        Dim _rowindex = 0
-        If timelog_row IsNot Nothing Then
-            _rowindex = 0
-        Else
-            _rowindex = timelog_row.Index
-        End If
+        tsbtnCancel.Enabled = False
+        Try
 
-        DataGridViewX2_CurrentCellChanged(DataGridViewX2, New EventArgs)
+            timelog_row =
+                DataGridViewX3.SelectedCells.OfType(Of DataGridViewCell).Where(Function(dgcel) dgcel.Selected).FirstOrDefault
 
-        If _rowindex > 0 Then
-            Dim _col =
-                DataGridViewX3.Columns.OfType(Of DataGridViewColumn).Where(Function(dgcol) dgcol.Visible).LastOrDefault
+            Dim _rowindex = 0
+            If timelog_row Is Nothing Then
+                _rowindex = 0
+            Else
+                _rowindex = timelog_row.RowIndex
+            End If
 
-            Dim dgcolname = _col.Name
+            DataGridViewX2_CurrentCellChanged(DataGridViewX2, New EventArgs)
 
-            DataGridViewX3.CurrentCell = DataGridViewX3.Item(0, _rowindex)
-        End If
+            If _rowindex > 0 Then
+                'Dim _col =
+                '    DataGridViewX3.Columns.OfType(Of DataGridViewColumn).Where(Function(dgcol) dgcol.Visible).LastOrDefault
+
+                'Dim dgcolname = _col.Name
+
+                DataGridViewX3.CurrentCell =
+                    DataGridViewX3.Item(timelog_row.ColumnIndex, _rowindex)
+            End If
+
+        Catch ex As Exception
+            ErrorNotif(ex)
+        Finally
+            tsbtnCancel.Enabled = True
+        End Try
 
     End Sub
 
@@ -191,12 +220,14 @@ Public Class TimeEntryLogs
     End Sub
 
     Private Sub tsbtnAudittrail_Click(sender As Object, e As EventArgs) Handles tsbtnAudittrail.Click
-        
+
     End Sub
 
     Private Sub tsbtndel_Click(sender As Object, e As EventArgs) Handles tsbtndel.Click
 
         DataGridViewX3.EndEdit()
+
+        tsbtndel.Enabled = False
 
         Dim dgvrows =
             DataGridViewX3.Rows.OfType(Of DataGridViewRow).
@@ -268,6 +299,10 @@ Public Class TimeEntryLogs
 
         Catch ex As Exception
             ErrorNotif(ex)
+        Finally
+
+            tsbtndel.Enabled = True
+
         End Try
 
     End Sub
@@ -275,6 +310,8 @@ Public Class TimeEntryLogs
     Private Sub tsbtnSave_Click(sender As Object, e As EventArgs) Handles tsbtnSave.Click
 
         DataGridViewX3.EndEdit()
+
+        tsbtnSave.Enabled = False
 
         Try
 
@@ -344,38 +381,25 @@ Public Class TimeEntryLogs
 
                         Dim should_update_record As Boolean = (_count > 0)
 
-                        If should_update_record Then
-                            For Each etd In timelog_record
-                                With etd
-                                    .EmployeeId = var_erowid
-                                    .TimeIn = time_in
-                                    .TimeOut = time_out
-                                    .DateValue = tl_date
-                                    .OrganizationId = organization_rowid
-                                    .LastUpdBy = user_row_id
-                                    .LastUpd = Now
-                                End With
-
-                                _mod.EmployeeTimeEntryDetails.Add(etd)
-                                _mod.Entry(etd).State = Entity.EntityState.Modified
-
-                            Next
-
-                        Else
-                            Dim ted =
+                        Dim ted =
                                     New EmployeeTimeEntryDetails _
                                     With {.EmployeeId = var_erowid,
                                           .TimeIn = time_in,
                                           .TimeOut = time_out,
                                           .DateValue = tl_date,
-                                          .OrganizationId = organization_rowid,
-                                          .CreatedBy = user_row_id,
-                                          .LastUpdBy = user_row_id,
-                                          .Created = Now}
+                                          .OrganizationId = organization_rowid}
 
-                            _mod.EmployeeTimeEntryDetails.Add(ted)
+                        If should_update_record Then
+                            ted.LastUpd = Now
+                            ted.LastUpdBy = user_row_id
 
+                            _mod.Entry(ted).State = Entity.EntityState.Modified
+                        Else
+                            ted.Created = Now
+                            ted.CreatedBy = user_row_id
                         End If
+
+                        _mod.EmployeeTimeEntryDetails.Add(ted)
 
                     Next
 
@@ -389,6 +413,10 @@ Public Class TimeEntryLogs
 
         Catch ex As Exception
             ErrorNotif(ex)
+        Finally
+
+            tsbtnSave.Enabled = True
+
         End Try
 
     End Sub
@@ -545,6 +573,20 @@ Public Class TimeEntryLogs
             DataGridViewX3.Item(WasEdited.Index, e.RowIndex).Value = True
         End If
 
+    End Sub
+
+    Private Sub MacroKey_ContrlKey_RKey(sender As Object, e As HotkeyEventArgs)
+        DataGridViewX1.Focus()
+        DataGridViewX2.Focus()
+
+        Dim _bool = tsbtnCancel.Enabled
+
+        If _bool Then
+            tsbtnCancel_Click(tsbtnCancel, New EventArgs)
+            'Button1_Click(Button1, New EventArgs)
+
+        End If
+        
     End Sub
 
 #End Region
@@ -741,12 +783,18 @@ Public Class TimeEntryLogs
     End Sub
 
     Private Sub ErrorNotif(ex As Exception)
-        MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
 
-        Dim st As StackTrace = New StackTrace(ex, True)
-        Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
+        Static exempted_msg() As String = New String() {"No row can be added to a DataGridView control that does not have columns. Columns must be added first."}
 
-        _logger.Error(sf.GetMethod.Name, ex)
+        If exempted_msg.Contains(ex.Message) = False Then
+            MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
+
+            Dim st As StackTrace = New StackTrace(ex, True)
+            Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
+
+            _logger.Error(sf.GetMethod.Name, ex)
+        End If
+
     End Sub
 
     Private Function ImportConventionalFormatTimeLogs() As Integer

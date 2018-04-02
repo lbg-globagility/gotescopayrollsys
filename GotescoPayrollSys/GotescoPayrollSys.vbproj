@@ -221,6 +221,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MySqlBackup.NET.2.0.8\lib\net45\MySqlBackup.dll</HintPath>
     </Reference>
+    <Reference Include="NHotkey, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHotkey.1.2.1\lib\net20\NHotkey.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHotkey.WindowsForms, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHotkey.WindowsForms.1.2.1\lib\net20\NHotkey.WindowsForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OCRTools, Version=6.0.5357.12364, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\OCRTools.dll</HintPath>

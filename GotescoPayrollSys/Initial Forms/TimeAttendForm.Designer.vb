@@ -23,23 +23,42 @@ Partial Class TimeAttendForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.TimeEntToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TimeEntryLogsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TimeEntryLogsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TimeEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TimeEntToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PanelTimeAttend = New System.Windows.Forms.Panel()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
         Me.MenuStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(242, Byte), Integer))
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.TimeEntryLogsToolStripMenuItem, Me.TimeEntryToolStripMenuItem, Me.TimeEntToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.TimeEntryLogsToolStripMenuItem, Me.ToolStripMenuItem2, Me.TimeEntryToolStripMenuItem, Me.TimeEntToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1006, 24)
         Me.MenuStrip1.TabIndex = 2
         Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(98, 20)
+        Me.ToolStripMenuItem1.Text = "Employee Shift"
+        '
+        'TimeEntryLogsToolStripMenuItem
+        '
+        Me.TimeEntryLogsToolStripMenuItem.Name = "TimeEntryLogsToolStripMenuItem"
+        Me.TimeEntryLogsToolStripMenuItem.Size = New System.Drawing.Size(101, 20)
+        Me.TimeEntryLogsToolStripMenuItem.Text = "Time entry logs"
+        '
+        'TimeEntryToolStripMenuItem
+        '
+        Me.TimeEntryToolStripMenuItem.Name = "TimeEntryToolStripMenuItem"
+        Me.TimeEntryToolStripMenuItem.Size = New System.Drawing.Size(76, 20)
+        Me.TimeEntryToolStripMenuItem.Text = "Time entry"
         '
         'TimeEntToolStripMenuItem
         '
@@ -48,24 +67,6 @@ Partial Class TimeAttendForm
         Me.TimeEntToolStripMenuItem.Text = "Employee Shift"
         Me.TimeEntToolStripMenuItem.Visible = False
         '
-        'TimeEntryLogsToolStripMenuItem
-        '
-        Me.TimeEntryLogsToolStripMenuItem.Name = "TimeEntryLogsToolStripMenuItem"
-        Me.TimeEntryLogsToolStripMenuItem.Size = New System.Drawing.Size(101, 20)
-        Me.TimeEntryLogsToolStripMenuItem.Text = "Time entry logs"
-        '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(98, 20)
-        Me.ToolStripMenuItem1.Text = "Employee Shift"
-        '
-        'TimeEntryToolStripMenuItem
-        '
-        Me.TimeEntryToolStripMenuItem.Name = "TimeEntryToolStripMenuItem"
-        Me.TimeEntryToolStripMenuItem.Size = New System.Drawing.Size(76, 20)
-        Me.TimeEntryToolStripMenuItem.Text = "Time entry"
-        '
         'PanelTimeAttend
         '
         Me.PanelTimeAttend.Dock = System.Windows.Forms.DockStyle.Fill
@@ -73,6 +74,13 @@ Partial Class TimeAttendForm
         Me.PanelTimeAttend.Name = "PanelTimeAttend"
         Me.PanelTimeAttend.Size = New System.Drawing.Size(1006, 446)
         Me.PanelTimeAttend.TabIndex = 3
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(118, 20)
+        Me.ToolStripMenuItem2.Text = "Time entry logs (2)"
+        Me.ToolStripMenuItem2.Visible = False
         '
         'TimeAttendForm
         '
@@ -97,4 +105,5 @@ Partial Class TimeAttendForm
     Friend WithEvents TimeEntryLogsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TimeEntryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
 End Class

@@ -133,4 +133,32 @@
 
     End Sub
 
+    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
+
+        Dim _tel =
+            PanelTimeAttend.Controls.OfType(Of TimeEntryLogs)()
+
+        Dim has_tel = (_tel.Count > 0)
+
+        Dim tel_form As New TimeEntryLogs
+
+        If has_tel Then
+            tel_form = _tel.FirstOrDefault
+
+            tel_form.TopLevel = False
+            tel_form.Dock = DockStyle.Fill
+        Else
+            tel_form.TopLevel = False
+            tel_form.Dock = DockStyle.Fill
+
+            PanelTimeAttend.Controls.Add(tel_form)
+
+            listTimeAttendForm.Add(tel_form.Name)
+        End If
+
+        tel_form.Show()
+        tel_form.BringToFront()
+        tel_form.Focus()
+    End Sub
+
 End Class

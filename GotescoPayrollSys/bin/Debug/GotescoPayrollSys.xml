@@ -6,7 +6,82 @@ GotescoPayrollSys
 </name>
 </assembly>
 <members>
-<member name="P:GotescoPayrollSys.My.Resources.Resources.ResourceManager">
+<member name="P:GotescoPayrollSys.AboutAndVersion.VersionCode">
+	<summary>
+ Returns the version of this software.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:GotescoPayrollSys.ExcelWriter.#ctor(System.IO.Stream)">
+	<summary>
+ Initializes a new instance of the <see cref="T:GotescoPayrollSys.ExcelWriter"/> class.
+ </summary>
+	<param name="stream">The stream.</param>
+</member><member name="M:GotescoPayrollSys.ExcelWriter.WriteCell(System.Int32,System.Int32,System.String)">
+	<summary>
+ Writes the text cell value.
+ </summary>
+	<param name="row">The row.</param>
+	<param name="col">The col.</param>
+	<param name="value">The string value.</param>
+</member><member name="M:GotescoPayrollSys.ExcelWriter.WriteCell(System.Int32,System.Int32,System.Int32)">
+	<summary>
+ Writes the integer cell value.
+ </summary>
+	<param name="row">The row number.</param>
+	<param name="col">The column number.</param>
+	<param name="value">The value.</param>
+</member><member name="M:GotescoPayrollSys.ExcelWriter.WriteCell(System.Int32,System.Int32,System.Double)">
+	<summary>
+ Writes the double cell value.
+ </summary>
+	<param name="row">The row number.</param>
+	<param name="col">The column number.</param>
+	<param name="value">The value.</param>
+</member><member name="M:GotescoPayrollSys.ExcelWriter.WriteCell(System.Int32,System.Int32)">
+	<summary>
+ Writes the empty cell.
+ </summary>
+	<param name="row">The row number.</param>
+	<param name="col">The column number.</param>
+</member><member name="M:GotescoPayrollSys.ExcelWriter.BeginWrite">
+	<summary>
+ Must be called once for creating XLS file header
+ </summary>
+</member><member name="M:GotescoPayrollSys.ExcelWriter.EndWrite">
+	<summary>
+ Ends the writing operation, but do not close the stream
+ </summary>
+</member><member name="T:GotescoPayrollSys.DSReportList._PFF_053DataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GotescoPayrollSys.DSReportList.PFF053DataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GotescoPayrollSys.DSReportList._PFF_053Row">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GotescoPayrollSys.DSReportList.PFF053Row">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GotescoPayrollSys.DSReportList._PFF_053RowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GotescoPayrollSys.DSReportList.PFF053RowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GotescoPayrollSys.DSReportList">
+	<summary>
+Represents a strongly typed in-memory cache of data.
+</summary>
+</member><member name="P:GotescoPayrollSys.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
@@ -244,81 +319,6 @@ Represents strongly named DataRow class.
 Row event argument class
 </summary>
 </member><member name="T:GotescoPayrollSys.memoUserDetailsDataset">
-	<summary>
-Represents a strongly typed in-memory cache of data.
-</summary>
-</member><member name="M:GotescoPayrollSys.ExcelWriter.#ctor(System.IO.Stream)">
-	<summary>
- Initializes a new instance of the <see cref="T:GotescoPayrollSys.ExcelWriter"/> class.
- </summary>
-	<param name="stream">The stream.</param>
-</member><member name="M:GotescoPayrollSys.ExcelWriter.WriteCell(System.Int32,System.Int32,System.String)">
-	<summary>
- Writes the text cell value.
- </summary>
-	<param name="row">The row.</param>
-	<param name="col">The col.</param>
-	<param name="value">The string value.</param>
-</member><member name="M:GotescoPayrollSys.ExcelWriter.WriteCell(System.Int32,System.Int32,System.Int32)">
-	<summary>
- Writes the integer cell value.
- </summary>
-	<param name="row">The row number.</param>
-	<param name="col">The column number.</param>
-	<param name="value">The value.</param>
-</member><member name="M:GotescoPayrollSys.ExcelWriter.WriteCell(System.Int32,System.Int32,System.Double)">
-	<summary>
- Writes the double cell value.
- </summary>
-	<param name="row">The row number.</param>
-	<param name="col">The column number.</param>
-	<param name="value">The value.</param>
-</member><member name="M:GotescoPayrollSys.ExcelWriter.WriteCell(System.Int32,System.Int32)">
-	<summary>
- Writes the empty cell.
- </summary>
-	<param name="row">The row number.</param>
-	<param name="col">The column number.</param>
-</member><member name="M:GotescoPayrollSys.ExcelWriter.BeginWrite">
-	<summary>
- Must be called once for creating XLS file header
- </summary>
-</member><member name="M:GotescoPayrollSys.ExcelWriter.EndWrite">
-	<summary>
- Ends the writing operation, but do not close the stream
- </summary>
-</member><member name="P:GotescoPayrollSys.AboutAndVersion.VersionCode">
-	<summary>
- Returns the version of this software.
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:GotescoPayrollSys.DSReportList._PFF_053DataTable">
-	<summary>
-Represents the strongly named DataTable class.
-</summary>
-</member><member name="T:GotescoPayrollSys.DSReportList.PFF053DataTable">
-	<summary>
-Represents the strongly named DataTable class.
-</summary>
-</member><member name="T:GotescoPayrollSys.DSReportList._PFF_053Row">
-	<summary>
-Represents strongly named DataRow class.
-</summary>
-</member><member name="T:GotescoPayrollSys.DSReportList.PFF053Row">
-	<summary>
-Represents strongly named DataRow class.
-</summary>
-</member><member name="T:GotescoPayrollSys.DSReportList._PFF_053RowChangeEvent">
-	<summary>
-Row event argument class
-</summary>
-</member><member name="T:GotescoPayrollSys.DSReportList.PFF053RowChangeEvent">
-	<summary>
-Row event argument class
-</summary>
-</member><member name="T:GotescoPayrollSys.DSReportList">
 	<summary>
 Represents a strongly typed in-memory cache of data.
 </summary>

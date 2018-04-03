@@ -24,6 +24,14 @@ e.DeptManager = NEW.DeptMngrID
 WHERE e.DeptManager = OLD.DeptMngrID
 AND NEW.DeptMngrID IS NULL;
 
+IF NEW.RowID = 0 THEN
+
+	SET NEW.LastName = 'User';
+	SET NEW.FirstName = 'System';
+	SET NEW.MiddleName = 'Generated';
+
+END IF;
+
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;

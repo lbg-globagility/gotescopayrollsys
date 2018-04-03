@@ -27,6 +27,8 @@ Public Class TimeEntryLogs
 
     Dim thefilepath As String = String.Empty
 
+    Private can_add, can_del, can_update As Boolean
+
 #End Region
 
 #Region "Event Handlers"
@@ -195,8 +197,12 @@ Public Class TimeEntryLogs
 
     End Sub
 
-    Private Sub TimeEntryLogs_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub TimeEntryLogs_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        
+    End Sub
 
+    Private Sub TimeEntryLogs_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        TimeAttendForm.listTimeAttendForm.Remove(Me.Name)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -452,6 +458,8 @@ Public Class TimeEntryLogs
 
                 thefilepath = browsefile.FileName
 
+                ToolStripProgressBar1.Visible = True
+
                 Dim ct As New CustomBalloonToolTip(Label2, "Importing time logs")
                 ct.ShowInfoBallon("Please wait while the system doing the importation.")
 
@@ -509,6 +517,8 @@ Public Class TimeEntryLogs
             DataGridViewX2_CurrentCellChanged(DataGridViewX2, New EventArgs)
 
         End If
+
+        ToolStripProgressBar1.Visible = False
 
     End Sub
 
@@ -605,6 +615,10 @@ Public Class TimeEntryLogs
 
         End If
         
+    End Sub
+
+    Private Sub ToolStripProgressBar1_VisibleChanged(sender As Object, e As EventArgs) Handles ToolStripProgressBar1.VisibleChanged
+        Panel5.Enabled = (Not ToolStripProgressBar1.Visible)
     End Sub
 
 #End Region
@@ -873,6 +887,43 @@ Public Class TimeEntryLogs
 #End Region
 
 #Region "Properties"
+
+    Public ReadOnly ViewName As String = "Employee Time Entry logs"
+
+    Property CanAdd As Boolean
+        Get
+            Return can_add
+        End Get
+        Set(value As Boolean)
+            can_add = value
+            tsbtnNew.Visible = can_add
+            tsbtnImport.Visible = can_add
+            DataGridViewX3.AllowUserToAddRows = can_add
+            
+        End Set
+    End Property
+
+    Property CanDelete As Boolean
+        Get
+            Return can_del
+        End Get
+        Set(value As Boolean)
+            can_del = value
+            tsbtndel.Visible = can_del
+
+        End Set
+    End Property
+
+    Property CanUpdate As Boolean
+        Get
+            Return can_update
+        End Get
+        Set(value As Boolean)
+            can_update = value
+            tsbtnSave.Visible = can_update
+            
+        End Set
+    End Property
 
 #End Region
 

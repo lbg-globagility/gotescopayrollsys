@@ -59,7 +59,6 @@ Partial Class TimeAttendForm
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(118, 20)
         Me.ToolStripMenuItem2.Text = "Time entry logs (2)"
-        Me.ToolStripMenuItem2.Visible = False
         '
         'TimeEntryToolStripMenuItem
         '

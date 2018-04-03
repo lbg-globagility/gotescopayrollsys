@@ -59,9 +59,9 @@ Partial Class TimeEntryLogs
         Me.tsbtnCancel = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.tsbtnImport = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.tsbtnClose = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnAudittrail = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -444,7 +444,7 @@ Partial Class TimeEntryLogs
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.White
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNew, Me.tsbtnSave, Me.tsbtndel, Me.tsbtnCancel, Me.ToolStripLabel1, Me.tsbtnImport, Me.tsbtnClose, Me.tsbtnAudittrail, Me.ToolStripProgressBar1})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNew, Me.tsbtnSave, Me.tsbtndel, Me.tsbtnCancel, Me.ToolStripLabel1, Me.tsbtnImport, Me.ToolStripProgressBar1, Me.tsbtnClose, Me.tsbtnAudittrail})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(653, 25)
@@ -456,24 +456,24 @@ Partial Class TimeEntryLogs
         Me.tsbtnNew.Image = Global.GotescoPayrollSys.My.Resources.Resources.Add
         Me.tsbtnNew.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnNew.Name = "tsbtnNew"
-        Me.tsbtnNew.Size = New System.Drawing.Size(108, 22)
-        Me.tsbtnNew.Text = "&New time entry"
+        Me.tsbtnNew.Size = New System.Drawing.Size(98, 22)
+        Me.tsbtnNew.Text = "&New time log"
         '
         'tsbtnSave
         '
         Me.tsbtnSave.Image = Global.GotescoPayrollSys.My.Resources.Resources.Save
         Me.tsbtnSave.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnSave.Name = "tsbtnSave"
-        Me.tsbtnSave.Size = New System.Drawing.Size(108, 22)
-        Me.tsbtnSave.Text = "&Save time entry"
+        Me.tsbtnSave.Size = New System.Drawing.Size(98, 22)
+        Me.tsbtnSave.Text = "&Save time log"
         '
         'tsbtndel
         '
         Me.tsbtndel.Image = Global.GotescoPayrollSys.My.Resources.Resources.CLOSE_00
         Me.tsbtndel.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtndel.Name = "tsbtndel"
-        Me.tsbtndel.Size = New System.Drawing.Size(117, 22)
-        Me.tsbtndel.Text = "&Delete time entry"
+        Me.tsbtndel.Size = New System.Drawing.Size(107, 22)
+        Me.tsbtndel.Text = "&Delete time log"
         '
         'tsbtnCancel
         '
@@ -486,8 +486,8 @@ Partial Class TimeEntryLogs
         'ToolStripLabel1
         '
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(52, 22)
-        Me.ToolStripLabel1.Text = "               "
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(22, 22)
+        Me.ToolStripLabel1.Text = "     "
         '
         'tsbtnImport
         '
@@ -496,6 +496,13 @@ Partial Class TimeEntryLogs
         Me.tsbtnImport.Name = "tsbtnImport"
         Me.tsbtnImport.Size = New System.Drawing.Size(63, 22)
         Me.tsbtnImport.Text = "Import"
+        '
+        'ToolStripProgressBar1
+        '
+        Me.ToolStripProgressBar1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
+        Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 22)
+        Me.ToolStripProgressBar1.Visible = False
         '
         'tsbtnClose
         '
@@ -516,13 +523,6 @@ Partial Class TimeEntryLogs
         Me.tsbtnAudittrail.Size = New System.Drawing.Size(23, 22)
         Me.tsbtnAudittrail.Text = "ToolStripButton1"
         Me.tsbtnAudittrail.ToolTipText = "Show audit trails"
-        '
-        'ToolStripProgressBar1
-        '
-        Me.ToolStripProgressBar1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
-        Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 22)
-        Me.ToolStripProgressBar1.Visible = False
         '
         'Label2
         '

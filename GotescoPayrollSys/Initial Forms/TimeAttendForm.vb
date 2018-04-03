@@ -12,7 +12,23 @@
 
         If formuserprivilege.Count <> 0 Then
 
+            Dim is_tel = (TypeOf Formname Is TimeEntryLogs)
+
+            If is_tel Then
+                Dim fdsfd = DirectCast(Formname, TimeEntryLogs)
+                fdsfd.CanAdd = False
+                fdsfd.CanUpdate = False
+                fdsfd.CanDelete = False
+            End If
+
             For Each drow In formuserprivilege
+
+                If is_tel Then
+                    Dim fdsfd = DirectCast(Formname, TimeEntryLogs)
+                    fdsfd.CanAdd = (drow("Creates").ToString = "Y")
+                    fdsfd.CanUpdate = (drow("Updates").ToString = "Y")
+                    fdsfd.CanDelete = (drow("Deleting").ToString = "Y")
+                End If
 
                 If drow("ReadOnly").ToString = "Y" Then
 
@@ -133,7 +149,24 @@
 
     End Sub
 
-    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
+    Private Sub ToolStripMenuItem2Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
+
+        Dim _tel =
+            PanelTimeAttend.Controls.OfType(Of TimeEntryLogs)()
+
+        Dim has_tel = (_tel.Count > 0)
+
+        Dim tel_form As New TimeEntryLogs
+
+        If has_tel Then
+            tel_form = _tel.FirstOrDefault
+        End If
+
+        ChangeForm(tel_form, tel_form.ViewName)
+        previousForm = tel_form
+    End Sub
+
+    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) 'Handles ToolStripMenuItem2.Click
 
         Dim _tel =
             PanelTimeAttend.Controls.OfType(Of TimeEntryLogs)()
@@ -159,6 +192,7 @@
         tel_form.Show()
         tel_form.BringToFront()
         tel_form.Focus()
+
     End Sub
 
 End Class

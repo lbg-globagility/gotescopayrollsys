@@ -63,7 +63,7 @@ AND tlg.ImportID = import_id
 INTO date_from
      , date_to;
 
-SELECT organiz_rowid, date_from, date_to INTO OUTFILE 'D:/New Downloads/result.txt';
+# SELECT organiz_rowid, date_from, date_to INTO OUTFILE 'D:/New Downloads/result.txt';
 
 INSERT INTO employeetimeentrydetails
 (

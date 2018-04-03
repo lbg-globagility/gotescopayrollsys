@@ -25,10 +25,10 @@ Partial Class TimeAttendForm
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.TimeEntryLogsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.TimeEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TimeEntToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PanelTimeAttend = New System.Windows.Forms.Panel()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -54,6 +54,13 @@ Partial Class TimeAttendForm
         Me.TimeEntryLogsToolStripMenuItem.Size = New System.Drawing.Size(101, 20)
         Me.TimeEntryLogsToolStripMenuItem.Text = "Time entry logs"
         '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(118, 20)
+        Me.ToolStripMenuItem2.Text = "Time entry logs (2)"
+        Me.ToolStripMenuItem2.Visible = False
+        '
         'TimeEntryToolStripMenuItem
         '
         Me.TimeEntryToolStripMenuItem.Name = "TimeEntryToolStripMenuItem"
@@ -74,13 +81,6 @@ Partial Class TimeAttendForm
         Me.PanelTimeAttend.Name = "PanelTimeAttend"
         Me.PanelTimeAttend.Size = New System.Drawing.Size(1006, 446)
         Me.PanelTimeAttend.TabIndex = 3
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(118, 20)
-        Me.ToolStripMenuItem2.Text = "Time entry logs (2)"
-        Me.ToolStripMenuItem2.Visible = False
         '
         'TimeAttendForm
         '

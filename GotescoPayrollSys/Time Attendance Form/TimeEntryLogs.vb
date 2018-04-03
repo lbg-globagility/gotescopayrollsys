@@ -229,10 +229,19 @@ Public Class TimeEntryLogs
 
         tsbtndel.Enabled = False
 
+        Dim _cells =
+            DataGridViewX3.SelectedCells.OfType(Of DataGridViewCell).Where(Function(dgcell) dgcell.Selected)
+
+        Dim row_indexes As New List(Of Integer)
+
+        For Each dgcell In _cells
+            row_indexes.Add(dgcell.RowIndex)
+        Next
+
         Dim dgvrows =
             DataGridViewX3.Rows.OfType(Of DataGridViewRow).
             Where(Function(dgvrow) dgvrow.IsNewRow = False And
-                      dgvrow.Selected)
+                      row_indexes.Contains(dgvrow.Index))
 
         If dgvrows.Count = 0 Then
             Return
@@ -377,29 +386,37 @@ Public Class TimeEntryLogs
                         For Each _item In timelog_record.ToList
                             _count += 1
                         Next
-                        Console.WriteLine(_count)
 
                         Dim should_update_record As Boolean = (_count > 0)
 
-                        Dim ted =
-                                    New EmployeeTimeEntryDetails _
-                                    With {.EmployeeId = var_erowid,
-                                          .TimeIn = time_in,
-                                          .TimeOut = time_out,
-                                          .DateValue = tl_date,
-                                          .OrganizationId = organization_rowid}
-
                         If should_update_record Then
-                            ted.LastUpd = Now
-                            ted.LastUpdBy = user_row_id
+                            For Each etd In timelog_record
 
-                            _mod.Entry(ted).State = Entity.EntityState.Modified
+                                With etd
+                                    .TimeIn = time_in
+                                    .TimeOut = time_out
+                                    .DateValue = tl_date
+
+                                    .LastUpd = Now
+                                    .LastUpdBy = user_row_id
+                                End With
+
+                                _mod.Entry(etd).State = Entity.EntityState.Modified
+                            Next
+
                         Else
-                            ted.Created = Now
-                            ted.CreatedBy = user_row_id
-                        End If
+                            Dim ted =
+                                New EmployeeTimeEntryDetails _
+                                With {.EmployeeId = var_erowid,
+                                      .TimeIn = time_in,
+                                      .TimeOut = time_out,
+                                      .DateValue = tl_date,
+                                      .OrganizationId = organization_rowid,
+                                      .Created = Now,
+                                      .CreatedBy = user_row_id}
 
-                        _mod.EmployeeTimeEntryDetails.Add(ted)
+                            _mod.EmployeeTimeEntryDetails.Add(ted)
+                        End If
 
                     Next
 
@@ -506,6 +523,7 @@ Public Class TimeEntryLogs
             DataGridViewX3.CurrentCell = DataGridViewX3.Item(0, has_newrow.Index)
         End If
 
+        DataGridViewX3.Focus()
     End Sub
 
     Private Sub DataGridViewX3_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewX3.CellContentClick

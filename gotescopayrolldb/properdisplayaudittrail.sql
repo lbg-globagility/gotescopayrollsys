@@ -20,7 +20,10 @@ au.Created
 , v.ViewName `Module`
 , au.FieldChanged `Field Changed`
 , au.OldValue `Previous Value`
-, au.NewValue `New Value`
+, IF(au.FieldChanged = 'EmployeeID'
+     , (SELECT EmployeeID FROM employee WHERE RowID = IFNULL(au.NewValue, 0))
+     # , (SELECT CONCAT_WS(', ', EmployeeID, LastName, FirstName) FROM employee WHERE RowID = IFNULL(au.NewValue, 0))
+	  , au.NewValue) `New Value`
 , au.ActionPerformed `ActionPerformed`
 
 , au.ViewID

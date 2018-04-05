@@ -44,6 +44,7 @@ IF is_deptmngr = TRUE THEN
 	,'view this'
 	,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=eot.EmployeeID AND `Type`=CONCAT('Employee Overtime@',eot.RowID)),'') `FileName`
 	,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=eot.EmployeeID AND `Type`=CONCAT('Employee Overtime@',eot.RowID)),'') `FileExtens`
+	, DATE_FORMAT(eot.Created, '%c/%e/%Y %h:%i %p') `Created`
 	FROM employeeovertime eot
 	INNER JOIN employee e ON e.RowID=eot.EmployeeID AND e.OrganizationID=eot.OrganizationID AND e.DeptManager=dept_mngr_rowid
 	WHERE eot.OrganizationID=eot_OrganizationID
@@ -68,6 +69,7 @@ ELSE
 			,'view this'
 			,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=eot.EmployeeID AND `Type`=CONCAT('Employee Overtime@',eot.RowID)),'') `FileName`
 			,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=eot.EmployeeID AND `Type`=CONCAT('Employee Overtime@',eot.RowID)),'') `FileExtens`
+			, DATE_FORMAT(eot.Created, '%c/%e/%Y %h:%i %p') `Created`
 			FROM employeeovertime eot
 			INNER JOIN employee e ON e.RowID=eot.EmployeeID AND e.OrganizationID=eot.OrganizationID AND e.DeptManager IS NULL
 			WHERE eot.OrganizationID=eot_OrganizationID
@@ -88,6 +90,7 @@ ELSE
 			,'view this'
 			,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=eot.EmployeeID AND `Type`=CONCAT('Employee Overtime@',eot.RowID)),'') `FileName`
 			,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=eot.EmployeeID AND `Type`=CONCAT('Employee Overtime@',eot.RowID)),'') `FileExtens`
+			, DATE_FORMAT(eot.Created, '%c/%e/%Y %h:%i %p') `Created`
 			FROM employeeovertime eot
 			INNER JOIN employee e
 			        ON e.RowID=eot.EmployeeID

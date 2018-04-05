@@ -16,7 +16,7 @@ Public Class TimeEntryLogs
 
     Private page_num As Integer = 0
 
-    Private organization_rowid As Integer = 1
+    Private organization_rowid As Integer = org_rowid
 
     Private e_uniq_id, e_primkey As String
 
@@ -55,7 +55,7 @@ Public Class TimeEntryLogs
 
         MyBase.OnLoad(e)
 
-        'organization_rowid = 1 'org_rowid
+        'organization_rowid = org_rowid
         'user_row_id = 1
 
         lblYear.Text = this_year

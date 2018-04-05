@@ -35,8 +35,6 @@ Partial Class EmployeeForm
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -84,11 +82,11 @@ Partial Class EmployeeForm
         Dim DataGridViewCellStyle58 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle61 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle62 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle59 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle60 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle63 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle66 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle67 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle64 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle65 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle68 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle70 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle71 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -98,8 +96,10 @@ Partial Class EmployeeForm
         Dim DataGridViewCellStyle74 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle75 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle76 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle64 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle65 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle59 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle60 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.txtEmpID = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.rdMale = New System.Windows.Forms.RadioButton()
@@ -529,20 +529,6 @@ Partial Class EmployeeForm
         Me.pbempleave = New System.Windows.Forms.PictureBox()
         Me.Label36 = New System.Windows.Forms.Label()
         Me.dgvempleave = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.elv_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_Type = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_StartTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_EndTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_StartDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
-        Me.elv_EndDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
-        Me.elv_Reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_Comment = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_Image = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_viewimage = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.elv_attafilename = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_attafileextensn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.AdditionalOverrideLeaveBalance = New GotescoPayrollSys.DataGridViewNumberColumn()
         Me.Label37 = New System.Windows.Forms.Label()
         Me.txtstarttime = New System.Windows.Forms.TextBox()
         Me.Label38 = New System.Windows.Forms.Label()
@@ -1198,19 +1184,6 @@ Partial Class EmployeeForm
         Me.pbempEmpOT = New System.Windows.Forms.PictureBox()
         Me.Label187 = New System.Windows.Forms.Label()
         Me.dgvempOT = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.eot_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.eot_Type = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.eot_StartTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.eot_EndTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.eot_StartDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
-        Me.eot_EndDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
-        Me.eot_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.eot_Reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.eot_Comment = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.eot_Image = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.eot_viewimage = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.eot_attafilename = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.eot_attafileextensn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label188 = New System.Windows.Forms.Label()
         Me.txtstarttimeEmpOT = New System.Windows.Forms.TextBox()
         Me.Label189 = New System.Windows.Forms.Label()
@@ -1262,6 +1235,20 @@ Partial Class EmployeeForm
         Me.pbempOBF = New System.Windows.Forms.PictureBox()
         Me.Label171 = New System.Windows.Forms.Label()
         Me.dgvOBF = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.obf_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_Type = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.obf_StartTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_EndTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_StartDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.obf_EndDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.obf_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_Reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_Comment = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_Image = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_view = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.obf_attafilename = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_attafileextensn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.obf_DateCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label172 = New System.Windows.Forms.Label()
         Me.txtstarttimeOBF = New System.Windows.Forms.TextBox()
         Me.Label173 = New System.Windows.Forms.Label()
@@ -1521,20 +1508,35 @@ Partial Class EmployeeForm
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.BalloonToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolTipLeaveBalOverride = New System.Windows.Forms.ToolTip(Me.components)
-        Me.obf_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_Type = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.obf_StartTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_EndTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_StartDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
-        Me.obf_EndDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
-        Me.obf_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_Reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_Comment = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_Image = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_view = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.obf_attafilename = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_attafileextensn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.obf_DateCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_Type = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_StartTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_EndTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_StartDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.elv_EndDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.elv_Reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_Comment = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_Image = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_viewimage = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.elv_attafilename = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_attafileextensn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.AdditionalOverrideLeaveBalance = New GotescoPayrollSys.DataGridViewNumberColumn()
+        Me.elv_DateCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_Type = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.eot_StartTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_EndTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_StartDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.eot_EndDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.eot_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_Reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_Comment = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_Image = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_viewimage = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.eot_attafilename = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_attafileextensn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.eot_DateCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tabctrlemp.SuspendLayout
         Me.tbpempchklist.SuspendLayout
         Me.ToolStrip15.SuspendLayout
@@ -2307,7 +2309,7 @@ Partial Class EmployeeForm
         Me.SplitContainer2.Panel2.Controls.Add(Me.lblforballoon1)
         Me.SplitContainer2.Panel2.Cursor = System.Windows.Forms.Cursors.Default
         Me.SplitContainer2.Size = New System.Drawing.Size(858, 430)
-        Me.SplitContainer2.SplitterDistance = 167
+        Me.SplitContainer2.SplitterDistance = 164
         Me.SplitContainer2.SplitterWidth = 7
         Me.SplitContainer2.TabIndex = 114
         '
@@ -3710,7 +3712,7 @@ Partial Class EmployeeForm
         Me.dgvDepen.Name = "dgvDepen"
         Me.dgvDepen.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvDepen.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvDepen.Size = New System.Drawing.Size(856, 229)
+        Me.dgvDepen.Size = New System.Drawing.Size(856, 232)
         Me.dgvDepen.TabIndex = 116
         '
         'Colmn0
@@ -6140,7 +6142,7 @@ Partial Class EmployeeForm
         Me.dgvempleave.BackgroundColor = System.Drawing.Color.White
         Me.dgvempleave.ColumnHeadersHeight = 38
         Me.dgvempleave.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvempleave.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.elv_RowID, Me.elv_Type, Me.elv_StartTime, Me.elv_EndTime, Me.elv_StartDate, Me.elv_EndDate, Me.elv_Reason, Me.elv_Comment, Me.elv_Image, Me.elv_viewimage, Me.elv_attafilename, Me.elv_attafileextensn, Me.elv_Status, Me.AdditionalOverrideLeaveBalance})
+        Me.dgvempleave.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.elv_RowID, Me.elv_Type, Me.elv_StartTime, Me.elv_EndTime, Me.elv_StartDate, Me.elv_EndDate, Me.elv_Reason, Me.elv_Comment, Me.elv_Image, Me.elv_viewimage, Me.elv_attafilename, Me.elv_attafileextensn, Me.elv_Status, Me.AdditionalOverrideLeaveBalance, Me.elv_DateCreated})
         DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle13.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
@@ -6156,163 +6158,6 @@ Partial Class EmployeeForm
         Me.dgvempleave.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvempleave.Size = New System.Drawing.Size(611, 345)
         Me.dgvempleave.TabIndex = 0
-        '
-        'elv_RowID
-        '
-        Me.elv_RowID.HeaderText = "RowID"
-        Me.elv_RowID.Name = "elv_RowID"
-        Me.elv_RowID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_RowID.Visible = false
-        '
-        'elv_Type
-        '
-        Me.elv_Type.HeaderText = "Leave type"
-        Me.elv_Type.Name = "elv_Type"
-        Me.elv_Type.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_Type.Width = 150
-        '
-        'elv_StartTime
-        '
-        Me.elv_StartTime.HeaderText = "Start time"
-        Me.elv_StartTime.Name = "elv_StartTime"
-        Me.elv_StartTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'elv_EndTime
-        '
-        Me.elv_EndTime.HeaderText = "End time"
-        Me.elv_EndTime.Name = "elv_EndTime"
-        Me.elv_EndTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'elv_StartDate
-        '
-        '
-        '
-        '
-        Me.elv_StartDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.elv_StartDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
-        Me.elv_StartDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_StartDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
-        Me.elv_StartDate.HeaderText = "Start date"
-        Me.elv_StartDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
-        '
-        '
-        '
-        Me.elv_StartDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.elv_StartDate.MonthCalendar.BackgroundStyle.Class = ""
-        Me.elv_StartDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        '
-        '
-        '
-        Me.elv_StartDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
-        Me.elv_StartDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_StartDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
-        Me.elv_StartDate.MonthCalendar.MarkedDates = New Date(-1) {}
-        Me.elv_StartDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.elv_StartDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
-        Me.elv_StartDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_StartDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
-        Me.elv_StartDate.Name = "elv_StartDate"
-        Me.elv_StartDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_StartDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'elv_EndDate
-        '
-        '
-        '
-        '
-        Me.elv_EndDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.elv_EndDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
-        Me.elv_EndDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_EndDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
-        Me.elv_EndDate.HeaderText = "End date"
-        Me.elv_EndDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
-        '
-        '
-        '
-        Me.elv_EndDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.elv_EndDate.MonthCalendar.BackgroundStyle.Class = ""
-        Me.elv_EndDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        '
-        '
-        '
-        Me.elv_EndDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
-        Me.elv_EndDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_EndDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
-        Me.elv_EndDate.MonthCalendar.MarkedDates = New Date(-1) {}
-        Me.elv_EndDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.elv_EndDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
-        Me.elv_EndDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_EndDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
-        Me.elv_EndDate.Name = "elv_EndDate"
-        Me.elv_EndDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_EndDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'elv_Reason
-        '
-        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_Reason.DefaultCellStyle = DataGridViewCellStyle11
-        Me.elv_Reason.HeaderText = "Reason"
-        Me.elv_Reason.Name = "elv_Reason"
-        Me.elv_Reason.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_Reason.Width = 190
-        '
-        'elv_Comment
-        '
-        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_Comment.DefaultCellStyle = DataGridViewCellStyle12
-        Me.elv_Comment.HeaderText = "Comments"
-        Me.elv_Comment.MaxInputLength = 499
-        Me.elv_Comment.Name = "elv_Comment"
-        Me.elv_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_Comment.Width = 190
-        '
-        'elv_Image
-        '
-        Me.elv_Image.HeaderText = "Image"
-        Me.elv_Image.MaxInputLength = 1999
-        Me.elv_Image.Name = "elv_Image"
-        Me.elv_Image.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_Image.Visible = false
-        '
-        'elv_viewimage
-        '
-        Me.elv_viewimage.HeaderText = ""
-        Me.elv_viewimage.Name = "elv_viewimage"
-        '
-        'elv_attafilename
-        '
-        Me.elv_attafilename.HeaderText = "Attachment file name"
-        Me.elv_attafilename.Name = "elv_attafilename"
-        '
-        'elv_attafileextensn
-        '
-        Me.elv_attafileextensn.HeaderText = "Attachment file extension"
-        Me.elv_attafileextensn.Name = "elv_attafileextensn"
-        '
-        'elv_Status
-        '
-        Me.elv_Status.HeaderText = "Status"
-        Me.elv_Status.Name = "elv_Status"
-        '
-        'AdditionalOverrideLeaveBalance
-        '
-        Me.AdditionalOverrideLeaveBalance.HeaderText = "Override Leave Balance"
-        Me.AdditionalOverrideLeaveBalance.MaxInputLength = 11
-        Me.AdditionalOverrideLeaveBalance.Name = "AdditionalOverrideLeaveBalance"
-        Me.AdditionalOverrideLeaveBalance.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         '
         'Label37
         '
@@ -12874,7 +12719,7 @@ Partial Class EmployeeForm
         Me.dgvempOT.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle58
         Me.dgvempOT.ColumnHeadersHeight = 38
         Me.dgvempOT.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvempOT.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.eot_RowID, Me.eot_Type, Me.eot_StartTime, Me.eot_EndTime, Me.eot_StartDate, Me.eot_EndDate, Me.eot_Status, Me.eot_Reason, Me.eot_Comment, Me.eot_Image, Me.eot_viewimage, Me.eot_attafilename, Me.eot_attafileextensn})
+        Me.dgvempOT.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.eot_RowID, Me.eot_Type, Me.eot_StartTime, Me.eot_EndTime, Me.eot_StartDate, Me.eot_EndDate, Me.eot_Status, Me.eot_Reason, Me.eot_Comment, Me.eot_Image, Me.eot_viewimage, Me.eot_attafilename, Me.eot_attafileextensn, Me.eot_DateCreated})
         DataGridViewCellStyle61.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle61.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle61.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
@@ -12899,168 +12744,6 @@ Partial Class EmployeeForm
         Me.dgvempOT.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvempOT.Size = New System.Drawing.Size(611, 331)
         Me.dgvempOT.TabIndex = 0
-        '
-        'eot_RowID
-        '
-        Me.eot_RowID.HeaderText = "RowID"
-        Me.eot_RowID.Name = "eot_RowID"
-        Me.eot_RowID.ReadOnly = true
-        Me.eot_RowID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.eot_RowID.Visible = false
-        '
-        'eot_Type
-        '
-        Me.eot_Type.HeaderText = "Overtime type"
-        Me.eot_Type.Name = "eot_Type"
-        Me.eot_Type.ReadOnly = true
-        Me.eot_Type.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.eot_Type.Width = 150
-        '
-        'eot_StartTime
-        '
-        Me.eot_StartTime.HeaderText = "Start time"
-        Me.eot_StartTime.Name = "eot_StartTime"
-        Me.eot_StartTime.ReadOnly = true
-        Me.eot_StartTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'eot_EndTime
-        '
-        Me.eot_EndTime.HeaderText = "End time"
-        Me.eot_EndTime.Name = "eot_EndTime"
-        Me.eot_EndTime.ReadOnly = true
-        Me.eot_EndTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'eot_StartDate
-        '
-        '
-        '
-        '
-        Me.eot_StartDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.eot_StartDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
-        Me.eot_StartDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.eot_StartDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
-        Me.eot_StartDate.HeaderText = "Start date"
-        Me.eot_StartDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
-        '
-        '
-        '
-        Me.eot_StartDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.eot_StartDate.MonthCalendar.BackgroundStyle.Class = ""
-        Me.eot_StartDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        '
-        '
-        '
-        Me.eot_StartDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
-        Me.eot_StartDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.eot_StartDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
-        Me.eot_StartDate.MonthCalendar.MarkedDates = New Date(-1) {}
-        Me.eot_StartDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.eot_StartDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
-        Me.eot_StartDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.eot_StartDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
-        Me.eot_StartDate.Name = "eot_StartDate"
-        Me.eot_StartDate.ReadOnly = true
-        Me.eot_StartDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.eot_StartDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'eot_EndDate
-        '
-        '
-        '
-        '
-        Me.eot_EndDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.eot_EndDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
-        Me.eot_EndDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.eot_EndDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
-        Me.eot_EndDate.HeaderText = "End date"
-        Me.eot_EndDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
-        '
-        '
-        '
-        Me.eot_EndDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.eot_EndDate.MonthCalendar.BackgroundStyle.Class = ""
-        Me.eot_EndDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        '
-        '
-        '
-        Me.eot_EndDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
-        Me.eot_EndDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.eot_EndDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
-        Me.eot_EndDate.MonthCalendar.MarkedDates = New Date(-1) {}
-        Me.eot_EndDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.eot_EndDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
-        Me.eot_EndDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.eot_EndDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
-        Me.eot_EndDate.Name = "eot_EndDate"
-        Me.eot_EndDate.ReadOnly = true
-        Me.eot_EndDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.eot_EndDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'eot_Status
-        '
-        Me.eot_Status.HeaderText = "Status"
-        Me.eot_Status.Name = "eot_Status"
-        Me.eot_Status.ReadOnly = true
-        '
-        'eot_Reason
-        '
-        DataGridViewCellStyle59.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.eot_Reason.DefaultCellStyle = DataGridViewCellStyle59
-        Me.eot_Reason.HeaderText = "Reason"
-        Me.eot_Reason.Name = "eot_Reason"
-        Me.eot_Reason.ReadOnly = true
-        Me.eot_Reason.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.eot_Reason.Width = 190
-        '
-        'eot_Comment
-        '
-        DataGridViewCellStyle60.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.eot_Comment.DefaultCellStyle = DataGridViewCellStyle60
-        Me.eot_Comment.HeaderText = "Comments"
-        Me.eot_Comment.MaxInputLength = 499
-        Me.eot_Comment.Name = "eot_Comment"
-        Me.eot_Comment.ReadOnly = true
-        Me.eot_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.eot_Comment.Width = 190
-        '
-        'eot_Image
-        '
-        Me.eot_Image.HeaderText = "Image"
-        Me.eot_Image.MaxInputLength = 1999
-        Me.eot_Image.Name = "eot_Image"
-        Me.eot_Image.ReadOnly = true
-        Me.eot_Image.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.eot_Image.Visible = false
-        '
-        'eot_viewimage
-        '
-        Me.eot_viewimage.HeaderText = ""
-        Me.eot_viewimage.Name = "eot_viewimage"
-        Me.eot_viewimage.ReadOnly = true
-        '
-        'eot_attafilename
-        '
-        Me.eot_attafilename.HeaderText = "Attachment file name"
-        Me.eot_attafilename.Name = "eot_attafilename"
-        Me.eot_attafilename.ReadOnly = true
-        '
-        'eot_attafileextensn
-        '
-        Me.eot_attafileextensn.HeaderText = "Attachment file extension"
-        Me.eot_attafileextensn.Name = "eot_attafileextensn"
-        Me.eot_attafileextensn.ReadOnly = true
         '
         'Label188
         '
@@ -13637,6 +13320,162 @@ Partial Class EmployeeForm
         Me.dgvOBF.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvOBF.Size = New System.Drawing.Size(611, 345)
         Me.dgvOBF.TabIndex = 0
+        '
+        'obf_RowID
+        '
+        Me.obf_RowID.HeaderText = "RowID"
+        Me.obf_RowID.Name = "obf_RowID"
+        Me.obf_RowID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.obf_RowID.Visible = false
+        '
+        'obf_Type
+        '
+        Me.obf_Type.HeaderText = "Type"
+        Me.obf_Type.Name = "obf_Type"
+        Me.obf_Type.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.obf_Type.Width = 150
+        '
+        'obf_StartTime
+        '
+        Me.obf_StartTime.HeaderText = "Start time"
+        Me.obf_StartTime.Name = "obf_StartTime"
+        Me.obf_StartTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'obf_EndTime
+        '
+        Me.obf_EndTime.HeaderText = "End time"
+        Me.obf_EndTime.Name = "obf_EndTime"
+        Me.obf_EndTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'obf_StartDate
+        '
+        '
+        '
+        '
+        Me.obf_StartDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.obf_StartDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.obf_StartDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.obf_StartDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.obf_StartDate.HeaderText = "Start date"
+        Me.obf_StartDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.obf_StartDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.obf_StartDate.MonthCalendar.BackgroundStyle.Class = ""
+        Me.obf_StartDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.obf_StartDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.obf_StartDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.obf_StartDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
+        Me.obf_StartDate.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.obf_StartDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.obf_StartDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.obf_StartDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.obf_StartDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.obf_StartDate.Name = "obf_StartDate"
+        Me.obf_StartDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.obf_StartDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'obf_EndDate
+        '
+        '
+        '
+        '
+        Me.obf_EndDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.obf_EndDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.obf_EndDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.obf_EndDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.obf_EndDate.HeaderText = "End date"
+        Me.obf_EndDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.obf_EndDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.obf_EndDate.MonthCalendar.BackgroundStyle.Class = ""
+        Me.obf_EndDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.obf_EndDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.obf_EndDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.obf_EndDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
+        Me.obf_EndDate.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.obf_EndDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.obf_EndDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.obf_EndDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.obf_EndDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.obf_EndDate.Name = "obf_EndDate"
+        Me.obf_EndDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.obf_EndDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'obf_Status
+        '
+        Me.obf_Status.HeaderText = "Status"
+        Me.obf_Status.Name = "obf_Status"
+        '
+        'obf_Reason
+        '
+        DataGridViewCellStyle64.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.obf_Reason.DefaultCellStyle = DataGridViewCellStyle64
+        Me.obf_Reason.HeaderText = "Reason"
+        Me.obf_Reason.Name = "obf_Reason"
+        Me.obf_Reason.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.obf_Reason.Width = 190
+        '
+        'obf_Comment
+        '
+        DataGridViewCellStyle65.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.obf_Comment.DefaultCellStyle = DataGridViewCellStyle65
+        Me.obf_Comment.HeaderText = "Comments"
+        Me.obf_Comment.MaxInputLength = 499
+        Me.obf_Comment.Name = "obf_Comment"
+        Me.obf_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.obf_Comment.Width = 190
+        '
+        'obf_Image
+        '
+        Me.obf_Image.HeaderText = "Image"
+        Me.obf_Image.MaxInputLength = 1999
+        Me.obf_Image.Name = "obf_Image"
+        Me.obf_Image.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.obf_Image.Visible = false
+        '
+        'obf_view
+        '
+        Me.obf_view.HeaderText = ""
+        Me.obf_view.Name = "obf_view"
+        '
+        'obf_attafilename
+        '
+        Me.obf_attafilename.HeaderText = "Attachment file name"
+        Me.obf_attafilename.Name = "obf_attafilename"
+        '
+        'obf_attafileextensn
+        '
+        Me.obf_attafileextensn.HeaderText = "Attachment file extension"
+        Me.obf_attafileextensn.Name = "obf_attafileextensn"
+        '
+        'obf_DateCreated
+        '
+        Me.obf_DateCreated.HeaderText = "Date created"
+        Me.obf_DateCreated.Name = "obf_DateCreated"
+        Me.obf_DateCreated.ReadOnly = true
+        Me.obf_DateCreated.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'Label172
         '
@@ -15879,161 +15718,338 @@ Partial Class EmployeeForm
         Me.ToolTipLeaveBalOverride.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipLeaveBalOverride.ToolTipTitle = "Hint"
         '
-        'obf_RowID
+        'elv_RowID
         '
-        Me.obf_RowID.HeaderText = "RowID"
-        Me.obf_RowID.Name = "obf_RowID"
-        Me.obf_RowID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.obf_RowID.Visible = false
+        Me.elv_RowID.HeaderText = "RowID"
+        Me.elv_RowID.Name = "elv_RowID"
+        Me.elv_RowID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_RowID.Visible = false
         '
-        'obf_Type
+        'elv_Type
         '
-        Me.obf_Type.HeaderText = "Type"
-        Me.obf_Type.Name = "obf_Type"
-        Me.obf_Type.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.obf_Type.Width = 150
+        Me.elv_Type.HeaderText = "Leave type"
+        Me.elv_Type.Name = "elv_Type"
+        Me.elv_Type.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.elv_Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_Type.Width = 150
         '
-        'obf_StartTime
+        'elv_StartTime
         '
-        Me.obf_StartTime.HeaderText = "Start time"
-        Me.obf_StartTime.Name = "obf_StartTime"
-        Me.obf_StartTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_StartTime.HeaderText = "Start time"
+        Me.elv_StartTime.Name = "elv_StartTime"
+        Me.elv_StartTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
-        'obf_EndTime
+        'elv_EndTime
         '
-        Me.obf_EndTime.HeaderText = "End time"
-        Me.obf_EndTime.Name = "obf_EndTime"
-        Me.obf_EndTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_EndTime.HeaderText = "End time"
+        Me.elv_EndTime.Name = "elv_EndTime"
+        Me.elv_EndTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
-        'obf_StartDate
-        '
-        '
-        '
-        '
-        Me.obf_StartDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.obf_StartDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
-        Me.obf_StartDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.obf_StartDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
-        Me.obf_StartDate.HeaderText = "Start date"
-        Me.obf_StartDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
-        '
-        '
-        '
-        Me.obf_StartDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.obf_StartDate.MonthCalendar.BackgroundStyle.Class = ""
-        Me.obf_StartDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        '
-        '
-        '
-        Me.obf_StartDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
-        Me.obf_StartDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.obf_StartDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
-        Me.obf_StartDate.MonthCalendar.MarkedDates = New Date(-1) {}
-        Me.obf_StartDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.obf_StartDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
-        Me.obf_StartDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.obf_StartDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
-        Me.obf_StartDate.Name = "obf_StartDate"
-        Me.obf_StartDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.obf_StartDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'obf_EndDate
+        'elv_StartDate
         '
         '
         '
         '
-        Me.obf_EndDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.obf_EndDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
-        Me.obf_EndDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.obf_EndDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
-        Me.obf_EndDate.HeaderText = "End date"
-        Me.obf_EndDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        Me.elv_StartDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.elv_StartDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.elv_StartDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_StartDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.elv_StartDate.HeaderText = "Start date"
+        Me.elv_StartDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
         '
         '
         '
-        Me.obf_EndDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        Me.elv_StartDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
         '
         '
         '
-        Me.obf_EndDate.MonthCalendar.BackgroundStyle.Class = ""
-        Me.obf_EndDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_StartDate.MonthCalendar.BackgroundStyle.Class = ""
+        Me.elv_StartDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         '
         '
         '
-        Me.obf_EndDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
-        Me.obf_EndDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.obf_EndDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
-        Me.obf_EndDate.MonthCalendar.MarkedDates = New Date(-1) {}
-        Me.obf_EndDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        Me.elv_StartDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.elv_StartDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_StartDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
+        Me.elv_StartDate.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.elv_StartDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
         '
         '
         '
-        Me.obf_EndDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
-        Me.obf_EndDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.obf_EndDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
-        Me.obf_EndDate.Name = "obf_EndDate"
-        Me.obf_EndDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.obf_EndDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_StartDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.elv_StartDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_StartDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.elv_StartDate.Name = "elv_StartDate"
+        Me.elv_StartDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.elv_StartDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
-        'obf_Status
+        'elv_EndDate
         '
-        Me.obf_Status.HeaderText = "Status"
-        Me.obf_Status.Name = "obf_Status"
         '
-        'obf_Reason
         '
-        DataGridViewCellStyle64.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.obf_Reason.DefaultCellStyle = DataGridViewCellStyle64
-        Me.obf_Reason.HeaderText = "Reason"
-        Me.obf_Reason.Name = "obf_Reason"
-        Me.obf_Reason.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.obf_Reason.Width = 190
         '
-        'obf_Comment
+        Me.elv_EndDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.elv_EndDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.elv_EndDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_EndDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.elv_EndDate.HeaderText = "End date"
+        Me.elv_EndDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
         '
-        DataGridViewCellStyle65.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.obf_Comment.DefaultCellStyle = DataGridViewCellStyle65
-        Me.obf_Comment.HeaderText = "Comments"
-        Me.obf_Comment.MaxInputLength = 499
-        Me.obf_Comment.Name = "obf_Comment"
-        Me.obf_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.obf_Comment.Width = 190
         '
-        'obf_Image
         '
-        Me.obf_Image.HeaderText = "Image"
-        Me.obf_Image.MaxInputLength = 1999
-        Me.obf_Image.Name = "obf_Image"
-        Me.obf_Image.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.obf_Image.Visible = false
+        Me.elv_EndDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
         '
-        'obf_view
         '
-        Me.obf_view.HeaderText = ""
-        Me.obf_view.Name = "obf_view"
         '
-        'obf_attafilename
+        Me.elv_EndDate.MonthCalendar.BackgroundStyle.Class = ""
+        Me.elv_EndDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         '
-        Me.obf_attafilename.HeaderText = "Attachment file name"
-        Me.obf_attafilename.Name = "obf_attafilename"
         '
-        'obf_attafileextensn
         '
-        Me.obf_attafileextensn.HeaderText = "Attachment file extension"
-        Me.obf_attafileextensn.Name = "obf_attafileextensn"
+        Me.elv_EndDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.elv_EndDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_EndDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
+        Me.elv_EndDate.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.elv_EndDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
         '
-        'obf_DateCreated
         '
-        Me.obf_DateCreated.HeaderText = "Date created"
-        Me.obf_DateCreated.Name = "obf_DateCreated"
-        Me.obf_DateCreated.ReadOnly = True
-        Me.obf_DateCreated.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        Me.elv_EndDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.elv_EndDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_EndDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.elv_EndDate.Name = "elv_EndDate"
+        Me.elv_EndDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.elv_EndDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'elv_Reason
+        '
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.elv_Reason.DefaultCellStyle = DataGridViewCellStyle11
+        Me.elv_Reason.HeaderText = "Reason"
+        Me.elv_Reason.Name = "elv_Reason"
+        Me.elv_Reason.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_Reason.Width = 190
+        '
+        'elv_Comment
+        '
+        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.elv_Comment.DefaultCellStyle = DataGridViewCellStyle12
+        Me.elv_Comment.HeaderText = "Comments"
+        Me.elv_Comment.MaxInputLength = 499
+        Me.elv_Comment.Name = "elv_Comment"
+        Me.elv_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_Comment.Width = 190
+        '
+        'elv_Image
+        '
+        Me.elv_Image.HeaderText = "Image"
+        Me.elv_Image.MaxInputLength = 1999
+        Me.elv_Image.Name = "elv_Image"
+        Me.elv_Image.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_Image.Visible = false
+        '
+        'elv_viewimage
+        '
+        Me.elv_viewimage.HeaderText = ""
+        Me.elv_viewimage.Name = "elv_viewimage"
+        '
+        'elv_attafilename
+        '
+        Me.elv_attafilename.HeaderText = "Attachment file name"
+        Me.elv_attafilename.Name = "elv_attafilename"
+        '
+        'elv_attafileextensn
+        '
+        Me.elv_attafileextensn.HeaderText = "Attachment file extension"
+        Me.elv_attafileextensn.Name = "elv_attafileextensn"
+        '
+        'elv_Status
+        '
+        Me.elv_Status.HeaderText = "Status"
+        Me.elv_Status.Name = "elv_Status"
+        '
+        'AdditionalOverrideLeaveBalance
+        '
+        Me.AdditionalOverrideLeaveBalance.HeaderText = "Override Leave Balance"
+        Me.AdditionalOverrideLeaveBalance.MaxInputLength = 11
+        Me.AdditionalOverrideLeaveBalance.Name = "AdditionalOverrideLeaveBalance"
+        Me.AdditionalOverrideLeaveBalance.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        '
+        'elv_DateCreated
+        '
+        Me.elv_DateCreated.HeaderText = "Date created"
+        Me.elv_DateCreated.Name = "elv_DateCreated"
+        Me.elv_DateCreated.ReadOnly = true
+        Me.elv_DateCreated.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'eot_RowID
+        '
+        Me.eot_RowID.HeaderText = "RowID"
+        Me.eot_RowID.Name = "eot_RowID"
+        Me.eot_RowID.ReadOnly = true
+        Me.eot_RowID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.eot_RowID.Visible = false
+        '
+        'eot_Type
+        '
+        Me.eot_Type.HeaderText = "Overtime type"
+        Me.eot_Type.Name = "eot_Type"
+        Me.eot_Type.ReadOnly = true
+        Me.eot_Type.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.eot_Type.Width = 150
+        '
+        'eot_StartTime
+        '
+        Me.eot_StartTime.HeaderText = "Start time"
+        Me.eot_StartTime.Name = "eot_StartTime"
+        Me.eot_StartTime.ReadOnly = true
+        Me.eot_StartTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'eot_EndTime
+        '
+        Me.eot_EndTime.HeaderText = "End time"
+        Me.eot_EndTime.Name = "eot_EndTime"
+        Me.eot_EndTime.ReadOnly = true
+        Me.eot_EndTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'eot_StartDate
+        '
+        '
+        '
+        '
+        Me.eot_StartDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.eot_StartDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.eot_StartDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.eot_StartDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.eot_StartDate.HeaderText = "Start date"
+        Me.eot_StartDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.eot_StartDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.eot_StartDate.MonthCalendar.BackgroundStyle.Class = ""
+        Me.eot_StartDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.eot_StartDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.eot_StartDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.eot_StartDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
+        Me.eot_StartDate.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.eot_StartDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.eot_StartDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.eot_StartDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.eot_StartDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.eot_StartDate.Name = "eot_StartDate"
+        Me.eot_StartDate.ReadOnly = true
+        Me.eot_StartDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.eot_StartDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'eot_EndDate
+        '
+        '
+        '
+        '
+        Me.eot_EndDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.eot_EndDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.eot_EndDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.eot_EndDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.eot_EndDate.HeaderText = "End date"
+        Me.eot_EndDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.eot_EndDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.eot_EndDate.MonthCalendar.BackgroundStyle.Class = ""
+        Me.eot_EndDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.eot_EndDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.eot_EndDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.eot_EndDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
+        Me.eot_EndDate.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.eot_EndDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.eot_EndDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.eot_EndDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.eot_EndDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.eot_EndDate.Name = "eot_EndDate"
+        Me.eot_EndDate.ReadOnly = true
+        Me.eot_EndDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.eot_EndDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'eot_Status
+        '
+        Me.eot_Status.HeaderText = "Status"
+        Me.eot_Status.Name = "eot_Status"
+        Me.eot_Status.ReadOnly = true
+        '
+        'eot_Reason
+        '
+        DataGridViewCellStyle59.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.eot_Reason.DefaultCellStyle = DataGridViewCellStyle59
+        Me.eot_Reason.HeaderText = "Reason"
+        Me.eot_Reason.Name = "eot_Reason"
+        Me.eot_Reason.ReadOnly = true
+        Me.eot_Reason.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.eot_Reason.Width = 190
+        '
+        'eot_Comment
+        '
+        DataGridViewCellStyle60.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.eot_Comment.DefaultCellStyle = DataGridViewCellStyle60
+        Me.eot_Comment.HeaderText = "Comments"
+        Me.eot_Comment.MaxInputLength = 499
+        Me.eot_Comment.Name = "eot_Comment"
+        Me.eot_Comment.ReadOnly = true
+        Me.eot_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.eot_Comment.Width = 190
+        '
+        'eot_Image
+        '
+        Me.eot_Image.HeaderText = "Image"
+        Me.eot_Image.MaxInputLength = 1999
+        Me.eot_Image.Name = "eot_Image"
+        Me.eot_Image.ReadOnly = true
+        Me.eot_Image.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.eot_Image.Visible = false
+        '
+        'eot_viewimage
+        '
+        Me.eot_viewimage.HeaderText = ""
+        Me.eot_viewimage.Name = "eot_viewimage"
+        Me.eot_viewimage.ReadOnly = true
+        '
+        'eot_attafilename
+        '
+        Me.eot_attafilename.HeaderText = "Attachment file name"
+        Me.eot_attafilename.Name = "eot_attafilename"
+        Me.eot_attafilename.ReadOnly = true
+        '
+        'eot_attafileextensn
+        '
+        Me.eot_attafileextensn.HeaderText = "Attachment file extension"
+        Me.eot_attafileextensn.Name = "eot_attafileextensn"
+        Me.eot_attafileextensn.ReadOnly = true
+        '
+        'eot_DateCreated
+        '
+        Me.eot_DateCreated.HeaderText = "Date created"
+        Me.eot_DateCreated.Name = "eot_DateCreated"
+        Me.eot_DateCreated.ReadOnly = true
+        Me.eot_DateCreated.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'EmployeeForm
         '
@@ -17256,19 +17272,6 @@ End Sub
     Friend WithEvents c_Remarks As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents c_RowID1 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents dtpExfromto As System.Windows.Forms.DateTimePicker
-    Friend WithEvents eot_RowID As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents eot_Type As System.Windows.Forms.DataGridViewComboBoxColumn
-    Friend WithEvents eot_StartTime As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents eot_EndTime As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents eot_StartDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
-    Friend WithEvents eot_EndDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
-    Friend WithEvents eot_Status As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents eot_Reason As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents eot_Comment As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents eot_Image As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents eot_viewimage As System.Windows.Forms.DataGridViewButtonColumn
-    Friend WithEvents eot_attafilename As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents eot_attafileextensn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents dtpExpto As System.Windows.Forms.DateTimePicker
     Friend WithEvents Label310 As System.Windows.Forms.Label
     Friend WithEvents c_compname As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -17637,20 +17640,6 @@ End Sub
     Friend WithEvents txtaddvlpayp2 As System.Windows.Forms.TextBox
     Friend WithEvents Label378 As System.Windows.Forms.Label
     Friend WithEvents txtRegularizationDate As GotescoPayrollSys.CustomDateTextBox
-    Friend WithEvents elv_RowID As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_Type As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_StartTime As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_EndTime As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_StartDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
-    Friend WithEvents elv_EndDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
-    Friend WithEvents elv_Reason As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_Comment As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_Image As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_viewimage As System.Windows.Forms.DataGridViewButtonColumn
-    Friend WithEvents elv_attafilename As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_attafileextensn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_Status As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents AdditionalOverrideLeaveBalance As GotescoPayrollSys.DataGridViewNumberColumn
     Friend WithEvents ToolTipLeaveBalOverride As System.Windows.Forms.ToolTip
     Friend WithEvents lblLeaveBalOverrideHint As System.Windows.Forms.Label
     Friend WithEvents ToolStripLabel9 As System.Windows.Forms.ToolStripLabel
@@ -17690,4 +17679,33 @@ End Sub
     Friend WithEvents obf_attafilename As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents obf_attafileextensn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents obf_DateCreated As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_RowID As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_Type As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_StartTime As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_EndTime As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_StartDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents elv_EndDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents elv_Reason As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_Comment As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_Image As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_viewimage As System.Windows.Forms.DataGridViewButtonColumn
+    Friend WithEvents elv_attafilename As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_attafileextensn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents elv_Status As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents AdditionalOverrideLeaveBalance As GotescoPayrollSys.DataGridViewNumberColumn
+    Friend WithEvents elv_DateCreated As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_RowID As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_Type As System.Windows.Forms.DataGridViewComboBoxColumn
+    Friend WithEvents eot_StartTime As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_EndTime As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_StartDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents eot_EndDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents eot_Status As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_Reason As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_Comment As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_Image As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_viewimage As System.Windows.Forms.DataGridViewButtonColumn
+    Friend WithEvents eot_attafilename As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_attafileextensn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents eot_DateCreated As System.Windows.Forms.DataGridViewTextBoxColumn
 End Class

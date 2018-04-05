@@ -6457,11 +6457,39 @@ Public Class EmployeeForm
         param(1, 1) = org_rowid
         param(2, 1) = user_row_id
 
-        EXEC_VIEW_PROCEDURE(param,
-                            "VIEW_employeeleave",
-                            dgvempleave, 1, 1)
+        'EXEC_VIEW_PROCEDURE(param,
+        '                    "VIEW_employeeleave",
+        '                    dgvempleave, 1, 1)
+        Try
+            dgvempleave.Rows.Clear()
+            Dim params = New Object() {EmployeeID, org_rowid, user_row_id}
+            Dim sql As New SQL("CALL VIEW_employeeleave(?elv_EmployeeID, ?elv_OrganizationID, ?user_rowid);", params)
+            Dim dt As New DataTable
+            dt = sql.GetFoundRows.Tables(0)
+            For Each drow As DataRow In dt.Rows
+                Dim row_array = drow.ItemArray
+                dgvempleave.Rows.Add(row_array)
+            Next
+        Catch ex As Exception
+            ErrorNotif(ex)
+        Finally
+            AddHandler dgvempleave.SelectionChanged, AddressOf dgvempleave_SelectionChanged
+        End Try
 
-        AddHandler dgvempleave.SelectionChanged, AddressOf dgvempleave_SelectionChanged
+    End Sub
+
+    Private Sub ErrorNotif(ex As Exception)
+
+        Static exempted_msg() As String = New String() {"No row can be added to a DataGridView control that does not have columns. Columns must be added first."}
+
+        If exempted_msg.Contains(ex.Message) = False Then
+            MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
+
+            Dim st As StackTrace = New StackTrace(ex, True)
+            Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
+
+            _logger.Error(sf.GetMethod.Name, ex)
+        End If
 
     End Sub
 

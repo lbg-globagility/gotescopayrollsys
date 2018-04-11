@@ -48,7 +48,11 @@ Public Class TimeEntryLogs
 
     Protected Overrides Sub OnLoad(e As EventArgs)
 
-        HotkeyManager.Current.AddOrReplace("MacroKey_Control_R", (Keys.Control + Keys.R), AddressOf MacroKey_ContrlKey_RKey)
+        Try
+            HotkeyManager.Current.AddOrReplace("MacroKey_Control_R", (Keys.Control + Keys.R), AddressOf MacroKey_ContrlKey_RKey)
+        Catch ex As Exception
+            ErrorNotif(ex)
+        End Try
 
         PrevYear.Text = (this_year - 1)
         NxtYear.Text = (this_year + 1)
@@ -816,9 +820,15 @@ Public Class TimeEntryLogs
 
     Private Sub ErrorNotif(ex As Exception)
 
-        Static exempted_msg() As String = New String() {"No row can be added to a DataGridView control that does not have columns. Columns must be added first."}
+        Static exempted_msg() As String = New String() {"No row can be added to a DataGridView control that does not have columns. Columns must be added first.",
+                                                        "Hot key is already registered"}
 
-        If exempted_msg.Contains(ex.Message) = False Then
+        If ex.Message.Contains(exempted_msg(1)) Then
+            Dim st As StackTrace = New StackTrace(ex, True)
+            Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
+
+            _logger.Error(sf.GetMethod.Name, ex)
+        ElseIf exempted_msg.Contains(ex.Message) = False Then
             MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
 
             Dim st As StackTrace = New StackTrace(ex, True)

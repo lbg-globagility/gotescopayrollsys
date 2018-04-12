@@ -136,6 +136,9 @@ Partial Class PayStub
         Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.pbEmpPicChk = New System.Windows.Forms.PictureBox()
+        Me.txtRestDayHrs = New System.Windows.Forms.TextBox()
+        Me.txtRestDayPay = New System.Windows.Forms.TextBox()
+        Me.Label85 = New System.Windows.Forms.Label()
         Me.txtPaidLeaveHrs = New System.Windows.Forms.TextBox()
         Me.txtPaidLeave = New System.Windows.Forms.TextBox()
         Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
@@ -465,9 +468,6 @@ Partial Class PayStub
         Me.bgwPrintAllPaySlip = New System.ComponentModel.BackgroundWorker()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.txtRestDayHrs = New System.Windows.Forms.TextBox()
-        Me.txtRestDayPay = New System.Windows.Forms.TextBox()
-        Me.Label85 = New System.Windows.Forms.Label()
         CType(Me.dgvpayper, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cms1.SuspendLayout()
         CType(Me.dgvemployees, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1354,6 +1354,39 @@ Partial Class PayStub
         Me.pbEmpPicChk.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pbEmpPicChk.TabIndex = 164
         Me.pbEmpPicChk.TabStop = False
+        '
+        'txtRestDayHrs
+        '
+        Me.txtRestDayHrs.BackColor = System.Drawing.Color.White
+        Me.txtRestDayHrs.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtRestDayHrs.Location = New System.Drawing.Point(125, 245)
+        Me.txtRestDayHrs.Name = "txtRestDayHrs"
+        Me.txtRestDayHrs.ReadOnly = True
+        Me.txtRestDayHrs.ShortcutsEnabled = False
+        Me.txtRestDayHrs.Size = New System.Drawing.Size(100, 13)
+        Me.txtRestDayHrs.TabIndex = 520
+        Me.txtRestDayHrs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtRestDayPay
+        '
+        Me.txtRestDayPay.BackColor = System.Drawing.Color.White
+        Me.txtRestDayPay.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtRestDayPay.Location = New System.Drawing.Point(251, 245)
+        Me.txtRestDayPay.Name = "txtRestDayPay"
+        Me.txtRestDayPay.ReadOnly = True
+        Me.txtRestDayPay.ShortcutsEnabled = False
+        Me.txtRestDayPay.Size = New System.Drawing.Size(100, 13)
+        Me.txtRestDayPay.TabIndex = 519
+        Me.txtRestDayPay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label85
+        '
+        Me.Label85.AutoSize = True
+        Me.Label85.Location = New System.Drawing.Point(14, 245)
+        Me.Label85.Name = "Label85"
+        Me.Label85.Size = New System.Drawing.Size(75, 13)
+        Me.Label85.TabIndex = 518
+        Me.Label85.Text = "Rest day pay :"
         '
         'txtPaidLeaveHrs
         '
@@ -4251,14 +4284,16 @@ Partial Class PayStub
         '
         Me.DeclaredToolStripMenuItem.AccessibleDescription = "0"
         Me.DeclaredToolStripMenuItem.Name = "DeclaredToolStripMenuItem"
-        Me.DeclaredToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
+        Me.DeclaredToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DeclaredToolStripMenuItem.Tag = "0"
         Me.DeclaredToolStripMenuItem.Text = "Declared"
         '
         'ActualToolStripMenuItem
         '
         Me.ActualToolStripMenuItem.AccessibleDescription = "1"
         Me.ActualToolStripMenuItem.Name = "ActualToolStripMenuItem"
-        Me.ActualToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
+        Me.ActualToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ActualToolStripMenuItem.Tag = "1"
         Me.ActualToolStripMenuItem.Text = "Actual"
         '
         'tsbtnprintall
@@ -4273,14 +4308,14 @@ Partial Class PayStub
         'DeclaredToolStripMenuItem1
         '
         Me.DeclaredToolStripMenuItem1.Name = "DeclaredToolStripMenuItem1"
-        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
+        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
         Me.DeclaredToolStripMenuItem1.Tag = "0"
         Me.DeclaredToolStripMenuItem1.Text = "Declared"
         '
         'ActualToolStripMenuItem1
         '
         Me.ActualToolStripMenuItem1.Name = "ActualToolStripMenuItem1"
-        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
+        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
         Me.ActualToolStripMenuItem1.Tag = "1"
         Me.ActualToolStripMenuItem1.Text = "Actual"
         '
@@ -4525,39 +4560,6 @@ Partial Class PayStub
         'Timer1
         '
         Me.Timer1.Interval = 2500
-        '
-        'txtRestDayHrs
-        '
-        Me.txtRestDayHrs.BackColor = System.Drawing.Color.White
-        Me.txtRestDayHrs.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtRestDayHrs.Location = New System.Drawing.Point(125, 245)
-        Me.txtRestDayHrs.Name = "txtRestDayHrs"
-        Me.txtRestDayHrs.ReadOnly = True
-        Me.txtRestDayHrs.ShortcutsEnabled = False
-        Me.txtRestDayHrs.Size = New System.Drawing.Size(100, 13)
-        Me.txtRestDayHrs.TabIndex = 520
-        Me.txtRestDayHrs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txtRestDayPay
-        '
-        Me.txtRestDayPay.BackColor = System.Drawing.Color.White
-        Me.txtRestDayPay.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtRestDayPay.Location = New System.Drawing.Point(251, 245)
-        Me.txtRestDayPay.Name = "txtRestDayPay"
-        Me.txtRestDayPay.ReadOnly = True
-        Me.txtRestDayPay.ShortcutsEnabled = False
-        Me.txtRestDayPay.Size = New System.Drawing.Size(100, 13)
-        Me.txtRestDayPay.TabIndex = 519
-        Me.txtRestDayPay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Label85
-        '
-        Me.Label85.AutoSize = True
-        Me.Label85.Location = New System.Drawing.Point(14, 245)
-        Me.Label85.Name = "Label85"
-        Me.Label85.Size = New System.Drawing.Size(75, 13)
-        Me.Label85.TabIndex = 518
-        Me.Label85.Text = "Rest day pay :"
         '
         'PayStub
         '

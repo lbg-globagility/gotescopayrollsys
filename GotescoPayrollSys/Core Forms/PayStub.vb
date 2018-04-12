@@ -3072,7 +3072,7 @@ Public Class PayStub
     End Sub
 #End Region
 
-    Private Sub tsbtnprintpayslip_Click(sender As Object, e As EventArgs) Handles DeclaredToolStripMenuItem.Click 'tsbtnprintpayslip.Click
+    Private Sub tsbtnprintpayslip_Click(sender As Object, e As EventArgs) 'Handles DeclaredToolStripMenuItem.Click 'tsbtnprintpayslip.Click
 
         Static once As Boolean = True
         If once Then : Exit Sub : End If

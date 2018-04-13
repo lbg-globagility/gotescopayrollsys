@@ -4279,6 +4279,7 @@ Partial Class PayStub
         Me.tsbtnprintpayslip.Name = "tsbtnprintpayslip"
         Me.tsbtnprintpayslip.Size = New System.Drawing.Size(104, 22)
         Me.tsbtnprintpayslip.Text = "&Print pay slip"
+        Me.tsbtnprintpayslip.Visible = False
         '
         'DeclaredToolStripMenuItem
         '
@@ -4302,8 +4303,8 @@ Partial Class PayStub
         Me.tsbtnprintall.Image = CType(resources.GetObject("tsbtnprintall.Image"), System.Drawing.Image)
         Me.tsbtnprintall.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnprintall.Name = "tsbtnprintall"
-        Me.tsbtnprintall.Size = New System.Drawing.Size(119, 22)
-        Me.tsbtnprintall.Text = "Print all pay slip"
+        Me.tsbtnprintall.Size = New System.Drawing.Size(104, 22)
+        Me.tsbtnprintall.Text = "Print pay slip"
         '
         'DeclaredToolStripMenuItem1
         '

@@ -48,7 +48,17 @@ SELECT ps.RowID , ps.AsActual, es.RowID, es.EffectiveDateFrom, es.EffectiveDateT
 ,CONCAT_WS(', ',e.LastName,e.FirstName) `Column3`
 ,es.BasicPay `Column11`, es.`SalaryGroup`
 
-,IFNULL(ete.RegularHoursWorked,0) `Column17`,	ete.RegularHoursAmount `Column18`
+, IFNULL(ete.RegularHoursWorked,0) `Column17`
+# , ete.RegularHoursAmount `Column18`
+,IF(e.EmployeeType = 'Daily'
+    , FORMAT(IFNULL(ete.RegularHoursAmount, 0), 2)
+    , FORMAT(es.BasicPay - (IFNULL(ete.UndertimeHoursAmount, 0) + IFNULL(ete.HoursLateAmount, 0) + IFNULL(ete.Absent, 0) + IFNULL(ete.Leavepayment, 0) + IFNULL(ete.HolidayPayAmount, 0)), 2)
+    /*, IF(e.EmployeeType = 'Monthly'
+         , FORMAT(@basic_payment - IFNULL((et.UndertimeHoursAmount + et.HoursLateAmount + et.Absent + et.Leavepayment + et.HolidayPayAmount), 0), 2)
+			, @basic_payment
+			)*/
+    ) `Column18`
+    
 ,IFNULL(ete.OvertimeHoursWorked,0) `Column19`,	ete.OvertimeHoursAmount `Column20`
 	
 ,ete.NightDifferentialHours `Column21`,			ete.NightDiffHoursAmount `Column22`
@@ -200,8 +210,12 @@ LEFT JOIN (SELECT etea.RowID `eteRowID`,etea.EmployeeID
 				, SUM(etea.OtherLeaveHours) `OtherLeaveHours`
 				, SUM(etea.TotalDayPay) `TotalDayPay`
 				, SUM(etea.Absent) `Absent`
+				#
+				, SUM(etea.Leavepayment) `Leavepayment`
+				, SUM(etea.HolidayPayAmount) `HolidayPayAmount`
 				
-				FROM v_uni_employeetimeentry etea
+				# FROM v_uni_employeetimeentry etea
+				FROM proper_time_entry etea
 				INNER JOIN employee e ON e.RowID=etea.EmployeeID
 				INNER JOIN employeesalary es ON es.RowID=etea.EmployeeSalaryID
 				INNER JOIN payrate pr ON pr.RowID=etea.PayRateID

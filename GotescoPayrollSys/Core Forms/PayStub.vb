@@ -9913,7 +9913,7 @@ Public Class PayStub
 
     End Sub
 
-    Private Sub ActualToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ActualToolStripMenuItem.Click
+    Private Sub ActualToolStripMenuItem_Click(sender As Object, e As EventArgs) 'Handles ActualToolStripMenuItem.Click
 
         Static once As Boolean = True
         If once Then : Exit Sub : End If

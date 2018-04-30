@@ -4285,7 +4285,7 @@ Partial Class PayStub
         '
         Me.DeclaredToolStripMenuItem.AccessibleDescription = "0"
         Me.DeclaredToolStripMenuItem.Name = "DeclaredToolStripMenuItem"
-        Me.DeclaredToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DeclaredToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
         Me.DeclaredToolStripMenuItem.Tag = "0"
         Me.DeclaredToolStripMenuItem.Text = "Declared"
         '
@@ -4293,7 +4293,7 @@ Partial Class PayStub
         '
         Me.ActualToolStripMenuItem.AccessibleDescription = "1"
         Me.ActualToolStripMenuItem.Name = "ActualToolStripMenuItem"
-        Me.ActualToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ActualToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
         Me.ActualToolStripMenuItem.Tag = "1"
         Me.ActualToolStripMenuItem.Text = "Actual"
         '
@@ -4309,14 +4309,14 @@ Partial Class PayStub
         'DeclaredToolStripMenuItem1
         '
         Me.DeclaredToolStripMenuItem1.Name = "DeclaredToolStripMenuItem1"
-        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
         Me.DeclaredToolStripMenuItem1.Tag = "0"
         Me.DeclaredToolStripMenuItem1.Text = "Declared"
         '
         'ActualToolStripMenuItem1
         '
         Me.ActualToolStripMenuItem1.Name = "ActualToolStripMenuItem1"
-        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
         Me.ActualToolStripMenuItem1.Tag = "1"
         Me.ActualToolStripMenuItem1.Text = "Actual"
         '

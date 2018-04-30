@@ -40,13 +40,19 @@ IF loannumexist = '1' THEN
 
 ELSE
 
-	IF NEW.LoanPayPeriodLeft = 1 AND IFNULL(OLD.LoanPayPeriodLeft,0) > 1 THEN
+	# IF NEW.LoanPayPeriodLeft = 1 AND IFNULL(OLD.LoanPayPeriodLeft,0) > 1 THEN
+	IF NEW.LoanPayPeriodLeft = 0 AND IFNULL(OLD.LoanPayPeriodLeft,0) > 0 THEN
 	
 		SET loan_amount_update = NEW.TotalLoanAmount - (NEW.DeductionAmount * (NEW.NoOfPayPeriod - 1));
+		
+		SET @kulangsobra = (NEW.TotalLoanAmount - (NEW.DeductionAmount * NEW.NoOfPayPeriod));
+		
+		# SET NEW.DeductionAmount = loan_amount_update;
+		SET NEW.DeductionAmount = (NEW.DeductionAmount + (@kulangsobra));
 	
-		SET NEW.DeductionAmount = loan_amount_update;
-	
-		SET NEW.TotalBalanceLeft = loan_amount_update;
+		# SET NEW.TotalBalanceLeft = loan_amount_update;
+		# SET NEW.TotalBalanceLeft = NEW.DeductionAmount; # (NEW.TotalBalanceLeft + (@kulangsobra));
+		SET NEW.TotalBalanceLeft = 0;
 	
 	ELSEIF OLD.LoanPayPeriodLeft <= 0 AND NEW.LoanPayPeriodLeft = 1 THEN
 	

@@ -433,6 +433,12 @@ Partial Public Class DS1
         
         Private columnColumn40 As Global.System.Data.DataColumn
         
+        Private columnColumn41 As Global.System.Data.DataColumn
+        
+        Private columnColumn42 As Global.System.Data.DataColumn
+        
+        Private columnColumn43 As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub New()
@@ -789,6 +795,30 @@ Partial Public Class DS1
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property Column41Column() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnColumn41
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property Column42Column() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnColumn42
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property Column43Column() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnColumn43
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -865,9 +895,12 @@ Partial Public Class DS1
                     ByVal Column37 As String,  _
                     ByVal Column38 As String,  _
                     ByVal Column39 As String,  _
-                    ByVal Column40() As Byte) As DatTab1Row
+                    ByVal Column40() As Byte,  _
+                    ByVal Column41 As String,  _
+                    ByVal Column42 As String,  _
+                    ByVal Column43 As String) As DatTab1Row
             Dim rowDatTab1Row As DatTab1Row = CType(Me.NewRow,DatTab1Row)
-            Dim columnValuesArray() As Object = New Object() {Column1, Column2, Column3, Column4, Column5, Column6, Column7, Column8, Column9, Column10, Column11, Column12, Column13, Column14, Column15, Column16, Column17, Column18, Column19, Column20, Column21, Column22, Column23, Column24, Column25, Column26, Column27, Column28, Column29, Column30, Column31, Column32, Column33, Column34, Column35, Column36, Column37, Column38, Column39, Column40}
+            Dim columnValuesArray() As Object = New Object() {Column1, Column2, Column3, Column4, Column5, Column6, Column7, Column8, Column9, Column10, Column11, Column12, Column13, Column14, Column15, Column16, Column17, Column18, Column19, Column20, Column21, Column22, Column23, Column24, Column25, Column26, Column27, Column28, Column29, Column30, Column31, Column32, Column33, Column34, Column35, Column36, Column37, Column38, Column39, Column40, Column41, Column42, Column43}
             rowDatTab1Row.ItemArray = columnValuesArray
             Me.Rows.Add(rowDatTab1Row)
             Return rowDatTab1Row
@@ -930,6 +963,9 @@ Partial Public Class DS1
             Me.columnColumn38 = MyBase.Columns("Column38")
             Me.columnColumn39 = MyBase.Columns("Column39")
             Me.columnColumn40 = MyBase.Columns("Column40")
+            Me.columnColumn41 = MyBase.Columns("Column41")
+            Me.columnColumn42 = MyBase.Columns("Column42")
+            Me.columnColumn43 = MyBase.Columns("Column43")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1015,6 +1051,12 @@ Partial Public Class DS1
             MyBase.Columns.Add(Me.columnColumn39)
             Me.columnColumn40 = New Global.System.Data.DataColumn("Column40", GetType(Byte()), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnColumn40)
+            Me.columnColumn41 = New Global.System.Data.DataColumn("Column41", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnColumn41)
+            Me.columnColumn42 = New Global.System.Data.DataColumn("Column42", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnColumn42)
+            Me.columnColumn43 = New Global.System.Data.DataColumn("Column43", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnColumn43)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -4759,6 +4801,51 @@ Partial Public Class DS1
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property Column41() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableDatTab1.Column41Column),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Column41' in table 'DatTab1' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableDatTab1.Column41Column) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property Column42() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableDatTab1.Column42Column),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Column42' in table 'DatTab1' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableDatTab1.Column42Column) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property Column43() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableDatTab1.Column43Column),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Column43' in table 'DatTab1' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableDatTab1.Column43Column) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Function IsColumn1Null() As Boolean
             Return Me.IsNull(Me.tableDatTab1.Column1Column)
         End Function
@@ -5235,6 +5322,42 @@ Partial Public Class DS1
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub SetColumn40Null()
             Me(Me.tableDatTab1.Column40Column) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsColumn41Null() As Boolean
+            Return Me.IsNull(Me.tableDatTab1.Column41Column)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetColumn41Null()
+            Me(Me.tableDatTab1.Column41Column) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsColumn42Null() As Boolean
+            Return Me.IsNull(Me.tableDatTab1.Column42Column)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetColumn42Null()
+            Me(Me.tableDatTab1.Column42Column) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsColumn43Null() As Boolean
+            Return Me.IsNull(Me.tableDatTab1.Column43Column)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetColumn43Null()
+            Me(Me.tableDatTab1.Column43Column) = Global.System.Convert.DBNull
         End Sub
     End Class
     

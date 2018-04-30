@@ -55,6 +55,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `proper_time_entry` A
 		    , ((esa.Salary / (e.WorkDaysPerYear / 12)) / IFNULL(sh.DivisorToDailyRate, 8)))
 	  ) `Leavepayment`
 	,0 `AsActual`
+	, IF(et.Absent > 0, IFNULL(sh.WorkHours, 0), 0) `AbsentHours`
 	FROM employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID
 	INNER JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
@@ -103,6 +104,7 @@ UNION
 		    , ((esa.Salary / (e.WorkDaysPerYear / 12)) / IFNULL(sh.DivisorToDailyRate, 8)))
 	  ) `Leavepayment`
 	,1 `AsActual`
+	, IF(et.Absent > 0, IFNULL(sh.WorkHours, 0), 0) `AbsentHours`
 	FROM employeetimeentryactual et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID
 	INNER JOIN employeetimeentry ete ON ete.RowID=et.RowID

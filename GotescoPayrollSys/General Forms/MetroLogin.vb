@@ -14,6 +14,10 @@ Public Class MetroLogin
         '9988
 
         Console.WriteLine(DecrypedData("ÌÔÚÑÉººº¶"))
+        Console.WriteLine(DecrypedData("¶·¸¹"))
+
+        'A01274
+        '1234
 
         'dbconn()
 

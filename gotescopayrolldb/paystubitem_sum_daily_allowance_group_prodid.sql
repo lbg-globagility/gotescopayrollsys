@@ -21,7 +21,10 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `paystubitem_sum_dail
 		,0 AS Column1
 		,GET_employeerateperday(et.EmployeeID,et.OrganizationID,et.`Date`) AS Column2
 		,   ((IF(pr.PayType='Regular Day'
-				, IF(et.TotalDayPay > et.RegularHoursAmount, et.RegularHoursAmount, et.TotalDayPay)
+				# , IF(et.TotalDayPay > et.RegularHoursAmount, et.RegularHoursAmount, et.TotalDayPay)
+				, ROUND((et.RegularHoursAmount
+				         * IF((es.RestDay = '1' OR es.RestDay IS NULL) AND e.CalcRestDay = '1', (pr.`PayRate` / pr.RestDayRate), 1))
+				        , 2)
 				, IF(pr.PayType='Special Non-Working Holiday' AND e.CalcSpecialHoliday = '1'
 					, IF(e.EmployeeType = 'Daily', (et.RegularHoursAmount / pr.`PayRate`), et.HolidayPayAmount)
 					, IF(pr.PayType='Special Non-Working Holiday' AND e.CalcSpecialHoliday = '0'

@@ -56,6 +56,8 @@ SET @basic_payment = 0.00;
 
 SET @_ordinal = 0;
 
+SET @deduct_amt = 0;
+
 SELECT
 ps.RowID
 ,e.EmployeeID `Column2`
@@ -104,6 +106,7 @@ ps.RowID
 ,IFNULL(FORMAT(et.Absent,2), 0) `Column26`
 ,IFNULL(FORMAT(et.HoursLateAmount, 2), 0) `Column27`
 ,IFNULL(FORMAT(et.UndertimeHoursAmount, 2), 0) `Column28`
+,IFNULL(FORMAT(et.`AbsentHours`,2), 0) `Column41`
 
 ,logo `Column40`
 
@@ -162,6 +165,7 @@ LEFT JOIN (SELECT
 			  , IF(is_actual = 1
 			       , SUM(i.RestDayActualPay)
 					 , SUM(i.RestDayAmount)) `RestDayAmount`
+			  , SUM(et.`AbsentHours`) `AbsentHours`
 			  FROM proper_time_entry et
 			  
 			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
@@ -173,7 +177,7 @@ LEFT JOIN (SELECT
            ) et
        ON et.EmployeeID=ps.EmployeeID
 
-INNER JOIN (SELECT
+LEFT JOIN (SELECT
            PayStubID
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column34`
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column37`
@@ -186,7 +190,7 @@ INNER JOIN (SELECT
            ) psiallw
        ON psiallw.PayStubID = ps.RowID
        
-INNER JOIN (SELECT
+LEFT JOIN (SELECT
            PayStubID
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column36`
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column39`
@@ -222,12 +226,12 @@ INNER JOIN (SELECT
 								,pp.PayFromDate
 								,pp.PayToDate
 								,pp.OrdinalValue
-								,
-								(@_ordinal := (@_ordinal + 1)) `AscOrder`
+								, (@_ordinal := (@_ordinal + 1)) `AscOrder`
+								, (@deduct_amt := ROUND((els.TotalLoanAmount / els.NoOfPayPeriod), 2)) `DeductAmt`
 								
 								,(@_deduction :=
 								 IF(@_ordinal = els.NoOfPayPeriod
-								    , ( els.DeductionAmount + (els.TotalLoanAmount - (els.DeductionAmount * els.NoOfPayPeriod)) )
+								    , ( @deduct_amt + (els.TotalLoanAmount - (@deduct_amt * els.NoOfPayPeriod)) )
 									 , els.DeductionAmount)) `Deduction`
 								
 								,IF(pp.RowID = pp_rowid, @_deduction, 0) `DeductionAmount`

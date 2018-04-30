@@ -1,16 +1,9 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               5.5.5-10.0.12-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
--- HeidiSQL Version:             8.3.0.4694
--- --------------------------------------------------------
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for procedure gotescopayrolldb_server.paystub_payslips
 DROP PROCEDURE IF EXISTS `paystub_payslips`;
 DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(IN `og_rowid` INT, IN `pp_rowid` INT, IN `is_actual` CHAR(1)
@@ -98,10 +91,10 @@ ps.RowID
 			)*/
     ) `Column18`
 
-,IFNULL(FORMAT(et.OvertimeHoursAmount, 2), '') `Column20`
-,IFNULL(FORMAT(et.NightDiffHoursAmount,2), '') `Column22`
-,IFNULL(FORMAT(et.NightDiffOTHoursAmount, 2), '') `Column24`
-,IFNULL(FORMAT(et.HolidayPayAmount, 2), '') `Column1`
+,IFNULL(FORMAT(et.OvertimeHoursAmount, 2), 0) `Column20`
+,IFNULL(FORMAT(et.NightDiffHoursAmount,2), 0) `Column22`
+,IFNULL(FORMAT(et.NightDiffOTHoursAmount, 2), 0) `Column24`
+,IFNULL(FORMAT(et.HolidayPayAmount, 2), 0) `Column1`
 
 ,IFNULL(FORMAT(et.Absent,2), 0) `Column26`
 ,IFNULL(FORMAT(et.HoursLateAmount, 2), 0) `Column27`
@@ -115,6 +108,8 @@ ps.RowID
 
 # , IFNULL(rd.`RestDayAmount`, 0) `Column16`
 , IFNULL(ROUND(et.`RestDayAmount`, 2), 0) `Column16`
+
+, IFNULL(ROUND(et.`Leavepayment`, 2), 0) `Column15`
 
 FROM proper_payroll ps
 
@@ -161,6 +156,7 @@ LEFT JOIN (SELECT
 			  ,SUM(et.HolidayPayAmount) `HolidayPayAmount`
 			  ,SUM(et.TaxableDailyBonus) `TaxableDailyBonus`
 			  ,SUM(et.NonTaxableDailyBonus) `NonTaxableDailyBonus`
+			  ,SUM(et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours) `LeaveHours`
 			  ,SUM(et.Leavepayment) `Leavepayment`
 			  , IF(is_actual = 1
 			       , SUM(i.RestDayActualPay)
@@ -400,6 +396,7 @@ ORDER BY CONCAT(e.LastName, e.FirstName)
 
 END//
 DELIMITER ;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

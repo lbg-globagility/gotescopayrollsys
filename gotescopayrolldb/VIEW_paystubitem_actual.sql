@@ -6,7 +6,12 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_paystubitem_actual`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_paystubitem_actual`(IN `OrganizID` INT, IN `EmpRowID` INT, IN `pay_date_from` DATE, IN `pay_date_to` DATE)
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_paystubitem_actual`(
+	IN `OrganizID` INT,
+	IN `EmpRowID` INT,
+	IN `pay_date_from` DATE,
+	IN `pay_date_to` DATE
+)
     DETERMINISTIC
 BEGIN
 
@@ -124,7 +129,9 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.AdditionalVLHours) AS AdditionalVLHours
 				, SUM(etea.TotalDayPay) AS TotalDayPay
 				, SUM(etea.Absent) AS Absent, SUM(etea.HolidayPayAmount) AS HolidayPayAmount
+				, SUM(et.AbsentHours) `AbsentHours`
 				FROM employeetimeentryactual etea
+				INNER JOIN proper_time_entry et ON et.RowID=etea.RowID AND et.AsActual=TRUE
 				INNER JOIN payrate pr ON pr.RowID=etea.PayRateID
 				WHERE etea.EmployeeID=EmpRowID
 				AND etea.OrganizationID=OrganizID

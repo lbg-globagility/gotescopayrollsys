@@ -2609,7 +2609,7 @@ Public Class EmployeeForm
                             '    rdMale.Checked = False
                         End If
 
-                        Dim n_ReadSQLProcedureToDatatable As New _
+                        Dim n_ReadSQLProcedureToDatatable As New  _
                             ReadSQLProcedureToDatatable("GET_emp_leaveamounts", .Cells("RowID").Value)
                         Dim catchdt As New DataTable : catchdt = n_ReadSQLProcedureToDatatable.ResultTable
 
@@ -3476,7 +3476,6 @@ Public Class EmployeeForm
                                 InfoBalloon("Employee ID '" & txtEmpID.Text & "' has been updated successfully.", "Employee Update Successful", lblforballoon, 0, -69)
 
                             End If
-
                         Catch ex As Exception
                             MsgBox(getErrExcptn(ex, Me.Name))
                         End Try
@@ -6970,7 +6969,6 @@ Public Class EmployeeForm
                             Convert.ToBoolean(sql_result)
 
                         lblDeptMngrApproveLeave.Visible = bool_result
-
                     Else
                         clear()
                     End If
@@ -10751,7 +10749,7 @@ Public Class EmployeeForm
 
                     If prompt = Windows.Forms.DialogResult.Yes Then
 
-                        Dim n_ExecSQLProcedure As New _
+                        Dim n_ExecSQLProcedure As New  _
                             ExecSQLProcedure("DEL_employeeloanschedule", 192,
                                              dgvLoanList.CurrentRow.Cells("c_RowIDLoan").Value)
 
@@ -13289,7 +13287,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                               Optional esal_TrueSalary As Object = Nothing,
                               Optional esal_IsDoneByImporting As Object = "0") As Object
 
-        Dim params(17, 2) As Object
+        Dim params(16, 2) As Object
 
         params(0, 0) = "esal_RowID"
         params(1, 0) = "esal_EmployeeID"
@@ -13304,12 +13302,12 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         params(10, 0) = "esal_EffectiveDateFrom"
         params(11, 0) = "esal_EffectiveDateTo"
         params(12, 0) = "esal_HDMFAmount"
-        params(13, 0) = "esal_PAGIBIGAmout"
-        params(14, 0) = "esal_TrueSalary"
-        params(15, 0) = "esal_IsDoneByImporting"
+        params(13, 0) = "esal_TrueSalary"
+        params(14, 0) = "esal_IsDoneByImporting"
+        params(15, 0) = "esal_DiscardSSS"
 
-        params(16, 0) = "esal_DiscardSSS"
-        params(17, 0) = "esal_DiscardPhH"
+        params(16, 0) = "esal_DiscardPhH"
+        'params(17, 0) = ""
 
         params(0, 1) = If(esal_RowID = Nothing, DBNull.Value, esal_RowID)
         params(1, 1) = esal_EmployeeID
@@ -13328,14 +13326,14 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         'params(12, 1) = If(esal_truepagibigamount > 0, esal_truepagibigamount, Val(txtPagibig.Text) * payfreqdivisor) 'FormatNumber((Val(txtPagibig.Text) * payfreqdivisor), 2).Replace(",", "")
         'params(13, 1) = If(esal_truepagibigamount > 0, esal_truepagibigamount, Val(txtPagibig.Text)) ' * payfreqdivisor
 
-        params(12, 1) = ValNoComma(txtPagibig.Text) * payfreqdivisor
-        params(13, 1) = ValNoComma(txtPagibig.Text) * payfreqdivisor
+        params(12, 1) = ValNoComma(txtPagibig.Text)
+        params(13, 1) = If(esal_TrueSalary = Nothing, Val(esal_Salary), Val(esal_TrueSalary))
 
-        params(14, 1) = If(esal_TrueSalary = Nothing, Val(esal_Salary), Val(esal_TrueSalary))
-        params(15, 1) = esal_IsDoneByImporting
+        params(14, 1) = esal_IsDoneByImporting
+        params(15, 1) = Convert.ToInt16(is_user_override_sss)
 
-        params(16, 1) = Convert.ToInt16(is_user_override_sss)
-        params(17, 1) = Convert.ToInt16(is_user_override_phh)
+        params(16, 1) = Convert.ToInt16(is_user_override_phh)
+        'params(17, 1) =
 
         INSUPD_employeesalary =
             EXEC_INSUPD_PROCEDURE(params,
@@ -16534,7 +16532,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         Convert.ToBoolean(sql_result)
 
                     lblDeptMngrApproveOT.Visible = bool_result
-
                 Else
                     clearEOT()
 
@@ -18300,7 +18297,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         Convert.ToBoolean(sql_result)
 
                     lblDeptMngrApproveOB.Visible = bool_result
-
                 Else
                     prev_obf_Type = ""
                     prev_obf_StartTime = ""

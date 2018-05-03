@@ -8,6 +8,7 @@ Imports log4net
 Imports OfficeOpenXml
 
 Public Class PayStub
+
     Public q_employee As String = "SELECT e.RowID," &
         "e.EmployeeID 'Employee ID'," &
         "e.FirstName 'First Name'," &
@@ -197,8 +198,6 @@ Public Class PayStub
 
         End If
 
-
-
         strdeductsched = dattabl_deductsched.Rows(0)("SSSDeductionSchedule")
 
         'SSS deduction schedule
@@ -217,10 +216,6 @@ Public Class PayStub
 
         End If
 
-
-
-
-
         strdeductsched = dattabl_deductsched.Rows(0)("PagIbigDeductionSchedule")
 
         'PAGIBIG deduction schedule
@@ -238,8 +233,6 @@ Public Class PayStub
             isorgHDMFdeductsched = 1
 
         End If
-
-
 
         linkPrev.Text = "← " & (current_year - 1)
         linkNxt.Text = (current_year + 1) & " →"
@@ -264,8 +257,6 @@ Public Class PayStub
         '        For Each strval In employeecolumnname
         '            MsgBox(strval.ToString)
         '        Next
-
-
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & viewID)
 
@@ -350,13 +341,11 @@ Public Class PayStub
         Try
 
             catch_dt = sql.GetFoundRows.Tables(0)
-
         Catch ex As Exception
 
             catch_dt.Dispose()
 
             MsgBox(getErrExcptn(ex, Me.Name))
-
         Finally
 
             If sql.HasError = False _
@@ -391,8 +380,8 @@ Public Class PayStub
 
             filltable(dgvemployees, "VIEW_employee", param, 1)
             'filltable(dgvEmp, q_employee)
-            'filltable(dgvEmp, "VIEW_employee", "e_OrganizationID", 1, 1)   
-        Else 'q_employee & 
+            'filltable(dgvEmp, "VIEW_employee", "e_OrganizationID", 1, 1)
+        Else 'q_employee &
             filltable(dgvemployees, searchquery) ' & " ORDER BY e.RowID DESC")
         End If
 
@@ -573,7 +562,6 @@ Public Class PayStub
 
                     ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                         numofweekends += 1
-
                     Else
                         numofweekdays += 1
 
@@ -594,7 +582,6 @@ Public Class PayStub
             End With
 
             'dgvemployees_SelectionChanged(sender, e)
-
         Else
 
             numofweekdays = 0
@@ -655,7 +642,6 @@ Public Class PayStub
         quer_empPayFreq = ""
 
         If bgworkgenpayroll.IsBusy Then
-
         Else
 
             Dim pay_freqString = String.Empty
@@ -670,11 +656,9 @@ Public Class PayStub
                             DirectCast(ctrl, ToolStripButton).Text
 
                         Exit For
-
                     Else
                         Continue For
                     End If
-
                 Else
                     Continue For
                 End If
@@ -682,7 +666,6 @@ Public Class PayStub
             Next
 
             quer_empPayFreq = " AND pf.PayFrequencyType='" & pay_freqString & "' "
-
 
             RemoveHandler dgvemployees.SelectionChanged, AddressOf dgvemployees_SelectionChanged
 
@@ -702,7 +685,6 @@ Public Class PayStub
                 If modcent = 0 Then
 
                     pagination -= 20
-
                 Else
 
                     pagination -= modcent
@@ -721,7 +703,6 @@ Public Class PayStub
 
                 If modcent = 0 Then
                     pagination += 20
-
                 Else
                     pagination -= modcent
 
@@ -793,7 +774,7 @@ Public Class PayStub
 
         dgvemployees.Tag = Nothing
 
-        If dgvemployees.RowCount > 0 Then 'And dgvemployees.CurrentRow IsNot Nothing 
+        If dgvemployees.RowCount > 0 Then 'And dgvemployees.CurrentRow IsNot Nothing
             With dgvemployees.CurrentRow
 
                 'If .Cells("RowID").Value <> sameEmpID Then
@@ -818,7 +799,6 @@ Public Class PayStub
                 Dim addtlWord = Nothing
 
                 If .Cells("MiddleName").Value = Nothing Then
-
                 Else
 
                     Dim midNameTwoWords = Split(.Cells("MiddleName").Value.ToString, " ")
@@ -835,10 +815,8 @@ Public Class PayStub
 
                 End If
 
-
                 LastFirstMidName = .Cells("LastName").Value & ", " & .Cells("FirstName").Value &
                     If(Trim(addtlWord) = Nothing, "", If(Trim(addtlWord) = ".", "", ", " & addtlWord))
-
 
                 txtFName.Text = txtFName.Text & " " & .Cells("LastName").Value
 
@@ -895,342 +873,12 @@ Public Class PayStub
 
             End With
 
-            ' ''With dgvemployees.CurrentRow
-
-            ' ''    If paypRowID <> Nothing Then
-
-            ' ''        VIEW_paystub(.Cells("RowID").Value, _
-            ' ''                     paypRowID)
-            ' ''        '"₱ " & 
-            ' ''        txtgrosssal.Text = "0.00"
-            ' ''        txtnetsal.Text = "0.00"
-            ' ''        txtTotalAdjustments.Text = "0.00" 'Josh
-            ' ''        txttaxabsal.Text = "0.00"
-            ' ''        txtempwtax.Text = "0.00"
-
-            ' ''        txtempsss.Text = "0.00"
-            ' ''        txtempphh.Text = "0.00"
-            ' ''        txtemphdmf.Text = "0.00"
-
-            ' ''        txtemptotallow.Text = "0.00"
-            ' ''        txtemptotloan.Text = "0.00"
-            ' ''        txtemptotbon.Text = "0.00"
-
-            ' ''        For Each dgvrow As DataGridViewRow In dgvpaystub.Rows
-            ' ''            With dgvrow
-            ' ''                txtgrosssal.Text = FormatNumber(Val(.Cells("paystb_TotalGrossSalary").Value), 2)
-
-            ' ''                txtnetsal.Text = FormatNumber(Val(.Cells("paystb_TotalNetSalary").Value), 2)
-
-            ' ''                Me.currentTotal = .Cells("paystb_TotalNetSalary").Value
-
-
-            ' ''                txttaxabsal.Text = FormatNumber(Val(.Cells("paystb_TotalTaxableSalary").Value), 2)
-
-            ' ''                txtempwtax.Text = FormatNumber(Val(.Cells("paystb_TotalEmpWithholdingTax").Value), 2)
-
-            ' ''                txtTotalAdjustments.Text = FormatNumber(Val(.Cells("paystb_TotalAdjustments").Value), 2)
-
-            ' ''                'txtersss.Text = .Cells("paystb_TotalCompSSS").Value
-            ' ''                'txterphh.Text = .Cells("paystb_TotalCompPhilhealth").Value
-            ' ''                'txterhdmf.Text = .Cells("paystb_TotalCompHDMF").Value
-
-            ' ''                txtempsss.Text = FormatNumber(Val(.Cells("paystb_TotalEmpSSS").Value), 2)
-            ' ''                txtempphh.Text = FormatNumber(Val(.Cells("paystb_TotalEmpPhilhealth").Value), 2)
-            ' ''                txtemphdmf.Text = FormatNumber(Val(.Cells("paystb_TotalEmpHDMF").Value), 2)
-
-            ' ''                txtemptotallow.Text = FormatNumber(Val(.Cells("paystb_TotalAllowance").Value), 2)
-
-            ' ''                'txtotpay.Text = .Cells("paystb_TotalAllowance").Value
-            ' ''                'txtnightdiffpay.Text = .Cells("paystb_TotalAllowance").Value
-            ' ''                'txtnightdiffotpay.Text = .Cells("paystb_TotalAllowance").Value
-            ' ''                'txtholidaypay.Text = .Cells("paystb_TotalAllowance").Value
-
-            ' ''                'txttardi.Text = .Cells("paystb_TotalAllowance").Value
-            ' ''                'txtut.Text = .Cells("paystb_TotalAllowance").Value
-
-            ' ''                txtemptotloan.Text = FormatNumber(Val(.Cells("paystb_TotalLoans").Value), 2)
-            ' ''                txtemptotbon.Text = FormatNumber(Val(.Cells("paystb_TotalBonus").Value), 2)
-
-            ' ''                'txtvacleft.Text = .Cells("paystb_TotalVacationDaysLeft").Value
-
-            ' ''                VIEW_paystubitem(.Cells("paystb_RowID").Value)
-
-            ' ''                For Each dgvrw As DataGridViewRow In dgvpaystubitm.Rows
-            ' ''                    With dgvrw
-            ' ''                        If .Cells("Item").Value.ToString = "Vacation leave" Then
-            ' ''                            txtvlbal.Text = FormatNumber(Val(.Cells("PayAmount").Value), 2)
-            ' ''                            Continue For
-            ' ''                        ElseIf .Cells("Item").Value.ToString = "Sick leave" Then
-            ' ''                            txtslbal.Text = FormatNumber(Val(.Cells("PayAmount").Value), 2)
-            ' ''                            Continue For
-            ' ''                        ElseIf .Cells("Item").Value.ToString = "Maternity leave" Then '/paternity 
-            ' ''                            'If Microsoft.VisualBasic.Left(dgvemployees.CurrentRow.Cells("Gender").Value, 1) = "M" Then
-            ' ''                            txtmlbal.Text = FormatNumber(Val(.Cells("PayAmount").Value), 2)
-            ' ''                            'Else
-            ' ''                            '    txtmlbal.Text = FormatNumber(Val(.Cells("PayAmount").Value), 2)
-            ' ''                            'End If
-            ' ''                            Continue For
-            ' ''                        ElseIf .Cells("Item").Value.ToString = "Tardiness" Then
-            ' ''                            txttottardiamt.Text = FormatNumber(Val(.Cells("PayAmount").Value), 2)
-            ' ''                            Continue For
-            ' ''                        ElseIf .Cells("Item").Value.ToString = "Undertime" Then
-            ' ''                            txttotutamt.Text = FormatNumber(Val(.Cells("PayAmount").Value), 2)
-            ' ''                            Continue For
-            ' ''                        Else
-            ' ''                            Continue For
-            ' ''                        End If
-
-            ' ''                    End With
-
-            ' ''                Next
-
-            ' ''            End With
-
-            ' ''            Exit For
-            ' ''        Next
-
-            ' ''        VIEW_specificemployeesalary(.Cells("RowID").Value, _
-            ' ''                                    paypTo)
-
-            ' ''        For Each dgvrow As DataGridViewRow In dgvempsal.Rows
-            ' ''            txtempbasicpay.Text = "0.00"
-
-            ' ''            With dgvrow
-            ' ''                txtempbasicpay.Text = FormatNumber(Val(.Cells("esal_BasicPay").Value), 2)
-
-            ' ''                'If isorgSSSdeductsched = 1 Then 'Per pay period
-            ' ''                '    txtempsss.Text = Val(.Cells("esal_EmployeeContributionAmount").Value) / 2
-            ' ''                '    txtempsss.Text = FormatNumber(Val(txtempsss.Text), 2).ToString '.Replace(",", "")
-
-            ' ''                'ElseIf isorgSSSdeductsched = 2 Then 'First half
-            ' ''                '    If isEndOfMonth = "0" Then
-            ' ''                '        txtempsss.Text = Val(.Cells("esal_EmployeeContributionAmount").Value)
-            ' ''                '        txtempsss.Text = FormatNumber(Val(txtempsss.Text), 2).ToString '.Replace(",", "")
-
-            ' ''                '    Else
-            ' ''                '        txtempsss.Text = "0.00"
-
-            ' ''                '    End If
-
-            ' ''                'Else '                          'End of the month
-            ' ''                '    If isEndOfMonth = "0" Then
-            ' ''                '        txtempsss.Text = "0.00"
-            ' ''                '    Else
-            ' ''                '        txtempsss.Text = Val(.Cells("esal_EmployeeContributionAmount").Value)
-            ' ''                '        txtempsss.Text = FormatNumber(Val(txtempsss.Text), 2).ToString '.Replace(",", "")
-            ' ''                '    End If
-
-            ' ''                'End If
-
-            ' ''                'If isorgPHHdeductsched = 1 Then 'Per pay period
-            ' ''                '    txtempphh.Text = Val(.Cells("esal_EmployeeShare").Value) / 2
-            ' ''                '    txtempphh.Text = FormatNumber(Val(txtempphh.Text), 2).ToString '.Replace(",", "")
-
-            ' ''                'ElseIf isorgPHHdeductsched = 2 Then 'First half
-            ' ''                '    If isEndOfMonth = "0" Then
-            ' ''                '        txtempphh.Text = .Cells("esal_EmployeeShare").Value
-            ' ''                '        txtempphh.Text = FormatNumber(Val(txtempphh.Text), 2).ToString '.Replace(",", "")
-
-            ' ''                '    Else
-            ' ''                '        txtempphh.Text = "0.00"
-
-            ' ''                '    End If
-
-            ' ''                'Else '                              'End of the month
-            ' ''                '    If isEndOfMonth = "0" Then
-            ' ''                '        txtempphh.Text = "0.00"
-            ' ''                '    Else
-            ' ''                '        txtempphh.Text = .Cells("esal_EmployeeShare").Value
-            ' ''                '        txtempphh.Text = FormatNumber(Val(txtempphh.Text), 2).ToString '.Replace(",", "")
-            ' ''                '    End If
-
-            ' ''                'End If
-
-            ' ''                'If isorgHDMFdeductsched = 1 Then 'Per pay period
-            ' ''                '    txtemphdmf.Text = Val(.Cells("esal_HDMFAmount").Value) / 2
-            ' ''                '    txtemphdmf.Text = FormatNumber(Val(txtemphdmf.Text), 2).ToString '.Replace(",", "")
-
-            ' ''                'ElseIf isorgHDMFdeductsched = 2 Then 'First half
-            ' ''                '    If isEndOfMonth = "0" Then
-            ' ''                '        txtemphdmf.Text = .Cells("esal_HDMFAmount").Value
-            ' ''                '        txtemphdmf.Text = FormatNumber(Val(txtemphdmf.Text), 2).ToString '.Replace(",", "")
-
-            ' ''                '    Else
-            ' ''                '        txtemphdmf.Text = "0.00"
-
-            ' ''                '    End If
-
-            ' ''                'Else
-            ' ''                '    If isEndOfMonth = "0" Then
-            ' ''                '        txtemphdmf.Text = "0.00"
-            ' ''                '    Else
-            ' ''                '        txtemphdmf.Text = .Cells("esal_HDMFAmount").Value
-            ' ''                '        txtemphdmf.Text = FormatNumber(Val(txtemphdmf.Text), 2).ToString '.Replace(",", "")
-            ' ''                '    End If
-
-            ' ''                'End If
-
-            ' ''                Exit For
-            ' ''            End With
-            ' ''        Next
-
-            ' ''        VIEW_employeetimeentry_SUM(.Cells("RowID").Value, _
-            ' ''                                    paypFrom, _
-            ' ''                                    paypTo)
-
-            ' ''        txttotreghrs.Text = "0.00"
-            ' ''        txttotregamt.Text = "0.00"
-
-            ' ''        txttotothrs.Text = "0.00"
-            ' ''        txttototamt.Text = "0.00"
-
-            ' ''        txttotnightdiffhrs.Text = "0.00"
-            ' ''        txttotnightdiffamt.Text = "0.00"
-
-            ' ''        txttotnightdiffothrs.Text = "0.00"
-            ' ''        txttotnightdiffotamt.Text = "0.00"
-
-            ' ''        txttotholidayhrs.Text = "0.00"
-            ' ''        txttotholidayamt.Text = "0.00"
-
-            ' ''        txthrswork.Text = "0.00"
-            ' ''        txthrsworkamt.Text = "0.00"
-
-            ' ''        lblsubtot.Text = "0.00"
-
-            ' ''        For Each dgvrow As DataGridViewRow In dgvetent.Rows
-            ' ''            With dgvrow
-            ' ''                If employeetype = "Fixed" Then
-            ' ''                    If dgvemployees.CurrentRow.Cells("PayFreqID").Value = 1 Then
-            ' ''                        If txtgrosssal.Text = "0.00" Then
-            ' ''                            txtgrosssal.Text = FormatNumber(Val(txtempbasicpay.Text.Replace(",", "")) + _
-            ' ''                            (.Cells("etent_OvertimeHoursAmount").Value) + _
-            ' ''                            (.Cells("etent_NightDiffOTHoursAmount").Value), _
-            ' ''                                                    2)
-
-            ' ''                        End If
-
-            ' ''                        lblsubtot.Text = txtempbasicpay.Text 'txtgrosssal
-
-            ' ''                        'txtgrosssal.Text = txtgrosssal.Text '.Replace(",", "")
-
-            ' ''                        txthrsworkamt.Text = lblsubtot.Text
-
-            ' ''                    Else
-            ' ''                        If txtgrosssal.Text = "0.00" Then
-            ' ''                            txtgrosssal.Text = FormatNumber(Val(txtemptotallow.Text.Replace(",", "")) + _
-            ' ''                            (.Cells("etent_OvertimeHoursAmount").Value) + _
-            ' ''                            (.Cells("etent_NightDiffOTHoursAmount").Value), _
-            ' ''                                                        2)
-
-            ' ''                        End If
-
-            ' ''                        lblsubtot.Text = txtempbasicpay.Text 'txtgrosssal'.Replace(",", "")
-
-            ' ''                        txthrsworkamt.Text = lblsubtot.Text
-
-            ' ''                    End If
-
-
-            ' ''                Else
-            ' ''                    lblsubtot.Text = FormatNumber(ValNoComma(.Cells("etent_TotalDayPay").Value), 2)
-
-            ' ''                    'txthrsworkamt.Text = FormatNumber(Val(.Cells("etent_TotalDayPay").Value), 2)
-
-            ' ''                    txthrsworkamt.Text = FormatNumber(ValNoComma(.Cells("etent_RegularHoursAmount").Value), 2)
-
-            ' ''                End If
-
-            ' ''                txttotreghrs.Text = Val(.Cells("etent_TotalHoursWorked").Value) 'etent_RegularHoursWorked
-            ' ''                txttotregamt.Text = If(IsDBNull(.Cells("etent_RegularHoursAmount").Value), "0.00", FormatNumber(Val(.Cells("etent_RegularHoursAmount").Value), 2))
-
-            ' ''                txttotothrs.Text = .Cells("etent_OvertimeHoursWorked").Value
-            ' ''                txttototamt.Text = FormatNumber(Val(.Cells("etent_OvertimeHoursAmount").Value), 2)
-
-            ' ''                txttotnightdiffhrs.Text = .Cells("etent_NightDifferentialHours").Value
-            ' ''                txttotnightdiffamt.Text = FormatNumber(Val(.Cells("etent_NightDiffHoursAmount").Value), 2)
-
-            ' ''                txttotnightdiffothrs.Text = .Cells("etent_NightDifferentialOTHours").Value
-            ' ''                txttotnightdiffotamt.Text = FormatNumber(Val(.Cells("etent_NightDiffOTHoursAmount").Value), 2)
-
-            ' ''                txttotut.Text = .Cells("etent_UndertimeHours").Value
-            ' ''                'txttotutamt.Text = FormatNumber(Val(.Cells("etent_UndertimeHoursAmount").Value), 2)
-
-            ' ''                'txttotholidayhrs.Text = .Cells("esal_BasicPay").Value
-            ' ''                'txttotholidayamt.Text = .Cells("esal_BasicPay").Value
-
-            ' ''                txthrswork.Text = ValNoComma(.Cells("etent_TotalHoursWorked").Value) _
-            ' ''                                - ValNoComma(.Cells("etent_OvertimeHoursWorked").Value) _
-            ' ''                                - ValNoComma(.Cells("etent_NightDifferentialOTHours").Value)
-            ' ''                'txthrswork.Text = .Cells("etent_RegularHoursWorked").Value
-
-            ' ''                txttottardi.Text = .Cells("etent_HoursLate").Value
-            ' ''                'txttottardiamt.Text = FormatNumber(Val(.Cells("etent_HoursLateAmount").Value), 2)
-
-            ' ''                Exit For
-            ' ''            End With
-            ' ''        Next
-
-            ' ''        txttotabsent.Text = COUNT_employeeabsent(.Cells("RowID").Value, _
-            ' ''                                                 .Cells("Startdate").Value, _
-            ' ''                                                 paypFrom, _
-            ' ''                                                 paypTo)
-
-            ' ''        'Dim param_date = If(paypTo = Nothing, paypFrom, paypTo)
-
-            ' ''        'Dim rateper_hour = GET_employeerateperhour(.Cells("RowID").Value, param_date)
-
-            ' ''        'txttottardi.Text = Val(rateper_hour) * Val(txttottardi.Text)
-
-            ' ''        Dim misc_subtot = Val(txttottardiamt.Text.Replace(",", "")) + Val(txttotutamt.Text.Replace(",", ""))
-
-            ' ''        lblsubtotmisc.Text = FormatNumber(Val(misc_subtot), 2).ToString '.Replace(",", "")
-
-            ' ''        'VIEW_eallow_indate(.Cells("RowID").Value, _
-            ' ''        '                    paypFrom, _
-            ' ''        '                    paypTo)
-
-            ' ''        'VIEW_eloan_indate(.Cells("RowID").Value, _
-            ' ''        '                    paypFrom, _
-            ' ''        '                    paypTo)
-
-            ' ''        'VIEW_ebon_indate(.Cells("RowID").Value, _
-            ' ''        '                    paypFrom, _
-            ' ''        '                    paypTo)
-            ' ''        UpdateAdjustmentDetails() 'Josh
-
-            ' ''    Else
-            ' ''        dgvpaystub.Rows.Clear()
-
-            ' ''        txtgrosssal.Text = ""
-            ' ''        txtnetsal.Text = ""
-            ' ''        txttaxabsal.Text = ""
-
-            ' ''        dgvpaystub.Rows.Clear()
-            ' ''        dgvpaystubitem.Rows.Clear()
-            ' ''        dgvempsal.Rows.Clear()
-            ' ''        dgvetent.Rows.Clear()
-            ' ''        dgvpaystubitm.Rows.Clear()
-            ' ''        dgvempbon.Rows.Clear()
-            ' ''        dgvLoanList.Rows.Clear()
-            ' ''        dgvempallowance.Rows.Clear()
-
-            ' ''    End If
-
-            ' ''End With
-
-            'If tabEarned.SelectedIndex = 1 Then
-            '    TabPage4_Enter(TabPage4, New EventArgs)
-            'End If
-
             Select Case tabEarned.SelectedIndex
                 Case 0
                     TabPage1_Enter1(TabPage1, New EventArgs)
                 Case 1
                     TabPage4_Enter1(TabPage4, New EventArgs)
             End Select
-
         Else
             sameEmpID = -1
 
@@ -1406,7 +1054,6 @@ Public Class PayStub
 
                 .CommandType = CommandType.StoredProcedure
 
-
                 .Parameters.Add("absentcount", MySqlDbType.Decimal)
 
                 .Parameters.AddWithValue("EmpID", EmpID)
@@ -1425,7 +1072,6 @@ Public Class PayStub
                 returnval = If(datread.Read = True, If(IsDBNull(datread.GetString(0)), "0.00", datread.GetString(0).ToString), "0.00") 'dr.GetString(0).ToString
 
             End With
-
         Catch ex As Exception
             MsgBox(ex.Message, , "Error : COUNT_employeeabsent")
 
@@ -1450,7 +1096,6 @@ Public Class PayStub
 
                 .CommandType = CommandType.StoredProcedure
 
-
                 .Parameters.Add("rateperhour", MySqlDbType.Int32)
 
                 .Parameters.AddWithValue("EmpID", EmpID)
@@ -1466,7 +1111,6 @@ Public Class PayStub
                 rate_perhour = If(datread.Read = True, If(IsDBNull(datread.GetString(0)), "0", datread.GetString(0).ToString), "0") 'dr.GetString(0).ToString
 
             End With
-
         Catch ex As Exception
             MsgBox(ex.Message, , "Error : GET_employeerateperhour")
 
@@ -1514,8 +1158,6 @@ Public Class PayStub
 
     Dim notax_allowanceOnce As New DataTable
 
-
-
     Dim emp_bonusSemiM As New DataTable
 
     Dim notax_bonusSemiM As New DataTable
@@ -1523,7 +1165,6 @@ Public Class PayStub
     Dim emp_allowanceSemiM As New DataTable
 
     Dim notax_allowanceSemiM As New DataTable
-
 
     Dim emp_allowanceWeekly As New DataTable
 
@@ -1533,20 +1174,7 @@ Public Class PayStub
 
     Dim notax_bonusWeekly As New DataTable
 
-
     Dim prev_empTimeEntry As New DataTable
-
-
-
-
-
-
-
-
-
-
-
-
 
     Dim numofdaypresent As New DataTable
 
@@ -1577,7 +1205,6 @@ Public Class PayStub
 
     Dim leavetype As Object = Nothing
     Dim leavtyp() As String
-
 
     Dim allowkind As Object = Nothing
     Dim allow_kind() As String
@@ -1643,7 +1270,6 @@ Public Class PayStub
 
                                       'Dim prompt = MessageBox.Show("Begin generate payroll from " & Format(CDate(paypFrom), "MMM-d-yyyy") & " to " & Format(CDate(paypTo), "MMM-d-yyyy") & " ?", "Generate payroll", MessageBoxButtons.YesNoCancel)
                                       ''MsgBox("Employee time entry from " & paypFrom & " to " & paypTo & " is not yet prepared.", MsgBoxStyle.Information)
-
 
                                       'If prompt = Windows.Forms.DialogResult.Yes Then
 
@@ -1904,9 +1530,6 @@ Public Class PayStub
                                       '" GROUP BY EmployeeID" & _
                                       '" ORDER BY EmployeeID;"
 
-
-
-
                                       '" AND IF('" & paypFrom & "' < DedEffectiveDateFrom AND '" & paypTo & "' < DedEffectiveDateTo, DedEffectiveDateFrom>='" & paypFrom & "' AND DedEffectiveDateTo>='" & paypTo & "', DedEffectiveDateFrom<='" & paypFrom & "' AND DedEffectiveDateTo<='" & paypTo & "')" & _
 
                                       '" AND DedEffectiveDateFrom>='" & paypFrom & "'" & _
@@ -1948,7 +1571,6 @@ Public Class PayStub
                                                   '    " AND (els.DedEffectiveDateFrom >= '' OR els.DedEffectiveDateTo >= '')" &
                                                   '    " AND (els.DedEffectiveDateFrom <= '' OR els.DedEffectiveDateTo <= '')" &
                                                   '    " ORDER BY els.LoanTypeID;"
-
                                               Else '                      'means, end of the month
 
                                                   segregate_emp_loan = "SELECT LoanTypeID,DeductionAmount,DeductionPercentage,EmployeeID,IF(LoanPayPeriodLeft BETWEEN 1 AND 1.99, '1', '0') 'LoanDueDate',TotalLoanAmount,DeductionAmount,NoOfPayPeriod" &
@@ -2020,8 +1642,6 @@ Public Class PayStub
                                       '" AND Status='In Progress'" & _
                                       '" AND COALESCE(LoanPayPeriodLeft,0)!=0" & _
                                       '" ORDER BY LoanTypeID;"
-
-
 
                                       '" ,IF(DAY(DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', DedEffectiveDateFrom<='" & paypTo & "')" & _
 
@@ -2419,26 +2039,6 @@ Public Class PayStub
                                                                                        paypFrom,
                                                                                        paypTo}).GetFoundRows.Tables(0)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                       Dim weeklyallowfreq = "Weekly"
 
                                       If allowfreq.Count <> 0 Then
@@ -2470,7 +2070,6 @@ Public Class PayStub
                                                                 " GROUP BY EmployeeID",
                                                                 " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")).GetFoundRows.Tables(0)
 
-
                                       emp_allowanceWeekly = New SQL(String.Concat("SELECT SUM(COALESCE(AllowanceAmount,0)) 'TotalAllowanceAmount',EmployeeID",
                                                                 " FROM employeeallowance",
                                                                 " WHERE OrganizationID=", org_rowid,
@@ -2488,22 +2087,6 @@ Public Class PayStub
                                                                 " AND EffectiveStartDate BETWEEN '", paypFrom, "' AND '", paypTo, "'",
                                                                 " GROUP BY EmployeeID",
                                                                 " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")).GetFoundRows.Tables(0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                                       ''employeebonus
                                       'emp_bonus = retAsDatTbl("SELECT SUM(COALESCE(BonusAmount,0)) 'BonusAmount'" & _
@@ -2669,7 +2252,6 @@ Public Class PayStub
                                                   GetAsDataTable("GET_Attended_Months",
                                                                  CommandType.StoredProcedure,
                                                                  params)
-
                                       Else
                                           empthirteenmonthtable = Nothing
 
@@ -2879,7 +2461,6 @@ Public Class PayStub
                 Console.WriteLine("Payroll Form disabled now")
 
             End If
-
         Catch ex As Exception
             Dim err_msg As String = getErrExcptn(ex, Me.Name)
             erro_msg_length = err_msg.Length
@@ -2965,7 +2546,6 @@ Public Class PayStub
                                 Continue For
 
                             End If
-
                         Else
 
                             i += 1
@@ -2973,7 +2553,6 @@ Public Class PayStub
                             Continue For
 
                         End If
-
                     Else
                         Continue For
 
@@ -3055,7 +2634,9 @@ Public Class PayStub
     End Sub
 
 #Region "LEAVE_gainingbalance"
+
     Public errlogger As ILog = LogManager.GetLogger("LoggerWork")
+
     Private Sub GainingLeaveBalances()
 
         Dim params = New Object() {org_rowid, user_row_id, paypFrom, paypTo}
@@ -3070,6 +2651,7 @@ Public Class PayStub
         End If
 
     End Sub
+
 #End Region
 
     Private Sub tsbtnprintpayslip_Click(sender As Object, e As EventArgs) 'Handles DeclaredToolStripMenuItem.Click 'tsbtnprintpayslip.Click
@@ -3293,8 +2875,6 @@ Public Class PayStub
                     'objText.Text &= vbNewLine
                     'allowvalues.Text &= vbNewLine
 
-
-
                     objText = .ReportObjects("loansubdetails")
 
                     Dim loanvalues As CrystalDecisions.CrystalReports.Engine.TextObject = .ReportObjects("loanvalues")
@@ -3315,7 +2895,6 @@ Public Class PayStub
                             loanvalues.Text = "₱ " & FormatNumber(Val(dgvrow.Cells("c_dedamt").Value), 2)
 
                             resultloanvalues = dgvrow.Cells("c_totballeft").Value
-
                         Else
                             objText.Text &= vbNewLine & dgvrow.Cells("c_loantype").Value & " loan " & tabchar & dgvrow.Cells("c_totballeft").Value ' & vbTab & "₱ " & dgvrow.Cells("c_dedamt").Value
 
@@ -3346,7 +2925,6 @@ Public Class PayStub
                     'loanvalues.Text &= vbNewLine
 
                     ''dgvempbon'bonsubdetails
-
 
                     objText = .ReportObjects("bonsubdetails")
 
@@ -3391,7 +2969,6 @@ Public Class PayStub
 
             'rptdoc = Nothing
             'rptdoc.Dispose()
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
 
@@ -3599,10 +3176,6 @@ Public Class PayStub
             .Add("Column35") 'Loan type
             .Add("Column36") 'Bonus type
 
-
-
-
-
             .Add("Column37") 'Allowance amount
             .Add("Column38") 'Loan amount
             .Add("Column39") 'Bonus amount
@@ -3624,7 +3197,7 @@ Public Class PayStub
                                       " AND e.PayFrequencyID='" & paypPayFreqID & "'" &
                                       " AND '" & paypTo & "' BETWEEN esal.EffectiveDateFrom AND COALESCE(esal.EffectiveDateTo,'" & paypTo & "')" &
                                       " GROUP BY e.RowID" &
-                                      " ORDER BY e.LastName;") 'RowID DESC  
+                                      " ORDER BY e.LastName;") 'RowID DESC
 
         Dim employeeloanfulldetails As New DataTable
 
@@ -3642,7 +3215,6 @@ Public Class PayStub
             newdatrow("Column2") = drow("EmployeeID") 'Employee ID
 
             Dim LasFirMidName As String = Nothing
-
 
             Dim midNameTwoWords = Split(drow("MiddleName").ToString, " ")
 
@@ -3674,7 +3246,6 @@ Public Class PayStub
                                     VbStrConv.ProperCase))
 
             newdatrow("Column3") = LasFirMidName 'full_name 'Employee Full Name
-
 
             VIEW_paystub(drow("RowID").ToString,
                                  paypRowID)
@@ -3710,7 +3281,7 @@ Public Class PayStub
                     newdatrow("Column7") = "₱ " & FormatNumber(ValNoComma(.Cells("paystb_TotalEmpWithholdingTax").Value), 2) 'Withholding Tax
 
                     'newdatrow("Column3") = .Cells("paystb_TotalEmpSSS").Value
-                    'newdatrow("Column3") = .Cells("paystb_TotalEmpPhilhealth").Value   
+                    'newdatrow("Column3") = .Cells("paystb_TotalEmpPhilhealth").Value
                     'newdatrow("Column3") = .Cells("paystb_TotalEmpHDMF").Value
 
                     newdatrow("Column8") = "₱ " & FormatNumber(ValNoComma(.Cells("paystb_TotalAllowance").Value), 2) 'Total Allowance
@@ -3795,7 +3366,6 @@ Public Class PayStub
 
                     If isorgSSSdeductsched = 1 Then
                         newdatrow("Column12") = "₱ " & FormatNumber((val_sss / 2), 2)
-
                     Else
                         If isEndOfMonth = "0" Then
                             newdatrow("Column12") = "₱ " & FormatNumber(val_sss, 2) 'SSS Amount
@@ -3808,7 +3378,6 @@ Public Class PayStub
 
                     If isorgPHHdeductsched = 1 Then
                         newdatrow("Column13") = "₱ " & FormatNumber((val_phh / 2), 2) 'PhilHealth Amount
-
                     Else
                         If isEndOfMonth = "0" Then
                             newdatrow("Column13") = "₱ " & FormatNumber(val_phh, 2) 'PhilHealth Amount
@@ -3820,7 +3389,6 @@ Public Class PayStub
 
                     If isorgHDMFdeductsched = 1 Then
                         newdatrow("Column14") = "₱ " & FormatNumber((val_hdmf / 2), 2) 'PAGIBIG Amount
-
                     Else
                         If isEndOfMonth = "0" Then
                             newdatrow("Column14") = "₱ " & FormatNumber((val_hdmf), 2) 'PAGIBIG Amount
@@ -3870,7 +3438,6 @@ Public Class PayStub
 
                                 newdatrow("Column16") = "₱ " & FormatNumber(totbasicpay, 2) 'newdatrow("Column4") 'txthrsworkamt
                             End If
-
                         Else
 
                             'newdatrow("Column4") = "₱ " & FormatNumber(theEmpBasicPayFix, 2) 'newdatrow("Column4") '.ToString.Replace(",", "") 'Gross Income
@@ -3880,7 +3447,6 @@ Public Class PayStub
                             newdatrow("Column16") = "₱ " & FormatNumber(theEmpBasicPayFix, 2) 'newdatrow("Column4") 'txthrsworkamt
 
                         End If
-
                     Else
                         newdatrow("Column15") = "₱ " & FormatNumber(ValNoComma(.Cells("etent_TotalDayPay").Value), 2) 'Sub Total - Right side
 
@@ -3972,8 +3538,6 @@ Public Class PayStub
 
             Next
 
-
-
             VIEW_eallow_indate(drow("RowID"),
                                 paypFrom,
                                 paypTo)
@@ -3985,8 +3549,6 @@ Public Class PayStub
             VIEW_ebon_indate(drow("RowID"),
                                 paypFrom,
                                 paypTo)
-
-
 
             For Each dgvrow As DataGridViewRow In dgvempallowance.Rows 'Allowances
                 If dgvrow.Index = 0 Then
@@ -4023,7 +3585,6 @@ Public Class PayStub
                     newdatrow("Column33") = "₱ " & FormatNumber(ValNoComma(loanrow("CurrentBalance")), 2)
 
                     totalamountofloan += ValNoComma(loanrow("DeductionAmount"))
-
                 Else
 
                     newdatrow("Column35") &= vbNewLine & loanrow("PartNo").ToString & " loan" '& vbTab & " - " & dgvrow.Cells("c_totloanamt").Value _
@@ -4310,7 +3871,6 @@ Public Class PayStub
 
     Dim EcolaProductID = Nothing
 
-
     Public paypSSSContribSched As String = Nothing
 
     Public paypPhHContribSched As String = Nothing
@@ -4337,7 +3897,6 @@ Public Class PayStub
 
         'Dim MinWageEmpSSSContrib = ValNoComma(0)
         'Dim MinWageEmplyrSSSContrib = ValNoComma(0)
-
 
         'Dim MinWageEmpPhHContrib = ValNoComma(0)
 
@@ -4442,8 +4001,6 @@ Public Class PayStub
 
                 End If
 
-
-
                 ',,strHDMFdeductsched
                 strSSSdeductsched = drow("SSSDeductSched").ToString
                 If drow("SSSDeductSched").ToString = "End of the month" Then
@@ -4460,9 +4017,6 @@ Public Class PayStub
 
                 End If
 
-
-
-
                 strHDMFdeductsched = drow("HDMFDeductSched").ToString
                 If drow("HDMFDeductSched").ToString = "End of the month" Then
 
@@ -4478,8 +4032,6 @@ Public Class PayStub
 
                 End If
 
-
-
                 'If drow("WTaxDeductSched").ToString = "End of the month" Then
 
                 '    isorgWTaxdeductsched = 0
@@ -4493,7 +4045,6 @@ Public Class PayStub
                 '    isorgWTaxdeductsched = 2
 
                 'End If
-
 
                 Dim employee_ID = Trim(drow("RowID"))
 
@@ -4510,13 +4061,6 @@ Public Class PayStub
 
                 Dim emp_bon = emp_bonus.Select("EmployeeID = " & drow("RowID").ToString)
 
-
-
-
-
-
-
-
                 Dim day_allowance = emp_allowanceDaily.Select("EmployeeID = " & drow("RowID").ToString)
 
                 Dim month_allowance = emp_allowanceMonthly.Select("EmployeeID = " & drow("RowID").ToString)
@@ -4530,9 +4074,6 @@ Public Class PayStub
                 'emp_allowanceSemiM
 
                 'emp_allowanceWeekly
-
-
-
 
                 Dim daynotax_allowance = notax_allowanceDaily.Select("EmployeeID = " & drow("RowID").ToString)
 
@@ -4548,9 +4089,6 @@ Public Class PayStub
 
                 'notax_allowanceWeekly
 
-
-
-
                 Dim day_bon = emp_bonusDaily.Select("EmployeeID = " & drow("RowID").ToString)
 
                 Dim month_bon = emp_bonusMonthly.Select("EmployeeID = " & drow("RowID").ToString)
@@ -4564,8 +4102,6 @@ Public Class PayStub
                 'emp_bonusSemiM
 
                 'emp_bonusWeekly
-
-
 
                 Dim daynotax_bon = notax_bonusDaily.Select("EmployeeID = " & drow("RowID").ToString)
 
@@ -4581,9 +4117,6 @@ Public Class PayStub
 
                 'notax_bonusWeekly
 
-
-
-
                 Dim valemp_loan = Val(0)
                 For Each drowloan In emp_loan
                     valemp_loan = drowloan("DeductionAmount")
@@ -4593,8 +4126,6 @@ Public Class PayStub
                 'For Each drowbon In emp_bon
                 '    valemp_bon = drowbon("BonusAmount")
                 'Next
-
-
 
                 Dim valday_allowance = ValNoComma(emp_allowanceDaily.Compute("SUM(TotalAllowanceAmount)", "EmployeeID = " & drow("RowID")))
                 'GET_employeeallowance(drow("RowID").ToString, _
@@ -4636,7 +4167,6 @@ Public Class PayStub
                 '                      drow("EmployeeType").ToString, _
                 '                      "1")
 
-
                 Dim valonce_allowance = 0.0
                 For Each drowonceallow In once_allowance
                     valonce_allowance = drowonceallow("TotalAllowanceAmount")
@@ -4652,15 +4182,12 @@ Public Class PayStub
                     valonce_allowance = drowweekallow("TotalAllowanceAmount")
                 Next
 
-
                 'this is taxable                                ' / divisorMonthlys
                 Dim totalemployeeallownce = (valday_allowance _
                                              + (valmonth_allowance) _
                                              + valonce_allowance _
                                              + valsemim_allowance _
                                              + valweek_allowance)
-
-
 
                 Dim valdaynotax_allowance =
                     GET_employeeallowance(drow("RowID").ToString,
@@ -4743,10 +4270,6 @@ Public Class PayStub
                     valoncenotax_allowance = drowweekallow("TotalAllowanceAmount")
                 Next
 
-
-
-
-
                 'this is non-taxable                                        ' / divisorMonthlys
                 '+ valsemimonnotax_allowance _
                 Dim totalnotaxemployeeallownce = (valdaynotax_allowance _
@@ -4754,10 +4277,6 @@ Public Class PayStub
                                                   + valoncenotax_allowance _
                                                   + valsemimnotax_allowance _
                                                   + valweeknotax_allowance)
-
-
-
-
 
                 Dim valday_bon = 0.0
                 For Each drowdaybon In day_bon
@@ -4803,17 +4322,12 @@ Public Class PayStub
                     valonce_bon = drowweekbon("BonusAmount")
                 Next
 
-
-
                 'this is taxable                        ' / divisorMonthlys
                 Dim totalemployeebonus = (valday_bon _
                                           + (valmonth_bon) _
                                           + valonce_bon _
                                           + valsemim_bon _
                                           + valweek_bon)
-
-
-
 
                 Dim valdaynotax_bon = 0.0
                 For Each drowdaybon In daynotax_bon
@@ -4859,8 +4373,6 @@ Public Class PayStub
                     valoncenotax_bon = drowweekbon("BonusAmount")
                 Next
 
-
-
                 'this is non-taxable
                 Dim totalnotaxemployeebonus = Val(0)
 
@@ -4876,12 +4388,6 @@ Public Class PayStub
                 totalnotaxemployeebonus += valweeknotax_bon
 
                 totalnotaxemployeebonus += valmonthnotax_bon / divisorMonthlys
-
-
-
-
-
-
 
                 Dim emptotdaypay = etent_totdaypay.Select("EmployeeID = " & drow("RowID").ToString)
 
@@ -4959,20 +4465,17 @@ Public Class PayStub
                                     pstub_TotalCompPhilhealth = 0
 
                                 End If
-
                             Else
 
                                 emptaxabsal = grossincome - pstub_TotalEmpPhilhealth '(CDec(drowsal("EmployeeContributionAmount")))
 
                             End If
-
                         Else '                          'End of the month
                             pstub_TotalEmpPhilhealth = CDec(drowsal("EmployeeShare"))
                             pstub_TotalCompPhilhealth = CDec(drowsal("EmployerShare"))
 
                             If isEndOfMonth = 1 Then
                                 emptaxabsal = grossincome - pstub_TotalEmpPhilhealth '(CDec(drowsal("EmployeeContributionAmount")))
-
                             Else
 
                                 emptaxabsal = grossincome
@@ -5009,12 +4512,10 @@ Public Class PayStub
                                     pstub_TotalCompSSS = 0
 
                                 End If
-
                             Else
                                 emptaxabsal = emptaxabsal - pstub_TotalEmpSSS
 
                             End If
-
                         Else
                             pstub_TotalEmpSSS = CDec(drowsal("EmployeeContributionAmount"))
                             pstub_TotalCompSSS = CDec(drowsal("EmployerContributionAmount"))
@@ -5056,12 +4557,10 @@ Public Class PayStub
                                     pstub_TotalCompHDMF = 0
 
                                 End If
-
                             Else
                                 emptaxabsal = emptaxabsal - pstub_TotalEmpHDMF
 
                             End If
-
                         Else
                             'If drow("PayFrequencyID").ToString = 1 Then
                             '    pstub_TotalEmpHDMF = (CDec(drowsal("HDMFAmount")) / 2)
@@ -5173,10 +4672,6 @@ Public Class PayStub
 
                 '==================================================Ito ay para kay Fixed-employee, kahit wala siyang record sa employeetimeentry meron pa rin siyang sasahurin
 
-
-
-
-
                 For Each drowtotdaypay In emptotdaypay 'drowtotdaypay("TotalDayPay").ToString
 
                     grossincome = Val(0)
@@ -5262,13 +4757,11 @@ Public Class PayStub
 
                             'Prior_PayPeriodID'Current_PayPeriodID'Next_PayPeriodID
 
-
                             'Dim prev_GrossIncome = EXECQUER("SELECT IFNULL(TotalGrossSalary,0)" & _
                             '                                  " FROM paystub" & _
                             '                                  " WHERE OrganizationID='" & orgztnID & "'" & _
                             '                                  " AND EmployeeID='" & employee_ID & "'" & _
                             '                                  " AND PayPeriodID='" & prev_payperiodID & "';")
-
 
                             '"SELECT IFNULL(psi.PayAmount,0)" & _
                             '" FROM paystubitem psi" & _
@@ -5280,8 +4773,6 @@ Public Class PayStub
                             '" WHERE p.PartNo='Taxable Income';"
 
                             'fullSemiMonthSalary + OT Pay + Holiday Pay + Rest Day Pay + Nigth Diff
-
-
 
                             'Dim getEcolaAmountOfThisPayPeriod = Nothing
 
@@ -5316,9 +4807,6 @@ Public Class PayStub
 
                             'End If '                                get Ecola allowance amount of this pay period
 
-
-
-
                             'Dim fullmonthSalary = fullSemiMonthSalary _
                             '                      + ValNoComma(drowtotdaypay("OvertimeHoursAmount")) _
                             '                      + ValNoComma(drowtotdaypay("NightDiffHoursAmount")) _
@@ -5349,12 +4837,7 @@ Public Class PayStub
 
                             End If
 
-
-
-
-
                             Dim employeeContribution As New DataTable
-
 
                             'SSS
 
@@ -5395,7 +4878,6 @@ Public Class PayStub
                                     End If
 
                                 End If
-
                             Else
                                 If (isEndOfMonth = 1 And strSSSdeductsched = "End of the month") _
                                 Or (isEndOfMonth = 0 And strSSSdeductsched = "Per pay period") Then
@@ -5414,10 +4896,6 @@ Public Class PayStub
                                 End If
 
                             End If
-
-
-
-
 
                             'PHILHEALTH
 
@@ -5439,7 +4917,6 @@ Public Class PayStub
                             ElseIf strPHHdeductsched = "Per pay period" Then
 
                             End If
-
 
                             'PHILHEALTH
 
@@ -5471,7 +4948,6 @@ Public Class PayStub
                                     End If
                                 End If
                                 'paypHDMFContribSched
-
                             Else
 
                                 If (isEndOfMonth = 1 And strSSSdeductsched = "End of the month") _
@@ -5501,8 +4977,6 @@ Public Class PayStub
 
                         End If
 
-
-
                         'CurrentPayPeriodID'PriorPayPeriodID'NextPayPeriodID
 
                         grossincome += totalemployeeallownce
@@ -5513,7 +4987,6 @@ Public Class PayStub
                             emptaxabsal = grossincome - (pstub_TotalEmpPhilhealth) '- (CDec(drowsal("EmployeeContributionAmount")) / 2))
 
                             fullmonthSalaryTaxableSalary -= pstub_TotalEmpPhilhealth
-
                         Else
 
                             If isorgPHHdeductsched = 1 Then 'Per pay period
@@ -5543,14 +5016,12 @@ Public Class PayStub
                                         pstub_TotalEmpPhilhealth = 0
 
                                         pstub_TotalCompPhilhealth = 0
-
                                     Else
                                         emptaxabsal = emptaxabsal - pstub_TotalEmpPhilhealth
 
                                         fullmonthSalaryTaxableSalary -= pstub_TotalEmpPhilhealth
 
                                     End If
-
                                 Else
 
                                     emptaxabsal = grossincome - pstub_TotalEmpPhilhealth '(CDec(drowsal("EmployeeContributionAmount")))
@@ -5558,7 +5029,6 @@ Public Class PayStub
                                     fullmonthSalaryTaxableSalary -= pstub_TotalEmpPhilhealth
 
                                 End If
-
                             Else '                          'End of the month
                                 'If drow("EmploymentStatus").ToString = "Probationary" Then
                                 '    pstub_TotalEmpPhilhealth = CDec(drowsal("EmployeeShare"))
@@ -5569,7 +5039,6 @@ Public Class PayStub
                                     emptaxabsal = grossincome - pstub_TotalEmpPhilhealth '(CDec(drowsal("EmployeeContributionAmount")))
 
                                     fullmonthSalaryTaxableSalary -= pstub_TotalEmpPhilhealth
-
                                 Else
 
                                     emptaxabsal = grossincome
@@ -5592,7 +5061,6 @@ Public Class PayStub
                             emptaxabsal -= pstub_TotalEmpSSS
 
                             fullmonthSalaryTaxableSalary -= pstub_TotalEmpSSS
-
                         Else
 
                             If isorgSSSdeductsched = 1 Then 'Per pay period
@@ -5621,21 +5089,18 @@ Public Class PayStub
                                         pstub_TotalEmpSSS = 0
 
                                         pstub_TotalCompSSS = 0
-
                                     Else
                                         emptaxabsal = emptaxabsal - pstub_TotalEmpSSS
 
                                         fullmonthSalaryTaxableSalary -= pstub_TotalEmpSSS
 
                                     End If
-
                                 Else
                                     emptaxabsal = emptaxabsal - pstub_TotalEmpSSS
 
                                     fullmonthSalaryTaxableSalary -= pstub_TotalEmpSSS
 
                                 End If
-
                             Else
                                 'If drow("EmploymentStatus").ToString = "Regular" Then
                                 '    pstub_TotalEmpSSS = CDec(drowsal("EmployeeContributionAmount"))
@@ -5646,7 +5111,6 @@ Public Class PayStub
                                     emptaxabsal = emptaxabsal - pstub_TotalEmpSSS
 
                                     fullmonthSalaryTaxableSalary -= pstub_TotalEmpSSS
-
                                 Else
                                     emptaxabsal = emptaxabsal
 
@@ -5674,7 +5138,6 @@ Public Class PayStub
                             emptaxabsal -= pstub_TotalEmpHDMF
 
                             fullmonthSalaryTaxableSalary -= pstub_TotalEmpHDMF
-
                         Else 'If 1 > 1 Then
 
                             If isorgHDMFdeductsched = 1 Then 'Per pay period
@@ -5703,21 +5166,18 @@ Public Class PayStub
                                         pstub_TotalEmpHDMF = 0
 
                                         pstub_TotalCompHDMF = 0
-
                                     Else
                                         emptaxabsal = emptaxabsal - pstub_TotalEmpHDMF
 
                                         fullmonthSalaryTaxableSalary -= pstub_TotalEmpHDMF
 
                                     End If
-
                                 Else
                                     emptaxabsal = emptaxabsal - pstub_TotalEmpHDMF
 
                                     fullmonthSalaryTaxableSalary -= pstub_TotalEmpHDMF
 
                                 End If
-
                             Else
                                 'If drow("PayFrequencyID").ToString = 1 Then
                                 '    pstub_TotalEmpHDMF = (CDec(drowsal("HDMFAmount")) / 2)
@@ -5733,7 +5193,6 @@ Public Class PayStub
                                     emptaxabsal = emptaxabsal - pstub_TotalEmpHDMF
 
                                     fullmonthSalaryTaxableSalary -= pstub_TotalEmpHDMF
-
                                 Else
                                     emptaxabsal = emptaxabsal
 
@@ -5840,7 +5299,6 @@ Public Class PayStub
                 If withthirteenthmonthpay = 0 Then
 
                     thirteenthmoval = 0.0
-
                 Else
 
                     If empthirteenmonthtable IsNot Nothing Then
@@ -5871,7 +5329,6 @@ Public Class PayStub
                             thirteenthmoval = thirteenthmoval / 12
 
                         Next
-
                     Else
 
                         thirteenthmoval = 0.0
@@ -5950,7 +5407,6 @@ Public Class PayStub
                         'INSUPD_paystubitem(, paystubID, allow_type(1).ToString, 0)
                         'INSUPD_paystubitem(, paystubID, allow_type(2).ToString, 0)
                         'INSUPD_paystubitem(, paystubID, allow_type(3).ToString, 0)
-
                     Else
                         For Each gallow As DataRow In groupallow.Rows
                             INSUPD_paystubitem(, paystubID, gallow("ProductID"), gallow("sum_AllowanceAmount"))
@@ -6043,9 +5499,6 @@ Public Class PayStub
                         INSUPD_paystubitem(, paystubID, ebon("ProductID"), ebon("BonusAmount"))
                     Next
 
-
-
-
                     'Absent,Tardiness,Undertime,.PAGIBIG,.PhilHealth,.SSS
 
                     '338,339,340,344,345,346
@@ -6061,7 +5514,6 @@ Public Class PayStub
                         INSUPD_paystubitem(, paystubID, arraydeduction(3).ToString, 0) 'Absent
                         INSUPD_paystubitem(, paystubID, arraydeduction(4).ToString, 0) 'Tardiness
                         INSUPD_paystubitem(, paystubID, arraydeduction(5).ToString, 0) 'Undertime
-
                     Else
 
                         For Each d_row In sel_TardinessUndertime
@@ -6086,7 +5538,6 @@ Public Class PayStub
 
                     'Leave
 
-
                     'employeeloans
 
                     Dim sel_eloans = eloans.Select("EmployeeID=" & drow("RowID").ToString)
@@ -6097,7 +5548,6 @@ Public Class PayStub
                         For Each strval In loantyp
                             INSUPD_paystubitem(, paystubID, strval, 0)
                         Next
-
                     Else
                         Dim idloanalreadyinsert As New List(Of String)
 
@@ -6111,7 +5561,6 @@ Public Class PayStub
                                     'loanbutal = If(loanbutal < 0, loanbutal, loanbutal)
 
                                     INSUPD_paystubitem(, paystubID, val_loan("LoanTypeID"), val_loan("DeductionAmount") + loanbutal)
-
                                 Else
 
                                     INSUPD_paystubitem(, paystubID, val_loan("LoanTypeID"), val_loan("DeductionAmount"))
@@ -6119,7 +5568,6 @@ Public Class PayStub
                                 End If
 
                                 idloanalreadyinsert.Add(Trim(val_loan("LoanTypeID")))
-
                             Else
 
                             End If
@@ -6150,10 +5598,6 @@ Public Class PayStub
                         'End If
 
                     End If
-
-
-
-
 
                     '341,342,343,361
 
@@ -6201,7 +5645,6 @@ Public Class PayStub
                     getstrvalue = getStrBetween(StrReverse(emp_totals(3).ToString), "", ";")
                     INSUPD_paystubitem(, paystubID, StrReverse(getstrvalue), tax_amount) 'Withholding Tax
 
-
                     If isexisting = 0 Then 'the paystub not yet exists
 
                         If drow("EmploymentStatus").ToString = "Regular" Then 'accruance of leave are for regular employees only
@@ -6234,10 +5677,9 @@ Public Class PayStub
                                          ",MaternityLeaveBalance=COALESCE(MaternityLeaveBalance,0) + MaternityLeavePerPayPeriod" &
                                          ",OtherLeaveBalance=COALESCE(OtherLeaveBalance,0) + OtherLeavePerPayPeriod" &
                                          ",LastUpdBy=" & user_row_id &
-                                         " WHERE RowID='" & drow("RowID").ToString & "';") 'OrganizationID=" & orgztnID & " AND 
+                                         " WHERE RowID='" & drow("RowID").ToString & "';") 'OrganizationID=" & orgztnID & " AND
 
                                 'leavebalances'leavebalan
-
 
                                 leavebalances = EXECQUER("SELECT CONCAT(COALESCE(MaternityLeaveBalance,0)" &
                                                          ",',0'" &
@@ -6265,7 +5707,6 @@ Public Class PayStub
 
                                     Try
                                         INSUPD_paystubitem(, paystubID, leavtyp(i).ToString, leavebalan(i).ToString)
-
                                     Catch ex As Exception
                                         'INSUPD_paystubitem(, paystubID, leavtyp(i).ToString, 0)
                                         lst_leaveinsert.Add(leavtyp(i).ToString)
@@ -6273,7 +5714,6 @@ Public Class PayStub
                                     End Try
 
                                 Next
-
 
                                 If lst_leaveinsert.Count <> 0 Then
                                     For Each leave_id In leavtyp
@@ -6288,13 +5728,10 @@ Public Class PayStub
 
                                 End If
 
-
-
                                 'INSUPD_paystubitem(, paystubID, leavtyp(0).ToString, leavebalan(0).ToString) 'Vacation
                                 'INSUPD_paystubitem(, paystubID, leavtyp(1).ToString, leavebalan(1).ToString) 'Sick
                                 'INSUPD_paystubitem(, paystubID, leavtyp(2).ToString, leavebalan(2).ToString) 'Maternity
                                 'INSUPD_paystubitem(, paystubID, leavtyp(3).ToString, 0)
-
                             Else
                                 For Each elvrow In sel_empleave
                                     If elvrow("LeaveType").ToString = "Vacation leave" Then
@@ -6311,7 +5748,6 @@ Public Class PayStub
                                         maternbal = Val(elvrow("NumOfHoursLeave")) 'FormatNumber(Val(elvrow("NumOfHoursLeave")), 2)
 
                                         'INSUPD_paystubitem(, paystubID, elvrow("ProductID"), (elvrow("NumOfDaysLeave") * maternbal))
-
                                     Else '
                                         If elvrow("LeaveType").ToString = "Others" Then
                                             othersbal = Val(elvrow("NumOfHoursLeave"))
@@ -6381,7 +5817,6 @@ Public Class PayStub
 
                                     Try
                                         INSUPD_paystubitem(, paystubID, leavtyp(i).ToString, leavebalan(i).ToString)
-
                                     Catch ex As Exception
                                         'INSUPD_paystubitem(, paystubID, leavtyp(i).ToString, 0)
                                         lst_leaveinsert.Add(leavtyp(i).ToString)
@@ -6416,7 +5851,6 @@ Public Class PayStub
                             'employeeloanschedule - will trigger this...
                             'LoanPayPeriodLeft = LoanPayPeriodLeft - 1 AND LoanPayPeriodLeft != 0
 
-
                             '" AND IF('" & paypFrom & "' < DedEffectiveDateFrom AND '" & paypTo & "' < DedEffectiveDateTo" & _
                             '", DedEffectiveDateFrom>='" & paypFrom & "' AND DedEffectiveDateTo>='" & paypTo & "'" & _
                             '", DedEffectiveDateFrom<='" & paypFrom & "' AND DedEffectiveDateTo>='" & paypTo & "')")
@@ -6424,7 +5858,6 @@ Public Class PayStub
                             '" AND IF(DedEffectiveDateFrom < '" & paypTo & "'" & _
                             '" ,IF(DAY(DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', DedEffectiveDateFrom<='" & paypTo & "')" & _
                             '" ,DedEffectiveDateFrom<='" & paypTo & "')" & _
-
 
                             'EXECQUER("UPDATE employeeloanschedule SET" & _
                             '         " LoanPayPeriodLeft = (LoanPayPeriodLeft - 1)" & _
@@ -6434,8 +5867,6 @@ Public Class PayStub
                             '         " AND IF(DedEffectiveDateFrom < '" & paypTo & "'" & _
                             '         " ,IF(DAY(DedEffectiveDateFrom) BETWEEN DAY('" & paypFrom & "') AND DAY('" & paypTo & "'), DedEffectiveDateFrom BETWEEN '" & paypFrom & "' AND '" & paypTo & "', DedEffectiveDateFrom<='" & paypTo & "')" & _
                             '         " ,DedEffectiveDateFrom<='" & paypTo & "');")
-
-
                         Else 'zero accruance of leave for probationary employees only
 
                             For Each strval In leavtyp
@@ -6443,11 +5874,9 @@ Public Class PayStub
                             Next
 
                         End If
-
                     Else 'the paystub already exists
 
                     End If
-
 
                     'For Each strval In empalldistrib
 
@@ -6485,7 +5914,6 @@ Public Class PayStub
                             For Each strr In allow_type
 
                                 If includedallowance.Contains(strr) Then
-
                                 Else
 
                                     INSUPD_paystubitem(, paystubID, strr, 0)
@@ -6493,7 +5921,6 @@ Public Class PayStub
                                 End If
 
                             Next
-
                         Else
 
                             'SELECT * FROM product WHERE CategoryID='33' AND OrganizationID=2;
@@ -6518,7 +5945,6 @@ Public Class PayStub
             EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & org_rowid & "','" & paypRowID & "','" & user_row_id & "');")
 
         End If
-
 
         'EXECQUER("CALL `RECOMPUTE_weeklyemployeeSSSContribAmount`('" & orgztnID & "','" & Current_PayPeriodID & "');")
 
@@ -6557,7 +5983,6 @@ Public Class PayStub
 
                 MsgBox("Background work cancelled.",
                        MsgBoxStyle.Exclamation)
-
             Else
 
                 MsgBox(pause_process_message,
@@ -6565,7 +5990,6 @@ Public Class PayStub
                        "Payroll process skipped")
 
             End If
-
         Else
 
             VIEW_payperiodofyear(genpayselyear)
@@ -6822,7 +6246,6 @@ Public Class PayStub
             Dim searchdate = Nothing
             If MaskedTextBox1.Text = "  /  /" Then
                 searchdate = Format(CDate(dbnow), "yyyy")
-
             Else
                 searchdate = Format(CDate(Trim(MaskedTextBox1.Text)), "yyyy")
 
@@ -6833,7 +6256,6 @@ Public Class PayStub
             'loademployee()
 
             'employeepicture = retAsDatTbl("SELECT RowID,Image FROM employee WHERE OrganizationID=" & orgztnID & ";")
-
         Else
 
         End If
@@ -7022,6 +6444,7 @@ Public Class PayStub
         End With
 
     End Sub
+
     Sub VIEW_ebon_indate(Optional ebon_EmployeeID As Object = Nothing,
                                Optional datefrom As Object = Nothing,
                                Optional dateto As Object = Nothing)
@@ -7043,11 +6466,11 @@ Public Class PayStub
                              dgvempbon)
 
     End Sub
+
     Private Sub PayStub_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
         If bgworkgenpayroll.IsBusy Then
             e.Cancel = True
-
         Else
             e.Cancel = False
 
@@ -7202,7 +6625,6 @@ Public Class PayStub
                 End If
 
                 btnrefresh_Click(sender, e)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
             End Try
@@ -7343,7 +6765,6 @@ Public Class PayStub
 
         Try
 
-
             If allowancefrequensi = "Daily" _
                     And emppaytype = "Fixed" Then
 
@@ -7398,7 +6819,6 @@ Public Class PayStub
 
                                 'ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                                 '    PayStub.numofweekends += 1
-
                             Else
                                 numofweekdays += 1
 
@@ -7407,7 +6827,6 @@ Public Class PayStub
                         Next
 
                         'numofweekdays = numofweekdays * work_dayscount
-
                     Else '                              'five days a week
 
                         numofweekdays = 0
@@ -7421,7 +6840,6 @@ Public Class PayStub
 
                             ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                                 '    PayStub.numofweekends += 1
-
                             Else
                                 numofweekdays += 1
 
@@ -7455,7 +6873,6 @@ Public Class PayStub
 
             ElseIf allowancefrequensi = "Semi-monthly" _
                         And emppaytype = "Fixed" Then
-
 
                 Dim n_datatab As New DataTable
 
@@ -7501,7 +6918,6 @@ Public Class PayStub
                     n_datatab = Nothing
 
                 End If
-
             Else
 
                 Dim date_diff = DateDiff(DateInterval.Day, CDate(paypFrom), CDate(paypTo))
@@ -7511,7 +6927,6 @@ Public Class PayStub
                 Dim payperiod_fromdate = Format(CDate(paypFrom), "yyyy-MM-dd")
 
                 Dim payperiod_todate = Format(CDate(paypTo), "yyyy-MM-dd")
-
 
                 Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT ete.*" &
                                                  ",pr.PayType" &
@@ -7594,7 +7009,6 @@ Public Class PayStub
                     End If
 
                     If emphourworked = 0 Then
-
                     Else
 
                         'If emppaytype = "Monthly" And numofweekdays = 15 Then
@@ -7673,7 +7087,6 @@ Public Class PayStub
                                 Next
 
                             End If
-
                         Else
 
                             Dim empallowanceamounts As New DataTable
@@ -7703,12 +7116,10 @@ Public Class PayStub
                                             totalAllowanceWork += (ValNoComma(ddrow("AllowanceAmount")) * pro_ratedhrs)
 
                                             dtempalldistrib.Rows.Add(ddrow("ProductID"), (ValNoComma(ddrow("AllowanceAmount")) * pro_ratedhrs))
-
                                         Else
                                             dtempalldistrib.Rows.Add(ddrow("ProductID"), 0.0)
 
                                         End If
-
                                     Else
 
                                         Dim valamount = Val(ddrow("AllowanceAmount")) ' / dutyhours
@@ -7731,7 +7142,6 @@ Public Class PayStub
 
                             ElseIf allowancefrequensi = "Semi-monthly" Then
 
-
                                 If emppaytype = "Daily" Then
 
                                     'numofweekdays = EXECQUER("SELECT ROUND(`GET_empworkdaysperyear`('" & employeeRowID & "') / 12 / 2);")
@@ -7744,22 +7154,18 @@ Public Class PayStub
 
                                         totalAllowanceWork = totalAllowanceWork + val_allowa 'totalAllowanceWork + (valamount * emphourworked)
 
-
                                         dtempalldistrib.Rows.Add(ddrow("ProductID"), allowaval)
 
                                     Next
-
                                 Else
 
                                     Dim emp_late = employee_timeentries.Compute("SUM(HoursLate)", "EmployeeID = '" & employeeRowID & "'")
 
                                     emp_late = ValNoComma(emp_late)
 
-
                                     Dim emp_undtime = employee_timeentries.Compute("SUM(UnderTimeHours)", "EmployeeID = '" & employeeRowID & "'")
 
                                     emp_undtime = ValNoComma(emp_undtime)
-
 
                                     'For Each drow As DataRow In sel_employee_timeentries
                                     '    emp_late = ValNoComma(drow("HoursLate")) _
@@ -7793,7 +7199,6 @@ Public Class PayStub
                                     '        " WHERE d.DateValue BETWEEN '" & paypFrom & "' AND '" & paypTo & "'" & _
                                     '        " ORDER BY d.DateValue;")
 
-
                                     For Each ddrow As DataRow In empallowanceamounts.Rows
 
                                         Dim val_allowa = ValNoComma(ddrow("AllowanceAmount"))
@@ -7810,7 +7215,6 @@ Public Class PayStub
                                         valamount = valamount - less_toallowance
 
                                         totalAllowanceWork = valamount 'totalAllowanceWork + (valamount * emphourworked)
-
 
                                         Dim allowaval = totalAllowanceWork 'valamount * emphourworked
 
@@ -7830,7 +7234,7 @@ Public Class PayStub
 
                                     valamount = valamount * (numofweekdays / (date_diff + 1))
 
-                                    totalAllowanceWork = totalAllowanceWork + (valamount) ' * emphourworked)    
+                                    totalAllowanceWork = totalAllowanceWork + (valamount) ' * emphourworked)
 
                                     Dim allowaval = valamount ' * emphourworked
 
@@ -7851,10 +7255,8 @@ Public Class PayStub
                 Next
 
             End If
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
-
         Finally
 
             returningval = totalAllowanceWork
@@ -7911,7 +7313,6 @@ Public Class PayStub
                 params(3, 1) = "0"
 
                 PayrollSummaChosenData = DeclaredToolStripMenuItem2.Text
-
             Else 'If obj_sender.Name = "ActualToolStripMenuItem2" Then
 
                 params(3, 1) = "1"
@@ -7957,7 +7358,6 @@ Public Class PayStub
 
                     .Add("DatCol10") 'Total Bonuses
 
-
                     .Add("DatCol11") 'Basic Pay
 
                     .Add("DatCol12") 'SSS Amount
@@ -7978,7 +7378,6 @@ Public Class PayStub
 
                     .Add("DatCol20") 'Overtime hours amount
 
-
                     .Add("DatCol21") 'Night differential hours worked
 
                     .Add("DatCol22") 'Night differential hours amount
@@ -7998,7 +7397,6 @@ Public Class PayStub
                     .Add("DatCol29") 'Late amount
 
                     .Add("DatCol30") 'Leave type
-
 
                     .Add("DatCol31") 'Leave count
 
@@ -8043,7 +7441,6 @@ Public Class PayStub
                     .Add("DatCol60") '
 
                 End With
-
             Else
                 rptdattab.Rows.Clear()
 
@@ -8064,14 +7461,6 @@ Public Class PayStub
             'paramets(1, 1) = drow("EmployeeRowID")
             paramets(2, 1) = n_PayrollSummaDateSelection.DateFromID
             paramets(3, 1) = n_PayrollSummaDateSelection.DateToID
-
-
-
-
-
-
-
-
 
             For Each drow As DataRow In datatab.Rows
 
@@ -8114,7 +7503,6 @@ Public Class PayStub
                 newdatrow("DatCol30") = FormatNumber(Val(drow(9)), 2) 'Bonus
                 newdatrow("DatCol31") = FormatNumber(Val(drow(10)), 2) 'Allowance
 
-
                 paramets(1, 1) = drow("EmployeeRowID")
 
                 AbsTardiUTNDifOTHolipay = callProcAsDatTab(paramets,
@@ -8133,7 +7521,6 @@ Public Class PayStub
                 Dim overtimeval = 0.0
 
                 Dim ndiffval = 0.0
-
 
                 'For Each ddrow As DataRow In AbsTardiUTNDifOTHolipay.Rows
 
@@ -8168,7 +7555,6 @@ Public Class PayStub
                 '    End If '
 
                 'Next
-
 
                 newdatrow("DatCol32") = FormatNumber(absentval, 2) 'Absent
 
@@ -8208,7 +7594,7 @@ Public Class PayStub
                 'newdatrow("DatCol40") = 0
 
                 'newdatrow("DatCol40") = 0
-                'newdatrow("DatCol41") = 0  
+                'newdatrow("DatCol41") = 0
                 'newdatrow("DatCol42") = 0
                 'newdatrow("DatCol43") = 0
                 'newdatrow("DatCol44") = 0
@@ -8236,9 +7622,7 @@ Public Class PayStub
 
             Next
 
-
             If rptdattab Is Nothing Then
-
             Else
 
                 Dim rptdoc As New PayrollSumma
@@ -8248,7 +7632,6 @@ Public Class PayStub
                 Dim crvwr As New CrysVwr
 
                 With crvwr
-
 
                     .PayperiodIDFrom = n_PayrollSummaDateSelection.DateFromID
 
@@ -8260,7 +7643,6 @@ Public Class PayStub
                         n_PayrollSummaDateSelection.
                            cboStringParameter.
                            Text
-
 
                     '.SpecificReport = "PayrollSummary"
 
@@ -8286,7 +7668,6 @@ Public Class PayStub
                 objText = rptdoc.ReportDefinition.Sections(2).ReportObjects("txtorgname")
 
                 objText.Text = orgNam
-
 
                 objText = rptdoc.ReportDefinition.Sections(2).ReportObjects("txtorgaddress")
 
@@ -8323,7 +7704,6 @@ Public Class PayStub
                 '    objText.Text = "Contact No. " & contactdet(0).ToString
                 'End If
 
-
                 crvwr.Text = papy_string & " (" & PayrollSummaChosenData.ToUpper & ")"
 
                 crvwr.Refresh()
@@ -8337,7 +7717,6 @@ Public Class PayStub
         'Try
 
         '    'DatCol1
-
 
         '    'callProcAsDatTab
 
@@ -8382,7 +7761,6 @@ Public Class PayStub
 
             enlistTheLists(sel_query, payfrqncy)
 
-
             Dim first_sender As New ToolStripButton
 
             Dim indx = 0
@@ -8420,8 +7798,6 @@ Public Class PayStub
 
             tstrip.PerformLayout()
 
-
-
             RemoveHandler dgvpayper.SelectionChanged, AddressOf dgvpayper_SelectionChanged
 
             dgvpayper_SelectionChanged(sender, e)
@@ -8448,7 +7824,6 @@ Public Class PayStub
         quer_empPayFreq = ""
 
         If bgworkgenpayroll.IsBusy Then
-
         Else
 
             Dim senderObj As New ToolStripButton
@@ -8482,7 +7857,6 @@ Public Class PayStub
             End If
 
             If prevObj.Name = Nothing Then
-
             Else
 
                 If prevObj.Name <> senderObj.Name Then
@@ -8516,7 +7890,6 @@ Public Class PayStub
             If tsSearch.Text.Trim = String.Empty Then
 
                 quer_empPayFreq = " AND pf.PayFrequencyType='" & senderObj.Text & "' "
-
             Else
 
                 quer_empPayFreq = " AND pf.PayFrequencyType='" & senderObj.Text & "' AND e.EmployeeID='" & tsSearch.Text & "' "
@@ -8565,7 +7938,6 @@ Public Class PayStub
 
         If dgvpayper.RowCount <> 0 Then
             ToolStripMenuItem1.Enabled = True
-
         Else
             ToolStripMenuItem1.Enabled = False
 
@@ -8585,7 +7957,6 @@ Public Class PayStub
 
                 paypTo = Format(CDate(.Cells("Column3").Value), "yyyy-MM-dd")
 
-
                 'Dim sel_yearDateFrom = CDate(PayStub.paypFrom).Year
 
                 'Dim sel_yearDateTo = CDate(PayStub.paypTo).Year
@@ -8593,7 +7964,6 @@ Public Class PayStub
                 'Dim sel_year = If(sel_yearDateFrom > sel_yearDateTo, _
                 '                  sel_yearDateFrom, _
                 '                  sel_yearDateTo)
-
 
                 isEndOfMonth = Trim(.Cells("Column14").Value)
 
@@ -8614,7 +7984,6 @@ Public Class PayStub
 
                     ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                         numofweekends += 1
-
                     Else
                         numofweekdays += 1
 
@@ -8637,7 +8006,6 @@ Public Class PayStub
                     ElseIf prompt = Windows.Forms.DialogResult.Cancel Then
                         'Exit Sub
                     End If
-
                 Else
 
                 End If
@@ -8647,7 +8015,6 @@ Public Class PayStub
                 genpayroll(PayFreqRowID)
 
             End With
-
 
         End If
 
@@ -8817,7 +8184,6 @@ Public Class PayStub
                 Next
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, Me.Name))
-
             Finally
                 UpdatePasytubsAdjustmentColumn()
                 MsgBox("Adjustments were saved!", MsgBoxStyle.Information)
@@ -8848,10 +8214,8 @@ Public Class PayStub
             End With
 
             cmd.ExecuteNonQuery()
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
-
         Finally
 
             _conn.Close()
@@ -8860,7 +8224,6 @@ Public Class PayStub
             _conn.Dispose()
         End Try
     End Sub
-
 
     Dim dtJosh As DataTable
     Dim da As New MySqlDataAdapter()
@@ -8885,7 +8248,6 @@ Public Class PayStub
             dgvAdjustments.DataSource = dtJosh
 
             'txtnetsal.Text = FormatNumber(currentTotal + Convert.ToDouble(GET_SumPayStubAdjustments()), 2)
-
         Catch ex As Exception
             'dgvAdjustments.Rows.Clear()
             dgvAdjustments.DataSource = Nothing
@@ -8940,7 +8302,6 @@ Public Class PayStub
         Catch ex As Exception
 
             MsgBox(getErrExcptn(ex, Me.Name))
-
         Finally
 
             conn.Close()
@@ -9010,7 +8371,6 @@ Public Class PayStub
             For Each ctrl In fsdfsd
                 ctrl.Text = replace_value
             Next
-
         Catch ex As Exception
 
             MsgBox(getErrExcptn(ex, "ObjectDisplayFieldCleanser"))
@@ -9018,7 +8378,6 @@ Public Class PayStub
         End Try
 
     End Sub
-
 
     Private Sub TabPage1_Enter1(sender As Object, e As EventArgs) Handles TabPage1.Enter 'DECLARED
 
@@ -9106,7 +8465,6 @@ Public Class PayStub
 
         paystubactual = n_SQLQueryToDatatable.ResultTable
 
-
         Dim psaItems As New DataTable
 
         For Each drow As DataRow In paystubactual.Rows
@@ -9139,9 +8497,7 @@ Public Class PayStub
                     thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) + holidaybayad + ValNoComma(drow("PaidLeaveAmount")) 'ValNoComma(drow("HolidayPayAmount"))
                 End If
 
-
                 txthrsworkamt.Text = FormatNumber((thebasicpay - thelessamounts), 2)
-
             Else
                 txthrsworkamt.Text = FormatNumber((ValNoComma(drow("RegularHoursAmount"))), 2)
             End If
@@ -9186,16 +8542,14 @@ Public Class PayStub
                     thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) ' + ValNoComma(drow("HolidayPayAmount"))
                 End If
 
-
                 lblsubtot.Text = FormatNumber((thebasicpay - thelessamounts), 2)
-
             Else
                 lblsubtot.Text = FormatNumber(ValNoComma(drow("TotalDayPay")), 2)
 
             End If
 
             'Absent
-            txttotabsent.Text = 0.0
+            txttotabsent.Text = FormatNumber((ValNoComma(drow("AbsentHours"))), 2)
             txttotabsentamt.Text = FormatNumber((ValNoComma(drow("Absent"))), 2)
             'Tardiness / late
             txttottardi.Text = ValNoComma(drow("HoursLate"))
@@ -9233,7 +8587,6 @@ Public Class PayStub
 
             'Net
             txtnetsal.Text = FormatNumber((ValNoComma(drow("TotalNetSalary"))), 2)
-
 
             txtvlbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Vacation leave'")) '-
             'ValNoComma(drow("VacationLeaveHours"))
@@ -9392,13 +8745,11 @@ Public Class PayStub
 
         paystubactual = n_SQLQueryToDatatable.ResultTable
 
-
         Dim psaItems As New DataTable
 
         For Each drow As DataRow In paystubactual.Rows
 
             psaItems = New SQLQueryToDatatable("CALL VIEW_paystubitemundeclared('" & drow("RowID") & "');").ResultTable
-
 
             Dim strdouble = ValNoComma(drow("TrueSalary")) / ValNoComma(drow("PAYFREQUENCYDIVISOR")) 'BasicPay
             Dim holidaybayad = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Holiday pay'")) 'Holiday pay
@@ -9426,9 +8777,7 @@ Public Class PayStub
                     thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) + holidaybayad + ValNoComma(drow("PaidLeaveAmount")) 'ValNoComma(drow("HolidayPayAmount"))
                 End If
 
-
                 txthrsworkamt_U.Text = FormatNumber((thebasicpay - thelessamounts), 2)
-
             Else
                 txthrsworkamt_U.Text = FormatNumber((ValNoComma(drow("RegularHoursAmount"))), 2)
             End If
@@ -9473,16 +8822,14 @@ Public Class PayStub
                     thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) ' + ValNoComma(drow("HolidayPayAmount"))
                 End If
 
-
                 lblsubtot.Text = FormatNumber((thebasicpay - thelessamounts), 2)
-
             Else
                 lblsubtot.Text = FormatNumber((ValNoComma(drow("TotalDayPay"))), 2)
 
             End If
 
             'Absent
-            txttotabsent_U.Text = 0.0
+            txttotabsent_U.Text = FormatNumber((ValNoComma(drow("AbsentHours"))), 2)
             txttotabsentamt_U.Text = FormatNumber((ValNoComma(drow("Absent"))), 2)
             'Tardiness / late
             txttottardi_U.Text = ValNoComma(drow("HoursLate"))
@@ -9520,7 +8867,6 @@ Public Class PayStub
 
             'Net
             txtnetsal.Text = FormatNumber((ValNoComma(drow("TotalNetSalary"))), 2)
-
 
             txtvlbal.Text = ValNoComma(psaItems.Compute("MIN(PayAmount)", "Item = 'Vacation leave'")) '-
             'ValNoComma(drow("VacationLeaveHours"))
@@ -9647,16 +8993,11 @@ Public Class PayStub
             txttotutamt_U.Text = ValNoComma(txttotutamt.Text) + (computed_val)
             txttotutamt_U.Text = FormatNumber(ValNoComma(txttotutamt_U.Text), 2)
 
-
             Static same_rowindex As Integer = -1
 
             Static same_rowindexPapPerd As Integer = -1
 
-
-
             Static keep_declaredvalues(20) As String
-
-
 
             If same_rowindex <> dgvemployees.CurrentRow.Index _
                 Or same_rowindexPapPerd <> dgvpayper.CurrentRow.Index Then
@@ -9664,7 +9005,6 @@ Public Class PayStub
                 same_rowindex = dgvemployees.CurrentRow.Index
 
                 same_rowindexPapPerd = dgvpayper.CurrentRow.Index
-
 
                 keep_declaredvalues(0) = ValNoComma(lblsubtot.Text)
 
@@ -9679,57 +9019,41 @@ Public Class PayStub
 
                 keep_declaredvalues(2) -= ValNoComma(keep_declaredvalues(3))
 
-
                 keep_declaredvalues(4) = ValNoComma(txtnetsal.Text)
 
                 keep_declaredvalues(5) = ValNoComma(txttaxabsal.Text)
 
             End If
 
-
-
             computed_val = ValNoComma(keep_declaredvalues(0)) * undeclaredSalPercent
 
             lblsubtot.Text = ValNoComma(keep_declaredvalues(0)) + (computed_val)
             lblsubtot.Text = FormatNumber(ValNoComma(lblsubtot.Text), 2)
-
-
 
             computed_val = ValNoComma(keep_declaredvalues(1)) * undeclaredSalPercent
 
             lblsubtotmisc.Text = ValNoComma(keep_declaredvalues(1)) + (computed_val)
             lblsubtotmisc.Text = FormatNumber(ValNoComma(lblsubtotmisc.Text), 2)
 
-
-
-
-
             'txtemptotallow.Text = _
             '    EXECQUER("SELECT GET_paystubitemallowancenotecola('" & orgztnID & "'" & _
             '             ", '" & dgvemployees.CurrentRow.Cells("RowID").Value & "'" & _
             '             ", '" & dgvpayper.CurrentRow.Cells("Column1").Value & "');")
-
-
 
             computed_val = ValNoComma(keep_declaredvalues(2)) * undeclaredSalPercent
 
             txtgrosssal.Text = ValNoComma(keep_declaredvalues(2)) + (computed_val)
             txtgrosssal.Text = FormatNumber(ValNoComma(txtgrosssal.Text), 2)
 
-
             'computed_val = ValNoComma(keep_declaredvalues(5)) * undeclaredSalPercent
 
             'txttaxabsal.Text = ValNoComma(keep_declaredvalues(5)) + (computed_val)
             'txttaxabsal.Text = FormatNumber(ValNoComma(txttaxabsal.Text), 2)
 
-
-
             computed_val = ValNoComma(keep_declaredvalues(4)) * undeclaredSalPercent
 
             txtnetsal.Text = ValNoComma(keep_declaredvalues(4)) + (computed_val)
             txtnetsal.Text = FormatNumber(ValNoComma(txtnetsal.Text), 2)
-
-
         Else
 
             txtempbasicpay_U.Text = txtempbasicpay.Text
@@ -9783,7 +9107,6 @@ Public Class PayStub
 
         End If
 
-
         employee_dattab = retAsDatTbl("SELECT e.*" &
                                       ",CONCAT(UCASE(e.LastName),', ',UCASE(e.FirstName),', ',INITIALS(e.MiddleName,'.','1')) AS FullName" &
                                       " FROM employee e LEFT JOIN employeesalary esal ON e.RowID=esal.EmployeeID" &
@@ -9816,9 +9139,7 @@ Public Class PayStub
 
         Next
 
-
         rptdocAll = New rptAllDecUndecPaySlip
-
 
         With rptdocAll.ReportDefinition.Sections(2)
 
@@ -9854,7 +9175,6 @@ Public Class PayStub
             If Trim(contactdet(0).ToString) = "" Then
 
                 contactdets = ""
-
             Else
 
                 contactdets = "Contact No. " & contactdet(0).ToString
@@ -9874,7 +9194,6 @@ Public Class PayStub
 
         rptdocAll.SetDataSource(dtprintAllPaySlip)
 
-
     End Sub
 
     Private Sub bgwPrintAllPaySlip_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgwPrintAllPaySlip.ProgressChanged
@@ -9891,7 +9210,6 @@ Public Class PayStub
         ElseIf e.Cancelled Then
             MsgBox("Background work cancelled.",
                    MsgBoxStyle.Exclamation)
-
         Else
 
             Dim crvwr As New CrysVwr
@@ -10169,8 +9487,6 @@ Public Class PayStub
                     'objText.Text &= vbNewLine
                     'allowvalues.Text &= vbNewLine
 
-
-
                     objText = .ReportObjects("loansubdetails")
 
                     Dim loanvalues As CrystalDecisions.CrystalReports.Engine.TextObject = .ReportObjects("loanvalues")
@@ -10190,7 +9506,6 @@ Public Class PayStub
                             loanvalues.Text = "₱ " & FormatNumber(Val(dgvrow.Cells("c_dedamt").Value), 2)
 
                             resultloanvalues = dgvrow.Cells("c_totballeft").Value
-
                         Else
                             objText.Text &= vbNewLine & dgvrow.Cells("c_loantype").Value & " loan " & tabchar & dgvrow.Cells("c_totballeft").Value ' & vbTab & "₱ " & dgvrow.Cells("c_dedamt").Value
 
@@ -10221,7 +9536,6 @@ Public Class PayStub
                     'loanvalues.Text &= vbNewLine
 
                     ''dgvempbon'bonsubdetails
-
 
                     objText = .ReportObjects("bonsubdetails")
 
@@ -10265,7 +9579,6 @@ Public Class PayStub
 
             'rptdoc = Nothing
             'rptdoc.Dispose()
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
 
@@ -10388,13 +9701,11 @@ Public Class PayStub
             mysql_cmd.Dispose()
             mysql_da.Dispose()
             mysql_conn.Dispose()
-
         Catch ex As Exception
 
             MsgBox(getErrExcptn(ex, Me.Name))
 
             has_erros = True
-
         Finally
 
             If has_erros = False Then
@@ -10412,7 +9723,6 @@ Public Class PayStub
             End If
 
         End Try
-
 
     End Sub
 
@@ -10531,10 +9841,6 @@ Public Class PayStub
             .Add("Column35") 'Loan type
             .Add("Column36") 'Bonus type
 
-
-
-
-
             .Add("Column37") 'Allowance amount
             .Add("Column38") 'Loan amount
             .Add("Column39") 'Bonus amount
@@ -10568,7 +9874,6 @@ Public Class PayStub
 
             Dim LasFirMidName As String = Nothing
 
-
             Dim midNameTwoWords = Split(drow("MiddleName").ToString, " ")
 
             Dim midnameinitial As String = Nothing
@@ -10600,7 +9905,6 @@ Public Class PayStub
 
             newdatrow("Column3") = LasFirMidName 'full_name 'Employee Full Name
 
-
             VIEW_paystub(drow("RowID").ToString,
                                  paypRowID)
 
@@ -10609,7 +9913,6 @@ Public Class PayStub
             Dim declared_psi As New DataTable
 
             If IsDBNull(drow("RowID")) Then
-
             Else
 
                 Dim its_value = drow("psRowID").ToString
@@ -10636,18 +9939,15 @@ Public Class PayStub
 
                     Dim gros_inc = Val(newdatrow("Column4"))
 
-
                     Dim val_netincome = If(undeclared_psi.Rows.Count = 0, 0, ValNoComma(undeclared_psi.Compute("SUM(PayAmount)", "Item = 'Net Income'")))
 
                     newdatrow("Column5") = "₱ " & FormatNumber(ValNoComma(val_netincome), 2) 'Net Income
-
 
                     'Dim val_taxableincome = If(undeclared_psi.Rows.Count = 0, 0, ValNoComma(undeclared_psi.Compute("SUM(PayAmount)", "Item = 'Taxable Income'")))
 
                     'newdatrow("Column6") = "₱ " & FormatNumber(ValNoComma(val_taxableincome), 2) 'Taxable salary
 
                     newdatrow("Column6") = "₱ " & FormatNumber(Val(.Cells("paystb_TotalTaxableSalary").Value), 2) 'Taxable salary
-
 
                     Dim val_wtax = If(undeclared_psi.Rows.Count = 0, 0, ValNoComma(undeclared_psi.Compute("SUM(PayAmount)", "Item = 'Withholding Tax'")))
 
@@ -10752,7 +10052,6 @@ Public Class PayStub
 
                     If isorgSSSdeductsched = 1 Then
                         newdatrow("Column12") = "₱ " & FormatNumber((val_sss / 2), 2)
-
                     Else
                         If isEndOfMonth = "0" Then
                             newdatrow("Column12") = "₱ " & FormatNumber(val_sss, 2) 'SSS Amount
@@ -10765,7 +10064,6 @@ Public Class PayStub
 
                     If isorgPHHdeductsched = 1 Then
                         newdatrow("Column13") = "₱ " & FormatNumber((val_phh / 2), 2) 'PhilHealth Amount
-
                     Else
                         If isEndOfMonth = "0" Then
                             newdatrow("Column13") = "₱ " & FormatNumber(val_phh, 2) 'PhilHealth Amount
@@ -10777,7 +10075,6 @@ Public Class PayStub
 
                     If isorgHDMFdeductsched = 1 Then
                         newdatrow("Column14") = "₱ " & FormatNumber((val_hdmf / 2), 2) 'PAGIBIG Amount
-
                     Else
                         If isEndOfMonth = "0" Then
                             newdatrow("Column14") = "₱ " & FormatNumber((val_hdmf), 2) 'PAGIBIG Amount
@@ -10829,7 +10126,6 @@ Public Class PayStub
 
                                 newdatrow("Column16") = "₱ " & FormatNumber(totbasicpay, 2) 'newdatrow("Column4") 'txthrsworkamt
                             End If
-
                         Else
 
                             'newdatrow("Column4") = "₱ " & FormatNumber(theEmpBasicPayFix, 2) 'newdatrow("Column4") '.ToString.Replace(",", "") 'Gross Income
@@ -10839,7 +10135,6 @@ Public Class PayStub
                             newdatrow("Column16") = "₱ " & FormatNumber(theEmpBasicPayFix, 2) 'newdatrow("Column4") 'txthrsworkamt
 
                         End If
-
                     Else
 
                         Dim sumtotdaypay = ValNoComma(.Cells("etent_TotalDayPay").Value)
@@ -10897,7 +10192,6 @@ Public Class PayStub
                     Dim val_absent = If(undeclared_psi.Rows.Count = 0, 0, ValNoComma(undeclared_psi.Compute("SUM(PayAmount)", "Item = 'Absent'")))
                     newdatrow("Column26") = "₱ " & FormatNumber(val_absent, 2)
 
-
                     str_length = ("₱ " & FormatNumber(ValNoComma(.Cells("etent_HoursLateAmount").Value), 2)).ToString.Length 'Tardiness
 
                     Dim val_tardi = ValNoComma(.Cells("etent_HoursLateAmount").Value) + (ValNoComma(.Cells("etent_HoursLateAmount").Value) * undeclaredpercent)
@@ -10930,8 +10224,6 @@ Public Class PayStub
                 End With
             Next
 
-
-
             VIEW_eallow_indate(drow("RowID"),
                                 paypFrom,
                                 paypTo)
@@ -10943,8 +10235,6 @@ Public Class PayStub
             VIEW_ebon_indate(drow("RowID"),
                                 paypFrom,
                                 paypTo)
-
-
 
             For Each dgvrow As DataGridViewRow In dgvempallowance.Rows 'Allowances
                 If dgvrow.Index = 0 Then
@@ -10967,7 +10257,6 @@ Public Class PayStub
             Dim totalamountofloan = Val(0)
 
             'For Each dgvrow As DataGridViewRow In dgvLoanList.Rows 'Loans
-
 
             '    If dgvrow.Index = 0 Then
             '        newdatrow("Column35") = dgvrow.Cells("c_loantype").Value & " loan" ' & vbTab & "₱ " & dgvrow.Cells("c_dedamt").Value
@@ -11007,7 +10296,6 @@ Public Class PayStub
                     newdatrow("Column33") = "₱ " & FormatNumber(ValNoComma(loanrow("CurrentBalance")), 2)
 
                     totalamountofloan += ValNoComma(loanrow("DeductionAmount"))
-
                 Else
 
                     newdatrow("Column35") &= vbNewLine & loanrow("PartNo").ToString & " loan" '& vbTab & " - " & dgvrow.Cells("c_totloanamt").Value _
@@ -11268,7 +10556,6 @@ Public Class PayStub
 
     Private Sub bgworkgenpayroll_DoBackGroundWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgworkgenpayroll.DoWork
 
-
         Dim last_enddate_cutoff_thisyear =
             New ExecuteQuery("SELECT DATE_FORMAT(pp.PayToDate,@@date_format)" &
                              " FROM payperiod pp" &
@@ -11314,7 +10601,6 @@ Public Class PayStub
 
             filingStatus = New SQLQueryToDatatable("SELECT * FROM filingstatus;" &
                                               "").ResultTable
-
 
             phh = New SQLQueryToDatatable("SELECT * FROM payphilhealth;").ResultTable
 
@@ -11365,7 +10651,6 @@ Public Class PayStub
 
                 End If
 
-
                 strSSSdeductsched = drow("SSSDeductSched").ToString
                 If drow("SSSDeductSched").ToString = "End of the month" Then
 
@@ -11380,7 +10665,6 @@ Public Class PayStub
                     isorgSSSdeductsched = 2
 
                 End If
-
 
                 strHDMFdeductsched = drow("HDMFDeductSched").ToString
                 If drow("HDMFDeductSched").ToString = "End of the month" Then
@@ -11397,7 +10681,6 @@ Public Class PayStub
 
                 End If
 
-
                 If drow("WTaxDeductSched").ToString = "End of the month" _
                     Or drow("WTaxDeductSched").ToString = "First half of next month" Then
 
@@ -11413,7 +10696,6 @@ Public Class PayStub
 
                 End If
 
-
                 Dim employee_ID = Trim(drow("RowID"))
 
                 org_WorkDaysPerYear = drow("WorkDaysPerYear")
@@ -11423,19 +10705,11 @@ Public Class PayStub
                                             If(drow("PayFrequencyID") = 3, EXECQUER("SELECT COUNT(RowID) FROM employeetimeentry WHERE EmployeeID='" & employee_ID & "' AND Date BETWEEN '" & paypFrom & "' AND '" & paypTo & "' AND IFNULL(TotalDayPay,0)!=0 AND OrganizationID='" & org_rowid & "';"),
                                                numberofweeksthismonth)))
 
-
                 Dim rowempsal = esal_dattab.Select("EmployeeID = '" & drow("RowID") & "'")
 
                 Dim emp_loan = emp_loans.Select("EmployeeID = '" & drow("RowID") & "' AND Nondeductible = '0'")
 
                 Dim emp_bon = emp_bonus.Select("EmployeeID = '" & drow("RowID") & "'")
-
-
-
-
-
-
-
 
                 Dim day_allowance = emp_allowanceDaily.Select("EmployeeID = '" & drow("RowID") & "'")
 
@@ -11451,9 +10725,6 @@ Public Class PayStub
 
                 'emp_allowanceWeekly
 
-
-
-
                 Dim daynotax_allowance = notax_allowanceDaily.Select("EmployeeID = '" & drow("RowID") & "'")
 
                 Dim monthnotax_allowance = notax_allowanceMonthly.Select("EmployeeID = '" & drow("RowID") & "'")
@@ -11467,9 +10738,6 @@ Public Class PayStub
                 'notax_allowanceSemiM
 
                 'notax_allowanceWeekly
-
-
-
 
                 Dim day_bon = emp_bonusDaily.Select("EmployeeID = '" & drow("RowID") & "'")
 
@@ -11485,8 +10753,6 @@ Public Class PayStub
 
                 'emp_bonusWeekly
 
-
-
                 Dim daynotax_bon = notax_bonusDaily.Select("EmployeeID = '" & drow("RowID") & "'")
 
                 Dim monthnotax_bon = notax_bonusMonthly.Select("EmployeeID = '" & drow("RowID") & "'")
@@ -11501,9 +10767,6 @@ Public Class PayStub
 
                 'notax_bonusWeekly
 
-
-
-
                 Dim valemp_loan = Val(0)
                 For Each drowloan In emp_loan
                     valemp_loan = drowloan("DeductionAmount")
@@ -11513,8 +10776,6 @@ Public Class PayStub
                 'For Each drowbon In emp_bon
                 '    valemp_bon = drowbon("BonusAmount")
                 'Next
-
-
 
                 Dim valday_allowance = ValNoComma(emp_allowanceDaily.Compute("SUM(TotalAllowanceAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                 'GET_employeeallowance(drow("RowID").ToString, _
@@ -11551,15 +10812,12 @@ Public Class PayStub
                     'valweek_allowance = drowweekallow("TotalAllowanceAmount")
                 Next
 
-
                 'this is taxable                                ' / divisorMonthlys
                 Dim totalemployeeallownce = (valday_allowance _
                                              + (valmonth_allowance) _
                                              + valonce_allowance _
                                              + valsemim_allowance _
                                              + valweek_allowance)
-
-
 
                 Dim valdaynotax_allowance = ValNoComma(notax_allowanceDaily.Compute("SUM(TotalAllowanceAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                 'GET_employeeallowance(drow("RowID").ToString, _
@@ -11596,10 +10854,6 @@ Public Class PayStub
                     'valweeknotax_allowance = drowweekallow("TotalAllowanceAmount")
                 Next
 
-
-
-
-
                 'this is non-taxable                                        ' / divisorMonthlys
                 '+ valsemimonnotax_allowance _
                 Dim totalnotaxemployeeallownce = (valdaynotax_allowance _
@@ -11607,10 +10861,6 @@ Public Class PayStub
                                                   + valoncenotax_allowance _
                                                   + valsemimnotax_allowance _
                                                   + valweeknotax_allowance)
-
-
-
-
 
                 Dim valday_bon = ValNoComma(emp_bonusDaily.Compute("SUM(TotalBonusAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                 'For Each drowdaybon In day_bon
@@ -11667,9 +10917,6 @@ Public Class PayStub
                                           + valsemim_bon _
                                           + valweek_bon)
 
-
-
-
                 Dim valdaynotax_bon = ValNoComma(notax_bonusDaily.Compute("SUM(TotalBonusAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                 'For Each drowdaybon In daynotax_bon
                 '    valdaynotax_bon = drowdaybon("BonusAmount")
@@ -11714,8 +10961,6 @@ Public Class PayStub
                     valoncenotax_bon = drowweekbon("BonusAmount")
                 Next
 
-
-
                 'this is non-taxable
                 Dim totalnotaxemployeebonus = Val(0)
 
@@ -11731,12 +10976,6 @@ Public Class PayStub
                 totalnotaxemployeebonus += valweeknotax_bon
 
                 totalnotaxemployeebonus += valmonthnotax_bon ' / divisorMonthlys
-
-
-
-
-
-
 
                 Dim emptotdaypay = etent_totdaypay.Select("EmployeeID = '" & drow("RowID") & "'")
 
@@ -11822,7 +11061,6 @@ Public Class PayStub
                                 grossincome = ValNoComma(drowtotdaypay("TotalDayPay"))
 
                                 grossincome_firsthalf = ValNoComma(prev_empTimeEntry.Compute("SUM(TotalDayPay)", "EmployeeID = '" & drow("RowID") & "'"))
-
                             Else
 
                                 grossincome = ValNoComma(drowsal("BasicPay")) ' + ValNoComma(emptimeentryOfHoliday.Compute("SUM(HolidayPayAmount)", "EmployeeID = '" & drow("RowID") & "' AND PayFromDate <= Date AND Date <= PayFromDate1"))
@@ -11876,7 +11114,6 @@ Public Class PayStub
 
                             pstub_TotalEmpSSS = sss_ee
                             pstub_TotalCompSSS = sss_er
-
                         Else
                             If isorgSSSdeductsched = 2 Then 'Per pay period
                                 'pstub_TotalEmpSSS = CDec(drowsal("EmployeeContributionAmount"))
@@ -11903,7 +11140,6 @@ Public Class PayStub
 
                             pstub_TotalEmpPhilhealth = phh_ee
                             pstub_TotalCompPhilhealth = phh_er
-
                         Else
                             If isorgPHHdeductsched = 2 Then 'Per pay period
                                 'pstub_TotalEmpPhilhealth = CDec(drowsal("EmployeeShare"))
@@ -11922,7 +11158,6 @@ Public Class PayStub
                         If isEndOfMonth = isorgHDMFdeductsched Then
                             pstub_TotalEmpHDMF = CDec(drowsal("HDMFAmount"))
                             pstub_TotalCompHDMF = 100 'CDec(drowsal("HDMFAmount"))
-
                         Else
                             If isorgHDMFdeductsched = 2 Then 'Per pay period
                                 pstub_TotalEmpHDMF = CDec(drowsal("HDMFAmount"))
@@ -11970,7 +11205,6 @@ Public Class PayStub
                             If isMinimumWage Then
 
                                 tax_amount = 0
-
                             Else
 
                                 'Dim paywithholdingtax = retAsDatTbl("SELECT ExemptionAmount,TaxableIncomeFromAmount,ExemptionInExcessAmount" & _
@@ -12011,7 +11245,6 @@ Public Class PayStub
 
                                 'Dim GET_employeetaxableincome = EXECQUER("SELECT `GET_employeetaxableincome`('" & drow("RowID") & "', '" & orgztnID & "', '" & paypFrom & "','" & grossincome & "');")
 
-
                                 'For Each drowtax As DataRow In paywithholdingtax.rows
                                 For Each drowtax In sel_payWTax
                                     Dim taxrowID = drowtax("RowID")
@@ -12031,7 +11264,6 @@ Public Class PayStub
                                 Next
 
                             End If
-
                         Else
                             'PAYFREQUENCY_DIVISOR
 
@@ -12443,7 +11675,6 @@ Public Class PayStub
     Private Sub tsbtnDelEmpPayroll_Click(sender As Object, e As EventArgs) Handles tsbtnDelEmpPayroll.Click
 
         If currentEmployeeID = Nothing Then
-
         Else
 
             tsbtnDelEmpPayroll.Enabled = False
@@ -12536,7 +11767,6 @@ Public Class PayStub
             backgroundworking = 0
 
             'MsgBox("Done generating payroll", MsgBoxStyle.Information)
-
         Else
 
             Console.WriteLine("batch still in process...")

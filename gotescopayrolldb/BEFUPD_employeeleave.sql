@@ -15,7 +15,7 @@ DECLARE selected_leavebal DECIMAL(11,2) DEFAULT 0;
 START METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
 *********************************************************/
 IF NEW.Status2 = 'Pending' AND NEW.`Status` = 'Approved' THEN
-	
+	# UPDATE employeeleave SET lastUpd=CURRENT_TIMESTAMP() WHERE Status2 = 'Pending' AND `Status` = 'Approved';
 	SET NEW.Status2 = NEW.`Status`;
 
 END IF;

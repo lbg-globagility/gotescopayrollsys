@@ -16,7 +16,10 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `paystubitem_sum_semi
 	,0 `Column2`
 	,ea.AllowanceAmount `TotalAllowanceAmt`
 	,ea.TaxableFlag
-	,IF(IFNULL(et.Absent, 0) > 0, IFNULL(sh.DivisorToDailyRate, 8), 0) `HoursToLess`
+	, (et.HoursLate
+	   + et.UndertimeHours
+	   + IF(IFNULL(et.Absent, 0) > 0, IFNULL(sh.DivisorToDailyRate, 8), 0)
+	   ) `HoursToLess`
 	,ea.AllowanceAmount
 	,e.WorkDaysPerYear
 	,p.`Fixed`
@@ -24,7 +27,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `paystubitem_sum_semi
 	,IFNULL(sh.DivisorToDailyRate, 8) `DivisorToDailyRate`
 	,1 `Result`
 	FROM employeeallowance ea
-	INNER JOIN employee e ON e.OrganizationID=ea.OrganizationID AND e.RowID=ea.EmployeeID AND e.EmploymentStatus='Regular'
+	INNER JOIN employee e ON e.OrganizationID=ea.OrganizationID AND e.RowID=ea.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 	INNER JOIN product p ON p.RowID=ea.ProductID AND LOCATE('ecola', LCASE(p.PartNo)) > 0
 	INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID
 	INNER JOIN dates d ON d.DateValue BETWEEN ea.EffectiveStartDate AND ea.EffectiveEndDate
@@ -46,9 +49,12 @@ UNION
 	,0 `Column2`
 	,ea.AllowanceAmount `TotalAllowanceAmt`
 	,ea.TaxableFlag
-	,IF(pr.PayType != 'Regular Day' OR IFNULL(et.Absent, 0) > 0
-	    , IFNULL(sh.DivisorToDailyRate, 8)
-		 , 0) `HoursToLess`
+	,(et.HoursLate
+	  + et.UndertimeHours +
+	  IF(pr.PayType != 'Regular Day' OR IFNULL(et.Absent, 0) > 0
+	     , IFNULL(sh.DivisorToDailyRate, 8)
+		  , 0)
+	  ) `HoursToLess`
 	,ea.AllowanceAmount
 	,e.WorkDaysPerYear
 	,p.`Fixed`
@@ -86,7 +92,8 @@ UNION
 						#/ IFNULL(sh.DivisorToDailyRate,0)))
 						, 0)))) / IF(e.EmployeeType = 'Daily', esa.BasicPay, ( esa.Salary / (e.WorkDaysPerYear / 12) ))) * (ea.AllowanceAmount / (e.WorkDaysPerYear / (PAYFREQUENCY_DIVISOR(pf.PayFrequencyType) * 12))) ) AS TotalAllowanceAmt
 	,ea.TaxableFlag
-	,(et.HoursLate + et.UndertimeHours) AS HoursToLess
+	,(et.HoursLate + et.UndertimeHours + IF(IFNULL(et.Absent, 0) > 0, IFNULL(sh.DivisorToDailyRate, 8), 0)
+	  ) AS HoursToLess
 	,ea.AllowanceAmount
 	,e.WorkDaysPerYear
 	,p.`Fixed`
@@ -94,7 +101,7 @@ UNION
 	,IFNULL(sh.DivisorToDailyRate, 8) `DivisorToDailyRate`
 	,3 `Result`
 	FROM employeetimeentry et
-	INNER JOIN employee e ON e.OrganizationID=et.OrganizationID AND e.RowID=et.EmployeeID AND e.EmploymentStatus NOT IN ('Resigned','Terminated') #AND e.EmployeeType!='Fixed'
+	INNER JOIN employee e ON e.OrganizationID=et.OrganizationID AND e.RowID=et.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 	INNER JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
 	INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID
 	LEFT JOIN employeeshift es ON es.RowID=et.EmployeeShiftID

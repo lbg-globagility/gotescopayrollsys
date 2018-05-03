@@ -39,6 +39,7 @@ IF is_deptmngr = TRUE THEN
 		,elv.Status2 `Status`
 		,elv.AdditionalOverrideLeaveBalance
 	   , DATE_FORMAT(elv.Created, '%c/%e/%Y %h:%i %p') `Created`
+	   , is_deptmngr
 		FROM employeeleave elv
 		INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.DeptManager=dept_mngr_rowid
 		WHERE elv.OrganizationID=elv_OrganizationID
@@ -46,7 +47,6 @@ IF is_deptmngr = TRUE THEN
 ;
 
 ELSE
-
 		SELECT
 		elv.RowID
 		,COALESCE(elv.LeaveType,'') `LeaveType`
@@ -63,6 +63,7 @@ ELSE
 		,elv.`Status`
 		,elv.AdditionalOverrideLeaveBalance
 	   , DATE_FORMAT(elv.Created, '%c/%e/%Y %h:%i %p') `Created`
+	   , is_deptmngr
 		FROM employeeleave elv
 		INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.DeptManager IS NULL
 		WHERE elv.OrganizationID=elv_OrganizationID
@@ -85,13 +86,14 @@ ELSE
 		,elv.`Status`
 		,elv.AdditionalOverrideLeaveBalance
 	   , DATE_FORMAT(elv.Created, '%c/%e/%Y %h:%i %p') `Created`
+	   , is_deptmngr
 		FROM employeeleave elv
 		INNER JOIN employee e
 		        ON e.RowID=elv.EmployeeID
 				     AND e.OrganizationID=elv.OrganizationID
 					  AND e.DeptManager IS NOT NULL
-					  AND elv.Status2 = 'Approved'
 		WHERE elv.OrganizationID=elv_OrganizationID
+					  AND elv.Status2 = 'Approved'
 		AND elv.EmployeeID=elv_EmployeeID
 ;
 

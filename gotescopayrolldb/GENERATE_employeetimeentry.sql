@@ -148,6 +148,8 @@ DECLARE default_regholi_payrate DECIMAL(11,2) DEFAULT 2.0;
 DECLARE has_timelogs_onthisdate
         ,is_valid_for_holipayment BOOL DEFAULT FALSE;
 
+UPDATE employeeovertime ot SET ot.LastUpd=IFNULL(ADDDATE(ot.LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP()) WHERE ot.EmployeeID=ete_EmpRowID AND ot.OrganizationID=ete_OrganizID AND ete_Date BETWEEN ot.OTStartDate AND ot.OTEndDate AND ot.OTStatus='Approved';
+
 SELECT
 e.EmploymentStatus
 ,e.EmployeeType
@@ -202,7 +204,7 @@ SELECT
 				, default_payrate))
 	,IF(e_OTOverride = '1', pr.OvertimeRate, default_payrate)
 	,IF(e_CalcNightDiff = '1', pr.NightDifferentialRate, default_payrate)
-	,IF(e_CalcNightDiffOT = '1', pr.NightDifferentialOTRate, default_payrate)
+	,IF(e_CalcNightDiffOT = '1', (pr.NightDifferentialOTRate - pr.OvertimeRate), default_payrate)
 	,IF(e_CalcRestDay = '1', pr.RestDayRate, default_payrate)
 	,IF(e_CalcRestDayOT = '1', pr.RestDayOvertimeRate, default_payrate)
 	,pr.DayBefore
@@ -219,7 +221,15 @@ INTO  payrateRowID
 		,restdayot_rate
 		,pr_DayBefore
 		,pr_PayType;
+/*UPDATE payrate SET NightDifferentialOTRate=1.375 WHERE PayType='Regular day';
 
+ALTER TABLE `payrate`
+	CHANGE COLUMN `PayRate` `PayRate` DECIMAL(10,4) NULL DEFAULT NULL COMMENT 'payout rate 1.10, 1.20,2.0 (10%, 20%, 100%, etc)' AFTER `Description`,
+	CHANGE COLUMN `OvertimeRate` `OvertimeRate` DECIMAL(10,4) NULL DEFAULT NULL AFTER `PayRate`,
+	CHANGE COLUMN `NightDifferentialRate` `NightDifferentialRate` DECIMAL(10,4) NULL DEFAULT NULL AFTER `OvertimeRate`,
+	CHANGE COLUMN `NightDifferentialOTRate` `NightDifferentialOTRate` DECIMAL(10,4) NULL DEFAULT NULL AFTER `NightDifferentialRate`,
+	CHANGE COLUMN `RestDayRate` `RestDayRate` DECIMAL(10,4) NULL DEFAULT NULL AFTER `NightDifferentialOTRate`,
+	CHANGE COLUMN `RestDayOvertimeRate` `RestDayOvertimeRate` DECIMAL(10,4) NULL DEFAULT NULL AFTER `RestDayRate`;*/
 
 SELECT IFNULL((RestDay = 1), FALSE)
 FROM employeeshift
@@ -769,10 +779,10 @@ ELSE
 		INTO ete_HrsUnder;
 		
 	END IF;
-		
-	SET ete_NDiffHrs = 0.0;
 	
-	SET ete_NDiffOTHrs = 0.0;
+	SET ete_NDiffHrs = 0;
+	
+	SET ete_NDiffOTHrs = IFNULL((SELECT SUM(ot.OfficialValidNightDiffHours) FROM employeeovertime ot WHERE ot.EmployeeID=ete_EmpRowID AND ot.OrganizationID=ete_OrganizID AND ete_Date BETWEEN ot.OTStartDate AND ot.OTEndDate AND ot.OTStatus='Approved'), 0);
 	
 END IF;
 

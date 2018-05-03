@@ -82,6 +82,7 @@ Public Class PayPeriodGUI
 #Region "Properties"
 
     ReadOnly Property RowID As Object
+
         Get
             Return this_rowid
 
@@ -90,6 +91,7 @@ Public Class PayPeriodGUI
     End Property
 
     ReadOnly Property PayDateFrom As Object
+
         Get
             Return this_datefrom
 
@@ -98,6 +100,7 @@ Public Class PayPeriodGUI
     End Property
 
     ReadOnly Property PayDateTo As Object
+
         Get
             Return this_dateto
 
@@ -106,6 +109,7 @@ Public Class PayPeriodGUI
     End Property
 
     ReadOnly Property IsExec13monthCalc As Boolean
+
         Get
             Return includes_13month_calc
 
@@ -114,6 +118,7 @@ Public Class PayPeriodGUI
     End Property
 
     ReadOnly Property PreceedingRowID As Object
+
         Get
             Return prior_rowid
 
@@ -122,6 +127,7 @@ Public Class PayPeriodGUI
     End Property
 
     ReadOnly Property ProceedingRowID As Object
+
         Get
             Return next_rowid
 
@@ -130,12 +136,15 @@ Public Class PayPeriodGUI
     End Property
 
     Property PayFreqType As String
+
         Get
             Return m_PayFreqType
         End Get
+
         Set(value As String)
             m_PayFreqType = value
         End Set
+
     End Property
 
     Property AsPurpose As PurposeAs
@@ -184,8 +193,6 @@ Public Class PayPeriodGUI
 
         End If
 
-        user_row_id = 1
-
         Dim n_db As New SQL("SELECT YEAR( CURDATE() );")
         yearnow = Convert.ToInt32(n_db.GetFoundRow)
 
@@ -221,7 +228,6 @@ Public Class PayPeriodGUI
             '    linkNxt_LinkClicked(linkNxt, New LinkLabelLinkClickedEventArgs(n_link))
 
             '    Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -304,13 +310,11 @@ Public Class PayPeriodGUI
         'stores the `PayFrequencyID` of this `organization`
         orgpayfreqID = Convert.ToInt32(_sql.GetFoundRow) 'EXECQUER("SELECT PayFrequencyID FROM organization WHERE RowID='" & orgztnID & "';")
 
-
     End Sub
 
     Sub PayFreq_Changed(sender As Object, e As EventArgs)
 
         quer_empPayFreq = ""
-
 
         Dim senderObj As New ToolStripButton
 
@@ -341,7 +345,6 @@ Public Class PayPeriodGUI
         End If
 
         If prevObj.Name = Nothing Then
-
         Else
 
             If prevObj.Name <> senderObj.Name Then
@@ -496,14 +499,10 @@ Public Class PayPeriodGUI
                                                 " AND pp.RowID" & _
                                                 " ORDER BY pyp.PayFromDate DESC,pyp.PayToDate DESC" & _
                                                 " LIMIT 1,1;")
-
                 Else
                     PriorPayPeriodID = dgvpaypers.Item("Column1", prior_index).Value
 
                 End If
-
-
-
 
                 Dim next_index = .Index + 1
 
@@ -525,11 +524,9 @@ Public Class PayPeriodGUI
 
                 'NextPayPeriodID
 
-
                 paypFrom = Format(CDate(.Cells("Column2").Value), "yyyy-MM-dd")
 
                 paypTo = Format(CDate(.Cells("Column3").Value), "yyyy-MM-dd")
-
 
                 'Dim sel_yearDateFrom = CDate(paypFrom).Year
 
@@ -538,7 +535,6 @@ Public Class PayPeriodGUI
                 'Dim sel_year = If(sel_yearDateFrom > sel_yearDateTo, _
                 '                  sel_yearDateFrom, _
                 '                  sel_yearDateTo)
-
 
                 numofweekdays = 0
 
@@ -555,7 +551,6 @@ Public Class PayPeriodGUI
 
                     ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                         numofweekends += 1
-
                     Else
                         numofweekdays += 1
 
@@ -617,7 +612,6 @@ Public Class PayPeriodGUI
 
         If is_even Then
             row_bg_color = Color.FromArgb(240, 240, 240)
-
         Else
             row_bg_color = Color.FromArgb(255, 255, 255)
         End If
@@ -655,7 +649,6 @@ Public Class PayPeriodGUI
                                               dgvpaypers.Item("Column1", e.RowIndex).Value)
 
             End If
-
         Else
 
         End If
@@ -720,7 +713,6 @@ Public Class PayPeriodGUI
 
                     ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                         numofweekends += 1
-
                     Else
                         numofweekdays += 1
 
@@ -759,7 +751,6 @@ Public Class PayPeriodGUI
                 End If
 
             End With
-
         Else
 
             _year = 0
@@ -837,10 +828,8 @@ Public Class PayPeriodGUI
 
         Try
             max_drp_downwidhth = drp_downwidhths.Max
-
         Catch ex As Exception
             max_drp_downwidhth = cboxDivisions.Width
-
         Finally
             cboxDivisions.DropDownWidth = max_drp_downwidhth 'wiidth, cb_width
 

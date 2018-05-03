@@ -14,6 +14,12 @@ DECLARE selected_leavebal DECIMAL(11,2) DEFAULT 0;
 /*********************************************************
 START METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
 *********************************************************/
+IF NEW.Status2 = 'Pending' AND NEW.`Status` = 'Approved' THEN
+	
+	SET NEW.Status2 = NEW.`Status`;
+
+END IF;
+
 IF NEW.`Status` = 'Approved' THEN
 	
 	SET @offcl_validdays = TIMESTAMPDIFF(DAY, NEW.LeaveStartDate, NEW.LeaveEndDate);

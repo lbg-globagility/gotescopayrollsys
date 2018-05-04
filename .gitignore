@@ -17,3 +17,5 @@ Output/
 *.log
 
 GotescoPayrollSys/Core Forms/PayStub\.resx
+
+GotescoPayrollSys/bin/Debug/GotescoPayrollSys\.exe\.config

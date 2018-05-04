@@ -118,23 +118,28 @@ IF NEW.OTStatus = 'Approved' THEN
 												  , @ot_timestamp_end)
 								/ (@min_per_hour * @sec_per_min));
 	
-	/*IF @sh_timestamp_end <= @ot_timestamp_start
+	IF @sh_timestamp_end <= @ot_timestamp_start
 	   AND @sh_timestamp_end <= @ot_timestamp_end THEN # satisfies an overtime after shift
 	   
 		SET @valid_ot_hrs = (TIMESTAMPDIFF(SECOND
-													  , @ot_timestamp_start
-													  , IF(@ot_timestamp_end < @etd_timelog_out, @ot_timestamp_end, @etd_timelog_out))
+	                                      , GREATEST(@ot_timestamp_start, @sh_timestamp_end)
+	                                      , LEAST(@ot_timestamp_end, @etd_timelog_out)
+													  #, IF(@ot_timestamp_end < @etd_timelog_out, @ot_timestamp_end, @etd_timelog_out)
+													  )
 									/ (@min_per_hour * @sec_per_min));
-		
-	ELSEIF @ot_timestamp_start <= @sh_timestamp_start
-	       AND @ot_timestamp_end <= @sh_timestamp_start THEN # satisfies an overtime before shift
+		# SELECT @ot_timestamp_start, @ot_timestamp_end, @etd_timelog_in, @etd_timelog_out, @sh_timestamp_start, @sh_timestamp_end INTO OUTFILE 'D:/New Downloads/result.txt';
+	ELSEIF @sh_timestamp_start >= @ot_timestamp_start
+	       AND @sh_timestamp_start >= @ot_timestamp_end THEN # satisfies an overtime before shift
 	
 		SET @valid_ot_hrs = (TIMESTAMPDIFF(SECOND
-													  , IF(@etd_timelog_in > @ot_timestamp_start, @etd_timelog_in, @ot_timestamp_start)
-													  , @ot_timestamp_end)
+	                                      , GREATEST(@ot_timestamp_start, @etd_timelog_in)
+	                                      , LEAST(@ot_timestamp_end, @sh_timestamp_start)
+													  /*, IF(@etd_timelog_in > @ot_timestamp_start, @etd_timelog_in, @ot_timestamp_start)
+													  , @ot_timestamp_end*/
+													  )
 									/ (@min_per_hour * @sec_per_min));
-		
-	END IF;*/
+									
+	END IF;
 	
 	# SET NEW.Reason = @valid_ot_hrs;
 	
@@ -158,10 +163,33 @@ IF NEW.OTStatus = 'Approved' THEN
 	INTO @og_ndiff_timefrom
 			,@og_ndiff_timeto;
 			
-	SET @valid_ndiff_hrs = (TIMESTAMPDIFF(SECOND
+	SET @valid_ndiff_hrs = 0;
+	   
+	IF @sh_timestamp_start >= @ot_timestamp_start
+	   AND @sh_timestamp_start >= @ot_timestamp_end THEN
+	   
+	   SET @valid_ndiff_hrs = (TIMESTAMPDIFF(SECOND
+	                                      , LEAST(@ot_timestamp_end, @etd_timelog_in)
+	                                      , SUBDATE(@og_ndiff_timeto, INTERVAL 1 DAY)
+													  )
+									/ (@min_per_hour * @sec_per_min));
+	
+	ELSEIF @sh_timestamp_end <= @ot_timestamp_start
+	       AND @sh_timestamp_end <= @ot_timestamp_end THEN
+	       
+	   SET @valid_ndiff_hrs = (TIMESTAMPDIFF(SECOND
+	                                      , @og_ndiff_timefrom
+	                                      , LEAST(@ot_timestamp_end, @etd_timelog_out, @og_ndiff_timeto)
+													  )
+									/ (@min_per_hour * @sec_per_min));
+	
+	END IF;
+	SET @valid_ndiff_hrs = IF(IFNULL(@valid_ndiff_hrs, 0) < 0, 0, IFNULL(@valid_ndiff_hrs, 0));
+	
+	/*SET @valid_ndiff_hrs = (TIMESTAMPDIFF(SECOND
 	                                      , IF(@og_ndiff_timefrom > @ot_timestamp_start, @og_ndiff_timefrom, @ot_timestamp_start)
 													  , IF(@og_ndiff_timeto > @ot_timestamp_end, @ot_timestamp_end, @og_ndiff_timeto))
-									/ (@min_per_hour * @sec_per_min));
+									/ (@min_per_hour * @sec_per_min));*/
 	
 	SET NEW.OfficialValidNightDiffHours = IFNULL(@valid_ndiff_hrs, 0);
 

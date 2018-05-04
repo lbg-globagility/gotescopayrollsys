@@ -345,6 +345,8 @@ END IF;
 
 IF isRestDay = '1' THEN 
 	
+	SET ndiffotrate = ndiffotrate * restday_rate;
+	# SELECT ndiffotrate, restday_rate INTO OUTFILE 'D:/New Downloads/result.txt';
 	SET @var_is_timelogs_betweenbreaktime = FALSE;
 	
 	SET @is_timelogs_betweenbreaktime = FALSE;
@@ -449,7 +451,7 @@ IF isRestDay = '1' THEN
 				
 				, (TIMESTAMPDIFF(SECOND, CONCAT_DATETIME(ete_Date, otstartingtime), @ot_endtime) / (@mins_perhour * @secs_perminute)))
 			) `Result`
-		INTO ete_NDiffHrs;
+		INTO @ete_NDiffHrs; # 
 		# og_ndtimefrom, og_ndtimeto
 	ELSE
 		
@@ -782,9 +784,9 @@ ELSE
 	
 	SET ete_NDiffHrs = 0;
 	
-	SET ete_NDiffOTHrs = IFNULL((SELECT SUM(ot.OfficialValidNightDiffHours) FROM employeeovertime ot WHERE ot.EmployeeID=ete_EmpRowID AND ot.OrganizationID=ete_OrganizID AND ete_Date BETWEEN ot.OTStartDate AND ot.OTEndDate AND ot.OTStatus='Approved'), 0);
-	
 END IF;
+
+	SET ete_NDiffOTHrs = IFNULL((SELECT SUM(ot.OfficialValidNightDiffHours) FROM employeeovertime ot WHERE ot.EmployeeID=ete_EmpRowID AND ot.OrganizationID=ete_OrganizID AND ete_Date BETWEEN ot.OTStartDate AND ot.OTEndDate AND ot.OTStatus='Approved'), 0);
 
 
 SELECT GET_employeerateperday(ete_EmpRowID, ete_OrganizID, ete_Date)

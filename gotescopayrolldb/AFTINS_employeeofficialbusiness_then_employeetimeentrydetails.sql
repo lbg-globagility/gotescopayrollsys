@@ -94,8 +94,8 @@ SET i=0;
 			,''
 			FROM dates d
 			LEFT JOIN (SELECT etd.*
-			            ,CONCAT_DATETIME(etd.`Date`, etd.TimeIn) `TimeStampIn`
-			            ,CONCAT_DATETIME(ADDDATE(etd.`Date`, INTERVAL IS_TIMERANGE_REACHTOMORROW(etd.TimeIn, etd.TimeOut) DAY), etd.TimeOut) `TimeStampOut`
+			            ,CONCAT_DATETIME(etd.`Date`, etd.TimeIn) `TimeStampInn`
+			            ,CONCAT_DATETIME(ADDDATE(etd.`Date`, INTERVAL IS_TIMERANGE_REACHTOMORROW(etd.TimeIn, etd.TimeOut) DAY), etd.TimeOut) `TimeStampOutt`
 			            FROM employeetimeentrydetails etd
 			            WHERE etd.OrganizationID=NEW.OrganizationID
 			            AND etd.EmployeeID=NEW.EmployeeID

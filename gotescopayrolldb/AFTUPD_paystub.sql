@@ -790,7 +790,7 @@ ELSEIF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '0' THEN
 	
 		SELECT (TrueSalary / PAYFREQUENCY_DIVISOR(pftype)) FROM employeesalary es WHERE es.EmployeeID=NEW.EmployeeID AND es.OrganizationID=NEW.OrganizationID AND (es.EffectiveDateFrom >= NEW.PayFromDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) >= NEW.PayFromDate) AND (es.EffectiveDateFrom <= NEW.PayToDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) <= NEW.PayToDate) ORDER BY es.EffectiveDateFrom DESC LIMIT 1 INTO totalworkamount;
 		
-		SELECT ( (totalworkamount - (SUM(et.HoursLateAmount) + SUM(et.UndertimeHoursAmount) + SUM(et.Absent))) + SUM(et.OvertimeHoursAmount) + SUM(IFNULL(rd.RestDayActualPay, 0))) FROM employeetimeentryactual et LEFT JOIN restdaytimeentry rd ON rd.RowID = et.RowID WHERE et.OrganizationID=NEW.OrganizationID AND et.EmployeeID=NEW.EmployeeID AND et.`Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO totalworkamount;
+		SELECT ( (totalworkamount - (SUM(et.HoursLateAmount) + SUM(et.UndertimeHoursAmount) + SUM(et.Absent))) + SUM(et.OvertimeHoursAmount) + SUM(IFNULL(rd.RestDayActualPay, 0)) + SUM(IFNULL(et.NightDiffHoursAmount, 0)) + SUM(IFNULL(et.NightDiffOTHoursAmount, 0))) FROM employeetimeentryactual et LEFT JOIN restdaytimeentry rd ON rd.RowID = et.RowID WHERE et.OrganizationID=NEW.OrganizationID AND et.EmployeeID=NEW.EmployeeID AND et.`Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO totalworkamount;
 		
 		IF totalworkamount IS NULL THEN
 			

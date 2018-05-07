@@ -127,7 +127,7 @@ IF NEW.OTStatus = 'Approved' THEN
 													  #, IF(@ot_timestamp_end < @etd_timelog_out, @ot_timestamp_end, @etd_timelog_out)
 													  )
 									/ (@min_per_hour * @sec_per_min));
-		# SELECT @ot_timestamp_start, @ot_timestamp_end, @etd_timelog_in, @etd_timelog_out, @sh_timestamp_start, @sh_timestamp_end INTO OUTFILE 'D:/New Downloads/result.txt';
+		# SELECT @ot_timestamp_start, @ot_timestamp_end, @etd_timelog_in, @etd_timelog_out, @sh_timestamp_start, @sh_timestamp_end, @valid_ot_hrs, GREATEST(@ot_timestamp_start, @sh_timestamp_end), LEAST(@ot_timestamp_end, @etd_timelog_out) INTO OUTFILE 'D:/New Downloads/result.txt';
 	ELSEIF @sh_timestamp_start >= @ot_timestamp_start
 	       AND @sh_timestamp_start >= @ot_timestamp_end THEN # satisfies an overtime before shift
 	

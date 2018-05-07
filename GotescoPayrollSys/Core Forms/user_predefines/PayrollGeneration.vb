@@ -8,8 +8,10 @@ Public Class PayrollGeneration
     Public errlogger As ILog = LogManager.GetLogger("LoggerWork")
     Private model1 As New Model1
     Private new_philhealth_collect As IQueryable(Of newphilhealthimplement) = model1.NewPhilHealth.OfType(Of newphilhealthimplement)()
+
     'Private wtax As IQueryable(Of WithholdingTaxBracket) = model1.NewWithholdingTax.OfType(Of WithholdingTaxBracket)()
     Private employee_dattab As DataTable
+
     Private isEndOfMonth As String
     Private isorgPHHdeductsched As SByte
     Private isorgSSSdeductsched As SByte
@@ -53,11 +55,13 @@ Public Class PayrollGeneration
     Private fixedTaxableMonthlyAllowances As DataTable
 
     Private Delegate Sub NotifyMainWindow(ByVal progress_index As Integer)
+
     Private m_NotifyMainWindow As NotifyMainWindow
 
     Private form_caller As Form
 
     Private ecoal_dat_set As New DataSet
+
     Private str_ecola_forgovt_contrib As String =
         "CALL ECOLA_forSSScontrib(?og_rowid, ?date_from, ?date_to);"
 
@@ -305,7 +309,6 @@ Public Class PayrollGeneration
 
         emp_dailytype_allowance = ecoal_dat_set.Tables(1)
 
-
         Dim emptimeentryOfLeave As New DataTable
 
         Dim emptimeentryOfHoliday As New DataTable
@@ -363,7 +366,6 @@ Public Class PayrollGeneration
 
         Dim sss As New DataTable
         sss = New SQL("SELECT * FROM paysocialsecurity;").GetFoundRows.Tables(0)
-
 
         Dim emp_count = employee_dattab.Rows.Count
 
@@ -432,7 +434,6 @@ Public Class PayrollGeneration
 
                 End If
 
-
                 strSSSdeductsched = drow("SSSDeductSched").ToString
                 If drow("SSSDeductSched").ToString = "End of the month" Then
 
@@ -447,7 +448,6 @@ Public Class PayrollGeneration
                     isorgSSSdeductsched = 2
 
                 End If
-
 
                 strHDMFdeductsched = drow("HDMFDeductSched").ToString
                 If drow("HDMFDeductSched").ToString = "End of the month" Then
@@ -464,7 +464,6 @@ Public Class PayrollGeneration
 
                 End If
 
-
                 If drow("WTaxDeductSched").ToString = "End of the month" _
                     Or drow("WTaxDeductSched").ToString = "First half of next month" Then
 
@@ -480,7 +479,6 @@ Public Class PayrollGeneration
 
                 End If
 
-
                 Dim employee_ID = Trim(drow("RowID"))
 
                 Dim org_WorkDaysPerYear = Convert.ToInt32(drow("WorkDaysPerYear"))
@@ -490,19 +488,11 @@ Public Class PayrollGeneration
                                             If(drow("PayFrequencyID") = 3, EXECQUER("SELECT COUNT(RowID) FROM employeetimeentry WHERE EmployeeID='" & employee_ID & "' AND Date BETWEEN '" & n_PayrollDateFrom & "' AND '" & n_PayrollDateTo & "' AND IFNULL(TotalDayPay,0)!=0 AND OrganizationID='" & org_rowid & "';"),
                                                numberofweeksthismonth)))
 
-
                 Dim rowempsal = esal_dattab.Select("EmployeeID = '" & drow("RowID") & "'")
 
                 Dim emp_loan = emp_loans.Select("EmployeeID = '" & drow("RowID") & "' AND Nondeductible = '0'")
 
                 Dim emp_bon = emp_bonus.Select("EmployeeID = '" & drow("RowID") & "'")
-
-
-
-
-
-
-
 
                 Dim day_allowance = emp_allowanceDaily.Select("EmployeeID = '" & drow("RowID") & "'")
 
@@ -518,9 +508,6 @@ Public Class PayrollGeneration
 
                 'emp_allowanceWeekly
 
-
-
-
                 Dim daynotax_allowance = notax_allowanceDaily.Select("EmployeeID = '" & drow("RowID") & "'")
 
                 Dim monthnotax_allowance = notax_allowanceMonthly.Select("EmployeeID = '" & drow("RowID") & "'")
@@ -534,9 +521,6 @@ Public Class PayrollGeneration
                 'notax_allowanceSemiM
 
                 'notax_allowanceWeekly
-
-
-
 
                 Dim day_bon = emp_bonusDaily.Select("EmployeeID = '" & drow("RowID") & "'")
 
@@ -552,8 +536,6 @@ Public Class PayrollGeneration
 
                 'emp_bonusWeekly
 
-
-
                 Dim daynotax_bon = notax_bonusDaily.Select("EmployeeID = '" & drow("RowID") & "'")
 
                 Dim monthnotax_bon = notax_bonusMonthly.Select("EmployeeID = '" & drow("RowID") & "'")
@@ -568,9 +550,6 @@ Public Class PayrollGeneration
 
                 'notax_bonusWeekly
 
-
-
-
                 Dim valemp_loan = Val(0)
                 For Each drowloan In emp_loan
                     valemp_loan = drowloan("DeductionAmount")
@@ -580,8 +559,6 @@ Public Class PayrollGeneration
                 'For Each drowbon In emp_bon
                 '    valemp_bon = drowbon("BonusAmount")
                 'Next
-
-
 
                 Dim valday_allowance = ValNoComma(emp_allowanceDaily.Compute("SUM(TotalAllowanceAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                 'GET_employeeallowance(drow("RowID").ToString, _
@@ -618,15 +595,12 @@ Public Class PayrollGeneration
                     'valweek_allowance = drowweekallow("TotalAllowanceAmount")
                 Next
 
-
                 'this is taxable                                ' / divisorMonthlys
                 Dim totalemployeeallownce = (valday_allowance _
                                              + (valmonth_allowance) _
                                              + valonce_allowance _
                                              + valsemim_allowance _
                                              + valweek_allowance)
-
-
 
                 Dim valdaynotax_allowance = ValNoComma(notax_allowanceDaily.Compute("SUM(TotalAllowanceAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                 'GET_employeeallowance(drow("RowID").ToString, _
@@ -663,10 +637,6 @@ Public Class PayrollGeneration
                     'valweeknotax_allowance = drowweekallow("TotalAllowanceAmount")
                 Next
 
-
-
-
-
                 'this is non-taxable                                        ' / divisorMonthlys
                 '+ valsemimonnotax_allowance _
                 Dim totalnotaxemployeeallownce = (valdaynotax_allowance _
@@ -674,10 +644,6 @@ Public Class PayrollGeneration
                                                   + valoncenotax_allowance _
                                                   + valsemimnotax_allowance _
                                                   + valweeknotax_allowance)
-
-
-
-
 
                 Dim valday_bon = ValNoComma(emp_bonusDaily.Compute("SUM(TotalBonusAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                 'For Each drowdaybon In day_bon
@@ -730,9 +696,6 @@ Public Class PayrollGeneration
                                           + valsemim_bon _
                                           + valweek_bon)
 
-
-
-
                 Dim valdaynotax_bon = ValNoComma(notax_bonusDaily.Compute("SUM(TotalBonusAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                 'For Each drowdaybon In daynotax_bon
                 '    valdaynotax_bon = drowdaybon("BonusAmount")
@@ -777,8 +740,6 @@ Public Class PayrollGeneration
                     valoncenotax_bon = drowweekbon("BonusAmount")
                 Next
 
-
-
                 'this is non-taxable
                 Dim totalnotaxemployeebonus = Val(0)
 
@@ -794,12 +755,6 @@ Public Class PayrollGeneration
                 totalnotaxemployeebonus += valweeknotax_bon
 
                 totalnotaxemployeebonus += valmonthnotax_bon ' / divisorMonthlys
-
-
-
-
-
-
 
                 Dim emptotdaypay = etent_totdaypay.Select("EmployeeID = '" & drow("RowID") & "'")
 
@@ -900,7 +855,6 @@ Public Class PayrollGeneration
                                 grossincome = ValNoComma(drowtotdaypay("TotalDayPay"))
 
                                 grossincome_firsthalf = ValNoComma(prev_empTimeEntry.Compute("SUM(TotalDayPay)", "EmployeeID = '" & drow("RowID") & "'"))
-
                             Else
 
                                 grossincome = ValNoComma(drowsal("BasicPay")) ' + ValNoComma(emptimeentryOfHoliday.Compute("SUM(HolidayPayAmount)", "EmployeeID = '" & drow("RowID") & "' AND PayFromDate <= Date AND Date <= PayFromDate1"))
@@ -909,7 +863,7 @@ Public Class PayrollGeneration
                                 grossincome -= (ValNoComma(drowtotdaypay("HoursLateAmount")) _
                                                 + ValNoComma(drowtotdaypay("UndertimeHoursAmount")) _
                                                 + ValNoComma(drowtotdaypay("Absent")))
-                                grossincome += ValNoComma(drowtotdaypay("OvertimeHoursAmount"))
+                                grossincome += (ValNoComma(drowtotdaypay("OvertimeHoursAmount")) + NightDiffAmount + NightDiffOTAmount)
                                 'n_PayrollRecordID
                                 grossincome_firsthalf = ValNoComma(drowsal("BasicPay")) '+ _
                                 'ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = " & drow("RowID").ToString)) + _
@@ -920,7 +874,9 @@ Public Class PayrollGeneration
                                     (ValNoComma(prev_empTimeEntry.Compute("SUM(HoursLateAmount)", "EmployeeID = '" & drow("RowID") & "'")) _
                                     + ValNoComma(prev_empTimeEntry.Compute("SUM(UndertimeHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) _
                                     + ValNoComma(prev_empTimeEntry.Compute("SUM(Absent)", "EmployeeID = '" & drow("RowID") & "'")))
-                                grossincome_firsthalf += ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = '" & drow("RowID") & "'"))
+                                grossincome_firsthalf += (ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) +
+                                                          ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) +
+                                                          ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffOTHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")))
                             End If
 
                             monthly_computed_salary = ((grossincome + grossincome_firsthalf) - overall_overtime)
@@ -997,7 +953,6 @@ Public Class PayrollGeneration
 
                             pstub_TotalEmpSSS = sss_ee
                             pstub_TotalCompSSS = sss_er
-
                         Else
                             If isorgSSSdeductsched = 2 Then 'Per pay period
                                 'pstub_TotalEmpSSS = CDec(drowsal("EmployeeContributionAmount"))
@@ -1049,7 +1004,6 @@ Public Class PayrollGeneration
 
                             pstub_TotalEmpPhilhealth = phh_ee
                             pstub_TotalCompPhilhealth = phh_er
-
                         Else
                             If isorgPHHdeductsched = 2 Then 'Per pay period
                                 'pstub_TotalEmpPhilhealth = CDec(drowsal("EmployeeShare"))
@@ -1068,7 +1022,6 @@ Public Class PayrollGeneration
                         If isEndOfMonth = isorgHDMFdeductsched Then
                             pstub_TotalEmpHDMF = CDec(drowsal("HDMFAmount"))
                             pstub_TotalCompHDMF = 100 'CDec(drowsal("HDMFAmount"))
-
                         Else
                             If isorgHDMFdeductsched = 2 Then 'Per pay period
                                 pstub_TotalEmpHDMF = CDec(drowsal("HDMFAmount"))
@@ -1119,7 +1072,6 @@ Public Class PayrollGeneration
                             If isMinimumWage Then
 
                                 tax_amount = 0
-
                             Else
 
                                 'Dim paywithholdingtax = retAsDatTbl("SELECT ExemptionAmount,TaxableIncomeFromAmount,ExemptionInExcessAmount" & _
@@ -1169,7 +1121,6 @@ Public Class PayrollGeneration
                                 '" AND PayFrequencyID = " & drow("PayFrequencyID").ToString & " AND " &
                                 'Dim GET_employeetaxableincome = EXECQUER("SELECT `GET_employeetaxableincome`('" & drow("RowID") & "', '" & orgztnID & "', '" & n_PayrollDateFrom & "','" & grossincome & "');")
 
-
                                 'For Each drowtax As DataRow In paywithholdingtax.rows
                                 For Each drowtax In sel_payWTax
                                     Dim taxrowID = drowtax("RowID")
@@ -1189,7 +1140,6 @@ Public Class PayrollGeneration
                                 Next
 
                             End If
-
                         Else
                             'PAYFREQUENCY_DIVISOR
 
@@ -1269,7 +1219,6 @@ Public Class PayrollGeneration
 
                                 '" AND PayFrequencyID = " & drow("PayFrequencyID").ToString & " AND " &
                                 'Dim GET_employeetaxableincome = EXECQUER("SELECT `GET_employeetaxableincome`('" & drow("RowID") & "', '" & orgztnID & "', '" & n_PayrollDateFrom & "','" & grossincome & "');")
-
 
                                 'For Each drowtax As DataRow In paywithholdingtax.rows
                                 For Each drowtax In sel_payWTax
@@ -1459,7 +1408,6 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
                         Await _
                             Task.WhenAll(my_sqlconn.OpenAsync(),
                                          my_sqlcmd.ExecuteNonQueryAsync())
-
                     Catch ex As Exception
                         errlogger.Error(String.Concat("Payroll generation@INSUPD_paystub_proc(employee.RowID = ", Convert.ToInt32(drow("RowID")),
                                                       ", employee.Id = ", Convert.ToString(drow("EmployeeID")), ")"), ex)
@@ -1480,7 +1428,6 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
 
                 Dim my_cmd As String = String.Concat(Convert.ToString(drow("RowID")), "@", Convert.ToString(drow("EmployeeID")))
                 Console.WriteLine(my_cmd)
-
             Catch ex As Exception
 
                 Dim err_msg As String =
@@ -1496,7 +1443,6 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
 
                 MsgBox(String.Concat(err_msg, vbNewLine,
                                      "error occured for EMPLOYEE[", Convert.ToString(drow("EmployeeID")), "]"))
-
             Finally
 
                 'Dim string_query As String =
@@ -1530,7 +1476,6 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         'Dim exec_str_query_recompute_13thmonthpay As New SQL(str_query_recompute_13thmonthpay, para_meters)
 
         'exec_str_query_recompute_13thmonthpay.ExecuteQuery()
-
 
         If withthirteenthmonthpay = 1 Then
 
@@ -1605,8 +1550,10 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         'Console.WriteLine(String.Concat(dfsd, " @@ ", employee_dattab.TableName))
 
     End Sub
+
     '
     Private str_query As String = "CALL INSUPD_monthlyemployeerestdaypayment(?og_rowid, ?e_rowid, ?pp_rowid, ?u_rowid);"
+
     Private str_query2 As String = "CALL INSUPD_paystubitemallowances(?og_rowid, ?e_rowid, ?pp_rowid, ?u_rowid);"
 
     Sub PayrollGeneration_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs)
@@ -1662,7 +1609,6 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         '    End Try
 
         'Next
-
 
     End Sub
 

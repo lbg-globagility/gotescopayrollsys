@@ -8481,7 +8481,7 @@ Public Class PayStub
 
                 txthrsworkamt.Text = FormatNumber((strdouble), 2)
 
-            ElseIf drow("EmployeeType").ToString = "Monthly" Or drow("EmployeeType").ToString = "Fixed" Then
+            ElseIf drow("EmployeeType").ToString = "Monthly" Then
                 'Dim thebasicpay = ValNoComma(drow("BasicPay"))
                 'Dim thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent"))
 
@@ -8526,7 +8526,7 @@ Public Class PayStub
 
                 lblsubtot.Text = FormatNumber((strdouble), 2)
 
-            ElseIf drow("EmployeeType").ToString = "Monthly" Or drow("EmployeeType").ToString = "Fixed" Then
+            ElseIf drow("EmployeeType").ToString = "Monthly" Then
                 'Dim thebasicpay = ValNoComma(drow("BasicPay"))
                 'Dim thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent"))
 
@@ -8538,7 +8538,10 @@ Public Class PayStub
                 If drow("FirstTimeSalary").ToString = "1" And drow("EmployeeType").ToString = "Monthly" Then
                     thebasicpay = ValNoComma(drow("RegularHoursAmount"))
                 Else
-                    thebasicpay = ValNoComma(drow("BasicPay")) + ValNoComma(drow("OvertimeHoursAmount"))
+                    thebasicpay = ValNoComma(drow("BasicPay")) +
+                        ValNoComma(drow("OvertimeHoursAmount")) +
+                        ValNoComma(drow("NightDiffHoursAmount")) +
+                        ValNoComma(drow("NightDiffOTHoursAmount"))
                     thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) ' + ValNoComma(drow("HolidayPayAmount"))
                 End If
 
@@ -8761,7 +8764,7 @@ Public Class PayStub
 
                 txthrsworkamt_U.Text = FormatNumber((strdouble), 2)
 
-            ElseIf drow("EmployeeType").ToString = "Monthly" Or drow("EmployeeType").ToString = "Fixed" Then
+            ElseIf drow("EmployeeType").ToString = "Monthly" Then
                 'Dim thebasicpay = ValNoComma(drow("BasicPay"))
                 'Dim thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent"))
 
@@ -8806,7 +8809,7 @@ Public Class PayStub
 
                 lblsubtot.Text = FormatNumber((strdouble), 2)
 
-            ElseIf drow("EmployeeType").ToString = "Monthly" Or drow("EmployeeType").ToString = "Fixed" Then
+            ElseIf drow("EmployeeType").ToString = "Monthly" Then
                 'Dim thebasicpay = ValNoComma(drow("BasicPay"))
                 'Dim thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent"))
 
@@ -8818,7 +8821,10 @@ Public Class PayStub
                 If drow("FirstTimeSalary").ToString = "1" And drow("EmployeeType").ToString = "Monthly" Then
                     thebasicpay = ValNoComma(drow("RegularHoursAmount"))
                 Else
-                    thebasicpay = ValNoComma(drow("BasicPay")) + ValNoComma(drow("OvertimeHoursAmount"))
+                    thebasicpay = ValNoComma(drow("BasicPay")) +
+                        ValNoComma(drow("OvertimeHoursAmount")) +
+                        ValNoComma(drow("NightDiffHoursAmount")) +
+                        ValNoComma(drow("NightDiffOTHoursAmount"))
                     thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) ' + ValNoComma(drow("HolidayPayAmount"))
                 End If
 

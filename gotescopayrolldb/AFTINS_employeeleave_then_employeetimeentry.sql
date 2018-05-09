@@ -8,7 +8,7 @@ DROP TRIGGER IF EXISTS `AFTINS_employeeleave_then_employeetimeentry`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `AFTINS_employeeleave_then_employeetimeentry` AFTER INSERT ON `employeeleave` FOR EACH ROW BEGIN
-
+# AFTINS_employeeleave_then_employeetimeentry
 DECLARE shift_RowID INT(11);
 
 DECLARE empshiftRowID INT(11);
@@ -135,7 +135,7 @@ SET @correct_date = CURDATE();
         ORDER BY d.DateValue
     ) INTO anyint;
 
-ELSE
+ELSEIF NEW.`Status` = 'Approved' THEN
 
     SELECT IF(DATEDIFF(NEW.LeaveStartDate,NEW.LeaveEndDate) < 0,DATEDIFF(NEW.LeaveStartDate,NEW.LeaveEndDate) * -1,DATEDIFF(NEW.LeaveStartDate,NEW.LeaveEndDate)) INTO numofdaysofleave;
 
@@ -164,12 +164,10 @@ ELSE
 
     firstToLastDay: LOOP
 
-            IF looper != numofdaysofleave + 1 THEN
+            IF looper < numofdaysofleave + 1 THEN
 
                 SELECT ADDDATE(NEW.LeaveStartDate, INTERVAL looper DAY) INTO dateloop;
-
-
-
+                
                 SELECT
                 esh.RowID
                 ,esh.ShiftID
@@ -181,37 +179,11 @@ ELSE
                 ORDER BY DATEDIFF(dateloop, esh.EffectiveFrom) DESC
                 LIMIT 1
                 INTO empshiftRowID,shift_RowID;
-
-
-
+                
                 SELECT RowID FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date`=dateloop INTO etentRowID;
-
-
+                
                 SELECT esa.RowID, IF(e.EmployeeType='Daily', esa.BasicPay, (esa.Salary / (e.WorkDaysPerYear / month_count_peryear))) `BasicPay` FROM employeesalary esa INNER JOIN employee e ON e.RowID=esa.EmployeeID WHERE esa.EmployeeID=NEW.EmployeeID AND esa.OrganizationID=NEW.OrganizationID AND dateloop BETWEEN DATE(COALESCE(esa.EffectiveDateFrom,DATE_FORMAT(CURRENT_TIMESTAMP(),'%Y-%m-%d'))) AND DATE(COALESCE(esa.EffectiveDateTo,dateloop)) AND DATEDIFF(dateloop,esa.EffectiveDateFrom) >= 0 ORDER BY DATEDIFF(DATE_FORMAT(dateloop,'%Y-%m-%d'),esa.EffectiveDateFrom) LIMIT 1 INTO esal_RowID, dailypayamount;
-
-
-                # SELECT GET_employeerateperday(NEW.EmployeeID, NEW.OrganizationID, dateloop) INTO dailypayamount;
-
-                /*IF e_EmpType = 'Monthly 15a1s5d1f5a1sd1f51asd51f5s1da5' THEN
-
-                    SELECT BasicPay
-                    ,Salary
-                    FROM employeesalary
-                    WHERE EmployeeID=NEW.EmployeeID
-                    AND OrganizationID=NEW.OrganizationID
-                    AND dateloop BETWEEN DATE(COALESCE(EffectiveDateFrom, DATE_FORMAT(CURRENT_TIMESTAMP(),'%Y-%m-%d'))) AND DATE(COALESCE(EffectiveDateTo, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL 1 MONTH)))
-                    AND DATEDIFF(dateloop,EffectiveDateFrom) >= 0
-                    ORDER BY DATEDIFF(DATE_FORMAT(dateloop,'%Y-%m-%d'),EffectiveDateFrom)
-                    LIMIT 1
-                    INTO empBasicPay
-                            ,emp_sal;
-
-                    SET dailypayamount = empBasicPay / GET_employeesalarydivisor(NEW.OrganizationID, NEW.EmployeeID, dateloop);
-
-                END IF;*/
-
-
-
+                
                 SELECT sh.TimeFrom
                 ,sh.TimeTo
                 FROM shift sh
@@ -292,165 +264,11 @@ ELSE
                 AND etd.OrganizationID=NEW.OrganizationID
                 AND etd.`Date`='1900-01-01'
                 INTO etd_timein,etd_timeout;
-
-                /*IF etd_timein IS NOT NULL AND etd_timeout IS NOT NULL THEN
-
-                    SELECT sh.TimeFrom
-                    ,sh.TimeTo
-                    FROM shift sh
-                    WHERE sh.RowID=shift_RowID
-                    INTO sh_timefrom,sh_timeto;
-
-                    SELECT GRACE_PERIOD(etd_timein,sh_timefrom) INTO etd_timein;
-
-                    IF etd_timein BETWEEN '12:00' AND '13:00' THEN
-                        SET etd_timein = '13:00';
-                    END IF;
-
-
-                    IF COMPUTE_TimeDifference(etd_timeout,sh_timeto) > 4
-                        AND COMPUTE_TimeDifference(etd_timeout,sh_timeto) < 5
-                        AND COMPUTE_TimeDifference(sh_timefrom, sh_timeto) = 9 THEN
-
-                        IF etd_timein BETWEEN sh_timefrom AND etd_timeout THEN
-
-                            SET etd_timeout = ADDTIME(sh_timefrom,'04:00');
-
-                        ELSEIF SUBTIME(sh_timeto,'04:00') BETWEEN etd_timein AND sh_timeto THEN
-
-                            SET etd_timeout = SUBTIME(sh_timeto,'04:00');
-
-                        ELSEIF etd_timein BETWEEN SUBTIME(sh_timeto,'04:00') AND sh_timeto THEN
-
-                            SET etd_timeout = SUBTIME(sh_timeto,'04:00');
-
-                        END IF;
-
-                    ELSEIF COMPUTE_TimeDifference(etd_timeout,sh_timeto) > 5
-                            AND COMPUTE_TimeDifference(etd_timeout,sh_timeto) < 6
-                            AND COMPUTE_TimeDifference(sh_timefrom, sh_timeto) = 10 THEN
-
-                        IF etd_timein BETWEEN sh_timefrom AND etd_timeout THEN
-
-                            SET etd_timeout = ADDTIME(sh_timefrom,'05:00');
-
-                        ELSEIF SUBTIME(sh_timeto,'05:00') BETWEEN etd_timein AND sh_timeto THEN
-
-                            SET etd_timeout = SUBTIME(sh_timeto,'05:00');
-
-                        ELSEIF etd_timein BETWEEN SUBTIME(sh_timeto,'05:00') AND sh_timeto THEN
-
-                            SET etd_timeout = SUBTIME(sh_timeto,'05:00');
-
-                        END IF;
-
-                    END IF;
-
-
-
-                    SET extra_regularhours = COMPUTE_TimeDifference(etd_timein,etd_timeout);
-
-                    SET extra_regularamount = extra_regularhours * hourlypayamount;
-
-                    SET dailypayamount = dailypayamount + extra_regularamount;
-
-                END IF;
-
-
-                SELECT etd.TimeIn
-                ,etd.TimeOut
-                FROM employeetimeentrydetails etd
-                WHERE etd.EmployeeID=NEW.EmployeeID
-                AND etd.OrganizationID=NEW.OrganizationID
-                AND etd.`Date`=dateloop
-                LIMIT 1
-                INTO etd_timein,etd_timeout;
-
-                SET etd_timein = IF(TIME_FORMAT(etd_timeout,'%H:%i') = TIME_FORMAT(NEW.LeaveStartTime,'%H:%i') AND NEW.LeaveStartTime < NEW.LeaveEndTime, TIME(ADDTIME(etd_timeout,'00:00:01')), NEW.LeaveStartTime);
-
-                IF COMPUTE_TimeDifference(sh_timefrom, sh_timeto) = 9 THEN
-
-                    IF SUBTIME(sh_timeto,'04:30') < etd_timein AND sh_timeto > NEW.LeaveEndTime THEN
-                        SET under_hrs = COMPUTE_TimeDifference(etd_timein, NEW.LeaveEndTime);
-
-                        SET under_hrs = 4 - under_hrs;
-
-                    ELSEIF (etd_timein BETWEEN SUBTIME(sh_timeto,'04:30') AND sh_timeto)
-                            AND sh_timeto = NEW.LeaveEndTime THEN
-                        SET under_hrs = 0;
-
-                    ELSEIF etd_timein BETWEEN SUBTIME(sh_timeto,'04:30') AND sh_timeto THEN
-                        SET under_hrs = COMPUTE_TimeDifference(etd_timein, sh_timeto);
-
-                    ELSE
-                        SET under_hrs = 0;
-                    END IF;
-
-
-                    IF sh_timefrom <= etd_timein AND ADDTIME(sh_timefrom,'04:30') >= NEW.LeaveEndTime THEN
-                        SET late_hrs = COMPUTE_TimeDifference(etd_timein, NEW.LeaveEndTime);
-
-                        SET late_hrs = 4 - late_hrs;
-
-                    ELSEIF (etd_timein BETWEEN sh_timefrom AND ADDTIME(sh_timefrom,'04:30'))
-                            AND ADDTIME(sh_timefrom,'04:30') = NEW.LeaveEndTime THEN
-                        SET late_hrs = COMPUTE_TimeDifference(etd_timein, sh_timefrom);
-
-                    ELSEIF etd_timein BETWEEN sh_timefrom AND ADDTIME(sh_timefrom,'04:30') THEN
-                        SET late_hrs = COMPUTE_TimeDifference(etd_timein, sh_timefrom);
-
-                    ELSE
-                        SET late_hrs = 0;
-                    END IF;
-
-                ELSEIF COMPUTE_TimeDifference(sh_timefrom, sh_timeto) = 10 THEN
-
-                    IF SUBTIME(sh_timeto,'05:00') < etd_timein AND sh_timeto > NEW.LeaveEndTime THEN
-                        SET under_hrs = COMPUTE_TimeDifference(etd_timein, NEW.LeaveEndTime);
-
-                        SET under_hrs = 4.5 - under_hrs;
-
-                    ELSEIF (etd_timein BETWEEN SUBTIME(sh_timeto,'05:00') AND sh_timeto)
-                            AND sh_timeto = NEW.LeaveEndTime THEN
-                        SET under_hrs = 0;
-
-                    ELSEIF etd_timein BETWEEN SUBTIME(sh_timeto,'05:00') AND sh_timeto THEN
-                        SET under_hrs = COMPUTE_TimeDifference(etd_timein, sh_timeto);
-
-                    ELSE
-                        SET under_hrs = 0;
-                    END IF;
-
-
-                    IF sh_timefrom <= etd_timein AND ADDTIME(sh_timefrom,'05:00') >= NEW.LeaveEndTime THEN
-                        SET late_hrs = COMPUTE_TimeDifference(etd_timein, NEW.LeaveEndTime);
-
-                        SET late_hrs = 4.5 - late_hrs;
-
-                    ELSEIF (etd_timein BETWEEN sh_timefrom AND ADDTIME(sh_timefrom,'05:00'))
-                            AND ADDTIME(sh_timefrom,'05:00') = NEW.LeaveEndTime THEN
-                        SET late_hrs = 0;
-
-                    ELSEIF etd_timein BETWEEN sh_timefrom AND ADDTIME(sh_timefrom,'05:00') THEN
-                        SET late_hrs = COMPUTE_TimeDifference(etd_timein, sh_timefrom);
-
-                    ELSE
-                        SET late_hrs = 0;
-                    END IF;
-
-                ELSEIF COMPUTE_TimeDifference(sh_timefrom, sh_timeto) IN (4,5) THEN
-
-                    SET late_hrs = 0;
-
-                    SET under_hrs = 0;
-
-                END IF;*/
-
+                
                 SET late_hrs = IFNULL(late_hrs,0);
 
                 SET under_hrs = IFNULL(under_hrs,0);
-
-
+                
                 SELECT INSUPD_employeetimeentries(etentRowID
 															, NEW.OrganizationID
 															, NEW.CreatedBy

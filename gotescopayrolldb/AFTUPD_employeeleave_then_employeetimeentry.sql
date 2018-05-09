@@ -5,7 +5,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TRIGGER IF EXISTS `AFTUPD_employeeleave_then_employeetimeentry`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `AFTUPD_employeeleave_then_employeetimeentry` AFTER UPDATE ON `employeeleave` FOR EACH ROW BEGIN
 
@@ -54,7 +54,7 @@ SET leav_type = LCASE(NEW.LeaveType);
 	WHERE et.EmployeeID=NEW.EmployeeID
 	AND et.OrganizationID=NEW.OrganizationID;
 
-IF LOCATE('aternity', leav_type) > 0 THEN
+IF LOCATE('aternity', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 	
 	UPDATE employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID
@@ -70,7 +70,7 @@ IF LOCATE('aternity', leav_type) > 0 THEN
 	WHERE et.EmployeeID=NEW.EmployeeID
 	AND et.OrganizationID=NEW.OrganizationID;
 
-ELSEIF LOCATE('vacation', leav_type) > 0 THEN
+ELSEIF LOCATE('vacation', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 
 	UPDATE employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID
@@ -93,7 +93,7 @@ ELSEIF LOCATE('vacation', leav_type) > 0 THEN
 	WHERE et.EmployeeID=NEW.EmployeeID
 	AND et.OrganizationID=NEW.OrganizationID;
 
-ELSEIF LOCATE('sick', leav_type) > 0 THEN
+ELSEIF LOCATE('sick', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 
 	UPDATE employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID
@@ -116,7 +116,7 @@ ELSEIF LOCATE('sick', leav_type) > 0 THEN
 	WHERE et.EmployeeID=NEW.EmployeeID
 	AND et.OrganizationID=NEW.OrganizationID;
 
-ELSEIF LOCATE('others', leav_type) > 0 THEN
+ELSEIF LOCATE('others', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 
 	UPDATE employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID
@@ -139,7 +139,7 @@ ELSEIF LOCATE('others', leav_type) > 0 THEN
 	WHERE et.EmployeeID=NEW.EmployeeID
 	AND et.OrganizationID=NEW.OrganizationID;
 
-ELSEIF LOCATE('additional', leav_type) > 0 THEN
+ELSEIF LOCATE('additional', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 
 	UPDATE employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID

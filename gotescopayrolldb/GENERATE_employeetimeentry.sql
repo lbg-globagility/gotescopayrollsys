@@ -346,7 +346,7 @@ END IF;
 IF isRestDay = '1' THEN 
 	
 	SET ndiffotrate = ndiffotrate * restday_rate;
-	# SELECT ndiffotrate, restday_rate INTO OUTFILE 'D:/New Downloads/result.txt';
+	
 	SET @var_is_timelogs_betweenbreaktime = FALSE;
 	
 	SET @is_timelogs_betweenbreaktime = FALSE;
@@ -815,7 +815,7 @@ IF IFNULL(rateperhourforOT,0) <= 0 THEN
 END IF;
 
 SELECT
-RowID
+NULL
 FROM employeetimeentry
 WHERE EmployeeID=ete_EmpRowID
 AND OrganizationID=ete_OrganizID
@@ -1091,16 +1091,16 @@ IF pr_DayBefore IS NULL THEN
 		
 			SELECT elv.OfficialValidHours
 			FROM employeeleave elv
-			INNER JOIN dates d ON d.DateValue BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
+			# INNER JOIN dates d ON d.DateValue BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
 			WHERE elv.EmployeeID = ete_EmpRowID
 			AND elv.OrganizationID = ete_OrganizID
-			AND d.DateValue = ete_Date
+			AND ete_Date BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
 			LIMIT 1 INTO
 			@leave_hours;
 			
 			IF ete_RegHrsWorkd = 0 THEN
-			
 				SET ete_TotalDayPay = (IFNULL(@leave_hours, 0) * rateperhour);
+				
 			ELSE
 				
 				SET ete_TotalDayPay = (IFNULL(@leave_hours, 0) * rateperhour)
@@ -1135,7 +1135,30 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_HrsLate * rateperhour)
 			) INTO anyINT;
 			
-
+			/*SELECT anyINT
+					, ete_OrganizID
+					, ete_UserRowID
+					, ete_UserRowID
+					, ete_Date
+					, eshRowID
+					, ete_EmpRowID
+					, esalRowID
+					, '0'
+					, ete_RegHrsWorkd
+					, ete_OvertimeHrs
+					, ete_HrsUnder
+					, ete_NDiffHrs
+					, ete_NDiffOTHrs
+					, ete_HrsLate
+					, payrateRowID
+					, ete_TotalDayPay
+					, ete_RegHrsWorkd + ete_OvertimeHrs
+					, ((ete_RegHrsWorkd - ete_NDiffHrs) * rateperhour) * commonrate
+					, (ete_OvertimeHrs * rateperhourforOT) * otrate
+					, (ete_HrsUnder * rateperhour)
+					, (ete_NDiffHrs * rateperhour) * ndiffrate
+					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
+					, (ete_HrsLate * rateperhour) INTO OUTFILE 'D:/New Downloads/result.txt';*/
 		END IF;
 	
 	ELSE

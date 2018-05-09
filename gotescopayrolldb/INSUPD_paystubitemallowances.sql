@@ -11,11 +11,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystubitemallowances`(IN `o
 BEGIN
 
 DECLARE ps_rowid
-        ,MonthCount INT(11);
+        ,MonthCount
+		  ,default_min_hrswork INT(11);
 
 DECLARE date_from
         , date_to DATE;
 
+SET default_min_hrswork = 8;
 SET MonthCount = 12;
 
 SELECT ps.RowID
@@ -74,7 +76,7 @@ INSERT INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayS
 				INNER JOIN payrate pr ON pr.RowID=et.PayRateID
 				INNER JOIN payperiod pp ON pp.RowID=pp_rowid
 				WHERE i.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
-				AND i.TotalAllowanceAmt > 0
+				AND i.TotalAllowanceAmt != 0
 				AND i.OrganizationID=og_rowid
 				) i
 			GROUP BY i.ProductID
@@ -108,7 +110,8 @@ INSERT INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayS
 	,0
 	FROM (SELECT i.ProductID
 	      ,i.EmployeeID
-	      ,( i.AllowanceAmount - (SUM(i.HoursToLess) * ((i.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * 12))) / 8)) ) `AllowanceAmount`
+	      # ,( i.AllowanceAmount - (SUM(i.HoursToLess) * ((i.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * 12))) / 8)) ) `AllowanceAmount`
+			,i.AllowanceAmount - (SUM(i.HoursToLess) * (i.DailyAllowance / default_min_hrswork)) `AllowanceAmount`
 	      FROM paystubitem_sum_semimon_allowance_group_prodid i
 			WHERE i.OrganizationID=og_rowid
 			AND i.EmployeeID=e_rowid

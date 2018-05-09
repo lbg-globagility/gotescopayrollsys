@@ -14,17 +14,18 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `paystubitem_sum_semi
 	,d.DateValue `Date`
 	,0 `Column1`
 	,0 `Column2`
-	,ea.AllowanceAmount `TotalAllowanceAmt`
+	,ROUND((ea.AllowanceAmount / ((e.WorkDaysPerYear / 12) / PAYFREQUENCY_DIVISOR(pf.PayFrequencyType))), 1) `TotalAllowanceAmt`
 	,ea.TaxableFlag
-	, (et.HoursLate
-	   + et.UndertimeHours
-	   + IF(IFNULL(et.Absent, 0) > 0, IFNULL(sh.DivisorToDailyRate, 8), 0)
+	, (/*et.HoursLate
+	   + et.UndertimeHours +*/
+	   IF(IFNULL(et.Absent, 0) > 0, IFNULL(sh.DivisorToDailyRate, 8), 0)
 	   ) `HoursToLess`
 	,ea.AllowanceAmount
 	,e.WorkDaysPerYear
 	,p.`Fixed`
 	,PAYFREQUENCY_DIVISOR(pf.PayFrequencyType) `PAYFREQDIV`
 	,IFNULL(sh.DivisorToDailyRate, 8) `DivisorToDailyRate`
+	,ROUND((ea.AllowanceAmount / ((e.WorkDaysPerYear / 12) / PAYFREQUENCY_DIVISOR(pf.PayFrequencyType))), 1) `DailyAllowance`
 	,1 `Result`
 	FROM employeeallowance ea
 	INNER JOIN employee e ON e.OrganizationID=ea.OrganizationID AND e.RowID=ea.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
@@ -47,10 +48,10 @@ UNION
 	,d.DateValue `Date`
 	,0 `Column1`
 	,0 `Column2`
-	,ea.AllowanceAmount `TotalAllowanceAmt`
+	,ROUND((ea.AllowanceAmount / ((e.WorkDaysPerYear / 12) / PAYFREQUENCY_DIVISOR(pf.PayFrequencyType))), 1) `TotalAllowanceAmt`
 	,ea.TaxableFlag
-	,(et.HoursLate
-	  + et.UndertimeHours +
+	,(/*et.HoursLate
+	  + et.UndertimeHours +*/
 	  IF(pr.PayType != 'Regular Day' OR IFNULL(et.Absent, 0) > 0
 	     , IFNULL(sh.DivisorToDailyRate, 8)
 		  , 0)
@@ -60,6 +61,7 @@ UNION
 	,p.`Fixed`
 	,PAYFREQUENCY_DIVISOR(pf.PayFrequencyType) `PAYFREQDIV`
 	,IFNULL(sh.DivisorToDailyRate, 8) `DivisorToDailyRate`
+	,ROUND((ea.AllowanceAmount / ((e.WorkDaysPerYear / 12) / PAYFREQUENCY_DIVISOR(pf.PayFrequencyType))), 1) `DailyAllowance`
 	,2 `Result`
 	FROM employeeallowance ea
 	INNER JOIN employee e ON e.OrganizationID=ea.OrganizationID AND e.RowID=ea.EmployeeID AND e.EmploymentStatus='Contractual'
@@ -99,6 +101,8 @@ UNION
 	,p.`Fixed`
 	,PAYFREQUENCY_DIVISOR(pf.PayFrequencyType) AS PAYFREQDIV
 	,IFNULL(sh.DivisorToDailyRate, 8) `DivisorToDailyRate`
+	# ,ROUND((ea.AllowanceAmount / ((e.WorkDaysPerYear / 12) / PAYFREQUENCY_DIVISOR(pf.PayFrequencyType))), 1) `DailyAllowance`
+	,(ea.AllowanceAmount / ((e.WorkDaysPerYear / 12) / PAYFREQUENCY_DIVISOR(pf.PayFrequencyType))) `DailyAllowance`
 	,3 `Result`
 	FROM employeetimeentry et
 	INNER JOIN employee e ON e.OrganizationID=et.OrganizationID AND e.RowID=et.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0

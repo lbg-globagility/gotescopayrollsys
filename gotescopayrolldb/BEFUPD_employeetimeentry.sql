@@ -5,7 +5,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TRIGGER IF EXISTS `BEFUPD_employeetimeentry`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `BEFUPD_employeetimeentry` BEFORE UPDATE ON `employeetimeentry` FOR EACH ROW BEGIN
 
@@ -120,7 +120,7 @@ ELSE
 	SET NEW.UndertimeHours = IFNULL(NEW.UndertimeHours,0);
 	SET NEW.UndertimeHoursAmount = IFNULL(NEW.UndertimeHoursAmount,0);
 END IF;
-	
+
 SET NEW.TotalDayPay = IFNULL(NEW.TotalDayPay,0);
 SET NEW.TaxableDailyBonus = 0;
 IF isRest_day = '0' THEN
@@ -230,7 +230,7 @@ IF isRest_day = '0' THEN
 						
 					ELSE
 					
-						SET NEW.TotalDayPay = @daily_pay;#GET_employeerateperday(NEW.EmployeeID, NEW.OrganizationID, NEW.`Date`);
+						SET NEW.TotalDayPay = @daily_pay;
 						SET NEW.Absent = 0.0;
 					
 					END IF;

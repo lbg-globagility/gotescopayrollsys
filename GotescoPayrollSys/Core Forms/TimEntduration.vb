@@ -63,8 +63,6 @@ Public Class TimEntduration
         linkPrev.Text = "← " & (current_years - 1)
         linkNxt.Text = (current_years + 1) & " →"
 
-
-
         txtYr.Text = CDate(EmpTimeEntry.today_date).Year
 
         cbomonth.Items.Clear()
@@ -83,9 +81,7 @@ Public Class TimEntduration
 
         cbomonth.SelectedIndex = CDate(EmpTimeEntry.today_date).Month - 1
 
-
         Dim payfrqncy As New AutoCompleteStringCollection
-
 
         Dim sel_query = ""
 
@@ -98,7 +94,6 @@ Public Class TimEntduration
         End If
 
         enlistTheLists(sel_query, payfrqncy)
-
 
         Dim first_sender As New ToolStripButton
 
@@ -140,7 +135,6 @@ Public Class TimEntduration
         If first_sender IsNot Nothing Then
             PayFreq_Changed(first_sender, New EventArgs)
         End If
-
 
         'With dgvpayper
         '    .Columns("RowID").Visible = False
@@ -204,7 +198,6 @@ Public Class TimEntduration
         End If
 
         If prevObj.Name = Nothing Then
-
         Else
 
             If prevObj.Name <> senderObj.Name Then
@@ -368,7 +361,6 @@ Public Class TimEntduration
             'Me.Hide()
 
             MDIPrimaryForm.BringToFront()
-
         Else
             e.Cancel = True
             me_close = 0
@@ -451,7 +443,6 @@ Public Class TimEntduration
                                                     CDate(EmpTimeEntry.today_date).Year, _
                                                     CDate(.Cells("Pay period from").Value).Year)
 
-
                     day_paypFrom = If(.Cells("Pay period from").Value = Nothing, _
                                       CDate(.Cells("Pay period to").Value).Day, _
                                       CDate(.Cells("Pay period from").Value).Day)
@@ -485,7 +476,6 @@ Public Class TimEntduration
                     ElseIf day_today = 16 Then
 
                     ElseIf day_today = day_paypTo Then
-
                     Else
 
                     End If
@@ -676,7 +666,6 @@ Public Class TimEntduration
                                             .curr_RegHrsWork = drow("RegularHrsWork")
 
                                             'isNightShift = 0 'DAY SHIFT
-
                                         Else '                              'NIGHT SHIFT
 
                                             .currNightEShiftID = drow("esh_RowID")
@@ -896,7 +885,6 @@ Public Class TimEntduration
                                     '    '*****************NIGHT SHIFT****************
 
                                 Next
-
                             Else
 
                                 'dt_etent = retAsDatTbl("SELECT RowID" & _
@@ -925,7 +913,7 @@ Public Class TimEntduration
                             '    If firstrow = 0 Then
                             '        firstrow = 1
 
-                            '        'txthrsUT.Text = UTval.ToString 'Total Undertime hour(s) 
+                            '        'txthrsUT.Text = UTval.ToString 'Total Undertime hour(s)
 
                             '        If Val(drows("IsLateNight")) <= 0 Then
                             '            drows("IsLateNight") = drows("IsLateNight").ToString.Replace("-", "")
@@ -1005,12 +993,11 @@ Public Class TimEntduration
 
                             ''********************
                             'cboOverUnderTime.SelectedIndex = If(OTval > 0 Or OTNightval > 0, 0, If(dt_etent.Rows.Count = 0, -1, 1))
-                            ''DEPENDE PA ANG OVER TIME, 
-                            ''EXAMPLE KUNG MAY APPROVAL PA BA? 
+                            ''DEPENDE PA ANG OVER TIME,
+                            ''EXAMPLE KUNG MAY APPROVAL PA BA?
                             ''NO OVER TIME
                             '',KUNG MAY ALLOWABLE HOUR(S) FOR OVER TIME
                             ''********************
-
                         Else
 
                         End If
@@ -1028,8 +1015,6 @@ Public Class TimEntduration
         Me.Hide()
 
     End Sub
-
-
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
@@ -1071,7 +1056,6 @@ Public Class TimEntduration
                 Me.Close()
 
                 Exit Sub
-
             Else 'If prompt = Windows.Forms.DialogResult.Cancel Then
 
                 Exit Sub
@@ -1090,7 +1074,6 @@ Public Class TimEntduration
                  " AND '" & Format(CDate(selectdayTo), "yyyy-MM-dd") & "');")
 
             If timelogs = 1 Then
-
             Else
 
                 MsgBox("There are no time logs within this pay period." & vbNewLine & _
@@ -1116,8 +1099,6 @@ Public Class TimEntduration
 
         EmpTimeEntry.Last.Enabled = False
 
-
-
         'EmpTimeEntry.ToolStrip1.Enabled = False
 
         progbar.Visible = True
@@ -1133,7 +1114,7 @@ Public Class TimEntduration
         '                                     "' AND '" & Format(CDate(dgvpayper.CurrentRow.Cells("Pay period to").Value), "yyyy-MM-dd") & _
         '                                     "' GROUP BY Created;")
 
-        'If etentdet_for_this_payp.Rows.Count >= 2 Then 
+        'If etentdet_for_this_payp.Rows.Count >= 2 Then
 
         'End If
 
@@ -1155,149 +1136,9 @@ Public Class TimEntduration
     Private Sub bgWork_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWork.DoWork
         backgroundworking = 1
 
-        'compute_employeetimeentry()
-        '" AND EmploymentStatus IS NOT IN ('Resigned','Terminated')" & _
-
-        'employee_dattab
-
-        'Dim firstbound = If(selectdayFrom = Nothing, _
-        '                    CDate(selectdayTo).Day, _
-        '                    CDate(selectdayFrom).Day)
-
-        'Dim lastbound = If(selectdayTo = Nothing, _
-        '                    CDate(selectdayFrom).Day, _
-        '                    CDate(selectdayTo).Day - CDate(selectdayFrom).Day)
-
-        'firstbound = 1
-
         Dim lastbound = DateDiff(DateInterval.Day, _
                                  CDate(selectdayFrom), _
-                                 CDate(selectdayTo)) 'CDate(selectdayTo).Day
-
-        'If(selectdayTo = Nothing, _
-        '                    firstbound, _
-        '                    CDate(selectdayTo).Day - CDate(selectdayFrom).Day)
-
-        'month_paypFrom = If(selectdayFrom = Nothing, _
-        '                    CDate(selectdayTo).Month, _
-        '                    CDate(selectdayFrom).Month)
-
-        'Dim month = If(month_paypFrom.ToString.Length = 1, "0" & month_paypFrom, month_paypFrom)
-
-        'year_payp = If(selectdayFrom = Nothing, _
-        '               current_years, _
-        '               CDate(selectdayFrom).Year)
-
-        'CDate(EmpTimeEntry.today_date).Year
-        'firstbound
-        'lastbound -= 1
-
-        '*******************************************************************************
-
-        'For i_date = 0 To lastbound
-
-        '    'Dim i_dateDay = If(i_date.ToString.Length = 1, "0" & i_date, i_date)
-
-        '    Dim indx_date As Object = CDate(selectdayFrom).AddDays(i_date) 'year_payp & "-" & month & "-" & i_dateDay
-
-        '    indx_date = Format(indx_date, "yyyy-MM-dd")
-
-        '    For Each drow As DataRow In employee_dattab.Rows
-        '        computehrswork_employeetimeentry(drow("RowID"), _
-        '                                         indx_date, _
-        '                                         drow("StartDate"))
-
-        '    Next
-
-        '    bgWork.ReportProgress(CInt(100 * i_date / lastbound), "")
-
-        'Next
-
-
-
-
-
-
-
-
-
-
-
-
-
-        'Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT CONCAT('SELECT GENERATE_employeetimeentry(', e.RowID,',', e.OrganizationID,',\'', d.DateValue,'\'," & z_User & ");')" & _
-        '                                                     " FROM dates d" & _
-        '                                                     " INNER JOIN employee e ON e.OrganizationID=" & orgztnID & _
-        '                                                     " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID AND pf.PayFrequencyType='" & quer_empPayFreq & "'" & _
-        '                                                     " INNER JOIN position ps ON ps.RowID=e.PositionID AND ps.DivisionId='" & division_selectedvalue & "'" & _
-        '                                                     " WHERE d.DateValue" & _
-        '                                                     " BETWEEN '" & Format(CDate(selectdayFrom), "yyy-MM-dd") & "' AND '" & Format(CDate(selectdayTo), "yyyy-MM-dd") & "';")
-
-        'Dim output_filepath = Path.GetTempPath & Convert.ToString("\sqldumpfile.txt")
-
-        'If File.Exists(output_filepath) Then
-        '    File.Delete(output_filepath)
-        'End If
-
-        ''Using outputFile As New StreamWriter(output_filepath)
-
-        ''End Using
-
-        'For Each drow As DataRow In n_SQLQueryToDatatable.ResultTable.Rows
-        '    'outputFile.WriteLine(drow(0))
-        '    'File.AppendAllText(output_filepath,
-        '    '                   drow(0))
-
-        '    'Dim n_ExecuteQuery As New ExecuteQuery(drow(0))
-
-        'Next
-
-        'Dim sql_script = Nothing
-
-        'sql_script = File.ReadAllText(output_filepath)
-
-        'Dim n_ExecuteQuery As New ExecuteQuery("CALL EXEC_sql_from_file('" & sql_script & "');")
-
-        'EMPLOYEE_payrollgen_paginate
-
-        'Dim n_ExecuteQuery As _
-        '    New ExecuteQuery("CALL MASS_generate_employeetimeentry('" & orgztnID & "'" & _
-        '                     ",'" & quer_empPayFreq & "'" & _
-        '                     ",'" & z_User & "'" & _
-        '                     ",'" & Format(CDate(selectdayFrom), "yyy-MM-dd") & "'" & _
-        '                     ",'" & Format(CDate(selectdayTo), "yyy-MM-dd") & "', " & DivisionID & ");", 192)
-        '",'" & division_selectedvalue & "'" & _
-
-        'Dim sql As New SQL("CALL MASS_generate_employeetimeentry(?og_rowid, ?pay_freq, ?u_rowid, ?day_from, ?day_to, ?dv_rowid);",
-        '                   New Object() {orgztnID,
-        '                                 quer_empPayFreq,
-        '                                 z_User,
-        '                                 Format(CDate(selectdayFrom), "yyy-MM-dd"),
-        '                                 Format(CDate(selectdayFrom), "yyy-MM-dd"),
-        '                                 If(DivisionID = 0, DBNull.Value, DivisionID)})
-
-        'sql.ExecuteQuery()
-
-        'If sql.HasError Then
-        '    Throw sql.ErrorException
-        'Else
-
-        'n_ExecuteQuery = _
-        '    New ExecuteQuery("CALL RECOMPUTE_agencytotalbill('" & orgztnID & "', '" & dayFrom & "', '" & dayTo & "', '" & z_User & "');")
-
-        'Dim parram_arrays =
-        '    New Object() {orgztnID,
-        '                  dayFrom,
-        '                  dayTo,
-        '                  z_User,
-        '                  If(DivisionID = 0, DBNull.Value, DivisionID)}
-
-        'Dim n_ExecSQLProcedure As New  _
-        '    ExecSQLProcedure("INS_employeeetimeentrygeneration", 192,
-        '                     parram_arrays)
-
-        'Dim sql1 As New SQL("CALL INS_employeeetimeentrygeneration(?og_rowid, ?day_from, ?day_to, ?u_rowid, ?div_rowid);",
-        '                    parram_arrays)
+                                 CDate(selectdayTo))
 
         Dim parram_arrays =
             New Object() {user_row_id,
@@ -1306,9 +1147,9 @@ Public Class TimEntduration
                           dayFrom,
                           dayTo}
 
-        'String.Concat("SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid)",
+        'CONCAT('SELECT GENERATE_employeetimeentry(', e.RowID, ', ', e.OrganizationID, ', \'', d.DateValue, '\', ", user_row_id, ");')
         Dim str_query As String =
-            String.Concat("SELECT CONCAT('SELECT GENERATE_employeetimeentry(', e.RowID, ', ', e.OrganizationID, ', \'', d.DateValue, '\', ", user_row_id, ");') `Result`",
+            String.Concat("SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ", user_row_id, ") `Result`",
                           ", ?u_rowid `UserRowID`",
                           " FROM dates d",
                           " INNER JOIN employee e ON e.OrganizationID=?og_rowid AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')",
@@ -1321,7 +1162,6 @@ Public Class TimEntduration
         Dim sql1 As New SQL(str_query,
                             parram_arrays)
 
-        'sql1.ExecuteQuery()
         Dim dt As New DataTable
         dt = sql1.GetFoundRows.Tables(0)
 
@@ -1339,7 +1179,7 @@ Public Class TimEntduration
 
             Dim _sql As New SQL(_str_quer)
 
-            _sql.ExecuteQuery()
+            '_sql.ExecuteQuery()
 
             If _sql.HasError Then
                 Throw _sql.ErrorException
@@ -1355,49 +1195,6 @@ Public Class TimEntduration
         Next
 
         Console.WriteLine(progress_value)
-
-        'Dim thrd As New Thread(AddressOf sql1.ExecuteQuery) With {.IsBackground = True}
-
-        'thrd.Start()
-
-        'thrd.Join()
-
-        'If sql1.HasError Then
-        '    Throw sql1.ErrorException
-        'Else
-
-        'bgWork.ReportProgress(100, "")
-
-        'Console.WriteLine(100)
-
-        'End If
-
-        'End If
-
-        '*******************************************************************************
-
-        'Dim LeftPartString = "UPDATE employeetimeentry SET "
-
-        'Dim RightPartString = "=0.0 WHERE OrganizationID='" & orgztnID & "'"
-
-        'Dim eteColNames As New AutoCompleteStringCollection
-
-        'enlistTheLists("SELECT ii.COLUMN_NAME" & _
-        '               " FROM information_schema.`COLUMNS` ii" & _
-        '               " WHERE ii.TABLE_SCHEMA='" & sys_db & "'" & _
-        '               " AND ii.TABLE_NAME='employeetimeentry'" & _
-        '               " AND ii.DATA_TYPE='decimal';",
-        '               eteColNames)
-
-        'Dim strResult = String.Empty
-
-        'For Each strval In eteColNames
-
-        '    strResult &= LeftPartString & strval & RightPartString & " AND " & strval & " IS NULL;"
-
-        'Next
-
-        'EXECQUER(strResult)
 
     End Sub
 
@@ -1543,7 +1340,6 @@ Public Class TimEntduration
                     dayTo = Format(CDate(selectdayTo), "yyyy-MM-dd")
 
                 End With
-
             Else
                 selectdayFrom = Nothing
                 selectdayTo = Nothing
@@ -1552,7 +1348,6 @@ Public Class TimEntduration
                 dayTo = Nothing
 
             End If
-
         Else
             selectdayFrom = Nothing
             selectdayTo = Nothing
@@ -1696,7 +1491,6 @@ Public Class TimEntduration
             End If
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

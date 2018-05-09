@@ -27,8 +27,8 @@ SET is_valid_for_holipayment = IFNULL(is_valid_for_holipayment,FALSE);
 
 INSERT INTO employeetimeentry 
 (
-	RowID
-	,OrganizationID
+	# RowID,
+	OrganizationID
 	,Created
 	,CreatedBy
 	,LastUpdBy
@@ -55,8 +55,8 @@ INSERT INTO employeetimeentry
 	,TotalDayPay
 	,IsValidForHolidayPayment
 ) VALUES (
-	etent_RowID
-	,etent_OrganizationID
+	# etent_RowID,
+	etent_OrganizationID
 	,CURRENT_TIMESTAMP()
 	,etent_CreatedBy
 	,etent_CreatedBy
@@ -109,14 +109,43 @@ UPDATE
 	,TotalDayPay = IF((etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount) = 0
 	     , etent_TotalDayPay + etent_NightDiffOTHoursAmount
 	     , (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount))
+	     
 	,EmployeeShiftID = etent_EmployeeShiftID
 	,EmployeeSalaryID=etent_EmployeeSalaryID
 	,IsValidForHolidayPayment=is_valid_for_holipayment;SELECT @@Identity AS id INTO etentID;
 	
+	/*SELECT etent_OrganizationID
+	,CURRENT_TIMESTAMP()
+	,etent_CreatedBy
+	,etent_CreatedBy
+	,etent_Date
+	,etent_EmployeeShiftID
+	,etent_EmployeeID
+	,etent_EmployeeSalaryID
+	,etent_EmployeeFixedSalaryFlag
+	,etent_TotalHoursWorked
+	,etent_RegularHoursWorked
+	,	etent_RegularHoursAmount
+	,etent_OvertimeHoursWorked
+	,	etent_OvertimeHoursAmount
+	,etent_UndertimeHours
+	,	etent_UndertimeHoursAmount
+	,etent_NightDifferentialHours
+	,	etent_NightDiffHoursAmount
+	,etent_NightDifferentialOTHours
+	,	etent_NightDiffOTHoursAmount
+	,etent_HoursLate
+	,	etent_HoursLateAmount
+	,IF(etent_HoursLateAmount = 0, '0', '1')
+	,etent_PayRateID
+	# ,	etent_TotalDayPay
+	, IF((etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount) = 0
+	     , etent_TotalDayPay + etent_NightDiffOTHoursAmount
+	     , (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount))
+	,is_valid_for_holipayment INTO OUTFILE 'D:/New Downloads/result.txt';*/
+	
 RETURN etentID;
 
-	
-	
 END//
 DELIMITER ;
 

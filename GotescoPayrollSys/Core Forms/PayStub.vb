@@ -2025,19 +2025,39 @@ Public Class PayStub
                                       '                              " GROUP BY EmployeeID" & _
                                       '                              " ORDER BY DATEDIFF(CURRENT_DATE(),EffectiveStartDate);")
 
-                                      emp_allowanceSemiM = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
+                                      'SEMI-MONTHLY ALLOWANCE#########
+                                      'emp_allowanceSemiM = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
+                                      '                                                 New Object() {org_rowid,
+                                      '                                                 "Semi-monthly",
+                                      '                                                 "1",
+                                      '                                                 paypFrom,
+                                      '                                                 paypTo}).GetFoundRows.Tables(0)
+
+                                      'notax_allowanceSemiM = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
+                                      '                                                 New Object() {org_rowid,
+                                      '                                                 "Semi-monthly",
+                                      '                                                 "0",
+                                      '                                                 paypFrom,
+                                      '                                                 paypTo}).GetFoundRows.Tables(0)
+                                      Dim str_quer_semimon_allowance =
+                                          String.Concat("SELECT i.*",
+                                                        ",i.AllowanceAmount - (SUM(i.HoursToLess) * (i.DailyAllowance / 8)) `TotalAllowanceAmount`",
+                                                        " FROM paystubitem_sum_semimon_allowance_group_prodid i",
+                                                        " WHERE i.OrganizationID = ?og_rowid",
+                                                        " AND i.TaxableFlag = ?is_taxable",
+                                                        " AND i.`Date` BETWEEN ?date_from AND ?date_to",
+                                                        " GROUP BY i.EmployeeID, i.ProductID;")
+                                      emp_allowanceSemiM = New SQL(str_quer_semimon_allowance,
                                                                                        New Object() {org_rowid,
-                                                                                       "Semi-monthly",
                                                                                        "1",
                                                                                        paypFrom,
                                                                                        paypTo}).GetFoundRows.Tables(0)
-
-                                      notax_allowanceSemiM = New SQL("CALL GET_employee_allowanceofthisperiod(?og_rowid, ?frequency, ?is_taxable, ?date_from, ?date_to);",
+                                      notax_allowanceSemiM = New SQL(str_quer_semimon_allowance,
                                                                                        New Object() {org_rowid,
-                                                                                       "Semi-monthly",
                                                                                        "0",
                                                                                        paypFrom,
                                                                                        paypTo}).GetFoundRows.Tables(0)
+                                      '###############################
 
                                       Dim weeklyallowfreq = "Weekly"
 

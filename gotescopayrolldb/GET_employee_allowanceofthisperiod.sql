@@ -148,17 +148,25 @@ UNION
 	
 	# ,ii.AllowanceAmount - (SUM(i.HoursToLess) * ((i.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * MonthCount))) / default_min_hrswork)) AS TotalAllowanceAmount
 	
-	,ii.AllowanceAmount - (SUM(i.HoursToLess) * ((ii.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * MonthCount))) / default_min_hrswork)) AS TotalAllowanceAmount
+	# ,ii.AllowanceAmount - (SUM(i.HoursToLess) * ((ii.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * MonthCount))) / default_min_hrswork)) AS TotalAllowanceAmount
+	,(i.TotalAllowanceAmt / default_min_hrswork) `HourlyAllowance`
+	# ,i.AllowanceAmount - (SUM(i.HoursToLess) * (i.TotalAllowanceAmt / default_min_hrswork)) AS TotalAllowanceAmount
 	
 	# ,i.AllowanceAmount - (SUM(i.HoursToLess) * ((i.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * MonthCount))) / default_min_hrswork)) AS TotalAllowanceAmount
 	
-	,SUM(i.HoursToLess)
 	FROM paystubitem_sum_semimon_allowance_group_prodid i
-	INNER JOIN (SELECT ea.*,MIN(d.DateValue) AS DateRange1,MAX(d.DateValue) AS DateRange2 FROM dates d INNER JOIN employeeallowance ea ON ea.AllowanceFrequency='Semi-monthly' AND TaxableFlag=IsTaxable AND ea.OrganizationID=OrganizID AND d.DateValue BETWEEN ea.EffectiveStartDate AND ea.EffectiveEndDate WHERE d.DateValue BETWEEN DatePayFrom AND DatePayTo GROUP BY ea.RowID ORDER BY d.DateValue) ii ON i.EmployeeID=ii.EmployeeID AND i.OrganizationID=ii.OrganizationID AND i.`Date` BETWEEN ii.DateRange1 AND ii.DateRange2 AND i.`Fixed`=0 AND ii.TaxableFlag = i.TaxableFlag
+	
+	# INNER JOIN (SELECT ea.*,MIN(d.DateValue) AS DateRange1,MAX(d.DateValue) AS DateRange2 FROM dates d INNER JOIN employeeallowance ea ON ea.AllowanceFrequency='Semi-monthly' AND TaxableFlag=IsTaxable AND ea.OrganizationID=OrganizID AND d.DateValue BETWEEN ea.EffectiveStartDate AND ea.EffectiveEndDate WHERE d.DateValue BETWEEN DatePayFrom AND DatePayTo GROUP BY ea.RowID ORDER BY d.DateValue) ii ON i.EmployeeID=ii.EmployeeID AND i.OrganizationID=ii.OrganizationID AND i.`Date` BETWEEN ii.DateRange1 AND ii.DateRange2 AND i.`Fixed`=0 AND ii.TaxableFlag = i.TaxableFlag
+	
 	WHERE i.TaxableFlag = IsTaxable
-	GROUP BY i.EmployeeID,ii.RowID,ii.ProductID;
+	AND i.OrganizationID = OrganizID
+	AND i.`Date` BETWEEN DatePayFrom AND DatePayTo
+	AND i.TotalAllowanceAmt != 0
 	
-	
+	## GROUP BY i.EmployeeID,ii.RowID,ii.ProductID
+	# GROUP BY i.EmployeeID,i.ProductID
+	# GROUP BY i.EmployeeID
+	;
 	
 	
 	

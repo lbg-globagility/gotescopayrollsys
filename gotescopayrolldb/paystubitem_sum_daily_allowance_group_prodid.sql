@@ -10,13 +10,16 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `paystubitem_sum_dail
 p.RowID AS ProductID
 ,et.EmployeeID,et.OrganizationID,et.`Date`
 ,0 AS Column1
+
 # ,GET_employeerateperday(et.EmployeeID,et.OrganizationID,et.`Date`) AS Column2
+# , (esa.DailyRate / IFNULL(sh.DivisorToDailyRate, 8) * GREATEST(et.VacationLeaveHours,et.SickLeaveHours,et.MaternityLeaveHours,et.OtherLeaveHours)) `LeavePay`
+
 , esa.DailyRate `Column2`
 ,   ((IF(pr.PayType='Regular Day'
 		, ROUND((
 		         IF(p.PartNo='Ecola' AND et.TotalDayPay > 0
 					   , esa.DailyRate
-					   , et.RegularHoursAmount * IF((es.RestDay = '1' OR es.RestDay IS NULL) AND e.CalcRestDay = '1', (pr.`PayRate` / pr.RestDayRate), 1)
+					   , ( (et.RegularHoursAmount * IF((es.RestDay = '1' OR es.RestDay IS NULL) AND e.CalcRestDay = '1', (pr.`PayRate` / pr.RestDayRate), 1)) + (esa.DailyRate / IFNULL(sh.DivisorToDailyRate, 8) * GREATEST(et.VacationLeaveHours,et.SickLeaveHours,et.MaternityLeaveHours,et.OtherLeaveHours)) )
 					   )
 					)
 		        , 2)

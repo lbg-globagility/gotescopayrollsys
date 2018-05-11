@@ -77,6 +77,8 @@ DECLARE under_hrs DECIMAL(11,6);
 
 DECLARE month_count_peryear INT(11) DEFAULT 12;
 
+DECLARE default_min_workhrs INT(11) DEFAULT 8;
+
 
 SELECT NEW.LeaveType INTO leavetype;
 
@@ -182,15 +184,23 @@ ELSEIF NEW.`Status` = 'Approved' THEN
                 
                 SELECT RowID FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date`=dateloop INTO etentRowID;
                 
-                SELECT esa.RowID, IF(e.EmployeeType='Daily', esa.BasicPay, (esa.Salary / (e.WorkDaysPerYear / month_count_peryear))) `BasicPay` FROM employeesalary esa INNER JOIN employee e ON e.RowID=esa.EmployeeID WHERE esa.EmployeeID=NEW.EmployeeID AND esa.OrganizationID=NEW.OrganizationID AND dateloop BETWEEN DATE(COALESCE(esa.EffectiveDateFrom,DATE_FORMAT(CURRENT_TIMESTAMP(),'%Y-%m-%d'))) AND DATE(COALESCE(esa.EffectiveDateTo,dateloop)) AND DATEDIFF(dateloop,esa.EffectiveDateFrom) >= 0 ORDER BY DATEDIFF(DATE_FORMAT(dateloop,'%Y-%m-%d'),esa.EffectiveDateFrom) LIMIT 1 INTO esal_RowID, dailypayamount;
+                # SELECT esa.RowID, IF(e.EmployeeType='Daily', esa.BasicPay, (esa.Salary / (e.WorkDaysPerYear / month_count_peryear))) `BasicPay` FROM employeesalary esa INNER JOIN employee e ON e.RowID=esa.EmployeeID WHERE esa.EmployeeID=NEW.EmployeeID AND esa.OrganizationID=NEW.OrganizationID AND dateloop BETWEEN DATE(COALESCE(esa.EffectiveDateFrom,DATE_FORMAT(CURRENT_TIMESTAMP(),'%Y-%m-%d'))) AND DATE(COALESCE(esa.EffectiveDateTo,dateloop)) AND DATEDIFF(dateloop,esa.EffectiveDateFrom) >= 0 ORDER BY DATEDIFF(DATE_FORMAT(dateloop,'%Y-%m-%d'),esa.EffectiveDateFrom) LIMIT 1 INTO esal_RowID, dailypayamount;
                 
+                SELECT esa.RowID, esa.DailyRate
+                FROM employeesalary_withdailyrate esa
+                WHERE esa.EmployeeID = NEW.EmployeeID
+                AND esa.OrganizationID = NEW.OrganizationID
+                AND dateloop BETWEEN esa.EffectiveDateFrom AND IFNULL(esa.EffectiveDateTo, ADDDATE(esa.EffectiveDateFrom, INTERVAL 1 YEAR))
+                LIMIT 1
+					 INTO esal_RowID, dailypayamount;
+					 
                 SELECT sh.TimeFrom
-                ,sh.TimeTo
+                ,sh.TimeTo, sh.DivisorToDailyRate
                 FROM shift sh
                 WHERE sh.RowID=shift_RowID
-                INTO sh_timefrom,sh_timeto;
+                INTO sh_timefrom,sh_timeto,numhrsworkd;
                 
-                SET numhrsworkd =  (TIMESTAMPDIFF(SECOND
+                /*SET numhrsworkd =  (TIMESTAMPDIFF(SECOND
 														        ,CONCAT_DATETIME(NEW.LeaveStartDate, sh_timefrom)
 																  ,CONCAT_DATETIME(ADDDATE(NEW.LeaveStartDate, INTERVAL IS_TIMERANGE_REACHTOMORROW(sh_timefrom, sh_timeto) DAY), sh_timeto))
 												/ 3600);
@@ -199,7 +209,7 @@ ELSEIF NEW.`Status` = 'Approved' THEN
 
                     SET numhrsworkd = (numhrsworkd - 1);
 
-                END IF;
+                END IF;*/
 
                 SET numhrsworkd = IFNULL(numhrsworkd, 0);
 
@@ -218,7 +228,7 @@ ELSEIF NEW.`Status` = 'Approved' THEN
                         SET dailypayamount = hourlypayamount * numhrsworkd;
 
                     END IF;
-
+                    
                 ELSEIF leavetype LIKE '%Sick%' THEN
 
                     IF emp_sickbal - numhrsworkd < 0 THEN

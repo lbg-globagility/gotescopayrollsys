@@ -2,7 +2,6 @@
 Imports MySql.Data.MySqlClient
 Imports System.Data
 
-
 Module mdlValidation
     Public z_OrganizationID As Integer
     Public user_row_id As Integer
@@ -64,6 +63,7 @@ Module mdlValidation
         MainForm.Enabled = True
 
     End Sub
+
     Public Sub TextboxTestNumeric(ByVal textboxConts As TextBox, ByVal IntLen As Integer, ByVal DeciLen As Integer)
         If textboxConts.ReadOnly Then
             Exit Sub
@@ -93,13 +93,11 @@ Module mdlValidation
             Exit Sub
         End Try
 
-
         If Not IsNumeric(textboxConts.Text) Then
             textboxConts.Text = textboxConts.Text.Remove(textboxConts.SelectionStart - 1, 1)
             textboxConts.SelectionStart = i - 1
             Exit Sub
         End If
-
 
         Dim TxtSplit() As String = Split(CDec(textboxConts.Text), ".")
 
@@ -129,7 +127,6 @@ Module mdlValidation
         Return True
     End Function
 
-
     Public Function ComputeEmpSalary(ByVal basicpay As Control, ByVal sss As Control, ByVal PhilHealth As Control)
         Dim basicrate As Double
         'basicrate = Convert.ToDouble(txtBasicrate.Text)
@@ -151,7 +148,6 @@ Module mdlValidation
             Next
         Else
 
-
             dt = getDataTableForSQL("select MAX(EMployeeShare) as EMployeeShare , RowID from payphilhealth where SalaryRangeTo < '" & basicrate & "'")
             PhilHealth.Text = Nothing
             Dim philid As Integer
@@ -170,8 +166,6 @@ Module mdlValidation
 
         Dim dt1 As New DataTable
         dt1 = getDataTableForSQL("select * from paysocialsecurity where RangeFromAmount <= '" & basicrate & "' And RangeToAmount >= '" & basicrate & "'")
-
-
 
         If dt1.Rows.Count > 0 Then
             sss.Text = Nothing
@@ -210,12 +204,12 @@ Module mdlValidation
                 Next
             End If
 
-
         End If
 
         Return True
 
     End Function
+
     Public Function execute(ByVal query As String) As DataTable
         Try
             Dim con As New MySqlConnection(connectionString)
@@ -228,6 +222,7 @@ Module mdlValidation
             Return Nothing
         End Try
     End Function
+
     Public Function getCount(ByVal Sqlcommand As String) As Integer
         connection = New MySqlConnection(connectionString)
 
@@ -248,6 +243,7 @@ Module mdlValidation
         End Try
         Return ItemNumber
     End Function
+
     'Public Function execute(ByVal query As String) As DataTable
     '    Try
     '        Dim con As New MySqlConnection(Newcon)
@@ -283,7 +279,6 @@ Module mdlValidation
 
             command.Connection.Open()
 
-
             Dim adapter As MySqlDataAdapter = New MySqlDataAdapter(command)
             adapter.Fill(DataReturn)
             command.Connection.Close()
@@ -295,15 +290,15 @@ Module mdlValidation
             command.Connection.Close()
         End Try
     End Function
-    Public Function UpdateAuditTrail(ByVal strInputArray As Array, ByVal a_RowID As Integer, ByVal a_ViewID As Integer) As Boolean
 
+    Public Function UpdateAuditTrail(ByVal strInputArray As Array, ByVal a_RowID As Integer, ByVal a_ViewID As Integer) As Boolean
 
         Dim created As String = Date.Now.ToString("yyyy-MM-dd HH:mm:ss")
         Dim UpperBound As Integer = strInputArray.GetUpperBound(0)
         For i As Integer = 0 To UpperBound
             If Not strInputArray(i, 1) = strInputArray(i, 2) Then
                 'DirectCommand("UPDATE audittrail SET ")
-                I_AuditTrail(created, user_row_id, created, user_row_id, Z_OrganizationID, a_ViewID, strInputArray(i, 0), a_RowID, strInputArray(i, 1), strInputArray(i, 2), "Update")
+                I_AuditTrail(created, user_row_id, created, user_row_id, z_OrganizationID, a_ViewID, strInputArray(i, 0), a_RowID, strInputArray(i, 1), strInputArray(i, 2), "Update")
             End If
         Next
         Return True
@@ -314,10 +309,11 @@ Module mdlValidation
 
         Dim created As String = Date.Now.ToString("yyyy-MM-dd HH:mm:ss")
         For i As Integer = 0 To UpperBound
-            I_AuditTrail(created, user_row_id, created, user_row_id, Z_OrganizationID, a_ViewID, strInputArray(i, 0), a_RowID, "", strInputArray(i, 1), "Insert")
+            I_AuditTrail(created, user_row_id, created, user_row_id, z_OrganizationID, a_ViewID, strInputArray(i, 0), a_RowID, "", strInputArray(i, 1), "Insert")
         Next
         Return True
     End Function
+
     Public Function getDataSetForTable(ByVal TableName As String)
         Dim sql As String = "SELECT  * FROM " & TableName
         Dim command As MySqlCommand = New MySqlCommand(sql, New MySqlConnection(connectionString))
@@ -354,6 +350,7 @@ Module mdlValidation
         End Try
 
     End Function
+
     Public Sub fillCombobox(ByVal sqlCommand As String, ByVal LvName As ComboBox)
         LvName.Items.Clear()
         Dim dtFiller As New DataTable
@@ -364,6 +361,7 @@ Module mdlValidation
 
         Next
     End Sub
+
     Public Function SQL_ArrayList(ByVal Sqlcommand As String) As ArrayList
         connection = New MySqlConnection(connectionString)
 
@@ -384,9 +382,7 @@ Module mdlValidation
         End Try
         Return ArString
 
-
     End Function
-
 
     Public Function EncrypedData(ByVal a As String)
         Dim Encryped As String = Nothing
@@ -399,11 +395,13 @@ Module mdlValidation
 
         Return Encryped
     End Function
+
     Public Function DecrypedData(ByVal a As String)
         Dim DEcrypedio As String = Nothing
         If Not a Is Nothing Then
             For Each x As Char In a
-                Dim ToCOn As Integer = Convert.ToInt64(x) - 133
+                Dim i = Convert.ToInt64(x)
+                Dim ToCOn As Integer = (i - 133)
                 DEcrypedio &= Convert.ToChar(Convert.ToInt64(ToCOn))
             Next
         End If
@@ -446,12 +444,12 @@ Module mdlValidation
 
                 Z_encryptdata2 = Encryped
 
-
             Next
         End If
 
         Return Encryped
     End Function
+
     Public Function ObjectToString(ByVal obj As Object) As String
         Try
             If IsDBNull(obj) Then
@@ -485,6 +483,7 @@ Module mdlValidation
         End Try
         Return itemSTR
     End Function
+
     Public Function SQL_ArrayList_Decrypted(ByVal Sqlcommand As String) As ArrayList
         connection = New MySqlConnection(connectionString)
 
@@ -505,8 +504,8 @@ Module mdlValidation
         End Try
         Return ArString
 
-
     End Function
+
     'Public Sub fillCombobox(ByVal sqlCommand As String, ByVal LvName As ComboBox)
     '    LvName.Items.Clear()
     '    Dim dtFiller As New DataTable
@@ -539,10 +538,6 @@ Module mdlValidation
     '        connection.Close()
     '    End Try
     'End Sub
-
-
-
-
 
     Public Function ConvertImageFiletoBytes(ByVal ImageFilePath As String) As Byte()
         Dim _tempByte() As Byte = Nothing
@@ -599,8 +594,8 @@ Module mdlValidation
         Return ItemNumber
     End Function
 
-
     Public hintInfo As ToolTip
+
     Public Sub myBalloon(Optional ToolTipStringContent As String = Nothing, Optional ToolTipStringTitle As String = Nothing, Optional objct As System.Windows.Forms.IWin32Window = Nothing, Optional x As Integer = 0, Optional y As Integer = 0, Optional dispo As SByte = 0, Optional duration As Integer = 3000)
         Try
             If dispo = 1 Then
@@ -620,6 +615,7 @@ Module mdlValidation
     End Sub
 
     Public hintWarn As ToolTip 'New ToolTip
+
     Public Sub myBalloonWarn(Optional ToolTipStringContent As String = Nothing, Optional ToolTipStringTitle As String = Nothing, Optional objct As System.Windows.Forms.IWin32Window = Nothing, Optional x As Integer = 0, Optional y As Integer = 0, Optional dispo As Byte = 0, Optional duration As Integer = 2275)
 
         'Dim hint As New ToolTip
@@ -642,7 +638,6 @@ Module mdlValidation
 
     End Sub
 
-
     Public Sub AutoSearchEmpName(ByRef txbox As System.Windows.Forms.TextBox)
         connection.Open()
         Try
@@ -658,7 +653,6 @@ Module mdlValidation
             txbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend
             txbox.AutoCompleteSource = AutoCompleteSource.CustomSource
             txbox.AutoCompleteCustomSource = strcol
-
         Catch ex As Exception
             MsgBox(ex.Message)
         Finally
@@ -681,11 +675,11 @@ Module mdlValidation
             txbox.AutoCompleteMode = AutoCompleteMode.SuggestAppend
             txbox.AutoCompleteSource = AutoCompleteSource.CustomSource
             txbox.AutoCompleteCustomSource = strcol
-
         Catch ex As Exception
             MsgBox(ex.Message)
         Finally
             connection.Close()
         End Try
     End Sub
+
 End Module

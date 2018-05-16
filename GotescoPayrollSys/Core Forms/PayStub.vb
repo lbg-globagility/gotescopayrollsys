@@ -8175,6 +8175,10 @@ Public Class PayStub
         If Not hasError Then
             Try
                 'EXECQUER("DELETE FROM paystubadjustment WHERE PayStubID = FN_GetPayStubIDByEmployeeIDAndPayPeriodID('" & Me.currentEmployeeID & "', " & dgvpayper.SelectedRows(0).Cells(0).Value & ",'" & orgztnID & "');ALTER TABLE paystubadjustment AUTO_INCREMENT = 0;")
+                Dim selected_tabpage = tabEarned.TabPages(tabEarned.SelectedIndex)
+                Dim is_actual_selected =
+                    (tabEarned.TabPages.OfType(Of TabPage).Where(Function(tp) tp.Tag = 1 And tp.Name = TabPage4.Name And tp.Name = selected_tabpage.Name).Count > 0)
+
                 For Each dgvRow As DataGridViewRow In dgvAdjustments.Rows
                     Dim productRowID = dgvRow.Cells("cboProducts").Value
                     If productRowID IsNot Nothing And dgvRow.IsNewRow = False Then 'If Not dgvRow.Cells(0).Value Is Nothing AndAlso Not dgvRow.Cells(1).Value Is Nothing AndAlso IsNumeric(dgvRow.Cells(1).Value) Then
@@ -8184,7 +8188,8 @@ Public Class PayStub
                         End If
                         Dim returned_value = Nothing
                         'SavePaystubAdjustments(productRowID,ValNoComma(dgvRow.Cells("DataGridViewTextBoxColumn66").Value),If(IsNothing(dgvRow.Cells(comment_columnname).Value) Or IsDBNull(dgvRow.Cells(comment_columnname).Value), "", dgvRow.Cells(comment_columnname).Value),dgvRow.Cells("psaRowID").Value)
-                        Dim SQLFunctionName As String = If(ValNoComma(dgvRow.Cells("IsAdjustmentActual").Value) = 0, "I_paystubadjustment", "I_paystubadjustmentactual")
+
+                        Dim SQLFunctionName As String = If(is_actual_selected, "I_paystubadjustmentactual", "I_paystubadjustment")
                         Dim n_ReadSQLFunction As _
                             New ReadSQLFunction(SQLFunctionName,
                                                     "returnvalue",

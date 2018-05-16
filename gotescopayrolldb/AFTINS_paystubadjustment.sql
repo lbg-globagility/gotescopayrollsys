@@ -19,8 +19,8 @@ SELECT ps.EmployeeID,ps.PayPeriodID FROM paystub ps WHERE ps.RowID=NEW.PayStubID
 	SET ps.TotalNetSalary=(ps.TotalNetSalary + (NEW.PayAmount))
 	,ps.TotalAdjustments=(ps.TotalAdjustments + (NEW.PayAmount))
 	WHERE ps.RowID=NEW.PayStubID;
-
-INSERT INTO paystubadjustmentactual
+	
+/*INSERT INTO paystubadjustmentactual
 (
 	RowID,
 	OrganizationID,
@@ -39,7 +39,7 @@ INSERT INTO paystubadjustmentactual
 	,NEW.CreatedBy
 	,NEW.PayStubID
 	,NEW.ProductID
-	,NEW.PayAmount * (es.TrueSalary / es.Salary)
+	,NEW.PayAmount # * (es.TrueSalary / es.Salary)
 	,NEW.`Comment`
 	FROM employee e
 	INNER JOIN payperiod pp ON pp.RowID=payperiodRowID AND pp.OrganizationID=e.OrganizationID
@@ -53,7 +53,8 @@ UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	,LastUpdBy=NEW.CreatedBy
 	,`Comment`=NEW.`Comment`
-	,PayAmount=NEW.PayAmount * (es.TrueSalary / es.Salary);
+	,PayAmount=NEW.PayAmount # * (es.TrueSalary / es.Salary)
+	;*/
 
 END//
 DELIMITER ;

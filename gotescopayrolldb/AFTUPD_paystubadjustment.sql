@@ -15,7 +15,7 @@ DECLARE payperiodRowID INT(11);
 
 SELECT ps.EmployeeID,ps.PayPeriodID FROM paystub ps WHERE ps.RowID=NEW.PayStubID INTO empRowID,payperiodRowID;
 
-INSERT INTO paystubadjustmentactual
+/*INSERT INTO paystubadjustmentactual
 (
 	RowID,
 	OrganizationID,
@@ -48,7 +48,7 @@ UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	,LastUpdBy=NEW.CreatedBy
 	,`Comment`=NEW.`Comment`
-	,PayAmount=NEW.PayAmount * (es.TrueSalary / es.Salary);
+	,PayAmount=NEW.PayAmount * (es.TrueSalary / es.Salary);*/
 
 END//
 DELIMITER ;

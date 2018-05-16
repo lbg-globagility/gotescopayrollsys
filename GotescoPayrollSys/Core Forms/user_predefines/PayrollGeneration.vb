@@ -841,8 +841,12 @@ Public Class PayrollGeneration
                             '    ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffOTHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) + _
                             '    ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffHoursAmount)", "EmployeeID = '" & drow("RowID") & "'"))
 
-                            grossincome_firsthalf =
-                                ValNoComma(prev_empTimeEntry.Compute("SUM(TotalGrossSalary)", "EmployeeID = '" & drow("RowID") & "'"))
+                            grossincome_firsthalf = ValNoComma(drowsal("BasicPay"))
+                            'ValNoComma(prev_empTimeEntry.Compute("SUM(TotalGrossSalary)", "EmployeeID = '" & drow("RowID") & "'"))
+                            grossincome_firsthalf -=
+                                    (ValNoComma(prev_empTimeEntry.Compute("SUM(HoursLateAmount)", "EmployeeID = '" & drow("RowID") & "'")) _
+                                    + ValNoComma(prev_empTimeEntry.Compute("SUM(UndertimeHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) _
+                                    + ValNoComma(prev_empTimeEntry.Compute("SUM(Absent)", "EmployeeID = '" & drow("RowID") & "'")))
 
                             monthly_computed_salary = grossincome + grossincome_firsthalf
 

@@ -834,6 +834,11 @@ SET actualgross = totalworkamount + NEW.TotalAllowance + NEW.TotalBonus;
 							
 SET @total_govt_contrib = (NEW.TotalEmpSSS + NEW.TotalEmpPhilhealth + NEW.TotalEmpHDMF);
 
+SELECT SUM(pa.PayAmount)
+FROM paystubadjustmentactual pa
+WHERE pa.PayStubID = NEW.RowID
+INTO @tot_actual_adj; SET @tot_actual_adj = IFNULL(@tot_actual_adj, 0);
+
 INSERT INTO paystubactual
 (
 	RowID
@@ -869,7 +874,7 @@ INSERT INTO paystubactual
 	,NEW.PayFromDate
 	,NEW.PayToDate
 	,actualgross
-	,(actualgross - (NEW.TotalEmpSSS + NEW.TotalEmpPhilhealth + NEW.TotalEmpHDMF + NEW.TotalEmpWithholdingTax)) - NEW.TotalLoans + (NEW.TotalAdjustments * actualrate)
+	,(actualgross - (NEW.TotalEmpSSS + NEW.TotalEmpPhilhealth + NEW.TotalEmpHDMF + NEW.TotalEmpWithholdingTax)) - (NEW.TotalLoans + (@tot_actual_adj))
 	,(((NEW.TotalTaxableSalary + @total_govt_contrib) * actualrate) - @total_govt_contrib)
 	,NEW.TotalEmpSSS
 	,NEW.TotalEmpWithholdingTax
@@ -896,7 +901,7 @@ UPDATE
 	,PayFromDate=NEW.PayFromDate
 	,PayToDate=NEW.PayToDate
 	,TotalGrossSalary=actualgross
-	,TotalNetSalary=(actualgross - (NEW.TotalEmpSSS + NEW.TotalEmpPhilhealth + NEW.TotalEmpHDMF + NEW.TotalEmpWithholdingTax)) - NEW.TotalLoans + (NEW.TotalAdjustments * actualrate)
+	,TotalNetSalary=(((actualgross - (NEW.TotalEmpSSS + NEW.TotalEmpPhilhealth + NEW.TotalEmpHDMF + NEW.TotalEmpWithholdingTax)) - NEW.TotalLoans) + @tot_actual_adj)
 	,TotalTaxableSalary=(((NEW.TotalTaxableSalary + @total_govt_contrib) * actualrate) - @total_govt_contrib)
 	,TotalEmpSSS=NEW.TotalEmpSSS
 	,TotalEmpWithholdingTax=NEW.TotalEmpWithholdingTax
@@ -909,7 +914,7 @@ UPDATE
 	,TotalLoans=NEW.TotalLoans
 	,TotalBonus=NEW.TotalBonus
 	,TotalAllowance=NEW.TotalAllowance
-	,TotalAdjustments=NEW.TotalAdjustments * actualrate
+	,TotalAdjustments=@tot_actual_adj
 	,ThirteenthMonthInclusion=NEW.ThirteenthMonthInclusion
 	,NondeductibleTotalLoans=NEW.NondeductibleTotalLoans;
 

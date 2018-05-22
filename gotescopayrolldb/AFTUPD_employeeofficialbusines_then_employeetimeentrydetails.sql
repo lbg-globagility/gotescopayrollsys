@@ -104,8 +104,8 @@ IF (OLD.OffBusStatus != 'Approved' AND NEW.OffBusStatus = 'Approved')
 			,one_datetimestamp
 			,NEW.CreatedBy
 			,NEW.EmployeeID
-			,NEW.OffBusStartTime
-			,NEW.OffBusEndTime
+			,IFNULL(NEW.OffBusStartTime,etd.TimeIn)
+			,IFNULL(NEW.OffBusEndTime,etd.TimeOut)
 			,d.DateValue
 			,''
 			,''
@@ -189,8 +189,8 @@ simple_loop: LOOP
 			,one_datetimestamp
 			,NEW.CreatedBy
 			,NEW.EmployeeID
-			,NEW.OffBusStartTime
-			,NEW.OffBusEndTime
+			,IFNULL(NEW.OffBusStartTime,etd.TimeIn)
+			,IFNULL(NEW.OffBusEndTime,etd.TimeOut)
 			,d.DateValue
 			,''
 			,''

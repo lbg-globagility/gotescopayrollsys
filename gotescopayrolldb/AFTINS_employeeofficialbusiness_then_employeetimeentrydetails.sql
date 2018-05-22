@@ -87,8 +87,8 @@ SET i=0;
 			,one_datetimestamp
 			,NEW.CreatedBy
 			,NEW.EmployeeID
-			,NEW.OffBusStartTime
-			,NEW.OffBusEndTime
+			,IFNULL(NEW.OffBusStartTime,etd.TimeIn)
+			,IFNULL(NEW.OffBusEndTime,etd.TimeOut)
 			,d.DateValue
 			,''
 			,''

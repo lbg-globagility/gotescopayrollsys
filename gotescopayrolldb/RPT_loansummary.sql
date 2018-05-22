@@ -20,7 +20,7 @@ ii.EmployeeUniqueId `DatCol1`
 ,FORMAT(ii.DeductionAmount, 2) `DatCol4`
 */
 
-SELECT ls.RowID
+/*SELECT ls.RowID
 ,ls.`DatCol1`
 ,ls.`DatCol2`
 ,ls.`DatCol3`
@@ -31,7 +31,6 @@ SELECT ls.RowID
 FROM (SELECT i.*
 		, pp.PayFromDate
 		, pp.PayToDate
-		# , (@_index := IF(@_index < i.NoOfPayPeriod, (@_index + 1), 0)) `Index`
 		,(@enddate := PAYTODATE_OF_NoOfPayPeriod(i.DedEffectiveDateFrom, i.NoOfPayPeriod, e.RowID, i.DeductionSchedule)) `LoanEffectiveEndDate`
 		,e.EmployeeID `DatCol1`
 		,(@_midinit := LEFT(e.MiddleName, 1))
@@ -44,8 +43,6 @@ FROM (SELECT i.*
 		INNER JOIN payperiod pp
 		        ON pp.OrganizationID=i.OrganizationID
 		           AND pp.TotalGrossSalary=e.PayFrequencyID
-				     /*AND (i.DedEffectiveDateFrom >= pp.PayFromDate OR @enddate >= pp.PayFromDate)
-				     AND (i.DedEffectiveDateFrom <= pp.PayToDate OR @enddate <= pp.PayToDate)*/
 					  AND (i.DedEffectiveDateFrom >= pay_datefrom OR PAYTODATE_OF_NoOfPayPeriod(i.DedEffectiveDateFrom, i.NoOfPayPeriod, e.RowID, i.DeductionSchedule) >= pay_datefrom)
 					  AND (i.DedEffectiveDateFrom <= pay_dateto OR PAYTODATE_OF_NoOfPayPeriod(i.DedEffectiveDateFrom, i.NoOfPayPeriod, e.RowID, i.DeductionSchedule) <= pay_dateto)
 					  AND (pp.PayFromDate >= pay_datefrom OR pp.PayToDate >=pay_datefrom)
@@ -63,7 +60,8 @@ FROM (SELECT i.*
 		
 		ORDER BY i.RowID, i.ReferenceLoanID, pp.OrdinalValue, p.PartNo
 		) ls
-;
+ORDER BY ls.`DatCol2`
+;*/
 
 # #######################################
 
@@ -120,6 +118,7 @@ FROM (SELECT i.*
 		                    )
 		ORDER BY i.RowID, pp.OrdinalValue, p.PartNo
 		) ls
+ORDER BY ls.`DatCol2`
 ;
 
 END//

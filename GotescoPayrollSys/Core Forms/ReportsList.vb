@@ -31,7 +31,6 @@ Public Class ReportsList
         Dim _providers =
             providers.OfType(Of IReportProvider).Where(Function(p) p.GotescoReportName.Length > 0)
 
-
         Dim str_quer As String =
             String.Concat("SELECT REPLACE(l.DisplayValue, '\'', '') `DisplayValue`",
                           " FROM listofval l",
@@ -64,7 +63,7 @@ Public Class ReportsList
     End Sub
 
     Private Sub lvMainMenu_KeyDown(sender As Object, e As KeyEventArgs) Handles lvMainMenu.KeyDown
-        If lvMainMenu.Items.Count <> 0 Then
+        If lvMainMenu.Items.Count > 0 Then
             If e.KeyCode = Keys.Enter Then
                 report_maker()
             End If

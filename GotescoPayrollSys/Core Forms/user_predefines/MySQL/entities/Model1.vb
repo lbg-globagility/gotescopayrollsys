@@ -7,11 +7,11 @@ Imports System.Data.Common
 Public Class Model1
     Inherits DbContext
 
-    ' Your context has been configured to use a 'Model1' connection string from your application's 
-    ' configuration file (App.config or Web.config). By default, this connection string targets the 
-    ' 'GotescoPayrollSys.Model1' database on your LocalDb instance. 
-    ' 
-    ' If you wish to target a different database and/or database provider, modify the 'Model1' 
+    ' Your context has been configured to use a 'Model1' connection string from your application's
+    ' configuration file (App.config or Web.config). By default, this connection string targets the
+    ' 'GotescoPayrollSys.Model1' database on your LocalDb instance.
+    '
+    ' If you wish to target a different database and/or database provider, modify the 'Model1'
     ' connection string in the application configuration file.
     'Public Sub New()
     '    Dim newConn = New DataBaseConnection
@@ -35,7 +35,7 @@ Public Class Model1
         MyBase.New(connection, True)
     End Sub
 
-    ' Add a DbSet for each entity type that you want to include in your model. For more information 
+    ' Add a DbSet for each entity type that you want to include in your model. For more information
     ' on configuring and using a Code First model, see http:'go.microsoft.com/fwlink/?LinkId=390109.
     ' Public Overridable Property MyEntities() As DbSet(Of MyEntity)
     Public Overridable Property NewPhilHealth() As DbSet(Of newphilhealthimplement)
@@ -51,6 +51,8 @@ Public Class Model1
     Public Overridable Property EmployeeEntity() As DbSet(Of EmployeeEntity)
 
     Public Overridable Property EmployeeTimeEntryDetails() As DbSet(Of EmployeeTimeEntryDetails)
+
+    Public Overridable Property PayPeriods() As DbSet(Of PayPeriods)
 
 End Class
 

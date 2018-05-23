@@ -1,16 +1,19 @@
-﻿Public Class selectPayPeriod
+﻿Imports MySql.Data.MySqlClient
 
-
+Public Class selectPayPeriod
 
     Dim m_PayFreqType = ""
 
     Property PayFreqType As String
+
         Get
             Return m_PayFreqType
         End Get
+
         Set(value As String)
             m_PayFreqType = value
         End Set
+
     End Property
 
     Public PriorPayPeriodID As String = String.Empty
@@ -18,7 +21,6 @@
     Public CurrentPayPeriodID As String = String.Empty
 
     Public NextPayPeriodID As String = String.Empty
-
 
     Dim yearnow = CDate(dbnow).Year
 
@@ -38,10 +40,7 @@
         linkPrev.Text = "← " & (yearnow - 1)
         linkNxt.Text = (yearnow + 1) & " →"
 
-
-
         Dim payfrqncy As New AutoCompleteStringCollection
-
 
         Dim sel_query = ""
 
@@ -54,7 +53,6 @@
         End If
 
         enlistTheLists(sel_query, payfrqncy)
-
 
         Dim first_sender As New ToolStripButton
 
@@ -105,8 +103,6 @@
             PayFreq_Changed(first_sender, New EventArgs)
         End If
 
-
-
         orgpayfreqID = EXECQUER("SELECT PayFrequencyID FROM organization WHERE RowID='" & org_rowid & "';")
 
     End Sub
@@ -116,7 +112,6 @@
     Sub PayFreq_Changed(sender As Object, e As EventArgs)
 
         quer_empPayFreq = ""
-
 
         Dim senderObj As New ToolStripButton
 
@@ -147,7 +142,6 @@
         End If
 
         If prevObj.Name = Nothing Then
-
         Else
 
             If prevObj.Name <> senderObj.Name Then
@@ -245,7 +239,6 @@
     Private Sub dgvpaypers_UserAddedRow(sender As Object, e As DataGridViewRowEventArgs) Handles dgvpaypers.UserAddedRow
 
         If e.Row Is Nothing Then
-
         Else
 
             If e.Row.Index > -1 Then
@@ -293,7 +286,6 @@
                                                 " AND pp.RowID" & _
                                                 " ORDER BY pyp.PayFromDate DESC,pyp.PayToDate DESC" & _
                                                 " LIMIT 1,1;")
-
                 Else
                     PriorPayPeriodID = dgvpaypers.Item("Column1", prior_index).Value
 
@@ -301,15 +293,11 @@
 
                 PayStub.Prior_PayPeriodID = PriorPayPeriodID
 
-
                 PayStub.paypSSSContribSched = dgvpaypers.Item("SSSContribSched", .Index).Value
 
                 PayStub.paypPhHContribSched = dgvpaypers.Item("PhHContribSched", .Index).Value
 
                 PayStub.paypHDMFContribSched = dgvpaypers.Item("HDMFContribSched", .Index).Value
-
-
-
 
                 Dim next_index = .Index + 1
 
@@ -333,11 +321,9 @@
 
                 'NextPayPeriodID
 
-
                 PayStub.paypFrom = Format(CDate(.Cells("Column2").Value), "yyyy-MM-dd")
 
                 PayStub.paypTo = Format(CDate(.Cells("Column3").Value), "yyyy-MM-dd")
-
 
                 'Dim sel_yearDateFrom = CDate(PayStub.paypFrom).Year
 
@@ -346,7 +332,6 @@
                 'Dim sel_year = If(sel_yearDateFrom > sel_yearDateTo, _
                 '                  sel_yearDateFrom, _
                 '                  sel_yearDateTo)
-
 
                 PayStub.isEndOfMonth = Trim(.Cells("Column14").Value)
 
@@ -367,7 +352,6 @@
 
                     ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                         PayStub.numofweekends += 1
-
                     Else
                         PayStub.numofweekdays += 1
 
@@ -397,8 +381,6 @@
                 End If
 
             End With
-
-
 
             PayStub.VeryFirstPayPeriodIDOfThisYear = id_value
 
@@ -448,35 +430,52 @@
                 Dim minwage_result = CDbl(dgvpaypers.Item("PayPeriodMinWageValue", e.RowIndex).Value)
 
                 dgvpaypers.Item("PayPeriodMinWageValue", e.RowIndex).ErrorText = Nothing
-
             Catch ex As Exception
 
                 dgvpaypers.ShowCellErrors = True
 
                 dgvpaypers.Item("PayPeriodMinWageValue", e.RowIndex).ErrorText = Space(10) & "Invalid numeric value"
-
             Finally
 
                 If prior_value <> min_wage_val Then
 
                     prior_value = ValNoComma(dgvpaypers.Item("PayPeriodMinWageValue", e.RowIndex).Value)
 
-                    Dim n_ExecuteQuery As _
-                        New ExecuteQuery("UPDATE payperiod" &
-                                         " SET" &
-                                         " MinimumWageValue=" & min_wage_val & "" &
-                                         ",LastUpd=CURRENT_TIMESTAMP()" &
-                                         ",LastUpdBy='" & user_row_id & "'" &
-                                         " WHERE RowID='" & dgvpaypers.Item("Column1", e.RowIndex).Value & "';")
+                    'Dim n_ExecuteQuery As _
+                    '    New ExecuteQuery("UPDATE payperiod" &
+                    '                     " SET" &
+                    '                     " MinimumWageValue=" & min_wage_val & "" &
+                    '                     ",LastUpd=CURRENT_TIMESTAMP()" &
+                    '                     ",LastUpdBy='" & user_row_id & "'" &
+                    '                     " WHERE RowID='" & dgvpaypers.Item("Column1", e.RowIndex).Value & "';")
 
+                    UpdateMinimumWage(min_wage_val, dgvpaypers.Item("Column1", e.RowIndex).Value)
                 End If
 
             End Try
-
         Else
 
         End If
 
+    End Sub
+
+    Private Async Sub UpdateMinimumWage(min_wage As Double, rowId As Integer)
+        Try
+            Using context As New Model1
+                context.Database.Log = Function(message As String)
+                                           Console.WriteLine(message)
+                                       End Function
+
+                Dim payperiod = context.PayPeriods.Find(rowId)
+
+                payperiod.LastUpdBy = user_row_id
+                payperiod.MinimumWageValue = Convert.ToDecimal(min_wage)
+
+                Await context.SaveChangesAsync()
+            End Using
+        Catch ex As Exception
+            Throw
+        End Try
     End Sub
 
     Private Sub dgvpaypers_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvpaypers.KeyDown
@@ -531,7 +530,6 @@
 
                     ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                         numofweekends += 1
-
                     Else
                         numofweekdays += 1
 
@@ -614,7 +612,6 @@
             '    linkNxt_LinkClicked(linkNxt, New LinkLabelLinkClickedEventArgs(n_link))
 
             '    Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -654,7 +651,6 @@
                                                 " AND pp.RowID" & _
                                                 " ORDER BY pyp.PayFromDate DESC,pyp.PayToDate DESC" & _
                                                 " LIMIT 1,1;")
-
                 Else
                     PriorPayPeriodID = dgvpaypers.Item("Column1", prior_index).Value
 
@@ -662,10 +658,7 @@
 
                 'PayStub.Prior_PayPeriodID = PriorPayPeriodID
 
-
                 'PriorPayPeriodID
-
-
 
                 Dim next_index = .Index + 1
 
@@ -689,11 +682,9 @@
 
                 'NextPayPeriodID
 
-
                 'PayStub.paypFrom = Format(CDate(.Cells("Column2").Value), "yyyy-MM-dd")
 
                 'PayStub.paypTo = Format(CDate(.Cells("Column3").Value), "yyyy-MM-dd")
-
 
                 'Dim sel_yearDateFrom = CDate('PayStub.paypFrom).Year
 
@@ -702,7 +693,6 @@
                 'Dim sel_year = If(sel_yearDateFrom > sel_yearDateTo, _
                 '                  sel_yearDateFrom, _
                 '                  sel_yearDateTo)
-
 
                 'PayStub.isEndOfMonth = Trim(.Cells("Column14").Value)
 

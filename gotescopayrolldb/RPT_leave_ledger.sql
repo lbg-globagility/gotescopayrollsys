@@ -48,9 +48,9 @@ IF payfreqID = 1 THEN
     IF @exists THEN
 
         SELECT
-            ee.RowID AS `DatCol1`,
-            ee.EmployeeID AS `DatCol2`,
-            CONCAT(ee.LastName, ', ', ee.FirstName, ' ', INITIALS(ee.MiddleName, '.', '1')) AS `DatCol3`,
+            ee.RowID AS `DatCol0`,
+            ee.EmployeeID AS `DatCol1`,
+            CONCAT(ee.LastName, ', ', ee.FirstName, ' ', INITIALS(ee.MiddleName, '.', '1')) AS `DatCol2`,
             CONCAT(INITIALS(p.PartNo, '', '1'), IF(LOCATE('Others', p.PartNo) > 0, 'L', '')) AS `DatCol12`,
             psi1.`EarnedHrs` AS `DatCol13`,
             FORMAT(psi1.`EarnedHrs` / 8, 2) AS `DatCol14`,
@@ -123,7 +123,7 @@ IF payfreqID = 1 THEN
             p.`Category` = 'Leave Type' AND
             ps.PayToDate = paramDateTo
         GROUP BY psi.ProductID, ps.EmployeeID
-        ORDER BY ee.LastName;
+        ORDER BY CONCAT(ee.LastName, ee.FirstName);
 
     ELSE
 

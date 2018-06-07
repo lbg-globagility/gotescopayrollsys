@@ -35,4 +35,5 @@ Public Class EmployeeOffenseReportProvider
         reportDialog.Show()
     End Sub
 
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 End Class

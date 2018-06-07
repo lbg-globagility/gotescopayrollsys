@@ -1,5 +1,4 @@
-﻿
-Public Class AgencyFeeReportProvider
+﻿Public Class AgencyFeeReportProvider
     Implements IReportProvider
 
     Public Property Name As String = "Agency Fee" Implements IReportProvider.Name
@@ -10,4 +9,5 @@ Public Class AgencyFeeReportProvider
         Throw New NotImplementedException()
     End Sub
 
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 End Class

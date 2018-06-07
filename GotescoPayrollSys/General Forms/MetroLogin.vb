@@ -65,7 +65,6 @@ Public Class MetroLogin
             '    End If
 
             '    Return False
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -140,7 +139,6 @@ Public Class MetroLogin
             userLastName = splitFNameLName(1).ToString.Replace(".", "")
 
             If userLastName = "" Then
-
             Else
                 userLastName = StrConv(userLastName, VbStrConv.ProperCase)
 
@@ -180,7 +178,6 @@ Public Class MetroLogin
                 MDIPrimaryForm.Show()
 
             End If
-
         Else
             'WarnBalloon("Please input your correct credentials.", "Invalid credentials", btnlogin, btnlogin.Width - 18, -69)
 
@@ -215,16 +212,13 @@ Public Class MetroLogin
         'params(0, 0) = "user_name"
         'params(1, 0) = "pass_word"
 
-
         'Dim n_EncryptData As New EncryptData(txtbxUserID.Text)
 
         'params(0, 1) = n_EncryptData.ResultValue
 
-
         'n_EncryptData = New EncryptData(txtbxPword.Text)
 
         'params(1, 1) = n_EncryptData.ResultValue
-
 
         Dim returnobj = Nothing
         'EXEC_INSUPD_PROCEDURE(params,
@@ -274,7 +268,6 @@ Public Class MetroLogin
 
     Private Sub cbxorganiz_SelectedValueChanged(sender As Object, e As EventArgs) Handles cbxorganiz.SelectedValueChanged
 
-
     End Sub
 
     Private Sub MetroLink1_Click(sender As Object, e As EventArgs) Handles MetroLink1.Click
@@ -292,8 +285,6 @@ Public Class MetroLogin
         ''MsgBox(Convert.ToBoolean("0").ToString)
 
         'cbxorganiz.Enabled = Convert.ToBoolean("0")
-
-
 
         'Dim dialog_box = MessageBox.Show("Come on", "", MessageBoxButtons.YesNoCancel)
 
@@ -326,7 +317,6 @@ Public Class MetroLogin
             cbxorganiz.DisplayMember = n_SQLQueryToDatatable.ResultTable.Columns(1).ColumnName
 
             cbxorganiz.DataSource = n_SQLQueryToDatatable.ResultTable
-
         Else
 
             Dim isThereSomeNewToOrganization =
@@ -341,7 +331,6 @@ Public Class MetroLogin
                 cbxorganiz.DisplayMember = n_SQLQueryToDatatable.ResultTable.Columns(1).ColumnName
 
                 cbxorganiz.DataSource = n_SQLQueryToDatatable.ResultTable
-
             Else
 
             End If

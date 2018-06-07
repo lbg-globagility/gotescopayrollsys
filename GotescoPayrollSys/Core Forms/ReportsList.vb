@@ -25,7 +25,9 @@ Public Class ReportsList
             New SSSMonthlyReportProvider(),
             New TaxReportProvider(),
             New PostEmploymentClearanceReportProvider(),
-            New AgencyFeeReportProvider()
+            New AgencyFeeReportProvider(),
+            New LeaveBalanceSummaryReportProvider(),
+            New FiledLeavesReportProvider()
         }
 
         Dim _providers =

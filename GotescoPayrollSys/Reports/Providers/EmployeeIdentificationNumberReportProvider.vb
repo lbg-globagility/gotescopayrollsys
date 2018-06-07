@@ -1,5 +1,4 @@
-﻿
-Imports CrystalDecisions.CrystalReports.Engine
+﻿Imports CrystalDecisions.CrystalReports.Engine
 
 Public Class EmployeeIdentificationNumberReportProvider
     Implements IReportProvider
@@ -57,11 +56,11 @@ Public Class EmployeeIdentificationNumberReportProvider
                 crvwr.Show()
 
             End If
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
 
     End Sub
 
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 End Class

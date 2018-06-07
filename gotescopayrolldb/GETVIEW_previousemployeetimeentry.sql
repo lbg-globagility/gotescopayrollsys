@@ -95,6 +95,7 @@ IF payfreqID = 1 THEN
 			     + SUM(ete.NightDiffHoursAmount)
 				  + SUM(ete.NightDiffOTHoursAmount))
 	        , 0) `TotalGrossSalary`
+	,esa.BasicPay
 	FROM employeetimeentry ete
 	INNER JOIN payperiod pyp ON pyp.RowID=@prev_payperiod_rowid
 	INNER JOIN employee e ON e.RowID=ete.EmployeeID
@@ -102,6 +103,7 @@ IF payfreqID = 1 THEN
 	       ON ps.EmployeeID=ete.EmployeeID
 			    AND ps.OrganizationID=ete.OrganizationID
 				 AND ps.PayPeriodID=pyp.RowID
+	INNER JOIN employeesalary_withdailyrate esa ON esa.RowID=ete.EmployeeSalaryID
 	WHERE ete.`Date` BETWEEN pyp.PayFromDate AND pyp.PayToDate
 	AND ete.OrganizationID=OrganizID
 	AND e.PayFrequencyID=payfreqID
@@ -188,6 +190,7 @@ IF payfreqID = 1 THEN
 			        + SUM(ete.NightDiffHoursAmount)
 				     + SUM(ete.NightDiffOTHoursAmount))
 	           , 0) `TotalGrossSalary`
+		,esa.BasicPay
 		FROM employeetimeentry ete
 		INNER JOIN payperiod pyp ON pyp.RowID=prev_payperiodID
 		INNER JOIN employee e ON e.RowID=ete.EmployeeID
@@ -195,6 +198,7 @@ IF payfreqID = 1 THEN
 	          ON ps.EmployeeID=e.RowID
 			       AND ps.OrganizationID=ete.OrganizationID
 				    AND ps.PayPeriodID=pyp.RowID
+		INNER JOIN employeesalary_withdailyrate esa ON esa.RowID=ete.EmployeeSalaryID
 		WHERE ete.`Date` BETWEEN pyp.PayFromDate AND pyp.PayToDate
 		AND ete.OrganizationID=OrganizID
 		AND e.PayFrequencyID=payfreqID

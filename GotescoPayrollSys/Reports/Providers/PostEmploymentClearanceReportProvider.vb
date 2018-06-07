@@ -1,5 +1,4 @@
-﻿
-Public Class PostEmploymentClearanceReportProvider
+﻿Public Class PostEmploymentClearanceReportProvider
     Implements IReportProvider
 
     Public Property Name As String = "Post Employment Clearance" Implements IReportProvider.Name
@@ -10,4 +9,5 @@ Public Class PostEmploymentClearanceReportProvider
         Throw New NotImplementedException("No decision yet what employment clearance would look like.")
     End Sub
 
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 End Class

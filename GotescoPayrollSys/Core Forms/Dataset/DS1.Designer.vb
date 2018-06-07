@@ -31,6 +31,8 @@ Partial Public Class DS1
     
     Private tableDatTbl3 As DatTbl3DataTable
     
+    Private tableemployeetimeentry As employeetimeentryDataTable
+    
     Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -68,6 +70,9 @@ Partial Public Class DS1
             End If
             If (Not (ds.Tables("DatTbl3")) Is Nothing) Then
                 MyBase.Tables.Add(New DatTbl3DataTable(ds.Tables("DatTbl3")))
+            End If
+            If (Not (ds.Tables("employeetimeentry")) Is Nothing) Then
+                MyBase.Tables.Add(New employeetimeentryDataTable(ds.Tables("employeetimeentry")))
             End If
             Me.DataSetName = ds.DataSetName
             Me.Prefix = ds.Prefix
@@ -113,6 +118,16 @@ Partial Public Class DS1
     Public ReadOnly Property DatTbl3() As DatTbl3DataTable
         Get
             Return Me.tableDatTbl3
+        End Get
+    End Property
+    
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+     Global.System.ComponentModel.Browsable(false),  _
+     Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+    Public ReadOnly Property employeetimeentry() As employeetimeentryDataTable
+        Get
+            Return Me.tableemployeetimeentry
         End Get
     End Property
     
@@ -192,6 +207,9 @@ Partial Public Class DS1
             If (Not (ds.Tables("DatTbl3")) Is Nothing) Then
                 MyBase.Tables.Add(New DatTbl3DataTable(ds.Tables("DatTbl3")))
             End If
+            If (Not (ds.Tables("employeetimeentry")) Is Nothing) Then
+                MyBase.Tables.Add(New employeetimeentryDataTable(ds.Tables("employeetimeentry")))
+            End If
             Me.DataSetName = ds.DataSetName
             Me.Prefix = ds.Prefix
             Me.Namespace = ds.Namespace
@@ -242,6 +260,12 @@ Partial Public Class DS1
                 Me.tableDatTbl3.InitVars
             End If
         End If
+        Me.tableemployeetimeentry = CType(MyBase.Tables("employeetimeentry"),employeetimeentryDataTable)
+        If (initTable = true) Then
+            If (Not (Me.tableemployeetimeentry) Is Nothing) Then
+                Me.tableemployeetimeentry.InitVars
+            End If
+        End If
     End Sub
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -258,6 +282,8 @@ Partial Public Class DS1
         MyBase.Tables.Add(Me.tableDatTbl2)
         Me.tableDatTbl3 = New DatTbl3DataTable()
         MyBase.Tables.Add(Me.tableDatTbl3)
+        Me.tableemployeetimeentry = New employeetimeentryDataTable()
+        MyBase.Tables.Add(Me.tableemployeetimeentry)
     End Sub
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -275,6 +301,12 @@ Partial Public Class DS1
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
     Private Function ShouldSerializeDatTbl3() As Boolean
+        Return false
+    End Function
+    
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+    Private Function ShouldSerializeemployeetimeentry() As Boolean
         Return false
     End Function
     
@@ -344,6 +376,9 @@ Partial Public Class DS1
     
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
     Public Delegate Sub DatTbl3RowChangeEventHandler(ByVal sender As Object, ByVal e As DatTbl3RowChangeEvent)
+    
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+    Public Delegate Sub employeetimeentryRowChangeEventHandler(ByVal sender As Object, ByVal e As employeetimeentryRowChangeEvent)
     
     '''<summary>
     '''Represents the strongly named DataTable class.
@@ -4141,6 +4176,780 @@ Partial Public Class DS1
             Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
             attribute2.Name = "tableTypeName"
             attribute2.FixedValue = "DatTbl3DataTable"
+            type.Attributes.Add(attribute2)
+            type.Particle = sequence
+            Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+            If xs.Contains(dsSchema.TargetNamespace) Then
+                Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                Try 
+                    Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                    dsSchema.Write(s1)
+                    Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                    Do While schemas.MoveNext
+                        schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                        s2.SetLength(0)
+                        schema.Write(s2)
+                        If (s1.Length = s2.Length) Then
+                            s1.Position = 0
+                            s2.Position = 0
+                            
+                            Do While ((s1.Position <> s1.Length)  _
+                                        AndAlso (s1.ReadByte = s2.ReadByte))
+                                
+                                
+                            Loop
+                            If (s1.Position = s1.Length) Then
+                                Return type
+                            End If
+                        End If
+                        
+                    Loop
+                Finally
+                    If (Not (s1) Is Nothing) Then
+                        s1.Close
+                    End If
+                    If (Not (s2) Is Nothing) Then
+                        s2.Close
+                    End If
+                End Try
+            End If
+            xs.Add(dsSchema)
+            Return type
+        End Function
+    End Class
+    
+    '''<summary>
+    '''Represents the strongly named DataTable class.
+    '''</summary>
+    <Global.System.Serializable(),  _
+     Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+    Partial Public Class employeetimeentryDataTable
+        Inherits Global.System.Data.TypedTableBase(Of employeetimeentryRow)
+        
+        Private columnDate As Global.System.Data.DataColumn
+        
+        Private columnEmployeeShiftID As Global.System.Data.DataColumn
+        
+        Private columnEmployeeID As Global.System.Data.DataColumn
+        
+        Private columnEmployeeSalaryID As Global.System.Data.DataColumn
+        
+        Private columnEmployeeFixedSalaryFlag As Global.System.Data.DataColumn
+        
+        Private columnRegularHoursWorked As Global.System.Data.DataColumn
+        
+        Private columnRegularHoursAmount As Global.System.Data.DataColumn
+        
+        Private columnTotalHoursWorked As Global.System.Data.DataColumn
+        
+        Private columnOvertimeHoursWorked As Global.System.Data.DataColumn
+        
+        Private columnOvertimeHoursAmount As Global.System.Data.DataColumn
+        
+        Private columnUndertimeHours As Global.System.Data.DataColumn
+        
+        Private columnUndertimeHoursAmount As Global.System.Data.DataColumn
+        
+        Private columnNightDifferentialHours As Global.System.Data.DataColumn
+        
+        Private columnNightDiffHoursAmount As Global.System.Data.DataColumn
+        
+        Private columnNightDifferentialOTHours As Global.System.Data.DataColumn
+        
+        Private columnNightDiffOTHoursAmount As Global.System.Data.DataColumn
+        
+        Private columnHoursLate As Global.System.Data.DataColumn
+        
+        Private columnHoursLateAmount As Global.System.Data.DataColumn
+        
+        Private columnLateFlag As Global.System.Data.DataColumn
+        
+        Private columnPayRateID As Global.System.Data.DataColumn
+        
+        Private columnVacationLeaveHours As Global.System.Data.DataColumn
+        
+        Private columnSickLeaveHours As Global.System.Data.DataColumn
+        
+        Private columnMaternityLeaveHours As Global.System.Data.DataColumn
+        
+        Private columnOtherLeaveHours As Global.System.Data.DataColumn
+        
+        Private columnAdditionalVLHours As Global.System.Data.DataColumn
+        
+        Private columnTotalDayPay As Global.System.Data.DataColumn
+        
+        Private columnAbsent As Global.System.Data.DataColumn
+        
+        Private columnTaxableDailyAllowance As Global.System.Data.DataColumn
+        
+        Private columnHolidayPayAmount As Global.System.Data.DataColumn
+        
+        Private columnTaxableDailyBonus As Global.System.Data.DataColumn
+        
+        Private columnNonTaxableDailyBonus As Global.System.Data.DataColumn
+        
+        Private columnIsValidForHolidayPayment As Global.System.Data.DataColumn
+        
+        Private columnFullName As Global.System.Data.DataColumn
+        
+        Private columnLeaveAllowance As Global.System.Data.DataColumn
+        
+        Private columnSickLeaveAllowance As Global.System.Data.DataColumn
+        
+        Private columnAdditionalVLAllowance As Global.System.Data.DataColumn
+        
+        Private columnTotalLeave As Global.System.Data.DataColumn
+        
+        Private columnRemarks As Global.System.Data.DataColumn
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub New()
+            MyBase.New
+            Me.TableName = "employeetimeentry"
+            Me.BeginInit
+            Me.InitClass
+            Me.EndInit
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Friend Sub New(ByVal table As Global.System.Data.DataTable)
+            MyBase.New
+            Me.TableName = table.TableName
+            If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                Me.CaseSensitive = table.CaseSensitive
+            End If
+            If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                Me.Locale = table.Locale
+            End If
+            If (table.Namespace <> table.DataSet.Namespace) Then
+                Me.Namespace = table.Namespace
+            End If
+            Me.Prefix = table.Prefix
+            Me.MinimumCapacity = table.MinimumCapacity
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+            Me.InitVars
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property DateColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnDate
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property EmployeeShiftIDColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnEmployeeShiftID
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property EmployeeIDColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnEmployeeID
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property EmployeeSalaryIDColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnEmployeeSalaryID
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property EmployeeFixedSalaryFlagColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnEmployeeFixedSalaryFlag
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property RegularHoursWorkedColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnRegularHoursWorked
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property RegularHoursAmountColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnRegularHoursAmount
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property TotalHoursWorkedColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTotalHoursWorked
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property OvertimeHoursWorkedColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnOvertimeHoursWorked
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property OvertimeHoursAmountColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnOvertimeHoursAmount
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property UndertimeHoursColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnUndertimeHours
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property UndertimeHoursAmountColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnUndertimeHoursAmount
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property NightDifferentialHoursColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnNightDifferentialHours
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property NightDiffHoursAmountColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnNightDiffHoursAmount
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property NightDifferentialOTHoursColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnNightDifferentialOTHours
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property NightDiffOTHoursAmountColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnNightDiffOTHoursAmount
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property HoursLateColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnHoursLate
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property HoursLateAmountColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnHoursLateAmount
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property LateFlagColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnLateFlag
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property PayRateIDColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnPayRateID
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property VacationLeaveHoursColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnVacationLeaveHours
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property SickLeaveHoursColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSickLeaveHours
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property MaternityLeaveHoursColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnMaternityLeaveHours
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property OtherLeaveHoursColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnOtherLeaveHours
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property AdditionalVLHoursColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnAdditionalVLHours
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property TotalDayPayColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTotalDayPay
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property AbsentColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnAbsent
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property TaxableDailyAllowanceColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTaxableDailyAllowance
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property HolidayPayAmountColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnHolidayPayAmount
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property TaxableDailyBonusColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTaxableDailyBonus
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property NonTaxableDailyBonusColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnNonTaxableDailyBonus
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property IsValidForHolidayPaymentColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnIsValidForHolidayPayment
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property FullNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnFullName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property LeaveAllowanceColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnLeaveAllowance
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property SickLeaveAllowanceColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSickLeaveAllowance
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property AdditionalVLAllowanceColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnAdditionalVLAllowance
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property TotalLeaveColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTotalLeave
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property RemarksColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnRemarks
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false)>  _
+        Public ReadOnly Property Count() As Integer
+            Get
+                Return Me.Rows.Count
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Default ReadOnly Property Item(ByVal index As Integer) As employeetimeentryRow
+            Get
+                Return CType(Me.Rows(index),employeetimeentryRow)
+            End Get
+        End Property
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Event employeetimeentryRowChanging As employeetimeentryRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Event employeetimeentryRowChanged As employeetimeentryRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Event employeetimeentryRowDeleting As employeetimeentryRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Event employeetimeentryRowDeleted As employeetimeentryRowChangeEventHandler
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Overloads Sub AddemployeetimeentryRow(ByVal row As employeetimeentryRow)
+            Me.Rows.Add(row)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Overloads Function AddemployeetimeentryRow( _
+                    ByVal _Date As String,  _
+                    ByVal EmployeeShiftID As String,  _
+                    ByVal EmployeeID As String,  _
+                    ByVal EmployeeSalaryID As String,  _
+                    ByVal EmployeeFixedSalaryFlag As String,  _
+                    ByVal RegularHoursWorked As String,  _
+                    ByVal RegularHoursAmount As String,  _
+                    ByVal TotalHoursWorked As String,  _
+                    ByVal OvertimeHoursWorked As String,  _
+                    ByVal OvertimeHoursAmount As String,  _
+                    ByVal UndertimeHours As String,  _
+                    ByVal UndertimeHoursAmount As String,  _
+                    ByVal NightDifferentialHours As String,  _
+                    ByVal NightDiffHoursAmount As String,  _
+                    ByVal NightDifferentialOTHours As String,  _
+                    ByVal NightDiffOTHoursAmount As String,  _
+                    ByVal HoursLate As String,  _
+                    ByVal HoursLateAmount As String,  _
+                    ByVal LateFlag As String,  _
+                    ByVal PayRateID As String,  _
+                    ByVal VacationLeaveHours As Decimal,  _
+                    ByVal SickLeaveHours As Decimal,  _
+                    ByVal MaternityLeaveHours As Decimal,  _
+                    ByVal OtherLeaveHours As Decimal,  _
+                    ByVal AdditionalVLHours As Decimal,  _
+                    ByVal TotalDayPay As String,  _
+                    ByVal Absent As String,  _
+                    ByVal TaxableDailyAllowance As String,  _
+                    ByVal HolidayPayAmount As String,  _
+                    ByVal TaxableDailyBonus As String,  _
+                    ByVal NonTaxableDailyBonus As String,  _
+                    ByVal IsValidForHolidayPayment As String,  _
+                    ByVal FullName As String,  _
+                    ByVal LeaveAllowance As Decimal,  _
+                    ByVal SickLeaveAllowance As Decimal,  _
+                    ByVal AdditionalVLAllowance As Decimal,  _
+                    ByVal TotalLeave As String,  _
+                    ByVal Remarks As String) As employeetimeentryRow
+            Dim rowemployeetimeentryRow As employeetimeentryRow = CType(Me.NewRow,employeetimeentryRow)
+            Dim columnValuesArray() As Object = New Object() {_Date, EmployeeShiftID, EmployeeID, EmployeeSalaryID, EmployeeFixedSalaryFlag, RegularHoursWorked, RegularHoursAmount, TotalHoursWorked, OvertimeHoursWorked, OvertimeHoursAmount, UndertimeHours, UndertimeHoursAmount, NightDifferentialHours, NightDiffHoursAmount, NightDifferentialOTHours, NightDiffOTHoursAmount, HoursLate, HoursLateAmount, LateFlag, PayRateID, VacationLeaveHours, SickLeaveHours, MaternityLeaveHours, OtherLeaveHours, AdditionalVLHours, TotalDayPay, Absent, TaxableDailyAllowance, HolidayPayAmount, TaxableDailyBonus, NonTaxableDailyBonus, IsValidForHolidayPayment, FullName, LeaveAllowance, SickLeaveAllowance, AdditionalVLAllowance, TotalLeave, Remarks}
+            rowemployeetimeentryRow.ItemArray = columnValuesArray
+            Me.Rows.Add(rowemployeetimeentryRow)
+            Return rowemployeetimeentryRow
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Overrides Function Clone() As Global.System.Data.DataTable
+            Dim cln As employeetimeentryDataTable = CType(MyBase.Clone,employeetimeentryDataTable)
+            cln.InitVars
+            Return cln
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+            Return New employeetimeentryDataTable()
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Friend Sub InitVars()
+            Me.columnDate = MyBase.Columns("Date")
+            Me.columnEmployeeShiftID = MyBase.Columns("EmployeeShiftID")
+            Me.columnEmployeeID = MyBase.Columns("EmployeeID")
+            Me.columnEmployeeSalaryID = MyBase.Columns("EmployeeSalaryID")
+            Me.columnEmployeeFixedSalaryFlag = MyBase.Columns("EmployeeFixedSalaryFlag")
+            Me.columnRegularHoursWorked = MyBase.Columns("RegularHoursWorked")
+            Me.columnRegularHoursAmount = MyBase.Columns("RegularHoursAmount")
+            Me.columnTotalHoursWorked = MyBase.Columns("TotalHoursWorked")
+            Me.columnOvertimeHoursWorked = MyBase.Columns("OvertimeHoursWorked")
+            Me.columnOvertimeHoursAmount = MyBase.Columns("OvertimeHoursAmount")
+            Me.columnUndertimeHours = MyBase.Columns("UndertimeHours")
+            Me.columnUndertimeHoursAmount = MyBase.Columns("UndertimeHoursAmount")
+            Me.columnNightDifferentialHours = MyBase.Columns("NightDifferentialHours")
+            Me.columnNightDiffHoursAmount = MyBase.Columns("NightDiffHoursAmount")
+            Me.columnNightDifferentialOTHours = MyBase.Columns("NightDifferentialOTHours")
+            Me.columnNightDiffOTHoursAmount = MyBase.Columns("NightDiffOTHoursAmount")
+            Me.columnHoursLate = MyBase.Columns("HoursLate")
+            Me.columnHoursLateAmount = MyBase.Columns("HoursLateAmount")
+            Me.columnLateFlag = MyBase.Columns("LateFlag")
+            Me.columnPayRateID = MyBase.Columns("PayRateID")
+            Me.columnVacationLeaveHours = MyBase.Columns("VacationLeaveHours")
+            Me.columnSickLeaveHours = MyBase.Columns("SickLeaveHours")
+            Me.columnMaternityLeaveHours = MyBase.Columns("MaternityLeaveHours")
+            Me.columnOtherLeaveHours = MyBase.Columns("OtherLeaveHours")
+            Me.columnAdditionalVLHours = MyBase.Columns("AdditionalVLHours")
+            Me.columnTotalDayPay = MyBase.Columns("TotalDayPay")
+            Me.columnAbsent = MyBase.Columns("Absent")
+            Me.columnTaxableDailyAllowance = MyBase.Columns("TaxableDailyAllowance")
+            Me.columnHolidayPayAmount = MyBase.Columns("HolidayPayAmount")
+            Me.columnTaxableDailyBonus = MyBase.Columns("TaxableDailyBonus")
+            Me.columnNonTaxableDailyBonus = MyBase.Columns("NonTaxableDailyBonus")
+            Me.columnIsValidForHolidayPayment = MyBase.Columns("IsValidForHolidayPayment")
+            Me.columnFullName = MyBase.Columns("FullName")
+            Me.columnLeaveAllowance = MyBase.Columns("LeaveAllowance")
+            Me.columnSickLeaveAllowance = MyBase.Columns("SickLeaveAllowance")
+            Me.columnAdditionalVLAllowance = MyBase.Columns("AdditionalVLAllowance")
+            Me.columnTotalLeave = MyBase.Columns("TotalLeave")
+            Me.columnRemarks = MyBase.Columns("Remarks")
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Private Sub InitClass()
+            Me.columnDate = New Global.System.Data.DataColumn("Date", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            Me.columnDate.ExtendedProperties.Add("Generator_ColumnPropNameInTable", "DateColumn")
+            Me.columnDate.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "columnDate")
+            Me.columnDate.ExtendedProperties.Add("Generator_UserColumnName", "Date")
+            MyBase.Columns.Add(Me.columnDate)
+            Me.columnEmployeeShiftID = New Global.System.Data.DataColumn("EmployeeShiftID", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnEmployeeShiftID)
+            Me.columnEmployeeID = New Global.System.Data.DataColumn("EmployeeID", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnEmployeeID)
+            Me.columnEmployeeSalaryID = New Global.System.Data.DataColumn("EmployeeSalaryID", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnEmployeeSalaryID)
+            Me.columnEmployeeFixedSalaryFlag = New Global.System.Data.DataColumn("EmployeeFixedSalaryFlag", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnEmployeeFixedSalaryFlag)
+            Me.columnRegularHoursWorked = New Global.System.Data.DataColumn("RegularHoursWorked", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnRegularHoursWorked)
+            Me.columnRegularHoursAmount = New Global.System.Data.DataColumn("RegularHoursAmount", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnRegularHoursAmount)
+            Me.columnTotalHoursWorked = New Global.System.Data.DataColumn("TotalHoursWorked", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTotalHoursWorked)
+            Me.columnOvertimeHoursWorked = New Global.System.Data.DataColumn("OvertimeHoursWorked", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnOvertimeHoursWorked)
+            Me.columnOvertimeHoursAmount = New Global.System.Data.DataColumn("OvertimeHoursAmount", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnOvertimeHoursAmount)
+            Me.columnUndertimeHours = New Global.System.Data.DataColumn("UndertimeHours", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnUndertimeHours)
+            Me.columnUndertimeHoursAmount = New Global.System.Data.DataColumn("UndertimeHoursAmount", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnUndertimeHoursAmount)
+            Me.columnNightDifferentialHours = New Global.System.Data.DataColumn("NightDifferentialHours", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnNightDifferentialHours)
+            Me.columnNightDiffHoursAmount = New Global.System.Data.DataColumn("NightDiffHoursAmount", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnNightDiffHoursAmount)
+            Me.columnNightDifferentialOTHours = New Global.System.Data.DataColumn("NightDifferentialOTHours", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnNightDifferentialOTHours)
+            Me.columnNightDiffOTHoursAmount = New Global.System.Data.DataColumn("NightDiffOTHoursAmount", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnNightDiffOTHoursAmount)
+            Me.columnHoursLate = New Global.System.Data.DataColumn("HoursLate", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnHoursLate)
+            Me.columnHoursLateAmount = New Global.System.Data.DataColumn("HoursLateAmount", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnHoursLateAmount)
+            Me.columnLateFlag = New Global.System.Data.DataColumn("LateFlag", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnLateFlag)
+            Me.columnPayRateID = New Global.System.Data.DataColumn("PayRateID", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnPayRateID)
+            Me.columnVacationLeaveHours = New Global.System.Data.DataColumn("VacationLeaveHours", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnVacationLeaveHours)
+            Me.columnSickLeaveHours = New Global.System.Data.DataColumn("SickLeaveHours", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSickLeaveHours)
+            Me.columnMaternityLeaveHours = New Global.System.Data.DataColumn("MaternityLeaveHours", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnMaternityLeaveHours)
+            Me.columnOtherLeaveHours = New Global.System.Data.DataColumn("OtherLeaveHours", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnOtherLeaveHours)
+            Me.columnAdditionalVLHours = New Global.System.Data.DataColumn("AdditionalVLHours", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnAdditionalVLHours)
+            Me.columnTotalDayPay = New Global.System.Data.DataColumn("TotalDayPay", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTotalDayPay)
+            Me.columnAbsent = New Global.System.Data.DataColumn("Absent", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnAbsent)
+            Me.columnTaxableDailyAllowance = New Global.System.Data.DataColumn("TaxableDailyAllowance", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTaxableDailyAllowance)
+            Me.columnHolidayPayAmount = New Global.System.Data.DataColumn("HolidayPayAmount", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnHolidayPayAmount)
+            Me.columnTaxableDailyBonus = New Global.System.Data.DataColumn("TaxableDailyBonus", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTaxableDailyBonus)
+            Me.columnNonTaxableDailyBonus = New Global.System.Data.DataColumn("NonTaxableDailyBonus", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnNonTaxableDailyBonus)
+            Me.columnIsValidForHolidayPayment = New Global.System.Data.DataColumn("IsValidForHolidayPayment", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnIsValidForHolidayPayment)
+            Me.columnFullName = New Global.System.Data.DataColumn("FullName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnFullName)
+            Me.columnLeaveAllowance = New Global.System.Data.DataColumn("LeaveAllowance", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnLeaveAllowance)
+            Me.columnSickLeaveAllowance = New Global.System.Data.DataColumn("SickLeaveAllowance", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSickLeaveAllowance)
+            Me.columnAdditionalVLAllowance = New Global.System.Data.DataColumn("AdditionalVLAllowance", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnAdditionalVLAllowance)
+            Me.columnTotalLeave = New Global.System.Data.DataColumn("TotalLeave", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTotalLeave)
+            Me.columnRemarks = New Global.System.Data.DataColumn("Remarks", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnRemarks)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function NewemployeetimeentryRow() As employeetimeentryRow
+            Return CType(Me.NewRow,employeetimeentryRow)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+            Return New employeetimeentryRow(builder)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Function GetRowType() As Global.System.Type
+            Return GetType(employeetimeentryRow)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowChanged(e)
+            If (Not (Me.employeetimeentryRowChangedEvent) Is Nothing) Then
+                RaiseEvent employeetimeentryRowChanged(Me, New employeetimeentryRowChangeEvent(CType(e.Row,employeetimeentryRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowChanging(e)
+            If (Not (Me.employeetimeentryRowChangingEvent) Is Nothing) Then
+                RaiseEvent employeetimeentryRowChanging(Me, New employeetimeentryRowChangeEvent(CType(e.Row,employeetimeentryRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowDeleted(e)
+            If (Not (Me.employeetimeentryRowDeletedEvent) Is Nothing) Then
+                RaiseEvent employeetimeentryRowDeleted(Me, New employeetimeentryRowChangeEvent(CType(e.Row,employeetimeentryRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowDeleting(e)
+            If (Not (Me.employeetimeentryRowDeletingEvent) Is Nothing) Then
+                RaiseEvent employeetimeentryRowDeleting(Me, New employeetimeentryRowChangeEvent(CType(e.Row,employeetimeentryRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub RemoveemployeetimeentryRow(ByVal row As employeetimeentryRow)
+            Me.Rows.Remove(row)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+            Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+            Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+            Dim ds As DS1 = New DS1()
+            Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+            any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+            any1.MinOccurs = New Decimal(0)
+            any1.MaxOccurs = Decimal.MaxValue
+            any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+            sequence.Items.Add(any1)
+            Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+            any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+            any2.MinOccurs = New Decimal(1)
+            any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+            sequence.Items.Add(any2)
+            Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+            attribute1.Name = "namespace"
+            attribute1.FixedValue = ds.Namespace
+            type.Attributes.Add(attribute1)
+            Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+            attribute2.Name = "tableTypeName"
+            attribute2.FixedValue = "employeetimeentryDataTable"
             type.Attributes.Add(attribute2)
             type.Particle = sequence
             Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
@@ -10254,6 +11063,1065 @@ Partial Public Class DS1
     End Class
     
     '''<summary>
+    '''Represents strongly named DataRow class.
+    '''</summary>
+    Partial Public Class employeetimeentryRow
+        Inherits Global.System.Data.DataRow
+        
+        Private tableemployeetimeentry As employeetimeentryDataTable
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+            MyBase.New(rb)
+            Me.tableemployeetimeentry = CType(Me.Table,employeetimeentryDataTable)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property _Date() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.DateColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Date' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.DateColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property EmployeeShiftID() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.EmployeeShiftIDColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'EmployeeShiftID' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.EmployeeShiftIDColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property EmployeeID() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.EmployeeIDColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'EmployeeID' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.EmployeeIDColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property EmployeeSalaryID() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.EmployeeSalaryIDColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'EmployeeSalaryID' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.EmployeeSalaryIDColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property EmployeeFixedSalaryFlag() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.EmployeeFixedSalaryFlagColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'EmployeeFixedSalaryFlag' in table 'employeetimeentry' is DB"& _ 
+                            "Null.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.EmployeeFixedSalaryFlagColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property RegularHoursWorked() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.RegularHoursWorkedColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'RegularHoursWorked' in table 'employeetimeentry' is DBNull."& _ 
+                            "", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.RegularHoursWorkedColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property RegularHoursAmount() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.RegularHoursAmountColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'RegularHoursAmount' in table 'employeetimeentry' is DBNull."& _ 
+                            "", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.RegularHoursAmountColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property TotalHoursWorked() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.TotalHoursWorkedColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TotalHoursWorked' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.TotalHoursWorkedColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property OvertimeHoursWorked() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.OvertimeHoursWorkedColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'OvertimeHoursWorked' in table 'employeetimeentry' is DBNull"& _ 
+                            ".", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.OvertimeHoursWorkedColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property OvertimeHoursAmount() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.OvertimeHoursAmountColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'OvertimeHoursAmount' in table 'employeetimeentry' is DBNull"& _ 
+                            ".", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.OvertimeHoursAmountColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property UndertimeHours() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.UndertimeHoursColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'UndertimeHours' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.UndertimeHoursColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property UndertimeHoursAmount() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.UndertimeHoursAmountColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'UndertimeHoursAmount' in table 'employeetimeentry' is DBNul"& _ 
+                            "l.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.UndertimeHoursAmountColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property NightDifferentialHours() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.NightDifferentialHoursColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'NightDifferentialHours' in table 'employeetimeentry' is DBN"& _ 
+                            "ull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.NightDifferentialHoursColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property NightDiffHoursAmount() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.NightDiffHoursAmountColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'NightDiffHoursAmount' in table 'employeetimeentry' is DBNul"& _ 
+                            "l.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.NightDiffHoursAmountColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property NightDifferentialOTHours() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.NightDifferentialOTHoursColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'NightDifferentialOTHours' in table 'employeetimeentry' is D"& _ 
+                            "BNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.NightDifferentialOTHoursColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property NightDiffOTHoursAmount() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.NightDiffOTHoursAmountColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'NightDiffOTHoursAmount' in table 'employeetimeentry' is DBN"& _ 
+                            "ull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.NightDiffOTHoursAmountColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property HoursLate() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.HoursLateColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'HoursLate' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.HoursLateColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property HoursLateAmount() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.HoursLateAmountColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'HoursLateAmount' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.HoursLateAmountColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property LateFlag() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.LateFlagColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'LateFlag' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.LateFlagColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property PayRateID() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.PayRateIDColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'PayRateID' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.PayRateIDColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property VacationLeaveHours() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.VacationLeaveHoursColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'VacationLeaveHours' in table 'employeetimeentry' is DBNull."& _ 
+                            "", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.VacationLeaveHoursColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property SickLeaveHours() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.SickLeaveHoursColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SickLeaveHours' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.SickLeaveHoursColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property MaternityLeaveHours() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.MaternityLeaveHoursColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'MaternityLeaveHours' in table 'employeetimeentry' is DBNull"& _ 
+                            ".", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.MaternityLeaveHoursColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property OtherLeaveHours() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.OtherLeaveHoursColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'OtherLeaveHours' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.OtherLeaveHoursColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property AdditionalVLHours() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.AdditionalVLHoursColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'AdditionalVLHours' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.AdditionalVLHoursColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property TotalDayPay() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.TotalDayPayColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TotalDayPay' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.TotalDayPayColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property Absent() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.AbsentColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Absent' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.AbsentColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property TaxableDailyAllowance() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.TaxableDailyAllowanceColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TaxableDailyAllowance' in table 'employeetimeentry' is DBNu"& _ 
+                            "ll.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.TaxableDailyAllowanceColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property HolidayPayAmount() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.HolidayPayAmountColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'HolidayPayAmount' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.HolidayPayAmountColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property TaxableDailyBonus() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.TaxableDailyBonusColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TaxableDailyBonus' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.TaxableDailyBonusColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property NonTaxableDailyBonus() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.NonTaxableDailyBonusColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'NonTaxableDailyBonus' in table 'employeetimeentry' is DBNul"& _ 
+                            "l.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.NonTaxableDailyBonusColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property IsValidForHolidayPayment() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.IsValidForHolidayPaymentColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'IsValidForHolidayPayment' in table 'employeetimeentry' is D"& _ 
+                            "BNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.IsValidForHolidayPaymentColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property FullName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.FullNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'FullName' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.FullNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property LeaveAllowance() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.LeaveAllowanceColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'LeaveAllowance' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.LeaveAllowanceColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property SickLeaveAllowance() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.SickLeaveAllowanceColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SickLeaveAllowance' in table 'employeetimeentry' is DBNull."& _ 
+                            "", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.SickLeaveAllowanceColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property AdditionalVLAllowance() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.AdditionalVLAllowanceColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'AdditionalVLAllowance' in table 'employeetimeentry' is DBNu"& _ 
+                            "ll.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.AdditionalVLAllowanceColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property TotalLeave() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.TotalLeaveColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TotalLeave' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.TotalLeaveColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property Remarks() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.RemarksColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Remarks' in table 'employeetimeentry' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.RemarksColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function Is_DateNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.DateColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub Set_DateNull()
+            Me(Me.tableemployeetimeentry.DateColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsEmployeeShiftIDNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.EmployeeShiftIDColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetEmployeeShiftIDNull()
+            Me(Me.tableemployeetimeentry.EmployeeShiftIDColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsEmployeeIDNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.EmployeeIDColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetEmployeeIDNull()
+            Me(Me.tableemployeetimeentry.EmployeeIDColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsEmployeeSalaryIDNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.EmployeeSalaryIDColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetEmployeeSalaryIDNull()
+            Me(Me.tableemployeetimeentry.EmployeeSalaryIDColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsEmployeeFixedSalaryFlagNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.EmployeeFixedSalaryFlagColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetEmployeeFixedSalaryFlagNull()
+            Me(Me.tableemployeetimeentry.EmployeeFixedSalaryFlagColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsRegularHoursWorkedNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.RegularHoursWorkedColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetRegularHoursWorkedNull()
+            Me(Me.tableemployeetimeentry.RegularHoursWorkedColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsRegularHoursAmountNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.RegularHoursAmountColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetRegularHoursAmountNull()
+            Me(Me.tableemployeetimeentry.RegularHoursAmountColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsTotalHoursWorkedNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.TotalHoursWorkedColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetTotalHoursWorkedNull()
+            Me(Me.tableemployeetimeentry.TotalHoursWorkedColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsOvertimeHoursWorkedNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.OvertimeHoursWorkedColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetOvertimeHoursWorkedNull()
+            Me(Me.tableemployeetimeentry.OvertimeHoursWorkedColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsOvertimeHoursAmountNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.OvertimeHoursAmountColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetOvertimeHoursAmountNull()
+            Me(Me.tableemployeetimeentry.OvertimeHoursAmountColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsUndertimeHoursNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.UndertimeHoursColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetUndertimeHoursNull()
+            Me(Me.tableemployeetimeentry.UndertimeHoursColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsUndertimeHoursAmountNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.UndertimeHoursAmountColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetUndertimeHoursAmountNull()
+            Me(Me.tableemployeetimeentry.UndertimeHoursAmountColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsNightDifferentialHoursNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.NightDifferentialHoursColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetNightDifferentialHoursNull()
+            Me(Me.tableemployeetimeentry.NightDifferentialHoursColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsNightDiffHoursAmountNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.NightDiffHoursAmountColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetNightDiffHoursAmountNull()
+            Me(Me.tableemployeetimeentry.NightDiffHoursAmountColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsNightDifferentialOTHoursNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.NightDifferentialOTHoursColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetNightDifferentialOTHoursNull()
+            Me(Me.tableemployeetimeentry.NightDifferentialOTHoursColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsNightDiffOTHoursAmountNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.NightDiffOTHoursAmountColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetNightDiffOTHoursAmountNull()
+            Me(Me.tableemployeetimeentry.NightDiffOTHoursAmountColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsHoursLateNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.HoursLateColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetHoursLateNull()
+            Me(Me.tableemployeetimeentry.HoursLateColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsHoursLateAmountNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.HoursLateAmountColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetHoursLateAmountNull()
+            Me(Me.tableemployeetimeentry.HoursLateAmountColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsLateFlagNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.LateFlagColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetLateFlagNull()
+            Me(Me.tableemployeetimeentry.LateFlagColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsPayRateIDNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.PayRateIDColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetPayRateIDNull()
+            Me(Me.tableemployeetimeentry.PayRateIDColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsVacationLeaveHoursNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.VacationLeaveHoursColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetVacationLeaveHoursNull()
+            Me(Me.tableemployeetimeentry.VacationLeaveHoursColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsSickLeaveHoursNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.SickLeaveHoursColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetSickLeaveHoursNull()
+            Me(Me.tableemployeetimeentry.SickLeaveHoursColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsMaternityLeaveHoursNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.MaternityLeaveHoursColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetMaternityLeaveHoursNull()
+            Me(Me.tableemployeetimeentry.MaternityLeaveHoursColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsOtherLeaveHoursNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.OtherLeaveHoursColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetOtherLeaveHoursNull()
+            Me(Me.tableemployeetimeentry.OtherLeaveHoursColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsAdditionalVLHoursNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.AdditionalVLHoursColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetAdditionalVLHoursNull()
+            Me(Me.tableemployeetimeentry.AdditionalVLHoursColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsTotalDayPayNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.TotalDayPayColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetTotalDayPayNull()
+            Me(Me.tableemployeetimeentry.TotalDayPayColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsAbsentNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.AbsentColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetAbsentNull()
+            Me(Me.tableemployeetimeentry.AbsentColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsTaxableDailyAllowanceNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.TaxableDailyAllowanceColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetTaxableDailyAllowanceNull()
+            Me(Me.tableemployeetimeentry.TaxableDailyAllowanceColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsHolidayPayAmountNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.HolidayPayAmountColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetHolidayPayAmountNull()
+            Me(Me.tableemployeetimeentry.HolidayPayAmountColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsTaxableDailyBonusNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.TaxableDailyBonusColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetTaxableDailyBonusNull()
+            Me(Me.tableemployeetimeentry.TaxableDailyBonusColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsNonTaxableDailyBonusNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.NonTaxableDailyBonusColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetNonTaxableDailyBonusNull()
+            Me(Me.tableemployeetimeentry.NonTaxableDailyBonusColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsIsValidForHolidayPaymentNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.IsValidForHolidayPaymentColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetIsValidForHolidayPaymentNull()
+            Me(Me.tableemployeetimeentry.IsValidForHolidayPaymentColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsFullNameNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.FullNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetFullNameNull()
+            Me(Me.tableemployeetimeentry.FullNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsLeaveAllowanceNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.LeaveAllowanceColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetLeaveAllowanceNull()
+            Me(Me.tableemployeetimeentry.LeaveAllowanceColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsSickLeaveAllowanceNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.SickLeaveAllowanceColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetSickLeaveAllowanceNull()
+            Me(Me.tableemployeetimeentry.SickLeaveAllowanceColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsAdditionalVLAllowanceNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.AdditionalVLAllowanceColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetAdditionalVLAllowanceNull()
+            Me(Me.tableemployeetimeentry.AdditionalVLAllowanceColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsTotalLeaveNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.TotalLeaveColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetTotalLeaveNull()
+            Me(Me.tableemployeetimeentry.TotalLeaveColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsRemarksNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.RemarksColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetRemarksNull()
+            Me(Me.tableemployeetimeentry.RemarksColumn) = Global.System.Convert.DBNull
+        End Sub
+    End Class
+    
+    '''<summary>
     '''Row event argument class
     '''</summary>
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
@@ -10347,6 +12215,42 @@ Partial Public Class DS1
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public ReadOnly Property Row() As DatTbl3Row
+            Get
+                Return Me.eventRow
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+            Get
+                Return Me.eventAction
+            End Get
+        End Property
+    End Class
+    
+    '''<summary>
+    '''Row event argument class
+    '''</summary>
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+    Public Class employeetimeentryRowChangeEvent
+        Inherits Global.System.EventArgs
+        
+        Private eventRow As employeetimeentryRow
+        
+        Private eventAction As Global.System.Data.DataRowAction
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub New(ByVal row As employeetimeentryRow, ByVal action As Global.System.Data.DataRowAction)
+            MyBase.New
+            Me.eventRow = row
+            Me.eventAction = action
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property Row() As employeetimeentryRow
             Get
                 Return Me.eventRow
             End Get

@@ -1,5 +1,4 @@
-﻿
-Public Class EmploymentRecordReportProvider
+﻿Public Class EmploymentRecordReportProvider
     Implements IReportProvider
 
     Public Property Name As String = "Employees' Employment Record" Implements IReportProvider.Name
@@ -43,4 +42,5 @@ Public Class EmploymentRecordReportProvider
 
     End Sub
 
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 End Class

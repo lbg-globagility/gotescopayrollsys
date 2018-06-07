@@ -1,4 +1,5 @@
 ﻿Option Strict On
+
 Imports System.IO
 Imports CrystalDecisions.CrystalReports.Engine
 Imports OfficeOpenXml
@@ -45,7 +46,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
                       "Net",
                       "13th",
                       "Total"}
-
 
     Private cell_mapped_text_value() As String =
         New String() {"DatCol2",
@@ -106,9 +106,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Get
             Return pp_rowid_from
         End Get
+
         Set(value As Object)
             pp_rowid_from = value
         End Set
+
     End Property
 
     Property PayperiodIDTo As Object
@@ -116,9 +118,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Get
             Return pp_rowid_to
         End Get
+
         Set(value As Object)
             pp_rowid_to = value
         End Set
+
     End Property
 
     Property IsActual As Boolean
@@ -126,9 +130,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Get
             Return is_actual
         End Get
+
         Set(value As Boolean)
             is_actual = value
         End Set
+
     End Property
 
     Property SalaryDistribution As String
@@ -136,9 +142,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Get
             Return sal_distrib
         End Get
+
         Set(value As String)
             sal_distrib = value
         End Set
+
     End Property
 
     Public Property Name As String = "" Implements IReportProvider.Name
@@ -327,7 +335,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
                 End Using
 
                 Process.Start(fullpathfile)
-
             Catch ex As Exception
                 errlogger.Error("PrintPayrollSummary", ex)
                 MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
@@ -593,6 +600,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     End Function
 
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 End Class
 
 Public Enum SalaryActualization As Short

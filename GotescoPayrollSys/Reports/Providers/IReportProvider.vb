@@ -6,4 +6,6 @@
 
     Sub Run()
 
+    Property IsFreeRangeOfDate As Boolean
+
 End Interface

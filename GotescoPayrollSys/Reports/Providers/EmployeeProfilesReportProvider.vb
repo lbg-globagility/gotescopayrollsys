@@ -1,4 +1,5 @@
 ﻿Option Strict On
+
 Imports System.IO
 Imports CrystalDecisions.CrystalReports.Engine
 Imports OfficeOpenXml
@@ -96,4 +97,5 @@ Public Class EmployeeProfilesReportProvider
         End Try
     End Sub
 
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 End Class

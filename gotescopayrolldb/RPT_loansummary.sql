@@ -74,7 +74,7 @@ SELECT ls.RowID
 ,ls.`DatCol4`
 
 ,ls.`PayFromDate`
-,ls.`PayToDate`
+,DATE_FORMAT(ls.`PayToDate`, '%c/%e/%Y') `DatCol5`
 FROM (SELECT i.*
 		, pp.PayFromDate
 		, pp.PayToDate
@@ -87,7 +87,7 @@ FROM (SELECT i.*
 		,p.PartNo `DatCol3`
       ,FORMAT(i.DeductionAmount, 2) `DatCol4`
 		FROM employeeloanschedule i
-		INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.OrganizationID=i.OrganizationID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+		INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.OrganizationID=i.OrganizationID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 		
 		INNER JOIN payperiod pp
 		        ON pp.OrganizationID=i.OrganizationID

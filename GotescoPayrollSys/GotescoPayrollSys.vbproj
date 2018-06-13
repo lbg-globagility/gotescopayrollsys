@@ -1164,6 +1164,7 @@
     <Compile Include="Reports\Providers\IReportProvider.vb" />
     <Compile Include="Reports\Providers\LeaveBalanceSummaryReportProvider.vb" />
     <Compile Include="Reports\Providers\LeaveLedgerReportProvider.vb" />
+    <Compile Include="Reports\Providers\LoanSummaryGroupByTypeReportProvider.vb" />
     <Compile Include="Reports\Providers\LoanSummaryByTypeReportProvider.vb" />
     <Compile Include="Reports\Providers\LoanSummaryReportProvider.vb" />
     <Compile Include="Reports\Providers\PagIBIGMonthlyReportProvider.vb" />

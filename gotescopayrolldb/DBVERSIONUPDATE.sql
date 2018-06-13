@@ -11,7 +11,7 @@ BEGIN
 
 DECLARE lov_type TEXT DEFAULT 'Report List';
 
-DECLARE new_report TEXT DEFAULT CONCAT_WS(',', 'Filed Leaves Report', 'Employee Leave Balance Summary');
+DECLARE new_report TEXT DEFAULT CONCAT_WS(',', 'Filed Leaves Report', 'Employee Leave Balance Summary', 'Employee Loan Summary Report');
 
 DECLARE default_user INT(11) DEFAULT 0;
 
@@ -33,7 +33,7 @@ INSERT INTO listofval(
 	, rl.ReportName
 	, lov_type
 	, ''
-	, 'Active'
+	, 'Yes'
 	, ''
 	, CURRENT_TIMESTAMP()
 	, default_user
@@ -43,7 +43,7 @@ INSERT INTO listofval(
 	FROM reportlist rl
 	ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();
 
-SET @is_exists = EXISTS(SELECT v.RowID FROM `view` v WHERE FIND_IN_SET(v.ViewName, new_report) > 0 LIMIT 1);
+SET @is_exists = EXISTS(SELECT v.RowID FROM `view` v WHERE FIND_IN_SET(v.ViewName, new_report) > 0);
 
 IF @is_exists = FALSE THEN
 

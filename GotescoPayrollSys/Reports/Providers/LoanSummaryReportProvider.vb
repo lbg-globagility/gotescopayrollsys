@@ -5,7 +5,7 @@ Imports CrystalDecisions.CrystalReports.Engine
 Public Class LoanSummaryReportProvider
     Implements IReportProvider
 
-    Public Property Name As String = "Loan Payment Summary Report" Implements IReportProvider.Name
+    Public Property Name As String = "Loan Payment Report" Implements IReportProvider.Name
 
     Public Property GotescoReportName As String = "Employee Loan Report" Implements IReportProvider.GotescoReportName
 

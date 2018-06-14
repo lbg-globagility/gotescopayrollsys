@@ -100,48 +100,6 @@ Public Class ReportsList
         End If
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-
-        Button1.Enabled = False
-
-        Dim rptdoc As ReportDocument
-
-        rptdoc = New Crystal_Report11601C_BIR
-
-        Static n_dt As New DataTable
-
-        Static once As SByte = 0
-
-        If once = 0 Then
-
-            For ii = 1 To 120
-
-                Dim n_dcol As New DataColumn
-
-                n_dcol.ColumnName = "COL" & ii
-
-                n_dt.Columns.Add(n_dcol)
-
-            Next
-
-        End If
-
-        rptdoc.SetDataSource(n_dt)
-
-        Dim crvwr As New CrysRepForm
-
-        crvwr.crysrepvwr.ReportSource = rptdoc
-
-        Dim papy_string = ""
-
-        crvwr.Text = papy_string
-
-        crvwr.Show()
-
-        Button1.Enabled = True
-
-    End Sub
-
     Private Sub Open_Remote_Connection(Optional strComputer As String = "GLOBAL-A-PC\Users\Public\Downloads\Test1.txt",
                                        Optional strUsername As String = Nothing,
                                        Optional strPassword As String = Nothing)

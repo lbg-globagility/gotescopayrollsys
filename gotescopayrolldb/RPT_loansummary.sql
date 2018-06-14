@@ -9,6 +9,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_loansummary`(IN `og_rowid` INT, IN `pay_datefrom` DATE, IN `pay_dateto` DATE, IN `loan_typeid` INT)
 BEGIN
 
+DECLARE decimal_size INT(11) DEFAULT 2;
+
 SET @_rowid = NULL;
 
 SET @_index = 0;
@@ -74,6 +76,9 @@ SELECT ls.RowID
 ,ls.`DatCol4`
 
 ,ls.`PayFromDate`
+
+,ls.`Balance` `DatCol6`
+
 ,DATE_FORMAT(ls.`PayToDate`, '%c/%e/%Y') `DatCol5`
 FROM (SELECT i.*
 		, pp.PayFromDate
@@ -85,7 +90,10 @@ FROM (SELECT i.*
 		,(@_midinit := LEFT(e.MiddleName, 1))
 		,CONCAT_WS(', ', e.LastName, e.FirstName, IF(LENGTH(@_midinit) = 0, NULL, @_midinit)) `DatCol2`
 		,p.PartNo `DatCol3`
-      ,FORMAT(i.DeductionAmount, 2) `DatCol4`
+      ,FORMAT(i.DeductionAmount, decimal_size) `DatCol4`
+      
+      ,ROUND(IFNULL(lb.Balance, 0), decimal_size) `Balance`
+      
 		FROM employeeloanschedule i
 		INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.OrganizationID=i.OrganizationID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 		
@@ -105,6 +113,8 @@ FROM (SELECT i.*
 		        ON ps.OrganizationID=e.OrganizationID
 		           AND ps.EmployeeID=e.RowID
 		           AND ps.PayPeriodID=pp.RowID
+		
+		INNER JOIN employeeloanschedulebacktrack lb ON lb.LoanschedID=i.RowID AND lb.PayStubID=ps.RowID
 		
 		WHERE i.OrganizationID = og_rowid
 		AND i.LoanTypeID = IFNULL(loan_typeid, i.LoanTypeID)

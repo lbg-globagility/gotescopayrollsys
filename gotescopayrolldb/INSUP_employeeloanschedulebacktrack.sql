@@ -39,9 +39,10 @@ KEY
 UPDATE
 	LastUpdBy		=UserRowID
 	,PayStubID		=PaystubRowID
-	,Balance			=LoanBalance
-	,DeductedAmount=AmountPerDeduct
-	,`Status`		=Estatus;
+	# ,Balance			=LoanBalance
+	# ,DeductedAmount=AmountPerDeduct
+	# ,`Status`		=Estatus
+	;
 SELECT @@identity `PrimKey` INTO returnvalue;
 
 IF returnvalue IS NULL THEN

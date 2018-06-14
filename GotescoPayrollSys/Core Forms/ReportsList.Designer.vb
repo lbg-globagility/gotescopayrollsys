@@ -46,7 +46,6 @@ Partial Class ReportsList
         Me.Button1.TabIndex = 2
         Me.Button1.Text = "Button1"
         Me.Button1.UseVisualStyleBackColor = True
-        Me.Button1.Visible = False
         '
         'Button2
         '

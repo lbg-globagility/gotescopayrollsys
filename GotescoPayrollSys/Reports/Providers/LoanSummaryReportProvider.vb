@@ -15,18 +15,19 @@ Public Class LoanSummaryReportProvider
 
     Private Sub Method1()
 
-        Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
+        Dim n_PayrollSummaDateSelection As New PayPeriodSelectionWithLoanTypes
 
         If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
 
-            Dim date_from, date_to As Object
+            Dim date_from, date_to, _loanTypeID As Object
 
             date_from = n_PayrollSummaDateSelection.DateFrom
             date_to = n_PayrollSummaDateSelection.DateTo
+            _loanTypeID = n_PayrollSummaDateSelection.LoanTypeId
 
             Dim sql_print_employee_loanreports As _
-                New SQL("CALL RPT_loans(?og_rowid, ?date_f, ?date_t, NULL);",
-                        New Object() {org_rowid, date_from, date_to})
+                New SQL("CALL RPT_loans(?og_rowid, ?date_f, ?date_t, ?loan_typeid);",
+                        New Object() {org_rowid, date_from, date_to, _loanTypeID})
 
             Try
 
@@ -77,18 +78,19 @@ Public Class LoanSummaryReportProvider
 
     Private Sub Method2()
 
-        Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
+        Dim n_PayrollSummaDateSelection As New PayPeriodSelectionWithLoanTypes
 
         If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
 
-            Dim date_from, date_to As Object
+            Dim date_from, date_to, _loanTypeID As Object
 
             date_from = n_PayrollSummaDateSelection.DateFrom
             date_to = n_PayrollSummaDateSelection.DateTo
+            _loanTypeID = n_PayrollSummaDateSelection.LoanTypeId
 
             Dim sql_print_employee_loanreports As _
-                New SQL("CALL RPT_loansummary(?og_rowid, ?date_f, ?date_t, NULL);",
-                        New Object() {org_rowid, date_from, date_to})
+                New SQL("CALL RPT_loansummary(?og_rowid, ?date_f, ?date_t, ?loan_typeid);",
+                        New Object() {org_rowid, date_from, date_to, _loanTypeID})
 
             Try
 

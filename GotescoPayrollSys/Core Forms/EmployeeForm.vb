@@ -22354,7 +22354,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     Private Sub MaskedTextBox1_Leave(sender As Object, e As EventArgs) 'Handles MaskedTextBox1.Leave
         Try
-            MaskedTextBox1.Text = CDate(MaskedTextBox1.Text).ToShortDateString
+            If MaskedTextBox1.Text.Trim.Length > 0 Then
+                MaskedTextBox1.Text = CDate(MaskedTextBox1.Text).ToShortDateString
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
@@ -22362,7 +22364,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     Private Sub MaskedTextBox2_Leave(sender As Object, e As EventArgs) 'Handles txtRegularizationDate.Leave
         Try
-            txtRegularizationDate.Text = CDate(txtRegularizationDate.Text).ToShortDateString
+            If txtRegularizationDate.Text.Trim.Length > 0 Then
+                txtRegularizationDate.Text = CDate(txtRegularizationDate.Text).ToShortDateString
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try

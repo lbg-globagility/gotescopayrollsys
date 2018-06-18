@@ -16,7 +16,7 @@ DECLARE curr_year YEAR;
 
 DECLARE count_semi_monthly_period_peryear INT DEFAULT 24;
 
-DECLARE e_indx, e_count INT DEFAULT 0;
+DECLARE e_indx, e_count, count_leavetype, _i, leavetypeid INT DEFAULT 0;
 
 DECLARE i INT DEFAULT 0;
 
@@ -354,6 +354,20 @@ IF curr_year = YEAR(CURDATE()) THEN
 	
 	# INSERT INTO `listofval` (`DisplayValue`, `LIC`, `Type`, `ParentLIC`, `Active`, `Description`, `Created`, `CreatedBy`, `LastUpd`, `OrderBy`, `LastUpdBy`) VALUES ('1', '2', 'Invented', '', 'Yes', 'some', '2016-04-19 17:47:13', 1, '2016-04-19 17:47:13', 1, 1) ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();
 
+	SET count_leavetype = IFNULL((SELECT COUNT(RowID) FROM product WHERE OrganizationID=OrganizID AND `Category`='Leave Type' AND ActiveData='1'), 0);
+	
+	WHILE _i < count_leavetype DO
+		SELECT RowID
+		FROM product
+		WHERE OrganizationID = OrganizID
+		AND `Category` = 'Leave Type' AND ActiveData = '1'
+		LIMIT _i, 1
+		INTO leavetypeid;
+		
+		CALL MASSUPD_CORRECT_LEAVEBALANCE(OrganizID, curr_year, leavetypeid);
+		
+		SET _i = _i + 1;
+	END WHILE;
 	
 END IF;
 

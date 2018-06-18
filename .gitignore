@@ -19,3 +19,7 @@ Output/
 GotescoPayrollSys/Core Forms/PayStub\.resx
 
 GotescoPayrollSys/bin/Debug/GotescoPayrollSys\.exe\.config
+
+GotescoPayrollSys/bin/Debug/vs959B\.tmp 
+ 
+*.tmp

@@ -41,80 +41,89 @@ INTO remarks;
 
 SELECT i.*
 
-, (i.LeaveAllowance - SUM(i.VacationLeaveHrs)) `VacationLeaveHours`
+/**/, (i.LeaveAllowance - SUM(i.VacationLeaveHrs)) `VacationLeaveHours`
 , (i.SickLeaveAllowance - SUM(i.SickLeaveHrs)) `SickLeaveHours`
 # ,i.MaternityLeaveHours `MaternityLeaveHours`
 # ,i.OtherLeaveHours `OtherLeaveHours`
 , (i.AdditionalVLAllowance - SUM(i.AdditionalVLHrs)) `AdditionalVLHours`
 
-FROM (SELECT
-		e.RowID `EmployeeRowId`
-		, et.RowID
-		, DATE_FORMAT(et.`Date`, custom_dateformat) `Date`
-		
-		/*,et.EmployeeShiftID
-		,et.EmployeeSalaryID
-		,et.EmployeeFixedSalaryFlag
-		,et.RegularHoursWorked
-		,et.RegularHoursAmount
-		,et.TotalHoursWorked
-		,et.OvertimeHoursWorked
-		,et.OvertimeHoursAmount
-		,et.UndertimeHours
-		,et.UndertimeHoursAmount
-		,et.NightDifferentialHours
-		,et.NightDiffHoursAmount
-		,et.NightDifferentialOTHours
-		,et.NightDiffOTHoursAmount
-		,et.HoursLate
-		,et.HoursLateAmount
-		,et.LateFlag
-		,et.PayRateID
-		,et.TotalDayPay
-		,et.Absent
-		,et.TaxableDailyAllowance
-		,et.HolidayPayAmount
-		,et.TaxableDailyBonus
-		,et.NonTaxableDailyBonus
-		,et.IsValidForHolidayPayment*/
-		
-		,et.VacationLeaveHours `VacationLeaveHrs`
-		,et.SickLeaveHours `SickLeaveHrs`
-		,et.MaternityLeaveHours `MaternityLeaveHrs`
-		,et.OtherLeaveHours `OtherLeaveHrs`
-		,et.AdditionalVLHours `AdditionalVLHrs`
-		
-		, e.EmployeeID
-		, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
-		, e.LeaveAllowance
-		, e.SickLeaveAllowance
-		, e.AdditionalVLAllowance
-		
-		, (e.LeaveAllowance
-		   + e.SickLeaveAllowance
-		   + e.AdditionalVLAllowance) `TotalLeave`
-		
-		, remarks `Remarks`
-		FROM employee e
-		
-		LEFT JOIN employeetimeentry et
-		        ON et.OrganizationID = org_rowid
-				     AND et.`Date` BETWEEN date_from AND date_to
-					  # AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
-					  AND (et.VacationLeaveHours + et.SickLeaveHours + et.AdditionalVLHours) > 0
-					  AND et.EmployeeID=e.RowID
-		
-		LEFT JOIN payperiod pp ON pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=e.OrganizationID AND pp.`Year` = yeartofollow AND et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
-		
-		LEFT JOIN paystub ps ON ps.OrganizationID=e.OrganizationID AND ps.EmployeeID=e.RowID AND ps.PayPeriodID=pp.RowID
-		LEFT JOIN paystubitem psi ON psi.PayStubID = ps.RowID AND FIND_IN_SET(psi.ProductID, leave_prodids) > 0
-		
-		WHERE e.OrganizationID = et.OrganizationID
-		AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-		AND e.RowID = IFNULL(emp_rowid, e.RowID)
-		
-		# GROUP BY et.RowID
-		ORDER BY CONCAT(e.LastName, e.FirstName), et.`Date`
+FROM (SELECT ii.*
+      FROM (SELECT
+				e.RowID `EmployeeRowId`
+				, et.RowID
+				, DATE_FORMAT(et.`Date`, custom_dateformat) `Date`
+				
+				,et.VacationLeaveHours `VacationLeaveHrs`
+				,et.SickLeaveHours `SickLeaveHrs`
+				,et.MaternityLeaveHours `MaternityLeaveHrs`
+				,et.OtherLeaveHours `OtherLeaveHrs`
+				,et.AdditionalVLHours `AdditionalVLHrs`
+				
+				, e.EmployeeID
+				, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
+				, e.LeaveAllowance
+				, e.SickLeaveAllowance
+				, e.AdditionalVLAllowance
+				
+				, (e.LeaveAllowance
+				   + e.SickLeaveAllowance
+				   + e.AdditionalVLAllowance) `TotalLeave`
+				
+				, remarks `Remarks`
+				FROM employee e
+				
+				LEFT JOIN employeetimeentry et
+				        ON et.OrganizationID = org_rowid
+						     AND et.`Date` BETWEEN date_from AND date_to
+							  # AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
+							  AND (et.VacationLeaveHours + et.SickLeaveHours + et.AdditionalVLHours) > 0
+							  AND et.EmployeeID=e.RowID
+				
+				INNER JOIN employeeleave elv ON elv.EmployeeID=et.EmployeeID AND elv.`Status`='Approved' AND et.`Date` BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
+				
+				LEFT JOIN payperiod pp ON pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=e.OrganizationID AND pp.`Year` = yeartofollow AND et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
+				
+				LEFT JOIN paystub ps ON ps.OrganizationID=e.OrganizationID AND ps.EmployeeID=e.RowID AND ps.PayPeriodID=pp.RowID
+				LEFT JOIN paystubitem psi ON psi.PayStubID = ps.RowID AND FIND_IN_SET(psi.ProductID, leave_prodids) > 0
+				
+				WHERE e.OrganizationID = et.OrganizationID
+				AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+				AND e.RowID = IFNULL(emp_rowid, e.RowID)
+				
+				GROUP BY et.RowID
+				ORDER BY CONCAT(e.LastName, e.FirstName), et.`Date`
+				) ii
+					
+			/**/UNION
+				SELECT
+				e.RowID `EmployeeRowId`
+				, NULL `RowID`
+				, NULL `Date`
+				
+				,0 `VacationLeaveHrs`
+				,0 `SickLeaveHrs`
+				,0 `MaternityLeaveHrs`
+				,0 `OtherLeaveHrs`
+				,0 `AdditionalVLHrs`
+				
+				, e.EmployeeID
+				, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
+				, e.LeaveAllowance
+				, e.SickLeaveAllowance
+				, e.AdditionalVLAllowance
+				
+				, (e.LeaveAllowance
+				   + e.SickLeaveAllowance
+				   + e.AdditionalVLAllowance) `TotalLeave`
+				
+				, remarks `Remarks`
+				FROM employee e
+				WHERE e.OrganizationID=org_rowid
+				AND e.RowID=IFNULL(emp_rowid, e.RowID)
+				AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+				AND (e.LeaveAllowance
+				     + e.SickLeaveAllowance
+				     + e.AdditionalVLAllowance) > 0
 ) i
 GROUP BY i.EmployeeRowId
 ORDER BY i.`FullName`

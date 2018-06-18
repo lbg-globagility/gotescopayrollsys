@@ -1,4 +1,6 @@
-﻿Public Class LoanSummaryGroupByTypeReportProvider
+﻿Imports CrystalDecisions.CrystalReports.Engine
+
+Public Class LoanSummaryGroupByTypeReportProvider
     Implements IReportProvider
 
     Public Property Name As String = "Loan Summary Report" Implements IReportProvider.Name
@@ -33,6 +35,22 @@
 
                 rptdoc.SetDataSource(dt)
 
+                Dim objText As TextObject = Nothing
+
+                objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("PeriodDate"), TextObject)
+
+                objText.Text =
+                    String.Concat("As of ",
+                                  DirectCast(date_to, Date).ToLongDateString)
+
+                objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtReportTitle"), TextObject)
+
+                objText.Text =
+                    String.Concat("LOAN REPORT - SUMMARY",
+                                  " (",
+                                  LoanNames(_loanTypeID).Replace(",", "/"),
+                                  ")")
+
                 Dim crvwr As New CrysRepForm
 
                 crvwr.crysrepvwr.ReportSource = rptdoc
@@ -46,5 +64,36 @@
         End If
 
     End Sub
+
+    Private Function LoanNames(LoanTypeId As Object) As String
+        Dim query As String =
+            String.Concat("SELECT GROUP_CONCAT(p.PartNo) `Result`",
+                          " FROM product p",
+                          " INNER JOIN category c ON c.CategoryName='Loan Type' AND c.RowID=p.CategoryID",
+                          " WHERE p.OrganizationID=?og_rowid",
+                          " AND p.RowID=IFNULL(?loantypeid, p.RowID)",
+                          " AND p.ActiveData='1'",
+                          " ORDER BY p.PartNo",
+                          ";")
+
+        Dim params = New Object() {org_rowid, LoanTypeId}
+
+        Dim sql As New SQL(query, params)
+
+        Dim returnvalue As String = ""
+
+        Try
+            returnvalue = sql.GetFoundRow
+
+            If sql.HasError Then
+                Throw sql.ErrorException
+            End If
+        Catch ex As Exception
+            returnvalue = ""
+            MsgBox(getErrExcptn(ex, MyBase.ToString))
+        End Try
+
+        Return returnvalue
+    End Function
 
 End Class

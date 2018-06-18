@@ -24,8 +24,8 @@ Partial Class DateRangeDialog
     Private Sub InitializeComponent()
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
         Me.DateTimePicker2 = New System.Windows.Forms.DateTimePicker()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.btnOK = New System.Windows.Forms.Button()
+        Me.btnCancel = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -48,23 +48,23 @@ Partial Class DateRangeDialog
         Me.DateTimePicker2.Size = New System.Drawing.Size(118, 20)
         Me.DateTimePicker2.TabIndex = 1
         '
-        'Button1
+        'btnOK
         '
-        Me.Button1.Location = New System.Drawing.Point(3, 4)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "OK"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnOK.Location = New System.Drawing.Point(3, 4)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(75, 23)
+        Me.btnOK.TabIndex = 0
+        Me.btnOK.Text = "OK"
+        Me.btnOK.UseVisualStyleBackColor = True
         '
-        'Button2
+        'btnCancel
         '
-        Me.Button2.Location = New System.Drawing.Point(84, 4)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 3
-        Me.Button2.Text = "Cancel"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.btnCancel.Location = New System.Drawing.Point(84, 4)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btnCancel.TabIndex = 1
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -86,12 +86,12 @@ Partial Class DateRangeDialog
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.Button1)
-        Me.Panel1.Controls.Add(Me.Button2)
+        Me.Panel1.Controls.Add(Me.btnOK)
+        Me.Panel1.Controls.Add(Me.btnCancel)
         Me.Panel1.Location = New System.Drawing.Point(127, 98)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(162, 31)
-        Me.Panel1.TabIndex = 6
+        Me.Panel1.TabIndex = 2
         '
         'DateRangeDialog
         '
@@ -115,8 +115,8 @@ Partial Class DateRangeDialog
     End Sub
     Friend WithEvents DateTimePicker1 As System.Windows.Forms.DateTimePicker
     Friend WithEvents DateTimePicker2 As System.Windows.Forms.DateTimePicker
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents btnOK As System.Windows.Forms.Button
+    Friend WithEvents btnCancel As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Panel1 As System.Windows.Forms.Panel

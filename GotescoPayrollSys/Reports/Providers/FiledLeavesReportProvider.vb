@@ -1,4 +1,6 @@
-﻿Public Class FiledLeavesReportProvider
+﻿Imports CrystalDecisions.CrystalReports.Engine
+
+Public Class FiledLeavesReportProvider
     Implements IReportProvider
 
     Public Property GotescoReportName As String = "Filed Leaves Report" Implements IReportProvider.GotescoReportName
@@ -29,6 +31,14 @@
 
         Dim report = New FiledLeaves()
         report.SetDataSource(dt)
+
+        Dim objText As TextObject = Nothing
+
+        objText = DirectCast(report.ReportDefinition.Sections(1).ReportObjects("PeriodDate"), TextObject)
+
+        objText.Text =
+            String.Concat("As of ",
+                          date_to.ToLongDateString)
 
         Dim viewer As New CrysRepForm()
         viewer.crysrepvwr.ReportSource = report

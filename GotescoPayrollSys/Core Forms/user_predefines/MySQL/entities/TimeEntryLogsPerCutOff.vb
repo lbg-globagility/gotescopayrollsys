@@ -48,6 +48,8 @@ Public Class TimeEntryLogsPerCutOff
 
     Public Property OrdinalValue As Integer
 
+    Public Property EmployeePrimaKey As Integer
+
     Public Property EmployeeUniqueKey As String
 
     Public Property FullName As String

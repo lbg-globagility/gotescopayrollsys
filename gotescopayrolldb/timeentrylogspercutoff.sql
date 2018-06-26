@@ -27,6 +27,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `timeentrylogspercuto
 , pp.`Year`
 , pp.OrdinalValue
 
+, e.RowID `EmployeePrimaKey`
 , e.EmployeeID `EmployeeUniqueKey`
 , PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
 

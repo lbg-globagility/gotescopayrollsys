@@ -146,13 +146,11 @@ Public Class TimeEntryLogs
 
     End Sub
 
-
     Private Sub PayPeriodAndEmployee_CurrentCellChanged(sender As Object, e As EventArgs) _
         Handles DataGridViewX1.CurrentCellChanged,
         DataGridViewX2.CurrentCellChanged
 
     End Sub
-
 
     Private Sub DataGridViewX2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewX2.CellContentClick
 
@@ -192,7 +190,6 @@ Public Class TimeEntryLogs
                 DataGridViewX3.CurrentCell =
                     DataGridViewX3.Item(timelog_row.ColumnIndex, _rowindex)
             End If
-
         Catch ex As Exception
             ErrorNotif(ex)
         Finally
@@ -202,7 +199,7 @@ Public Class TimeEntryLogs
     End Sub
 
     Private Sub TimeEntryLogs_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        
+
     End Sub
 
     Private Sub TimeEntryLogs_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -315,7 +312,6 @@ Public Class TimeEntryLogs
                 End If
 
             End If
-
         Catch ex As Exception
             ErrorNotif(ex)
         Finally
@@ -348,7 +344,6 @@ Public Class TimeEntryLogs
                 DataGridViewX3.CurrentCell = row_errors.FirstOrDefault.Cells(0)
                 Return
             End If
-
         Catch ex As Exception
             ErrorNotif(ex)
         End Try
@@ -413,7 +408,6 @@ Public Class TimeEntryLogs
 
                                 _mod.Entry(etd).State = Entity.EntityState.Modified
                             Next
-
                         Else
                             Dim ted =
                                 New EmployeeTimeEntryDetails _
@@ -437,7 +431,6 @@ Public Class TimeEntryLogs
                 ct.ShowInfoBallon("Changes saved successfully.")
 
             End If
-
         Catch ex As Exception
             ErrorNotif(ex)
         Finally
@@ -468,7 +461,6 @@ Public Class TimeEntryLogs
                 ct.ShowInfoBallon("Please wait while the system doing the importation.")
 
                 bgworkTypicalImport.RunWorkerAsync()
-
             Else
 
             End If
@@ -513,7 +505,6 @@ Public Class TimeEntryLogs
         If e.Error IsNot Nothing Then
             ErrorNotif(e.Error)
         ElseIf e.Cancelled Then
-
         Else
             Dim ct As New CustomBalloonToolTip(Label2, "Importing time logs")
             ct.ShowInfoBallon("Time logs imported successfully.")
@@ -596,7 +587,6 @@ Public Class TimeEntryLogs
                         DataGridViewX3.Item(colName, rowindx).ErrorText = "     Invalid time value"
                     End Try
                 End Try
-
             Else
 
                 DataGridViewX3.Item(colName, rowindx).ErrorText = Nothing
@@ -618,7 +608,7 @@ Public Class TimeEntryLogs
             'Button1_Click(Button1, New EventArgs)
 
         End If
-        
+
     End Sub
 
     Private Sub ToolStripProgressBar1_VisibleChanged(sender As Object, e As EventArgs) Handles ToolStripProgressBar1.VisibleChanged
@@ -647,7 +637,6 @@ Public Class TimeEntryLogs
                 DataGridViewX1.DataSource = _payperiods.ToList
 
             End Using
-
         Catch ex As Exception
             ErrorNotif(ex)
         End Try
@@ -671,7 +660,7 @@ Public Class TimeEntryLogs
                                       .Full_Name = employeeinfo.FullName,
                                       .EPrimaryKey = employeeinfo.RowID}
                      ).
-                 OrderBy(Function(e) e.Full_Name).
+                 OrderBy(Function(e) String.Concat(e.Full_Name, e.Employee_ID)).
                  Skip(_page).Take(twenty)
 
                 'DataGridViewX2.AutoGenerateColumns = False
@@ -684,7 +673,6 @@ Public Class TimeEntryLogs
                 Next
 
             End Using
-
         Catch ex As Exception
             ErrorNotif(ex)
         End Try
@@ -719,7 +707,6 @@ Public Class TimeEntryLogs
                     Next
 
                 End Using
-
             Catch ex As Exception
                 ErrorNotif(ex)
             End Try
@@ -745,7 +732,6 @@ Public Class TimeEntryLogs
                     datet = Date.Parse(pp_curr_row.Cells(1).Value).ToShortDateString
                 End If
 
-
                 Dim emp_curr_row = DataGridViewX2.Rows.OfType(Of DataGridViewRow).Where(Function(dgvr) dgvr.Selected).FirstOrDefault
 
                 e_uniq_id = Nothing
@@ -755,7 +741,6 @@ Public Class TimeEntryLogs
                     e_primkey = Convert.ToString(emp_curr_row.Cells(2).Value)
 
                 End If
-
 
                 Dim _timelogs =
                     (From t In _mod.TimeEntryLogsPerCutOff
@@ -894,6 +879,7 @@ Public Class TimeEntryLogs
         Return max_importid
 
     End Function
+
 #End Region
 
 #Region "Properties"
@@ -901,38 +887,47 @@ Public Class TimeEntryLogs
     Public ReadOnly ViewName As String = "Employee Time Entry logs"
 
     Property CanAdd As Boolean
+
         Get
             Return can_add
         End Get
+
         Set(value As Boolean)
             can_add = value
             tsbtnNew.Visible = can_add
             tsbtnImport.Visible = can_add
             DataGridViewX3.AllowUserToAddRows = can_add
-            
+
         End Set
+
     End Property
 
     Property CanDelete As Boolean
+
         Get
             Return can_del
         End Get
+
         Set(value As Boolean)
             can_del = value
             tsbtndel.Visible = can_del
 
         End Set
+
     End Property
 
     Property CanUpdate As Boolean
+
         Get
             Return can_update
         End Get
+
         Set(value As Boolean)
             can_update = value
             tsbtnSave.Visible = can_update
-            
+
         End Set
+
     End Property
 
 #End Region

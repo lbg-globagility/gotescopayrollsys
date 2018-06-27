@@ -100,6 +100,7 @@ IF NEW.`Status` = 'Approved' THEN
 	WHERE sh.RowID=@shift_rowid
 	AND sh.TimeFrom=NEW.LeaveStartTime
 	AND sh.TimeTo	=NEW.LeaveEndTime
+	LIMIT 1
 	INTO @break_hrs;
 	
 	SET @break_hrs = IFNULL(@break_hrs, 0);

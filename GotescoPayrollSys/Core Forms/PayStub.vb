@@ -9,59 +9,60 @@ Imports OfficeOpenXml
 
 Public Class PayStub
 
-    Public q_employee As String = "SELECT e.RowID," &
-        "e.EmployeeID 'Employee ID'," &
-        "e.FirstName 'First Name'," &
-        "e.MiddleName 'Middle Name'," &
-        "e.LastName 'Last Name'," &
-        "e.Surname," &
-        "e.Nickname," &
-        "e.MaritalStatus 'Marital Status'," &
-        "COALESCE(e.NoOfDependents,0) 'No. Of Dependents'," &
-        "e.Birthdate," &
-        "e.Startdate," &
-        "e.JobTitle 'Job Title'," &
-        "COALESCE(pos.PositionName,'') 'Position'," &
-        "e.Salutation," &
-        "e.TINNo 'TIN'," &
-        "e.SSSNo 'SSS No.'," &
-        "e.HDMFNo 'PAGIBIG No.'," &
-        "e.PhilHealthNo 'PhilHealth No.'," &
-        "e.WorkPhone 'Work Phone No.'," &
-        "e.HomePhone 'Home Phone No.'," &
-        "e.MobilePhone 'Mobile Phone No.'," &
-        "e.HomeAddress 'Home address'," &
-        "e.EmailAddress 'Email address'," &
-        "IF(e.Gender='M','Male','Female') 'Gender'," &
-        "e.EmploymentStatus 'Employment Status'," &
-        "IFNULL(pf.PayFrequencyType,'') 'Pay Frequency'," &
-        "e.UndertimeOverride," &
-        "e.OvertimeOverride," &
-        "COALESCE(pos.RowID,'pos.RowID') 'PositionID'" &
-        ",IFNULL(e.PayFrequencyID,'') 'PayFrequencyID'" &
-        ",e.EmployeeType" &
-        ",e.LeaveBalance" &
-        ",e.SickLeaveBalance" &
-        ",e.MaternityLeaveBalance" &
-        ",e.LeaveAllowance" &
-        ",e.SickLeaveAllowance" &
-        ",e.MaternityLeaveAllowance" &
-        ",e.LeavePerPayPeriod" &
-        ",e.SickLeavePerPayPeriod" &
-        ",e.MaternityLeavePerPayPeriod" &
-        ",COALESCE(fstat.RowID,3) 'fstatRowID'" &
-        ",'' 'Image'" &
-        ",DATE_FORMAT(e.Created,'%m-%d-%Y') 'Creation Date'," &
-        "CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2))) 'Created by'," &
-        "COALESCE(DATE_FORMAT(e.LastUpd,'%m-%d-%Y'),'') 'Last Update'," &
-        "(SELECT CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2)))  FROM user WHERE RowID=e.LastUpdBy) 'LastUpdate by'" &
-        " " &
-        "FROM employee e " &
-        "LEFT JOIN user u ON e.CreatedBy=u.RowID " &
-        "LEFT JOIN position pos ON e.PositionID=pos.RowID " &
-        "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " &
-        "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents " &
-        "WHERE e.OrganizationID=" & org_rowid
+    Public q_employee As String = String.Concat("SELECT e.RowID,",
+        "e.EmployeeID 'Employee ID',",
+        "e.FirstName 'First Name',",
+        "e.MiddleName 'Middle Name',",
+        "e.LastName 'Last Name',",
+        "e.Surname,",
+        "e.Nickname,",
+        "e.MaritalStatus 'Marital Status',",
+        "COALESCE(e.NoOfDependents,0) 'No. Of Dependents',",
+        "e.Birthdate,",
+        "e.Startdate,",
+        "e.JobTitle 'Job Title',",
+        "COALESCE(pos.PositionName,'') 'Position',",
+        "e.Salutation,",
+        "e.TINNo 'TIN',",
+        "e.SSSNo 'SSS No.',",
+        "e.HDMFNo 'PAGIBIG No.',",
+        "e.PhilHealthNo 'PhilHealth No.',",
+        "e.WorkPhone 'Work Phone No.',",
+        "e.HomePhone 'Home Phone No.',",
+        "e.MobilePhone 'Mobile Phone No.',",
+        "e.HomeAddress 'Home address',",
+        "e.EmailAddress 'Email address',",
+        "IF(e.Gender='M','Male','Female') 'Gender',",
+        "e.EmploymentStatus 'Employment Status',",
+        "IFNULL(pf.PayFrequencyType,'') 'Pay Frequency',",
+        "e.UndertimeOverride,",
+        "e.OvertimeOverride,",
+        "COALESCE(pos.RowID,'pos.RowID') 'PositionID'",
+        ",IFNULL(e.PayFrequencyID,'') 'PayFrequencyID'",
+        ",e.EmployeeType",
+        ",e.LeaveBalance",
+        ",e.SickLeaveBalance",
+        ",e.MaternityLeaveBalance",
+        ",e.LeaveAllowance",
+        ",e.SickLeaveAllowance",
+        ",e.MaternityLeaveAllowance",
+        ",e.LeavePerPayPeriod",
+        ",e.SickLeavePerPayPeriod",
+        ",e.MaternityLeavePerPayPeriod",
+        ",COALESCE(fstat.RowID,3) 'fstatRowID'",
+        ",'' 'Image'",
+        ",DATE_FORMAT(e.Created,'%m-%d-%Y') 'Creation Date',",
+        "CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2))) 'Created by',",
+        "COALESCE(DATE_FORMAT(e.LastUpd,'%m-%d-%Y'),'') 'Last Update',",
+        "(SELECT CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2)))  FROM user WHERE RowID=e.LastUpdBy) 'LastUpdate by'",
+        " ",
+        "FROM employee e ",
+        "LEFT JOIN user u ON e.CreatedBy=u.RowID ",
+        "LEFT JOIN position pos ON e.PositionID=pos.RowID ",
+        "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID ",
+        "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents ",
+        "WHERE e.OrganizationID=", org_rowid,
+        " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0")
 
     '",COALESCE(LEFT(Image,256),'') 'Image'" & _
 
@@ -435,7 +436,7 @@ Public Class PayStub
     Sub loademployee(Optional q_empsearch As String = Nothing)
         Dim full_query As String = String.Empty
         If q_empsearch = Nothing Then
-            full_query = (q_employee & " ORDER BY e.RowID DESC" &
+            full_query = (q_employee & " ORDER BY CONCAT(e.LastName, e.FirstName)" &
                         ",FIELD(e.EmploymentStatus,'Retired','Resigned','Terminated')" &
                         ",FIELD(e.RevealInPayroll,'1','0')" &
                         " LIMIT " & pagination & ",20;") ', dgvemployees
@@ -448,13 +449,14 @@ Public Class PayStub
                 pagination = 0
             End If
 
-            full_query = (q_employee & q_empsearch & " ORDER BY e.RowID DESC" &
+            full_query = (q_employee & q_empsearch & " ORDER BY CONCAT(e.LastName, e.FirstName)" &
                         ",FIELD(e.EmploymentStatus,'Retired','Resigned','Terminated')" &
                         ",FIELD(e.RevealInPayroll,'1','0')" &
                         " LIMIT " & pagination & ",20;") ', dgvemployees', Simple)
         End If
         Dim catchdt As New DataTable
-        catchdt = New SQLQueryToDatatable(full_query).ResultTable
+        'catchdt = New SQLQueryToDatatable(full_query).ResultTable
+        catchdt = New SQL(full_query).GetFoundRows.Tables.OfType(Of DataTable).First
         dgvemployees.Rows.Clear()
         For Each drow As DataRow In catchdt.Rows
             Dim row_array = drow.ItemArray
@@ -6545,28 +6547,52 @@ Public Class PayStub
 
             pagination = 0
 
-            dattabsearch = retAsDatTbl("SELECT e.*" &
-                                       ",pos.PositionName" &
-                                       ",pf.PayFrequencyType" &
-                                       ",fstat.FilingStatus" &
-                                       " FROM employee e" &
-                                       " LEFT JOIN user u ON e.CreatedBy=u.RowID" &
-                                       " LEFT JOIN position pos ON e.PositionID=pos.RowID" &
-                                       " LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID" &
-                                       " LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents" &
-                                       " WHERE (e.FirstName LIKE '%" & Trim(tsSearch.Text) & "%'" &
-                                       " OR e.MiddleName LIKE '%" & Trim(tsSearch.Text) & "%'" &
-                                       " OR e.LastName LIKE '%" & Trim(tsSearch.Text) & "%'" &
-                                       " OR e.Surname LIKE '%" & Trim(tsSearch.Text) & "%'" &
-                                       " OR e.EmployeeID LIKE '%" & Trim(tsSearch.Text) & "%'" &
-                                       " OR e.TINNo LIKE '%" & Trim(tsSearch.Text) & "%'" &
-                                       " OR e.SSSNo LIKE '%" & Trim(tsSearch.Text) & "%'" &
-                                       " OR e.HDMFNo LIKE '%" & Trim(tsSearch.Text) & "%'" &
-                                       " OR e.PhilHealthNo LIKE '%" & Trim(tsSearch.Text) & "%')" &
-                                       " AND e.OrganizationID=" & org_rowid & " ORDER BY e.RowID DESC LIMIT " & pagination & ",100;")
+            'dattabsearch = retAsDatTbl(String.Concat("SELECT e.*",
+            '                           ",pos.PositionName",
+            '                           ",pf.PayFrequencyType",
+            '                           ",fstat.FilingStatus",
+            '                           " FROM employee e",
+            '                           " LEFT JOIN user u ON e.CreatedBy=u.RowID",
+            '                           " LEFT JOIN position pos ON e.PositionID=pos.RowID",
+            '                           " LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID",
+            '                           " LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents",
+            '                           " WHERE (e.FirstName LIKE '%", Trim(tsSearch.Text), "%'",
+            '                           " OR e.MiddleName LIKE '%", Trim(tsSearch.Text), "%'",
+            '                           " OR e.LastName LIKE '%", Trim(tsSearch.Text), "%'",
+            '                           " OR e.Surname LIKE '%", Trim(tsSearch.Text), "%'",
+            '                           " OR e.EmployeeID LIKE '%", Trim(tsSearch.Text), "%'",
+            '                           " OR e.TINNo LIKE '%", Trim(tsSearch.Text), "%'",
+            '                           " OR e.SSSNo LIKE '%", Trim(tsSearch.Text), "%'",
+            '                           " OR e.HDMFNo LIKE '%", Trim(tsSearch.Text), "%'",
+            '                           " OR e.PhilHealthNo LIKE '%", Trim(tsSearch.Text), "%')",
+            '                           " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
+            '                           " AND e.OrganizationID=", org_rowid, " ORDER BY CONCAT(e.LastName, e.FirstName) LIMIT ", pagination, ",20;"))
 
-            '" WHERE MATCH (e.FirstName,e.MiddleName,e.LastName,e.Surname,e.EmployeeID,e.TINNo,e.SSSNo,e.HDMFNo,e.PhilHealthNo)" & _
-            '" AGAINST ('" & Trim(tsSearch.Text) & "') AND e.OrganizationID=" & orgztnID & " ORDER BY e.RowID DESC LIMIT " & pagination & ",100;")
+            Dim query As String =
+                String.Concat("SELECT e.*",
+                            ",pos.PositionName",
+                            ",pf.PayFrequencyType",
+                            ",fstat.FilingStatus",
+                            " FROM employee e",
+                            " LEFT JOIN user u ON e.CreatedBy=u.RowID",
+                            " LEFT JOIN position pos ON e.PositionID=pos.RowID",
+                            " LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID",
+                            " LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents",
+                            " WHERE (e.FirstName LIKE '%?search_text%'",
+                            " OR e.MiddleName LIKE '%?search_text%'",
+                            " OR e.LastName LIKE '%?search_text%'",
+                            " OR e.Surname LIKE '%?search_text%'",
+                            " OR e.EmployeeID LIKE '%?search_text%'",
+                            " OR e.TINNo LIKE '%?search_text%'",
+                            " OR e.SSSNo LIKE '%?search_text%'",
+                            " OR e.HDMFNo LIKE '%?search_text%'",
+                            " OR e.PhilHealthNo LIKE '%?search_text%')",
+                            " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
+                            " AND e.OrganizationID=", org_rowid, " ORDER BY CONCAT(e.LastName, e.FirstName) LIMIT ", pagination, ",20;")
+
+            Dim params = New Object() {tsSearch.Text.Trim}
+
+            dattabsearch = New SQL(query, params).GetFoundRows.Tables.OfType(Of DataTable).First
 
             dgvemployees.Rows.Clear()
 
@@ -8416,85 +8442,20 @@ Public Class PayStub
 
         ObjectDisplayFieldCleanser(tbpleavebal, 0.0)
 
-        'For Each ctrl As Control In TabPage4.Controls
-        '    If TypeOf ctrl Is TextBox Then
-
-        '        'Dim contentstring = DirectCast(ctrl, TextBox).Text & "@" & ctrl.Name & ".Text = 0" & Environment.NewLine
-
-        '        File.AppendAllText("C:\Users\GLOBAL-D\Desktop\UNDECLAREDTextBoxObject.txt",
-        '                           ctrl.Name & ".Text = 0" & Environment.NewLine)
-
-        '        File.AppendAllText("C:\Users\GLOBAL-D\Desktop\UNDECLAREDTextBoxObject.txt",
-        '                           DirectCast(ctrl, TextBox).Text & Environment.NewLine)
-
-        '    Else
-        '        Continue For
-        '    End If
-        'Next
         Label3.Text = "Taxable income :"
         Dim EmployeeRowID = dgvemployees.Tag
 
-        'Dim n_SQLQueryToDatatable As _
-        '    New SQLQueryToDatatable("SELECT psa.*" &
-        '                            ",es.BasicPay" &
-        '                            ",es.Salary AS TrueSalary" &
-        '                            ",IF(e.EmployeeType='Daily',PAYFREQUENCY_DIVISOR(e.EmployeeType),PAYFREQUENCY_DIVISOR(pf.PayFrequencyType)) AS PAYFREQUENCYDIVISOR" &
-        '                            ",ete.*" &
-        '                            ",e.EmployeeType" &
-        '                            " FROM paystub psa" &
-        '                            " INNER JOIN employee e ON e.RowID=psa.EmployeeID AND e.OrganizationID=psa.OrganizationID" &
-        '                            " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
-        '                            " INNER JOIN employeesalary es" &
-        '                                " ON es.EmployeeID=psa.EmployeeID" &
-        '                                " AND es.OrganizationID=psa.OrganizationID" &
-        '                                " AND (es.EffectiveDateFrom >= psa.PayFromDate OR IFNULL(es.EffectiveDateTo,CURDATE()) >= psa.PayFromDate)" &
-        '                                " AND (es.EffectiveDateFrom <= psa.PayToDate OR IFNULL(es.EffectiveDateTo,CURDATE()) <= psa.PayToDate)" &
-        '                            " INNER JOIN (SELECT RowID AS eteRowID" &
-        '                                        ",SUM(RegularHoursWorked) AS RegularHoursWorked" &
-        '                                        ",SUM(RegularHoursAmount) AS RegularHoursAmount" &
-        '                                        ",SUM(TotalHoursWorked) AS TotalHoursWorked" &
-        '                                        ",SUM(OvertimeHoursWorked) AS OvertimeHoursWorked" &
-        '                                        ",SUM(OvertimeHoursAmount) AS OvertimeHoursAmount" &
-        '                                        ",SUM(UndertimeHours) AS UndertimeHours" &
-        '                                        ",SUM(UndertimeHoursAmount) AS UndertimeHoursAmount" &
-        '                                        ",SUM(NightDifferentialHours) AS NightDifferentialHours" &
-        '                                        ",SUM(NightDiffHoursAmount) AS NightDiffHoursAmount" &
-        '                                        ",SUM(NightDifferentialOTHours) AS NightDifferentialOTHours" &
-        '                                        ",SUM(NightDiffOTHoursAmount) AS NightDiffOTHoursAmount" &
-        '                                        ",SUM(HoursLate) AS HoursLate" &
-        '                                        ",SUM(HoursLateAmount) AS HoursLateAmount" &
-        '                                        ",SUM(VacationLeaveHours) AS VacationLeaveHours" &
-        '                                        ",SUM(SickLeaveHours) AS SickLeaveHours" &
-        '                                        ",SUM(MaternityLeaveHours) AS MaternityLeaveHours" &
-        '                                        ",SUM(OtherLeaveHours) AS OtherLeaveHours" &
-        '                                        ",SUM(TotalDayPay) AS TotalDayPay" &
-        '                                        ",SUM(Absent) AS Absent" &
-        '                                        " FROM employeetimeentry" &
-        '                                        " WHERE EmployeeID='" & EmployeeRowID & "' AND OrganizationID='" & orgztnID & "' AND `Date` BETWEEN '" & paypFrom & "' AND '" & paypTo & "') ete ON ete.eteRowID > 0" &
-        '                            " INNER JOIN organization og ON og.RowID=psa.OrganizationID" &
-        '                            " WHERE psa.EmployeeID='" & EmployeeRowID & "'" &
-        '                            " AND psa.OrganizationID='" & orgztnID & "'" &
-        '                            " AND psa.PayFromDate='" & paypFrom & "'" &
-        '                            " AND psa.PayToDate='" & paypTo & "'" &
-        '                            " ORDER BY es.EffectiveDateFrom DESC" &
-        '                            " LIMIT 1;")
-
-        Dim n_SQLQueryToDatatable As _
-            New ReadSQLProcedureToDatatable("VIEW_paystubitem_declared",
-                                            org_rowid,
-                                            EmployeeRowID,
-                                            paypFrom,
-                                            paypTo)
-
         Dim paystubactual As New DataTable
 
-        paystubactual = n_SQLQueryToDatatable.ResultTable
+        paystubactual =
+            New SQL("CALL VIEW_paystubitem_declared(?ogrowid, ?erowid, ?datefrom, ?dateto);",
+                    New Object() {org_rowid, EmployeeRowID, paypFrom, paypTo}).GetFoundRows.Tables.OfType(Of DataTable).First
 
         Dim psaItems As New DataTable
 
         For Each drow As DataRow In paystubactual.Rows
 
-            psaItems = New SQLQueryToDatatable("CALL VIEW_paystubitem('" & drow("RowID") & "');").ResultTable
+            psaItems = New SQL(String.Concat("CALL VIEW_paystubitem('", drow("RowID"), "');")).GetFoundRows.Tables.OfType(Of DataTable).First
 
             Dim strdouble = ValNoComma(drow("TrueSalary")) / ValNoComma(drow("PAYFREQUENCYDIVISOR")) 'BasicPay
             Dim holidaybayad = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Holiday pay'")) 'Holiday pay
@@ -8718,66 +8679,17 @@ Public Class PayStub
         Label3.Text = "Taxable income :"
         Dim EmployeeRowID = dgvemployees.Tag
 
-        'Dim n_SQLQueryToDatatable As _
-        '    New SQLQueryToDatatable("SELECT psa.*" &
-        '                            ",(es.BasicPay + (es.BasicPay * GET_employeeundeclaredsalarypercent(es.EmployeeID,es.OrganizationID,'" & paypFrom & "','" & paypTo & "'))) AS BasicPay" &
-        '                            ",es.TrueSalary" &
-        '                            ",IF(e.EmployeeType='Daily',PAYFREQUENCY_DIVISOR(e.EmployeeType),PAYFREQUENCY_DIVISOR(pf.PayFrequencyType)) AS PAYFREQUENCYDIVISOR" &
-        '                            ",ete.*" &
-        '                            ",e.EmployeeType" &
-        '                            " FROM paystubactual psa" &
-        '                            " INNER JOIN employee e ON e.RowID=psa.EmployeeID AND e.OrganizationID=psa.OrganizationID" &
-        '                            " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
-        '                            " INNER JOIN employeesalary es" &
-        '                                " ON es.EmployeeID=psa.EmployeeID" &
-        '                                " AND es.OrganizationID=psa.OrganizationID" &
-        '                                " AND (es.EffectiveDateFrom >= psa.PayFromDate OR IFNULL(es.EffectiveDateTo,psa.PayToDate) >= psa.PayFromDate)" &
-        '                                " AND (es.EffectiveDateFrom <= psa.PayToDate OR IFNULL(es.EffectiveDateTo,psa.PayToDate) <= psa.PayToDate)" &
-        '                            " INNER JOIN (SELECT RowID AS eteRowID" &
-        '                                        ",SUM(RegularHoursWorked) AS RegularHoursWorked" &
-        '                                        ",SUM(RegularHoursAmount) AS RegularHoursAmount" &
-        '                                        ",SUM(TotalHoursWorked) AS TotalHoursWorked" &
-        '                                        ",SUM(OvertimeHoursWorked) AS OvertimeHoursWorked" &
-        '                                        ",SUM(OvertimeHoursAmount) AS OvertimeHoursAmount" &
-        '                                        ",SUM(UndertimeHours) AS UndertimeHours" &
-        '                                        ",SUM(UndertimeHoursAmount) AS UndertimeHoursAmount" &
-        '                                        ",SUM(NightDifferentialHours) AS NightDifferentialHours" &
-        '                                        ",SUM(NightDiffHoursAmount) AS NightDiffHoursAmount" &
-        '                                        ",SUM(NightDifferentialOTHours) AS NightDifferentialOTHours" &
-        '                                        ",SUM(NightDiffOTHoursAmount) AS NightDiffOTHoursAmount" &
-        '                                        ",SUM(HoursLate) AS HoursLate" &
-        '                                        ",SUM(HoursLateAmount) AS HoursLateAmount" &
-        '                                        ",SUM(VacationLeaveHours) AS VacationLeaveHours" &
-        '                                        ",SUM(SickLeaveHours) AS SickLeaveHours" &
-        '                                        ",SUM(MaternityLeaveHours) AS MaternityLeaveHours" &
-        '                                        ",SUM(OtherLeaveHours) AS OtherLeaveHours" &
-        '                                        ",SUM(TotalDayPay) AS TotalDayPay" &
-        '                                        ",SUM(Absent) AS Absent" &
-        '                                        " FROM employeetimeentryactual" &
-        '                                        " WHERE EmployeeID='" & EmployeeRowID & "' AND OrganizationID='" & orgztnID & "' AND `Date` BETWEEN '" & paypFrom & "' AND '" & paypTo & "') ete ON ete.eteRowID > 0" &
-        '                            " WHERE psa.EmployeeID='" & EmployeeRowID & "'" &
-        '                            " AND psa.OrganizationID='" & orgztnID & "'" &
-        '                            " AND psa.PayFromDate='" & paypFrom & "'" &
-        '                            " AND psa.PayToDate='" & paypTo & "'" &
-        '                            " ORDER BY es.EffectiveDateFrom DESC" &
-        '                            " LIMIT 1;")
-
-        Dim n_SQLQueryToDatatable As _
-            New ReadSQLProcedureToDatatable("VIEW_paystubitem_actual",
-                                            org_rowid,
-                                            EmployeeRowID,
-                                            paypFrom,
-                                            paypTo)
-
         Dim paystubactual As New DataTable
 
-        paystubactual = n_SQLQueryToDatatable.ResultTable
+        paystubactual =
+            New SQL("CALL VIEW_paystubitem_actual(?ogrowid, ?erowid, ?datefrom, ?dateto);",
+                    New Object() {org_rowid, EmployeeRowID, paypFrom, paypTo}).GetFoundRows.Tables.OfType(Of DataTable).First
 
         Dim psaItems As New DataTable
 
         For Each drow As DataRow In paystubactual.Rows
 
-            psaItems = New SQLQueryToDatatable("CALL VIEW_paystubitemundeclared('" & drow("RowID") & "');").ResultTable
+            psaItems = New SQL(String.Concat("CALL VIEW_paystubitemundeclared('", drow("RowID"), "');")).GetFoundRows.Tables.OfType(Of DataTable).First
 
             Dim strdouble = ValNoComma(drow("TrueSalary")) / ValNoComma(drow("PAYFREQUENCYDIVISOR")) 'BasicPay
             Dim holidaybayad = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Holiday pay'")) 'Holiday pay

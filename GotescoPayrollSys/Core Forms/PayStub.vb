@@ -6547,27 +6547,6 @@ Public Class PayStub
 
             pagination = 0
 
-            'dattabsearch = retAsDatTbl(String.Concat("SELECT e.*",
-            '                           ",pos.PositionName",
-            '                           ",pf.PayFrequencyType",
-            '                           ",fstat.FilingStatus",
-            '                           " FROM employee e",
-            '                           " LEFT JOIN user u ON e.CreatedBy=u.RowID",
-            '                           " LEFT JOIN position pos ON e.PositionID=pos.RowID",
-            '                           " LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID",
-            '                           " LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents",
-            '                           " WHERE (e.FirstName LIKE '%", Trim(tsSearch.Text), "%'",
-            '                           " OR e.MiddleName LIKE '%", Trim(tsSearch.Text), "%'",
-            '                           " OR e.LastName LIKE '%", Trim(tsSearch.Text), "%'",
-            '                           " OR e.Surname LIKE '%", Trim(tsSearch.Text), "%'",
-            '                           " OR e.EmployeeID LIKE '%", Trim(tsSearch.Text), "%'",
-            '                           " OR e.TINNo LIKE '%", Trim(tsSearch.Text), "%'",
-            '                           " OR e.SSSNo LIKE '%", Trim(tsSearch.Text), "%'",
-            '                           " OR e.HDMFNo LIKE '%", Trim(tsSearch.Text), "%'",
-            '                           " OR e.PhilHealthNo LIKE '%", Trim(tsSearch.Text), "%')",
-            '                           " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
-            '                           " AND e.OrganizationID=", org_rowid, " ORDER BY CONCAT(e.LastName, e.FirstName) LIMIT ", pagination, ",20;"))
-
             Dim query As String =
                 String.Concat("SELECT e.*",
                             ",pos.PositionName",
@@ -6578,19 +6557,19 @@ Public Class PayStub
                             " LEFT JOIN position pos ON e.PositionID=pos.RowID",
                             " LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID",
                             " LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents",
-                            " WHERE (e.FirstName LIKE '%?search_text%'",
-                            " OR e.MiddleName LIKE '%?search_text%'",
-                            " OR e.LastName LIKE '%?search_text%'",
-                            " OR e.Surname LIKE '%?search_text%'",
-                            " OR e.EmployeeID LIKE '%?search_text%'",
-                            " OR e.TINNo LIKE '%?search_text%'",
-                            " OR e.SSSNo LIKE '%?search_text%'",
-                            " OR e.HDMFNo LIKE '%?search_text%'",
-                            " OR e.PhilHealthNo LIKE '%?search_text%')",
+                            " WHERE (e.FirstName LIKE ?search_text",
+                            " OR e.MiddleName LIKE ?search_text",
+                            " OR e.LastName LIKE ?search_text",
+                            " OR e.Surname LIKE ?search_text",
+                            " OR e.EmployeeID LIKE ?search_text",
+                            " OR e.TINNo LIKE ?search_text",
+                            " OR e.SSSNo LIKE ?search_text",
+                            " OR e.HDMFNo LIKE ?search_text",
+                            " OR e.PhilHealthNo LIKE ?search_text)",
                             " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
                             " AND e.OrganizationID=", org_rowid, " ORDER BY CONCAT(e.LastName, e.FirstName) LIMIT ", pagination, ",20;")
 
-            Dim params = New Object() {tsSearch.Text.Trim}
+            Dim params = New Object() {String.Concat("%", tsSearch.Text.Trim, "%")}
 
             dattabsearch = New SQL(query, params).GetFoundRows.Tables.OfType(Of DataTable).First
 

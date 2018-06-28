@@ -54,7 +54,7 @@ SET @deduct_amt = 0;
 SELECT
 ps.RowID
 ,e.EmployeeID `Column2`
-,CONCAT_WS(', ', e.LastName, e.FirstName) `Column3`
+,REPLACE(CONCAT_WS(', ', e.LastName, e.FirstName), ',,', ',') `Column3`
 ,(@basic_payment := IFNULL(IF(ps.AsActual = 1, (esa.BasicPay * (esa.TrueSalary / esa.Salary)), esa.BasicPay), 0)) `TheBasicPay`
 
 ,FORMAT(@basic_payment, 2) `Column11`
@@ -94,12 +94,15 @@ ps.RowID
 ,IFNULL(FORMAT(et.OvertimeHoursAmount, 2), 0) `Column20`
 ,IFNULL(FORMAT(et.NightDiffHoursAmount,2), 0) `Column22`
 ,IFNULL(FORMAT(et.NightDiffOTHoursAmount, 2), 0) `Column24`
-,IFNULL(FORMAT(et.HolidayPayAmount, 2), 0) `Column1`
 
-,IFNULL(FORMAT(et.Absent,2), 0) `Column26`
-,IFNULL(FORMAT(et.HoursLateAmount, 2), 0) `Column27`
-,IFNULL(FORMAT(et.UndertimeHoursAmount, 2), 0) `Column28`
-,IFNULL(FORMAT(et.`AbsentHours`,2), 0) `Column41`
+,FORMAT(IFNULL(et.`AbsentHours`, 0),2) `Column41`
+,FORMAT(IFNULL(et.Absent, 0),2) `Column26`
+
+,FORMAT(IFNULL(et.HoursLate,0), 2) `Column42`
+,FORMAT(IFNULL(et.HoursLateAmount, 0), 2) `Column27`
+
+,FORMAT(IFNULL(et.UndertimeHours,0), 2) `Column43`
+,FORMAT(IFNULL(et.UndertimeHoursAmount, 0), 2) `Column28`
 
 ,logo `Column40`
 
@@ -109,7 +112,14 @@ ps.RowID
 # , IFNULL(rd.`RestDayAmount`, 0) `Column16`
 , IFNULL(ROUND(et.`RestDayAmount`, 2), 0) `Column16`
 
+, FORMAT(IFNULL(et.`HolidayHours`, 0), 2) `Column44`
+, IFNULL(FORMAT(et.HolidayPayAmount, 2), 0) `Column1`
+
+, FORMAT(IFNULL(et.`LeaveHours`, 0), 2) `Column45`
 , IFNULL(ROUND(et.`Leavepayment`, 2), 0) `Column15`
+
+,IFNULL(REPLACE(adj.`AdjustmentName`, ',', '\n'), '') `Column46`
+,IFNULL(REPLACE(adj.`AdjustmentAmount`, ',', '\n'), '') `Column47`
 
 FROM proper_payroll ps
 
@@ -162,6 +172,10 @@ LEFT JOIN (SELECT
 			       , SUM(i.RestDayActualPay)
 					 , SUM(i.RestDayAmount)) `RestDayAmount`
 			  , SUM(et.`AbsentHours`) `AbsentHours`
+			  , SUM(IF(et.IsValidForHolidayPayment = 1
+			           # , GREATEST(et.RegularHoursWorked, et.WorkHours)
+			           , et.RegularHoursWorked
+						  , 0)) `HolidayHours`
 			  FROM proper_time_entry et
 			  
 			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
@@ -386,6 +400,16 @@ INNER JOIN (SELECT
 			  AND i.`Date` BETWEEN paydate_from AND paydat_to
 			  GROUP BY i.EmployeeID
            ) rd ON rd.EmployeeID = ps.EmployeeID*/
+
+LEFT JOIN (SELECT d.*
+			  FROM paystubadjustment_itemized d
+			  WHERE d.OrganizationID=og_rowid
+			  AND d.IsActual=is_actual
+			UNION
+           SELECT a.*
+			  FROM paystubadjustmentactual_itemized a
+			  WHERE a.OrganizationID=og_rowid
+			  AND a.IsActual=is_actual) adj ON adj.PayStubID=ps.RowID
 
 WHERE ps.OrganizationID=og_rowid
 AND ps.PayPeriodID=pp_rowid

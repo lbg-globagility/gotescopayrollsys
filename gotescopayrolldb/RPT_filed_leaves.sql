@@ -93,6 +93,10 @@ INNER JOIN employee e
 		     AND e.RowID = IFNULL(emp_rowid, e.RowID)
 		     AND e.OrganizationID = et.OrganizationID
 		     AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+			  AND (e.DateRegularized BETWEEN date_from AND date_to
+				    OR (e.DateRegularized <= date_from
+					     OR e.DateRegularized <= date_to)
+					 )
 
 INNER JOIN payperiod pp ON pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=e.OrganizationID AND pp.`Year` = yeartofollow AND et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
 

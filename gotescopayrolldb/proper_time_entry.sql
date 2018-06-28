@@ -48,6 +48,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `proper_time_entry` A
 	  ) `Leavepayment`
 	,0 `AsActual`
 	, IF(et.Absent > 0, IFNULL(sh.WorkHours, 0), 0) `AbsentHours`
+	, IFNULL(sh.WorkHours, 0) `WorkHours`
 	FROM employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID
 	INNER JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
@@ -97,6 +98,7 @@ UNION
 	  ) `Leavepayment`
 	,1 `AsActual`
 	, IF(et.Absent > 0, IFNULL(sh.WorkHours, 0), 0) `AbsentHours`
+	, IFNULL(sh.WorkHours, 0) `WorkHours`
 	FROM employeetimeentryactual et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID
 	INNER JOIN employeetimeentry ete ON ete.RowID=et.RowID

@@ -41,7 +41,7 @@ INTO remarks;
 
 SELECT i.*
 
-/**/, (i.LeaveAllowance - SUM(i.VacationLeaveHrs)) `VacationLeaveHours`
+/**/ , (i.LeaveAllowance - SUM(i.VacationLeaveHrs)) `VacationLeaveHours`
 , (i.SickLeaveAllowance - SUM(i.SickLeaveHrs)) `SickLeaveHours`
 # ,i.MaternityLeaveHours `MaternityLeaveHours`
 # ,i.OtherLeaveHours `OtherLeaveHours`
@@ -89,12 +89,16 @@ FROM (SELECT ii.*
 				WHERE e.OrganizationID = et.OrganizationID
 				AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 				AND e.RowID = IFNULL(emp_rowid, e.RowID)
+				AND (e.DateRegularized BETWEEN date_from AND date_to
+				     OR (e.DateRegularized <= date_from
+					      OR e.DateRegularized <= date_to)
+					  )
 				
 				GROUP BY et.RowID
 				ORDER BY CONCAT(e.LastName, e.FirstName), et.`Date`
 				) ii
 					
-			/**/UNION
+			/**/ UNION
 				SELECT
 				e.RowID `EmployeeRowId`
 				, NULL `RowID`
@@ -124,6 +128,10 @@ FROM (SELECT ii.*
 				AND (e.LeaveAllowance
 				     + e.SickLeaveAllowance
 				     + e.AdditionalVLAllowance) > 0
+				AND (e.DateRegularized BETWEEN date_from AND date_to
+				     OR (e.DateRegularized <= date_from
+					      OR e.DateRegularized <= date_to)
+					  )
 ) i
 GROUP BY i.EmployeeRowId
 ORDER BY i.`FullName`

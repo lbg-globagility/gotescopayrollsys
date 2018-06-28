@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `v_employeesemimonthlyallowance`;
 DROP TABLE IF EXISTS `v_employeesemimonthlyallowance`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `v_employeesemimonthlyallowance` AS SELECT ea.*
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_employeesemimonthlyallowance` AS SELECT ea.*
 	,(ea.AllowanceAmount
 	  / (e.WorkDaysPerYear
 	     / (12 # is the number of months per year

@@ -70,7 +70,7 @@ WHILE _index < emp_count DO
 
 	SET @ordinalvalue = 0;
 	
-	/**/UPDATE paystubitem si
+	/**/ UPDATE paystubitem si
 	INNER JOIN (
 			SELECT x.*
 			, MIN(x.`Result`) `LeastLeaveBal`
@@ -102,7 +102,7 @@ WHILE _index < emp_count DO
 	, si.LastUpdBy=IFNULL(si.LastUpdBy, si.CreatedBy)/**/
 	;
 	
-	/**/UPDATE paystubitem psi
+	/**/ UPDATE paystubitem psi
 	INNER JOIN payperiod pp ON pp.OrganizationID=og_rowid AND pp.OrdinalValue > @ordinalvalue AND pp.`Year`=number_year
 	INNER JOIN paystub ps ON ps.OrganizationID=og_rowid AND ps.EmployeeID=e_rowid AND ps.PayPeriodID=pp.RowID AND ps.RowID=psi.PayStubID
 	

@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `employeetimeentryactualproper`;
 DROP TABLE IF EXISTS `employeetimeentryactualproper`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `employeetimeentryactualproper` AS SELECT et.*
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employeetimeentryactualproper` AS SELECT et.*
 		, (et.RegularHoursAmount * (1 / pr.`PayRate`)) `BasicDayPay`
 		, CONCAT(pr.PayType, ' - non-restday') `Type`
 		FROM employeetimeentryactual et

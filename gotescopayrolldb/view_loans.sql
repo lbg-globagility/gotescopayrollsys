@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `view_loans`;
 DROP TABLE IF EXISTS `view_loans`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `view_loans` AS SELECT els.*
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_loans` AS SELECT els.*
 FROM employeeloanschedule els ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

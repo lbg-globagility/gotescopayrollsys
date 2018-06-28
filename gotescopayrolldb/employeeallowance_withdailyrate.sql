@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `employeeallowance_withdailyrate`;
 DROP TABLE IF EXISTS `employeeallowance_withdailyrate`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `employeeallowance_withdailyrate` AS SELECT ea.*
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employeeallowance_withdailyrate` AS SELECT ea.*
 , IF(ea.AllowanceFrequency != 'Semi-monthly'
      , ea.AllowanceAmount
 	  , ( ea.AllowanceAmount / ((e.WorkDaysPerYear / 12) / 2) )

@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `timeentrylogspercutoff`;
 DROP TABLE IF EXISTS `timeentrylogspercutoff`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `timeentrylogspercutoff` AS SELECT etd.RowID
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `timeentrylogspercutoff` AS SELECT etd.RowID
 , etd.OrganizationId
 , etd.Created
 , etd.CreatedBy

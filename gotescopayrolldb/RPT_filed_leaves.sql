@@ -6,7 +6,12 @@
 
 DROP PROCEDURE IF EXISTS `RPT_filed_leaves`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_filed_leaves`(IN `org_rowid` INT, IN `emp_rowid` INT, IN `date_from` DATE, IN `date_to` DATE)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_filed_leaves`(
+	IN `org_rowid` INT,
+	IN `emp_rowid` INT,
+	IN `date_from` DATE,
+	IN `date_to` DATE
+)
 BEGIN
 
 DECLARE leave_prodids TEXT;

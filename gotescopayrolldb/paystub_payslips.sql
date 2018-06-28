@@ -6,7 +6,17 @@
 
 DROP PROCEDURE IF EXISTS `paystub_payslips`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(IN `og_rowid` INT, IN `pp_rowid` INT, IN `is_actual` CHAR(1)
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
+	IN `og_rowid` INT,
+	IN `pp_rowid` INT,
+	IN `is_actual` CHAR(1)
+
+
+
+
+
+
+
 
 
 
@@ -82,6 +92,8 @@ ps.RowID
 ,IFNULL(REPLACE(psiloan.`Column33`, ',', '\n'), '') `Column33`
 ,IFNULL((LENGTH(psiloan.`Column33`) - LENGTH(REPLACE(psiloan.`Column33`, ',', ''))) + 1, 0) `Column10`
 
+,FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `Column17`
+    
 ,IF(e.EmployeeType = 'Daily'
     , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)
     , FORMAT(@basic_payment - (IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.Absent, 0) + IFNULL(et.Leavepayment, 0) + IFNULL(et.HolidayPayAmount, 0)), 2)
@@ -91,8 +103,13 @@ ps.RowID
 			)*/
     ) `Column18`
 
+,IFNULL(FORMAT(et.OvertimeHoursWorked, 2), 0) `Column19`
 ,IFNULL(FORMAT(et.OvertimeHoursAmount, 2), 0) `Column20`
+
+,IFNULL(FORMAT(et.NightDifferentialHours,2), 0) `Column21`
 ,IFNULL(FORMAT(et.NightDiffHoursAmount,2), 0) `Column22`
+
+,IFNULL(FORMAT(et.NightDifferentialOTHours,2), 0) `Column23`
 ,IFNULL(FORMAT(et.NightDiffOTHoursAmount, 2), 0) `Column24`
 
 ,FORMAT(IFNULL(et.`AbsentHours`, 0),2) `Column41`

@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `leavetimeentry`;
 DROP TABLE IF EXISTS `leavetimeentry`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `leavetimeentry` AS SELECT et.*
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `leavetimeentry` AS SELECT et.*
 , (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) `LeaveHours`
 , ((esa.DailyRate / sh.DivisorToDailyRate) * (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours)) `LeavePayment`
 FROM employeetimeentry et

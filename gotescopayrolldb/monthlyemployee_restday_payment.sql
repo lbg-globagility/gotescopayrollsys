@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `monthlyemployee_restday_payment`;
 DROP TABLE IF EXISTS `monthlyemployee_restday_payment`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `monthlyemployee_restday_payment` AS SELECT et.*
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `monthlyemployee_restday_payment` AS SELECT et.*
 	, DAYNAME(et.`Date`) `DayName`
 	, (esa.Salary / (e.WorkDaysPerYear / 12)) `DailyRate`
 	, (et.RegularHoursAmount * (1 - (1 / pr.RestDayRate))) `AddtlRestDayPayment`

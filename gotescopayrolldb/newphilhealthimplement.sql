@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `newphilhealthimplement`;
 DROP TABLE IF EXISTS `newphilhealthimplement`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `newphilhealthimplement` AS SELECT
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `newphilhealthimplement` AS SELECT
 1 `RowID`
 
 , (SELECT lv.DisplayValue

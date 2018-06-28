@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `salary_for_paystub`;
 DROP TABLE IF EXISTS `salary_for_paystub`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `salary_for_paystub` AS SELECT esa.*
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `salary_for_paystub` AS SELECT esa.*
 ,pp.RowID `PayPeriodID`
 # ,d.DateValue
 ,pp.PayFromDate

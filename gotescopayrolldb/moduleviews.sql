@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `moduleviews`;
 DROP TABLE IF EXISTS `moduleviews`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `moduleviews` AS SELECT CONVERT('Agency' USING utf8) `ViewName`
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `moduleviews` AS SELECT CONVERT('Agency' USING utf8) `ViewName`
 UNION SELECT CONVERT('Agency Fee' USING utf8)
 UNION SELECT CONVERT('Alpha list' USING utf8)
 UNION SELECT CONVERT('Attendance sheet' USING utf8)

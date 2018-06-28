@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `paystubitem_sum_daily_allowance_group_prodid`;
 DROP TABLE IF EXISTS `paystubitem_sum_daily_allowance_group_prodid`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `paystubitem_sum_daily_allowance_group_prodid` AS SELECT
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `paystubitem_sum_daily_allowance_group_prodid` AS SELECT
 p.RowID AS ProductID
 ,et.EmployeeID,et.OrganizationID,et.`Date`
 ,0 AS Column1

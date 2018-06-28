@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `restdaytimeentry`;
 DROP TABLE IF EXISTS `restdaytimeentry`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `restdaytimeentry` AS /*SELECT et.*
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `restdaytimeentry` AS /*SELECT et.*
 	, '1st Query' `Group`
 	FROM employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID

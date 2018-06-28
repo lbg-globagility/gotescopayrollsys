@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `reportlist`;
 DROP TABLE IF EXISTS `reportlist`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `reportlist` AS SELECT CONVERT('Attendance sheet' USING utf8) `ReportName`
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `reportlist` AS SELECT CONVERT('Attendance sheet' USING utf8) `ReportName`
 UNION SELECT CONVERT('Alpha list' USING utf8)
 UNION SELECT CONVERT('Employee\'s Employment Record' USING utf8)
 UNION SELECT CONVERT('Employee\'s History of Salary Increase' USING utf8)

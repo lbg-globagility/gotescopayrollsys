@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `properdisplayaudittrail`;
 DROP TABLE IF EXISTS `properdisplayaudittrail`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `properdisplayaudittrail` AS SELECT
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `properdisplayaudittrail` AS SELECT
 au.Created
 , PROPERCASE(CONCAT_WS(', ', u.LastName, u.FirstName)) `Created By`
 , v.ViewName `Module`

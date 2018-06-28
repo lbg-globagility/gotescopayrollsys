@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `proper_payroll`;
 DROP TABLE IF EXISTS `proper_payroll`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `proper_payroll` AS SELECT
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `proper_payroll` AS SELECT
 		RowID
 		,OrganizationID
 		,PayPeriodID

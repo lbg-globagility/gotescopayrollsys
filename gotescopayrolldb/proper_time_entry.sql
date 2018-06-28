@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `proper_time_entry`;
 DROP TABLE IF EXISTS `proper_time_entry`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `proper_time_entry` AS SELECT
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `proper_time_entry` AS SELECT
 	et.RowID
 	,et.OrganizationID
 	,et.`Date`

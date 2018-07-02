@@ -1,6 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
 
 Public Class MainForm
+
     Public Sub ChangeForm(ByVal Formname As Form)
         Try
             Application.DoEvents()
@@ -34,9 +35,6 @@ Public Class MainForm
         End Try
     End Sub
 
-
-
-
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         LoginForm.UsernameTextBox.Clear()
         LoginForm.PasswordTextBox.Clear()
@@ -44,19 +42,14 @@ Public Class MainForm
         LoginForm.Show()
     End Sub
 
-
-
     Private Sub btnEmpSalary_Click(sender As Object, e As EventArgs) Handles hbtnEmpSalary.Click
         EmpSalaryForm.lbllinkbasicpay.Text = ""
         ChangeForm(EmpSalaryForm)
     End Sub
 
-
     Private Sub btnPrevEmployer_Click(sender As Object, e As EventArgs) Handles hbtnPrevEmployer.Click
         ChangeForm(EmployeePrevEmployerForm)
     End Sub
-
-
 
     Private Sub btnUsersform_Click(sender As Object, e As EventArgs) Handles btnUsersform.Click
         'Dim f As UsersForm = New UsersForm()
@@ -101,7 +94,6 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-
         Dim position As String = getStringItem("Select p.PositionName From User u inner join Position p on u.PositionID = p.RowID " & _
                                              "Where u.RowID = '" & user_row_id & "' And u.OrganizationID = " & z_OrganizationID & "")
         Dim getposition As String = position
@@ -132,38 +124,7 @@ Public Class MainForm
     End Sub
 
     Private Sub btnbackup_Click(sender As Object, e As EventArgs) Handles btnbackup.Click
-        Try
 
-            Dim ConString As String = System.IO.File.ReadAllText("C:\PayrollSystem\ConnectionStringPayroll.txt")
-            Dim BackupFile As String
-            Dim fileSaver As SaveFileDialog = New SaveFileDialog()
-            fileSaver.Filter = "SQL files | *.sql"
-
-            If fileSaver.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                BackupFile = fileSaver.FileName
-
-                Using sConnection As New MySqlConnection(ConString)
-                    Using sqlCommand As New MySqlCommand()
-                        Using sqlBackup As New MySqlBackup(sqlCommand)
-                            sqlCommand.Connection = sConnection
-                            sConnection.Open()
-                            sqlBackup.ExportToFile(BackupFile)
-                            MessageBox.Show("MySQL database backup has been created.", "MySQL Backup", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                            sConnection.Close()
-                        End Using
-                    End Using
-                End Using
-            Else
-                MessageBox.Show("No backup file was created.", "MySQL Restore", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            End If
-
-
-        Catch ex As Exception
-            MsgBox(ex.ToString())
-        Finally
-            connection.Close()
-
-        End Try
     End Sub
 
     Private Sub btnShiftEntry_Click(sender As Object, e As EventArgs) Handles btnShiftEntry.Click
@@ -181,4 +142,5 @@ Public Class MainForm
     Private Sub btnTimeENtry_Click(sender As Object, e As EventArgs) Handles btnTimeENtry.Click
         ChangeForm(AttendanceTimeEntryForm)
     End Sub
+
 End Class

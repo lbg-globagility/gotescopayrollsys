@@ -1517,7 +1517,9 @@ Public Class PayStub
 
                                       End Select
 
-                                      emp_loans = New SQL(sum_emp_loans).GetFoundRows.Tables(0)
+                                      'emp_loans = New SQL(sum_emp_loans).GetFoundRows.Tables(0)
+                                      emp_loans = New SQL("CALL GET_employeeloanschedules_ofthisperiod(?og_rowid, ?pp_rowid);",
+                                                          New Object() {org_rowid, paypRowID}).GetFoundRows.Tables.OfType(Of DataTable).First
 
                                       '"SELECT SUM((COALESCE(TotalLoanAmount,0) - COALESCE(TotalBalanceLeft,0))) 'TotalLoanAmount'" & _
                                       '",SUM(DeductionAmount) 'DeductionAmount'" & _

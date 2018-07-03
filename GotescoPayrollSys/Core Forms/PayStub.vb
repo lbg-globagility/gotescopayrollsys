@@ -2678,6 +2678,35 @@ Public Class PayStub
 
 #End Region
 
+    Private Async Function LoanHistoryItems() As Task
+
+        Using conn = New MySqlConnection(mysql_conn_text)
+
+            Await conn.OpenAsync()
+
+            Using transaction = conn.BeginTransaction
+
+                Using cmd = conn.CreateCommand
+                    With cmd
+                        .Connection = conn
+                        .CommandText = "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(?og_rowid, ?pp_rowid, ?user_rowid, NULL);"
+                        .Transaction = transaction
+
+                        .Parameters.AddWithValue("?og_rowid", org_rowid)
+                        .Parameters.AddWithValue("?pp_rowid", paypRowID)
+                        .Parameters.AddWithValue("?user_rowid", user_row_id)
+
+                        Await cmd.ExecuteNonQueryAsync
+
+                    End With
+                End Using
+
+            End Using
+
+        End Using
+
+    End Function
+
     Private Sub tsbtnprintpayslip_Click(sender As Object, e As EventArgs) 'Handles DeclaredToolStripMenuItem.Click 'tsbtnprintpayslip.Click
 
         Static once As Boolean = True
@@ -7923,7 +7952,8 @@ Public Class PayStub
 
             End If
 
-            loademployee(quer_empPayFreq)
+            'loademployee(quer_empPayFreq)
+            tsbtnSearch_Click(tsbtnSearch, New EventArgs)
 
             If prev_selRowIndex <> -1 Then
                 If dgvemployees.RowCount > prev_selRowIndex Then
@@ -11666,7 +11696,13 @@ Public Class PayStub
                                  GainingLeaveBalances()
                                  MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll, OK")
                              End Sub)
-                task_leave_gain_balance.Wait()
+                'task_leave_gain_balance.Wait()
+                task_leave_gain_balance.ContinueWith(Sub()
+                                                         LoanHistoryItems.ContinueWith(Sub()
+
+                                                                                       End Sub)
+                                                     End Sub)
+
                 MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
             Else
 

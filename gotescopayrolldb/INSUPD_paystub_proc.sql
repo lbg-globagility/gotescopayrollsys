@@ -6,7 +6,39 @@
 
 DROP PROCEDURE IF EXISTS `INSUPD_paystub_proc`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystub_proc`(IN `pstub_RowID` INT, IN `pstub_OrganizationID` INT, IN `pstub_CreatedBy` INT, IN `pstub_LastUpdBy` INT, IN `pstub_PayPeriodID` INT, IN `pstub_EmployeeID` INT, IN `pstub_TimeEntryID` INT, IN `pstub_PayFromDate` DATE, IN `pstub_PayToDate` DATE, IN `pstub_TotalGrossSalary` DECIMAL(15,5), IN `pstub_TotalNetSalary` DECIMAL(15,5), IN `pstub_TotalTaxableSalary` DECIMAL(15,4), IN `pstub_TotalEmpSSS` DECIMAL(15,4), IN `pstub_TotalEmpWithholdingTax` DECIMAL(15,4), IN `pstub_TotalCompSSS` DECIMAL(15,4), IN `pstub_TotalEmpPhilhealth` DECIMAL(15,4), IN `pstub_TotalCompPhilhealth` DECIMAL(15,4), IN `pstub_TotalEmpHDMF` DECIMAL(15,4), IN `pstub_TotalCompHDMF` DECIMAL(15,4), IN `pstub_TotalVacationDaysLeft` DECIMAL(15,4), IN `pstub_TotalLoans` DECIMAL(15,4), IN `pstub_TotalBonus` DECIMAL(15,4), IN `pstub_TotalAllowance` DECIMAL(15,5), IN `pstub_NondeductibleTotalLoans` DECIMAL(15,4))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystub_proc`(
+	IN `pstub_RowID` INT,
+	IN `pstub_OrganizationID` INT,
+	IN `pstub_CreatedBy` INT,
+	IN `pstub_LastUpdBy` INT,
+	IN `pstub_PayPeriodID` INT,
+	IN `pstub_EmployeeID` INT,
+	IN `pstub_TimeEntryID` INT,
+	IN `pstub_PayFromDate` DATE,
+	IN `pstub_PayToDate` DATE,
+	IN `pstub_TotalGrossSalary` DECIMAL(15,5),
+	IN `pstub_TotalNetSalary` DECIMAL(15,5),
+	IN `pstub_TotalTaxableSalary` DECIMAL(15,4),
+	IN `pstub_TotalEmpSSS` DECIMAL(15,4),
+	IN `pstub_TotalEmpWithholdingTax` DECIMAL(15,4),
+	IN `pstub_TotalCompSSS` DECIMAL(15,4),
+	IN `pstub_TotalEmpPhilhealth` DECIMAL(15,4),
+	IN `pstub_TotalCompPhilhealth` DECIMAL(15,4),
+	IN `pstub_TotalEmpHDMF` DECIMAL(15,4),
+	IN `pstub_TotalCompHDMF` DECIMAL(15,4),
+	IN `pstub_TotalVacationDaysLeft` DECIMAL(15,4),
+	IN `pstub_TotalLoans` DECIMAL(15,4),
+	IN `pstub_TotalBonus` DECIMAL(15,4),
+	IN `pstub_TotalAllowance` DECIMAL(15,5),
+	IN `pstub_NondeductibleTotalLoans` DECIMAL(15,4)
+
+
+
+
+
+
+
+)
     DETERMINISTIC
 BEGIN
 
@@ -14,7 +46,8 @@ DECLARE paystubID INT(11);
 
 DECLARE existingrowrecord INT(11);
 
-DECLARE isexist INT(1);
+DECLARE isexist, _index, _count, p_id, anyint INT(11);
+DECLARE i_index, i_count INT(11);
 
 DECLARE SumPayStubAdjustments DECIMAL(15,4) DEFAULT 0;
 
@@ -123,6 +156,7 @@ UPDATE
 	,TotalAdjustments=(SumPayStubAdjustments)
 	,TotalUndeclaredSalary=ps_TotalUndeclaredSalary
 	,NondeductibleTotalLoans=pstub_NondeductibleTotalLoans;
+	SELECT @@identity `Id` INTO pstub_RowID;
 
 
 CALL RECOMPUTE_thirteenthmonthpay(pstub_OrganizationID, pstub_PayPeriodID, pstub_CreatedBy);

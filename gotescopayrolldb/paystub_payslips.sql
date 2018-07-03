@@ -22,6 +22,7 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
 
 
 
+
 )
     DETERMINISTIC
 BEGIN

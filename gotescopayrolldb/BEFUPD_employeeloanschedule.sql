@@ -91,9 +91,9 @@ IF NEW.`Status` = cancelled_status THEN
 END IF;
 
 IF NEW.PayStubID IS NOT NULL THEN
-
+	SET NEW.PayStubID = NEW.PayStubID;
 # OrganizID,UserRowID,EmpRowID,PaystubRowID,LoanSchedRowID,LoanBalance,LoanPayPeriodLeft,AmountPerDeduct,Estatus
-	SELECT INSUP_employeeloanschedulebacktrack(
+	/*SELECT INSUP_employeeloanschedulebacktrack(
 		NEW.OrganizationID
 		,NEW.LastUpdBy
 		,NEW.EmployeeID
@@ -103,7 +103,7 @@ IF NEW.PayStubID IS NOT NULL THEN
 		,NEW.LoanPayPeriodLeft
 		,NEW.DeductionAmount
 		,NEW.`Status`
-	) INTO catchrowid;
+	) INTO catchrowid;*/
 
 END IF;
 

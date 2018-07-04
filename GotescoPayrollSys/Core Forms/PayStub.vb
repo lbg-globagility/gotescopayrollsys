@@ -2678,34 +2678,18 @@ Public Class PayStub
 
 #End Region
 
-    Private Async Function LoanHistoryItems() As Task
+    Private Sub LoanHistoryItems()
+        Dim params = New Object() {org_rowid, paypRowID, user_row_id}
+        Dim sql As New SQL("CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(?og_rowid, ?pp_rowid, ?user_rowid, NULL);",
+                           params)
+        sql.ExecuteQueryAsync()
 
-        Using conn = New MySqlConnection(mysql_conn_text)
+        If sql.HasError Then
+            errlogger.Error("PayStub.LoanHistoryItems", sql.ErrorException)
+            Console.WriteLine(String.Concat("PayStub.LoanHistoryItems ", sql.ErrorException.Message))
+        End If
 
-            Await conn.OpenAsync()
-
-            Using transaction = conn.BeginTransaction
-
-                Using cmd = conn.CreateCommand
-                    With cmd
-                        .Connection = conn
-                        .CommandText = "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(?og_rowid, ?pp_rowid, ?user_rowid, NULL);"
-                        .Transaction = transaction
-
-                        .Parameters.AddWithValue("?og_rowid", org_rowid)
-                        .Parameters.AddWithValue("?pp_rowid", paypRowID)
-                        .Parameters.AddWithValue("?user_rowid", user_row_id)
-
-                        Await cmd.ExecuteNonQueryAsync
-
-                    End With
-                End Using
-
-            End Using
-
-        End Using
-
-    End Function
+    End Sub
 
     Private Sub tsbtnprintpayslip_Click(sender As Object, e As EventArgs) 'Handles DeclaredToolStripMenuItem.Click 'tsbtnprintpayslip.Click
 
@@ -6589,14 +6573,8 @@ Public Class PayStub
                             " LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID",
                             " LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents",
                             " WHERE (e.FirstName LIKE ?search_text",
-                            " OR e.MiddleName LIKE ?search_text",
                             " OR e.LastName LIKE ?search_text",
-                            " OR e.Surname LIKE ?search_text",
-                            " OR e.EmployeeID LIKE ?search_text",
-                            " OR e.TINNo LIKE ?search_text",
-                            " OR e.SSSNo LIKE ?search_text",
-                            " OR e.HDMFNo LIKE ?search_text",
-                            " OR e.PhilHealthNo LIKE ?search_text)",
+                            " OR e.EmployeeID LIKE ?search_text)",
                             " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
                             " AND e.OrganizationID=", org_rowid, " ORDER BY CONCAT(e.LastName, e.FirstName) LIMIT ", pagination, ",20;")
 
@@ -11694,14 +11672,10 @@ Public Class PayStub
                 Dim task_leave_gain_balance =
                     Task.Run(Sub()
                                  GainingLeaveBalances()
+                                 LoanHistoryItems()
                                  MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll, OK")
                              End Sub)
-                'task_leave_gain_balance.Wait()
-                task_leave_gain_balance.ContinueWith(Sub()
-                                                         LoanHistoryItems.ContinueWith(Sub()
-
-                                                                                       End Sub)
-                                                     End Sub)
+                task_leave_gain_balance.Wait()
 
                 MDIPrimaryForm.CaptionMainFormStatus(String.Empty)
             Else

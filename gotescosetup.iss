@@ -82,7 +82,7 @@ Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.Fonts.dll"; DestDir: "{app
 Source: ".\GotescoPayrollSys\bin\Debug\Microsoft.Office.Interop.Excel.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.Entity.EF6.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
-Source: ".\GotescoPayrollSys\bin\Debug\MySqlBackup.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+; Source: ".\GotescoPayrollSys\bin\Debug\MySqlBackup.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\NHotkey.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\NHotkey.WindowsForms.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\OCRTools.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full

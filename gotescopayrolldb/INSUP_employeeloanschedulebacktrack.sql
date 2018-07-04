@@ -25,6 +25,11 @@ CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUP_employeeloanschedulebacktrack`
 
 
 
+
+
+
+
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -67,7 +72,7 @@ INSERT INTO employeeloanschedulebacktrack
 	, i.EmployeeID
 	, PaystubRowID
 	, LoanSchedRowID
-	, i.RunningBalance
+	, i.CorrectedRunningBalance # RunningBalance
 	, i.DecrementNumOfPayperiod
 	, i.CorrectedDeductionAmount
 	, i.`Estatus`
@@ -92,9 +97,14 @@ FROM (SELECT
 		    , (@decrem := els.NoOfPayPeriod - 1)
 			 , (@decrem := @decrem - 1)
 			 ) `DecrementNumOfPayperiod`
+
+		,IF(@bal != 0 AND @decrem = 0
+		    , 0
+			 , ROUND(@bal, 6)
+			 ) `CorrectedRunningBalance`
 		
-		, IF(@bal != 0 AND @decrem = 0
-		     , ROUND((els.DeductionAmount + (@bal)), 6)
+		, IF(@decrem = 0 # @bal != 0 AND 
+		     , ROUND((els.DeductionAmount + @bal), 6)
 			  , els.DeductionAmount
 			  ) `CorrectedDeductionAmount`
 		
@@ -104,17 +114,17 @@ FROM (SELECT
 			  ) `Estatus`
 		
 		, els.PayPeriodID
+		, els.PayStubRowId
 		
 		FROM employeeloanschedules els
 		WHERE els.OrganizationID = OrganizID
-		# AND els.PayPeriodID = payperiod_rowid
-		AND els.PayStubID = PaystubRowID
 		AND els.EmployeeID = EmpRowID
 		AND els.RowID = LoanSchedRowID
 		AND IF(els.SubstituteEndDate IS NULL, els.`Status`, loanstatus_inprogress) IN ('In Progress', 'Complete')
 		ORDER BY els.RowID, els.`Year`, els.`Month`
 		) i
 		WHERE i.PayPeriodID = payperiod_rowid
+		AND i.PayStubRowId = PaystubRowID
 ON
 DUPLICATE
 KEY
@@ -122,7 +132,7 @@ UPDATE
 	LastUpd			=CURRENT_TIMESTAMP()
 	,LastUpdBy		=UserRowID
 	,PayStubID		=PaystubRowID
-	,Balance			=i.RunningBalance
+	,Balance			=i.CorrectedRunningBalance # RunningBalance
 	,DeductedAmount=i.CorrectedDeductionAmount
 	,CountPayPeriodLeft=i.DecrementNumOfPayperiod
 	,`Status`		=i.`Estatus`

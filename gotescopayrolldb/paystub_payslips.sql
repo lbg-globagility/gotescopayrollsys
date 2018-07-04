@@ -23,6 +23,8 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
 
 
 
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -235,9 +237,12 @@ LEFT JOIN (SELECT
 
  LEFT JOIN (SELECT ii.*
             ,GROUP_CONCAT(ii.LoanName) `Column35`
-            ,GROUP_CONCAT(ROUND(ii.DeductionAmount, 2)) `Column38`
-            ,GROUP_CONCAT(ROUND(ii.BalanceOfLoan, 2)) `Column33`
-            FROM (SELECT i.RowID
+            /*,GROUP_CONCAT(ROUND(ii.DeductionAmount, 2)) `Column38`
+            ,GROUP_CONCAT(ROUND(ii.BalanceOfLoan, 2)) `Column33`*/
+            
+            ,GROUP_CONCAT(ROUND(ii.DeductedAmount, 2)) `Column38`
+            ,GROUP_CONCAT(ROUND(ii.Balance, 2)) `Column33`
+            FROM (/*SELECT i.RowID
 						,i.EmployeeID
 						,i.TotalLoanAmount
 						,i.ppRowID
@@ -285,7 +290,11 @@ LEFT JOIN (SELECT
 								ORDER BY pp.OrdinalValue
 						) i
 						WHERE i.psRowID IS NOT NULL
-						GROUP BY i.RowID
+						GROUP BY i.RowID*/
+						SELECT plb.*
+						FROM paysliploanbalances plb
+						WHERE plb.OrganizationID = og_rowid
+						AND plb.PayPeriodID = pp_rowid
 				      ) ii
 			  GROUP BY ii.EmployeeID
            ) psiloan

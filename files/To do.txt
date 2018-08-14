@@ -1,0 +1,2 @@
+- don't just hide resigned or terminated employee not until to his/her resingation/termination cut-off
+- missing time logs during of filing of ob

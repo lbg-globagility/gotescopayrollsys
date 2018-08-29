@@ -340,6 +340,12 @@
     <Compile Include="Core Forms\rpt\PayPeriodSelectionWithLoanTypes.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Core Forms\rpt\PayslipByTwos.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PayslipByTwos.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core Forms\rpt\printallpayslipotherformat.vb">
       <DependentUpon>printallpayslipotherformat.rpt</DependentUpon>
       <SubType>Component</SubType>
@@ -1372,6 +1378,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\rpt\PayPeriodSelectionWithLoanTypes.resx">
       <DependentUpon>PayPeriodSelectionWithLoanTypes.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\rpt\PayslipByTwos.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayslipByTwos.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Providers\DateRangeDialog.resx">
       <DependentUpon>DateRangeDialog.vb</DependentUpon>

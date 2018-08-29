@@ -3048,8 +3048,8 @@ Public Class PayStub
         Finally
 
             If sql.HasError = False Then
-
-                Dim payroll_payslip As New printallpayslipotherformat2 ' printallpayslipotherformat printallpayslipotherformat_v2
+                '8766 - total pixel height of a pay slip
+                Dim payroll_payslip As New PayslipByTwos 'printallpayslipotherformat2
 
                 With payroll_payslip.ReportDefinition.Sections(2)
                     Dim objText As CrystalDecisions.CrystalReports.Engine.TextObject = .ReportObjects("OrgName")
@@ -3068,6 +3068,15 @@ Public Class PayStub
                         objText.Text = cut_off_text
 
                     End If
+
+                    objText = .ReportObjects("lblEmployeeId")
+                    objText.Text = "Employee ID:"
+
+                    objText = .ReportObjects("lblFullname")
+                    objText.Text = "Full Name:"
+
+                    objText = .ReportObjects("lblBasicRate")
+                    objText.Text = "BASIC RATE:"
 
                 End With
 
@@ -11518,11 +11527,11 @@ Public Class PayStub
                                                     Convert.ToInt32(drow("RowID")),
                                                     user_row_id,
                                                     paypFrom, paypTo}
-                Dim n_ExecSQLProcedure As New  _
+                Dim n_ExecSQLProcedure As New _
                     ExecSQLProcedure("LEAVE_gainingbalance", 192,
                                      procparam_array)
 
-                Dim paystubID = _
+                Dim paystubID =
                 INSUPD_paystub(paypRowID,
                                drow("RowID").ToString,
                                paypFrom,

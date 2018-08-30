@@ -2398,7 +2398,7 @@ Partial Class PayStub
         Me.Label66.Name = "Label66"
         Me.Label66.Size = New System.Drawing.Size(367, 13)
         Me.Label66.TabIndex = 511
-        Me.Label66.Text = "---------------------------------------------------------------------------------" & _
+        Me.Label66.Text = "---------------------------------------------------------------------------------" &
     "----------------------"
         '
         'txtTotalAdjustments
@@ -3360,7 +3360,7 @@ Partial Class PayStub
         Me.Label35.Name = "Label35"
         Me.Label35.Size = New System.Drawing.Size(367, 13)
         Me.Label35.TabIndex = 245
-        Me.Label35.Text = "---------------------------------------------------------------------------------" & _
+        Me.Label35.Text = "---------------------------------------------------------------------------------" &
     "----------------------"
         '
         'Label34
@@ -3370,7 +3370,7 @@ Partial Class PayStub
         Me.Label34.Name = "Label34"
         Me.Label34.Size = New System.Drawing.Size(367, 13)
         Me.Label34.TabIndex = 244
-        Me.Label34.Text = "---------------------------------------------------------------------------------" & _
+        Me.Label34.Text = "---------------------------------------------------------------------------------" &
     "----------------------"
         '
         'Label33
@@ -3380,7 +3380,7 @@ Partial Class PayStub
         Me.Label33.Name = "Label33"
         Me.Label33.Size = New System.Drawing.Size(367, 13)
         Me.Label33.TabIndex = 243
-        Me.Label33.Text = "---------------------------------------------------------------------------------" & _
+        Me.Label33.Text = "---------------------------------------------------------------------------------" &
     "-----------------------------------------"
         '
         'Label32
@@ -3390,7 +3390,7 @@ Partial Class PayStub
         Me.Label32.Name = "Label32"
         Me.Label32.Size = New System.Drawing.Size(367, 13)
         Me.Label32.TabIndex = 242
-        Me.Label32.Text = "---------------------------------------------------------------------------------" & _
+        Me.Label32.Text = "---------------------------------------------------------------------------------" &
     "----------------------"
         '
         'Label26
@@ -3400,7 +3400,7 @@ Partial Class PayStub
         Me.Label26.Name = "Label26"
         Me.Label26.Size = New System.Drawing.Size(367, 13)
         Me.Label26.TabIndex = 241
-        Me.Label26.Text = "---------------------------------------------------------------------------------" & _
+        Me.Label26.Text = "---------------------------------------------------------------------------------" &
     "----------------------"
         '
         'Label24
@@ -3410,7 +3410,7 @@ Partial Class PayStub
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(365, 13)
         Me.Label24.TabIndex = 240
-        Me.Label24.Text = "---------------------------------------------------------------------------------" & _
+        Me.Label24.Text = "---------------------------------------------------------------------------------" &
     "-----------------------------------------"
         '
         'Label21
@@ -3420,7 +3420,7 @@ Partial Class PayStub
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(365, 13)
         Me.Label21.TabIndex = 239
-        Me.Label21.Text = "---------------------------------------------------------------------------------" & _
+        Me.Label21.Text = "---------------------------------------------------------------------------------" &
     "----------------------"
         '
         'TabControl3
@@ -4309,14 +4309,14 @@ Partial Class PayStub
         'DeclaredToolStripMenuItem1
         '
         Me.DeclaredToolStripMenuItem1.Name = "DeclaredToolStripMenuItem1"
-        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
+        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
         Me.DeclaredToolStripMenuItem1.Tag = "0"
         Me.DeclaredToolStripMenuItem1.Text = "Declared"
         '
         'ActualToolStripMenuItem1
         '
         Me.ActualToolStripMenuItem1.Name = "ActualToolStripMenuItem1"
-        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
+        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
         Me.ActualToolStripMenuItem1.Tag = "1"
         Me.ActualToolStripMenuItem1.Text = "Actual"
         '

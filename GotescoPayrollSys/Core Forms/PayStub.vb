@@ -3048,8 +3048,9 @@ Public Class PayStub
         Finally
 
             If sql.HasError = False Then
-                '8766 - total pixel height of a pay slip
-                Dim payroll_payslip As New PayslipByTwos 'printallpayslipotherformat2
+                '8766 - total pixel height of a pay slip -- PayslipByTwos
+                '9657 -- NewPayslipByTwos
+                Dim payroll_payslip As New NewPayslipByTwos 'printallpayslipotherformat2'PayslipByTwos
 
                 With payroll_payslip.ReportDefinition.Sections(2)
                     Dim objText As CrystalDecisions.CrystalReports.Engine.TextObject = .ReportObjects("OrgName")
@@ -3069,14 +3070,26 @@ Public Class PayStub
 
                     End If
 
-                    objText = .ReportObjects("lblEmployeeId")
-                    objText.Text = "Employee ID:"
+                    'objText = .ReportObjects("lblEmployeeId")
+                    'objText.Text = "Employee ID:"
 
-                    objText = .ReportObjects("lblFullname")
-                    objText.Text = "Full Name:"
+                    'objText = .ReportObjects("lblFullname")
+                    'objText.Text = "Full Name:"
 
-                    objText = .ReportObjects("lblBasicRate")
-                    objText.Text = "BASIC RATE:"
+                    'objText = .ReportObjects("lblBasicRate")
+                    'objText.Text = "BASIC RATE:"
+
+                    'objText = .ReportObjects("lblCompAllowance")
+                    'objText.Text = "CO. ALLOW"
+
+                    'objText = .ReportObjects("lblEcola")
+                    'objText.Text = "ECOLA"
+
+                    'objText = .ReportObjects("lblDeduction")
+                    'objText.Text = "DEDUCTIONS:"
+
+                    'objText = .ReportObjects("lblEarning")
+                    'objText.Text = "EARNINGS FOR THE PERIOD:"
 
                 End With
 

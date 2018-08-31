@@ -168,7 +168,7 @@ Public Class selectPayPeriod
 
     End Sub
 
-    Sub VIEW_payp(Optional param_Date As Object = Nothing, _
+    Sub VIEW_payp(Optional param_Date As Object = Nothing,
                   Optional PayFreqType As Object = Nothing)
 
         Dim params(3, 2) As Object
@@ -183,8 +183,8 @@ Public Class selectPayPeriod
         params(2, 1) = "0"
         params(3, 1) = PayFreqType
 
-        EXEC_VIEW_PROCEDURE(params, _
-                            "VIEW_payp", _
+        EXEC_VIEW_PROCEDURE(params,
+                            "VIEW_payp",
                             dgvpaypers)
 
     End Sub
@@ -277,14 +277,14 @@ Public Class selectPayPeriod
 
                 If prior_index < 0 Then
 
-                    PriorPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
-                                                " FROM payperiod pyp" & _
-                                                " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
-                                                " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
-                                                " AND pyp.RowID BETWEEN (" & CurrentPayPeriodID & " - 10)" & _
-                                                " AND pp.RowID" & _
-                                                " ORDER BY pyp.PayFromDate DESC,pyp.PayToDate DESC" & _
+                    PriorPayPeriodID = EXECQUER("SELECT pyp.RowID" &
+                                                " FROM payperiod pyp" &
+                                                " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" &
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" &
+                                                " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" &
+                                                " AND pyp.RowID BETWEEN (" & CurrentPayPeriodID & " - 10)" &
+                                                " AND pp.RowID" &
+                                                " ORDER BY pyp.PayFromDate DESC,pyp.PayToDate DESC" &
                                                 " LIMIT 1,1;")
                 Else
                     PriorPayPeriodID = dgvpaypers.Item("Column1", prior_index).Value
@@ -305,14 +305,14 @@ Public Class selectPayPeriod
                     NextPayPeriodID = dgvpaypers.Item("Column1", next_index).Value
                 Else
 
-                    NextPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
-                                                " FROM payperiod pyp" & _
-                                                " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
-                                                " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
-                                                " AND pyp.RowID BETWEEN pp.RowID" & _
-                                                " AND (" & CurrentPayPeriodID & " + 10)" & _
-                                                " ORDER BY pyp.PayFromDate,pyp.PayToDate" & _
+                    NextPayPeriodID = EXECQUER("SELECT pyp.RowID" &
+                                                " FROM payperiod pyp" &
+                                                " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" &
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" &
+                                                " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" &
+                                                " AND pyp.RowID BETWEEN pp.RowID" &
+                                                " AND (" & CurrentPayPeriodID & " + 10)" &
+                                                " ORDER BY pyp.PayFromDate,pyp.PayToDate" &
                                                 " LIMIT 1,1;")
 
                 End If
@@ -363,7 +363,7 @@ Public Class selectPayPeriod
 
                 If CheckBox1.Checked Then 'Format(CDate(.Cells("Column3").Value), "MM") = "12"
 
-                    Dim prompt = MessageBox.Show("Do you want to include the calculation of Thirteenth month pay ?", _
+                    Dim prompt = MessageBox.Show("Do you want to include the calculation of Thirteenth month pay ?",
                                                  "Thirteenth month pay calculation", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information)
 
                     If prompt = Windows.Forms.DialogResult.Yes Then
@@ -504,9 +504,9 @@ Public Class selectPayPeriod
         If dgvpaypers.RowCount <> 0 Then
 
             With dgvpaypers.CurrentRow
-                lblpapyperiodval.Text = ": from " & _
-                    Trim(.Cells("Column2").Value) & _
-                    " to " & _
+                lblpapyperiodval.Text = ": from " &
+                    Trim(.Cells("Column2").Value) &
+                    " to " &
                     Trim(.Cells("Column3").Value)
 
                 'Column1
@@ -542,11 +542,11 @@ Public Class selectPayPeriod
                     _year = yearnow
 
                     Dim n_ExecuteQuery As _
-                            New ExecuteQuery("SELECT EXISTS(SELECT RowID" & _
-                                            " FROM paystub" & _
-                                            " WHERE OrganizationID='" & org_rowid & "'" & _
-                                            " AND ThirteenthMonthInclusion='1'" & _
-                                            " AND (YEAR(PayFromDate)='" & yearnow & "' OR YEAR(PayToDate)='" & yearnow & "')" & _
+                            New ExecuteQuery("SELECT EXISTS(SELECT RowID" &
+                                            " FROM paystub" &
+                                            " WHERE OrganizationID='" & org_rowid & "'" &
+                                            " AND ThirteenthMonthInclusion='1'" &
+                                            " AND (YEAR(PayFromDate)='" & yearnow & "' OR YEAR(PayToDate)='" & yearnow & "')" &
                                             " LIMIT 1);")
 
                     Dim bool_decision = Not Convert.ToBoolean(CInt(n_ExecuteQuery.Result))
@@ -642,14 +642,14 @@ Public Class selectPayPeriod
 
                 If prior_index < 0 Then
 
-                    PriorPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
-                                                " FROM payperiod pyp" & _
-                                                " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
-                                                " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
-                                                " AND pyp.RowID BETWEEN (" & CurrentPayPeriodID & " - 10)" & _
-                                                " AND pp.RowID" & _
-                                                " ORDER BY pyp.PayFromDate DESC,pyp.PayToDate DESC" & _
+                    PriorPayPeriodID = EXECQUER("SELECT pyp.RowID" &
+                                                " FROM payperiod pyp" &
+                                                " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" &
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" &
+                                                " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" &
+                                                " AND pyp.RowID BETWEEN (" & CurrentPayPeriodID & " - 10)" &
+                                                " AND pp.RowID" &
+                                                " ORDER BY pyp.PayFromDate DESC,pyp.PayToDate DESC" &
                                                 " LIMIT 1,1;")
                 Else
                     PriorPayPeriodID = dgvpaypers.Item("Column1", prior_index).Value
@@ -666,14 +666,14 @@ Public Class selectPayPeriod
                     NextPayPeriodID = dgvpaypers.Item("Column1", next_index).Value
                 Else
 
-                    NextPayPeriodID = EXECQUER("SELECT pyp.RowID" & _
-                                                " FROM payperiod pyp" & _
-                                                " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" & _
-                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" & _
-                                                " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" & _
-                                                " AND pyp.RowID BETWEEN pp.RowID" & _
-                                                " AND (" & CurrentPayPeriodID & " + 10)" & _
-                                                " ORDER BY pyp.PayFromDate,pyp.PayToDate" & _
+                    NextPayPeriodID = EXECQUER("SELECT pyp.RowID" &
+                                                " FROM payperiod pyp" &
+                                                " INNER JOIN payperiod pp ON pp.RowID='" & CurrentPayPeriodID & "'" &
+                                                " WHERE pyp.OrganizationID='" & org_rowid & "'" &
+                                                " AND pyp.TotalGrossSalary=pp.TotalGrossSalary" &
+                                                " AND pyp.RowID BETWEEN pp.RowID" &
+                                                " AND (" & CurrentPayPeriodID & " + 10)" &
+                                                " ORDER BY pyp.PayFromDate,pyp.PayToDate" &
                                                 " LIMIT 1,1;")
 
                 End If

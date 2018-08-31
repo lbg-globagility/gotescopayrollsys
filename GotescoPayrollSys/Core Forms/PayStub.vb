@@ -9,63 +9,6 @@ Imports OfficeOpenXml
 
 Public Class PayStub
 
-    Public q_employee As String = String.Concat("SELECT e.RowID,",
-        "e.EmployeeID 'Employee ID',",
-        "e.FirstName 'First Name',",
-        "e.MiddleName 'Middle Name',",
-        "e.LastName 'Last Name',",
-        "e.Surname,",
-        "e.Nickname,",
-        "e.MaritalStatus 'Marital Status',",
-        "COALESCE(e.NoOfDependents,0) 'No. Of Dependents',",
-        "e.Birthdate,",
-        "e.Startdate,",
-        "e.JobTitle 'Job Title',",
-        "COALESCE(pos.PositionName,'') 'Position',",
-        "e.Salutation,",
-        "e.TINNo 'TIN',",
-        "e.SSSNo 'SSS No.',",
-        "e.HDMFNo 'PAGIBIG No.',",
-        "e.PhilHealthNo 'PhilHealth No.',",
-        "e.WorkPhone 'Work Phone No.',",
-        "e.HomePhone 'Home Phone No.',",
-        "e.MobilePhone 'Mobile Phone No.',",
-        "e.HomeAddress 'Home address',",
-        "e.EmailAddress 'Email address',",
-        "IF(e.Gender='M','Male','Female') 'Gender',",
-        "e.EmploymentStatus 'Employment Status',",
-        "IFNULL(pf.PayFrequencyType,'') 'Pay Frequency',",
-        "e.UndertimeOverride,",
-        "e.OvertimeOverride,",
-        "COALESCE(pos.RowID,'pos.RowID') 'PositionID'",
-        ",IFNULL(e.PayFrequencyID,'') 'PayFrequencyID'",
-        ",e.EmployeeType",
-        ",e.LeaveBalance",
-        ",e.SickLeaveBalance",
-        ",e.MaternityLeaveBalance",
-        ",e.LeaveAllowance",
-        ",e.SickLeaveAllowance",
-        ",e.MaternityLeaveAllowance",
-        ",e.LeavePerPayPeriod",
-        ",e.SickLeavePerPayPeriod",
-        ",e.MaternityLeavePerPayPeriod",
-        ",COALESCE(fstat.RowID,3) 'fstatRowID'",
-        ",'' 'Image'",
-        ",DATE_FORMAT(e.Created,'%m-%d-%Y') 'Creation Date',",
-        "CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2))) 'Created by',",
-        "COALESCE(DATE_FORMAT(e.LastUpd,'%m-%d-%Y'),'') 'Last Update',",
-        "(SELECT CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2)))  FROM user WHERE RowID=e.LastUpdBy) 'LastUpdate by'",
-        " ",
-        "FROM employee e ",
-        "LEFT JOIN user u ON e.CreatedBy=u.RowID ",
-        "LEFT JOIN position pos ON e.PositionID=pos.RowID ",
-        "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID ",
-        "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents ",
-        "WHERE e.OrganizationID=", org_rowid,
-        " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0")
-
-    '",COALESCE(LEFT(Image,256),'') 'Image'" & _
-
     Public current_year As String = CDate(dbnow).Year
 
     Dim new_conn As New MySqlConnection
@@ -113,6 +56,8 @@ Public Class PayStub
                       " FROM payperiod",
                       " WHERE RowID=?pp_rowid;")
 
+    Private CurrLinkPage As LinkLabel
+
     Property VeryFirstPayPeriodIDOfThisYear As Object
 
         Get
@@ -130,7 +75,7 @@ Public Class PayStub
     End Property
 
     Protected Overrides Sub OnLoad(e As EventArgs)
-
+        CurrLinkPage = First
         SplitContainer1.SplitterWidth = 6
 
         MyBase.OnLoad(e)
@@ -138,7 +83,7 @@ Public Class PayStub
     End Sub
 
     Private Sub PayStub_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        CurrLinkPage = First
         'customTabControl3.DrawMode = TabDrawMode.Normal
         'customTabControl3.DisplayStyle = TabStyle.Rounded
 
@@ -368,100 +313,35 @@ Public Class PayStub
 
     End Sub
 
-    Sub loademployees(Optional searchquery As String = Nothing)
+    Private Function SelectedPayFrequencyItem() As ToolStripButton
+        Return tstrip.Items.OfType(Of ToolStripButton).Where(Function(tsBtn) tsBtn.BackColor = selectedColor).SingleOrDefault
+    End Function
 
-        If searchquery = Nothing Then
-            Dim param(2, 2) As Object
+    Private Sub loadservingemployees()
 
-            param(0, 0) = "e_OrganizationID"
-            param(1, 0) = "pagination"
+        Dim payFrerSelected = SelectedPayFrequencyItem()
+        Dim payFreq = payFrerSelected.Text
+        Console.WriteLine(payFreq)
 
-            param(0, 1) = org_rowid
-            param(1, 1) = pagination
+        Dim _query = "CALL `loadservingemployees`(?orgId, ?payPeriodId, ?payFrequency, ?pageNumber, ?searchText);"
 
-            filltable(dgvemployees, "VIEW_employee", param, 1)
-            'filltable(dgvEmp, q_employee)
-            'filltable(dgvEmp, "VIEW_employee", "e_OrganizationID", 1, 1)
-        Else 'q_employee &
-            filltable(dgvemployees, searchquery) ' & " ORDER BY e.RowID DESC")
-        End If
-
-        Static x As SByte = 0
-
-        If x = 0 Then
-            x = 1
-
-            With dgvemployees
-                .Columns("RowID").Visible = False
-                .Columns("UndertimeOverride").Visible = False
-                .Columns("OvertimeOverride").Visible = False
-                .Columns("PositionID").Visible = False
-                .Columns("PayFrequencyID").Visible = False
-
-                .Columns("LeaveBalance").Visible = False
-                .Columns("SickLeaveBalance").Visible = False
-                .Columns("MaternityLeaveBalance").Visible = False
-
-                .Columns("LeaveAllowance").Visible = False
-                .Columns("SickLeaveAllowance").Visible = False
-                .Columns("MaternityLeaveAllowance").Visible = False
-
-                .Columns("LeavePerPayPeriod").Visible = False
-                .Columns("SickLeavePerPayPeriod").Visible = False
-                .Columns("MaternityLeavePerPayPeriod").Visible = False
-
-                .Columns("fstatRowID").Visible = False
-                .Columns("Image").Visible = False
-
-                'For Each r As DataGridViewRow In .Rows
-                '    empcolcount = 0
-                '    For Each c As DataGridViewColumn In .Columns
-                '        If c.Visible Then
-                '            If TypeOf r.Cells(c.Index).Value Is Byte() Then
-                '                Simple.Add("")
-                '            Else
-                '                Simple.Add(CStr(r.Cells(c.Index).Value))
-                '            End If
-                '            empcolcount += 1
-                '        End If
-                '    Next
-                'Next
-
-            End With
-
-        End If
-
-    End Sub
-
-    Sub loademployee(Optional q_empsearch As String = Nothing)
-        Dim full_query As String = String.Empty
-        If q_empsearch = Nothing Then
-            full_query = (q_employee & " ORDER BY CONCAT(e.LastName, e.FirstName)" &
-                        ",FIELD(e.EmploymentStatus,'Retired','Resigned','Terminated')" &
-                        ",FIELD(e.RevealInPayroll,'1','0')" &
-                        " LIMIT " & pagination & ",20;") ', dgvemployees
-
-            'dgvRowAdder(q_employee & " ORDER BY e.StartDate DESC" &
-            '            ",FIELD(e.EmploymentStatus,'Resigned','Terminated')" &
-            '            ",FIELD(e.RevealInPayroll,'1','0') LIMIT " & pagination & ",100;", dgvEmp)
-        Else
-            If pagination <= 0 Then
-                pagination = 0
-            End If
-
-            full_query = (q_employee & q_empsearch & " ORDER BY CONCAT(e.LastName, e.FirstName)" &
-                        ",FIELD(e.EmploymentStatus,'Retired','Resigned','Terminated')" &
-                        ",FIELD(e.RevealInPayroll,'1','0')" &
-                        " LIMIT " & pagination & ",20;") ', dgvemployees', Simple)
-        End If
+        Dim _params = New Object() {org_rowid, paypRowID, payFreq, pagination, tsSearch.Text.Trim}
         Dim catchdt As New DataTable
-        'catchdt = New SQLQueryToDatatable(full_query).ResultTable
-        catchdt = New SQL(full_query).GetFoundRows.Tables.OfType(Of DataTable).First
+        catchdt = New SQL(_query, _params).
+                          GetFoundRows.Tables.OfType(Of DataTable).First
+
         dgvemployees.Rows.Clear()
         For Each drow As DataRow In catchdt.Rows
             Dim row_array = drow.ItemArray
             dgvemployees.Rows.Add(row_array)
         Next
+
+        SomeDgvWorks()
+
+    End Sub
+
+    Private Sub SomeDgvWorks()
+
         Static x As SByte = 0
 
         If x = 0 Then
@@ -571,19 +451,12 @@ Public Class PayStub
 
                 Next
 
-                For Each tsitem As ToolStripItem In tstrip.Items
-
-                    If tsitem.Text = Trim(.Cells("Column12").Value) Then
-                        'tsitem.PerformClick()
-                        PayFreq_Changed(tsitem, New EventArgs)
-                        Exit For
-                    End If
-
-                Next
+                Dim w = SelectedPayFrequencyItem()
+                If w IsNot Nothing Then
+                    w.PerformClick()
+                End If
 
             End With
-
-            'dgvemployees_SelectionChanged(sender, e)
         Else
 
             numofweekdays = 0
@@ -641,31 +514,17 @@ Public Class PayStub
                                                                                                 LinkLabel4.LinkClicked, LinkLabel3.LinkClicked,
                                                                                                 LinkLabel2.LinkClicked, LinkLabel1.LinkClicked
 
+        Dim pageRecordCount = 10
+        CurrLinkPage = New LinkLabel
+        CurrLinkPage = DirectCast(sender, LinkLabel)
+
         quer_empPayFreq = ""
 
         If bgworkgenpayroll.IsBusy Then
         Else
 
-            Dim pay_freqString = String.Empty
-
-            For Each ctrl In tstrip.Items
-                If TypeOf ctrl Is ToolStripButton Then
-
-                    If DirectCast(ctrl, ToolStripButton).BackColor =
-                        Color.FromArgb(194, 228, 255) Then
-
-                        pay_freqString =
-                            DirectCast(ctrl, ToolStripButton).Text
-
-                        Exit For
-                    Else
-                        Continue For
-                    End If
-                Else
-                    Continue For
-                End If
-
-            Next
+            Dim selectedPayFreq = SelectedPayFrequencyItem()
+            Dim pay_freqString = selectedPayFreq.Text
 
             quer_empPayFreq = " AND pf.PayFrequencyType='" & pay_freqString & "' "
 
@@ -676,17 +535,17 @@ Public Class PayStub
             If sendrname = "First" Or sendrname = "LinkLabel1" Then
                 pagination = 0
             ElseIf sendrname = "Prev" Or sendrname = "LinkLabel2" Then
-                'If pagination - 20 < 0 Then
+                'If pagination - pageRecordCount < 0 Then
                 '    pagination = 0
                 'Else
-                '    pagination -= 20
+                '    pagination -= pageRecordCount
                 'End If
 
-                Dim modcent = pagination Mod 20
+                Dim modcent = pagination Mod pageRecordCount
 
                 If modcent = 0 Then
 
-                    pagination -= 20
+                    pagination -= pageRecordCount
                 Else
 
                     pagination -= modcent
@@ -701,34 +560,40 @@ Public Class PayStub
 
             ElseIf sendrname = "Nxt" Or sendrname = "LinkLabel4" Then
 
-                Dim modcent = pagination Mod 20
+                Dim modcent = pagination Mod pageRecordCount
 
                 If modcent = 0 Then
-                    pagination += 20
+                    pagination += pageRecordCount
                 Else
                     pagination -= modcent
 
-                    pagination += 20
+                    pagination += pageRecordCount
 
                 End If
             ElseIf sendrname = "Last" Or sendrname = "LinkLabel3" Then
 
-                Dim lastpage = Val(EXECQUER("SELECT COUNT(e.RowID) / 20" &
-                                            " FROM employee e" &
-                                            " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID" &
-                                            " WHERE e.OrganizationID=" & org_rowid & " " & Trim(quer_empPayFreq) & ";"))
+                Dim payFrerSelected = SelectedPayFrequencyItem()
+                Dim payFreq = payFrerSelected.Text
+
+                Dim _query = String.Concat("SELECT COUNT(e.RowID) / ", pageRecordCount,
+                                           " FROM employee_servedperiod e",
+                                           " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID AND pf.PayFrequencyType='", payFreq, "'",
+                                           " WHERE e.OrganizationID=", org_rowid,
+                                           " AND e.ServedPeriodId=", ValNoComma(paypRowID), ";")
+
+                Dim lastpage = Val(EXECQUER(_query))
 
                 Dim remender = lastpage Mod 1
 
-                pagination = (lastpage - remender) * 20
+                pagination = (lastpage - remender) * pageRecordCount
 
-                If pagination - 20 < 20 Then
+                If pagination - pageRecordCount < pageRecordCount Then
                     'pagination = 0
 
                 End If
 
-                'pagination = If(lastpage - 20 >= 20, _
-                '                lastpage - 20, _
+                'pagination = If(lastpage - pageRecordCount >= pageRecordCount, _
+                '                lastpage - pageRecordCount, _
                 '                lastpage)
 
             End If
@@ -738,7 +603,7 @@ Public Class PayStub
             'Else
             'End If
 
-            loademployee(quer_empPayFreq)
+            loadservingemployees()
 
             dgvemployees_SelectionChanged(sender, e)
 
@@ -6053,7 +5918,8 @@ Public Class PayStub
 
             VIEW_payperiodofyear(genpayselyear)
 
-            loademployee(quer_empPayFreq)
+            'loademployee(quer_empPayFreq)
+            First_LinkClicked(First, New LinkLabelLinkClickedEventArgs(New LinkLabel.Link()))
 
             EXECQUER("UPDATE employeeloanschedule SET `Status`='Completed' WHERE LoanPayPeriodLeft <= 0 AND OrganizationID=" & org_rowid & ";")
 
@@ -6562,7 +6428,7 @@ Public Class PayStub
 
         If e_asc = 13 Then
             'tsbtnSearch
-            tsbtnSearch_Click(sender, e)
+            tsbtnSearchEmployee_Click(sender, e)
         Else
             Dim keypressresult = TrapCharKey(e_asc) And TrapNumKey(e_asc)
 
@@ -6572,13 +6438,22 @@ Public Class PayStub
 
     End Sub
 
-    Private Sub tsbtnSearch_Click(sender As Object, e As EventArgs) Handles tsbtnSearch.Click
+    Private Sub tsbtnSearchEmployee_Click(sender As Object, e As EventArgs) Handles tsbtnSearch.Click
 
         RemoveHandler dgvemployees.SelectionChanged, AddressOf dgvemployees_SelectionChanged
 
-        'loademployee(Trim(tsSearch.Text))
+        First_LinkClicked(First, New LinkLabelLinkClickedEventArgs(New LinkLabel.Link()))
+
+        AddHandler dgvemployees.SelectionChanged, AddressOf dgvemployees_SelectionChanged
+
+    End Sub
+
+    Private Sub tsbtnSearch_Click(sender As Object, e As EventArgs) 'Handles tsbtnSearch.Click
+
+        RemoveHandler dgvemployees.SelectionChanged, AddressOf dgvemployees_SelectionChanged
+
         If Trim(tsSearch.Text).Length = 0 Then
-            First_LinkClicked(First, New LinkLabelLinkClickedEventArgs(New LinkLabel.Link())) 'loademployee(quer_empPayFreq)
+            'First_LinkClicked(First, New LinkLabelLinkClickedEventArgs(New LinkLabel.Link()))
         Else
             Dim dattabsearch As New DataTable
 
@@ -7848,8 +7723,6 @@ Public Class PayStub
                     first_sender = new_tsbtn
                 End If
 
-                AddHandler new_tsbtn.Click, AddressOf PayFreq_Changed
-
             Next
 
             tstrip.PerformLayout()
@@ -7861,7 +7734,9 @@ Public Class PayStub
             AddHandler dgvpayper.SelectionChanged, AddressOf dgvpayper_SelectionChanged
 
             If first_sender IsNot Nothing Then
-                PayFreq_Changed(first_sender, New EventArgs)
+                For Each tsBtn In tstrip.Items.OfType(Of ToolStripButton)
+                    AddHandler tsBtn.Click, AddressOf PayFreq_Changed
+                Next
             End If
 
             For Each tsItem As ToolStripItem In tstrip.Items
@@ -7874,6 +7749,8 @@ Public Class PayStub
     End Sub
 
     Dim quer_empPayFreq = ""
+
+    Dim selectedColor = Color.FromArgb(194, 228, 255)
 
     Sub PayFreq_Changed(sender As Object, e As EventArgs)
 
@@ -7892,11 +7769,11 @@ Public Class PayStub
 
             If once = 0 Then
 
-                once += 1
+                once = 1
 
                 prevObj = senderObj
 
-                senderObj.BackColor = Color.FromArgb(194, 228, 255)
+                senderObj.BackColor = selectedColor
 
                 senderObj.Font = selectedButtonFont
 
@@ -7904,7 +7781,8 @@ Public Class PayStub
 
                 quer_empPayFreq = " AND pf.PayFrequencyType='" & senderObj.Text & "' "
 
-                loademployee(quer_empPayFreq)
+                'loademployee(quer_empPayFreq)
+                First_LinkClicked(CurrLinkPage, New LinkLabelLinkClickedEventArgs(New LinkLabel.Link()))
 
                 AddHandler dgvemployees.SelectionChanged, AddressOf dgvemployees_SelectionChanged
 
@@ -7952,8 +7830,9 @@ Public Class PayStub
 
             End If
 
-            'loademployee(quer_empPayFreq)
-            tsbtnSearch_Click(tsbtnSearch, New EventArgs)
+            'tsbtnSearch_Click(tsbtnSearch, New EventArgs)
+            'CurrLinkPage First
+            First_LinkClicked(CurrLinkPage, New LinkLabelLinkClickedEventArgs(New LinkLabel.Link()))
 
             If prev_selRowIndex <> -1 Then
                 If dgvemployees.RowCount > prev_selRowIndex Then

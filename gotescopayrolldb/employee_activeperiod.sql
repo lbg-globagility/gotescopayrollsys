@@ -12,6 +12,10 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 	, IF(_start.RowID = pp.RowID
 	     , 'Initial period'
 		  , 'Succeeding period of initial year') `Description`
+	/*, pp.`Year`
+	, pp.OrdinalValue
+	, pp.PayFromDate
+	, pp.PayToDate*/
 	FROM employee e
 	INNER JOIN payperiod _start
 	        ON _start.OrganizationID=e.OrganizationID
@@ -29,6 +33,10 @@ UNION
 	SELECT e.RowID `RowId`
 	, pp.RowID `PayPeriodId`
 	, 'Served period(s)' `Description`
+	/*, pp.`Year`
+	, pp.OrdinalValue
+	, pp.PayFromDate
+	, pp.PayToDate*/
 	FROM employee e
 	INNER JOIN payperiod _start
 	        ON _start.OrganizationID=e.OrganizationID
@@ -48,6 +56,10 @@ UNION
 	, IF(_start.RowID = pp.RowID
 	     , 'Initial period'
 		  , 'Succeeding period of initial year') `Description`
+	/*, pp.`Year`
+	, pp.OrdinalValue
+	, pp.PayFromDate
+	, pp.PayToDate*/
 	FROM employee_quitperiod e
 	INNER JOIN employee ee ON ee.RowID=e.EmployeeId
 	INNER JOIN payperiod _start
@@ -65,6 +77,10 @@ UNION
 	SELECT e.EmployeeId `RowId`
 	, pp.RowID `PayPeriodId`
 	, 'Served period(s)' `Description`
+	/*, pp.`Year`
+	, pp.OrdinalValue
+	, pp.PayFromDate
+	, pp.PayToDate*/
 	FROM employee_quitperiod e
 	INNER JOIN employee ee ON ee.RowID=e.EmployeeId
 	
@@ -84,6 +100,10 @@ UNION
 	SELECT e.EmployeeId `RowId`
 	, pp.RowID `PayPeriodId`
 	, 'Year of quit, and rest served period' `Description`
+	/*, pp.`Year`
+	, pp.OrdinalValue
+	, pp.PayFromDate
+	, pp.PayToDate*/
 	FROM employee_quitperiod e
 	INNER JOIN payperiod quit ON quit.RowID=e.PayPeriodId
 	INNER JOIN payperiod pp

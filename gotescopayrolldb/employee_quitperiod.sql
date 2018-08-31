@@ -7,12 +7,17 @@
 DROP VIEW IF EXISTS `employee_quitperiod`;
 DROP TABLE IF EXISTS `employee_quitperiod`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employee_quitperiod` AS SELECT
-pp.*
+# pp.*,
 
-, e.RowID `EmployeeId`
+e.RowID `EmployeeId`
+, e.OrganizationID
 , e.PayFrequencyID
 
 , pp.RowID `PayPeriodId`
+, pp.`Year`
+, pp.OrdinalValue
+, pp.PayFromDate
+, pp.PayToDate
 
 FROM employee e
 INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND e.TerminationDate BETWEEN pp.PayFromDate AND pp.PayToDate

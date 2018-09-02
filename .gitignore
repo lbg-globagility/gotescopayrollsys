@@ -23,3 +23,7 @@ GotescoPayrollSys/bin/Debug/GotescoPayrollSys\.exe\.config
 GotescoPayrollSys/bin/Debug/vs959B\.tmp 
  
 *.tmp
+
+GotescoPayrollSys/bin/
+
+GotescoPayrollSys/obj/

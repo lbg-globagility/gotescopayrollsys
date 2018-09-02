@@ -128,6 +128,42 @@ Public Class MySQLExecuteCommand
 
     End Property
 
+    Async Function GetFoundRowsAsync() As Task(Of DataSet)
+        ResetError()
+
+        Dim datset_result As New DataSet
+
+        Dim mysql_transac As MySqlTransaction
+
+        mysql_transac = prepared_mysqlcmd.Connection.BeginTransaction
+
+        Try
+
+            dat_adap = New MySqlDataAdapter
+
+            dat_adap.SelectCommand = prepared_mysqlcmd
+
+            Await dat_adap.FillAsync(datset_result)
+
+            mysql_transac.Commit()
+
+        Catch ex As Exception
+            mysql_transac.Rollback()
+
+            AssignError(ex)
+
+        Finally
+
+            DisposeCommand()
+
+            dat_adap.Dispose()
+
+        End Try
+
+        Return datset_result
+
+    End Function
+
     ReadOnly Property ErrorException As Exception
 
         Get

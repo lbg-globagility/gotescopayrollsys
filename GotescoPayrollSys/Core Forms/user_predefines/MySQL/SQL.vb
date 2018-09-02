@@ -1,4 +1,5 @@
-﻿
+﻿Imports System.Threading.Tasks
+
 Public Class SQL
 
 #Region "Variables"
@@ -65,6 +66,19 @@ Public Class SQL
 
 #End Region
 
+#Region "Functions"
+
+    Async Function GetFoundRowsAsync() As Task(Of DataSet)
+        Dim my_exec_cmd As New  _
+                MySQLExecuteCommand(mysql_cmd)
+
+        Return Await my_exec_cmd.GetFoundRowsAsync
+
+        AssingError(my_exec_cmd)
+    End Function
+
+#End Region
+
 #Region "Methods"
 
     Sub New(sql_command As String,
@@ -80,7 +94,7 @@ Public Class SQL
     End Sub
 
     Sub ExecuteQuery()
-        Dim my_exec_cmd As New _
+        Dim my_exec_cmd As New  _
                 MySQLExecuteCommand(mysql_cmd)
 
         'Dim obj As Object = my_exec_cmd.GetFoundRow
@@ -92,7 +106,7 @@ Public Class SQL
     End Sub
 
     Async Sub ExecuteQueryAsync()
-        Dim my_exec_cmd As New _
+        Dim my_exec_cmd As New  _
                 MySQLExecuteCommand(mysql_cmd)
 
         'Dim obj As Object = my_exec_cmd.GetFoundRow

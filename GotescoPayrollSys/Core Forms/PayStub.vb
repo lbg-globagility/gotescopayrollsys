@@ -58,6 +58,8 @@ Public Class PayStub
 
     Private CurrLinkPage As LinkLabel
 
+    Private _once As Boolean = True
+
     Property VeryFirstPayPeriodIDOfThisYear As Object
 
         Get
@@ -317,7 +319,7 @@ Public Class PayStub
         Return tstrip.Items.OfType(Of ToolStripButton).Where(Function(tsBtn) tsBtn.BackColor = selectedColor).SingleOrDefault
     End Function
 
-    Private Sub loadservingemployees()
+    Private Async Function loadServingEmployeesAsync() As Task
 
         Dim payFrerSelected = SelectedPayFrequencyItem()
         Dim payFreq = payFrerSelected.Text
@@ -327,8 +329,10 @@ Public Class PayStub
 
         Dim _params = New Object() {org_rowid, paypRowID, payFreq, pagination, tsSearch.Text.Trim}
         Dim catchdt As New DataTable
-        catchdt = New SQL(_query, _params).
-                          GetFoundRows.Tables.OfType(Of DataTable).First
+
+        Dim _return = New SQL(_query, _params)
+        Dim _returnValue = Await _return.GetFoundRowsAsync()
+        catchdt = _returnValue.Tables.OfType(Of DataTable).FirstOrDefault
 
         dgvemployees.Rows.Clear()
         For Each drow As DataRow In catchdt.Rows
@@ -338,7 +342,7 @@ Public Class PayStub
 
         SomeDgvWorks()
 
-    End Sub
+    End Function
 
     Private Sub SomeDgvWorks()
 
@@ -509,14 +513,12 @@ Public Class PayStub
         dgvpayper_SelectionChanged(sender, e)
     End Sub
 
-    Private Sub First_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles First.LinkClicked, Prev.LinkClicked,
+    Private Async Sub First_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles First.LinkClicked, Prev.LinkClicked,
                                                                                                 Nxt.LinkClicked, Last.LinkClicked,
                                                                                                 LinkLabel4.LinkClicked, LinkLabel3.LinkClicked,
                                                                                                 LinkLabel2.LinkClicked, LinkLabel1.LinkClicked
 
         Dim pageRecordCount = 10
-        CurrLinkPage = New LinkLabel
-        CurrLinkPage = DirectCast(sender, LinkLabel)
 
         quer_empPayFreq = ""
 
@@ -603,7 +605,19 @@ Public Class PayStub
             'Else
             'End If
 
-            loadservingemployees()
+
+            If _once Then
+                _once = False
+                CurrLinkPage = New LinkLabel
+            End If
+
+            Dim _currLinkPage = DirectCast(sender, LinkLabel)
+
+            If Object.Equals(CurrLinkPage, _currLinkPage) = False Then
+                CurrLinkPage = _currLinkPage
+                Await loadServingEmployeesAsync()
+            End If
+
 
             dgvemployees_SelectionChanged(sender, e)
 
@@ -6442,6 +6456,7 @@ Public Class PayStub
 
         RemoveHandler dgvemployees.SelectionChanged, AddressOf dgvemployees_SelectionChanged
 
+        CurrLinkPage = New LinkLabel
         First_LinkClicked(First, New LinkLabelLinkClickedEventArgs(New LinkLabel.Link()))
 
         AddHandler dgvemployees.SelectionChanged, AddressOf dgvemployees_SelectionChanged
@@ -7844,23 +7859,23 @@ Public Class PayStub
 
             'dgvemployees_SelectionChanged(sender, e)
 
-            Static twice As SByte = 0
+            'Static twice As SByte = 0
 
-            If twice < 1 Then
+            'If twice < 1 Then
 
-                twice += 1
+            '    twice += 1
 
-            ElseIf twice = 1 Then
-                twice = 2
-                RemoveHandler dgvpayper.SelectionChanged, AddressOf dgvpayper_SelectionChanged
+            'ElseIf twice = 1 Then
+            '    twice = 2
+            '    RemoveHandler dgvpayper.SelectionChanged, AddressOf dgvpayper_SelectionChanged
 
-                dgvpayper_SelectionChanged(sender, e)
+            '    dgvpayper_SelectionChanged(sender, e)
 
-                AddHandler dgvpayper.SelectionChanged, AddressOf dgvpayper_SelectionChanged
+            '    AddHandler dgvpayper.SelectionChanged, AddressOf dgvpayper_SelectionChanged
 
-            End If
+            'End If
 
-            dgvemployees_SelectionChanged(sender, e)
+            'dgvemployees_SelectionChanged(sender, e)
 
         End If
 

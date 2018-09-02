@@ -150,11 +150,12 @@ ps.RowID
 ,IFNULL(REPLACE(eapp.`AllowanceName`, ',', '\n'), '') `Column48`
 ,IFNULL(REPLACE(eapp.`AllowanceAmount`, ',', '\n'), '') `Column49`
 
-, ( ps.TotalGrossSalary + IFNULL(adj_sum_positive.`AdjustmentAmount`, 0) ) `Column60`
+, ( ps.TotalGrossSalary + IFNULL(adj_positive.`PayAmount`, 0) ) `Column60`
 , ( ps.TotalLoans
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 + (IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0))
-	 + IFNULL(adj_sum_negative.`AdjustmentAmount` * -1, 0) ) `Column61`
+	 + IFNULL(adj_negative.`PayAmount` * -1, 0) ) `Column61`
+	 
 , ( ps.TotalLoans
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 + (IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0)) ) `Column62`
@@ -460,6 +461,7 @@ LEFT JOIN (SELECT d.*
 LEFT JOIN (SELECT d.PayStubID
            , d.AdjustmentName
            , d.AdjustmentAmount
+           , d.PayAmount
 			  FROM paystubadjustment_peritem d
 			  WHERE d.OrganizationID=og_rowid
 			  AND d.IsActual=is_actual
@@ -467,20 +469,23 @@ LEFT JOIN (SELECT d.PayStubID
            SELECT a.PayStubID
            , a.AdjustmentName
            , a.AdjustmentAmount
+           , a.PayAmount
 			  FROM paystubadjustmentactual_peritem a
 			  WHERE a.OrganizationID=og_rowid
 			  AND a.IsActual=is_actual) adj_positive ON adj_positive.PayStubID=ps.RowID
 
-LEFT JOIN (/*SELECT d.PayStubID
+LEFT JOIN (SELECT d.PayStubID
            , d.AdjustmentName
            , d.AdjustmentAmount
+           , d.PayAmount
 			  FROM paystubadjustment_peritemnega d
 			  WHERE d.OrganizationID=og_rowid
 			  AND d.IsActual=is_actual
-			UNION*/
+			UNION
            SELECT a.PayStubID
            , a.AdjustmentName
            , a.AdjustmentAmount
+           , a.PayAmount
 			  FROM paystubadjustmentactual_peritemnega a
 			  WHERE a.OrganizationID=og_rowid
 			  AND a.IsActual=is_actual) adj_negative ON adj_negative.PayStubID=ps.RowID
@@ -492,43 +497,6 @@ LEFT JOIN (SELECT GROUP_CONCAT(eapp.AllowanceAmount) `AllowanceAmount`
 			  WHERE eapp.OrganizationID=og_rowid
 			  AND eapp.PayPeriodId=pp_rowid
 			  GROUP BY eapp.EmployeeID) eapp ON eapp.EmployeeID=ps.EmployeeID
-			  
-LEFT JOIN (SELECT pd.*
-           FROM (SELECT d.RowID,d.PayStubID
-			        , SUM(d.AdjustmentAmount) `AdjustmentAmount`
-					  FROM paystubadjustment_itemized d
-					  WHERE d.OrganizationID=og_rowid
-					  AND d.IsActual=is_actual
-					  AND d.PayAmount > 0
-					  GROUP BY d.PayStubID) pd
-			UNION
-           SELECT pa.*
-			  FROM (SELECT a.RowID,a.PayStubID
-                 , SUM(a.AdjustmentAmount) `AdjustmentAmount`
-					  FROM paystubadjustmentactual_itemized a
-					  WHERE a.OrganizationID=og_rowid
-					  AND a.IsActual=is_actual
-					  AND a.PayAmount > 0
-					  GROUP BY a.PayStubID) pa) adj_sum_positive ON adj.PayStubID=ps.RowID
-
-LEFT JOIN (SELECT pd.*
-           FROM (SELECT d.RowID,d.PayStubID
-                 , SUM(d.AdjustmentAmount) `AdjustmentAmount`
-					  FROM paystubadjustment_itemized d
-					  WHERE d.OrganizationID=og_rowid
-					  AND d.IsActual=is_actual
-					  AND d.PayAmount < 0
-					  GROUP BY d.PayStubID) pd
-			UNION
-           SELECT pa.*
-			  FROM (SELECT a.RowID,a.PayStubID
-                 , SUM(a.AdjustmentAmount) `AdjustmentAmount`
-					  FROM paystubadjustmentactual_itemized a
-					  WHERE a.OrganizationID=og_rowid
-					  AND a.IsActual=is_actual
-					  AND a.PayAmount < 0
-					  GROUP BY a.PayStubID) pa) adj_sum_negative ON adj.PayStubID=ps.RowID
-					  
 WHERE ps.OrganizationID=og_rowid
 AND ps.PayPeriodID=pp_rowid
 AND ps.AsActual=is_actual

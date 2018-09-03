@@ -605,7 +605,6 @@ Public Class PayStub
             'Else
             'End If
 
-
             If _once Then
                 _once = False
                 CurrLinkPage = New LinkLabel
@@ -617,7 +616,6 @@ Public Class PayStub
                 CurrLinkPage = _currLinkPage
                 Await loadServingEmployeesAsync()
             End If
-
 
             dgvemployees_SelectionChanged(sender, e)
 

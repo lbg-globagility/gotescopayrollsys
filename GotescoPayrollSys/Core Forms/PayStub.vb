@@ -59,6 +59,8 @@ Public Class PayStub
     Private CurrLinkPage As LinkLabel
 
     Private _once As Boolean = True
+    Private _currPaginate As Integer = -1
+    Private pageRecordCount As Integer = 10
 
     Property VeryFirstPayPeriodIDOfThisYear As Object
 
@@ -457,6 +459,13 @@ Public Class PayStub
 
                 Dim w = SelectedPayFrequencyItem()
                 If w IsNot Nothing Then
+                    If CurrLinkPage?.Text.Contains("Next") Then
+                        pagination -= _currPaginate
+                    End If
+
+                    If CurrLinkPage?.Text.Contains("Prev") Then
+                        pagination += _currPaginate
+                    End If
                     w.PerformClick()
                 End If
 
@@ -518,8 +527,6 @@ Public Class PayStub
                                                                                                 LinkLabel4.LinkClicked, LinkLabel3.LinkClicked,
                                                                                                 LinkLabel2.LinkClicked, LinkLabel1.LinkClicked
 
-        Dim pageRecordCount = 10
-
         quer_empPayFreq = ""
 
         If bgworkgenpayroll.IsBusy Then
@@ -533,6 +540,8 @@ Public Class PayStub
             RemoveHandler dgvemployees.SelectionChanged, AddressOf dgvemployees_SelectionChanged
 
             Dim sendrname As String = DirectCast(sender, LinkLabel).Name
+
+            Dim _pageNumberChanged = False
 
             If sendrname = "First" Or sendrname = "LinkLabel1" Then
                 pagination = 0
@@ -598,6 +607,8 @@ Public Class PayStub
                 '                lastpage - pageRecordCount, _
                 '                lastpage)
 
+                _pageNumberChanged = True
+
             End If
 
             'loademployees()
@@ -614,6 +625,22 @@ Public Class PayStub
 
             If Object.Equals(CurrLinkPage, _currLinkPage) = False Then
                 CurrLinkPage = _currLinkPage
+                _pageNumberChanged = True
+            End If
+
+            If _currPaginate <> pagination Then
+                _currPaginate = pagination
+                _pageNumberChanged = True
+            End If
+
+            Dim _currLinkPageText = CurrLinkPage?.Text
+
+            If _currLinkPageText.Contains("Prev") _
+                Or _currLinkPageText.Contains("Next") Then
+                _pageNumberChanged = True
+            End If
+
+            If _pageNumberChanged Then
                 Await loadServingEmployeesAsync()
             End If
 

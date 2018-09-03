@@ -21,7 +21,7 @@ adj.RowID
 , FALSE `IsActual`
 
 , GROUP_CONCAT(p.PartNo) `AdjustmentName`
-, GROUP_CONCAT(adj.PayAmount) `AdjustmentAmount`
+, GROUP_CONCAT(adj.PayAmount * -1) `AdjustmentAmount`
 
 FROM paystubadjustment adj
 INNER JOIN product p ON p.RowID=adj.ProductID

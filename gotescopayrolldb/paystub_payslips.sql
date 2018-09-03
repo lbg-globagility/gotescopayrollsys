@@ -162,9 +162,12 @@ ps.RowID
 
 FROM proper_payroll ps
 
-INNER JOIN employee e
-        ON e.RowID=ps.EmployeeID AND e.OrganizationID=ps.OrganizationID
-        AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+# INNER JOIN employee e
+INNER JOIN employee_servedperiod e
+        ON e.RowID=ps.EmployeeID
+		     AND e.OrganizationID=ps.OrganizationID
+           # AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+           AND e.ServedPeriodId = ps.PayPeriodID
 
 INNER JOIN employeesalary esa
         ON esa.EmployeeID=ps.EmployeeID
@@ -423,7 +426,8 @@ SELECT p.PartNo `Allowance name`
  LEFT JOIN paystubitem psi
         ON psi.PayStubID=ps.RowID AND psi.ProductID=p.RowID AND psi.Undeclared=ps.AsActual
        
-INNER JOIN (SELECT
+# INNER JOIN (SELECT
+LEFT JOIN (SELECT
            PayStubID
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column30`
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column31`

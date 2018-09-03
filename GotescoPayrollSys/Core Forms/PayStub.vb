@@ -2974,27 +2974,6 @@ Public Class PayStub
 
                     End If
 
-                    'objText = .ReportObjects("lblEmployeeId")
-                    'objText.Text = "Employee ID:"
-
-                    'objText = .ReportObjects("lblFullname")
-                    'objText.Text = "Full Name:"
-
-                    'objText = .ReportObjects("lblBasicRate")
-                    'objText.Text = "BASIC RATE:"
-
-                    'objText = .ReportObjects("lblCompAllowance")
-                    'objText.Text = "CO. ALLOW"
-
-                    'objText = .ReportObjects("lblEcola")
-                    'objText.Text = "ECOLA"
-
-                    'objText = .ReportObjects("lblDeduction")
-                    'objText.Text = "DEDUCTIONS:"
-
-                    'objText = .ReportObjects("lblEarning")
-                    'objText.Text = "EARNINGS FOR THE PERIOD:"
-
                 End With
 
                 'Dim new_ds As New DataSet

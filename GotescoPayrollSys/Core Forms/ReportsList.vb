@@ -120,4 +120,16 @@ Public Class ReportsList
 
     End Sub
 
+    Private Sub ReportsList_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+
+    End Sub
+
+    Private Sub ReportsList_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        FormReports.listReportsForm.Remove(Name)
+    End Sub
+
+    Private Sub tsbtnClose_Click(sender As Object, e As EventArgs) Handles tsbtnClose.Click
+        Close()
+    End Sub
+
 End Class

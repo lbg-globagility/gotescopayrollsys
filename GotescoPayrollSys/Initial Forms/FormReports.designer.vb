@@ -62,9 +62,6 @@ Partial Class FormReports
         Me.tsbtnstartreport.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnstartreport.Name = "tsbtnstartreport"
         Me.tsbtnstartreport.Size = New System.Drawing.Size(23, 22)
-        Me.tsbtnstartreport.Text = "ToolStripButton1"
-        Me.tsbtnstartreport.ToolTipText = "Start report"
-        Me.tsbtnstartreport.Visible = False
         '
         'FormReports
         '

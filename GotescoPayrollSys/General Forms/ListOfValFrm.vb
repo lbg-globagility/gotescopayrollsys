@@ -32,7 +32,7 @@ Public Class ListOfValFrm
     Dim nowDate = Date.Now.ToString("yyyy/MM/dd HH:mm:ss")
     Dim listofvalsystemaccntflg, listofvaldisplayaccntflg As Char
     Private Sub ListOfValueForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             clearfields()
@@ -47,11 +47,11 @@ Public Class ListOfValFrm
             displayListOfValueDetails()
             tabMain.SelectedTab = tabDetails
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     Private Sub ListOfValueForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         'Me.Cursor = Cursors.WaitCursor
@@ -82,7 +82,7 @@ Public Class ListOfValFrm
             enableANDvisibleMS(legit, fraud, fraud)
             dgUnknown.Rows.Clear()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -97,7 +97,7 @@ Public Class ListOfValFrm
             cboLOVType.SelectedItem = Nothing
             cboParentValue.SelectedItem = Nothing
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -108,7 +108,7 @@ Public Class ListOfValFrm
             gbListOfVal.Enabled = enable2
             gbUnknown.Enabled = enable3
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -125,7 +125,7 @@ Public Class ListOfValFrm
             cmdNext.Visible = fraud
             cmdLast.Visible = fraud
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -142,7 +142,7 @@ Public Class ListOfValFrm
             lv_systemaccount.ReadOnly = readonly2
             dgUnknown.CommitEdit(True)
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -158,7 +158,7 @@ Public Class ListOfValFrm
             displayListOfValueDetails()
             tabMain.SelectedTab = tabDetails
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -219,7 +219,7 @@ Public Class ListOfValFrm
             reader1.Close()
             conn.Close()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -239,7 +239,7 @@ Public Class ListOfValFrm
             reader1.Close()
             conn.Close()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -259,7 +259,7 @@ Public Class ListOfValFrm
             reader1.Close()
             conn.Close()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -287,7 +287,7 @@ Public Class ListOfValFrm
                 End While
                 Return True
             Catch ex As Exception
-                MsgBox(getErrExcptn(ex, Me.Name))
+                MsgBox(getErrExcptn(ex, Name))
                 sqlrd.Close()
                 conn.Close()
                 Return False
@@ -343,7 +343,7 @@ Public Class ListOfValFrm
                 End While
                 Return True
             Catch ex As Exception
-                MsgBox(getErrExcptn(ex, Me.Name))
+                MsgBox(getErrExcptn(ex, Name))
                 sqlrd.Close()
                 conn.Close()
                 Return False
@@ -374,7 +374,7 @@ Public Class ListOfValFrm
                 listofvaltype = 0
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -393,7 +393,7 @@ Public Class ListOfValFrm
                 listofvaldisplayvalue = 0 : listofvalsystemaccntflg = "" : listofvaldisplayaccntflg = ""
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -404,7 +404,7 @@ Public Class ListOfValFrm
         Try
             TabControlColor(tabMain, e)
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -420,7 +420,7 @@ Public Class ListOfValFrm
                 cellTextBox.AutoCompleteCustomSource = Nothing
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
@@ -435,13 +435,13 @@ Public Class ListOfValFrm
                 datagridReadOnlySetup(fraud, legit)
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
     End Sub
     Private Sub dgUnknown_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnknown.CellEndEdit
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             dgUnknown.CommitEdit(True)
             If dgUnknown.CurrentRow.Cells("lv_displayvalue").Value <> "" Then
@@ -455,17 +455,17 @@ Public Class ListOfValFrm
                 dgUnknown.Item("lv_type", e.RowIndex).ErrorText = "Please enter the type of this value"
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         'Me.Cursor = Cursors.WaitCursor
         'Try
         '    'PrimaryForm.LstOfValForm = False
-        Me.Close()
+        Close()
         'Catch ex As Exception
         '    MsgBox(getErrExcptn(ex, Me.Name))
         'Finally
@@ -477,25 +477,25 @@ Public Class ListOfValFrm
         Try
             cboLOVType.Focus()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
     End Sub
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             tsrefreshperformclick()
             myBalloon("Successfully refresh", "Refresh", lblsavemsg, -15, -65)
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     Private Sub msClear_Click(sender As Object, e As EventArgs) Handles msClear.Click
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             If cue = "New" Then
@@ -505,14 +505,14 @@ Public Class ListOfValFrm
             Else
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             tabMain.SelectedTab = tabDetails
@@ -526,14 +526,14 @@ Public Class ListOfValFrm
             End If
             cboLOVType.Focus()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             tabMain.SelectedTab = tabDetails
@@ -548,11 +548,11 @@ Public Class ListOfValFrm
                 tsrefreshperformclick()
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
 
     Private Sub dgListOfVal_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgListOfVal.CellContentClick
@@ -564,7 +564,7 @@ Public Class ListOfValFrm
     End Sub
 
     Private Sub dgListOfVal_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgListOfVal.CellClick
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             tabMain.SelectedTab = tabDetails
@@ -576,11 +576,11 @@ Public Class ListOfValFrm
                 displayListOfValueItems(dgListOfVal.CurrentRow.Cells("l_type").Value)
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Try
@@ -669,14 +669,14 @@ Public Class ListOfValFrm
             Else
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     Private Sub dgListOfVal_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgListOfVal.DataError
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             'MessageBox.Show("Error:  " & e.Context.ToString())
             If (e.Context = DataGridViewDataErrorContexts.Commit) _
@@ -709,14 +709,14 @@ Public Class ListOfValFrm
                 dgListOfVal.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = " "
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     Private Sub dgUnknown_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgUnknown.DataError
-        Me.Cursor = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         Try
             'MessageBox.Show("Error:  " & e.Context.ToString())
             If (e.Context = DataGridViewDataErrorContexts.Commit) _
@@ -749,11 +749,11 @@ Public Class ListOfValFrm
                 dgUnknown.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = " "
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
 
 End Class

@@ -34,7 +34,7 @@ Public Class PhiHealth
         InfoBalloon(, , lblforballoon, , , 1)
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
@@ -51,7 +51,7 @@ Public Class PhiHealth
 
         showAuditTrail.Close()
 
-        GeneralForm.listGeneralForm.Remove(Me.Name)
+        GeneralForm.listGeneralForm.Remove(Name)
     End Sub
 
     Dim dontUpdate As SByte = 0
@@ -206,7 +206,7 @@ Public Class PhiHealth
                 AddHandler .KeyDown, AddressOf dgvPhHlth_KeyDown
 
             Catch ex As Exception
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             Finally
 
             End Try
@@ -311,7 +311,7 @@ Public Class PhiHealth
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs)
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub dgvPhHlth_CurrentCellChanged(sender As Object, e As EventArgs) Handles dgvPhHlth.CurrentCellChanged
@@ -382,7 +382,7 @@ Public Class PhiHealth
         End If
     End Sub
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub dgvPhHlth_KeyDown1(sender As Object, e As KeyEventArgs)
@@ -545,7 +545,7 @@ Public Class PhiHealth
             End If
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -564,7 +564,7 @@ Public Class PhiHealth
             DA.Fill(DS, "XLData")
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -593,7 +593,7 @@ Public Class PhiHealth
             returnvalue = DS.Tables(0)
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
             returnvalue = Nothing
 
@@ -815,12 +815,12 @@ Public Class PhiHealth
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

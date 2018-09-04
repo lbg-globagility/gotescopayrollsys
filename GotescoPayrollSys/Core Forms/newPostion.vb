@@ -184,11 +184,11 @@ Public Class newPostion
 
         If ValNoComma(n_PositionRowID) = 0 Then
 
-            Me.DialogResult = Windows.Forms.DialogResult.Cancel
+            DialogResult = Windows.Forms.DialogResult.Cancel
 
         Else
 
-            Me.DialogResult = Windows.Forms.DialogResult.OK
+            DialogResult = Windows.Forms.DialogResult.OK
 
         End If
 
@@ -215,12 +215,12 @@ Public Class newPostion
         If e.KeyCode = Keys.Enter Then
             Button1_Click(sender, e)
         ElseIf e.KeyCode = Keys.Escape Then
-            Me.Close()
+            Close()
         End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Me.Close()
+        Close()
     End Sub
 
     Dim divisionRowID = Nothing

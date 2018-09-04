@@ -627,7 +627,7 @@ Public Class OrganizationForm
         'myBalloon(, , lblSaveMsg, , , 1)
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
@@ -642,7 +642,7 @@ Public Class OrganizationForm
         '    MDIPrimaryForm.Text = "Welcome to " & FormLeft.Item(FormLeft.Count - 1)
         'End If
 
-        GeneralForm.listGeneralForm.Remove(Me.Name)
+        GeneralForm.listGeneralForm.Remove(Name)
 
     End Sub
 
@@ -755,7 +755,7 @@ Public Class OrganizationForm
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -1240,12 +1240,12 @@ Public Class OrganizationForm
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

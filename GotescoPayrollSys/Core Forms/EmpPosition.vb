@@ -94,7 +94,7 @@ Public Class EmpPosition
             UsersForm.fillPosition()
         Else
 
-            HRISForm.listHRISForm.Remove(Me.Name)
+            HRISForm.listHRISForm.Remove(Name)
 
         End If
 
@@ -961,7 +961,7 @@ Public Class EmpPosition
     End Sub
 
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub TabControl1_DrawItem(sender As Object, e As DrawItemEventArgs) Handles TabControl1.DrawItem
@@ -990,12 +990,12 @@ Public Class EmpPosition
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

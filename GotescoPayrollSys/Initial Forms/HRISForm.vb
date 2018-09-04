@@ -51,7 +51,7 @@
                 Formname.BringToFront()
                 Formname.Focus()
             Else
-                Me.PanelHRIS.Controls.Add(Formname)
+                PanelHRIS.Controls.Add(Formname)
                 listHRISForm.Add(Formname.Name)
 
                 Formname.Show()
@@ -64,7 +64,7 @@
                 'PerformLayout
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         End Try
     End Sub
 

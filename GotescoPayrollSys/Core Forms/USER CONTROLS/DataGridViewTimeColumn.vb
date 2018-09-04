@@ -6,7 +6,7 @@ Public Class DataGridViewTimeColumn
 
     Sub New()
 
-        Me.CellTemplate =
+        CellTemplate =
             New DataGridViewTimeCell
 
     End Sub

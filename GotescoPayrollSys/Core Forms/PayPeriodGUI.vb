@@ -181,12 +181,12 @@ Public Class PayPeriodGUI
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.StartPosition = FormStartPosition.CenterScreen
+        StartPosition = FormStartPosition.CenterScreen
 
     End Sub
 
     Protected Overrides Sub OnLoad(e As EventArgs)
-        Me.DialogResult = Windows.Forms.DialogResult.None
+        DialogResult = Windows.Forms.DialogResult.None
 
         If Convert.ToInt32(org_rowid) = 0 Then
             org_rowid = 1
@@ -582,7 +582,7 @@ Public Class PayPeriodGUI
 
             divis_rowid = cboxDivisions.SelectedValue
 
-            Me.DialogResult = Windows.Forms.DialogResult.OK
+            DialogResult = Windows.Forms.DialogResult.OK
 
             Dim PayFreqRowID = EXECQUER("SELECT RowID FROM payfrequency WHERE PayFrequencyType='" & quer_empPayFreq & "';")
 
@@ -592,7 +592,7 @@ Public Class PayPeriodGUI
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
-        Me.Close()
+        Close()
 
     End Sub
 

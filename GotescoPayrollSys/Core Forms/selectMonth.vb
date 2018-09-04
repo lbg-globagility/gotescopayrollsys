@@ -83,11 +83,11 @@
             m_MonthLastDate = CDate(paypTo)
 
 
-            Me.DialogResult = Windows.Forms.DialogResult.OK
+            DialogResult = Windows.Forms.DialogResult.OK
 
         Else
 
-            Me.DialogResult = Windows.Forms.DialogResult.Cancel
+            DialogResult = Windows.Forms.DialogResult.Cancel
 
         End If
 
@@ -95,9 +95,9 @@
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        DialogResult = Windows.Forms.DialogResult.Cancel
 
-        Me.Close()
+        Close()
 
     End Sub
 

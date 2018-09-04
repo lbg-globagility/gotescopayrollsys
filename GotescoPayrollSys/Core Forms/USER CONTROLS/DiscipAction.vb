@@ -9,7 +9,7 @@ Public Class DiscipAction
 
         If keyData = Keys.Escape And btnSave.Enabled Then
 
-            Me.Close()
+            Close()
 
             Return True
 
@@ -121,11 +121,11 @@ Public Class DiscipAction
 
         If isthereanupdate = "1" Then
 
-            Me.DialogResult = Windows.Forms.DialogResult.OK
+            DialogResult = Windows.Forms.DialogResult.OK
 
         Else
 
-            Me.DialogResult = Windows.Forms.DialogResult.Cancel
+            DialogResult = Windows.Forms.DialogResult.Cancel
 
         End If
 

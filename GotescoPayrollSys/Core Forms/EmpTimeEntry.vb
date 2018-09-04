@@ -1135,7 +1135,7 @@ Public Class EmpTimeEntry
 
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         Finally
             hideObjFields()
             dgvEmployi_SelectionChanged(sender, e)
@@ -2100,7 +2100,7 @@ Public Class EmpTimeEntry
 
         InfoBalloon(, , lblforballoon, , , 1)
 
-        Me.Close()
+        Close()
     End Sub
 
     Sub INSUPD_payrate(Optional prate_RowID As Object = Nothing, _
@@ -2823,7 +2823,7 @@ Public Class EmpTimeEntry
                 Try
                     ted.bgworkRECOMPUTE_employeeleave.RunWorkerAsync()
                 Catch ex As Exception
-                    MsgBox(getErrExcptn(ex, Me.Name))
+                    MsgBox(getErrExcptn(ex, Name))
                 Finally
                     RemoveHandler ted.bgWork.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
                     RemoveHandler ted.bgworkRECOMPUTE_employeeleave.ProgressChanged, AddressOf BackgroundWorker1_ProgressChanged
@@ -3125,7 +3125,7 @@ Public Class EmpTimeEntry
         TimEntduration.Close()
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
@@ -3136,7 +3136,7 @@ Public Class EmpTimeEntry
 
         showAuditTrail.Close()
 
-        TimeAttendForm.listTimeAttendForm.Remove(Me.Name)
+        TimeAttendForm.listTimeAttendForm.Remove(Name)
 
     End Sub
 
@@ -6030,7 +6030,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_tothrsworked") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6098,7 +6098,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
             'Column named etiment_tothrsworked cannot be found. Parameter Name : columnName()
             If ex.Message.Contains("etiment_RegHrsWork") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6161,7 +6161,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_reghrsamt") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6228,7 +6228,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_OTHrsWork") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6295,7 +6295,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_otpay") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6362,7 +6362,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_UTHrsWork") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6429,7 +6429,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_utamt") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6496,7 +6496,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_Hrslate") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6563,7 +6563,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_lateamt") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6630,7 +6630,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_NightDiffHrs") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6697,7 +6697,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_nightdiffpay") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6764,7 +6764,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_NightDiffOTHrs") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -6831,7 +6831,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_nightdiffotpay") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try
@@ -7483,7 +7483,7 @@ Public Class EmpTimeEntry
         Catch ex As Exception
 
             If ex.Message.Contains("etiment_TotDayPay") = False Then
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End If
 
         End Try

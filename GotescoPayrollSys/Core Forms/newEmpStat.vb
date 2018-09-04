@@ -36,7 +36,7 @@
         If e.KeyCode = Keys.Enter Then
             Button1_Click(sender, e)
         ElseIf e.KeyCode = Keys.Escape Then
-            Me.Close()
+            Close()
         End If
     End Sub
 
@@ -45,7 +45,7 @@
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Me.Close()
+        Close()
     End Sub
 
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean

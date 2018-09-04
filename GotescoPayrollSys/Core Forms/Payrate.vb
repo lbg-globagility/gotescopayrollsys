@@ -7,7 +7,7 @@ Public Class Payrate
     Private Sub Payrate_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
@@ -24,7 +24,7 @@ Public Class Payrate
 
         showAuditTrail.Close()
 
-        GeneralForm.listGeneralForm.Remove(Me.Name)
+        GeneralForm.listGeneralForm.Remove(Name)
 
     End Sub
 
@@ -816,14 +816,14 @@ Public Class Payrate
                 loadpayrate()
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         Finally
             addhandlr(sender, e)
         End Try
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        Me.Close()
+        Close()
     End Sub
 
     Dim dontUpdate As SByte = 0
@@ -1112,7 +1112,7 @@ Public Class Payrate
 
     Private Sub Label1_TextChanged(sender As Object, e As EventArgs) Handles Label1.TextChanged
         Dim lbl_Y = Label1.Location.Y
-        Dim lbl_X = (Me.Width / 2) - (Label1.Width / 2)
+        Dim lbl_X = (Width / 2) - (Label1.Width / 2)
 
         Label1.Location = New Point(lbl_X, lbl_Y)
     End Sub
@@ -1461,12 +1461,12 @@ Public Class Payrate
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

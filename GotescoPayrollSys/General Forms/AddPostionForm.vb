@@ -21,7 +21,7 @@
 
                 myBalloon("Added to database", "Done", btnSave, , -65)
                 UsersForm.fillPosition()
-                Me.Close()
+                Close()
 
                 'MsgBox("Added to database", MsgBoxStyle.Information, "Done")
 
@@ -31,7 +31,7 @@
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         txtPosition.Clear()
-        Me.Close()
+        Close()
 
     End Sub
 End Class

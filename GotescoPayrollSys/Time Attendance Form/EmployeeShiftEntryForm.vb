@@ -159,7 +159,7 @@ Public Class EmployeeShiftEntryForm
                         dtpDateTo.Value = .Item("Effectiveto") 'CDate(.Item("Effectiveto")).ToString(machineShortDateFormat)
 
                     Catch ex As Exception
-                        MsgBox(getErrExcptn(ex, Me.Name))
+                        MsgBox(getErrExcptn(ex, Name))
 
                     End Try
 
@@ -183,14 +183,14 @@ Public Class EmployeeShiftEntryForm
         myBalloon(, , lblSaveMsg, , , 1)
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
 
         dutyshift.Close()
 
-        TimeAttendForm.listTimeAttendForm.Remove(Me.Name)
+        TimeAttendForm.listTimeAttendForm.Remove(Name)
     End Sub
 
     Dim view_ID As Integer = Nothing
@@ -257,7 +257,7 @@ Public Class EmployeeShiftEntryForm
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -287,7 +287,7 @@ Public Class EmployeeShiftEntryForm
             fillemployeeshiftSelected()
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
     End Sub
@@ -627,7 +627,7 @@ Public Class EmployeeShiftEntryForm
 
         Dim catchDT = _
                     getWorkBookAsDataSet(filepath, _
-                                         Me.Name)
+                                         Name)
 
         If catchDT Is Nothing Then
 
@@ -812,7 +812,7 @@ Public Class EmployeeShiftEntryForm
 
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 

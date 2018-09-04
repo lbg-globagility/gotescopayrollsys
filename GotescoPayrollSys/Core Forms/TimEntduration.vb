@@ -56,7 +56,7 @@ Public Class TimEntduration
 
         new_conn.ConnectionString = db_connectinstring
 
-        Me.Text = "Today's date is " & Format(CDate(EmpTimeEntry.today_date), "MMMM dd, yyyy")
+        Text = "Today's date is " & Format(CDate(EmpTimeEntry.today_date), "MMMM dd, yyyy")
 
         current_years = Format(CDate(EmpTimeEntry.today_date), "yyyy")
 
@@ -406,7 +406,7 @@ Public Class TimEntduration
 
     Private Sub dgvpayper_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvpayper.KeyDown
         If e.KeyCode = Keys.Escape Then
-            Me.Hide()
+            Hide()
         End If
     End Sub
 
@@ -1012,7 +1012,7 @@ Public Class TimEntduration
 
         End If
 
-        Me.Hide()
+        Hide()
 
     End Sub
 
@@ -1053,7 +1053,7 @@ Public Class TimEntduration
 
                 TimeAttendForm.TimeEntryToolStripMenuItem_Click(sender, e)
 
-                Me.Close()
+                Close()
 
                 Exit Sub
             Else 'If prompt = Windows.Forms.DialogResult.Cancel Then
@@ -1228,7 +1228,7 @@ Public Class TimEntduration
                 me_close = 0
             End If
 
-            Me.Close()
+            Close()
         End If
 
         EmpTimeEntry.First.Enabled = True
@@ -1462,7 +1462,7 @@ Public Class TimEntduration
 
             If Panel1.Enabled Then
 
-                Me.Close()
+                Close()
 
             End If
 

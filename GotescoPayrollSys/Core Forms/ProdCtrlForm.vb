@@ -37,10 +37,10 @@ Public Class ProdCtrlForm
                          " LIMIT 1);")
 
             If haschangestoDB = 1 Then
-                Me.DialogResult = Windows.Forms.DialogResult.OK
+                DialogResult = Windows.Forms.DialogResult.OK
 
             Else
-                Me.DialogResult = Windows.Forms.DialogResult.Cancel
+                DialogResult = Windows.Forms.DialogResult.Cancel
 
             End If
 
@@ -289,7 +289,7 @@ Public Class ProdCtrlForm
 
         If keyData = Keys.Escape And isCellInEditMode = False Then
 
-            Me.Close()
+            Close()
 
             Return True
 

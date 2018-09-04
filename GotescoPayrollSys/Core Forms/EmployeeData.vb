@@ -41,13 +41,13 @@
 
     Protected Overrides Sub OnLoad(e As EventArgs)
         Try
-            has_pre_selected_emp = (Me.RowID.Length > 0)
+            has_pre_selected_emp = (RowID.Length > 0)
         Catch ex As Exception
             has_pre_selected_emp = False
         End Try
 
         If has_pre_selected_emp Then
-            pre_selected_emprowid = Me.RowID
+            pre_selected_emprowid = RowID
         End If
 
         MyBase.OnLoad(e)
@@ -141,7 +141,7 @@
 
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
         End Try
@@ -173,31 +173,31 @@
 
                 With dgvEmployee.CurrentRow
 
-                    Me.RowID = .Cells("e_rowid").Value
+                    RowID = .Cells("e_rowid").Value
 
-                    Me.EmployeeId = .Cells("e_id").Value
+                    EmployeeId = .Cells("e_id").Value
 
-                    Me.LastName = .Cells("e_lname").Value
+                    LastName = .Cells("e_lname").Value
 
-                    Me.FirstName = .Cells("e_fname").Value
+                    FirstName = .Cells("e_fname").Value
 
-                    Me.MiddleName = .Cells("e_midname").Value
+                    MiddleName = .Cells("e_midname").Value
 
-                    Me.EmployeeType = .Cells("e_type").Value
+                    EmployeeType = .Cells("e_type").Value
 
-                    Me.EmploymentStatus = .Cells("e_status").Value
+                    EmploymentStatus = .Cells("e_status").Value
 
-                    Me.PositionName = .Cells("e_posname").Value
+                    PositionName = .Cells("e_posname").Value
 
                     'Me.PositionID = .Cells("").Value
 
-                    Me.PayFrequencyType = .Cells("e_payfreqtype").Value
+                    PayFrequencyType = .Cells("e_payfreqtype").Value
 
                     'Me.PayFrequencyId = .Cells("").Value
 
                     Dim display_infos() As String = Split(Convert.ToString(.Cells("e_dispinfo").Value), "?", )
 
-                    Me.FullName = display_infos(0)
+                    FullName = display_infos(0)
 
                 End With
             Else
@@ -211,29 +211,29 @@
 
     Private Sub ClearProperties()
 
-        Me.RowID = ""
+        RowID = ""
 
-        Me.EmployeeId = ""
+        EmployeeId = ""
 
-        Me.LastName = ""
+        LastName = ""
 
-        Me.FirstName = ""
+        FirstName = ""
 
-        Me.MiddleName = ""
+        MiddleName = ""
 
-        Me.EmployeeType = ""
+        EmployeeType = ""
 
-        Me.EmploymentStatus = ""
+        EmploymentStatus = ""
 
-        Me.PositionName = ""
+        PositionName = ""
 
-        Me.PositionID = ""
+        PositionID = ""
 
-        Me.PayFrequencyType = ""
+        PayFrequencyType = ""
 
-        Me.PayFrequencyId = ""
+        PayFrequencyId = ""
 
-        Me.FullName = ""
+        FullName = ""
 
     End Sub
 
@@ -242,21 +242,21 @@
         Dim is_not_empty_rowid As Boolean = False
 
         Try
-            is_not_empty_rowid = (Me.RowID IsNot Nothing)
+            is_not_empty_rowid = (RowID IsNot Nothing)
         Catch ex As Exception
             is_not_empty_rowid = False
         End Try
 
         If dgvEmployee.Rows.Count > 0 _
             And is_not_empty_rowid Then
-            Me.DialogResult = Windows.Forms.DialogResult.OK
+            DialogResult = Windows.Forms.DialogResult.OK
 
         End If
 
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub dgvEmployee_CellMouseDoubleClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles dgvEmployee.CellMouseDoubleClick

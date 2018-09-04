@@ -60,7 +60,7 @@
 
     Private Sub dgvempallowance_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvempallowance.KeyDown
         If e.KeyCode = Keys.Escape Then
-            Me.Close()
+            Close()
         End If
     End Sub
 

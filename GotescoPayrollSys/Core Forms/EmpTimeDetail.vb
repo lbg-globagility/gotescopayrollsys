@@ -1514,7 +1514,7 @@ Public Class EmpTimeDetail
     End Sub
 
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles tsbtnClose.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub Form8_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -1563,7 +1563,7 @@ Public Class EmpTimeDetail
             InfoBalloon(, , lblforballoon, , , 1)
 
             If previousForm IsNot Nothing Then
-                If previousForm.Name = Me.Name Then
+                If previousForm.Name = Name Then
                     previousForm = Nothing
                 End If
             End If
@@ -1572,7 +1572,7 @@ Public Class EmpTimeDetail
 
             SelectFromEmployee.Close()
 
-            TimeAttendForm.listTimeAttendForm.Remove(Me.Name)
+            TimeAttendForm.listTimeAttendForm.Remove(Name)
 
         End If
 

@@ -112,7 +112,7 @@
 
         If keyData = Keys.Escape Then
 
-            Me.Close()
+            Close()
 
             Return True
 

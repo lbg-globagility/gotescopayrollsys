@@ -39,7 +39,7 @@ Public Class MetroLogin
 
         If keyData = Keys.Escape Then
 
-            Me.Close()
+            Close()
 
             Return True
 
@@ -195,7 +195,7 @@ Public Class MetroLogin
 
             If (err_log_limit > err_count) = False Then
 
-                Me.Close()
+                Close()
 
             End If
 

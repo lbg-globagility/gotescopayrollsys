@@ -420,7 +420,7 @@ Public Class LoanCancellation
 
             End If
 
-            Me.DialogResult = Windows.Forms.DialogResult.OK
+            DialogResult = Windows.Forms.DialogResult.OK
 
         Else
 
@@ -634,7 +634,7 @@ Public Class LoanCancellation
 
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -662,7 +662,7 @@ Public Class LoanCancellation
 
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -699,7 +699,7 @@ Public Class LoanCancellation
             Else
 
                 If tsbtnSaveLoan.Enabled Then
-                    Me.Close()
+                    Close()
                 End If
                 
             End If

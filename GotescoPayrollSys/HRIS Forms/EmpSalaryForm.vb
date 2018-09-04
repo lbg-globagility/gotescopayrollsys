@@ -237,7 +237,7 @@
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub txtBasicrate_TextChanged(sender As Object, e As EventArgs) Handles txtBasicrate.TextChanged

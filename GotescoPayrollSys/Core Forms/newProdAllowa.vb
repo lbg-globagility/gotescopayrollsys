@@ -26,11 +26,11 @@
 
         End If
 
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Me.Close()
+        Close()
     End Sub
 
     Dim istaxab As SByte = 0

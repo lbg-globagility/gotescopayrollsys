@@ -265,13 +265,13 @@ Public Class SelectFromEmployee
 
             End With
 
-            Me.Close()
+            Close()
         End If
 
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub EnterKeyPressForSearch(sender As Object, e As KeyPressEventArgs) Handles txtEmpID.KeyPress, txtFName.KeyPress, txtMName.KeyPress, _
@@ -696,7 +696,7 @@ Public Class SelectFromEmployee
 
         If keyData = Keys.Escape Then
 
-            Me.Close()
+            Close()
 
             Return True
 

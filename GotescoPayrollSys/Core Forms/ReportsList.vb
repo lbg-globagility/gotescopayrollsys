@@ -85,7 +85,7 @@ Public Class ReportsList
         Try
             n_listviewitem = lvMainMenu.SelectedItems(0)
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
             Exit Sub
         End Try
 

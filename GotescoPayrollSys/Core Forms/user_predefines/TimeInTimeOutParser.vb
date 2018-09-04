@@ -26,8 +26,8 @@ Module TimeInTimeOutParserModule
 
         Sub New(employee_uniq_key As String,
                 date_andtime As Object)
-            Me.e_uniq_key = employee_uniq_key
-            Me.date_and_time = date_andtime
+            e_uniq_key = employee_uniq_key
+            date_and_time = date_andtime
 
         End Sub
 

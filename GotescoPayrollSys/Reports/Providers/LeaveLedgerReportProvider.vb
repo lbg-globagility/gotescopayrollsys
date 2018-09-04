@@ -48,7 +48,7 @@ Public Class LeaveLedgerReportProvider
             End If
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         End Try
     End Sub
 

@@ -35,15 +35,15 @@ Public Class promptyear
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        DialogResult = Windows.Forms.DialogResult.Cancel
 
-        Me.Close()
+        Close()
 
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        DialogResult = Windows.Forms.DialogResult.OK
 
         sel_year = NumericUpDown1.Value
 

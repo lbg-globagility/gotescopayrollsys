@@ -128,9 +128,9 @@
 
         m_importfilepath = txtfilepath.Text
 
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        DialogResult = Windows.Forms.DialogResult.OK
 
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -142,9 +142,9 @@
 
         m_importfilepath = Nothing
 
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        DialogResult = Windows.Forms.DialogResult.Cancel
 
-        Me.Close()
+        Close()
 
     End Sub
 

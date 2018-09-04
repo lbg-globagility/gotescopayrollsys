@@ -80,12 +80,12 @@ Public Class TextBoxDateTime
 
                 If my_str_len <> 0 Then
 
-                    If Me.TextBox1.Text.Substring(TextBox1.SelectionStart, 1) = n_DateDelimiter Then
+                    If TextBox1.Text.Substring(TextBox1.SelectionStart, 1) = n_DateDelimiter Then
                         my_str_len -= 1
 
-                        Me.TextBox1.Text = Me.TextBox1.Text.Substring(0, (TextBox1.SelectionStart + 1))
+                        TextBox1.Text = TextBox1.Text.Substring(0, (TextBox1.SelectionStart + 1))
 
-                        Me.TextBox1.Select(TextBox1.SelectionStart, 0)
+                        TextBox1.Select(TextBox1.SelectionStart, 0)
 
                     End If
 
@@ -145,7 +145,7 @@ Public Class TextBoxDateTime
 
     Protected Overrides Sub OnTextChanged(e As EventArgs)
 
-        my_str_len = Me.TextBox1.Text.Length
+        my_str_len = TextBox1.Text.Length
 
         MyBase.OnTextChanged(e)
 
@@ -164,7 +164,7 @@ Public Class TextBoxDateTime
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        my_str_len = Me.TextBox1.Text.Length
+        my_str_len = TextBox1.Text.Length
         OnTextChanged(e)
     End Sub
 
@@ -176,9 +176,9 @@ Public Class TextBoxDateTime
     Private Sub addDelimiter(Optional OriginalCharacter As Char = Nothing)
         Dim concat_str = OriginalCharacter & n_DateDelimiter
 
-        Me.TextBox1.Text &= concat_str
+        TextBox1.Text &= concat_str
 
-        Me.TextBox1.Select(my_str_len, 0)
+        TextBox1.Select(my_str_len, 0)
 
     End Sub
 

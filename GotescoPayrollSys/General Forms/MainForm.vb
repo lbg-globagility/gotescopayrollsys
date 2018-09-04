@@ -88,7 +88,7 @@ Public Class MainForm
 
     Private Sub hbtnexit_Click(sender As Object, e As EventArgs) Handles hbtnexit.Click
         LoginForm.Show()
-        Me.Close()
+        Close()
 
     End Sub
 

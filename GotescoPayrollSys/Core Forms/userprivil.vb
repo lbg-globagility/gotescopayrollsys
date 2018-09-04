@@ -141,7 +141,7 @@
             End If
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         End Try
 
     End Sub
@@ -536,7 +536,7 @@
     End Sub
 
     Private Sub tsbtnCloseUserPrivil_Click(sender As Object, e As EventArgs) Handles tsbtnCloseUserPrivil.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) 'Handles CheckBox1.CheckedChanged
@@ -654,7 +654,7 @@
         InfoBalloon(, , lblforballoon, , , 1)
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
@@ -671,7 +671,7 @@
 
         showAuditTrail.Close()
 
-        GeneralForm.listGeneralForm.Remove(Me.Name)
+        GeneralForm.listGeneralForm.Remove(Name)
     End Sub
 
     Private Sub dgvpositview_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvpositview.DataError
@@ -712,12 +712,12 @@
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

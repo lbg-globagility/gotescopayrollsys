@@ -6,7 +6,7 @@ Public Class DataGridViewNumberColumn
 
     Sub New()
 
-        Me.CellTemplate =
+        CellTemplate =
             New DataGridViewNumberCell
 
     End Sub

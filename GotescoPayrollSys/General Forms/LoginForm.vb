@@ -450,7 +450,7 @@ Public Class LoginForm
 
             If ctr = 3 Then
 
-                Me.Close()
+                Close()
             ElseIf ctr <= 2 Then
                 If dt.Rows.Count > 0 Then
 
@@ -528,7 +528,7 @@ Public Class LoginForm
                         '    MDIPrimaryForm.Show()
                         '    ctr = 0
                         'End If
-                        Me.Hide()
+                        Hide()
                     Else
 
                         WarnBalloon("Either username or password is mismatched.", "Incorrect account", OK, OK.Width - 18, -69)
@@ -673,7 +673,7 @@ Public Class LoginForm
 
         If keyData = Keys.Escape Then
 
-            Me.Close()
+            Close()
 
             Return True
 

@@ -315,7 +315,7 @@ Public Class LeaveForm
 
         If TxtEmployeeNumber1.Exists Then
             MsgBox("Leave successfully saved", MsgBoxStyle.Information)
-            Me.Close()
+            Close()
         End If
 
     End Sub

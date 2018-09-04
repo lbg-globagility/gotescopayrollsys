@@ -99,29 +99,29 @@ Public Class OrganizationPrompt
 
             If n_RowIDValue = 0 Then
 
-                Me.DialogResult = Windows.Forms.DialogResult.Cancel
+                DialogResult = Windows.Forms.DialogResult.Cancel
 
             Else
 
-                Me.DialogResult = Windows.Forms.DialogResult.OK
+                DialogResult = Windows.Forms.DialogResult.OK
 
             End If
 
         Else
 
-            Me.DialogResult = Windows.Forms.DialogResult.Cancel
+            DialogResult = Windows.Forms.DialogResult.Cancel
 
         End If
 
-        Me.Close()
+        Close()
 
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
 
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        DialogResult = Windows.Forms.DialogResult.Cancel
 
-        Me.Close()
+        Close()
 
     End Sub
 

@@ -86,7 +86,7 @@ Public Class AboutAndVersion
 
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
         If keyData = Keys.Escape Then
-            Me.Close()
+            Close()
             Return False
         Else
             Return MyBase.ProcessCmdKey(msg, keyData)

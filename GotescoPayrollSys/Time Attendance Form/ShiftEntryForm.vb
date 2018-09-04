@@ -101,7 +101,7 @@
     Private Sub ShiftEntryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
@@ -116,7 +116,7 @@
         '    MDIPrimaryForm.Text = "Welcome to " & FormLeft.Item(FormLeft.Count - 1)
         'End If
 
-        GeneralForm.listGeneralForm.Remove(Me.Name)
+        GeneralForm.listGeneralForm.Remove(Name)
     End Sub
 
     Dim view_ID As Integer = Nothing
@@ -233,7 +233,7 @@
             my_TimeTo = Nothing
 
             txtDivisorToDailyRate.Text = 0
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             RemoveHandler dtpBreakTimeFrom.ValueChanged, AddressOf dtpBreakTimeFrom_ValueChanged
             RemoveHandler dtpBreakTimeTo.ValueChanged, AddressOf dtpBreakTimeTo_ValueChanged
@@ -255,11 +255,11 @@
 
             dgvshiftentry_CellClick(sender, New DataGridViewCellEventArgs(c_timef.Index, dgvshiftentry.CurrentRow.Index))
 
-            Me.DialogResult = Windows.Forms.DialogResult.OK
+            DialogResult = Windows.Forms.DialogResult.OK
 
         Else
 
-            Me.DialogResult = Windows.Forms.DialogResult.Cancel
+            DialogResult = Windows.Forms.DialogResult.Cancel
 
         End If
 
@@ -365,7 +365,7 @@
     End Sub
 
     Private Sub tsbtnCloseShift_Click(sender As Object, e As EventArgs) Handles tsbtnCloseShift.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub tsbtnAudittrail_Click(sender As Object, e As EventArgs) Handles tsbtnAudittrail.Click
@@ -417,12 +417,12 @@
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

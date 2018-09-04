@@ -124,7 +124,7 @@ Public Class EmployeeForm
 
                 End With
             Catch ex As Exception
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             Finally
                 conn.Close()
                 cmd.Dispose()
@@ -947,7 +947,7 @@ Public Class EmployeeForm
                            dtpR1A.Tag,
                            txtboxDeptMngr.Tag)
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             isnot_dept_mngr = IsDBNull(txtboxDeptMngr.Tag)
 
@@ -1533,7 +1533,7 @@ Public Class EmployeeForm
             End With
         Catch ex As Exception
 
-            Dim catch_errstr = getErrExcptn(ex, Me.Name)
+            Dim catch_errstr = getErrExcptn(ex, Name)
 
             If catch_errstr.Contains("Object reference not set to an instance of an object.") Then
 
@@ -1865,12 +1865,12 @@ Public Class EmployeeForm
             MDIPrimaryForm.lblUpdatedDate.Text = Nothing
 
             If previousForm IsNot Nothing Then
-                If previousForm.Name = Me.Name Then
+                If previousForm.Name = Name Then
                     previousForm = Nothing
                 End If
             End If
 
-            HRISForm.listHRISForm.Remove(Me.Name)
+            HRISForm.listHRISForm.Remove(Name)
 
         End If
 
@@ -2094,7 +2094,7 @@ Public Class EmployeeForm
                                                                    ToolStripButton11.Click, tsbtnCloseOBF.Click, ToolStripButton9.Click, ToolStripButton7.Click,
                                                                    ToolStripButton16.Click, ToolStripButton12.Click 'ToolStripButton12.Click
 
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub txt_Leave(sender As Object, e As EventArgs) Handles txtFName.Leave, txtFName.Leave, txtHomeAddr.Leave,
@@ -3383,7 +3383,7 @@ Public Class EmployeeForm
     End Sub
 
     Private Sub TabControl2_DrawItem(sender As Object, e As DrawItemEventArgs) 'Handles TabControl2.DrawItem
-        TabControlColor(TabControl2, e, Me.BackColor)
+        TabControlColor(TabControl2, e, BackColor)
     End Sub
 
     Function strTrimProper(ByVal exprssn As String) As String
@@ -3477,7 +3477,7 @@ Public Class EmployeeForm
 
                             End If
                         Catch ex As Exception
-                            MsgBox(getErrExcptn(ex, Me.Name))
+                            MsgBox(getErrExcptn(ex, Name))
                         End Try
                     Else
 
@@ -3605,7 +3605,7 @@ Public Class EmployeeForm
                 End If
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
             If txtdgvDepen IsNot Nothing Then
@@ -3776,7 +3776,7 @@ Public Class EmployeeForm
             End If
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -4614,7 +4614,7 @@ Public Class EmployeeForm
 
             End With
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         Finally
             conn.Close()
             listofEditDepen.Clear()
@@ -4868,7 +4868,7 @@ Public Class EmployeeForm
 
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         Finally
             'dgvempleave_SelectionChanged(sender, e)
             'AddHandler dgvempleave.SelectionChanged, AddressOf dgvempleave_SelectionChanged
@@ -5834,13 +5834,13 @@ Public Class EmployeeForm
                             Throw sql_ins_user.ErrorException
                         End If
                     Catch ex As Exception
-                        MsgBox(getErrExcptn(ex, Me.Name))
+                        MsgBox(getErrExcptn(ex, Name))
                     End Try
 
                 End If
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
         End Try
@@ -6980,7 +6980,7 @@ Public Class EmployeeForm
                 'clearObjControl(TabPage1)
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -7364,7 +7364,7 @@ Public Class EmployeeForm
 
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         Finally
             dgvempleave_SelectionChanged(sender, e)
             'AddHandler dgvempleave.SelectionChanged, AddressOf dgvempleave_SelectionChanged
@@ -8684,7 +8684,7 @@ Public Class EmployeeForm
                 fillempdisciplinaryselected(dgvDisciplinaryList.CurrentRow.Cells(c_rowid.Index).Value)
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
         btnNew.Enabled = True
         dgvEmp.Enabled = True
@@ -10116,7 +10116,7 @@ Public Class EmployeeForm
             controltruePromot()
             fillselectedpromotions()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
 
         AddHandler cmbflg.SelectedIndexChanged, AddressOf cmbflg_SelectedIndexChanged
@@ -10131,7 +10131,7 @@ Public Class EmployeeForm
 
             ''" & txtpositfrompromot.Text & "'
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
     End Sub
 
@@ -10291,7 +10291,7 @@ Public Class EmployeeForm
 
             txtbasicpay.Text = FormatNumber(getsID, 2)
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
     End Sub
 
@@ -10324,7 +10324,7 @@ Public Class EmployeeForm
             fillpromotions()
             fillselectedpromotions()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         Finally
             txtbasicpay.Visible = 0
             Label82.Visible = 0
@@ -10762,7 +10762,7 @@ Public Class EmployeeForm
                 End If
             Catch ex As Exception
 
-                MsgBox(getErrExcptn(ex, Me.Name), MsgBoxStyle.Critical, "Error occured during deleting loan")
+                MsgBox(getErrExcptn(ex, Name), MsgBoxStyle.Critical, "Error occured during deleting loan")
             Finally
                 If prompt = Windows.Forms.DialogResult.Yes Then
                     ToolStripButton23.PerformClick()
@@ -12810,7 +12810,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     End If
                 End If
 
-                MsgBox(getErrExcptn(ex, Me.Name))
+                MsgBox(getErrExcptn(ex, Name))
 
             End Try
         End If
@@ -14315,7 +14315,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             'rptdoc = Nothing
             'rptdoc.Dispose()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
 
     End Sub
@@ -14886,7 +14886,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             'rptdattab = Nothing
             'rptdattab.Dispose()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
 
     End Sub
@@ -20980,7 +20980,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
         Dim catchDT =
         getWorkBookAsDataSet(filepath,
-                             Me.Name)
+                             Name)
 
         If catchDT Is Nothing Then
         Else
@@ -21059,7 +21059,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                             End If
                         Catch ex As Exception
                             DateR1A = DBNull.Value
-                            MsgBox(getErrExcptn(ex, Me.Name), , "bgworkImporting_DoWork")
+                            MsgBox(getErrExcptn(ex, Name), , "bgworkImporting_DoWork")
                         End Try
 
                         INSUPD_employee(DBNull.Value,
@@ -22256,7 +22256,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             End If
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -22318,7 +22318,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             End If
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -22358,7 +22358,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                 MaskedTextBox1.Text = CDate(MaskedTextBox1.Text).ToShortDateString
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         End Try
     End Sub
 
@@ -22368,7 +22368,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                 txtRegularizationDate.Text = CDate(txtRegularizationDate.Text).ToShortDateString
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         End Try
     End Sub
 
@@ -22445,12 +22445,12 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

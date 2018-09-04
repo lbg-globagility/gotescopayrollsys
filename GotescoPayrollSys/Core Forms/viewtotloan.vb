@@ -32,7 +32,7 @@
 
     Private Sub dgvLoanList_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvLoanList.KeyDown
         If e.KeyCode = Keys.Escape Then
-            Me.Close()
+            Close()
         End If
     End Sub
 End Class

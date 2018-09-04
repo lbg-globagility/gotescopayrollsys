@@ -352,17 +352,17 @@ Public Class EmployeeSelection
 
     Private Sub btnSelect_Click(sender As Object, e As EventArgs) Handles btnSelect.Click
 
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        DialogResult = Windows.Forms.DialogResult.OK
 
-        Me.Close()
+        Close()
 
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
 
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        DialogResult = Windows.Forms.DialogResult.Cancel
 
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -777,7 +777,7 @@ Public Class EmployeeSelection
 
     Private Sub dgvEmployee_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvEmployee.KeyDown
         If e.KeyCode = Keys.Escape Then
-            Me.Close()
+            Close()
         ElseIf e.KeyCode = Keys.Enter Then
             btnSelect_Click(sender, e)
         End If

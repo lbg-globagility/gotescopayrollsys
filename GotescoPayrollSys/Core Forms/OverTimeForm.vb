@@ -313,7 +313,7 @@ Public Class OverTimeForm
 
         If TxtEmployeeNumber1.Exists Then
             MsgBox("Overtime successfully saved", MsgBoxStyle.Information)
-            Me.Close()
+            Close()
         End If
 
     End Sub

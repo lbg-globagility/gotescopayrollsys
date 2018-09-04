@@ -2,7 +2,7 @@
 
     Private Sub CrysRepForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         
-        Dim result = MessageBox.Show("Do you want to Close " & Me.Text & " ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)
+        Dim result = MessageBox.Show("Do you want to Close " & Text & " ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)
         If result = DialogResult.No Then
             e.Cancel = True
         Else
@@ -30,7 +30,7 @@
     Private Sub crysrepvwr_KeyDown(sender As Object, e As KeyEventArgs) Handles crysrepvwr.KeyDown, Me.KeyDown
 
         If e.Control AndAlso e.KeyCode = Keys.W Then
-            Me.Close()
+            Close()
         ElseIf e.Control AndAlso e.KeyCode = Keys.P Then
             crysrepvwr.PrintReport()
 

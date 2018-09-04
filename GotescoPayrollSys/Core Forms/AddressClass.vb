@@ -273,7 +273,7 @@
     End Sub
 
     Private Sub tsbtnClose_Click(sender As Object, e As EventArgs) Handles tsbtnClose.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
@@ -379,11 +379,11 @@
     End Sub
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        DialogResult = Windows.Forms.DialogResult.OK
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 
     Dim isShowAsDialog = False
@@ -435,9 +435,9 @@
 
             If keyData = Keys.Escape Then
 
-                Me.DialogResult = Windows.Forms.DialogResult.Cancel
+                DialogResult = Windows.Forms.DialogResult.Cancel
 
-                Me.Close()
+                Close()
 
                 Return True
 
@@ -461,12 +461,12 @@
             lnklblleave.Tag = 1
             tsbtnNewAddress_Click(tsbtnNewAddress, New EventArgs)
             lnklblleave.Text = "Hide creating address"
-            Me.Size = New Size(841, 398)
+            Size = New Size(841, 398)
         Else
             lnklblleave.Tag = 0
             tsbtnCancel_Click(tsbtnCancel, New EventArgs)
             lnklblleave.Text = "Create address"
-            Me.Size = New Size(339, 398)
+            Size = New Size(339, 398)
         End If
 
     End Sub

@@ -62,7 +62,7 @@
             btnNew.Enabled = True
             dgvFindingsList.Enabled = True
             EmpDisciplinaryActionForm.cmbFinding.Text = txtname.Text
-            Me.Hide()
+            Hide()
 
         Else
             DirectCommand("UPDATE product SET PartNo = '" & txtname.Text & "', Description = '" & txtdesc.Text & "', lastupd = '" & z_datetime & "', lastupdby = '" & user_row_id & "' where RowID = '" & pID & "'")
@@ -70,7 +70,7 @@
             myBalloon("Successfully Save", "Saving..", lblSaveMsg, , -100)
             EmpDisciplinaryActionForm.fillfindingcombobox()
             EmpDisciplinaryActionForm.cmbFinding.Text = txtname.Text
-            Me.Hide()
+            Hide()
         End If
     End Sub
 

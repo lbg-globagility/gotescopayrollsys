@@ -390,9 +390,9 @@ Public Class selectPayPeriod
 
         End If
 
-        Me.Hide()
+        Hide()
 
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -400,7 +400,7 @@ Public Class selectPayPeriod
 
         dgvpaypers.EndEdit(True)
 
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -481,7 +481,7 @@ Public Class selectPayPeriod
     Private Sub dgvpaypers_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvpaypers.KeyDown
 
         If e.KeyCode = Keys.Escape Then
-            Me.Close()
+            Close()
         ElseIf e.KeyCode = Keys.Enter Then
             e.Handled = 1
             Button1_Click(sender, e)
@@ -731,9 +731,9 @@ Public Class selectPayPeriod
 
         End If
 
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        DialogResult = Windows.Forms.DialogResult.OK
 
-        Me.Close()
+        Close()
 
     End Sub
 

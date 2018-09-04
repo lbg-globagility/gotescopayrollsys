@@ -64,7 +64,7 @@
 
         ShiftEntryForm.tsbtnNewShift.PerformClick()
 
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -644,7 +644,7 @@
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -664,7 +664,7 @@
 
                 EmployeeShiftEntryForm.lblShiftID.Text = EmployeeShiftEntryForm.dutyShiftRowID
 
-                Me.Close()
+                Close()
 
             End If
 
@@ -678,7 +678,7 @@
 
     Private Sub dgvshift_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvshift.KeyDown
         If e.KeyCode = Keys.Escape Then
-            Me.Close()
+            Close()
 
         End If
 

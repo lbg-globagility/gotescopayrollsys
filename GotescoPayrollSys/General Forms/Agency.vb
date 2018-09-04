@@ -25,12 +25,12 @@ Public Class Agency
     Private Sub Agency_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
 
-        GeneralForm.listGeneralForm.Remove(Me.Name)
+        GeneralForm.listGeneralForm.Remove(Name)
 
     End Sub
 
@@ -371,7 +371,7 @@ Public Class Agency
 
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click, _
                                                                                 tsbtnClose.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub tsbtnSaveEmp_Click(sender As Object, e As EventArgs) Handles tsbtnSaveEmp.Click
@@ -818,12 +818,12 @@ Public Class Agency
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

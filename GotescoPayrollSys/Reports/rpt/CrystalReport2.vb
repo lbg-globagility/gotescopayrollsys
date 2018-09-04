@@ -56,7 +56,7 @@ Public Class CrystalReport2
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section1() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(0)
+            Return ReportDefinition.Sections(0)
         End Get
     End Property
     
@@ -64,7 +64,7 @@ Public Class CrystalReport2
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section2() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(1)
+            Return ReportDefinition.Sections(1)
         End Get
     End Property
     
@@ -72,7 +72,7 @@ Public Class CrystalReport2
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property PageHeaderSection1() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(2)
+            Return ReportDefinition.Sections(2)
         End Get
     End Property
     
@@ -80,7 +80,7 @@ Public Class CrystalReport2
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section3() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(3)
+            Return ReportDefinition.Sections(3)
         End Get
     End Property
     
@@ -88,7 +88,7 @@ Public Class CrystalReport2
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section4() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(4)
+            Return ReportDefinition.Sections(4)
         End Get
     End Property
     
@@ -96,7 +96,7 @@ Public Class CrystalReport2
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section5() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(5)
+            Return ReportDefinition.Sections(5)
         End Get
     End Property
 End Class
@@ -145,7 +145,7 @@ Public Class CachedCrystalReport2
     
     Public Overridable Function CreateReport() As CrystalDecisions.CrystalReports.Engine.ReportDocument Implements CrystalDecisions.ReportSource.ICachedReport.CreateReport
         Dim rpt As CrystalReport2 = New CrystalReport2()
-        rpt.Site = Me.Site
+        rpt.Site = Site
         Return rpt
     End Function
     

@@ -1,7 +1,7 @@
 ﻿Public Class LoanType
 
     Protected Overrides Sub OnLoad(e As EventArgs)
-        Me.Size = New Size(346, 175)
+        Size = New Size(346, 175)
         MyBase.OnLoad(e)
     End Sub
 
@@ -33,11 +33,11 @@
 
         End If
 
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub chknondeductible_CheckedChanged(sender As Object, e As EventArgs) Handles chknondeductible.CheckedChanged
@@ -53,7 +53,7 @@
             once = 1
             lnklblleave.Text = "Hid&e"
             '5
-            Me.Size = New Size(346, 435)
+            Size = New Size(346, 435)
 
             LoadLoanNames()
 
@@ -61,10 +61,10 @@
             once = 2
             lnklblleave.Text = "Vi&ew others"
             '12
-            Me.Size = New Size(346, 175)
+            Size = New Size(346, 175)
         End If
 
-        Me.ResumeLayout()
+        ResumeLayout()
 
     End Sub
 
@@ -123,7 +123,7 @@
         Catch ex As Exception
             hasNoError = 1
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         Finally
 

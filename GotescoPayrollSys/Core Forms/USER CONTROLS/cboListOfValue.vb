@@ -16,7 +16,7 @@ Public Class cboListOfValue
 
     Sub New()
 
-        Me.ContextMenu = New ContextMenu
+        ContextMenu = New ContextMenu
 
     End Sub
 
@@ -67,7 +67,7 @@ Public Class cboListOfValue
 
         If n_ListOfValueType.Length = 0 Then 'Or n_OrderByColumn = -1
 
-            Me.Items.Clear()
+            Items.Clear()
 
         Else
 
@@ -93,11 +93,11 @@ Public Class cboListOfValue
             End With
             dr = cmd.ExecuteReader()
 
-            Me.Items.Clear()
+            Items.Clear()
 
             Do While dr.Read
                 If dr.GetString(0) <> "" Then
-                    Me.Items.Add(dr(0)) 'GetString
+                    Items.Add(dr(0)) 'GetString
                 End If
             Loop
             dr.Close()
@@ -153,7 +153,7 @@ Public Class cboListOfValue
                 End With
                 dr = cmd.ExecuteReader()
 
-                Me.Items.Clear()
+                Items.Clear()
 
                 Do While dr.Read
                     If dr.GetString(0) <> "" Then
@@ -178,19 +178,19 @@ Public Class cboListOfValue
 
     Private Sub AdjustWidthComboBox_DropDown() 'e As EventArgs
 
-        Dim cboxwidth = Me.DropDownWidth
+        Dim cboxwidth = DropDownWidth
 
-        Dim g As Graphics = Me.CreateGraphics
+        Dim g As Graphics = CreateGraphics
 
-        Dim vertScrollBarWidth As Integer = If(Me.Items.Count > Me.MaxDropDownItems, _
+        Dim vertScrollBarWidth As Integer = If(Items.Count > MaxDropDownItems, _
                                                SystemInformation.VerticalScrollBarWidth, _
                                                0)
 
         Dim newWidth As Integer = 0
 
-        For Each strval As String In Me.Items
+        For Each strval As String In Items
 
-            newWidth = g.MeasureString(strval, Me.Font).Width _
+            newWidth = g.MeasureString(strval, Font).Width _
                        + vertScrollBarWidth
 
             If cboxwidth < newWidth Then
@@ -201,7 +201,7 @@ Public Class cboListOfValue
 
         Next
 
-        Me.DropDownWidth = cboxwidth
+        DropDownWidth = cboxwidth
 
     End Sub
 

@@ -35,14 +35,14 @@ Public Class DataGridViewDateColumn
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         DataGridViewCellStyle1.Format = machineShortDate
 
-        Me.CellTemplate =
+        CellTemplate =
             New DataGridViewDateCell
 
         'Dim fsdfsd As New DataGridViewDateCell
 
         'fsdfsd.Tag = Nothing
 
-        Me.DefaultCellStyle = DataGridViewCellStyle1
+        DefaultCellStyle = DataGridViewCellStyle1
 
     End Sub
 

@@ -93,7 +93,7 @@ Public Class Form4
             filltable(DataGridViewX1, q_employee)
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
 
     End Sub
@@ -489,7 +489,7 @@ Public Class Form4
             Next
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             'Finally
             '    For Each strng In posnodaddtn
 
@@ -643,7 +643,7 @@ Public Class Form4
                 dattabDivis.Rows(i).Item("LEVEL") = FindLevel(ID1, 0)
             Next
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
     End Sub
     Private Function FindLevel(ByVal ID As String, ByRef Level As Integer) As Integer

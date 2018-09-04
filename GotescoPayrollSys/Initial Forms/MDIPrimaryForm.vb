@@ -51,7 +51,6 @@ Public Class MDIPrimaryForm
 
         SplitContainer2.SplitterWidth = 6
 
-
         Panel2.Font = DefaultFontStyle
 
         Panel3.Font = DefaultFontStyle
@@ -64,13 +63,11 @@ Public Class MDIPrimaryForm
 
         Panel7.Font = DefaultFontStyle
 
-
         'Panel10.Location = New Point(4, 3)
 
         'Panel8.Location = New Point(457, 3)
 
         'Panel9.Location = New Point(910, 3)
-
 
         Panel11.Font = DefaultFontStyle
 
@@ -111,9 +108,8 @@ Public Class MDIPrimaryForm
 
                 Formname.Show()
                 Formname.BringToFront()
-
             Else
-                Me.Panel1.Controls.Add(Formname)
+                Panel1.Controls.Add(Formname)
                 listofGroup.Add(Formname.Name)
 
                 Formname.Show()
@@ -126,9 +122,8 @@ Public Class MDIPrimaryForm
             End If
 
             Formname.Dock = DockStyle.Fill
-
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
             Panel8.Visible = False
@@ -145,7 +140,7 @@ Public Class MDIPrimaryForm
         lblTime.Text = TimeOfDay
     End Sub
 
-    Dim ClosingForm As Form = Nothing 'New 
+    Dim ClosingForm As Form = Nothing 'New
 
     Private Sub MDIPrimaryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'Dim prompt = MsgBox("Do you want to log out ?", MsgBoxStyle.YesNo, "Confirmation")
@@ -154,7 +149,6 @@ Public Class MDIPrimaryForm
 
         If backgroundworking = 1 Then
             e.Cancel = True
-
         Else
 
             'MessageBoxManager.No = "Yes,and quit"
@@ -198,10 +192,6 @@ Public Class MDIPrimaryForm
                 listofExtraForm.Add("HRISForm")
                 listofExtraForm.Add("PayrollForm")
                 listofExtraForm.Add("TimeAttendForm")
-
-
-
-
 
                 ReDim listofExtraFrm(My.Application.OpenForms.Count - 1)
 
@@ -292,7 +282,6 @@ Public Class MDIPrimaryForm
                 'MessageBoxManager.Unregister()
 
                 'MetroLogin.Close()
-
             Else
                 e.Cancel = True
 
@@ -335,7 +324,7 @@ Public Class MDIPrimaryForm
 
         lblTime.Text = TimeOfDay
         'lblUser.Text = Z_UserName
-        lblUser.Text = userFirstName & _
+        lblUser.Text = userFirstName &
                        If(userLastName = Nothing, "", " " & userLastName)
 
         lblPosition.Text = z_postName
@@ -366,7 +355,7 @@ Public Class MDIPrimaryForm
 
         'End If
 
-        Me.Text = orgNam
+        Text = orgNam
 
         GeneralForm.Hide()
         'GeneralForm.Dock = DockStyle.None
@@ -393,7 +382,6 @@ Public Class MDIPrimaryForm
         'PayrollForm.Dock = DockStyle.None
         'TimeAttendForm.Dock = DockStyle.None
         'FormReports.Dock = DockStyle.None
-
 
         ToolStripButton0.BackColor = Color.FromArgb(255, 255, 255)
 
@@ -569,7 +557,6 @@ Public Class MDIPrimaryForm
         If previous_scroller = ScrollOrientation.HorizontalScroll Then
 
             scroll_x = e.NewValue
-
         Else
 
             scroll_y = e.NewValue
@@ -589,9 +576,9 @@ Public Class MDIPrimaryForm
 
         CenterMe()
 
-        Width_resolution = Me.Width
+        Width_resolution = Width
 
-        Height_resolution = Me.Height
+        Height_resolution = Height
 
         Static once As SByte = 0
 
@@ -605,20 +592,17 @@ Public Class MDIPrimaryForm
 
         '    Panel9.Location = New Point(910, 3)
 
-
         '    'Panel10.Anchor = AnchorStyles.None
 
         '    'Panel8.Anchor = AnchorStyles.None
 
         '    'Panel9.Anchor = AnchorStyles.None
 
-
         '    Panel10.Size = New Size(448, 521)
 
         '    Panel8.Size = New Size(448, 521)
 
         '    Panel9.Size = New Size(438, 521)
-
 
         '    dgvEvaluationRegular.Size = New Size(300, 246)
 
@@ -635,7 +619,6 @@ Public Class MDIPrimaryForm
 
         '    Panel9.Location = New Point(910, 3)
 
-
         '    'Panel10.Anchor = AnchorStyles.Top And AnchorStyles.Bottom And AnchorStyles.Left
 
         '    'Panel8.Anchor = AnchorStyles.Top And AnchorStyles.Bottom ' And AnchorStyles.Left
@@ -648,13 +631,11 @@ Public Class MDIPrimaryForm
 
         '    'Panel9.Anchor = AnchorStyles.None
 
-
         '    Panel10.Size = New Size(448, 521 + (Height_resolution - Me.MinimumSize.Height))
 
         '    Panel8.Size = New Size(448, 521 + (Height_resolution - Me.MinimumSize.Height))
 
         '    Panel9.Size = New Size(438, 521 + (Height_resolution - Me.MinimumSize.Height))
-
 
         '    'For Each objctrl As Object In Panel1.Controls
 
@@ -701,8 +682,8 @@ Public Class MDIPrimaryForm
 
     Dim theemployeetable As New DataTable
 
-    Sub refresh_previousForm(Optional groupindex As Object = 0, _
-                             Optional sndr As Object = 0, _
+    Sub refresh_previousForm(Optional groupindex As Object = 0,
+                             Optional sndr As Object = 0,
                              Optional ee As EventArgs = Nothing)
 
         Static once As SByte = 0
@@ -906,7 +887,6 @@ Public Class MDIPrimaryForm
 
                     End With
 
-
                 ElseIf previousForm.Name = "Positn" Then
 
                 ElseIf previousForm.Name = "EmpPosition" Then
@@ -929,7 +909,6 @@ Public Class MDIPrimaryForm
 
                     If Application.OpenForms().OfType(Of TimEntduration).Any Then
                         If TimEntduration.bgWork.IsBusy Then
-
                         Else
                             EmpTimeEntry.btnRerfresh_Click(sndr, ee)
                         End If
@@ -943,7 +922,6 @@ Public Class MDIPrimaryForm
                     With PayStub
 
                         If .bgworkgenpayroll.IsBusy Then
-
                         Else
                             .btnrefresh_Click(sndr, ee)
                             'For Each drow As DataRow In theemployeetable.Rows
@@ -1008,7 +986,6 @@ Public Class MDIPrimaryForm
 
             End If
 
-
             'previousForm = UsersFrom
             'previousForm = ListOfValueForm
             'previousForm = OrganizatinoForm
@@ -1026,7 +1003,6 @@ Public Class MDIPrimaryForm
             'previousForm = EmpTimeEntry
 
             countchanges = theemployeetable.Rows.Count
-
         Else
 
         End If
@@ -1110,10 +1086,10 @@ Public Class MDIPrimaryForm
                     Case 1
                         With EmployeeForm
                             If .tsbtnNewEmp.Enabled = True Then
-                                Dim isTableChange = EXECQUER("SELECT EXISTS(SELECT RowID" & _
-                                                             " FROM position" & _
-                                                             " WHERE CURRENT_DATE()" & _
-                                                             " IN (DATE_FORMAT(Created,'%Y-%m-%d'),DATE_FORMAT(LastUpd,'%Y-%m-%d'))" & _
+                                Dim isTableChange = EXECQUER("SELECT EXISTS(SELECT RowID" &
+                                                             " FROM position" &
+                                                             " WHERE CURRENT_DATE()" &
+                                                             " IN (DATE_FORMAT(Created,'%Y-%m-%d'),DATE_FORMAT(LastUpd,'%Y-%m-%d'))" &
                                                              " AND OrganizationID=" & org_rowid & " LIMIT 1);")
 
                                 If isTableChange = 1 Then
@@ -1217,7 +1193,6 @@ Public Class MDIPrimaryForm
             PictureBox1.Image.Tag = 0
 
             Showmainbutton.Dock = DockStyle.None
-
         Else '                             'Show toolstrip
             PictureBox1.Image = ImageList1.Images(1)
             PictureBox1.Image.Tag = 1
@@ -1237,7 +1212,6 @@ Public Class MDIPrimaryForm
             Timer2_Tick(Timer2, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -1337,7 +1311,6 @@ Public Class MDIPrimaryForm
             once = 1
 
             Timer2_Tick(Timer2, New EventArgs)
-
         Else
 
             If isHome = 0 Then
@@ -1363,7 +1336,6 @@ Public Class MDIPrimaryForm
 
             If bgDashBoardReloader.IsBusy = False Then
 
-
                 dgvAge21Depen.Enabled = False
 
                 dgvBDayCeleb.Enabled = False
@@ -1382,9 +1354,7 @@ Public Class MDIPrimaryForm
 
                 dgvOTPending.Enabled = False
 
-
                 bgDashBoardReloader.RunWorkerAsync()
-
 
             End If
 
@@ -1404,19 +1374,15 @@ Public Class MDIPrimaryForm
 
     Dim n_bgwLeavePending = Nothing
 
-
-
     Dim n_bgwOBPending = Nothing
 
     Dim n_bgwOTPending = Nothing
-
 
     Dim n_bgwLoanBalances = Nothing
 
     Dim n_bgwNegaPaySlips = Nothing
 
     Dim n_bgwLackRequirements = Nothing
-
 
     Private Sub bgDashBoardReloader_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgDashBoardReloader.DoWork
         backgroundworking = 1
@@ -1427,102 +1393,74 @@ Public Class MDIPrimaryForm
 
         'End If
 
-
         Dim params(0, 1) As Object
 
         params(0, 0) = "OrganizID"
 
         params(0, 1) = org_rowid
 
-
-        n_bgwAge21Dependents = New DashBoardDataExtractor(params, _
+        n_bgwAge21Dependents = New DashBoardDataExtractor(params,
                                                           "DBoard_Age21Dependents").getDataTable
 
         'n_bgwAge21Dependents = n_bgwAge21Dependents.getDataTable
 
-
-
-        n_bgwBDayCelebrant = New DashBoardDataExtractor(params, _
+        n_bgwBDayCelebrant = New DashBoardDataExtractor(params,
                                                         "DBoard_BirthdayCelebrantThisMonth").getDataTable
 
         'n_bgwBDayCelebrant = n_bgwBDayCelebrant.getDataTable
 
-
-
-        n_bgwForEvaluation = New DashBoardDataExtractor(params, _
+        n_bgwForEvaluation = New DashBoardDataExtractor(params,
                                                         "DBoard_ForEvaluation").getDataTable
 
         'n_bgwForEvaluation = n_bgwForEvaluation.getDataTable
 
-
-
-        n_bgwForRegularization = New DashBoardDataExtractor(params, _
+        n_bgwForRegularization = New DashBoardDataExtractor(params,
                                                         "DBoard_ForRegularization").getDataTable
 
         'n_bgwForRegularization = n_bgwForRegularization.getDataTable
 
-
-
-        n_bgwForEvaluationRegular = New DashBoardDataExtractor(params, _
+        n_bgwForEvaluationRegular = New DashBoardDataExtractor(params,
                                                         "DBoard_ForEvaluationRegular").getDataTable
 
         'n_bgwForEvaluationRegular = n_bgwForEvaluationRegular.getDataTable
 
-
-
-        n_bgwLeavePending = New DashBoardDataExtractor(params, _
+        n_bgwLeavePending = New DashBoardDataExtractor(params,
                                                         "DBoard_LeavePending").getDataTable
 
         'n_bgwLeavePending = n_bgwLeavePending.getDataTable
 
-
-
-        n_bgwOBPending = New DashBoardDataExtractor(params, _
+        n_bgwOBPending = New DashBoardDataExtractor(params,
                                                         "DBoard_OBPending").getDataTable
 
         'n_bgwOBPending = n_bgwOBPending.getDataTable
 
-
-
-
-        n_bgwOTPending = New DashBoardDataExtractor(params, _
+        n_bgwOTPending = New DashBoardDataExtractor(params,
                                                         "DBoard_OTPending").getDataTable
 
         'n_bgwOTPending = n_bgwOTPending.getDataTable
 
-
-
-
-
-        n_bgwLoanBalances = New DashBoardDataExtractor(params, _
+        n_bgwLoanBalances = New DashBoardDataExtractor(params,
                                                         "DBoard_LoanBalances").getDataTable
 
         'n_bgwLoanBalances = n_bgwLoanBalances.getDataTable
 
-
-
-
-        n_bgwNegaPaySlips = New DashBoardDataExtractor(params, _
+        n_bgwNegaPaySlips = New DashBoardDataExtractor(params,
                                                         "DBoard_NegativePaySlips").getDataTable
 
         'n_bgwNegaPaySlips = n_bgwNegaPaySlips.getDataTable
 
-
-
-        n_bgwLackRequirements = New DashBoardDataExtractor(params, _
+        n_bgwLackRequirements = New DashBoardDataExtractor(params,
                                                         "DBoard_EmployeeLackRequirements").getDataTable
 
         'n_bgwLackRequirements = n_bgwLackRequirements.getDataTable
 
-
-
         Dim n_ExecuteQuery As _
             New ExecuteQuery("CALL INCREASE_employee_leave_TwoToFiveYearService('" & org_rowid & "');")
 
-        n_ExecuteQuery = _
+        n_ExecuteQuery =
             New ExecuteQuery("CALL INCREASE_employee_leave_FiveToTenYearService('" & org_rowid & "');")
 
-        n_ExecuteQuery = _
+        n_ExecuteQuery =
             New ExecuteQuery("CALL INCREASE_employee_leave_TenToFifteenYearService('" & org_rowid & "');")
 
     End Sub
@@ -1537,7 +1475,7 @@ Public Class MDIPrimaryForm
             MsgBox("Error: " & vbNewLine & e.Error.Message)
             'MessageBox.Show
         ElseIf e.Cancelled Then
-            MsgBox("Background work cancelled.", _
+            MsgBox("Background work cancelled.",
                    MsgBoxStyle.Exclamation)
         Else
 
@@ -1549,71 +1487,58 @@ Public Class MDIPrimaryForm
 
         Dim dattbl = InstantiateDatatable(n_bgwAge21Dependents)
 
-        PopulateDGVwithDatTbl(dgvAge21Depen, _
+        PopulateDGVwithDatTbl(dgvAge21Depen,
                               dattbl)
-
 
         dattbl = InstantiateDatatable(n_bgwBDayCelebrant)
 
-        PopulateDGVwithDatTbl(dgvBDayCeleb, _
+        PopulateDGVwithDatTbl(dgvBDayCeleb,
                               dattbl)
-
-
 
         dattbl = InstantiateDatatable(n_bgwForEvaluation)
 
-        PopulateDGVwithDatTbl(dgvEvaluateProbat, _
+        PopulateDGVwithDatTbl(dgvEvaluateProbat,
                               dattbl)
-
 
         dattbl = InstantiateDatatable(n_bgwForRegularization)
 
-        PopulateDGVwithDatTbl(dgvRegularization, _
+        PopulateDGVwithDatTbl(dgvRegularization,
                               dattbl)
-
 
         dattbl = InstantiateDatatable(n_bgwForEvaluationRegular)
 
-        PopulateDGVwithDatTbl(dgvEvaluationRegular, _
+        PopulateDGVwithDatTbl(dgvEvaluationRegular,
                               dattbl)
-
 
         dattbl = InstantiateDatatable(n_bgwLeavePending)
 
-        PopulateDGVwithDatTbl(dgvLeavePending, _
+        PopulateDGVwithDatTbl(dgvLeavePending,
                               dattbl)
-
 
         dattbl = InstantiateDatatable(n_bgwLoanBalances)
 
-        PopulateDGVwithDatTbl(dgvLoanBalance, _
+        PopulateDGVwithDatTbl(dgvLoanBalance,
                               dattbl)
-
 
         dattbl = InstantiateDatatable(n_bgwOBPending)
 
-        PopulateDGVwithDatTbl(dgvOBPending, _
+        PopulateDGVwithDatTbl(dgvOBPending,
                               dattbl)
-
 
         dattbl = InstantiateDatatable(n_bgwOTPending)
 
-        PopulateDGVwithDatTbl(dgvOTPending, _
+        PopulateDGVwithDatTbl(dgvOTPending,
                               dattbl)
 
         dattbl = InstantiateDatatable(n_bgwNegaPaySlips)
 
-        PopulateDGVwithDatTbl(dgvnegaPaySlip, _
+        PopulateDGVwithDatTbl(dgvnegaPaySlip,
                               dattbl)
-
-
 
         dattbl = InstantiateDatatable(n_bgwLackRequirements)
 
-        PopulateDGVwithDatTbl(dgvLackRequirements, _
+        PopulateDGVwithDatTbl(dgvLackRequirements,
                               dattbl)
-
-
 
         dgvAge21Depen.Enabled = True
 
@@ -1637,7 +1562,6 @@ Public Class MDIPrimaryForm
 
         dgvLackRequirements.Enabled = True
 
-
         If once = 0 Then
 
             once = 1
@@ -1658,7 +1582,6 @@ Public Class MDIPrimaryForm
 
             Panel8.PerformLayout()
 
-
             'For Each ctrl As Control In Panel9.Controls
 
             '    If TypeOf ctrl Is CollapsibleGroupBox Then
@@ -1675,9 +1598,7 @@ Public Class MDIPrimaryForm
 
             Panel9.PerformLayout()
 
-
             AddHandler NotifyIcon1.DoubleClick, AddressOf NotifyIcon1_Click
-
         Else
 
             NotifyIcon1.Visible = True
@@ -1703,7 +1624,6 @@ Public Class MDIPrimaryForm
         If dgvLeavePending.RowCount <> 0 Then
 
             EditToolStripMenuItem.Enabled = True
-
         Else
 
             EditToolStripMenuItem.Enabled = False
@@ -1762,18 +1682,23 @@ Public Class MDIPrimaryForm
         'CollapsibleGroupBox1.ToggleCollapsed()
 
     End Sub
+
     Private Sub CollapsibleGroupBox2_DoubleClick(sender As Object, e As EventArgs) Handles CollapsibleGroupBox2.DoubleClick
         'CollapsibleGroupBox2.ToggleCollapsed()
     End Sub
+
     Private Sub CollapsibleGroupBox3_DoubleClick(sender As Object, e As EventArgs) Handles CollapsibleGroupBox3.DoubleClick
         'CollapsibleGroupBox3.ToggleCollapsed()
     End Sub
+
     Private Sub CollapsibleGroupBox4_DoubleClick(sender As Object, e As EventArgs) Handles CollapsibleGroupBox4.DoubleClick
         'CollapsibleGroupBox4.ToggleCollapsed()
     End Sub
+
     Private Sub CollapsibleGroupBox5_DoubleClick(sender As Object, e As EventArgs) Handles CollapsibleGroupBox5.DoubleClick
         'CollapsibleGroupBox5.ToggleCollapsed()
     End Sub
+
     Private Sub CollapsibleGroupBox6_DoubleClick(sender As Object, e As EventArgs) Handles CollapsibleGroupBox6.DoubleClick
         'CollapsibleGroupBox6.ToggleCollapsed()
     End Sub
@@ -1827,7 +1752,7 @@ Public Class MDIPrimaryForm
             'MsgBox(getErrExcptn(e.Error, Me.Name))
             MsgBox(bgwork_errormsg)
         ElseIf e.Cancelled Then
-            MsgBox("Background work cancelled.", _
+            MsgBox("Background work cancelled.",
                    MsgBoxStyle.Information)
         Else
 
@@ -1842,7 +1767,7 @@ Public Class MDIPrimaryForm
     End Sub
 
     Sub CaptionMainFormStatus(str_caption As String)
-        Me.maintslabel.Text = str_caption
+        maintslabel.Text = str_caption
 
         maintslabel.Visible = (maintslabel.Text.Length > 0)
 
@@ -1858,19 +1783,18 @@ Public Class MDIPrimaryForm
 
 End Class
 
-
 Public Class DashBoardDataExtractor
 
     Dim datatab As New DataTable
 
-    Sub New(Optional ParamsCollection As Array = Nothing, _
+    Sub New(Optional ParamsCollection As Array = Nothing,
             Optional ProcedureName As String = Nothing)
 
         'Dim n_callProcAsDatTable As New callProcAsDatTable
 
         'datatab = New DataTable
 
-        datatab = callProcAsDatTbl(ParamsCollection, _
+        datatab = callProcAsDatTbl(ParamsCollection,
                                    ProcedureName)
 
     End Sub
@@ -1884,7 +1808,7 @@ Public Class DashBoardDataExtractor
 
     End Property
 
-    Function callProcAsDatTbl(Optional ParamsCollection As Array = Nothing, _
+    Function callProcAsDatTbl(Optional ParamsCollection As Array = Nothing,
                                       Optional ProcedureName As String = Nothing) As Object
 
         Dim returnvalue = Nothing
@@ -1936,7 +1860,6 @@ Public Class DashBoardDataExtractor
             MsgBox(getErrExcptn(ex, ProcedureName), MsgBoxStyle.Critical)
 
             returnvalue = Nothing
-
         Finally
 
             mysqlda.Dispose()
@@ -1953,7 +1876,6 @@ Public Class DashBoardDataExtractor
 
 End Class
 
-
 Public Class UserLog
 
     Dim syslogViewID = Nothing
@@ -1965,29 +1887,29 @@ Public Class UserLog
 
     Sub Inn()
 
-        INS_audittrail("System Log", _
-                       "", _
-                       "IN", _
-                       "", _
+        INS_audittrail("System Log",
+                       "",
+                       "IN",
+                       "",
                        "Log")
 
     End Sub
 
     Sub Out()
 
-        EXECQUER("UPDATE `audittrail`" & _
-                 " SET NewValue='OUT'" & _
-                 " WHERE CreatedBy='" & user_row_id & "'" & _
-                 " AND OrganizationID='" & org_rowid & "'" & _
-                 " AND NewValue=''" & _
+        EXECQUER("UPDATE `audittrail`" &
+                 " SET NewValue='OUT'" &
+                 " WHERE CreatedBy='" & user_row_id & "'" &
+                 " AND OrganizationID='" & org_rowid & "'" &
+                 " AND NewValue=''" &
                  " AND ViewID='" & syslogViewID & "';")
 
     End Sub
 
-    Sub INS_audittrail(Optional au_FieldChanged = Nothing, _
-                       Optional au_ChangedRowID = Nothing, _
-                       Optional au_OldValue = Nothing, _
-                       Optional au_NewValue = Nothing, _
+    Sub INS_audittrail(Optional au_FieldChanged = Nothing,
+                       Optional au_ChangedRowID = Nothing,
+                       Optional au_OldValue = Nothing,
+                       Optional au_NewValue = Nothing,
                        Optional au_ActionPerformed = Nothing)
 
         Try
@@ -2025,7 +1947,6 @@ Public Class UserLog
                 datread = .ExecuteReader()
 
             End With
-
         Catch ex As Exception
             MsgBox(ex.Message & " " & "INS_audittrail", , "Error")
         Finally

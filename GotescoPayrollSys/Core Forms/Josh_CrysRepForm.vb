@@ -26,24 +26,24 @@ Public Class Josh_CrysRepForm
 
 
         paramField.Name = "EmployeeName"
-        paramDiscreteValue.Value = Me.employeeName
+        paramDiscreteValue.Value = employeeName
         paramField.CurrentValues.Add(paramDiscreteValue)
         paramFields.Add(paramField)
 
         paramField2.Name = "DisciplinaryAction"
-        paramDiscreteValue2.Value = Me.disciplinaryAction.ToLower
+        paramDiscreteValue2.Value = disciplinaryAction.ToLower
         paramField2.CurrentValues.Add(paramDiscreteValue2)
         paramFields.Add(paramField2)
 
         paramField3.Name = "Infraction"
-        paramDiscreteValue3.Value = Me.infraction.ToLower
+        paramDiscreteValue3.Value = infraction.ToLower
         paramField3.CurrentValues.Add(paramDiscreteValue3)
         paramFields.Add(paramField3)
 
-        If Me.comments.Trim.Length > 0 Then Me.comments &= "."
+        If comments.Trim.Length > 0 Then comments &= "."
 
         paramField4.Name = "Comments"
-        paramDiscreteValue4.Value = Me.comments
+        paramDiscreteValue4.Value = comments
         paramField4.CurrentValues.Add(paramDiscreteValue4)
         paramFields.Add(paramField4)
 

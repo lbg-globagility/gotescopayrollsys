@@ -67,7 +67,7 @@ Public Class LoanSummaryReportProvider
                 End If
             Catch ex As Exception
 
-                MsgBox(getErrExcptn(ex, Me.Name))
+                MsgBox(getErrExcptn(ex, Name))
             Finally
 
             End Try
@@ -158,7 +158,7 @@ Public Class LoanSummaryReportProvider
                 End If
             Catch ex As Exception
 
-                MsgBox(getErrExcptn(ex, Me.Name))
+                MsgBox(getErrExcptn(ex, Name))
             Finally
 
             End Try

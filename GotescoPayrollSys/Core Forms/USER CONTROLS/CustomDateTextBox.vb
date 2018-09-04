@@ -9,9 +9,9 @@ Public Class CustomDateTextBox
 
     Private tooltip As New System.Windows.Forms.ToolTip
 
-    Dim balloon_x = Me.Width - 17
+    Dim balloon_x = Width - 17
 
-    Dim balloon_y = Me.Height - 93
+    Dim balloon_y = Height - 93
 
     Sub New()
 
@@ -55,15 +55,15 @@ Public Class CustomDateTextBox
 
         'Me.ErrorProvider1.ContainerControl = Me
 
-        Me.tooltip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.[Error]
+        tooltip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.[Error]
 
-        Me.tooltip.IsBalloon = True
+        tooltip.IsBalloon = True
 
-        Me.tooltip.ToolTipTitle = ErrorTitle
+        tooltip.ToolTipTitle = ErrorTitle
 
-        Me.Timer2.Enabled = True
+        Timer2.Enabled = True
 
-        Me.Timer2.Interval = 60
+        Timer2.Interval = 60
 
         AddHandler MyBase.OnUserStopTyping, AddressOf MyBase_OnUserStopTyping
 

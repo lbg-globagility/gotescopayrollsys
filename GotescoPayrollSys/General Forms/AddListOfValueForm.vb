@@ -3,7 +3,7 @@
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         txtname.Clear()
         lblName.Text = ""
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -32,7 +32,7 @@
                 OrganizationForm.fillorganizationtype()
                 txtname.Clear()
                 lblName.Text = ""
-                Me.Close()
+                Close()
             End If
 
 
@@ -47,7 +47,7 @@
                 OrganizationForm.filltype()
                 txtname.Clear()
                 lblName.Text = ""
-                Me.Close()
+                Close()
             End If
 
         ElseIf lblName.Text.Trim = "Status" Then
@@ -61,7 +61,7 @@
                 OrganizationForm.fillstatus()
                 txtname.Clear()
                 lblName.Text = ""
-                Me.Close()
+                Close()
             End If
 
         ElseIf lblName.Text.Trim = "Personal Title" Then
@@ -75,7 +75,7 @@
                 OrganizationForm.fillpersonalstatus()
                 txtname.Clear()
                 lblName.Text = ""
-                Me.Close()
+                Close()
             End If
         ElseIf lblName.Text = "Deduction Schedule" Then
             dt = getDataTableForSQL("Select * From ListOFVal where Type = 'Deduction Schedule' And DisplayValue = '" & txtname.Text & "'")
@@ -88,7 +88,7 @@
                 LoanScheduleForm.filldedsched()
                 txtname.Clear()
                 lblName.Text = ""
-                Me.Close()
+                Close()
             End If
         End If
       

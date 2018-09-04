@@ -19,7 +19,7 @@ Public Class OffSetting
 
         InfoBalloon(, , lblforballoon, , , 1)
 
-        HRISForm.listHRISForm.Remove(Me.Name)
+        HRISForm.listHRISForm.Remove(Name)
 
     End Sub
 
@@ -270,7 +270,7 @@ Public Class OffSetting
     End Sub
 
     Private Sub tsbtnClose_Click(sender As Object, e As EventArgs) Handles tsbtnClose.Click
-        Me.Close()
+        Close()
 
     End Sub
 

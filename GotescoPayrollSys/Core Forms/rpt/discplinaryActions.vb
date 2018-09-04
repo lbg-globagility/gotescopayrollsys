@@ -56,7 +56,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section1() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(0)
+            Return ReportDefinition.Sections(0)
         End Get
     End Property
     
@@ -64,7 +64,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section2() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(1)
+            Return ReportDefinition.Sections(1)
         End Get
     End Property
     
@@ -72,7 +72,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section3() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(2)
+            Return ReportDefinition.Sections(2)
         End Get
     End Property
     
@@ -80,7 +80,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section4() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(3)
+            Return ReportDefinition.Sections(3)
         End Get
     End Property
     
@@ -88,7 +88,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section5() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(4)
+            Return ReportDefinition.Sections(4)
         End Get
     End Property
     
@@ -96,7 +96,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_EmployeeName() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(0)
+            Return DataDefinition.ParameterFields(0)
         End Get
     End Property
     
@@ -104,7 +104,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_DisciplinaryAction() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(1)
+            Return DataDefinition.ParameterFields(1)
         End Get
     End Property
     
@@ -112,7 +112,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Infraction() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(2)
+            Return DataDefinition.ParameterFields(2)
         End Get
     End Property
     
@@ -120,7 +120,7 @@ Public Class discplinaryActions
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Comments() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(3)
+            Return DataDefinition.ParameterFields(3)
         End Get
     End Property
 End Class
@@ -169,7 +169,7 @@ Public Class CacheddiscplinaryActions
     
     Public Overridable Function CreateReport() As CrystalDecisions.CrystalReports.Engine.ReportDocument Implements CrystalDecisions.ReportSource.ICachedReport.CreateReport
         Dim rpt As discplinaryActions = New discplinaryActions()
-        rpt.Site = Me.Site
+        rpt.Site = Site
         Return rpt
     End Function
     

@@ -35,7 +35,7 @@
                 End If
             End With
 
-            Me.Hide()
+            Hide()
         End If
 
     End Sub
@@ -43,7 +43,7 @@
     Private Sub ListBox1_Button1_KeyDown(sender As Object, e As KeyEventArgs) Handles Button1.KeyDown, Me.KeyDown, _
                                                                                       lstbxleavtyp.KeyDown
         If e.KeyCode = Keys.Escape Then
-            Me.Hide()
+            Hide()
         ElseIf e.KeyCode = Keys.Enter Then
             ListBox1_Button1_Event(sender, e)
         End If
@@ -51,7 +51,7 @@
 
     Private Sub leavtyp_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         e.Cancel = True
-        Me.Hide()
+        Hide()
     End Sub
 
 End Class

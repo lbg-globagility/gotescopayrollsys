@@ -62,7 +62,7 @@ Public Class ShiftList
         If keyData = Keys.Escape Then
 
 
-            Me.Close()
+            Close()
 
             Return True
 
@@ -77,7 +77,7 @@ Public Class ShiftList
 
             Catch ex As Exception
 
-                MsgBox(getErrExcptn(ex, Me.Name))
+                MsgBox(getErrExcptn(ex, Name))
 
             End Try
 
@@ -163,13 +163,13 @@ Public Class ShiftList
 
                 Next
 
-                Me.DialogResult = Windows.Forms.DialogResult.OK
+                DialogResult = Windows.Forms.DialogResult.OK
 
             End With
 
         Else
 
-            Me.DialogResult = Windows.Forms.DialogResult.Cancel
+            DialogResult = Windows.Forms.DialogResult.Cancel
 
         End If
 

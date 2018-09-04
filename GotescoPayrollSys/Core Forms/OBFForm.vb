@@ -294,7 +294,7 @@ Public Class OBFForm
 
         If TxtEmployeeNumber1.Exists Then
             MsgBox("Official business successfully saved", MsgBoxStyle.Information)
-            Me.Close()
+            Close()
         End If
 
     End Sub

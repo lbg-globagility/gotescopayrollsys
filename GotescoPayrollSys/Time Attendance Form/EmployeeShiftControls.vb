@@ -303,14 +303,14 @@ Public Class EmployeeShiftControls
         myBalloon(, , lblSaveMsg, , , 1)
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
 
         dutyshift.Close()
 
-        TimeAttendForm.listTimeAttendForm.Remove(Me.Name)
+        TimeAttendForm.listTimeAttendForm.Remove(Name)
 
         ShiftList.Close()
         ShiftList.Dispose()
@@ -382,7 +382,7 @@ Public Class EmployeeShiftControls
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -418,7 +418,7 @@ Public Class EmployeeShiftControls
             fillemployeeshift()
             fillemployeeshiftSelected()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
             'CustomColoredTabControlActivateSelecting(True)
@@ -942,7 +942,7 @@ Public Class EmployeeShiftControls
 
         Dim catchDT = _
                     getWorkBookAsDataSet(filepath, _
-                                         Me.Name)
+                                         Name)
 
         If catchDT Is Nothing Then
 
@@ -1127,7 +1127,7 @@ Public Class EmployeeShiftControls
 
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -1661,12 +1661,12 @@ Public Class EmployeeShiftControls
     End Sub
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

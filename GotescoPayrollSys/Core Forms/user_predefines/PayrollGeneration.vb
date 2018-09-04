@@ -1285,7 +1285,7 @@ Public Class PayrollGeneration
 
                 If isPayStubExists.GetFoundRow = "0" Then
 
-                    If ValNoComma(Me.VeryFirstPayPeriodIDOfThisYear) = ValNoComma(n_PayrollRecordID) Then
+                    If ValNoComma(VeryFirstPayPeriodIDOfThisYear) = ValNoComma(n_PayrollRecordID) Then
                         'this means, the very first cut off of this year falls here
                         'so system should reset all leave balance to zero(0)
 

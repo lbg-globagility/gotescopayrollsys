@@ -60,7 +60,7 @@ Public Class AlphaListRptVwr
         If date_From Is Nothing _
             And date_To Is Nothing Then
 
-            Me.Text = orgNam & " - BIR Form No. 2316"
+            Text = orgNam & " - BIR Form No. 2316"
 
         Else
 
@@ -68,7 +68,7 @@ Public Class AlphaListRptVwr
 
             TaxDateTo = date_To
 
-            Me.Text = orgNam & " - BIR Form No. 2316 for period of " & _
+            Text = orgNam & " - BIR Form No. 2316 for period of " & _
                 Format(CDate(TaxDateFrom), "MMM dd, yyyy") & _
                 " to " & Format(CDate(TaxDateTo), "MMM dd, yyyy")
 

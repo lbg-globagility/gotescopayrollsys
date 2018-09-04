@@ -72,7 +72,7 @@ Public Class Revised_Withholding_Tax_Tables
         InfoBalloon(, , cmbPayType, , , 1)
 
         If previousForm IsNot Nothing Then
-            If previousForm.Name = Me.Name Then
+            If previousForm.Name = Name Then
                 previousForm = Nothing
             End If
         End If
@@ -87,7 +87,7 @@ Public Class Revised_Withholding_Tax_Tables
         '    MDIPrimaryForm.Text = "Welcome to " & FormLeft.Item(FormLeft.Count - 1)
         'End If
 
-        GeneralForm.listGeneralForm.Remove(Me.Name)
+        GeneralForm.listGeneralForm.Remove(Name)
     End Sub
 
     Dim view_ID As Object
@@ -259,7 +259,7 @@ Public Class Revised_Withholding_Tax_Tables
     End Sub
 
     Private Sub tsbtnCloseTax_Click(sender As Object, e As EventArgs) Handles tsbtnCloseTax.Click
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub tsbtnAudittrail_Click(sender As Object, e As EventArgs) Handles tsbtnAudittrail.Click
@@ -474,7 +474,7 @@ Public Class Revised_Withholding_Tax_Tables
             End If
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -493,7 +493,7 @@ Public Class Revised_Withholding_Tax_Tables
             DA.Fill(DS, "XLData")
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
         End Try
 
@@ -504,7 +504,7 @@ Public Class Revised_Withholding_Tax_Tables
             returnvalue = DS.Tables(0)
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
             returnvalue = Nothing
 
@@ -523,12 +523,12 @@ Public Class Revised_Withholding_Tax_Tables
     End Function
 
     Protected Overrides Sub OnActivated(e As EventArgs)
-        Me.KeyPreview = True
+        KeyPreview = True
         MyBase.OnActivated(e)
     End Sub
 
     Protected Overrides Sub OnDeactivate(e As EventArgs)
-        Me.KeyPreview = False
+        KeyPreview = False
         MyBase.OnDeactivate(e)
     End Sub
 

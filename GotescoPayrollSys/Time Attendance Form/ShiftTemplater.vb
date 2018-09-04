@@ -184,7 +184,7 @@ Public Class ShiftTemplater
                                                                 dgvcalendar.CurrentRow.Index))
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
             Label1.Text = String.Empty
 

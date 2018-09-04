@@ -56,7 +56,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section1() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(0)
+            Return ReportDefinition.Sections(0)
         End Get
     End Property
     
@@ -64,7 +64,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section2() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(1)
+            Return ReportDefinition.Sections(1)
         End Get
     End Property
     
@@ -72,7 +72,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property GroupHeaderSection1() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(2)
+            Return ReportDefinition.Sections(2)
         End Get
     End Property
     
@@ -80,7 +80,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section3() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(3)
+            Return ReportDefinition.Sections(3)
         End Get
     End Property
     
@@ -88,7 +88,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property GroupFooterSection1() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(4)
+            Return ReportDefinition.Sections(4)
         End Get
     End Property
     
@@ -96,7 +96,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section4() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(5)
+            Return ReportDefinition.Sections(5)
         End Get
     End Property
     
@@ -104,7 +104,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Section5() As CrystalDecisions.CrystalReports.Engine.Section
         Get
-            Return Me.ReportDefinition.Sections(6)
+            Return ReportDefinition.Sections(6)
         End Get
     End Property
     
@@ -112,7 +112,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ForTheYear1() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(0)
+            Return DataDefinition.ParameterFields(0)
         End Get
     End Property
     
@@ -120,7 +120,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ForThePeriodFrom() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(1)
+            Return DataDefinition.ParameterFields(1)
         End Get
     End Property
     
@@ -128,7 +128,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ForThePeriodTo() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(2)
+            Return DataDefinition.ParameterFields(2)
         End Get
     End Property
     
@@ -136,7 +136,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_9A() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(3)
+            Return DataDefinition.ParameterFields(3)
         End Get
     End Property
     
@@ -144,7 +144,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_9ANo() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(4)
+            Return DataDefinition.ParameterFields(4)
         End Get
     End Property
     
@@ -152,7 +152,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_StatutMinWage() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(5)
+            Return DataDefinition.ParameterFields(5)
         End Get
     End Property
     
@@ -160,7 +160,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_StatutMinWageMonth() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(6)
+            Return DataDefinition.ParameterFields(6)
         End Get
     End Property
     
@@ -168,7 +168,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item14() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(7)
+            Return DataDefinition.ParameterFields(7)
         End Get
     End Property
     
@@ -176,7 +176,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_MianEmployerItem17() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(8)
+            Return DataDefinition.ParameterFields(8)
         End Get
     End Property
     
@@ -184,7 +184,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_SecondaryEmployerItem17() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(9)
+            Return DataDefinition.ParameterFields(9)
         End Get
     End Property
     
@@ -192,7 +192,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item27() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(10)
+            Return DataDefinition.ParameterFields(10)
         End Get
     End Property
     
@@ -200,7 +200,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item30B() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(11)
+            Return DataDefinition.ParameterFields(11)
         End Get
     End Property
     
@@ -208,7 +208,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_CTCNoOfEmployee() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(12)
+            Return DataDefinition.ParameterFields(12)
         End Get
     End Property
     
@@ -216,7 +216,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_PlaceOfIssd() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(13)
+            Return DataDefinition.ParameterFields(13)
         End Get
     End Property
     
@@ -224,7 +224,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_DateSigned1() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(14)
+            Return DataDefinition.ParameterFields(14)
         End Get
     End Property
     
@@ -232,7 +232,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_DateSigned2() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(15)
+            Return DataDefinition.ParameterFields(15)
         End Get
     End Property
     
@@ -240,7 +240,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_DateOfIssd() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(16)
+            Return DataDefinition.ParameterFields(16)
         End Get
     End Property
     
@@ -248,7 +248,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_AmountPaid() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(17)
+            Return DataDefinition.ParameterFields(17)
         End Get
     End Property
     
@@ -256,7 +256,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_TIN() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(18)
+            Return DataDefinition.ParameterFields(18)
         End Get
     End Property
     
@@ -264,7 +264,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_EmployeeFullname() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(19)
+            Return DataDefinition.ParameterFields(19)
         End Get
     End Property
     
@@ -272,7 +272,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_RDOCode() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(20)
+            Return DataDefinition.ParameterFields(20)
         End Get
     End Property
     
@@ -280,7 +280,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_RegisteredAddress() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(21)
+            Return DataDefinition.ParameterFields(21)
         End Get
     End Property
     
@@ -288,7 +288,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ZipCode() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(22)
+            Return DataDefinition.ParameterFields(22)
         End Get
     End Property
     
@@ -296,7 +296,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_LocalHomeAddress() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(23)
+            Return DataDefinition.ParameterFields(23)
         End Get
     End Property
     
@@ -304,7 +304,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ZipCode2() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(24)
+            Return DataDefinition.ParameterFields(24)
         End Get
     End Property
     
@@ -312,7 +312,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ForeignAddress() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(25)
+            Return DataDefinition.ParameterFields(25)
         End Get
     End Property
     
@@ -320,7 +320,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ZipCode3() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(26)
+            Return DataDefinition.ParameterFields(26)
         End Get
     End Property
     
@@ -328,7 +328,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_DateOfBirth() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(27)
+            Return DataDefinition.ParameterFields(27)
         End Get
     End Property
     
@@ -336,7 +336,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_TelephoneNumber() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(28)
+            Return DataDefinition.ParameterFields(28)
         End Get
     End Property
     
@@ -344,7 +344,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ExemptionStatus1() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(29)
+            Return DataDefinition.ParameterFields(29)
         End Get
     End Property
     
@@ -352,7 +352,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ExemptionStatus2() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(30)
+            Return DataDefinition.ParameterFields(30)
         End Get
     End Property
     
@@ -360,7 +360,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_TINEmployer() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(31)
+            Return DataDefinition.ParameterFields(31)
         End Get
     End Property
     
@@ -368,7 +368,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_EmployerName() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(32)
+            Return DataDefinition.ParameterFields(32)
         End Get
     End Property
     
@@ -376,7 +376,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_RegAddressEmployer() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(33)
+            Return DataDefinition.ParameterFields(33)
         End Get
     End Property
     
@@ -384,7 +384,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ZipCodeEmployer() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(34)
+            Return DataDefinition.ParameterFields(34)
         End Get
     End Property
     
@@ -392,7 +392,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_TINEmployer2() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(35)
+            Return DataDefinition.ParameterFields(35)
         End Get
     End Property
     
@@ -400,7 +400,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_EmployerName2() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(36)
+            Return DataDefinition.ParameterFields(36)
         End Get
     End Property
     
@@ -408,7 +408,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_RegAddressEmployer2() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(37)
+            Return DataDefinition.ParameterFields(37)
         End Get
     End Property
     
@@ -416,7 +416,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_ZipCodeEmployer2() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(38)
+            Return DataDefinition.ParameterFields(38)
         End Get
     End Property
     
@@ -424,7 +424,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item21() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(39)
+            Return DataDefinition.ParameterFields(39)
         End Get
     End Property
     
@@ -432,7 +432,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item22() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(40)
+            Return DataDefinition.ParameterFields(40)
         End Get
     End Property
     
@@ -440,7 +440,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item23() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(41)
+            Return DataDefinition.ParameterFields(41)
         End Get
     End Property
     
@@ -448,7 +448,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item24() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(42)
+            Return DataDefinition.ParameterFields(42)
         End Get
     End Property
     
@@ -456,7 +456,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item25() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(43)
+            Return DataDefinition.ParameterFields(43)
         End Get
     End Property
     
@@ -464,7 +464,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item26() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(44)
+            Return DataDefinition.ParameterFields(44)
         End Get
     End Property
     
@@ -472,7 +472,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item28() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(45)
+            Return DataDefinition.ParameterFields(45)
         End Get
     End Property
     
@@ -480,7 +480,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item29() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(46)
+            Return DataDefinition.ParameterFields(46)
         End Get
     End Property
     
@@ -488,7 +488,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item30A() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(47)
+            Return DataDefinition.ParameterFields(47)
         End Get
     End Property
     
@@ -496,7 +496,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item31() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(48)
+            Return DataDefinition.ParameterFields(48)
         End Get
     End Property
     
@@ -504,7 +504,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item32() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(49)
+            Return DataDefinition.ParameterFields(49)
         End Get
     End Property
     
@@ -512,7 +512,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item33() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(50)
+            Return DataDefinition.ParameterFields(50)
         End Get
     End Property
     
@@ -520,7 +520,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item34() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(51)
+            Return DataDefinition.ParameterFields(51)
         End Get
     End Property
     
@@ -528,7 +528,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item35() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(52)
+            Return DataDefinition.ParameterFields(52)
         End Get
     End Property
     
@@ -536,7 +536,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item36() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(53)
+            Return DataDefinition.ParameterFields(53)
         End Get
     End Property
     
@@ -544,7 +544,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item37() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(54)
+            Return DataDefinition.ParameterFields(54)
         End Get
     End Property
     
@@ -552,7 +552,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item38() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(55)
+            Return DataDefinition.ParameterFields(55)
         End Get
     End Property
     
@@ -560,7 +560,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item39() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(56)
+            Return DataDefinition.ParameterFields(56)
         End Get
     End Property
     
@@ -568,7 +568,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item40() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(57)
+            Return DataDefinition.ParameterFields(57)
         End Get
     End Property
     
@@ -576,7 +576,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item41() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(58)
+            Return DataDefinition.ParameterFields(58)
         End Get
     End Property
     
@@ -584,7 +584,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item42() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(59)
+            Return DataDefinition.ParameterFields(59)
         End Get
     End Property
     
@@ -592,7 +592,7 @@ Public Class BIR2316
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
     Public ReadOnly Property Parameter_Item55() As CrystalDecisions.[Shared].IParameterField
         Get
-            Return Me.DataDefinition.ParameterFields(60)
+            Return DataDefinition.ParameterFields(60)
         End Get
     End Property
 End Class
@@ -641,7 +641,7 @@ Public Class CachedBIR2316
     
     Public Overridable Function CreateReport() As CrystalDecisions.CrystalReports.Engine.ReportDocument Implements CrystalDecisions.ReportSource.ICachedReport.CreateReport
         Dim rpt As BIR2316 = New BIR2316()
-        rpt.Site = Me.Site
+        rpt.Site = Site
         Return rpt
     End Function
     

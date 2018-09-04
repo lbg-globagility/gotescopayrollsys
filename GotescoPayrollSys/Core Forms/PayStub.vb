@@ -295,7 +295,7 @@ Public Class PayStub
 
             catch_dt.Dispose()
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
             If sql.HasError = False _
@@ -1117,7 +1117,7 @@ Public Class PayStub
 
     Private Sub tsbtngenpayroll_Click(sender As Object, e As EventArgs) Handles tsbtngenpayroll.Click
 
-        Me.VeryFirstPayPeriodIDOfThisYear = Nothing
+        VeryFirstPayPeriodIDOfThisYear = Nothing
 
         With selectPayPeriod
 
@@ -2322,7 +2322,7 @@ Public Class PayStub
             SpCmd = New MySqlCommand("EMPLOYEE_payrollgen_paginate",
                                       New MySql.Data.MySqlClient.MySqlConnection(mysql_conn_text))
 
-            If Me.Enabled Then
+            If Enabled Then
                 SpDataSet = New DataSet
                 With SpCmd
                     conn_bool = (.Connection.State = ConnectionState.Closed)
@@ -2385,12 +2385,12 @@ Public Class PayStub
 
                 End If
 
-                Me.Enabled = False
+                Enabled = False
                 Console.WriteLine("Payroll Form disabled now")
 
             End If
         Catch ex As Exception
-            Dim err_msg As String = getErrExcptn(ex, Me.Name)
+            Dim err_msg As String = getErrExcptn(ex, Name)
             erro_msg_length = err_msg.Length
             MsgBox(err_msg)
         Finally
@@ -2911,7 +2911,7 @@ Public Class PayStub
             'rptdoc = Nothing
             'rptdoc.Dispose()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
 
         End Try
 
@@ -2948,7 +2948,7 @@ Public Class PayStub
         Try
             result_tbl = sql.GetFoundRows.Tables(0)
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
             If sql.HasError = False Then
@@ -3768,7 +3768,7 @@ Public Class PayStub
     End Sub
 
     Private Sub tsbtnClose_Click(sender As Object, e As EventArgs) Handles tsbtnClose.Click
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -6011,7 +6011,7 @@ Public Class PayStub
 
         MDIPrimaryForm.Showmainbutton.Enabled = True
 
-        Me.Enabled = True
+        Enabled = True
 
         MDIPrimaryForm.systemprogressbar.Visible = 0
 
@@ -6031,7 +6031,7 @@ Public Class PayStub
 
         backgroundworking = 0
 
-        Me.Enabled = True
+        Enabled = True
 
     End Sub
 
@@ -6418,7 +6418,7 @@ Public Class PayStub
             e.Cancel = False
 
             If previousForm IsNot Nothing Then
-                If previousForm.Name = Me.Name Then
+                If previousForm.Name = Name Then
                     previousForm = Nothing
                 End If
             End If
@@ -6431,7 +6431,7 @@ Public Class PayStub
             viewtotloan.Close()
             viewtotbon.Close()
 
-            PayrollForm.listPayrollForm.Remove(Me.Name)
+            PayrollForm.listPayrollForm.Remove(Name)
 
         End If
 
@@ -6576,7 +6576,7 @@ Public Class PayStub
 
                 btnrefresh_Click(sender, e)
             Catch ex As Exception
-                MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+                MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             End Try
         End If
 
@@ -7206,7 +7206,7 @@ Public Class PayStub
 
             End If
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
             returningval = totalAllowanceWork
@@ -8133,7 +8133,7 @@ Public Class PayStub
                                                 productRowID,
                                                 ValNoComma(dgvRow.Cells("DataGridViewTextBoxColumn66").Value),
                                                 dgvRow.Cells("DataGridViewTextBoxColumn64").Value,
-                                                Me.currentEmployeeID,
+                                                currentEmployeeID,
                                                 paypRowID,
                                                 dgvRow.Cells("psaRowID").Value)
                         If ValNoComma(dgvRow.Cells("psaRowID").Value) = 0 And n_ReadSQLFunction.HasError = False Then
@@ -8143,7 +8143,7 @@ Public Class PayStub
                     End If
                 Next
             Catch ex As Exception
-                MsgBox(getErrExcptn(ex, Me.Name))
+                MsgBox(getErrExcptn(ex, Name))
             Finally
                 UpdatePasytubsAdjustmentColumn()
                 MsgBox("Adjustments were saved!", MsgBoxStyle.Information)
@@ -8167,7 +8167,7 @@ Public Class PayStub
                 .Parameters.Clear()
                 .CommandType = CommandType.StoredProcedure
 
-                .Parameters.AddWithValue("pa_EmployeeID", Me.currentEmployeeID)
+                .Parameters.AddWithValue("pa_EmployeeID", currentEmployeeID)
                 .Parameters.AddWithValue("pa_PayPeriodID", dgvpayper.SelectedRows(0).Cells(0).Value)
                 .Parameters.AddWithValue("User_RowID", user_row_id)
 
@@ -8175,7 +8175,7 @@ Public Class PayStub
 
             cmd.ExecuteNonQuery()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
             _conn.Close()
@@ -8198,7 +8198,7 @@ Public Class PayStub
             With cmd
                 .Parameters.Clear()
                 .CommandType = CommandType.StoredProcedure
-                .Parameters.AddWithValue("pa_EmployeeID", Me.currentEmployeeID)
+                .Parameters.AddWithValue("pa_EmployeeID", currentEmployeeID)
                 .Parameters.AddWithValue("pa_PayPeriodID", dgvpayper.SelectedRows(0).Cells(0).Value)
                 .Parameters.AddWithValue("pa_IsActual", Convert.ToInt16(IsActual))
             End With
@@ -8247,7 +8247,7 @@ Public Class PayStub
                 .Parameters.AddWithValue("pa_ProductID", productID)
                 .Parameters.AddWithValue("pa_PayAmount", payAmount)
                 .Parameters.AddWithValue("pa_Comment", comment)
-                .Parameters.AddWithValue("pa_EmployeeID", Me.currentEmployeeID)
+                .Parameters.AddWithValue("pa_EmployeeID", currentEmployeeID)
                 If dgvpayper.RowCount > 0 Then
                     .Parameters.AddWithValue("pa_PayPeriodID", dgvpayper.SelectedRows(0).Cells(0).Value)
                 Else
@@ -8261,7 +8261,7 @@ Public Class PayStub
             If mysqldatreadr.Read Then : returnvalue = mysqldatreadr(0) : End If
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
 
             conn.Close()
@@ -9432,7 +9432,7 @@ Public Class PayStub
             'rptdoc = Nothing
             'rptdoc.Dispose()
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
 
         End Try
 
@@ -9459,7 +9459,7 @@ Public Class PayStub
         Try
             result_tbl = sql.GetFoundRows.Tables(0)
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
         Finally
             'latter
             If sql.HasError = False Then
@@ -9555,7 +9555,7 @@ Public Class PayStub
             mysql_conn.Dispose()
         Catch ex As Exception
 
-            MsgBox(getErrExcptn(ex, Me.Name))
+            MsgBox(getErrExcptn(ex, Name))
 
             has_erros = True
         Finally
@@ -11248,7 +11248,7 @@ Public Class PayStub
 
                 If isPayStubExists.Result = "0" Then
 
-                    If ValNoComma(Me.VeryFirstPayPeriodIDOfThisYear) = ValNoComma(paypRowID) Then
+                    If ValNoComma(VeryFirstPayPeriodIDOfThisYear) = ValNoComma(paypRowID) Then
                         'this means, the very first cut off of this year falls here
                         'so system should reset all leave balance to zero(0)
 
@@ -11582,7 +11582,7 @@ Public Class PayStub
 
             If progress_precentage = payroll_emp_count Then
                 Timer1.Stop()
-                Me.Enabled = True
+                Enabled = True
                 Timer1.Enabled = False
 
                 MDIPrimaryForm.systemprogressbar.Visible = False

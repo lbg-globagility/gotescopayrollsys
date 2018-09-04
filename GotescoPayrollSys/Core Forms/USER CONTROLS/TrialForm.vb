@@ -87,7 +87,7 @@ Public Class TrialForm
             End If
 
         Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
+            MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         Finally
             'dgvempleave_SelectionChanged(sender, e)
             'AddHandler dgvempleave.SelectionChanged, AddressOf dgvempleave_SelectionChanged

@@ -9,21 +9,21 @@ Public Class txtPlaceHolder
 
     Private strEmpty As String = String.Empty
 
-    Dim n_PlaceHolderText As String = Me.Name
+    Dim n_PlaceHolderText As String = Name
 
     Dim TrueForeColor As Color = Color.Black
 
-    Dim TruePasswordChar As Char = Me.PasswordChar
+    Dim TruePasswordChar As Char = PasswordChar
 
     Sub New()
-        TrueForeColor = Me.ForeColor
+        TrueForeColor = ForeColor
 
-        Me.ForeColor = me_PlaceHolderForeColor
-        Me.Text = Me.Name
+        ForeColor = me_PlaceHolderForeColor
+        Text = Name
 
     End Sub
 
-    Dim n_StringValue As String = Me.Name
+    Dim n_StringValue As String = Name
 
     Public Property StringValue As String
 
@@ -63,17 +63,17 @@ Public Class txtPlaceHolder
 
     Protected Overrides Sub OnGotFocus(e As EventArgs)
 
-        If Me.Text.Length = 0 Then
+        If Text.Length = 0 Then
             'Me.PasswordChar = strEmpty
-            Me.ForeColor = TrueForeColor
-            Me.Text = strEmpty
-            Me.PasswordChar = TruePasswordChar
+            ForeColor = TrueForeColor
+            Text = strEmpty
+            PasswordChar = TruePasswordChar
         Else
-            If Me.ForeColor = me_PlaceHolderForeColor Then
-                Me.ForeColor = TrueForeColor
-                Me.Text = strEmpty
+            If ForeColor = me_PlaceHolderForeColor Then
+                ForeColor = TrueForeColor
+                Text = strEmpty
             Else
-                Me.PasswordChar = TruePasswordChar
+                PasswordChar = TruePasswordChar
             End If
         End If
 

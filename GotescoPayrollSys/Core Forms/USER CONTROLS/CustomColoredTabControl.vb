@@ -5,11 +5,11 @@ Public Class CustomColoredTabControl
 
     Sub New()
 
-        Me.DrawMode = TabDrawMode.OwnerDrawFixed
+        DrawMode = TabDrawMode.OwnerDrawFixed
 
-        Me.ItemSize = New Size(152, 25)
+        ItemSize = New Size(152, 25)
 
-        Me.Alignment = TabAlignment.Bottom
+        Alignment = TabAlignment.Bottom
 
     End Sub
 

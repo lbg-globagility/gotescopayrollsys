@@ -52,7 +52,7 @@ Public Class ForgotPasswordForm
 
                 MsgBox("Your Password will be sent to the email address associated to your user name", MsgBoxStyle.Information, "Sent Successfully.")
 
-                Me.Close()
+                Close()
             Catch ex As Exception
                 '"No Connection."
                 MsgBox(ex.Message, MsgBoxStyle.Exclamation, "Sending password failed") 'No Internet Connection.
@@ -64,7 +64,7 @@ Public Class ForgotPasswordForm
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         txtUserID.Clear()
-        Me.Close()
+        Close()
 
     End Sub
 
@@ -98,7 +98,7 @@ Public Class ForgotPasswordForm
 
         If keyData = Keys.Escape Then
 
-            Me.Close()
+            Close()
 
             Return True
 

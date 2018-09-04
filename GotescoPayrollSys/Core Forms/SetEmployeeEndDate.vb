@@ -86,7 +86,7 @@ Public Class SetEmployeeEndDate
     Private Sub btnOk_Click(sender As Object, e As EventArgs) Handles btnOk.Click
         n_ReturnDateValue = CustomDatePicker1.Tag
 
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        DialogResult = Windows.Forms.DialogResult.OK
 
     End Sub
 
@@ -95,7 +95,7 @@ Public Class SetEmployeeEndDate
 
         'Me.DialogResult = Windows.Forms.DialogResult.None
 
-        Me.Close()
+        Close()
 
     End Sub
 

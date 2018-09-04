@@ -73,7 +73,7 @@
 
                     If organization_RowID = String.Empty Then
 
-                        Me.Focus()
+                        Focus()
 
                     End If
 

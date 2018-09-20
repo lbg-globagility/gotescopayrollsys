@@ -34,6 +34,17 @@ DECLARE paydate_from
 
 DECLARE logo MEDIUMBLOB DEFAULT NULL;
 
+DECLARE newLine VARCHAR(50) DEFAULT '\r\n';
+DECLARE leading4NewLine
+			,leading3NewLine
+			,leading2NewLine
+			,leading1NewLine VARCHAR(50);
+
+SET leading4NewLine = CONCAT(newLine, newLine, newLine, newLine);
+SET leading3NewLine = CONCAT(newLine, newLine, newLine);
+SET leading2NewLine = CONCAT(newLine, newLine);
+SET leading1NewLine = newLine;
+
 /*SELECT ImageBlob
 FROM images
 WHERE (RowID=1
@@ -84,15 +95,15 @@ ps.RowID
 ,FORMAT(ps.TotalEmpWithholdingTax, 2) `Column7`
 ,FORMAT(ps.TotalAdjustments, 2) `Column32`
 
-,IFNULL(REPLACE(psiallw.`Column34`, ',', '\n'), '') `Column34`
-,IFNULL(REPLACE(psiallw.`Column37`, ',', '\n'), '') `Column37`
+,NEWLINECHARTRIMMER(REPLACE(psiallw.`Column34`, ',', '\r\n')) `Column34`
+,NEWLINECHARTRIMMER(REPLACE(psiallw.`Column37`, ',', '\r\n')) `Column37`
 
-,IFNULL(REPLACE(psibon.`Column36`, ',', '\n'), '') `Column36`
-,IFNULL(REPLACE(psibon.`Column39`, ',', '\n'), '') `Column39`
+,NEWLINECHARTRIMMER(REPLACE(psibon.`Column36`, ',', '\n')) `Column36`
+,NEWLINECHARTRIMMER(REPLACE(psibon.`Column39`, ',', '\n')) `Column39`
 
-/**/ ,IFNULL(REPLACE(psiloan.`Column35`, ',', '\n'), '') `Column35`
-,IFNULL(REPLACE(psiloan.`Column38`, ',', '\n'), '') `Column38`
-,IFNULL(REPLACE(psiloan.`Column33`, ',', '\n'), '') `Column33`
+/**/ ,NEWLINECHARTRIMMER(REPLACE(psiloan.`Column35`, ',', '\n')) `Column35`
+,NEWLINECHARTRIMMER(REPLACE(psiloan.`Column38`, ',', '\n')) `Column38`
+,NEWLINECHARTRIMMER(REPLACE(psiloan.`Column33`, ',', '\n')) `Column33`
 ,IFNULL((LENGTH(psiloan.`Column33`) - LENGTH(REPLACE(psiloan.`Column33`, ',', ''))) + 1, 0) `Column10`
 
 ,FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `Column17`
@@ -126,8 +137,8 @@ ps.RowID
 
 ,logo `Column40`
 
-,IFNULL(REPLACE(psilv.`Column30`, ',', '\n'), '') `Column30`
-,IFNULL(REPLACE(psilv.`Column31`, ',', '\n'), '') `Column31`
+,NEWLINECHARTRIMMER(REPLACE(psilv.`Column30`, ',', '\n')) `Column30`
+,NEWLINECHARTRIMMER(REPLACE(psilv.`Column31`, ',', '\n')) `Column31`
 
 # , IFNULL(rd.`RestDayAmount`, 0) `Column16`
 , IFNULL(ROUND(et.`RestDayAmount`, 2), 0) `Column16`
@@ -138,17 +149,17 @@ ps.RowID
 , FORMAT(IFNULL(et.`LeaveHours`, 0), 2) `Column45`
 , IFNULL(ROUND(et.`Leavepayment`, 2), 0) `Column15`
 
-,IFNULL(REPLACE(adj.`AdjustmentName`, ',', '\n'), '') `Column46`
-,IFNULL(REPLACE(adj.`AdjustmentAmount`, ',', '\n'), '') `Column47`
+,NEWLINECHARTRIMMER(REPLACE(adj.`AdjustmentName`, ',', '\n')) `Column46`
+,NEWLINECHARTRIMMER(REPLACE(adj.`AdjustmentAmount`, ',', '\n')) `Column47`
 
-,IFNULL(REPLACE(adj_positive.`AdjustmentName`, ',', '\n'), '') `Column50`
-,IFNULL(REPLACE(adj_positive.`AdjustmentAmount`, ',', '\n'), '') `Column51`
+,NEWLINECHARTRIMMER(REPLACE(adj_positive.`AdjustmentName`, ',', '\n')) `Column50`
+,NEWLINECHARTRIMMER(REPLACE(adj_positive.`AdjustmentAmount`, ',', '\n')) `Column51`
 
-,IFNULL(REPLACE(adj_negative.`AdjustmentName`, ',', '\n'), '') `Column52`
-,IFNULL(REPLACE(adj_negative.`AdjustmentAmount`, ',', '\n'), '') `Column53`
+,NEWLINECHARTRIMMER(REPLACE(adj_negative.`AdjustmentName`, ',', '\n')) `Column52`
+,NEWLINECHARTRIMMER(REPLACE(adj_negative.`AdjustmentAmount`, ',', '\n')) `Column53`
 
-,IFNULL(REPLACE(eapp.`AllowanceName`, ',', '\n'), '') `Column48`
-,IFNULL(REPLACE(eapp.`AllowanceAmount`, ',', '\n'), '') `Column49`
+,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceName`, ',', '\n')) `Column48`
+,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceAmount`, ',', '\n')) `Column49`
 
 , ( ps.TotalGrossSalary + IFNULL(adj_positive.`PayAmount`, 0) ) `Column60`
 , ( ps.TotalLoans

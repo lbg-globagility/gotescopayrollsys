@@ -340,6 +340,12 @@
       <DependentUpon>NewPayslipByTwos.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\rpt\NewPayslipByTwosDraftFont.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NewPayslipByTwosDraftFont.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core Forms\rpt\PayPeriodSelectionWithLoanTypes.Designer.vb">
       <DependentUpon>PayPeriodSelectionWithLoanTypes.vb</DependentUpon>
     </Compile>
@@ -1385,6 +1391,10 @@
     <EmbeddedResource Include="Core Forms\rpt\NewPayslipByTwos.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>NewPayslipByTwos.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\rpt\NewPayslipByTwosDraftFont.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>NewPayslipByTwosDraftFont.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\rpt\PayPeriodSelectionWithLoanTypes.resx">
       <DependentUpon>PayPeriodSelectionWithLoanTypes.vb</DependentUpon>

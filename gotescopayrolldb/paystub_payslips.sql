@@ -270,7 +270,7 @@ LEFT JOIN (SELECT
 # #######################
 
  LEFT JOIN (SELECT ii.*
-            ,GROUP_CONCAT(ii.LoanName) `Column35`
+            ,GROUP_CONCAT(UCASE(ii.LoanName)) `Column35`
             /*,GROUP_CONCAT(ROUND(ii.DeductionAmount, 2)) `Column38`
             ,GROUP_CONCAT(ROUND(ii.BalanceOfLoan, 2)) `Column33`*/
             
@@ -441,7 +441,7 @@ SELECT p.PartNo `Allowance name`
 # INNER JOIN (SELECT
 LEFT JOIN (SELECT
            PayStubID
-           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column30`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', UCASE(p.PartNo))) `Column30`
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column31`
            FROM paystubitem psi
 			  INNER JOIN product p ON p.RowID=psi.ProductID AND p.OrganizationID=psi.OrganizationID AND p.`Category`='Leave Type' AND p.ActiveData=1

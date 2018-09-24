@@ -48,10 +48,10 @@ Public Class PayStub
 
     Private query_payperiod_text As String =
         String.Concat("SELECT",
-                      " CONCAT('Payroll for '",
+                      " CONCAT('PAYROLL FOR  '",
                       " ,IF(YEAR(PayFromDate) = YEAR(PayToDate)",
-                      "     , CONCAT_WS(' to ', DATE_FORMAT(PayFromDate, '%c/%e'), DATE_FORMAT(PayToDate, ", customDateFormat, "))",
-                      "     , CONCAT_WS(' to ', DATE_FORMAT(PayFromDate, ", customDateFormat, "), DATE_FORMAT(PayToDate, ", customDateFormat, "))",
+                      "     , CONCAT_WS('  TO  ', DATE_FORMAT(PayFromDate, '%c/%e'), DATE_FORMAT(PayToDate, ", customDateFormat, "))",
+                      "     , CONCAT_WS('  TO  ', DATE_FORMAT(PayFromDate, ", customDateFormat, "), DATE_FORMAT(PayToDate, ", customDateFormat, "))",
                       "     )) `Result`",
                       " FROM payperiod",
                       " WHERE RowID=?pp_rowid;")

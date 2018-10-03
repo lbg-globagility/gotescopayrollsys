@@ -14,8 +14,9 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `NEWLINECHARTRIMMER`(
     DETERMINISTIC
 BEGIN
 
-DECLARE returnval VARCHAR(200) DEFAULT '';
+DECLARE returnval VARCHAR(255) DEFAULT '';
 
+DECLARE nextLine VARCHAR(50) DEFAULT '\n';
 DECLARE newLine VARCHAR(50) DEFAULT '\r\n';
 DECLARE leading4NewLine
 			,leading3NewLine
@@ -33,6 +34,12 @@ SET returnval =
                         , leading3NewLine, leading2NewLine)
 					 , leading2NewLine, leading1NewLine)
         , '');
+
+SET returnval = TRIM(LEADING newLine FROM returnval);
+SET returnval = TRIM(TRAILING newLine FROM returnval);
+
+SET returnval = TRIM(LEADING nextLine FROM returnval);
+SET returnval = TRIM(TRAILING nextLine FROM returnval);
 
 RETURN returnval;
 

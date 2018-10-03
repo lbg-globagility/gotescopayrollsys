@@ -1,8 +1,4 @@
-﻿Imports MetroFramework
-Imports System.Threading
-Imports System.IO
-
-Public Class MetroLogin
+﻿Public Class MetroLogin
 
     'Public n_FileObserver As New FileObserver(sys_apppath)
 

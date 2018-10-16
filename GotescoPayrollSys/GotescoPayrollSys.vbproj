@@ -1378,6 +1378,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\msword.ico" />
     <EmbeddedResource Include="Core Forms\REPORTS\Employee Leave Ledger.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Employee Leave Ledger.vb</LastGenOutput>

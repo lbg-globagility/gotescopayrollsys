@@ -2954,7 +2954,7 @@ Public Class PayStub
             If sql.HasError = False Then
                 '8766 - total pixel height of a pay slip -- PayslipByTwos
                 '9657 -- NewPayslipByTwos
-                Dim payroll_payslip As New NewPayslipByTwosDraftFont 'NewPayslipByTwos'printallpayslipotherformat2'PayslipByTwos
+                Dim payroll_payslip As New payslip 'NewPayslipByTwos'printallpayslipotherformat2'PayslipByTwos
 
                 With payroll_payslip.ReportDefinition.Sections(2)
                     Dim objText As CrystalDecisions.CrystalReports.Engine.TextObject = .ReportObjects("OrgName")

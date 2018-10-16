@@ -1,4 +1,7 @@
-﻿Public Class CrysVwr
+﻿Imports System.IO
+Imports CrystalDecisions.CrystalReports.Engine
+
+Public Class CrysVwr
 
 #Region "Vairable declarations"
 
@@ -10,6 +13,8 @@
     Private sal_distrib As String = "Cash"
 
     Private specific_rpt As String = String.Empty
+
+    Dim inputFileName As String
 
 #End Region
 
@@ -72,13 +77,13 @@
     Protected Overrides Sub OnLoad(e As EventArgs)
 
         Dim accesible_buttons =
-            Panel1.Controls.Cast(Of Button).Where(Function(btn) Convert.ToString(btn.Tag) = specific_rpt)
+            Panel1.Controls.Cast(Of Button) '.Where(Function(btn) Convert.ToString(btn.Tag) = specific_rpt)
 
-        Panel1.Visible = (accesible_buttons.Count > 0)
+        'Panel1.Visible = (accesible_buttons.Count > 0)
 
-        For Each obj In accesible_buttons
-            obj.Visible = True
-        Next
+        'For Each obj In accesible_buttons
+        '    obj.Visible = True
+        'Next
 
         MyBase.OnLoad(e)
 
@@ -103,6 +108,7 @@
         End If
 
     End Sub
+
     Private Sub CrysVwr_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Dim result = MessageBox.Show("Do you want to Close " & Text & " ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)
         If result = DialogResult.No Then
@@ -115,12 +121,34 @@
 
     End Sub
 
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        If CrystalReportViewer1.ReportSource Is Nothing Then
+            Return
+        End If
+
+        inputFileName = InputBox("Input a file name to be exported.", "Export as MS Word").Trim
+
+        If inputFileName.Length > 0 Then
+            Dim rpt As ReportClass = CrystalReportViewer1.ReportSource
+
+            Dim fullpathfile = String.Concat(Path.GetTempPath, inputFileName, ".doc")
+            Try
+                rpt.ExportToDisk(CrystalDecisions.Shared.ExportFormatType.WordForWindows,
+                                 fullpathfile)
+                Process.Start(fullpathfile)
+            Catch ex As Exception
+                MsgBox("Error occured when exporting.", MsgBoxStyle.Critical, "Export failed")
+            End Try
+        End If
+
+    End Sub
+
     Private Sub btnExportPayrollSummaToExcel_Click(sender As Object, e As EventArgs) Handles btnExportPayrollSummaToExcel.Click
 
         Dim psefr As New PayrollSummaryExcelFormatReportProvider
 
         With psefr
-            
+
             .PayperiodIDFrom = pp_rowid_from
 
             .PayperiodIDTo = pp_rowid_to
@@ -128,7 +156,6 @@
             .IsActual = is_actual
 
             .SalaryDistribution = sal_distrib
-
 
             .Run()
 

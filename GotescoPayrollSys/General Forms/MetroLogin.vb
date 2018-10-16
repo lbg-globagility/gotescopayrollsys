@@ -26,67 +26,9 @@
         'For Each strval In files
         '    File.AppendAllText("C:\Users\GLOBAL-D-PC\Desktop\gotescobindebug.txt", strval & Environment.NewLine)
         'Next
-        TestPrint()
 
         MyBase.OnLoad(e)
 
-    End Sub
-
-    Private Sub TestPrint()
-        Dim paypRowID = 200
-        Dim param_values =
-            New Object() {1,
-                          paypRowID,
-                          True}
-
-        Dim sql As New SQL("CALL paystub_payslips(?og_id, ?pp_rowid, ?as_actual);",
-                           param_values)
-
-        Dim result_tbl As New DataTable
-        Try
-            result_tbl = sql.GetFoundRows.Tables(0)
-        Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Name))
-        Finally
-
-            If sql.HasError = False Then
-                Dim payroll_payslip As New payslip 'NewPayslipByTwosDraftFont 'payslip
-
-                With payroll_payslip.ReportDefinition.Sections(2)
-                    Dim objText As CrystalDecisions.CrystalReports.Engine.TextObject = .ReportObjects("OrgName")
-                    objText.Text = "GOTESCO MARKETING, INC."
-
-                    objText = .ReportObjects("payperiod")
-
-                    Dim pp_rowid = param_values(1)
-
-                    Dim para_meter = New Object() {pp_rowid}
-
-                    Dim customDateFormat As String = "'%c/%e/%Y'"
-                    Dim cut_off_text = New SQL(
-                        String.Concat("SELECT",
-                                      " CONCAT('PAYROLL FOR  '",
-                                      " ,IF(YEAR(PayFromDate) = YEAR(PayToDate)",
-                                      "     , CONCAT_WS('  TO  ', DATE_FORMAT(PayFromDate, '%c/%e'), DATE_FORMAT(PayToDate, ", customDateFormat, "))",
-                                      "     , CONCAT_WS('  TO  ', DATE_FORMAT(PayFromDate, ", customDateFormat, "), DATE_FORMAT(PayToDate, ", customDateFormat, "))",
-                                      "     )) `Result`",
-                                      " FROM payperiod",
-                                      " WHERE RowID=?pp_rowid;"), para_meter).GetFoundRow
-
-                    If String.IsNullOrEmpty(cut_off_text) = False Then
-                        objText.Text = cut_off_text
-                    End If
-
-                End With
-
-                payroll_payslip.SetDataSource(result_tbl)
-
-                payroll_payslip.ExportToDisk(CrystalDecisions.Shared.ExportFormatType.WordForWindows, "test_new_payslip.doc")
-                MsgBox("Done", MsgBoxStyle.Information)
-
-            End If
-
-        End Try
     End Sub
 
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean

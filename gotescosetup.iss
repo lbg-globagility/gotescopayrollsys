@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Gotesco Payroll System"
-#define MyAppVersion "1.1.21"
+#define MyAppVersion "1.1.3"
 #define MyAppPublisher "Globagility, Inc."
 #define MyAppURL "http://www.globagilityinc.com/"
 #define MyAppExeName "GotescoPayrollSys.exe"
@@ -88,9 +88,10 @@ Source: ".\GotescoPayrollSys\bin\Debug\NHotkey.WindowsForms.dll"; DestDir: "{app
 Source: ".\GotescoPayrollSys\bin\Debug\OCRTools.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\ShockwaveFlashObjects.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\stdole.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
-Source: ".\GotescoPayrollSys\bin\Debug\Core Forms\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
-Source: ".\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
-Source: ".\GotescoPayrollSys\bin\Debug\rpt\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
+; Source: ".\GotescoPayrollSys\bin\Debug\Core Forms\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
+Source: ".\GotescoPayrollSys\bin\Debug\Core Forms\rpt\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
+; Source: ".\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
+; Source: ".\GotescoPayrollSys\bin\Debug\rpt\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
 ; Source: "D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
                                                  

@@ -34,17 +34,6 @@ DECLARE paydate_from
 
 DECLARE logo MEDIUMBLOB DEFAULT NULL;
 
-DECLARE newLine VARCHAR(50) DEFAULT '\r\n';
-DECLARE leading4NewLine
-			,leading3NewLine
-			,leading2NewLine
-			,leading1NewLine VARCHAR(50);
-
-SET leading4NewLine = CONCAT(newLine, newLine, newLine, newLine);
-SET leading3NewLine = CONCAT(newLine, newLine, newLine);
-SET leading2NewLine = CONCAT(newLine, newLine);
-SET leading1NewLine = newLine;
-
 /*SELECT ImageBlob
 FROM images
 WHERE (RowID=1
@@ -75,13 +64,20 @@ SET @_ordinal = 0;
 
 SET @deduct_amt = 0;
 
+SET @middle_name = 0;
+
 SELECT
 ps.RowID
 ,e.EmployeeID `Column2`
-,UCASE( CONCAT(REPLACE(CONCAT_WS(', ', e.LastName, e.FirstName), ',,', ','), ' ( ', e.EmployeeType, ' )') ) `Column3`
-,(@basic_payment := IFNULL(IF(ps.AsActual = 1, (esa.BasicPay * (esa.TrueSalary / esa.Salary)), esa.BasicPay), 0)) `TheBasicPay`
+, (@middle_name := IF(LENGTH(TRIM(IFNULL(e.MiddleName, ''))) = 0, NULL, TRIM(e.MiddleName))) `CustomMiddleName`
+,UCASE( CONCAT(REPLACE(CONCAT_WS(', ', e.LastName, e.FirstName, @middle_name), ',,', ','), ' ( ', e.EmployeeType, ' )') ) `Column3`
 
-,FORMAT(@basic_payment, 2) `Column11`
+,(@basic_payment := IFNULL(IF(ps.AsActual = 1, (esa.BasicPay * (esa.TrueSalary / esa.Salary)), esa.BasicPay), 0)) `TheBasicPay`
+,IFNULL(IF(is_actual = '1'
+           , TrueSalary
+			  , esa.Salary)
+        , 0) `Column11`
+# ,FORMAT(@basic_payment, 2) `Column11`
 
 ,FORMAT(ps.TotalGrossSalary, 2) `Column4`
 ,FORMAT(ps.TotalNetSalary, 2) `Column5`
@@ -95,18 +91,25 @@ ps.RowID
 ,FORMAT(ps.TotalEmpWithholdingTax, 2) `Column7`
 ,FORMAT(ps.TotalAdjustments, 2) `Column32`
 
-,NEWLINECHARTRIMMER(REPLACE(psiallw.`Column34`, ',', '\r\n')) `Column34`
-,NEWLINECHARTRIMMER(REPLACE(psiallw.`Column37`, ',', '\r\n')) `Column37`
+, NEWLINECHARTRIMMER(REPLACE(psiallw.`Column34`, ',', '\r\n')) `Column34`
+, NEWLINECHARTRIMMER(REPLACE(psiallw.`Column37`, ',', '\r\n')) `Column37`
 
-,NEWLINECHARTRIMMER(REPLACE(psibon.`Column36`, ',', '\n')) `Column36`
-,NEWLINECHARTRIMMER(REPLACE(psibon.`Column39`, ',', '\n')) `Column39`
+, NEWLINECHARTRIMMER(REPLACE(psibon.`Column36`, ',', '\n')) `Column36`
+, NEWLINECHARTRIMMER(REPLACE(psibon.`Column39`, ',', '\n')) `Column39`
 
-/**/ ,NEWLINECHARTRIMMER(REPLACE(psiloan.`Column35`, ',', '\n')) `Column35`
-,NEWLINECHARTRIMMER(REPLACE(psiloan.`Column38`, ',', '\n')) `Column38`
-,NEWLINECHARTRIMMER(REPLACE(psiloan.`Column33`, ',', '\n')) `Column33`
-,IFNULL((LENGTH(psiloan.`Column33`) - LENGTH(REPLACE(psiloan.`Column33`, ',', ''))) + 1, 0) `Column10`
+/**/, REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column35`, ',', '\n'))
+          , '|', ',')  `Column35`
+, REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column38`, ',', '\n'))
+          , '|', ',') `Column38`
+, REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column33`, ',', '\n'))
+          , '|', ',') `Column33`
+/* , CONCAT_WS('\r\n', 'TESTLOAN#1', 'TESTLOAN#2', 'TESTLOAN#3', 'TESTLOAN#4', 'TESTLOAN#5')  `Column35`
+, CONCAT_WS('\r\n', '50,000.00', '50,000.00', '50,000.00', '50,000.00', '50,000.00') `Column38`
+, CONCAT_WS('\r\n', '50,000.00', '50,000.00', '50,000.00', '50,000.00', '50,000.00') `Column33`*/
 
-,FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `Column17`
+, IFNULL((LENGTH(psiloan.`Column33`) - LENGTH(REPLACE(psiloan.`Column33`, ',', ''))) + 1, 0) `Column10`
+
+, FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `Column17`
     
 ,IF(e.EmployeeType = 'Daily'
     , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)
@@ -161,7 +164,7 @@ ps.RowID
 ,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceName`, ',', '\n')) `Column48`
 ,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceAmount`, ',', '\n')) `Column49`
 
-, ( ps.TotalGrossSalary + IFNULL(adj_positive.`PayAmount`, 0) ) `Column60`
+/**/, ( ps.TotalGrossSalary + IFNULL(adj_positive.`PayAmount`, 0) ) `Column60`
 , ( ps.TotalLoans
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 # + (IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0))
@@ -171,6 +174,7 @@ ps.RowID
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 # + (IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0))
 	 ) `Column62`
+# , '50,000.00' `Column60`, '50,000.00' `Column61`, '50,000.00' `Column62`
 
 FROM proper_payroll ps
 
@@ -274,8 +278,12 @@ LEFT JOIN (SELECT
             /*,GROUP_CONCAT(ROUND(ii.DeductionAmount, 2)) `Column38`
             ,GROUP_CONCAT(ROUND(ii.BalanceOfLoan, 2)) `Column33`*/
             
-            ,GROUP_CONCAT(ROUND(ii.DeductedAmount, 2)) `Column38`
-            ,GROUP_CONCAT(ROUND(ii.Balance, 2)) `Column33`
+            ,GROUP_CONCAT(REPLACE(FORMAT(ROUND(ii.DeductedAmount, 2), 2)
+				                      , ',', '|')
+				              ) `Column38`
+            ,GROUP_CONCAT(REPLACE(FORMAT(ROUND(ii.Balance, 2), 2)
+				                      , ',', '|')
+				              ) `Column33`
             FROM (/*SELECT i.RowID
 						,i.EmployeeID
 						,i.TotalLoanAmount

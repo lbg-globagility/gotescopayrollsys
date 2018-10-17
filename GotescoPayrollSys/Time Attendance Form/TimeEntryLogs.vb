@@ -208,6 +208,8 @@ Public Class TimeEntryLogs
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         SearchEmployees()
+
+        LoadTimeLogs()
     End Sub
 
     Private Sub TextBox1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox1.KeyPress
@@ -251,6 +253,7 @@ Public Class TimeEntryLogs
                       row_indexes.Contains(dgvrow.Index))
 
         If dgvrows.Count = 0 Then
+            tsbtndel.Enabled = True
             Return
         End If
 
@@ -551,8 +554,8 @@ Public Class TimeEntryLogs
                 Dim ampm As String = Nothing
 
                 Try
-                    If dateobj.ToString.Contains("A") Or _
-                        dateobj.ToString.Contains("P") Or _
+                    If dateobj.ToString.Contains("A") Or
+                        dateobj.ToString.Contains("P") Or
                         dateobj.ToString.Contains("M") Then
 
                         ampm = " " & StrReverse(getStrBetween(StrReverse(dateobj.ToString), "", ":"))

@@ -1,2 +1,5 @@
+9:46 AM 10/22/2018
+- lets say print pay slip where cut off is Oct. 16-31, but displays Nov. 1-15
+
 - don't just hide resigned or terminated employee not until to his/her resingation/termination cut-off
 - missing time logs during of filing of ob

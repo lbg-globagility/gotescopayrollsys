@@ -49,11 +49,11 @@ Public Class PayStub
     Private query_payperiod_text As String =
         String.Concat("SELECT",
                       " CONCAT('PAYROLL FOR  '",
-                      " ,IF(YEAR(PayFromDate) = YEAR(PayToDate)",
-                      "     , CONCAT_WS('  TO  ', DATE_FORMAT(PayFromDate, '%c/%e'), DATE_FORMAT(PayToDate, ", customDateFormat, "))",
-                      "     , CONCAT_WS('  TO  ', DATE_FORMAT(PayFromDate, ", customDateFormat, "), DATE_FORMAT(PayToDate, ", customDateFormat, "))",
+                      " ,IF(YEAR(CustomPayFromDate) = YEAR(CustomPayToDate)",
+                      "     , CONCAT_WS('  TO  ', DATE_FORMAT(CustomPayFromDate, '%c/%e'), DATE_FORMAT(CustomPayToDate, ", customDateFormat, "))",
+                      "     , CONCAT_WS('  TO  ', DATE_FORMAT(CustomPayFromDate, ", customDateFormat, "), DATE_FORMAT(CustomPayToDate, ", customDateFormat, "))",
                       "     )) `Result`",
-                      " FROM payperiod",
+                      " FROM custompayperiod",
                       " WHERE RowID=?pp_rowid;")
 
     Private CurrLinkPage As LinkLabel

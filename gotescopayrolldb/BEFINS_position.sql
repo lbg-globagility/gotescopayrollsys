@@ -15,6 +15,27 @@ IF NEW.DivisionId IS NULL THEN
 	
 	SELECT d.RowID FROM `division` d WHERE d.OrganizationID=NEW.OrganizationID ORDER BY d.Created LIMIT 1 INTO default_department;
 
+	IF default_department IS NULL THEN
+		INSERT INTO `division`
+		(
+			Name
+			,OrganizationID
+			,CreatedBy
+			,Created
+		) VALUES (
+			'Division One'
+			,NEW.OrganizationID
+			,NEW.CreatedBy
+			,CURRENT_TIMESTAMP()
+		) ON
+		DUPLICATE
+		KEY
+		UPDATE
+			LastUpd=CURRENT_TIMESTAMP()
+			,LastUpdBy=NEW.CreatedBy;
+			SELECT @@Identity INTO default_department;
+	END IF;
+
 	SET NEW.DivisionId = default_department;
 	
 END IF;

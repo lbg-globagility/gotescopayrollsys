@@ -22,7 +22,7 @@ IF USER_HAS_PRIVILEGE(pos_CreatedBy,pos_OrganizationID,VIEW_privilege('Position'
 		
 		IF pos_DivisionId IS NULL THEN
 			
-			SELECT RowID FROM division WHERE OrganizationID=pos_OrganizationID ORDER BY RowID LIMIT 1 INTO pos_DivisionId;
+			SELECT RowID FROM division WHERE OrganizationID=pos_OrganizationID AND ParentDivisionID IS NOT NULL ORDER BY RowID LIMIT 1 INTO pos_DivisionId;
 			
 		END IF;
 		
@@ -54,21 +54,15 @@ IF USER_HAS_PRIVILEGE(pos_CreatedBy,pos_OrganizationID,VIEW_privilege('Position'
 			,LastUpdBy=pos_LastUpdBy
 			,ParentPositionID=pos_ParentPositionID
 			,DivisionId=pos_DivisionId;
-		
-		
-
+			
 		SELECT @@Identity AS Id INTO positID;
-		
-		IF positID = 0 THEN
-		
-			SELECT RowID FROM position WHERE PositionName=pos_PositionName AND OrganizationID=pos_OrganizationID INTO positID;
-		
-		END IF;
-		
+
+
+
 	ELSE
 
 
-		
+
 		INSERT INTO `division`
 		(
 			Name
@@ -125,6 +119,27 @@ IF USER_HAS_PRIVILEGE(pos_CreatedBy,pos_OrganizationID,VIEW_privilege('Position'
 		END IF;
 		
 	END IF;
+
+	INSERT INTO `position`
+	(
+		PositionName
+		,Created
+		,CreatedBy
+		,OrganizationID
+		,LastUpdBy
+		,ParentPositionID
+		,DivisionId
+	)	SELECT
+		pos_PositionName
+		, CURRENT_TIMESTAMP()
+		, pos_CreatedBy
+		, og.RowID
+		, pos_CreatedBy
+		, NULL
+		, NULL
+		FROM (SELECT RowID FROM organization WHERE RowID != pos_OrganizationID) og
+	ON DUPLICATE KEY UPDATE LastUpd=IFNULL(ADDDATE(LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP()), LastUpdBy=IFNULL(LastUpdBy, CreatedBy)
+		;
 
 ELSE
 	CALL mysqlmsgbox('It seems that your privilege for this module has been modify. Please recheck your privilege.');

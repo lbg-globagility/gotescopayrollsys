@@ -114,8 +114,8 @@ IF NEW.`Status` = 'Approved' THEN
 		
 	END IF;
 	
-	# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
-	SET NEW.OfficialValidHours = (@offcl_validhrs - @break_hrs);
+	SET NEW.OfficialValidHours = @validhrs_multip_validdays;
+	# SET NEW.OfficialValidHours = (@offcl_validhrs - @break_hrs);
 	
 ELSE
 

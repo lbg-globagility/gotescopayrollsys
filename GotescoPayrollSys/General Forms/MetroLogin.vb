@@ -10,6 +10,7 @@
         '9988
 
         Console.WriteLine(DecrypedData("ÌÔÚÑÉººº¶"))
+        Console.WriteLine(DecrypedData("ÆÈÈÙÌ"))
         Console.WriteLine(DecrypedData("¶·¸¹"))
 
         'A01274

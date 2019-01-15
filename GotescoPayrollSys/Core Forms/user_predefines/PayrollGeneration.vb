@@ -1,8 +1,7 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.Threading
+﻿Imports System.Text.RegularExpressions
 Imports System.Threading.Tasks
-Imports System.Text.RegularExpressions
 Imports log4net
+Imports MySql.Data.MySqlClient
 
 Public Class PayrollGeneration
     Public errlogger As ILog = LogManager.GetLogger("LoggerWork")

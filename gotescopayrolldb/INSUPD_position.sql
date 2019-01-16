@@ -14,133 +14,81 @@ DECLARE positID INT(11);
 
 DECLARE defaultDivisID INT(11);
 
+DECLARE originalPositionName VARCHAR(255);
+
+DECLARE hasId BOOLEAN DEFAULT FALSE;
+
+SET hasId = pos_RowID IS NOT NULL;
+
+IF hasId THEN
+	SELECT pos.PositionName
+	FROM `position` pos
+	WHERE pos.RowID = pos_RowID
+	INTO originalPositionName;
+END IF;
+
 IF USER_HAS_PRIVILEGE(pos_CreatedBy,pos_OrganizationID,VIEW_privilege('Position',pos_OrganizationID)) = '1' THEN
-	
-	SELECT COUNT(RowID) FROM `division` WHERE OrganizationID=pos_OrganizationID INTO defaultDivisID;
-
-	IF defaultDivisID > 0 THEN
-		
-		IF pos_DivisionId IS NULL THEN
-			
-			SELECT RowID FROM division WHERE OrganizationID=pos_OrganizationID AND ParentDivisionID IS NOT NULL ORDER BY RowID LIMIT 1 INTO pos_DivisionId;
-			
-		END IF;
-		
-		INSERT INTO position 
-		(
-			RowID
-			,PositionName
-			,Created
-			,CreatedBy
-			,OrganizationID
-			,LastUpdBy
-			,ParentPositionID
-			,DivisionId
-		) VALUES (
-			pos_RowID
-			,pos_PositionName
-			,CURRENT_TIMESTAMP()
-			,pos_CreatedBy
-			,pos_OrganizationID
-			,pos_LastUpdBy
-			,pos_ParentPositionID
-			,pos_DivisionId
-		) ON 
-		DUPLICATE 
-		KEY 
-		UPDATE 
-			PositionName=pos_PositionName
-			,LastUpd=CURRENT_TIMESTAMP()
-			,LastUpdBy=pos_LastUpdBy
-			,ParentPositionID=pos_ParentPositionID
-			,DivisionId=pos_DivisionId;
-			
-		SELECT @@Identity AS Id INTO positID;
-
-
-
-	ELSE
-
-
-
-		INSERT INTO `division`
-		(
-			Name
-			,OrganizationID
-			,CreatedBy
-			,Created
-		) VALUES (
-			'Division One'
-			,pos_OrganizationID
-			,pos_CreatedBy
-			,CURRENT_TIMESTAMP()
-		) ON
-		DUPLICATE
-		KEY
-		UPDATE
-			LastUpd=CURRENT_TIMESTAMP()
-			,LastUpdBy=pos_LastUpdBy;
-		
-		SELECT RowID FROM `division` WHERE OrganizationID=pos_OrganizationID ORDER BY RowID DESC LIMIT 1 INTO defaultDivisID;
-
-		INSERT INTO position 
-		(
-			RowID
-			,PositionName
-			,Created
-			,CreatedBy
-			,OrganizationID
-			,LastUpdBy
-			,ParentPositionID
-			,DivisionId
-		) VALUES (
-			pos_RowID
-			,pos_PositionName
-			,CURRENT_TIMESTAMP()
-			,pos_CreatedBy
-			,pos_OrganizationID
-			,pos_LastUpdBy
-			,pos_ParentPositionID
-			,defaultDivisID
-		) ON
-		DUPLICATE
-		KEY
-		UPDATE
-			PositionName=pos_PositionName
-			,LastUpd=CURRENT_TIMESTAMP()
-			,LastUpdBy=pos_LastUpdBy
-			,ParentPositionID=pos_ParentPositionID
-			,DivisionId=defaultDivisID;SELECT @@Identity AS Id INTO positID;
-		
-		IF positID = 0 THEN
-		
-			SELECT RowID FROM position WHERE PositionName=pos_PositionName AND OrganizationID=pos_OrganizationID INTO positID;
-		
-		END IF;
-		
-	END IF;
 
 	INSERT INTO `position`
 	(
-		PositionName
+		RowID
+		,PositionName
 		,Created
 		,CreatedBy
 		,OrganizationID
 		,LastUpdBy
 		,ParentPositionID
 		,DivisionId
-	)	SELECT
-		pos_PositionName
-		, CURRENT_TIMESTAMP()
-		, pos_CreatedBy
-		, og.RowID
-		, pos_CreatedBy
-		, NULL
-		, NULL
-		FROM (SELECT RowID FROM organization WHERE RowID != pos_OrganizationID) og
-	ON DUPLICATE KEY UPDATE LastUpd=IFNULL(ADDDATE(LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP()), LastUpdBy=IFNULL(LastUpdBy, CreatedBy)
+	) VALUES (
+		pos_RowID
+		,pos_PositionName
+		,CURRENT_TIMESTAMP()
+		,pos_CreatedBy
+		,pos_OrganizationID
+		,pos_LastUpdBy
+		,pos_ParentPositionID
+		,pos_DivisionId
+	) ON 
+	DUPLICATE 
+	KEY 
+	UPDATE 
+		PositionName=pos_PositionName
+		,LastUpd=CURRENT_TIMESTAMP()
+		,LastUpdBy=pos_LastUpdBy
+		,ParentPositionID=pos_ParentPositionID
+		,DivisionId=pos_DivisionId; SELECT @@identity INTO positID;
+
+	IF hasId THEN
+
+		UPDATE `position` pos
+		SET pos.PositionName = pos_PositionName
+		, pos.LastUpd=IFNULL(pos.LastUpd, CURRENT_TIMESTAMP())
+		, pos.LastUpdBy=IFNULL(pos.LastUpdBy, pos.CreatedBy)
+		WHERE pos.OrganizationID != pos_OrganizationID
+		AND pos.PositionName = originalPositionName
 		;
 
+	ELSE
+	
+		INSERT INTO `position`
+		(	
+			PositionName
+			,Created
+			,CreatedBy
+			,OrganizationID
+			,LastUpdBy
+		) SELECT pos_PositionName
+			, CURRENT_TIMESTAMP()
+			, pos_CreatedBy
+			, i.`OrgId`
+			, pos_CreatedBy
+		FROM (SELECT og.RowID `OrgId`
+				FROM organization og
+				WHERE og.RowID != pos_OrganizationID) i
+		ON DUPLICATE KEY UPDATE PositionName=pos_PositionName, LastUpdBy=IFNULL(LastUpdBy, CreatedBy), LastUpd=IFNULL(LastUpd, CURRENT_TIMESTAMP());
+
+	END IF;
+	
 ELSE
 	CALL mysqlmsgbox('It seems that your privilege for this module has been modify. Please recheck your privilege.');
 END IF;

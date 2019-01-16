@@ -435,9 +435,6 @@ Partial Class PayStub
         Me.Label36 = New System.Windows.Forms.Label()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.tsbtngenpayroll = New System.Windows.Forms.ToolStripButton()
-        Me.tsbtnprintpayslip = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.DeclaredToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ActualToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsbtnprintall = New System.Windows.Forms.ToolStripDropDownButton()
         Me.DeclaredToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ActualToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
@@ -451,6 +448,9 @@ Partial Class PayStub
         Me.tsbtnAudittrail = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel8 = New System.Windows.Forms.ToolStripLabel()
         Me.tsbtnDelEmpPayroll = New System.Windows.Forms.ToolStripButton()
+        Me.tsbtnprintpayslip = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.DeclaredToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ActualToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.Label60 = New System.Windows.Forms.Label()
@@ -530,7 +530,7 @@ Partial Class PayStub
         Me.dgvpayper.ReadOnly = True
         Me.dgvpayper.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvpayper.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvpayper.Size = New System.Drawing.Size(350, 423)
+        Me.dgvpayper.Size = New System.Drawing.Size(350, 245)
         Me.dgvpayper.TabIndex = 0
         '
         'Column1
@@ -666,7 +666,7 @@ Partial Class PayStub
         Me.Label25.Font = New System.Drawing.Font("Arial", 15.75!, System.Drawing.FontStyle.Bold)
         Me.Label25.Location = New System.Drawing.Point(0, 0)
         Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(1370, 21)
+        Me.Label25.Size = New System.Drawing.Size(1261, 21)
         Me.Label25.TabIndex = 139
         Me.Label25.Text = "PAYROLL"
         Me.Label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1086,7 +1086,7 @@ Partial Class PayStub
         Me.linkPrev.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
         Me.linkPrev.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
         Me.linkPrev.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.linkPrev.Location = New System.Drawing.Point(8, 630)
+        Me.linkPrev.Location = New System.Drawing.Point(8, 452)
         Me.linkPrev.Name = "linkPrev"
         Me.linkPrev.Size = New System.Drawing.Size(38, 15)
         Me.linkPrev.TabIndex = 141
@@ -1100,7 +1100,7 @@ Partial Class PayStub
         Me.linkNxt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
         Me.linkNxt.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
         Me.linkNxt.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.linkNxt.Location = New System.Drawing.Point(313, 630)
+        Me.linkNxt.Location = New System.Drawing.Point(313, 452)
         Me.linkNxt.Name = "linkNxt"
         Me.linkNxt.Size = New System.Drawing.Size(39, 15)
         Me.linkNxt.TabIndex = 142
@@ -1128,7 +1128,7 @@ Partial Class PayStub
         Me.TabControl1.Location = New System.Drawing.Point(367, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1003, 654)
+        Me.TabControl1.Size = New System.Drawing.Size(894, 476)
         Me.TabControl1.TabIndex = 175
         '
         'tbppayroll
@@ -1138,7 +1138,7 @@ Partial Class PayStub
         Me.tbppayroll.Location = New System.Drawing.Point(4, 4)
         Me.tbppayroll.Name = "tbppayroll"
         Me.tbppayroll.Padding = New System.Windows.Forms.Padding(3)
-        Me.tbppayroll.Size = New System.Drawing.Size(995, 621)
+        Me.tbppayroll.Size = New System.Drawing.Size(886, 443)
         Me.tbppayroll.TabIndex = 0
         Me.tbppayroll.Text = "PAYROLL               "
         Me.tbppayroll.UseVisualStyleBackColor = True
@@ -1149,7 +1149,7 @@ Partial Class PayStub
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(3, 28)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(989, 590)
+        Me.Panel1.Size = New System.Drawing.Size(880, 412)
         Me.Panel1.TabIndex = 176
         '
         'SplitContainer1
@@ -1254,8 +1254,8 @@ Partial Class PayStub
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label39)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label38)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label36)
-        Me.SplitContainer1.Size = New System.Drawing.Size(989, 590)
-        Me.SplitContainer1.SplitterDistance = 310
+        Me.SplitContainer1.Size = New System.Drawing.Size(880, 412)
+        Me.SplitContainer1.SplitterDistance = 216
         Me.SplitContainer1.TabIndex = 0
         '
         'tstrip
@@ -4256,10 +4256,10 @@ Partial Class PayStub
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.Transparent
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtngenpayroll, Me.tsbtnprintpayslip, Me.tsbtnprintall, Me.tsbtnClose, Me.tsbtnPayrollSumma, Me.ToolStripSeparator1, Me.tsSearch, Me.tsbtnSearch, Me.tsbtnAudittrail, Me.ToolStripLabel8, Me.tsbtnDelEmpPayroll})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtngenpayroll, Me.tsbtnprintall, Me.tsbtnClose, Me.tsbtnPayrollSumma, Me.ToolStripSeparator1, Me.tsSearch, Me.tsbtnSearch, Me.tsbtnAudittrail, Me.ToolStripLabel8, Me.tsbtnDelEmpPayroll, Me.tsbtnprintpayslip})
         Me.ToolStrip1.Location = New System.Drawing.Point(3, 3)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(989, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(880, 25)
         Me.ToolStrip1.TabIndex = 175
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -4270,32 +4270,6 @@ Partial Class PayStub
         Me.tsbtngenpayroll.Name = "tsbtngenpayroll"
         Me.tsbtngenpayroll.Size = New System.Drawing.Size(113, 22)
         Me.tsbtngenpayroll.Text = "Ge&nerate Payroll"
-        '
-        'tsbtnprintpayslip
-        '
-        Me.tsbtnprintpayslip.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeclaredToolStripMenuItem, Me.ActualToolStripMenuItem})
-        Me.tsbtnprintpayslip.Image = CType(resources.GetObject("tsbtnprintpayslip.Image"), System.Drawing.Image)
-        Me.tsbtnprintpayslip.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.tsbtnprintpayslip.Name = "tsbtnprintpayslip"
-        Me.tsbtnprintpayslip.Size = New System.Drawing.Size(104, 22)
-        Me.tsbtnprintpayslip.Text = "&Print pay slip"
-        Me.tsbtnprintpayslip.Visible = False
-        '
-        'DeclaredToolStripMenuItem
-        '
-        Me.DeclaredToolStripMenuItem.AccessibleDescription = "0"
-        Me.DeclaredToolStripMenuItem.Name = "DeclaredToolStripMenuItem"
-        Me.DeclaredToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
-        Me.DeclaredToolStripMenuItem.Tag = "0"
-        Me.DeclaredToolStripMenuItem.Text = "Declared"
-        '
-        'ActualToolStripMenuItem
-        '
-        Me.ActualToolStripMenuItem.AccessibleDescription = "1"
-        Me.ActualToolStripMenuItem.Name = "ActualToolStripMenuItem"
-        Me.ActualToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
-        Me.ActualToolStripMenuItem.Tag = "1"
-        Me.ActualToolStripMenuItem.Text = "Actual"
         '
         'tsbtnprintall
         '
@@ -4309,14 +4283,14 @@ Partial Class PayStub
         'DeclaredToolStripMenuItem1
         '
         Me.DeclaredToolStripMenuItem1.Name = "DeclaredToolStripMenuItem1"
-        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
         Me.DeclaredToolStripMenuItem1.Tag = "0"
         Me.DeclaredToolStripMenuItem1.Text = "Declared"
         '
         'ActualToolStripMenuItem1
         '
         Me.ActualToolStripMenuItem1.Name = "ActualToolStripMenuItem1"
-        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
         Me.ActualToolStripMenuItem1.Tag = "1"
         Me.ActualToolStripMenuItem1.Text = "Actual"
         '
@@ -4341,13 +4315,13 @@ Partial Class PayStub
         'DeclaredToolStripMenuItem2
         '
         Me.DeclaredToolStripMenuItem2.Name = "DeclaredToolStripMenuItem2"
-        Me.DeclaredToolStripMenuItem2.Size = New System.Drawing.Size(152, 22)
+        Me.DeclaredToolStripMenuItem2.Size = New System.Drawing.Size(120, 22)
         Me.DeclaredToolStripMenuItem2.Text = "Declared"
         '
         'ActualToolStripMenuItem2
         '
         Me.ActualToolStripMenuItem2.Name = "ActualToolStripMenuItem2"
-        Me.ActualToolStripMenuItem2.Size = New System.Drawing.Size(152, 22)
+        Me.ActualToolStripMenuItem2.Size = New System.Drawing.Size(120, 22)
         Me.ActualToolStripMenuItem2.Text = "Actual"
         '
         'ToolStripSeparator1
@@ -4398,6 +4372,32 @@ Partial Class PayStub
         Me.tsbtnDelEmpPayroll.Text = "ToolStripButton1"
         Me.tsbtnDelEmpPayroll.ToolTipText = "Deletes only the selected" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "payroll of an employee"
         '
+        'tsbtnprintpayslip
+        '
+        Me.tsbtnprintpayslip.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeclaredToolStripMenuItem, Me.ActualToolStripMenuItem})
+        Me.tsbtnprintpayslip.Image = CType(resources.GetObject("tsbtnprintpayslip.Image"), System.Drawing.Image)
+        Me.tsbtnprintpayslip.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tsbtnprintpayslip.Name = "tsbtnprintpayslip"
+        Me.tsbtnprintpayslip.Size = New System.Drawing.Size(104, 22)
+        Me.tsbtnprintpayslip.Text = "&Print pay slip"
+        Me.tsbtnprintpayslip.Visible = False
+        '
+        'DeclaredToolStripMenuItem
+        '
+        Me.DeclaredToolStripMenuItem.AccessibleDescription = "0"
+        Me.DeclaredToolStripMenuItem.Name = "DeclaredToolStripMenuItem"
+        Me.DeclaredToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
+        Me.DeclaredToolStripMenuItem.Tag = "0"
+        Me.DeclaredToolStripMenuItem.Text = "Declared"
+        '
+        'ActualToolStripMenuItem
+        '
+        Me.ActualToolStripMenuItem.AccessibleDescription = "1"
+        Me.ActualToolStripMenuItem.Name = "ActualToolStripMenuItem"
+        Me.ActualToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
+        Me.ActualToolStripMenuItem.Tag = "1"
+        Me.ActualToolStripMenuItem.Text = "Actual"
+        '
         'TabControl2
         '
         Me.TabControl2.Controls.Add(Me.TabPage2)
@@ -4409,6 +4409,7 @@ Partial Class PayStub
         Me.TabControl2.SelectedIndex = 0
         Me.TabControl2.Size = New System.Drawing.Size(350, 158)
         Me.TabControl2.TabIndex = 176
+        Me.TabControl2.Visible = False
         '
         'TabPage2
         '
@@ -4521,6 +4522,7 @@ Partial Class PayStub
         Me.Button3.TabIndex = 177
         Me.Button3.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.Button3.UseVisualStyleBackColor = False
+        Me.Button3.Visible = False
         '
         'Button1
         '
@@ -4555,7 +4557,7 @@ Partial Class PayStub
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel4.Location = New System.Drawing.Point(0, 21)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1370, 654)
+        Me.Panel4.Size = New System.Drawing.Size(1261, 476)
         Me.Panel4.TabIndex = 179
         '
         'Timer1
@@ -4567,7 +4569,7 @@ Partial Class PayStub
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(234, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1370, 675)
+        Me.ClientSize = New System.Drawing.Size(1261, 497)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Label25)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None

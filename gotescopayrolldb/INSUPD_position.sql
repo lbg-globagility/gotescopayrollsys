@@ -68,8 +68,28 @@ IF USER_HAS_PRIVILEGE(pos_CreatedBy,pos_OrganizationID,VIEW_privilege('Position'
 		AND pos.PositionName = originalPositionName
 		;
 
+		INSERT INTO `position`
+		(	
+			PositionName
+			,Created
+			,CreatedBy
+			,OrganizationID
+			,LastUpdBy
+		) SELECT pos_PositionName
+			, CURRENT_TIMESTAMP()
+			, pos_CreatedBy
+			, i.`OrgId`
+			, pos_CreatedBy
+		FROM (SELECT og.RowID `OrgId`
+		      , pos.RowID `PositionId`
+				FROM organization og
+				LEFT JOIN `position` pos ON pos.OrganizationID=og.RowID AND pos.PositionName = originalPositionName
+				WHERE og.RowID != pos_OrganizationID) i
+		WHERE i.`PositionId` IS NULL
+		ON DUPLICATE KEY UPDATE PositionName=pos_PositionName, LastUpdBy=IFNULL(LastUpdBy, CreatedBy), LastUpd=IFNULL(ADDDATE(LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP());
+
 	ELSE
-	
+
 		INSERT INTO `position`
 		(	
 			PositionName
@@ -85,10 +105,10 @@ IF USER_HAS_PRIVILEGE(pos_CreatedBy,pos_OrganizationID,VIEW_privilege('Position'
 		FROM (SELECT og.RowID `OrgId`
 				FROM organization og
 				WHERE og.RowID != pos_OrganizationID) i
-		ON DUPLICATE KEY UPDATE PositionName=pos_PositionName, LastUpdBy=IFNULL(LastUpdBy, CreatedBy), LastUpd=IFNULL(LastUpd, CURRENT_TIMESTAMP());
+		ON DUPLICATE KEY UPDATE PositionName=pos_PositionName, LastUpdBy=IFNULL(LastUpdBy, CreatedBy), LastUpd=IFNULL(ADDDATE(LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP());
 
 	END IF;
-	
+
 ELSE
 	CALL mysqlmsgbox('It seems that your privilege for this module has been modify. Please recheck your privilege.');
 END IF;

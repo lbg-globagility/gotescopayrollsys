@@ -42,7 +42,7 @@ IF is_deptmngr = TRUE THEN
 	INNER JOIN employee e ON e.RowID=eot.EmployeeID AND e.OrganizationID=eot.OrganizationID AND e.DeptManager=dept_mngr_rowid
 	WHERE eot.OrganizationID=eot_OrganizationID
 	AND eot.EmployeeID=eot_EmployeeID
-	ORDER BY eot.OTStartDate,eot.OTEndDate
+	ORDER BY eot.OTStartDate DESC,eot.OTEndDate DESC
 	LIMIT pagenumber, 10;
 
 ELSE
@@ -93,7 +93,7 @@ ELSE
 			WHERE eot.OrganizationID=eot_OrganizationID
 			AND eot.EmployeeID=eot_EmployeeID) i
 	
-	ORDER BY i.OTStartDate, i.OTEndDate
+	ORDER BY i.OTStartDate DESC, i.OTEndDate DESC
 	LIMIT pagenumber, 10;
 	
 END IF;

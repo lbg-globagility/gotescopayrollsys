@@ -300,7 +300,7 @@ UNION
 			       ON rd.EmployeeID = e.RowID
 			
 			LEFT JOIN (SELECT l.*
-			           , SUM(l.LeavePayment) `SumLeavePay`
+			           , SUM(ROUND(l.LeavePayment, 2)) `SumLeavePay`
 			           FROM leavetimeentry l
 						  WHERE l.OrganizationID=ps_OrganizationID
 						  AND l.`Date` BETWEEN paypdatefrom AND paypdateto
@@ -481,7 +481,7 @@ UNION
 			       ON rd.EmployeeID = e.RowID
 			
 			LEFT JOIN (SELECT l.*
-			           , SUM(l.LeavePayment) `SumLeavePay`
+			           , SUM(ROUND(l.LeavePayment, 2)) `SumLeavePay`
 			           FROM leavetimeentry l
 						  WHERE l.OrganizationID=ps_OrganizationID
 						  AND l.`Date` BETWEEN paypdatefrom AND paypdateto

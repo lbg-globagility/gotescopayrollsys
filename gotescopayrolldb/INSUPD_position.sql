@@ -58,7 +58,7 @@ IF USER_HAS_PRIVILEGE(pos_CreatedBy,pos_OrganizationID,VIEW_privilege('Position'
 		,ParentPositionID=pos_ParentPositionID
 		,DivisionId=pos_DivisionId; SELECT @@identity INTO positID;
 
-	IF hasId THEN
+	IF hasId = TRUE THEN
 
 		UPDATE `position` pos
 		SET pos.PositionName = pos_PositionName
@@ -69,24 +69,25 @@ IF USER_HAS_PRIVILEGE(pos_CreatedBy,pos_OrganizationID,VIEW_privilege('Position'
 		;
 
 		INSERT INTO `position`
-		(	
-			PositionName
+		(
+			RowID
+			,PositionName
 			,Created
 			,CreatedBy
 			,OrganizationID
 			,LastUpdBy
-		) SELECT pos_PositionName
-			, CURRENT_TIMESTAMP()
-			, pos_CreatedBy
-			, i.`OrgId`
-			, pos_CreatedBy
-		FROM (SELECT og.RowID `OrgId`
-		      , pos.RowID `PositionId`
-				FROM organization og
-				LEFT JOIN `position` pos ON pos.OrganizationID=og.RowID AND pos.PositionName = originalPositionName
-				WHERE og.RowID != pos_OrganizationID) i
-		WHERE i.`PositionId` IS NULL
-		ON DUPLICATE KEY UPDATE PositionName=pos_PositionName, LastUpdBy=IFNULL(LastUpdBy, CreatedBy), LastUpd=IFNULL(ADDDATE(LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP());
+		) SELECT pos.RowID
+	      , pos_PositionName
+	      , CURRENT_TIMESTAMP()
+	      , pos_CreatedBy
+	      , og.RowID
+	      , pos_CreatedBy
+			FROM (SELECT RowID FROM organization) og
+			LEFT JOIN (SELECT RowID, OrganizationID FROM `position` WHERE PositionName = originalPositionName) pos ON pos.OrganizationID=og.RowID
+			WHERE og.RowID != pos_OrganizationID
+			AND pos.RowID IS NULL
+		ON DUPLICATE KEY UPDATE PositionName=pos_PositionName, LastUpdBy=IFNULL(LastUpdBy, CreatedBy), LastUpd=IFNULL(ADDDATE(LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP())
+		;
 
 	ELSE
 

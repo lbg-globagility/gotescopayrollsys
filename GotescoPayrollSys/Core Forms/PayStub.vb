@@ -8417,7 +8417,7 @@ Public Class PayStub
                               + holidaybayad
             'lblsubtot.Text = FormatNumber((ValNoComma(sumallbasic)), 2)
             'lblsubtot.Text = FormatNumber(ValNoComma(drow("TotalDayPay")), 2)
-            If drow("EmployeeType").ToString = "Fixer" Then
+            If drow("EmployeeType").ToString = "Fixed" Then
 
                 lblsubtot.Text = FormatNumber((strdouble), 2)
 
@@ -8651,7 +8651,7 @@ Public Class PayStub
                               + holidaybayad
             'lblsubtot.Text = FormatNumber(ValNoComma(sumallbasic), 2)
             'lblsubtot.Text = FormatNumber((ValNoComma(drow("TotalDayPay"))), 2)
-            If drow("EmployeeType").ToString = "Fixer" Then
+            If drow("EmployeeType").ToString = "Fixed" Then
 
                 lblsubtot.Text = FormatNumber((strdouble), 2)
 

@@ -347,16 +347,22 @@ SELECT SUM(ea.AllowanceAmount) FROM employeeallowance ea WHERE ea.ProductID != @
 SELECT sh.DivisorToDailyRate
 FROM employeeshift esh INNER JOIN shift sh ON sh.RowID=esh.ShiftID WHERE esh.RowID=NEW.EmployeeShiftID INTO rate_this_date;
 SET @daily_salary = e_rateperday;
-SET NEW.TaxableDailyAllowance = (SELECT (IF(pr.PayType='Regular Day'
-															, IF(NEW.TotalDayPay > NEW.RegularHoursAmount, IF(NEW.RegularHoursAmount=0, ((NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) * (@daily_salary / rate_this_date)), NEW.RegularHoursAmount), NEW.TotalDayPay)
-															, IF(pr.PayType='Special Non-Working Holiday' AND e.CalcSpecialHoliday = '1'
-																, IF(e.EmployeeType = 'Daily', (NEW.RegularHoursAmount / pr.`PayRate`), NEW.HolidayPayAmount)
-																, IF(pr.PayType='Special Non-Working Holiday' AND e.CalcSpecialHoliday = '0'
-																	, IF(e.EmployeeType = 'Daily', NEW.RegularHoursAmount, NEW.HolidayPayAmount)
-																	, IF(pr.PayType='Regular Holiday' AND e.CalcHoliday = '1'
-																		
-																		, NEW.HolidayPayAmount + ((NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) * (@daily_salary / rate_this_date))
-																		, 0)))) / @daily_salary) * TaxableDailyAllowanceAmount
+SET NEW.TaxableDailyAllowance = (SELECT (
+NULLIF(IF(pr.PayType='Regular Day'
+   , IF(NEW.TotalDayPay > NEW.RegularHoursAmount
+	     , IF(NEW.RegularHoursAmount=0
+		       , ((NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) * (NULLIF(@daily_salary, 0) / rate_this_date))
+				 , NEW.RegularHoursAmount), NEW.TotalDayPay)
+   , IF(pr.PayType='Special Non-Working Holiday' AND e.CalcSpecialHoliday = '1'
+        , IF(e.EmployeeType = 'Daily', (NULLIF(NEW.RegularHoursAmount, 0) / pr.`PayRate`), NEW.HolidayPayAmount)
+        , IF(pr.PayType='Special Non-Working Holiday' AND e.CalcSpecialHoliday = '0'
+             , IF(e.EmployeeType = 'Daily', NEW.RegularHoursAmount, NEW.HolidayPayAmount)
+             , IF(pr.PayType='Regular Holiday' AND e.CalcHoliday = '1'
+				      , NEW.HolidayPayAmount + ((NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) * (NULLIF(@daily_salary, 0) / rate_this_date))
+                   , 0)
+             )
+        )
+  ), 0) / @daily_salary) * TaxableDailyAllowanceAmount
 											FROM employee e
 											INNER JOIN payrate pr ON pr.RowID=NEW.PayRateID
 											WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID);

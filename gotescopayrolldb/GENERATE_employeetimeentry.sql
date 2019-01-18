@@ -865,13 +865,13 @@ IF ete_HrsLate IS NULL THEN
 END IF;
 
 
-IF ete_HrsLate > 4 AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 9 THEN
+/*IF ete_HrsLate > 4 AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 9 THEN
 	SET ete_HrsLate = COMPUTE_TimeDifference(SUBTIME(shifttimeto,'04:00'), shifttimeto);
 
 ELSEIF ete_HrsLate > 5 AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 10 THEN
 	SET ete_HrsLate = COMPUTE_TimeDifference(SUBTIME(shifttimeto,'05:00'), shifttimeto);
 
-END IF;
+END IF;*/
 
 
 IF ete_HrsUnder IS NULL THEN

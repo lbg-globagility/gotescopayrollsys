@@ -15,7 +15,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     Private basic_alphabet() As String =
         New String() {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-                      "AA", "AB"}
+                      "AA", "AB", "AC"}
 
     Private column_headers() As String =
         New String() {"Code",
@@ -552,7 +552,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         worksheet.Cells.AutoFitColumns(2, 22.71)
 
-                        worksheet.Cells("A1").AutoFitColumns(4.9, 5.3)
+                        worksheet.Cells("A1").AutoFitColumns(4.9, 9.1)
 
                         excl_pkg.Save()
 

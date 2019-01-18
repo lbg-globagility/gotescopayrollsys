@@ -9,7 +9,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RECOMPUTE_employeeleave`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE, IN `DivisionRowID` INT)
     DETERMINISTIC
 BEGIN
-
+#RECOMPUTE_employeeleave
 DECLARE anyint INT(11);
 
 DECLARE empleaveRowIDtodel VARCHAR(250);
@@ -22,12 +22,22 @@ SELECT EXISTS(SELECT lv.RowID FROM employeeleave lv INNER JOIN employee e ON e.R
 
 IF atleast_one = '1' THEN
 
-	DELETE FROM employeeleave
-	WHERE OrganizationID=OrganizID
-	AND (LeaveStartDate >= FromPayDate OR LeaveEndDate >= FromPayDate)
-	AND (LeaveStartDate <= ToPayDate OR LeaveEndDate <= ToPayDate);
-	ALTER TABLE employeeleave AUTO_INCREMENT = 0;
-	 
+	SET @ids = NULL;
+
+	SET SESSION group_concat_max_len = 20480;
+
+	SELECT GROUP_CONCAT(elv.RowID)
+	FROM employeeleave elv
+	INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+	INNER JOIN `position` pos ON pos.RowID=e.PositionID
+	INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID)
+	WHERE elv.OrganizationID=OrganizID
+	AND (elv.LeaveStartDate >= FromPayDate OR elv.LeaveEndDate >= FromPayDate)
+	AND (elv.LeaveStartDate <= ToPayDate OR elv.LeaveEndDate <= ToPayDate)
+	INTO @ids;
+
+	/**/DELETE FROM employeeleave WHERE FIND_IN_SET(RowID, @ids) > 0;
+
 	INSERT INTO employeeleave
 	(
 		OrganizationID
@@ -76,7 +86,7 @@ IF atleast_one = '1' THEN
 	
 
 END IF;
-	
+
 END//
 DELIMITER ;
 

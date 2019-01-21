@@ -1176,26 +1176,30 @@ Public Class TimEntduration
 
         Dim half_progress = 50
 
-        For Each drow As DataRow In dt.Rows
+        'For Each drow As DataRow In dt.Rows
 
-            Dim _str_quer As String = Convert.ToString(drow("Result"))
+        '    Dim _str_quer As String = Convert.ToString(drow("Result"))
 
-            Dim _sql As New SQL(_str_quer)
+        '    Dim _sql As New SQL(_str_quer)
 
-            '_sql.ExecuteQuery()
+        '    '_sql.ExecuteQuery()
 
-            If _sql.HasError Then
-                Throw _sql.ErrorException
-            End If
+        '    If _sql.HasError Then
+        '        Throw _sql.ErrorException
+        '    End If
 
-            progress_value =
-                ((i / row_count) * half_progress)
+        '    progress_value =
+        '        ((i / row_count) * half_progress)
 
-            bgWork.ReportProgress((half_progress + progress_value), String.Empty)
+        '    bgWork.ReportProgress((half_progress + progress_value), String.Empty)
+        bgWork.ReportProgress(100)
+        If sql1.HasError Then
+            Throw sql1.ErrorException
+        End If
 
-            i += 1
+        '    i += 1
 
-        Next
+        'Next
 
         Console.WriteLine(progress_value)
 

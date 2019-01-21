@@ -67,11 +67,17 @@ DECLARE ecola_rowid INT(11);
 
 DECLARE default_min_hrswork INT(11) DEFAULT 8;
 
+DECLARE firstPayDateFrom, firstPayDateTo DATE;
+
 SELECT RowID FROM product WHERE OrganizationID=NEW.OrganizationID AND LCASE(PartNo)='ecola' AND `Category`='Allowance type' INTO ecola_rowid;
 
 SELECT TRIM(SUBSTRING_INDEX(TRIM(SUBSTRING_INDEX(ii.COLUMN_COMMENT,',',2)),',',-1)) FROM information_schema.`COLUMNS` ii WHERE ii.TABLE_SCHEMA='gotescopayrolldatabaseoct3' AND ii.COLUMN_NAME='Status' AND ii.TABLE_NAME='employeeloanschedule' INTO loan_inprogress_status;
 
-SELECT pr.`Half` FROM payperiod pr WHERE pr.RowID=NEW.PayPeriodID INTO IsrbxpayrollFirstHalfOfMonth;
+SELECT pr.`Half`, pp.PayFromDate, pp.PayToDate
+FROM payperiod pr
+INNER JOIN payperiod pp ON pp.OrganizationID=pr.OrganizationID AND pp.TotalGrossSalary=pr.TotalGrossSalary AND pp.`Year`=pr.`Year` AND pp.OrdinalValue=1
+WHERE pr.RowID=NEW.PayPeriodID
+INTO IsrbxpayrollFirstHalfOfMonth, firstPayDateFrom, firstPayDateTo;
 
 SELECT pr.PayFromDate
 FROM payperiod pr
@@ -903,12 +909,8 @@ UPDATE
 SELECT EXISTS(SELECT RowID FROM employee WHERE RowID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND (DateRegularized <= NEW.PayFromDate OR DateRegularized <= NEW.PayToDate)) INTO isOneYearService;
 IF isOneYearService = '1' THEN
 	SELECT RowID FROM product WHERE PartNo='Vacation leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
-	SELECT e.LeaveBalance
-	
-	,e.SickLeaveBalance
-	,e.MaternityLeaveBalance
-	,e.OtherLeaveBalance
-	,e.AdditionalVLBalance
+	SELECT #e.LeaveBalance,e.SickLeaveBalance,e.MaternityLeaveBalance,e.OtherLeaveBalance,e.AdditionalVLBalance
+	e.LeaveAllowance, e.SickLeaveAllowance, e.MaternityLeaveAllowance, e.OtherLeaveAllowance, e.AdditionalVLAllowance
 	FROM employee e
 	LEFT JOIN payperiod pp ON pp.RowID=NEW.PayPeriodID
 	WHERE e.RowID=NEW.EmployeeID
@@ -941,36 +943,75 @@ IF isOneYearService = '1' THEN
 	
 	
 	
-	
-	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, ml_per_payp) INTO anyint;
+	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, (ml_per_payp - MAX(i.`MaternityLeaveHours`)))
+	FROM (SELECT SUM(et.MaternityLeaveHours) `MaternityLeaveHours`
+			FROM employeetimeentry et
+			WHERE et.EmployeeID=NEW.EmployeeID
+			AND et.OrganizationID=NEW.OrganizationID
+			AND et.`Date` BETWEEN firstPayDateFrom AND NEW.PayToDate
+		UNION
+			SELECT 0 `MaternityLeaveHours`) i
+	INTO anyint;
 	
 	SELECT RowID FROM product WHERE PartNo='Others' AND OrganizationID=NEW.OrganizationID AND `Category`='Leave Type' INTO product_rowid;
 	
 	
 	
 	
-	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, othr_per_payp) INTO anyint;
+	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, (othr_per_payp - MAX(i.`OtherLeaveHours`)))
+	FROM (SELECT SUM(et.OtherLeaveHours) `OtherLeaveHours`
+			FROM employeetimeentry et
+			WHERE et.EmployeeID=NEW.EmployeeID
+			AND et.OrganizationID=NEW.OrganizationID
+			AND et.`Date` BETWEEN firstPayDateFrom AND NEW.PayToDate
+		UNION
+			SELECT 0 `OtherLeaveHours`) i
+	INTO anyint;
 	
 	SELECT RowID FROM product WHERE PartNo='Sick leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
 	
 	
 	
 	
-	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, sl_per_payp) INTO anyint;
+	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, (sl_per_payp - MAX(i.`SickLeaveHours`)))
+	FROM (SELECT SUM(et.SickLeaveHours) `SickLeaveHours`
+			FROM employeetimeentry et
+			WHERE et.EmployeeID=NEW.EmployeeID
+			AND et.OrganizationID=NEW.OrganizationID
+			AND et.`Date` BETWEEN firstPayDateFrom AND NEW.PayToDate
+		UNION
+			SELECT 0 `SickLeaveHours`) i
+	INTO anyint;
 	
 	SELECT RowID FROM product WHERE PartNo='Vacation leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
 	
 	
 	
 	
-	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, vl_per_payp) INTO anyint;
+	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, (vl_per_payp - MAX(i.`VacationLeaveHours`)))
+	FROM (SELECT SUM(et.VacationLeaveHours) `VacationLeaveHours`
+			FROM employeetimeentry et
+			WHERE et.EmployeeID=NEW.EmployeeID
+			AND et.OrganizationID=NEW.OrganizationID
+			AND et.`Date` BETWEEN firstPayDateFrom AND NEW.PayToDate
+		UNION
+			SELECT 0 `VacationLeaveHours`) i
+	INTO anyint;
 
 	SELECT RowID FROM product WHERE PartNo='Additional VL' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
 	
 	
 	
 	
-	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, addvl_per_payp) INTO anyint;
+	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, (addvl_per_payp - MAX(i.`AdditionalVLHours`)))
+	FROM (SELECT SUM(et.AdditionalVLHours) `AdditionalVLHours`
+			FROM employeetimeentry et
+			WHERE et.EmployeeID=NEW.EmployeeID
+			AND et.OrganizationID=NEW.OrganizationID
+			AND et.`Date` BETWEEN firstPayDateFrom AND NEW.PayToDate
+		UNION
+			SELECT 0 `AdditionalVLHours`) i
+	INTO anyint;
 	
 ELSE
 

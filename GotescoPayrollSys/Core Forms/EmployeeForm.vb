@@ -10622,7 +10622,7 @@ Public Class EmployeeForm
                               " FROM (SELECT MAX(LoanNumber) + 1 `LoanNumber`",
                               "       FROM employeeloanschedule",
                               "       WHERE OrganizationID = ", z_OrganizationID,
-                              "       AND EmployeeID = ", dgvEmp.CurrentRow.Cells("RowID").Value,
+                              "       AND EmployeeID = ", Convert.ToInt32(publicEmpRowID),
                               "       AND LoanNumber REGEXP '^[0-9]+$'",
                               "       UNION SELECT 0 `LoanNumber`) i;")
 

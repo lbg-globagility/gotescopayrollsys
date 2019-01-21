@@ -974,7 +974,7 @@ Public Class PayrollGeneration
 
                         Dim phh_ee, phh_er As Double
                         Dim phh_param = New Object() {amount_used_to_get_sss_contrib}
-
+                        Dim employeePrimaKey = Convert.ToInt32(drow("RowID"))
                         Dim phh_sql As New SQL(phh_contrib_quer, phh_param)
                         Dim caught_result As New DataTable
                         'If is_year2018 = False Then
@@ -1500,28 +1500,32 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
 
         Dim return_value, value1, value2 As Decimal
 
-        'Dim contrib_amout, _rate, min_contrib, max_contrib As Decimal
+        Dim contrib_amout, _rate, min_contrib, max_contrib As Decimal
 
-        'For Each _phh As newphilhealthimplement In new_philhealth_collect
+        Dim _phh = new_philhealth_collect.FirstOrDefault
 
-        '    _rate = (_phh.Rate * base_multiplier)
+        If _phh Is Nothing Then
+            Return 0
+        End If
 
-        '    contrib_amout = (_rate * amount_worked)
+        _rate = (_phh.Rate * base_multiplier)
 
-        '    min_contrib = _phh.MinimumContribution
-        '    max_contrib = _phh.MaximumContribution
+        contrib_amout = (_rate * amount_worked)
 
-        '    If min_contrib > contrib_amout Then
-        '        contrib_amout = min_contrib
-        '    ElseIf max_contrib < contrib_amout Then
-        '        contrib_amout = max_contrib
-        '    End If
+        min_contrib = _phh.MinimumContribution
+        max_contrib = _phh.MaximumContribution
 
-        '    'value1 = (contrib_amout / half_divisor)
-        '    'value2 = (contrib_amout - value1)
-        '    '
-        value1 = (new_philhealth_deduction / half_divisor)
-        value2 = (new_philhealth_deduction - value1)
+        If min_contrib > contrib_amout Then
+            contrib_amout = min_contrib
+        ElseIf max_contrib < contrib_amout Then
+            contrib_amout = max_contrib
+        End If
+
+        value1 = (contrib_amout / half_divisor)
+        value2 = (contrib_amout - value1)
+
+        'value1 = (new_philhealth_deduction / half_divisor)
+        'value2 = (new_philhealth_deduction - value1)
 
         Dim number_array = New Decimal() {value1, value2}
 
@@ -1530,7 +1534,6 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         Else
             return_value = number_array.Max
         End If
-        'Next
 
         Return return_value
     End Function

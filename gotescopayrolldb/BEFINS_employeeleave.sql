@@ -11,6 +11,8 @@ CREATE TRIGGER `BEFINS_employeeleave` BEFORE INSERT ON `employeeleave` FOR EACH 
 
 DECLARE selected_leavebal DECIMAL(11,2) DEFAULT 0;
 
+DECLARE hasLatestPaystub, isFirstPeriod, isCelebratesRegularization BOOL DEFAULT FALSE;
+
 /*********************************************************
 START METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
 *********************************************************/
@@ -19,6 +21,17 @@ IF NEW.Status2 = 'Pending' AND NEW.`Status` = 'Approved' THEN
 	SET NEW.Status2 = NEW.`Status`;
 
 END IF;
+
+SELECT
+EXISTS(SELECT ps.RowID
+		FROM paystub ps
+		INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.Undeclared = '1'
+		INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo = NEW.LeaveType
+		INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave Type'
+		WHERE ps.EmployeeID=NEW.EmployeeID
+		AND NEW.LeaveStartDate BETWEEN ps.PayFromDate AND ps.PayToDate
+		LIMIT 1)
+INTO hasLatestPaystub;
 
 IF NEW.`Status` = 'Approved' THEN
 	
@@ -32,17 +45,56 @@ IF NEW.`Status` = 'Approved' THEN
 	END IF;
 	
 	SET NEW.OfficialValidDays = @offcl_validdays;
-
-	SELECT i.`LeaveBalance`
-	FROM (SELECT e.RowID,e.LeaveBalance FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Vacation leave'
-			UNION
-			SELECT e.RowID,e.SickLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Sick leave'
-			UNION
-			SELECT e.RowID,e.OtherLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
-			UNION
-			SELECT e.RowID,e.MaternityLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
-			) i
-	INTO selected_leavebal;
+	
+	SELECT
+	EXISTS(SELECT ps.RowID
+			FROM paystub ps
+			INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND pp.OrdinalValue = 1
+			WHERE ps.EmployeeID=NEW.EmployeeID
+			AND ps.OrganizationID=NEW.OrganizationID
+			LIMIT 1)
+	INTO isFirstPeriod;
+	
+	SELECT
+	EXISTS(SELECT e.RowID
+			FROM employee e
+			INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND e.DateRegularized BETWEEN pp.PayFromDate AND pp.PayToDate
+			WHERE e.RowID=NEW.EmployeeID)
+	INTO isCelebratesRegularization;
+	
+	IF (hasLatestPaystub = FALSE AND isFirstPeriod = TRUE)
+		OR isCelebratesRegularization = TRUE THEN
+	
+		SELECT i.`LeaveBalance`
+		FROM (SELECT e.RowID,e.LeaveAllowance FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Vacation leave'
+				UNION
+				SELECT e.RowID,e.SickLeaveAllowance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Sick leave'
+				UNION
+				SELECT e.RowID,e.OtherLeaveAllowance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
+				UNION
+				SELECT e.RowID,e.MaternityLeaveAllowance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
+				) i
+		INTO selected_leavebal;
+	
+	ELSE
+	
+		SELECT psi.PayAmount
+		FROM paystub ps
+		INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND NEW.LeaveStartDate BETWEEN pp.PayFromDate AND pp.PayToDate
+		
+		INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` AND ppd.OrganizationID=pp.OrganizationID AND ppd.TotalGrossSalary=pp.TotalGrossSalary AND ppd.OrdinalValue = (pp.OrdinalValue - 1)
+		INNER JOIN paystub pstub ON pstub.EmployeeID=ps.EmployeeID AND pstub.OrganizationID=ps.OrganizationID AND pstub.PayPeriodID=ppd.RowID
+		
+		INNER JOIN paystubitem psi ON psi.PayStubID=pstub.RowID AND psi.Undeclared = '1'
+		INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo = NEW.LeaveType
+		INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave Type'
+		
+		WHERE ps.EmployeeID=NEW.EmployeeID
+		AND ps.OrganizationID=NEW.OrganizationID
+		LIMIT 1
+		INTO selected_leavebal;
+		
+	END IF;
 	
 	SET @offcl_validhrs = 0.0;
 	

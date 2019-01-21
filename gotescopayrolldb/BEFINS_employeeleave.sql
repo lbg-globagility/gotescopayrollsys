@@ -65,14 +65,14 @@ IF NEW.`Status` = 'Approved' THEN
 	IF (hasLatestPaystub = FALSE AND isFirstPeriod = TRUE)
 		OR isCelebratesRegularization = TRUE THEN
 	
-		SELECT i.`LeaveBalance`
+		SELECT i.`LeaveAllowance`
 		FROM (SELECT e.RowID,e.LeaveAllowance FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Vacation leave'
 				UNION
-				SELECT e.RowID,e.SickLeaveAllowance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Sick leave'
+				SELECT e.RowID,e.SickLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Sick leave'
 				UNION
-				SELECT e.RowID,e.OtherLeaveAllowance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
+				SELECT e.RowID,e.OtherLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
 				UNION
-				SELECT e.RowID,e.MaternityLeaveAllowance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
+				SELECT e.RowID,e.MaternityLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
 				) i
 		INTO selected_leavebal;
 	

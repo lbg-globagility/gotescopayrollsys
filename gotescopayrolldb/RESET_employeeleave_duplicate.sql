@@ -10,11 +10,11 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RESET_employeeleave_duplicate`(IN `
     DETERMINISTIC
 BEGIN
 #RESET_employeeleave_duplicate
-DECLARE atleast_one CHAR(1);
+DECLARE atleast_one BOOL DEFAULT FALSE;
 
 SELECT EXISTS(SELECT lv.RowID FROM employeeleave lv INNER JOIN employee e ON e.RowID=lv.EmployeeID AND e.OrganizationID=lv.OrganizationID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated') INNER JOIN `position` pos ON pos.RowID=e.PositionID INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID) WHERE lv.OrganizationID=OrganizID AND (lv.LeaveStartDate >= FromPayDate OR lv.LeaveEndDate >= FromPayDate) AND (lv.LeaveStartDate <= ToPayDate OR lv.LeaveEndDate <= ToPayDate) LIMIT 1) INTO atleast_one;
 
-IF atleast_one = '1' THEN
+IF atleast_one = TRUE THEN
 
 	SET SESSION group_concat_max_len = 20480;
 

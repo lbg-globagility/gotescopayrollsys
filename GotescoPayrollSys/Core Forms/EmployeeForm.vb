@@ -2609,7 +2609,7 @@ Public Class EmployeeForm
                             '    rdMale.Checked = False
                         End If
 
-                        Dim n_ReadSQLProcedureToDatatable As New  _
+                        Dim n_ReadSQLProcedureToDatatable As New _
                             ReadSQLProcedureToDatatable("GET_emp_leaveamounts", .Cells("RowID").Value)
                         Dim catchdt As New DataTable : catchdt = n_ReadSQLProcedureToDatatable.ResultTable
 
@@ -10617,12 +10617,22 @@ Public Class EmployeeForm
         dgvEmp.Enabled = False
 
         If dgvEmp.RowCount <> 0 Then
-            loanno = getStringItem("Select COALESCE(MAX(LoanNumber),0) from employeeloanschedule where OrganizationID = '" &
-                                                 z_OrganizationID & "' And EmployeeID = '" & dgvEmp.CurrentRow.Cells("RowID").Value & "';")
+            Dim query =
+                String.Concat("SELECT MAX(i.`LoanNumber`) `LoanNumber`",
+                              " FROM (SELECT MAX(LoanNumber) + 1 `LoanNumber`",
+                              "       FROM employeeloanschedule",
+                              "       WHERE OrganizationID = ", z_OrganizationID,
+                              "       AND EmployeeID = ", dgvEmp.CurrentRow.Cells("RowID").Value,
+                              "       AND LoanNumber REGEXP '^[0-9]+$'",
+                              "       UNION SELECT 0 `LoanNumber`) i;")
+
+            loanno = getStringItem(query)
+            If loanno.Length > 0 Then
+                loanno = loanno.Replace(",", "")
+            End If
         End If
 
-        Dim getloanno As Integer = Val(loanno) + 1
-        txtloannumber.Text = getloanno
+        txtloannumber.Text = loanno
 
     End Sub
 
@@ -10749,7 +10759,7 @@ Public Class EmployeeForm
 
                     If prompt = Windows.Forms.DialogResult.Yes Then
 
-                        Dim n_ExecSQLProcedure As New  _
+                        Dim n_ExecSQLProcedure As New _
                             ExecSQLProcedure("DEL_employeeloanschedule", 192,
                                              dgvLoanList.CurrentRow.Cells("c_RowIDLoan").Value)
 

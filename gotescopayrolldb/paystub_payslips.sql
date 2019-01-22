@@ -71,6 +71,7 @@ ps.RowID
 ,e.EmployeeID `Column2`
 , (@middle_name := IF(LENGTH(TRIM(IFNULL(e.MiddleName, ''))) = 0, NULL, TRIM(e.MiddleName))) `CustomMiddleName`
 ,UCASE( CONCAT(REPLACE(CONCAT_WS(', ', e.LastName, e.FirstName, @middle_name), ',,', ','), ' ( ', e.EmployeeType, ' )') ) `Column3`
+, PROPERCASE(CONCAT_WS(', ', REPLACE(e.LastName,',',''), e.FirstName)) `Column63`
 
 ,(@basic_payment := IFNULL(IF(ps.AsActual = 1, (esa.BasicPay * (esa.TrueSalary / esa.Salary)), esa.BasicPay), 0)) `TheBasicPay`
 ,IFNULL(IF(is_actual = '1'

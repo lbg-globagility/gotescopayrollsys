@@ -281,14 +281,14 @@ AND OTStatus='Approved' AND has_timelogs_onthisdate = TRUE
 INTO OTCount;
 
 
-
+SET @breakFrom = NULL; SET @breakTo = NULL;
 
 
 SELECT
 sh.TimeFrom
 ,sh.TimeTo
 ,esh.RowID	
-,sh.RowID
+,sh.RowID, sh.BreakTimeFrom, sh.BreakTimeTo
 FROM employeeshift esh
 INNER JOIN shift sh ON sh.RowID=esh.ShiftID
 WHERE esh.EmployeeID=ete_EmpRowID
@@ -299,7 +299,7 @@ LIMIT 1
 INTO shifttimefrom
 	  ,shifttimeto
 	  ,eshRowID
-	  ,sh_rowID;
+	  ,sh_rowID, @breakFrom, @breakTo;
 	  
 IF OTCount = 1 THEN
 	
@@ -341,7 +341,8 @@ ELSE
 
 END IF;
 
-
+SET @timeStampLogIn = NULL;
+SET @timeStampLogOut = NULL;
 
 IF isRestDay = '1' THEN 
 	
@@ -464,6 +465,7 @@ ELSE
 	SELECT
 	etd.TimeIn
 	,IF(e_UTOverride = 1, etd.TimeOut, IFNULL(sh.TimeTo,etd.TimeOut))
+	, etd.TimeStampIn, etd.TimeStampOut
 	FROM employeetimeentrydetails etd
 	LEFT JOIN employeeshift esh ON esh.OrganizationID=etd.OrganizationID AND esh.EmployeeID=etd.EmployeeID AND etd.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
@@ -472,11 +474,13 @@ ELSE
 	AND etd.`Date`=ete_Date
 	LIMIT 1
 	INTO etd_TimeIn
-	     ,etd_TimeOut;
+	     ,etd_TimeOut
+		  ,@timeStampLogIn
+		  ,@timeStampLogOut;
 	
 	SELECT GRACE_PERIOD(etd_TimeIn, shifttimefrom, e_LateGracePeriod)
 	INTO etd_TimeIn;
-	
+
 	IF otstartingtime IS NULL
 		AND otstartingtime IS NULL THEN
 		
@@ -872,7 +876,23 @@ ELSEIF ete_HrsLate > 5 AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 
 	SET ete_HrsLate = COMPUTE_TimeDifference(SUBTIME(shifttimeto,'05:00'), shifttimeto);
 
 END IF;*/
+SET @minutePerHour = 60;
+SET @secPerHour = @minutePerHour * 60;
+SET @breakHours = ( TIME_TO_SEC(TIMEDIFF(@breakTo, @breakFrom)) / @secPerHour );
+SET @breakHoursFloor = FLOOR(@breakHours);
+SET @breakFractionMinutes = ( (@breakHours MOD 1) * @minutePerHour );
 
+SET @breakFrom = CONCAT_DATETIME(ete_Date, @breakFrom);
+SET @breakTo = ADDDATE(ADDDATE(@breakFrom, INTERVAL @breakHoursFloor HOUR), INTERVAL @breakFractionMinutes MINUTE);
+
+IF @breakFrom <= @timeStampLogIn AND @breakTo <= @timeStampLogIn #AND ete_Date = '2018-12-26'
+	THEN
+	SET ete_HrsLate = ete_HrsLate - @breakHours;
+ELSEIF @timeStampLogIn BETWEEN @breakFrom AND @breakTo AND ete_Date = '2018-12-26' THEN
+	SET @breakHours = ( TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(@timeStampLogIn, @@time_format), DATE_FORMAT(@breakFrom, @@time_format))) / @secPerHour );
+#	SELECT @timeStampLogIn, DATE_FORMAT(@timeStampLogIn, @@time_format), ete_HrsLate, @breakHours, @breakHoursFloor, @breakFractionMinutes, @breakFrom, @breakTo INTO OUTFILE 'D:/test.txt';
+	SET ete_HrsLate = ete_HrsLate - @breakHours;
+END IF;
 
 IF ete_HrsUnder IS NULL THEN
 	SET ete_HrsUnder = 0;
@@ -1088,7 +1108,7 @@ IF pr_DayBefore IS NULL THEN
 			
 			
 		ELSEIF isRestDay = '0' THEN
-		
+
 			SELECT elv.OfficialValidHours
 			FROM employeeleave elv
 			# INNER JOIN dates d ON d.DateValue BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
@@ -1134,7 +1154,7 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 			) INTO anyINT;
-			
+
 			/*SELECT anyINT
 					, ete_OrganizID
 					, ete_UserRowID
@@ -1175,7 +1195,7 @@ IF pr_DayBefore IS NULL THEN
 		LIMIT 1) AS CHAR) 'CharResult'
 		INTO hasLeave;
 
-		
+
 		IF hasLeave = '0' THEN
 	
 			
@@ -1226,11 +1246,11 @@ SET yes_true = 1;
 				) INTO anyINT;
 				
 			ELSE
-			
+
 				SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 											 + ((ete_OvertimeHrs * rateperhourforOT) * otrate);
 											 
-											 
+
 				SELECT INSUPD_employeetimeentries(
 						anyINT
 						, ete_OrganizID

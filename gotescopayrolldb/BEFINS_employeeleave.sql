@@ -58,20 +58,23 @@ IF NEW.`Status` = 'Approved' THEN
 	SELECT
 	EXISTS(SELECT e.RowID
 			FROM employee e
-			INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND e.DateRegularized BETWEEN pp.PayFromDate AND pp.PayToDate
-			WHERE e.RowID=NEW.EmployeeID)
+			INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND NEW.LeaveStartDate BETWEEN pp.PayFromDate AND pp.PayToDate
+			WHERE e.RowID=NEW.EmployeeID
+			AND e.DateRegularized BETWEEN pp.PayFromDate AND pp.PayToDate)
 	INTO isCelebratesRegularization;
-	
+
 	IF (hasLatestPaystub = FALSE AND isFirstPeriod = TRUE)
 		OR isCelebratesRegularization = TRUE THEN
 	
 		SELECT i.`LeaveAllowance`
 		FROM (SELECT e.RowID,e.LeaveAllowance FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Vacation leave'
-				UNION
+			UNION
 				SELECT e.RowID,e.SickLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Sick leave'
-				UNION
+			UNION
+				SELECT e.RowID,e.AdditionalVLAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Additional VL'
+			UNION
 				SELECT e.RowID,e.OtherLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
-				UNION
+			UNION
 				SELECT e.RowID,e.MaternityLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
 				) i
 		INTO selected_leavebal;
@@ -93,6 +96,8 @@ IF NEW.`Status` = 'Approved' THEN
 		AND ps.OrganizationID=NEW.OrganizationID
 		LIMIT 1
 		INTO selected_leavebal;
+		
+		IF selected_leavebal IS NULL THEN SET selected_leavebal = 0; END IF;
 		
 	END IF;
 	
@@ -160,15 +165,16 @@ IF NEW.`Status` = 'Approved' THEN
 	SET @break_hrs = IFNULL(@break_hrs, 0);
 	
 	SET @validhrs_multip_validdays = (@offcl_validhrs - @break_hrs) * @offcl_validdays;
-	
+
 	IF (selected_leavebal - @validhrs_multip_validdays) < 0 THEN
 		SET @validhrs_multip_validdays = @validhrs_multip_validdays + (selected_leavebal - @validhrs_multip_validdays);
-#		SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
-#	ELSE
-	END IF;
+		SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
+		IF NEW.EmployeeID=144 AND NEW.LeaveStartDate='2018-12-20' THEN SELECT hasLatestPaystub, isFirstPeriod, isCelebratesRegularization INTO OUTFILE 'D:/test.txt'; END IF;
+	ELSE
 	
-	# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
-	SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
+		# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
+		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
+	END IF;
 	
 ELSE
 

@@ -31,14 +31,16 @@ IF NEW.`Status` = 'Approved' THEN
 	
 	SET NEW.OfficialValidDays = @offcl_validdays;
 
-	SELECT i.`LeaveBalance`
-	FROM (SELECT e.RowID,e.LeaveBalance FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Vacation leave'
-			UNION
-			SELECT e.RowID,e.SickLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Sick leave'
-			UNION
-			SELECT e.RowID,e.OtherLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
-			UNION
-			SELECT e.RowID,e.MaternityLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
+	SELECT i.`LeaveAllowance`
+	FROM (SELECT e.RowID,e.LeaveAllowance FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Vacation leave'
+		UNION
+			SELECT e.RowID,e.SickLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Sick leave'
+		UNION
+			SELECT e.RowID,e.AdditionalVLAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Additional VL'
+		UNION
+			SELECT e.RowID,e.OtherLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
+		UNION
+			SELECT e.RowID,e.MaternityLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
 			) i
 	INTO selected_leavebal;
 	
@@ -109,12 +111,12 @@ IF NEW.`Status` = 'Approved' THEN
 	
 	IF (selected_leavebal - @validhrs_multip_validdays) < 0 THEN
 		SET @validhrs_multip_validdays = @validhrs_multip_validdays + (selected_leavebal - @validhrs_multip_validdays);
-#		SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
-#	ELSE
-	END IF;
+		SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
+	ELSE
 	
-	# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
-	SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
+		# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
+		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
+	END IF;
 	
 ELSE
 

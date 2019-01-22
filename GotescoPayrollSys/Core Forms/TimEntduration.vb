@@ -1,6 +1,4 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Threading
 
 Public Class TimEntduration
 

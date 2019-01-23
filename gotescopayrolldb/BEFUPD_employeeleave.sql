@@ -110,12 +110,14 @@ IF NEW.`Status` = 'Approved' THEN
 	SET @validhrs_multip_validdays = (@offcl_validhrs - @break_hrs) * @offcl_validdays;
 	
 	IF (selected_leavebal - @validhrs_multip_validdays) < 0 THEN
-		SET @validhrs_multip_validdays = @validhrs_multip_validdays + (selected_leavebal - @validhrs_multip_validdays);
-		SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
+		# SET @validhrs_multip_validdays = @validhrs_multip_validdays + (selected_leavebal - @validhrs_multip_validdays);
+		# SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
+		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * -1;
 	ELSE
 	
 		# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
-		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
+		# SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
+		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0));
 	END IF;
 	
 ELSE

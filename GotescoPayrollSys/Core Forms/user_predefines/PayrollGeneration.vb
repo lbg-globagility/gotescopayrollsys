@@ -1274,36 +1274,6 @@ Public Class PayrollGeneration
                     loan_nondeductibleamount = ValNoComma(lrow("DeductionAmount"))
                 Next
 
-                Dim isPayStubExists As _
-                    New SQL("SELECT EXISTS(SELECT RowID" &
-                                     " FROM paystub" &
-                                     " WHERE EmployeeID='" & drow("RowID") & "'" &
-                                     " AND OrganizationID='" & org_rowid & "'" &
-                                     " AND PayFromDate='" & n_PayrollDateFrom & "'" &
-                                     " AND PayToDate='" & n_PayrollDateTo & "');")
-
-                If isPayStubExists.GetFoundRow = "0" Then
-
-                    If ValNoComma(VeryFirstPayPeriodIDOfThisYear) = ValNoComma(n_PayrollRecordID) Then
-                        'this means, the very first cut off of this year falls here
-                        'so system should reset all leave balance to zero(0)
-
-                        Dim new_ExecuteQuery As _
-                            New SQL("UPDATE employee e SET" &
-                                             " e.LeaveBalance = 0" &
-                                             ",e.SickLeaveBalance = 0" &
-                                             ",e.MaternityLeaveBalance = 0" &
-                                             ",e.OtherLeaveBalance = 0" &
-                                             ",e.LastUpd=CURRENT_TIMESTAMP()" &
-                                             ",e.LastUpdBy='" & user_row_id & "'" &
-                                             " WHERE e.RowID='" & drow("RowID") & "'" &
-                                             " AND e.OrganizationID='" & org_rowid & "';")
-                        new_ExecuteQuery.ExecuteQuery()
-                        '",e.AdditionalVLBalance = 0" &
-
-                    End If
-                End If
-
                 Dim thirteenthmoval = Val(0)
 
                 Dim _gross, _net As Double

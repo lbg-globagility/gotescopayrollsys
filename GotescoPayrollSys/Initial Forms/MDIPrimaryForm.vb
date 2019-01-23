@@ -81,7 +81,7 @@ Public Class MDIPrimaryForm
 
         Panel1.Focus()
 
-        EXECQUER("CALL CREATE_employeesalary_senior_citizen('" & org_rowid & "','" & user_row_id & "');")
+        CreateSalaryForSeniorCitizensAsync()
 
         BackgroundWorker1.RunWorkerAsync()
 
@@ -91,6 +91,17 @@ Public Class MDIPrimaryForm
 
         MetroLogin.Hide()
 
+    End Sub
+
+    Private Async Sub CreateSalaryForSeniorCitizensAsync()
+        Using command =
+            New MySqlCommand(String.Concat("CALL CREATE_employeesalary_senior_citizen('", org_rowid, "','", user_row_id, "');"),
+                             New MySqlConnection(mysql_conn_text))
+            With command
+                Await .Connection.OpenAsync()
+                Await .ExecuteNonQueryAsync()
+            End With
+        End Using
     End Sub
 
     Dim listofGroup As New List(Of String)

@@ -906,10 +906,11 @@ UPDATE
 
 
 
-SELECT EXISTS(SELECT RowID FROM employee WHERE RowID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND (DateRegularized <= NEW.PayFromDate OR DateRegularized <= NEW.PayToDate)) INTO isOneYearService;
+#SELECT EXISTS(SELECT RowID FROM employee WHERE RowID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND (DateRegularized <= NEW.PayFromDate OR DateRegularized <= NEW.PayToDate)) INTO isOneYearService;
+SET isOneYearService = TRUE;
 IF isOneYearService = '1' THEN
 	SELECT RowID FROM product WHERE PartNo='Vacation leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
-	SELECT #e.LeaveBalance,e.SickLeaveBalance,e.MaternityLeaveBalance,e.OtherLeaveBalance,e.AdditionalVLBalance
+	SELECT
 	e.LeaveAllowance, e.SickLeaveAllowance, e.MaternityLeaveAllowance, e.OtherLeaveAllowance, e.AdditionalVLAllowance
 	FROM employee e
 	LEFT JOIN payperiod pp ON pp.RowID=NEW.PayPeriodID

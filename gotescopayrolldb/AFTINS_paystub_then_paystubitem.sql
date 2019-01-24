@@ -39,7 +39,7 @@ DECLARE othr_per_payp DECIMAL(11,6);
 
 DECLARE addvl_per_payp DECIMAL(11,6);
 
-DECLARE isOneYearService CHAR(1);
+DECLARE isOneYearService BOOL DEFAULT FALSE;
 
 DECLARE e_startdate DATE;
 
@@ -908,20 +908,20 @@ UPDATE
 
 #SELECT EXISTS(SELECT RowID FROM employee WHERE RowID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND (DateRegularized <= NEW.PayFromDate OR DateRegularized <= NEW.PayToDate)) INTO isOneYearService;
 SET isOneYearService = TRUE;
-IF isOneYearService = '1' THEN
+IF isOneYearService = TRUE THEN
 	SELECT RowID FROM product WHERE PartNo='Vacation leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
 	SELECT
 	e.LeaveAllowance, e.SickLeaveAllowance, e.MaternityLeaveAllowance, e.OtherLeaveAllowance, e.AdditionalVLAllowance
 	FROM employee e
-	LEFT JOIN payperiod pp ON pp.RowID=NEW.PayPeriodID
+#	LEFT JOIN payperiod pp ON pp.RowID=NEW.PayPeriodID
 	WHERE e.RowID=NEW.EmployeeID
-	AND e.OrganizationID=NEW.OrganizationID
+#	AND e.OrganizationID=NEW.OrganizationID
 	INTO vl_per_payp
 			,sl_per_payp
 			,ml_per_payp
 			,othr_per_payp
 			,addvl_per_payp;
-	
+
 	IF vl_per_payp IS NULL THEN
 		SET vl_per_payp = 0.0;
 	END IF;

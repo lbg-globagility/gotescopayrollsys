@@ -46,11 +46,14 @@ IF NEW.`Status` = 'Approved' THEN
 	SET NEW.OfficialValidDays = @offcl_validdays;
 	
 	SELECT
-	EXISTS(SELECT ps.RowID
-			FROM paystub ps
-			INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND pp.OrdinalValue = 1
-			WHERE ps.EmployeeID=NEW.EmployeeID
-			AND ps.OrganizationID=NEW.OrganizationID
+	EXISTS(SELECT pp.RowID
+			FROM payperiod pp
+			INNER JOIN (SELECT e.RowID, e.PayFrequencyID FROM employee e WHERE e.RowID=NEW.EmployeeID) e ON e.RowID = NEW.EmployeeID
+			WHERE pp.OrdinalValue = 1
+			AND pp.OrganizationID=NEW.OrganizationID
+			AND (NEW.LeaveStartDate BETWEEN pp.PayFromDate AND pp.PayToDate
+			     OR NEW.LeaveEndDate BETWEEN pp.PayFromDate AND pp.PayToDate)
+			AND pp.TotalGrossSalary = e.PayFrequencyID
 			LIMIT 1)
 	INTO isFirstPeriod;
 	
@@ -128,8 +131,8 @@ IF NEW.`Status` = 'Approved' THEN
 		INNER JOIN shift sh ON sh.RowID=esh.ShiftID
 		WHERE esh.EmployeeID=NEW.EmployeeID
 		AND esh.OrganizationID=NEW.OrganizationID
-		AND (esh.EffectiveFrom <= NEW.LeaveStartDate OR esh.EffectiveFrom <= NEW.LeaveEndDate)
-		AND (NEW.LeaveStartDate <= esh.EffectiveTo OR NEW.LeaveEndDate <= esh.EffectiveTo)
+		AND (esh.EffectiveFrom <= NEW.LeaveStartDate OR esh.EffectiveTo <= NEW.LeaveStartDate)
+		AND (NEW.LeaveEndDate <= esh.EffectiveFrom OR NEW.LeaveEndDate <= esh.EffectiveTo)
 		LIMIT 1
 		INTO @shift_rowid;
 	
@@ -147,7 +150,7 @@ IF NEW.`Status` = 'Approved' THEN
 	END IF;
 	
 	SET @break_hrs = NULL;
-	
+
 	SELECT IF(IS_TIMERANGE_REACHTOMORROW(sh.BreakTimeFrom, sh.BreakTimeTo)
 				, (TIMESTAMPDIFF(SECOND
 										,CONCAT_DATETIME(CURDATE(), sh.BreakTimeFrom)

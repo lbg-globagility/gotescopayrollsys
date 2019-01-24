@@ -12,6 +12,7 @@ CONCAT_WS(', ', CONCAT('SELECT INSUPD_position(', pos.RowID)
 FROM (SELECT *
 		FROM `position`
 		WHERE LENGTH(PositionName) > 0
+		AND DivisionId IS NOT NULL
 		#GROUP BY PositionName
 		) pos
 ORDER BY pos.PositionName

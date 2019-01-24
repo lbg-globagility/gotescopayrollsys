@@ -78,7 +78,7 @@ INNER JOIN (SELECT et.RowID,et.EmployeeID
 				WHERE et.OrganizationID = OrganizID
 				AND (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) != 0
 				AND et.`Date` BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
-				GROUP BY et.EmployeeID) ete ON ete.RowID IS NOT NULL
+				GROUP BY et.EmployeeID) ete ON ete.RowID IS NOT NULL AND ete.EmployeeID = e.RowID
 SET
 e.LeaveBalance = e.LeaveAllowance - IFNULL(ete.VacationLeaveHours,0)
 , e.SickLeaveBalance = e.SickLeaveAllowance - IFNULL(ete.SickLeaveHours,0)

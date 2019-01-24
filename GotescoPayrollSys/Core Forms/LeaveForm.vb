@@ -563,4 +563,16 @@ Public Class LeaveForm
 
     End Sub
 
+    Private Sub dtpstarttime_ValueChanged(sender As Object, e As EventArgs) Handles dtpstarttime.ValueChanged
+
+    End Sub
+
+    Private Sub dtpstarttime_LostFocus(sender As Object, e As EventArgs) Handles dtpstarttime.LostFocus
+        Static once As Boolean = False
+        If once = False Then
+            once = True
+            dtpendtime.Value = dtpstarttime.Value.AddHours(9)
+        End If
+    End Sub
+
 End Class

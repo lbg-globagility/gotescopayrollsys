@@ -9,7 +9,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RESET_employeeleave_duplicate`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE, IN `Pay_FrequencyType` VARCHAR(50), IN `DivisionRowID` INT)
     DETERMINISTIC
 BEGIN
-#RESET_employeeleave_duplicate
+
 DECLARE atleast_one BOOL DEFAULT FALSE;
 
 SELECT EXISTS(SELECT lv.RowID FROM employeeleave lv INNER JOIN employee e ON e.RowID=lv.EmployeeID AND e.OrganizationID=lv.OrganizationID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated') INNER JOIN `position` pos ON pos.RowID=e.PositionID INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID) WHERE lv.OrganizationID=OrganizID AND (lv.LeaveStartDate >= FromPayDate OR lv.LeaveEndDate >= FromPayDate) AND (lv.LeaveStartDate <= ToPayDate OR lv.LeaveEndDate <= ToPayDate) LIMIT 1) INTO atleast_one;
@@ -20,7 +20,7 @@ IF atleast_one = TRUE THEN
 
 	SET @etIds = NULL;
 	
-	/**/UPDATE employeetimeentry et
+	/**/ UPDATE employeetimeentry et
 	INNER JOIN employee e ON e.OrganizationID=OrganizID AND et.EmployeeID=e.RowID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
 	INNER JOIN `position` pos ON pos.RowID=e.PositionID
 	INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID)
@@ -61,7 +61,7 @@ IF atleast_one = TRUE THEN
 	
 	SET @ids = NULL;
 
-	/**/SELECT GROUP_CONCAT(elv.RowID)
+	/**/ SELECT GROUP_CONCAT(elv.RowID)
 	FROM employeeleave_duplicate elv
 	INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
 	INNER JOIN `position` pos ON pos.RowID=e.PositionID
@@ -71,7 +71,7 @@ IF atleast_one = TRUE THEN
 	AND (elv.LeaveStartDate <= ToPayDate OR elv.LeaveEndDate <= ToPayDate)
 	INTO @ids;
 
-	/**/DELETE FROM employeeleave_duplicate WHERE FIND_IN_SET(RowID, @ids) > 0;
+	/**/ DELETE FROM employeeleave_duplicate WHERE FIND_IN_SET(RowID, @ids) > 0;
 
 	INSERT INTO employeeleave_duplicate
 	(

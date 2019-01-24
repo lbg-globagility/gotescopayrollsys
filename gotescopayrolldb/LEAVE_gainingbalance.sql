@@ -55,6 +55,87 @@ AND e.DateRegularized BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 ;
 
+# 5th year ####################################
+UPDATE employee e
+INNER JOIN payfrequency pf
+        ON pf.RowID=e.PayFrequencyID
+INNER JOIN payperiod pp
+        ON pp.TotalGrossSalary = e.PayFrequencyID
+		     AND pp.OrganizationID = e.OrganizationID
+			  AND pp.PayFromDate = payDateFrom
+			  AND pp.PayToDate = payDateTo
+SET
+e.AdditionalVLPerPayPeriod = ( e.LeaveTenthYearService / count_semi_monthly_period_peryear )
+
+, e.AdditionalVLBalance = ( ( e.LeaveTenthYearService / count_semi_monthly_period_peryear ) * ((count_semi_monthly_period_peryear - pp.OrdinalValue) + 1) )
+
+, e.AdditionalVLAllowance = e.LeaveTenthYearService
+
+, e.LastUpd=CURRENT_TIMESTAMP()
+, e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
+WHERE e.OrganizationID = OrganizID
+AND ADDDATE(e.DateRegularized, INTERVAL 5 YEAR) BETWEEN payDateFrom AND payDateTo
+AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+;
+
+# 10th year ####################################
+UPDATE employee e
+INNER JOIN payfrequency pf
+        ON pf.RowID=e.PayFrequencyID
+INNER JOIN payperiod pp
+        ON pp.TotalGrossSalary = e.PayFrequencyID
+		     AND pp.OrganizationID = e.OrganizationID
+			  AND pp.PayFromDate = payDateFrom
+			  AND pp.PayToDate = payDateTo
+SET
+e.AdditionalVLPerPayPeriod = ( e.LeaveFifteenthYearService / count_semi_monthly_period_peryear )
+
+, e.AdditionalVLBalance = ( ( e.LeaveFifteenthYearService / count_semi_monthly_period_peryear ) * ((count_semi_monthly_period_peryear - pp.OrdinalValue) + 1) )
+
+, e.AdditionalVLAllowance = e.LeaveFifteenthYearService
+
+, e.LastUpd=CURRENT_TIMESTAMP()
+, e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
+WHERE e.OrganizationID = OrganizID
+AND ADDDATE(e.DateRegularized, INTERVAL 10 YEAR) BETWEEN payDateFrom AND payDateTo
+AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+;
+
+# 15th year ####################################
+UPDATE employee e
+INNER JOIN payfrequency pf
+        ON pf.RowID=e.PayFrequencyID
+INNER JOIN payperiod pp
+        ON pp.TotalGrossSalary = e.PayFrequencyID
+		     AND pp.OrganizationID = e.OrganizationID
+			  AND pp.PayFromDate = payDateFrom
+			  AND pp.PayToDate = payDateTo
+SET
+e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_monthly_period_peryear )
+
+, e.AdditionalVLBalance = ( ( e.LeaveAboveFifteenthYearService / count_semi_monthly_period_peryear ) * ((count_semi_monthly_period_peryear - pp.OrdinalValue) + 1) )
+
+, e.AdditionalVLAllowance = e.LeaveAboveFifteenthYearService
+
+, e.LastUpd=CURRENT_TIMESTAMP()
+, e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
+WHERE e.OrganizationID = OrganizID
+AND ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) BETWEEN payDateFrom AND payDateTo
+AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
 SELECT MIN(ppd.PayFromDate)
 , MAX(ppd.PayToDate)
 FROM payperiod pp
@@ -66,6 +147,86 @@ AND pp.PayToDate = payDateTo
 INTO thisYearPayDateFrom
      , thisYearPayDateTo
 ;
+
+# less than 10th year, between 6th & 9th year ###############################
+UPDATE employee e
+INNER JOIN payfrequency pf
+        ON pf.RowID=e.PayFrequencyID
+INNER JOIN payperiod pp
+        ON pp.TotalGrossSalary = e.PayFrequencyID
+		     AND pp.OrganizationID = e.OrganizationID
+			  AND pp.PayFromDate = payDateFrom
+			  AND pp.PayToDate = payDateTo
+SET
+e.AdditionalVLPerPayPeriod = ( e.LeaveTenthYearService / count_semi_monthly_period_peryear )
+
+, e.AdditionalVLBalance = e.LeaveTenthYearService
+
+, e.AdditionalVLAllowance = e.LeaveTenthYearService
+
+, e.LastUpd=CURRENT_TIMESTAMP()
+, e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
+WHERE e.OrganizationID = OrganizID
+AND (ADDDATE(e.DateRegularized, INTERVAL 6 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
+     OR ADDDATE(e.DateRegularized, INTERVAL 7 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
+     OR ADDDATE(e.DateRegularized, INTERVAL 8 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
+     OR ADDDATE(e.DateRegularized, INTERVAL 9 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo)
+AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+;
+
+
+# less than 15th year, between 11th & 14th year #############################
+UPDATE employee e
+INNER JOIN payfrequency pf
+        ON pf.RowID=e.PayFrequencyID
+INNER JOIN payperiod pp
+        ON pp.TotalGrossSalary = e.PayFrequencyID
+		     AND pp.OrganizationID = e.OrganizationID
+			  AND pp.PayFromDate = payDateFrom
+			  AND pp.PayToDate = payDateTo
+SET
+e.AdditionalVLPerPayPeriod = ( e.LeaveFifteenthYearService / count_semi_monthly_period_peryear )
+
+, e.AdditionalVLBalance = e.LeaveFifteenthYearService
+
+, e.AdditionalVLAllowance = e.LeaveFifteenthYearService
+
+, e.LastUpd=CURRENT_TIMESTAMP()
+, e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
+WHERE e.OrganizationID = OrganizID
+AND (ADDDATE(e.DateRegularized, INTERVAL 11 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
+     OR ADDDATE(e.DateRegularized, INTERVAL 12 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
+     OR ADDDATE(e.DateRegularized, INTERVAL 13 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
+     OR ADDDATE(e.DateRegularized, INTERVAL 14 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo)
+AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+;
+
+
+# more than 15th year #######################################################
+UPDATE employee e
+INNER JOIN payfrequency pf
+        ON pf.RowID=e.PayFrequencyID
+INNER JOIN payperiod pp
+        ON pp.TotalGrossSalary = e.PayFrequencyID
+		     AND pp.OrganizationID = e.OrganizationID
+			  AND pp.PayFromDate = payDateFrom
+			  AND pp.PayToDate = payDateTo
+SET
+e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_monthly_period_peryear )
+
+, e.AdditionalVLBalance = e.LeaveAboveFifteenthYearService
+
+, e.AdditionalVLAllowance = e.LeaveAboveFifteenthYearService
+
+, e.LastUpd=CURRENT_TIMESTAMP()
+, e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
+WHERE e.OrganizationID = OrganizID
+AND ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) NOT BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
+AND (ADDDATE(e.DateRegularized, INTERVAL 16 YEAR) <= thisYearPayDateFrom
+     OR ADDDATE(e.DateRegularized, INTERVAL 16 YEAR) <= thisYearPayDateTo)
+AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+;
+
 
 UPDATE employee e
 INNER JOIN (SELECT et.RowID,et.EmployeeID

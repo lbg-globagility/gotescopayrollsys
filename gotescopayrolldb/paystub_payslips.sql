@@ -98,7 +98,7 @@ ps.RowID
 , NEWLINECHARTRIMMER(REPLACE(psibon.`Column36`, ',', '\n')) `Column36`
 , NEWLINECHARTRIMMER(REPLACE(psibon.`Column39`, ',', '\n')) `Column39`
 
-/**/, REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column35`, ',', '\n'))
+/**/ , REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column35`, ',', '\n'))
           , '|', ',')  `Column35`
 , REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column38`, ',', '\n'))
           , '|', ',') `Column38`
@@ -165,7 +165,7 @@ ps.RowID
 ,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceName`, ',', '\n')) `Column48`
 ,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceAmount`, ',', '\n')) `Column49`
 
-/**/, ( ps.TotalGrossSalary + IFNULL(adj_positive.`PayAmount`, 0) ) `Column60`
+/**/ , ( ps.TotalGrossSalary + IFNULL(adj_positive.`PayAmount`, 0) ) `Column60`
 , ( ps.TotalLoans
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 # + (IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0))
@@ -453,9 +453,10 @@ LEFT JOIN (SELECT
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', UCASE(p.PartNo))) `Column30`
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column31`
            FROM paystubitem psi
-			  INNER JOIN product p ON p.RowID=psi.ProductID AND p.OrganizationID=psi.OrganizationID AND p.`Category`='Leave Type' AND p.ActiveData=1
+			  INNER JOIN product p ON p.RowID=psi.ProductID
+			  INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave Type'
 			  WHERE psi.OrganizationID = og_rowid
-			  AND psi.Undeclared = FALSE
+			  AND psi.Undeclared = TRUE
 			  AND psi.PayAmount != 0
 			  GROUP BY psi.PayStubID
 			  ORDER BY psi.RowID

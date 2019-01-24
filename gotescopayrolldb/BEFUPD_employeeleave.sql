@@ -24,8 +24,9 @@ IF NEW.`Status` = 'Approved' THEN
 	
 	SET @offcl_validdays = TIMESTAMPDIFF(DAY, NEW.LeaveStartDate, NEW.LeaveEndDate);
 	
-	IF IFNULL(@offcl_validdays,-1) >= 0 THEN
-		SET @offcl_validdays = @offcl_validdays + 1;
+	IF @offcl_validdays <= 0 THEN
+		SET @offcl_validdays = 1;
+		
 	END IF;
 	
 	SET NEW.OfficialValidDays = @offcl_validdays;

@@ -66,7 +66,7 @@ Partial Class MetroLogin
         '
         'txtbxPword
         '
-        Me.txtbxPword.Lines = New String() {"yellow1"}
+        Me.txtbxPword.Lines = New String(-1) {}
         Me.txtbxPword.Location = New System.Drawing.Point(23, 140)
         Me.txtbxPword.MaxLength = 32767
         Me.txtbxPword.Name = "txtbxPword"
@@ -75,13 +75,12 @@ Partial Class MetroLogin
         Me.txtbxPword.SelectedText = ""
         Me.txtbxPword.Size = New System.Drawing.Size(213, 23)
         Me.txtbxPword.TabIndex = 1
-        Me.txtbxPword.Text = "yellow1"
         Me.txtbxPword.UseSelectable = True
         Me.txtbxPword.UseSystemPasswordChar = True
         '
         'txtbxUserID
         '
-        Me.txtbxUserID.Lines = New String() {"admin1"}
+        Me.txtbxUserID.Lines = New String(-1) {}
         Me.txtbxUserID.Location = New System.Drawing.Point(23, 92)
         Me.txtbxUserID.MaxLength = 32767
         Me.txtbxUserID.Name = "txtbxUserID"
@@ -90,7 +89,6 @@ Partial Class MetroLogin
         Me.txtbxUserID.SelectedText = ""
         Me.txtbxUserID.Size = New System.Drawing.Size(213, 23)
         Me.txtbxUserID.TabIndex = 0
-        Me.txtbxUserID.Text = "admin1"
         Me.txtbxUserID.UseSelectable = True
         '
         'cbxorganiz

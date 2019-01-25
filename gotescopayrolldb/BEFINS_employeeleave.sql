@@ -83,7 +83,19 @@ IF NEW.`Status` = 'Approved' THEN
 	
 	ELSE
 	
-		SELECT psi.PayAmount
+		SELECT i.`LeaveBalance`
+		FROM (SELECT e.RowID,e.LeaveBalance FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Vacation leave'
+			UNION
+				SELECT e.RowID,e.SickLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Sick leave'
+			UNION
+				SELECT e.RowID,e.AdditionalVLAllowance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Additional VL'
+			UNION
+				SELECT e.RowID,e.OtherLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
+			UNION
+				SELECT e.RowID,e.MaternityLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
+				) i
+		INTO selected_leavebal;
+/*		SELECT psi.PayAmount
 		FROM paystub ps
 		INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND NEW.LeaveStartDate BETWEEN pp.PayFromDate AND pp.PayToDate
 		
@@ -97,7 +109,7 @@ IF NEW.`Status` = 'Approved' THEN
 		WHERE ps.EmployeeID=NEW.EmployeeID
 		AND ps.OrganizationID=NEW.OrganizationID
 		LIMIT 1
-		INTO selected_leavebal;
+		INTO selected_leavebal;*/
 		
 		IF selected_leavebal IS NULL THEN SET selected_leavebal = 0; END IF;
 		
@@ -131,11 +143,11 @@ IF NEW.`Status` = 'Approved' THEN
 		INNER JOIN shift sh ON sh.RowID=esh.ShiftID
 		WHERE esh.EmployeeID=NEW.EmployeeID
 		AND esh.OrganizationID=NEW.OrganizationID
-		AND (esh.EffectiveFrom <= NEW.LeaveStartDate OR esh.EffectiveTo <= NEW.LeaveStartDate)
-		AND (NEW.LeaveEndDate <= esh.EffectiveFrom OR NEW.LeaveEndDate <= esh.EffectiveTo)
+		AND (NEW.LeaveStartDate BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
+		     OR NEW.LeaveEndDate BETWEEN esh.EffectiveFrom AND esh.EffectiveTo)
 		LIMIT 1
 		INTO @shift_rowid;
-	
+
 	ELSEIF @offcl_validdays = 1 THEN
 	
 		SELECT sh.RowID
@@ -159,8 +171,6 @@ IF NEW.`Status` = 'Approved' THEN
 				, COMPUTE_TimeDifference(sh.BreakTimeFrom, sh.BreakTimeTo)) `Result`
 	FROM shift sh
 	WHERE sh.RowID=@shift_rowid
-	AND sh.TimeFrom=NEW.LeaveStartTime
-	AND sh.TimeTo	=NEW.LeaveEndTime
 	LIMIT 1
 	INTO @break_hrs;
 	

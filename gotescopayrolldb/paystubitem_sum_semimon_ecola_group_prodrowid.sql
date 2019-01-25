@@ -6,33 +6,7 @@
 
 DROP VIEW IF EXISTS `paystubitem_sum_semimon_ecola_group_prodrowid`;
 DROP TABLE IF EXISTS `paystubitem_sum_semimon_ecola_group_prodrowid`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `paystubitem_sum_semimon_ecola_group_prodrowid` AS SELECT i.*
-	,et.RowID `etRowID`
-	,d.DateValue `Date`
-	FROM v_employeesemimonthlyallowance i
-	INNER JOIN dates d
-	        ON d.DateValue BETWEEN i.EffectiveStartDate AND i.EffectiveEndDate
-	INNER JOIN employee e
-	        ON e.RowID=i.EmployeeID
-			     AND e.OrganizationID=i.OrganizationID
-			     AND e.EmploymentStatus = 'Regular'
-	INNER JOIN payfrequency pf
-	        ON pf.RowID=e.PayFrequencyID
-	INNER JOIN product p
-	        ON p.RowID=i.ProductID AND LOCATE('ecola', LCASE(p.PartNo)) > 0
-	INNER JOIN employeetimeentry et
-	       ON et.OrganizationID=i.OrganizationID
-	          AND et.EmployeeID=28
-	          AND et.`Date`=d.DateValue
-	          # AND et.`Date` BETWEEN i.EffectiveStartDate AND i.EffectiveEndDate
-	          AND (IFNULL(et.HoursLate, 0) + IFNULL(et.UndertimeHours, 0)) > 0
-				     OR IFNULL(et.Absent, 0) > 0
-	LEFT JOIN employeeshift esh
-	       ON esh.RowID=et.EmployeeShiftID
-	LEFT JOIN shift sh
-	       ON sh.RowID=esh.ShiftID
-	INNER JOIN dates dd
-	        ON dd.DateValue BETWEEN i.EffectiveStartDate AND i.EffectiveEndDate ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `paystubitem_sum_semimon_ecola_group_prodrowid` AS select `i`.`RowID` AS `RowID`,`i`.`OrganizationID` AS `OrganizationID`,`i`.`Created` AS `Created`,`i`.`CreatedBy` AS `CreatedBy`,`i`.`LastUpd` AS `LastUpd`,`i`.`LastUpdBy` AS `LastUpdBy`,`i`.`EmployeeID` AS `EmployeeID`,`i`.`ProductID` AS `ProductID`,`i`.`EffectiveStartDate` AS `EffectiveStartDate`,`i`.`AllowanceFrequency` AS `AllowanceFrequency`,`i`.`EffectiveEndDate` AS `EffectiveEndDate`,`i`.`TaxableFlag` AS `TaxableFlag`,`i`.`AllowanceAmount` AS `AllowanceAmount`,`i`.`DailyAllowance` AS `DailyAllowance`,`i`.`IsFixed` AS `IsFixed`,`et`.`RowID` AS `etRowID`,`d`.`DateValue` AS `Date` from ((((((((`v_employeesemimonthlyallowance` `i` join `dates` `d` on(`d`.`DateValue` between `i`.`EffectiveStartDate` and `i`.`EffectiveEndDate`)) join `employee` `e` on(`e`.`RowID` = `i`.`EmployeeID` and `e`.`OrganizationID` = `i`.`OrganizationID` and `e`.`EmploymentStatus` = 'Regular')) join `payfrequency` `pf` on(`pf`.`RowID` = `e`.`PayFrequencyID`)) join `product` `p` on(`p`.`RowID` = `i`.`ProductID` and locate('ecola',lcase(`p`.`PartNo`)) > 0)) join `employeetimeentry` `et` on(`et`.`OrganizationID` = `i`.`OrganizationID` and `et`.`EmployeeID` = 28 and `et`.`Date` = `d`.`DateValue` and ifnull(`et`.`HoursLate`,0) + ifnull(`et`.`UndertimeHours`,0) > 0 or ifnull(`et`.`Absent`,0) > 0)) left join `employeeshift` `esh` on(`esh`.`RowID` = `et`.`EmployeeShiftID`)) left join `shift` `sh` on(`sh`.`RowID` = `esh`.`ShiftID`)) join `dates` `dd` on(`dd`.`DateValue` between `i`.`EffectiveStartDate` and `i`.`EffectiveEndDate`)) ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

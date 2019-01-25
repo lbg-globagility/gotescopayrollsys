@@ -59,7 +59,7 @@ SET @has_loans = FALSE;
 
 
 
-	/**/SELECT#els.*,
+	/**/ SELECT#els.*,
 		INSUP_employeeloanschedulebacktrack(els.OrganizationID, user_rowid, els.EmployeeID, els.PayStubRowId, els.RowID, els.PayPeriodID, 0, 0, '')
 	   #, CONCAT_WS(', ', els.OrganizationID, user_rowid, els.EmployeeID, els.PayStubID, els.RowID, els.PayPeriodID, 0, 0, '') `Result`
 		FROM employeeloanschedules els
@@ -83,7 +83,7 @@ WHILE _index < _count DO
 	LIMIT _index, 1
 	INTO p_id;
 
-	/**/SET @has_loans = EXISTS(SELECT els.RowID
+	/**/ SET @has_loans = EXISTS(SELECT els.RowID
 	FROM employeeloanschedules els
 	WHERE els.OrganizationID=og_rowid
 	AND els.LoanTypeID=p_id
@@ -98,7 +98,7 @@ WHILE _index < _count DO
 
 	IF @has_loans THEN
 	
-		/**/INSERT INTO paystubitem(OrganizationID, Created, CreatedBy, PayStubID, ProductID, PayAmount, Undeclared)
+		/**/ INSERT INTO paystubitem(OrganizationID, Created, CreatedBy, PayStubID, ProductID, PayAmount, Undeclared)
 		SELECT
 			og_rowid, CURRENT_TIMESTAMP(), user_rowid, i.PayStubRowID, p_id
 			, i.`CorrectedDeductionAmount`
@@ -147,7 +147,7 @@ WHILE _index < _count DO
 				## WHERE i.PayStubID IS NOT NULL
 				WHERE i.PayStubRowID IS NOT NULL
 				AND i.PayPeriodID = pp_rowid
-		/**/ON DUPLICATE KEY UPDATE
+		/**/ ON DUPLICATE KEY UPDATE
 		LastUpd=CURRENT_TIMESTAMP()
 		, LastUpdBy = user_rowid
 		, PayAmount = i.`CorrectedDeductionAmount`

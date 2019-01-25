@@ -6,7 +6,15 @@
 
 DROP PROCEDURE IF EXISTS `LEAVE_gainingbalance`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `LEAVE_gainingbalance`(IN `OrganizID` INT, IN `EmpRowID` INT, IN `UserRowID` INT, IN `minimum_date` DATE, IN `custom_maximum_date` DATE)
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `LEAVE_gainingbalance`(
+	IN `OrganizID` INT,
+	IN `EmpRowID` INT,
+	IN `UserRowID` INT,
+	IN `minimum_date` DATE,
+	IN `custom_maximum_date` DATE
+
+
+)
     DETERMINISTIC
 BEGIN
 
@@ -23,6 +31,8 @@ DECLARE i INT DEFAULT 0;
 DECLARE payDateFrom, payDateTo DATE;
 
 DECLARE thisYearPayDateFrom, thisYearPayDateTo DATE;
+
+DECLARE regularEmplymentStatus VARCHAR(50) DEFAULT 'Regular';
 
 SET payDateFrom = minimum_date;
 SET payDateTo = custom_maximum_date;
@@ -53,6 +63,7 @@ e.LeavePerPayPeriod =				( e.LeaveAllowance / count_semi_monthly_period_peryear 
 WHERE e.OrganizationID = OrganizID
 AND e.DateRegularized BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+AND e.EmploymentStatus = regularEmplymentStatus
 ;
 
 # 5th year ####################################
@@ -76,6 +87,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveTenthYearService / count_semi_monthly_peri
 WHERE e.OrganizationID = OrganizID
 AND ADDDATE(e.DateRegularized, INTERVAL 5 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+AND e.EmploymentStatus = regularEmplymentStatus
 ;
 
 # 10th year ####################################
@@ -99,6 +111,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveFifteenthYearService / count_semi_monthly_
 WHERE e.OrganizationID = OrganizID
 AND ADDDATE(e.DateRegularized, INTERVAL 10 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+AND e.EmploymentStatus = regularEmplymentStatus
 ;
 
 # 15th year ####################################
@@ -122,6 +135,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_mon
 WHERE e.OrganizationID = OrganizID
 AND ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+AND e.EmploymentStatus = regularEmplymentStatus
 ;
 
 
@@ -150,13 +164,6 @@ INTO thisYearPayDateFrom
 
 # less than 10th year, between 6th & 9th year ###############################
 UPDATE employee e
-INNER JOIN payfrequency pf
-        ON pf.RowID=e.PayFrequencyID
-INNER JOIN payperiod pp
-        ON pp.TotalGrossSalary = e.PayFrequencyID
-		     AND pp.OrganizationID = e.OrganizationID
-			  AND pp.PayFromDate = payDateFrom
-			  AND pp.PayToDate = payDateTo
 SET
 e.AdditionalVLPerPayPeriod = ( e.LeaveTenthYearService / count_semi_monthly_period_peryear )
 
@@ -172,18 +179,12 @@ AND (ADDDATE(e.DateRegularized, INTERVAL 6 YEAR) BETWEEN thisYearPayDateFrom AND
      OR ADDDATE(e.DateRegularized, INTERVAL 8 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 9 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo)
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+AND e.EmploymentStatus = regularEmplymentStatus
 ;
 
 
 # less than 15th year, between 11th & 14th year #############################
 UPDATE employee e
-INNER JOIN payfrequency pf
-        ON pf.RowID=e.PayFrequencyID
-INNER JOIN payperiod pp
-        ON pp.TotalGrossSalary = e.PayFrequencyID
-		     AND pp.OrganizationID = e.OrganizationID
-			  AND pp.PayFromDate = payDateFrom
-			  AND pp.PayToDate = payDateTo
 SET
 e.AdditionalVLPerPayPeriod = ( e.LeaveFifteenthYearService / count_semi_monthly_period_peryear )
 
@@ -199,18 +200,12 @@ AND (ADDDATE(e.DateRegularized, INTERVAL 11 YEAR) BETWEEN thisYearPayDateFrom AN
      OR ADDDATE(e.DateRegularized, INTERVAL 13 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 14 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo)
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+AND e.EmploymentStatus = regularEmplymentStatus
 ;
 
 
 # more than 15th year #######################################################
 UPDATE employee e
-INNER JOIN payfrequency pf
-        ON pf.RowID=e.PayFrequencyID
-INNER JOIN payperiod pp
-        ON pp.TotalGrossSalary = e.PayFrequencyID
-		     AND pp.OrganizationID = e.OrganizationID
-			  AND pp.PayFromDate = payDateFrom
-			  AND pp.PayToDate = payDateTo
 SET
 e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_monthly_period_peryear )
 
@@ -225,6 +220,7 @@ AND ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) NOT BETWEEN thisYearPayDateFrom
 AND (ADDDATE(e.DateRegularized, INTERVAL 16 YEAR) <= thisYearPayDateFrom
      OR ADDDATE(e.DateRegularized, INTERVAL 16 YEAR) <= thisYearPayDateTo)
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+AND e.EmploymentStatus = regularEmplymentStatus
 ;
 
 
@@ -251,6 +247,7 @@ e.LeaveBalance = e.LeaveAllowance - IFNULL(ete.VacationLeaveHours,0)
 , e.LastUpdBy = IFNULL(e.LastUpdBy, e.CreatedBy)
 WHERE e.OrganizationID = OrganizID
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+AND e.EmploymentStatus = regularEmplymentStatus
 ;
 
 END//

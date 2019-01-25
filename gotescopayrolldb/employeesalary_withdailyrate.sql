@@ -6,24 +6,7 @@
 
 DROP VIEW IF EXISTS `employeesalary_withdailyrate`;
 DROP TABLE IF EXISTS `employeesalary_withdailyrate`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employeesalary_withdailyrate` AS SELECT esa.*
-	 ,ROUND(
-	 (esa.Salary
-	  / (e.WorkDaysPerYear
-	     / 12 # count of months per year
-		  )), 6) `DailyRate`
-	, ROUND(esa.Salary, 6) `MonthlySalary`
-	, (esa.TrueSalary / esa.Salary) `Percentage`
-	FROM employeesalary esa
-	INNER JOIN employee e ON e.RowID=esa.EmployeeID AND e.EmployeeType IN ('Monthly', 'Fixed')
-	
-UNION
-	SELECT esa.*
-	, ROUND(esa.BasicPay, 6) `DailyRate`
-	, ROUND( (esa.BasicPay * (e.WorkDaysPerYear / 12)) , 6) `MonthlySalary`
-	, (esa.TrueSalary / esa.Salary) `Percentage`
-	FROM employeesalary esa
-	INNER JOIN employee e ON e.RowID=esa.EmployeeID AND e.EmployeeType = 'Daily' ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employeesalary_withdailyrate` AS select `esa`.`RowID` AS `RowID`,`esa`.`EmployeeID` AS `EmployeeID`,`esa`.`Created` AS `Created`,`esa`.`CreatedBy` AS `CreatedBy`,`esa`.`LastUpd` AS `LastUpd`,`esa`.`LastUpdBy` AS `LastUpdBy`,`esa`.`OrganizationID` AS `OrganizationID`,`esa`.`FilingStatusID` AS `FilingStatusID`,`esa`.`PaySocialSecurityID` AS `PaySocialSecurityID`,`esa`.`PayPhilhealthID` AS `PayPhilhealthID`,`esa`.`PhilHealthDeduction` AS `PhilHealthDeduction`,`esa`.`HDMFAmount` AS `HDMFAmount`,`esa`.`TrueSalary` AS `TrueSalary`,`esa`.`BasicPay` AS `BasicPay`,`esa`.`Salary` AS `Salary`,`esa`.`UndeclaredSalary` AS `UndeclaredSalary`,`esa`.`BasicDailyPay` AS `BasicDailyPay`,`esa`.`BasicHourlyPay` AS `BasicHourlyPay`,`esa`.`NoofDependents` AS `NoofDependents`,`esa`.`MaritalStatus` AS `MaritalStatus`,`esa`.`PositionID` AS `PositionID`,`esa`.`EffectiveDateFrom` AS `EffectiveDateFrom`,`esa`.`EffectiveDateTo` AS `EffectiveDateTo`,`esa`.`ContributeToGovt` AS `ContributeToGovt`,`esa`.`OverrideDiscardSSSContrib` AS `OverrideDiscardSSSContrib`,`esa`.`OverrideDiscardPhilHealthContrib` AS `OverrideDiscardPhilHealthContrib`,round(`esa`.`Salary` / (`e`.`WorkDaysPerYear` / 12),6) AS `DailyRate`,round(`esa`.`Salary`,6) AS `MonthlySalary`,`esa`.`TrueSalary` / `esa`.`Salary` AS `Percentage` from (`employeesalary` `esa` join `employee` `e` on(`e`.`RowID` = `esa`.`EmployeeID` and `e`.`EmployeeType` in ('Monthly','Fixed'))) union select `esa`.`RowID` AS `RowID`,`esa`.`EmployeeID` AS `EmployeeID`,`esa`.`Created` AS `Created`,`esa`.`CreatedBy` AS `CreatedBy`,`esa`.`LastUpd` AS `LastUpd`,`esa`.`LastUpdBy` AS `LastUpdBy`,`esa`.`OrganizationID` AS `OrganizationID`,`esa`.`FilingStatusID` AS `FilingStatusID`,`esa`.`PaySocialSecurityID` AS `PaySocialSecurityID`,`esa`.`PayPhilhealthID` AS `PayPhilhealthID`,`esa`.`PhilHealthDeduction` AS `PhilHealthDeduction`,`esa`.`HDMFAmount` AS `HDMFAmount`,`esa`.`TrueSalary` AS `TrueSalary`,`esa`.`BasicPay` AS `BasicPay`,`esa`.`Salary` AS `Salary`,`esa`.`UndeclaredSalary` AS `UndeclaredSalary`,`esa`.`BasicDailyPay` AS `BasicDailyPay`,`esa`.`BasicHourlyPay` AS `BasicHourlyPay`,`esa`.`NoofDependents` AS `NoofDependents`,`esa`.`MaritalStatus` AS `MaritalStatus`,`esa`.`PositionID` AS `PositionID`,`esa`.`EffectiveDateFrom` AS `EffectiveDateFrom`,`esa`.`EffectiveDateTo` AS `EffectiveDateTo`,`esa`.`ContributeToGovt` AS `ContributeToGovt`,`esa`.`OverrideDiscardSSSContrib` AS `OverrideDiscardSSSContrib`,`esa`.`OverrideDiscardPhilHealthContrib` AS `OverrideDiscardPhilHealthContrib`,round(`esa`.`BasicPay`,6) AS `DailyRate`,round(`esa`.`BasicPay` * (`e`.`WorkDaysPerYear` / 12),6) AS `MonthlySalary`,`esa`.`TrueSalary` / `esa`.`Salary` AS `Percentage` from (`employeesalary` `esa` join `employee` `e` on(`e`.`RowID` = `esa`.`EmployeeID` and `e`.`EmployeeType` = 'Daily')) ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

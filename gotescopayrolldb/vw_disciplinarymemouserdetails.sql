@@ -6,45 +6,7 @@
 
 DROP VIEW IF EXISTS `vw_disciplinarymemouserdetails`;
 DROP TABLE IF EXISTS `vw_disciplinarymemouserdetails`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_disciplinarymemouserdetails` AS SELECT 
-	U.RowID AS 'UserID',
-	U.FirstName, 
-	U.MiddleName, 
-	U.LastName,
-	TRIM(O.Name) AS 'CompanyName',
-	O.Image,
-	P.PositionName,
-	CONCAT
-	(
-		IF(U.FirstName IS NULL OR TRIM(U.FirstName) = '', '', CONCAT
-			(
-			 UPPER(SUBSTRING(TRIM(U.FirstName), 1, 1)), 
-			 LOWER(SUBSTRING(TRIM(U.FirstName), 2)),
-			  ' ' ) 
-			),
-		IF(U.MiddleName IS NULL OR TRIM(U.MiddleName) = '', '', CONCAT
-			(
-				UPPER(SUBSTRING(TRIM(U.MiddleName), 1, 1)),
-				 '. ')
-			), 
-		IF(U.LastName IS NULL OR TRIM(U.LastName) = '', '', CONCAT
-			(
-			 UPPER(SUBSTRING(TRIM(U.LastName), 1, 1)), 
-			 LOWER(SUBSTRING(TRIM(U.LastName), 2)),
-			  ' ' ) 
-			)
-	) AS 'FullName'
-FROM 
-	user AS U 
-LEFT JOIN 
-	organization AS O 
-ON 
-	U.OrganizationID = O.RowID 
-LEFT JOIN 
-	position AS P
-ON 
-	U.PositionID = P.RowID 
-LIMIT 1 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_disciplinarymemouserdetails` AS select `u`.`RowID` AS `UserID`,`u`.`FirstName` AS `FirstName`,`u`.`MiddleName` AS `MiddleName`,`u`.`LastName` AS `LastName`,trim(`o`.`Name`) AS `CompanyName`,`o`.`Image` AS `Image`,`p`.`PositionName` AS `PositionName`,concat(if(`u`.`FirstName` is null or trim(`u`.`FirstName`) = '','',concat(ucase(substr(trim(`u`.`FirstName`),1,1)),lcase(substr(trim(`u`.`FirstName`),2)),' ')),if(`u`.`MiddleName` is null or trim(`u`.`MiddleName`) = '','',concat(ucase(substr(trim(`u`.`MiddleName`),1,1)),'. ')),if(`u`.`LastName` is null or trim(`u`.`LastName`) = '','',concat(ucase(substr(trim(`u`.`LastName`),1,1)),lcase(substr(trim(`u`.`LastName`),2)),' '))) AS `FullName` from ((`user` `u` left join `organization` `o` on(`u`.`OrganizationID` = `o`.`RowID`)) left join `position` `p` on(`u`.`PositionID` = `p`.`RowID`)) limit 1 ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

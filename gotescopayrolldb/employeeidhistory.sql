@@ -6,30 +6,7 @@
 
 DROP VIEW IF EXISTS `employeeidhistory`;
 DROP TABLE IF EXISTS `employeeidhistory`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employeeidhistory` AS SELECT 
-aut.RowID
-, e.RowID `EmployeeRowID`
-, v.OrganizationID
-, e.EmployeeID
-, e.LastName, e.FirstName, e.MiddleName
-, pos.PositionName
-, aut.OldValue
-, aut.NewValue
-, aut.ActionPerformed
-, aut.Created
-FROM audittrail aut
-INNER JOIN `view` v
-        ON v.ViewName = 'Employee Personal Profile'
-		     # AND v.OrganizationID = 3
-		     AND aut.ViewID = v.RowID
-INNER JOIN employee e
-        ON e.RowID=aut.ChangedRowID
-		     AND e.OrganizationID=v.OrganizationID
-		     AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
-INNER JOIN `position` pos
-        ON pos.RowID=e.PositionID
-WHERE aut.FieldChanged = 'EmployeeID'
-AND aut.ActionPerformed IN ('Insert', 'Update') ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employeeidhistory` AS select `aut`.`RowID` AS `RowID`,`e`.`RowID` AS `EmployeeRowID`,`v`.`OrganizationID` AS `OrganizationID`,`e`.`EmployeeID` AS `EmployeeID`,`e`.`LastName` AS `LastName`,`e`.`FirstName` AS `FirstName`,`e`.`MiddleName` AS `MiddleName`,`pos`.`PositionName` AS `PositionName`,`aut`.`OldValue` AS `OldValue`,`aut`.`NewValue` AS `NewValue`,`aut`.`ActionPerformed` AS `ActionPerformed`,`aut`.`Created` AS `Created` from (((`audittrail` `aut` join `view` `v` on(`v`.`ViewName` = 'Employee Personal Profile' and `aut`.`ViewID` = `v`.`RowID`)) join `employee` `e` on(`e`.`RowID` = `aut`.`ChangedRowID` and `e`.`OrganizationID` = `v`.`OrganizationID` and `e`.`EmploymentStatus` not in ('Resigned','Terminated'))) join `position` `pos` on(`pos`.`RowID` = `e`.`PositionID`)) where `aut`.`FieldChanged` = 'EmployeeID' and `aut`.`ActionPerformed` in ('Insert','Update') ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

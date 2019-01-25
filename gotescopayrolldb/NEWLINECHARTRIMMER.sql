@@ -10,7 +10,13 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `NEWLINECHARTRIMMER`(
 	`stringParam` VARCHAR(200)
 
 
-) RETURNS varchar(200) CHARSET latin1
+
+
+
+
+
+
+) RETURNS varchar(255) CHARSET latin1
     DETERMINISTIC
 BEGIN
 

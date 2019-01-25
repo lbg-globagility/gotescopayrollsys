@@ -6,26 +6,7 @@
 
 DROP VIEW IF EXISTS `properdisplayaudittrail`;
 DROP TABLE IF EXISTS `properdisplayaudittrail`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `properdisplayaudittrail` AS SELECT
-au.Created
-, PROPERCASE(CONCAT_WS(', ', u.LastName, u.FirstName)) `Created By`
-, v.ViewName `Module`
-, au.FieldChanged `Field Changed`
-, au.OldValue `Previous Value`
-, IF(au.FieldChanged = 'EmployeeID'
-     , (SELECT EmployeeID FROM employee WHERE RowID = IFNULL(au.NewValue, 0))
-     # , (SELECT CONCAT_WS(', ', EmployeeID, LastName, FirstName) FROM employee WHERE RowID = IFNULL(au.NewValue, 0))
-	  , au.NewValue) `New Value`
-, au.ActionPerformed `ActionPerformed`
-
-, au.ViewID
-, au.OrganizationID
-, au.RowID
-
-FROM audittrail au
-INNER JOIN `user` u ON u.RowID = au.CreatedBy
-INNER JOIN `view` v ON v.RowID = au.ViewID
-ORDER BY au.Created DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `properdisplayaudittrail` AS select `au`.`Created` AS `Created`,`PROPERCASE`(concat_ws(', ',`u`.`LastName`,`u`.`FirstName`)) AS `Created By`,`v`.`ViewName` AS `Module`,`au`.`FieldChanged` AS `Field Changed`,`au`.`OldValue` AS `Previous Value`,if(`au`.`FieldChanged` = 'EmployeeID',(select `employee`.`EmployeeID` from `employee` where `employee`.`RowID` = ifnull(`au`.`NewValue`,0)),`au`.`NewValue`) AS `New Value`,`au`.`ActionPerformed` AS `ActionPerformed`,`au`.`ViewID` AS `ViewID`,`au`.`OrganizationID` AS `OrganizationID`,`au`.`RowID` AS `RowID` from ((`audittrail` `au` join `user` `u` on(`u`.`RowID` = `au`.`CreatedBy`)) join `view` `v` on(`v`.`RowID` = `au`.`ViewID`)) order by `au`.`Created` desc ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

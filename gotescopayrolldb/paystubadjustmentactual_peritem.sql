@@ -6,27 +6,7 @@
 
 DROP VIEW IF EXISTS `paystubadjustmentactual_peritem`;
 DROP TABLE IF EXISTS `paystubadjustmentactual_peritem`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `paystubadjustmentactual_peritem` AS SELECT
-
-adj.RowID
-, adj.OrganizationID
-, adj.Created
-, adj.CreatedBy
-, adj.LastUpd
-, adj.LastUpdBy
-, adj.PayStubID
-, adj.ProductID
-, ROUND(SUM(adj.PayAmount), 2) `PayAmount`
-, adj.`Comment`
-, TRUE `IsActual`
-
-, GROUP_CONCAT(p.PartNo) `AdjustmentName`
-, GROUP_CONCAT(ROUND(adj.PayAmount, 2)) `AdjustmentAmount`
-
-FROM paystubadjustmentactual adj
-INNER JOIN product p ON p.RowID=adj.ProductID
-WHERE adj.PayAmount > 0
-GROUP BY adj.PayStubID ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `paystubadjustmentactual_peritem` AS select `adj`.`RowID` AS `RowID`,`adj`.`OrganizationID` AS `OrganizationID`,`adj`.`Created` AS `Created`,`adj`.`CreatedBy` AS `CreatedBy`,`adj`.`LastUpd` AS `LastUpd`,`adj`.`LastUpdBy` AS `LastUpdBy`,`adj`.`PayStubID` AS `PayStubID`,`adj`.`ProductID` AS `ProductID`,round(sum(`adj`.`PayAmount`),2) AS `PayAmount`,`adj`.`Comment` AS `Comment`,1 AS `IsActual`,group_concat(`p`.`PartNo` separator ',') AS `AdjustmentName`,group_concat(round(`adj`.`PayAmount`,2) separator ',') AS `AdjustmentAmount` from (`paystubadjustmentactual` `adj` join `product` `p` on(`p`.`RowID` = `adj`.`ProductID`)) where `adj`.`PayAmount` > 0 group by `adj`.`PayStubID` ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

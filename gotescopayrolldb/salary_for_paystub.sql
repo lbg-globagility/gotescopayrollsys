@@ -6,20 +6,7 @@
 
 DROP VIEW IF EXISTS `salary_for_paystub`;
 DROP TABLE IF EXISTS `salary_for_paystub`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `salary_for_paystub` AS SELECT esa.*
-,pp.RowID `PayPeriodID`
-# ,d.DateValue
-,pp.PayFromDate
-,pp.PayToDate
-FROM employeesalary esa
-INNER JOIN employee e
-        ON e.RowID=esa.EmployeeID AND e.OrganizationID=esa.OrganizationID
-INNER JOIN dates d
-        ON d.DateValue BETWEEN esa.EffectiveDateFrom AND IFNULL(esa.EffectiveDateTo, d.DateValue)
-INNER JOIN payperiod pp
-        ON pp.OrganizationID=esa.OrganizationID
-		     AND pp.TotalGrossSalary=e.PayFrequencyID
-			  AND d.DateValue BETWEEN pp.PayFromDate AND pp.PayToDate ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `salary_for_paystub` AS select `esa`.`RowID` AS `RowID`,`esa`.`EmployeeID` AS `EmployeeID`,`esa`.`Created` AS `Created`,`esa`.`CreatedBy` AS `CreatedBy`,`esa`.`LastUpd` AS `LastUpd`,`esa`.`LastUpdBy` AS `LastUpdBy`,`esa`.`OrganizationID` AS `OrganizationID`,`esa`.`FilingStatusID` AS `FilingStatusID`,`esa`.`PaySocialSecurityID` AS `PaySocialSecurityID`,`esa`.`PayPhilhealthID` AS `PayPhilhealthID`,`esa`.`PhilHealthDeduction` AS `PhilHealthDeduction`,`esa`.`HDMFAmount` AS `HDMFAmount`,`esa`.`TrueSalary` AS `TrueSalary`,`esa`.`BasicPay` AS `BasicPay`,`esa`.`Salary` AS `Salary`,`esa`.`UndeclaredSalary` AS `UndeclaredSalary`,`esa`.`BasicDailyPay` AS `BasicDailyPay`,`esa`.`BasicHourlyPay` AS `BasicHourlyPay`,`esa`.`NoofDependents` AS `NoofDependents`,`esa`.`MaritalStatus` AS `MaritalStatus`,`esa`.`PositionID` AS `PositionID`,`esa`.`EffectiveDateFrom` AS `EffectiveDateFrom`,`esa`.`EffectiveDateTo` AS `EffectiveDateTo`,`esa`.`ContributeToGovt` AS `ContributeToGovt`,`esa`.`OverrideDiscardSSSContrib` AS `OverrideDiscardSSSContrib`,`esa`.`OverrideDiscardPhilHealthContrib` AS `OverrideDiscardPhilHealthContrib`,`pp`.`RowID` AS `PayPeriodID`,`pp`.`PayFromDate` AS `PayFromDate`,`pp`.`PayToDate` AS `PayToDate` from (((`employeesalary` `esa` join `employee` `e` on(`e`.`RowID` = `esa`.`EmployeeID` and `e`.`OrganizationID` = `esa`.`OrganizationID`)) join `dates` `d` on(`d`.`DateValue` between `esa`.`EffectiveDateFrom` and ifnull(`esa`.`EffectiveDateTo`,`d`.`DateValue`))) join `payperiod` `pp` on(`pp`.`OrganizationID` = `esa`.`OrganizationID` and `pp`.`TotalGrossSalary` = `e`.`PayFrequencyID` and `d`.`DateValue` between `pp`.`PayFromDate` and `pp`.`PayToDate`)) ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

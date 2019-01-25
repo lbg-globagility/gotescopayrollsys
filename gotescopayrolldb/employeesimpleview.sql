@@ -6,16 +6,7 @@
 
 DROP VIEW IF EXISTS `employeesimpleview`;
 DROP TABLE IF EXISTS `employeesimpleview`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employeesimpleview` AS SELECT e.RowID
-, e.EmployeeID
-, e.LastName
-, e.FirstName
-, e.MiddleName
-, e.OrganizationID
-, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
-FROM employee e
-INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose=0
-WHERE FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employeesimpleview` AS select `e`.`RowID` AS `RowID`,`e`.`EmployeeID` AS `EmployeeID`,`e`.`LastName` AS `LastName`,`e`.`FirstName` AS `FirstName`,`e`.`MiddleName` AS `MiddleName`,`e`.`OrganizationID` AS `OrganizationID`,`PROPERCASE`(concat_ws(', ',`e`.`LastName`,`e`.`FirstName`)) AS `FullName` from (`employee` `e` join `organization` `og` on(`og`.`RowID` = `e`.`OrganizationID` and `og`.`NoPurpose` = 0)) where find_in_set(`e`.`EmploymentStatus`,`UNEMPLOYEMENT_STATUSES`()) = 0 ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

@@ -6,30 +6,7 @@
 
 DROP VIEW IF EXISTS `leavetimeentry`;
 DROP TABLE IF EXISTS `leavetimeentry`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `leavetimeentry` AS SELECT et.*
-, (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) `LeaveHours`
-, ((esa.DailyRate / sh.DivisorToDailyRate) * (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours)) `LeavePayment`
-FROM employeetimeentry et
-INNER JOIN employeeshift esh
-        ON esh.EmployeeID=et.EmployeeID
-		     AND esh.OrganizationID=et.OrganizationID
-			  AND et.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
-INNER JOIN shift sh
-        ON sh.RowID=esh.ShiftID
-
-INNER JOIN employee e
-        ON e.RowID=et.EmployeeID
-		     AND e.OrganizationID=et.OrganizationID
-			  AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-INNER JOIN organization og
-        ON og.RowID=et.OrganizationID
-		     AND og.NoPurpose=0
-
-INNER JOIN employeesalary_withdailyrate esa
-        ON esa.RowID = et.EmployeeSalaryID
-
-WHERE (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
-GROUP BY et.RowID ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `leavetimeentry` AS select `et`.`RowID` AS `RowID`,`et`.`OrganizationID` AS `OrganizationID`,`et`.`Created` AS `Created`,`et`.`CreatedBy` AS `CreatedBy`,`et`.`LastUpd` AS `LastUpd`,`et`.`LastUpdBy` AS `LastUpdBy`,`et`.`Date` AS `Date`,`et`.`EmployeeShiftID` AS `EmployeeShiftID`,`et`.`EmployeeID` AS `EmployeeID`,`et`.`EmployeeSalaryID` AS `EmployeeSalaryID`,`et`.`EmployeeFixedSalaryFlag` AS `EmployeeFixedSalaryFlag`,`et`.`RegularHoursWorked` AS `RegularHoursWorked`,`et`.`RegularHoursAmount` AS `RegularHoursAmount`,`et`.`TotalHoursWorked` AS `TotalHoursWorked`,`et`.`OvertimeHoursWorked` AS `OvertimeHoursWorked`,`et`.`OvertimeHoursAmount` AS `OvertimeHoursAmount`,`et`.`UndertimeHours` AS `UndertimeHours`,`et`.`UndertimeHoursAmount` AS `UndertimeHoursAmount`,`et`.`NightDifferentialHours` AS `NightDifferentialHours`,`et`.`NightDiffHoursAmount` AS `NightDiffHoursAmount`,`et`.`NightDifferentialOTHours` AS `NightDifferentialOTHours`,`et`.`NightDiffOTHoursAmount` AS `NightDiffOTHoursAmount`,`et`.`HoursLate` AS `HoursLate`,`et`.`HoursLateAmount` AS `HoursLateAmount`,`et`.`LateFlag` AS `LateFlag`,`et`.`PayRateID` AS `PayRateID`,`et`.`VacationLeaveHours` AS `VacationLeaveHours`,`et`.`SickLeaveHours` AS `SickLeaveHours`,`et`.`MaternityLeaveHours` AS `MaternityLeaveHours`,`et`.`OtherLeaveHours` AS `OtherLeaveHours`,`et`.`AdditionalVLHours` AS `AdditionalVLHours`,`et`.`TotalDayPay` AS `TotalDayPay`,`et`.`Absent` AS `Absent`,`et`.`TaxableDailyAllowance` AS `TaxableDailyAllowance`,`et`.`HolidayPayAmount` AS `HolidayPayAmount`,`et`.`TaxableDailyBonus` AS `TaxableDailyBonus`,`et`.`NonTaxableDailyBonus` AS `NonTaxableDailyBonus`,`et`.`IsValidForHolidayPayment` AS `IsValidForHolidayPayment`,`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`MaternityLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours` AS `LeaveHours`,`esa`.`DailyRate` / `sh`.`DivisorToDailyRate` * (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`MaternityLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours`) AS `LeavePayment` from (((((`employeetimeentry` `et` join `employeeshift` `esh` on(`esh`.`EmployeeID` = `et`.`EmployeeID` and `esh`.`OrganizationID` = `et`.`OrganizationID` and `et`.`Date` between `esh`.`EffectiveFrom` and `esh`.`EffectiveTo`)) join `shift` `sh` on(`sh`.`RowID` = `esh`.`ShiftID`)) join `employee` `e` on(`e`.`RowID` = `et`.`EmployeeID` and `e`.`OrganizationID` = `et`.`OrganizationID` and find_in_set(`e`.`EmploymentStatus`,`UNEMPLOYEMENT_STATUSES`()) = 0)) join `organization` `og` on(`og`.`RowID` = `et`.`OrganizationID` and `og`.`NoPurpose` = 0)) join `employeesalary_withdailyrate` `esa` on(`esa`.`RowID` = `et`.`EmployeeSalaryID`)) where `et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`MaternityLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours` > 0 group by `et`.`RowID` ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

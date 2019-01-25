@@ -6,11 +6,16 @@
 
 DROP PROCEDURE IF EXISTS `RPT_attendance_sheet`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_attendance_sheet`(IN `OrganizationID` INT, IN `FromDate` DATE, IN `ToDate` DATE)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_attendance_sheet`(
+	IN `OrganizationID` INT,
+	IN `FromDate` DATE,
+	IN `ToDate` DATE
+)
     DETERMINISTIC
 BEGIN
 
 SELECT
+ete.RowID,
 CONCAT(ee.EmployeeID,' / ',ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol1`
 , UCASE(SUBSTRING(DATE_FORMAT(ete.`Date`,'%W'),1,3)) `DatCol2`
 , DATE_FORMAT(ete.`Date`,'%m/%e/%y') `DatCol3`
@@ -27,7 +32,12 @@ CONCAT(ee.EmployeeID,' / ',ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',
 , IFNULL(ete.NightDifferentialOTHours,0) `DatCol14`
 ,etd.TimeScheduleType `DatCol15`
 FROM employeetimeentry ete
-INNER JOIN employee e ON e.RowID=ete.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+
+# INNER JOIN employee e ON e.RowID=ete.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+/**/ INNER JOIN employee e ON e.RowID=ete.EmployeeID
+INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND ete.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
+INNER JOIN employee_servedperiod eee ON eee.RowID=e.RowID AND eee.ServedPeriodId=pp.RowID
+
 LEFT JOIN employeeshift esh ON esh.RowID=ete.EmployeeShiftID
 LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
 INNER JOIN employeetimeentrydetails etd ON etd.EmployeeID=ete.EmployeeID AND etd.OrganizationID=ete.OrganizationID AND etd.`Date`=ete.`Date`

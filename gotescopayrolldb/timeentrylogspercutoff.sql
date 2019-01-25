@@ -6,40 +6,7 @@
 
 DROP VIEW IF EXISTS `timeentrylogspercutoff`;
 DROP TABLE IF EXISTS `timeentrylogspercutoff`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `timeentrylogspercutoff` AS SELECT etd.RowID
-, etd.OrganizationId
-, etd.Created
-, etd.CreatedBy
-, etd.LastUpd
-, etd.LastUpdBy
-, etd.EmployeeID
-, etd.TimeIn
-, etd.TimeOut
-, etd.`Date`
-, etd.TimeScheduleType
-, etd.TimeEntryStatus
-, etd.TimeentrylogsImportID
-
-, pp.RowID `PayPeriodID`
-, pp.PayFromDate
-, pp.PayToDate
-, pp.`Month`
-, pp.`Year`
-, pp.OrdinalValue
-
-, e.RowID `EmployeePrimaKey`
-, e.EmployeeID `EmployeeUniqueKey`
-, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
-
-, TIME_FORMAT(etd.TimeIn, '%l:%i %p') `TimeInText`
-, TIME_FORMAT(etd.TimeOut, '%l:%i %p') `TimeOutText`
-
-FROM employeetimeentrydetails etd
-INNER JOIN organization og ON og.RowID = etd.OrganizationID AND og.NoPurpose = 0
-INNER JOIN employee e ON e.RowID = etd.EmployeeID AND e.OrganizationID = og.RowID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-INNER JOIN payperiod pp ON pp.OrganizationID = e.OrganizationID AND pp.TotalGrossSalary = e.PayFrequencyID AND etd.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
-WHERE etd.EmployeeID IS NOT NULL
-ORDER BY pp.`Year` DESC, pp.OrdinalValue DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `timeentrylogspercutoff` AS select `etd`.`RowID` AS `RowID`,`etd`.`OrganizationID` AS `OrganizationId`,`etd`.`Created` AS `Created`,`etd`.`CreatedBy` AS `CreatedBy`,`etd`.`LastUpd` AS `LastUpd`,`etd`.`LastUpdBy` AS `LastUpdBy`,`etd`.`EmployeeID` AS `EmployeeID`,`etd`.`TimeIn` AS `TimeIn`,`etd`.`TimeOut` AS `TimeOut`,`etd`.`Date` AS `Date`,`etd`.`TimeScheduleType` AS `TimeScheduleType`,`etd`.`TimeEntryStatus` AS `TimeEntryStatus`,`etd`.`TimeentrylogsImportID` AS `TimeentrylogsImportID`,`pp`.`RowID` AS `PayPeriodID`,`pp`.`PayFromDate` AS `PayFromDate`,`pp`.`PayToDate` AS `PayToDate`,`pp`.`Month` AS `Month`,`pp`.`Year` AS `Year`,`pp`.`OrdinalValue` AS `OrdinalValue`,`e`.`RowID` AS `EmployeePrimaKey`,`e`.`EmployeeID` AS `EmployeeUniqueKey`,`PROPERCASE`(concat_ws(', ',`e`.`LastName`,`e`.`FirstName`)) AS `FullName`,time_format(`etd`.`TimeIn`,'%l:%i %p') AS `TimeInText`,time_format(`etd`.`TimeOut`,'%l:%i %p') AS `TimeOutText` from (((`employeetimeentrydetails` `etd` join `organization` `og` on(`og`.`RowID` = `etd`.`OrganizationID` and `og`.`NoPurpose` = 0)) join `employee` `e` on(`e`.`RowID` = `etd`.`EmployeeID` and `e`.`OrganizationID` = `og`.`RowID` and find_in_set(`e`.`EmploymentStatus`,`UNEMPLOYEMENT_STATUSES`()) = 0)) join `payperiod` `pp` on(`pp`.`OrganizationID` = `e`.`OrganizationID` and `pp`.`TotalGrossSalary` = `e`.`PayFrequencyID` and `etd`.`Date` between `pp`.`PayFromDate` and `pp`.`PayToDate`)) where `etd`.`EmployeeID` is not null order by `pp`.`Year` desc,`pp`.`OrdinalValue` desc ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

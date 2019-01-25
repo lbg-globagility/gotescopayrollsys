@@ -6,29 +6,7 @@
 
 DROP VIEW IF EXISTS `v_employeesemimonthlyallowance`;
 DROP TABLE IF EXISTS `v_employeesemimonthlyallowance`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_employeesemimonthlyallowance` AS SELECT ea.*
-	,(ea.AllowanceAmount
-	  / (e.WorkDaysPerYear
-	     / (12 # is the number of months per year
-		     * PAYFREQUENCY_DIVISOR(pf.PayFrequencyType)))) `DailyAllowance`
-	,FALSE `IsFixed`
-	FROM employeeallowance ea
-	INNER JOIN employee e ON e.RowID=ea.EmployeeID AND e.OrganizationID=ea.OrganizationID AND e.EmployeeType!='Daily' AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
-	INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID
-	INNER JOIN product p ON p.RowID=ea.ProductID AND p.`Fixed`=0
-	WHERE ea.AllowanceFrequency='Semi-monthly' 
-UNION
-	SELECT ea.*
-	,(ea.AllowanceAmount
-	  / (e.WorkDaysPerYear
-	     / (12 # is the number of months per year
-		     * PAYFREQUENCY_DIVISOR(pf.PayFrequencyType)))) `DailyAllowance`
-	,TRUE `IsFixed`
-	FROM employeeallowance ea
-	INNER JOIN employee e ON e.RowID=ea.EmployeeID AND e.OrganizationID=ea.OrganizationID AND e.EmployeeType!='Daily' AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
-	INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID
-	INNER JOIN product p ON p.RowID=ea.ProductID AND p.`Fixed`=1
-	WHERE ea.AllowanceFrequency='Semi-monthly' ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_employeesemimonthlyallowance` AS select `ea`.`RowID` AS `RowID`,`ea`.`OrganizationID` AS `OrganizationID`,`ea`.`Created` AS `Created`,`ea`.`CreatedBy` AS `CreatedBy`,`ea`.`LastUpd` AS `LastUpd`,`ea`.`LastUpdBy` AS `LastUpdBy`,`ea`.`EmployeeID` AS `EmployeeID`,`ea`.`ProductID` AS `ProductID`,`ea`.`EffectiveStartDate` AS `EffectiveStartDate`,`ea`.`AllowanceFrequency` AS `AllowanceFrequency`,`ea`.`EffectiveEndDate` AS `EffectiveEndDate`,`ea`.`TaxableFlag` AS `TaxableFlag`,`ea`.`AllowanceAmount` AS `AllowanceAmount`,`ea`.`AllowanceAmount` / (`e`.`WorkDaysPerYear` / (12 * `PAYFREQUENCY_DIVISOR`(`pf`.`PayFrequencyType`))) AS `DailyAllowance`,0 AS `IsFixed` from (((`employeeallowance` `ea` join `employee` `e` on(`e`.`RowID` = `ea`.`EmployeeID` and `e`.`OrganizationID` = `ea`.`OrganizationID` and `e`.`EmployeeType` <> 'Daily' and `e`.`EmploymentStatus` not in ('Resigned','Terminated'))) join `payfrequency` `pf` on(`pf`.`RowID` = `e`.`PayFrequencyID`)) join `product` `p` on(`p`.`RowID` = `ea`.`ProductID` and `p`.`Fixed` = 0)) where `ea`.`AllowanceFrequency` = 'Semi-monthly' union select `ea`.`RowID` AS `RowID`,`ea`.`OrganizationID` AS `OrganizationID`,`ea`.`Created` AS `Created`,`ea`.`CreatedBy` AS `CreatedBy`,`ea`.`LastUpd` AS `LastUpd`,`ea`.`LastUpdBy` AS `LastUpdBy`,`ea`.`EmployeeID` AS `EmployeeID`,`ea`.`ProductID` AS `ProductID`,`ea`.`EffectiveStartDate` AS `EffectiveStartDate`,`ea`.`AllowanceFrequency` AS `AllowanceFrequency`,`ea`.`EffectiveEndDate` AS `EffectiveEndDate`,`ea`.`TaxableFlag` AS `TaxableFlag`,`ea`.`AllowanceAmount` AS `AllowanceAmount`,`ea`.`AllowanceAmount` / (`e`.`WorkDaysPerYear` / (12 * `PAYFREQUENCY_DIVISOR`(`pf`.`PayFrequencyType`))) AS `DailyAllowance`,1 AS `IsFixed` from (((`employeeallowance` `ea` join `employee` `e` on(`e`.`RowID` = `ea`.`EmployeeID` and `e`.`OrganizationID` = `ea`.`OrganizationID` and `e`.`EmployeeType` <> 'Daily' and `e`.`EmploymentStatus` not in ('Resigned','Terminated'))) join `payfrequency` `pf` on(`pf`.`RowID` = `e`.`PayFrequencyID`)) join `product` `p` on(`p`.`RowID` = `ea`.`ProductID` and `p`.`Fixed` = 1)) where `ea`.`AllowanceFrequency` = 'Semi-monthly' ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

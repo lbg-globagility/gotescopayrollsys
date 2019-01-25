@@ -6,23 +6,7 @@
 
 DROP VIEW IF EXISTS `employee_quitperiod`;
 DROP TABLE IF EXISTS `employee_quitperiod`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employee_quitperiod` AS SELECT
-# pp.*,
-
-e.RowID `EmployeeId`
-, e.OrganizationID
-, e.PayFrequencyID
-
-, pp.RowID `PayPeriodId`
-, pp.`Year`
-, pp.OrdinalValue
-, pp.PayFromDate
-, pp.PayToDate
-
-FROM employee e
-INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND e.TerminationDate BETWEEN pp.PayFromDate AND pp.PayToDate
-WHERE FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) > 0
-AND e.TerminationDate IS NOT NULL ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `employee_quitperiod` AS select `e`.`RowID` AS `EmployeeId`,`e`.`OrganizationID` AS `OrganizationID`,`e`.`PayFrequencyID` AS `PayFrequencyID`,`pp`.`RowID` AS `PayPeriodId`,`pp`.`Year` AS `Year`,`pp`.`OrdinalValue` AS `OrdinalValue`,`pp`.`PayFromDate` AS `PayFromDate`,`pp`.`PayToDate` AS `PayToDate` from (`employee` `e` join `payperiod` `pp` on(`pp`.`OrganizationID` = `e`.`OrganizationID` and `pp`.`TotalGrossSalary` = `e`.`PayFrequencyID` and `e`.`TerminationDate` between `pp`.`PayFromDate` and `pp`.`PayToDate`)) where find_in_set(`e`.`EmploymentStatus`,`UNEMPLOYEMENT_STATUSES`()) > 0 and `e`.`TerminationDate` is not null ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

@@ -6,28 +6,7 @@
 
 DROP VIEW IF EXISTS `reportlist`;
 DROP TABLE IF EXISTS `reportlist`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `reportlist` AS SELECT CONVERT('Attendance sheet' USING utf8) `ReportName`
-UNION SELECT CONVERT('Alpha list' USING utf8)
-UNION SELECT CONVERT('Employee\'s Employment Record' USING utf8)
-UNION SELECT CONVERT('Employee\'s History of Salary Increase' USING utf8)
-UNION SELECT CONVERT('Employee\'s Identification Number' USING utf8)
-UNION SELECT CONVERT('Employee\'s Offenses' USING utf8)
-UNION SELECT CONVERT('Employee\'s payroll Ledger' USING utf8)
-UNION SELECT CONVERT('Employee 13th Month Pay Report' USING utf8)
-# UNION SELECT CONVERT('Employee Leave Ledger' USING utf8)
-UNION SELECT CONVERT('Filed Leaves Report' USING utf8)
-UNION SELECT CONVERT('Employee Leave Balance Summary' USING utf8)
-UNION SELECT CONVERT('Employee Loan Report' USING utf8)
-UNION SELECT CONVERT('Employee Loan Summary Report' USING utf8)
-UNION SELECT CONVERT('Employee Personal Information' USING utf8)
-UNION SELECT CONVERT('PAGIBIG Monthly Report' USING utf8)
-UNION SELECT CONVERT('Payroll Summary Report' USING utf8)
-UNION SELECT CONVERT('PhilHealth Monthly Report' USING utf8)
-UNION SELECT CONVERT('SSS Monthly Report' USING utf8)
-UNION SELECT CONVERT('Tax Monthly Report' USING utf8)
-UNION SELECT CONVERT('Post Employment Clearance' USING utf8)
-UNION SELECT CONVERT('Agency Fee' USING utf8)
-UNION SELECT CONVERT('Excessive Tardiness report' USING utf8) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `reportlist` AS select convert('Attendance sheet' using utf8) AS `ReportName` union select convert('Alpha list' using utf8) AS `CONVERT('Alpha list' USING utf8)` union select convert('Employee\'s Employment Record' using utf8) AS `CONVERT('Employee\'s Employment Record' USING utf8)` union select convert('Employee\'s History of Salary Increase' using utf8) AS `CONVERT('Employee\'s History of Salary Increase' USING utf8)` union select convert('Employee\'s Identification Number' using utf8) AS `CONVERT('Employee\'s Identification Number' USING utf8)` union select convert('Employee\'s Offenses' using utf8) AS `CONVERT('Employee\'s Offenses' USING utf8)` union select convert('Employee\'s payroll Ledger' using utf8) AS `CONVERT('Employee\'s payroll Ledger' USING utf8)` union select convert('Employee 13th Month Pay Report' using utf8) AS `CONVERT('Employee 13th Month Pay Report' USING utf8)` union select convert('Filed Leaves Report' using utf8) AS `CONVERT('Filed Leaves Report' USING utf8)` union select convert('Employee Leave Balance Summary' using utf8) AS `CONVERT('Employee Leave Balance Summary' USING utf8)` union select convert('Employee Loan Report' using utf8) AS `CONVERT('Employee Loan Report' USING utf8)` union select convert('Employee Loan Summary Report' using utf8) AS `CONVERT('Employee Loan Summary Report' USING utf8)` union select convert('Employee Personal Information' using utf8) AS `CONVERT('Employee Personal Information' USING utf8)` union select convert('PAGIBIG Monthly Report' using utf8) AS `CONVERT('PAGIBIG Monthly Report' USING utf8)` union select convert('Payroll Summary Report' using utf8) AS `CONVERT('Payroll Summary Report' USING utf8)` union select convert('PhilHealth Monthly Report' using utf8) AS `CONVERT('PhilHealth Monthly Report' USING utf8)` union select convert('SSS Monthly Report' using utf8) AS `CONVERT('SSS Monthly Report' USING utf8)` union select convert('Tax Monthly Report' using utf8) AS `CONVERT('Tax Monthly Report' USING utf8)` union select convert('Post Employment Clearance' using utf8) AS `CONVERT('Post Employment Clearance' USING utf8)` union select convert('Agency Fee' using utf8) AS `CONVERT('Agency Fee' USING utf8)` union select convert('Excessive Tardiness report' using utf8) AS `CONVERT('Excessive Tardiness report' USING utf8)` ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

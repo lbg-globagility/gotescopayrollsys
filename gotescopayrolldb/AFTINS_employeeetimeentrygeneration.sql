@@ -5,17 +5,17 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TRIGGER IF EXISTS `AFTINS_employeeetimeentrygeneration`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `AFTINS_employeeetimeentrygeneration` AFTER INSERT ON `employeeetimeentrygeneration` FOR EACH ROW BEGIN
 
-DECLARE _count
+DECLARE countRow
         ,indx
         ,anyint INT(11);
 
-DECLARE _indx
-        ,_anyint
-        ,_anycount INT(11);
+DECLARE indexNo
+        ,varInt
+        ,varCount INT(11);
 
 /*CALL MASS_generate_employeetimeentry
 (
@@ -52,28 +52,28 @@ SELECT
 	)
 INTO @existz;
 
-/*SET _anycount = DATEDIFF(NEW.Pay_dateto, NEW.Pay_datefrom);
+/*SET varCount = DATEDIFF(NEW.Pay_dateto, NEW.Pay_datefrom);
 
 SELECT COUNT(e.RowID)
 FROM employee e
 WHERE e.OrganizationID=NEW.OrgRowID
 AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
-INTO _count;
+INTO countRow;
 
 SET indx = 0;
 
-WHILE indx < _count DO
+WHILE indx < countRow DO
 	
 	SELECT e.RowID
 	FROM employee e
 	WHERE e.OrganizationID=NEW.OrgRowID
 	AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
-	LIMIT _indx, 1
+	LIMIT indexNo, 1
 	INTO @e_rowid;
 
-	SET _indx = 0;
+	SET indexNo = 0;
 	
-	WHILE _indx < _anycount DO
+	WHILE indexNo < varCount DO
 	
 		SELECT
 		GENERATE_employeetimeentry
@@ -86,10 +86,10 @@ WHILE indx < _count DO
 		FROM dates d
 		WHERE d.DateValue BETWEEN NEW.Pay_datefrom AND NEW.Pay_dateto
 		ORDER BY d.DateValue
-		LIMIT _indx, 1
-		INTO _anyint;
+		LIMIT indexNo, 1
+		INTO varInt;
 	
-		SET _indx = (_indx + 1);
+		SET indexNo = (indexNo + 1);
 
 	END WHILE;
 	

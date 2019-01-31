@@ -11,7 +11,13 @@ CREATE TRIGGER `BEFINS_employeeleave` BEFORE INSERT ON `employeeleave` FOR EACH 
 
 DECLARE selected_leavebal DECIMAL(11,2) DEFAULT 0;
 
-DECLARE hasLatestPaystub, isFirstPeriod, isCelebratesRegularization BOOL DEFAULT FALSE;
+DECLARE hasLatestPaystub, isFirstPeriod, isCelebratesRegularization, isCoversBreak BOOL DEFAULT FALSE;
+
+DECLARE startBreakTime, endBreakTime TIME DEFAULT NULL;
+
+DECLARE startBreakDateTime, endBreakDateTime DATETIME DEFAULT NULL;
+
+DECLARE hourBreak INT(11) DEFAULT 1;
 
 /*********************************************************
 START METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
@@ -136,9 +142,14 @@ IF NEW.`Status` = 'Approved' THEN
 	
 	SET @shift_rowid = NULL;
 	
+	SET @leaveStartDateTime = CONCAT_DATETIME(NEW.LeaveStartDate, NEW.LeaveStartTime);
+	SET @leaveEndDateTime = CONCAT_DATETIME(@appropriate_end_date, NEW.LeaveEndTime);
+	
 	IF @offcl_validdays > 1 THEN
 	
-		SELECT sh.RowID
+		SELECT sh.RowID, sh.BreakTimeFrom, sh.BreakTimeTo
+		, GetNextStartDateTime(CONCAT_DATETIME(NEW.LeaveStartDate, sh.TimeFrom), sh.BreakTimeFrom) BETWEEN @leaveStartDateTime AND @leaveEndDateTime
+		, sh.ShiftHours - sh.WorkHours `BreakHours`
 		FROM employeeshift esh
 		INNER JOIN shift sh ON sh.RowID=esh.ShiftID
 		WHERE esh.EmployeeID=NEW.EmployeeID
@@ -146,18 +157,24 @@ IF NEW.`Status` = 'Approved' THEN
 		AND (NEW.LeaveStartDate BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 		     OR NEW.LeaveEndDate BETWEEN esh.EffectiveFrom AND esh.EffectiveTo)
 		LIMIT 1
-		INTO @shift_rowid;
+		INTO @shift_rowid, startBreakTime, endBreakTime
+		     , isCoversBreak
+			  , hourBreak;
 
 	ELSEIF @offcl_validdays = 1 THEN
 	
-		SELECT sh.RowID
+		SELECT sh.RowID, sh.BreakTimeFrom, sh.BreakTimeTo
+		, GetNextStartDateTime(CONCAT_DATETIME(NEW.LeaveStartDate, sh.TimeFrom), sh.BreakTimeFrom) BETWEEN @leaveStartDateTime AND @leaveEndDateTime
+		, sh.ShiftHours - sh.WorkHours `BreakHours`
 		FROM employeeshift esh
 		INNER JOIN shift sh ON sh.RowID=esh.ShiftID
 		WHERE esh.EmployeeID=NEW.EmployeeID
 		AND esh.OrganizationID=NEW.OrganizationID
 		AND NEW.LeaveStartDate BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 		LIMIT 1
-		INTO @shift_rowid;
+		INTO @shift_rowid, startBreakTime, endBreakTime
+		     , isCoversBreak
+			  , hourBreak;
 	
 	END IF;
 	
@@ -176,17 +193,56 @@ IF NEW.`Status` = 'Approved' THEN
 	
 	SET @break_hrs = IFNULL(@break_hrs, 0);
 	
-	SET @validhrs_multip_validdays = (@offcl_validhrs - @break_hrs) * @offcl_validdays;
+	SET startBreakDateTime = GetNextStartDateTime(@leaveStartDateTime, startBreakTime);
+	SET endBreakDateTime = ADDDATE(startBreakDateTime, INTERVAL hourBreak HOUR);
+	#@leaveStartDateTime
+	#@leaveEndDateTime
+	
+	SET isCoversBreak = IFNULL(isCoversBreak, FALSE);
+	
+	IF isCoversBreak THEN
+		
+		SET @break_hrs = @break_hrs;
+		
+		# files leave at 1st half of shift schedule
+		IF @leaveStartDateTime <= startBreakDateTime AND @leaveEndDateTime <= endBreakDateTime THEN
+			SET @break_hrs = TIMESTAMPDIFF(SECOND, startBreakDateTime, @leaveEndDateTime);
+			SET @break_hrs = @break_hrs / (@min_perhour * @sec_permin);
+		
+		# files leave at 2nd half of shift schedule
+		ELSEIF startBreakDateTime <= @leaveStartDateTime AND endBreakDateTime <= @leaveEndDateTime THEN
+			SET @break_hrs = TIMESTAMPDIFF(SECOND, @leaveStartDateTime, endBreakDateTime);
+			SET @break_hrs = @break_hrs / (@min_perhour * @sec_permin);
+			
+		END IF;
+		
+		SET @validhrs_multip_validdays = (@offcl_validhrs - @break_hrs) * @offcl_validdays;
 
-	IF (selected_leavebal - @validhrs_multip_validdays) < 0 THEN
-		# SET @validhrs_multip_validdays = @validhrs_multip_validdays + (selected_leavebal - @validhrs_multip_validdays);
-		# SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
-		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * -1;
+		IF (selected_leavebal - @validhrs_multip_validdays) < 0 THEN
+			# SET @validhrs_multip_validdays = @validhrs_multip_validdays + (selected_leavebal - @validhrs_multip_validdays);
+			# SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
+			SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * -1;
+		ELSE
+		
+			# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
+			# SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
+			SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0));
+		END IF;
+		
 	ELSE
 	
-		# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
-		# SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
-		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0));
+		SET @validhrs_multip_validdays = @offcl_validhrs * @offcl_validdays;
+		
+		IF (selected_leavebal - @validhrs_multip_validdays) < 0 THEN
+
+			SET NEW.OfficialValidHours = IFNULL(@offcl_validhrs, 0) * -1;
+
+		ELSE
+		
+			SET NEW.OfficialValidHours = IFNULL(@offcl_validhrs, 0);
+
+		END IF;
+		
 	END IF;
 	
 ELSE

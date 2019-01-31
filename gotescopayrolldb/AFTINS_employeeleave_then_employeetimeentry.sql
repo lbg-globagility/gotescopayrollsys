@@ -5,7 +5,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TRIGGER IF EXISTS `AFTINS_employeeleave_then_employeetimeentry`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `AFTINS_employeeleave_then_employeetimeentry` AFTER INSERT ON `employeeleave` FOR EACH ROW BEGIN
 # AFTINS_employeeleave_then_employeetimeentry
@@ -109,7 +109,7 @@ SET @correct_date = CURDATE();
         SELECT
 
 
-        INSUPD_employeetimeentries(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, d.DateValue, esh.RowID, NEW.EmployeeID, es.RowID, 0, 0, 0, 0, 0, 0, 0, pr.RowID, 0, 0, 0, 0, 0, 0, 0, 0)
+        INSUPD_employeetimeentries(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, d.DateValue, esh.RowID, NEW.EmployeeID, es.RowID, 0, 0, 0, 0, 0, 0, 0, pr.RowID, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 
 
@@ -302,7 +302,8 @@ ELSEIF NEW.`Status` = 'Approved' THEN
 															, under_hrs * hourlypayamount
 															, 0
 															, 0
-															, late_hrs * hourlypayamount) INTO anyint;
+															, late_hrs * hourlypayamount
+															, 0) INTO anyint;
 
 
                 SELECT RowID FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date`=dateloop INTO anyint;

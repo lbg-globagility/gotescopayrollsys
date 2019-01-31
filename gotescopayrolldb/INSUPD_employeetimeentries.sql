@@ -6,7 +6,33 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeetimeentries`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeetimeentries`(`etent_RowID` INT, `etent_OrganizationID` INT, `etent_CreatedBy` INT, `etent_LastUpdBy` INT, `etent_Date` DATE, `etent_EmployeeShiftID` INT, `etent_EmployeeID` INT, `etent_EmployeeSalaryID` INT, `etent_EmployeeFixedSalaryFlag` CHAR(50), `etent_RegularHoursWorked` DECIMAL(11,6), `etent_OvertimeHoursWorked` DECIMAL(11,6), `etent_UndertimeHours` DECIMAL(11,6), `etent_NightDifferentialHours` DECIMAL(11,6), `etent_NightDifferentialOTHours` DECIMAL(11,6), `etent_HoursLate` DECIMAL(11,6), `etent_PayRateID` INT, `etent_TotalDayPay` DECIMAL(11,6), `etent_TotalHoursWorked` DECIMAL(11,6), `etent_RegularHoursAmount` DECIMAL(11,6), `etent_OvertimeHoursAmount` DECIMAL(11,6), `etent_UndertimeHoursAmount` DECIMAL(11,6), `etent_NightDiffHoursAmount` DECIMAL(11,6), `etent_NightDiffOTHoursAmount` DECIMAL(11,6), `etent_HoursLateAmount` DECIMAL(11,6)) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeetimeentries`(
+	`etent_RowID` INT,
+	`etent_OrganizationID` INT,
+	`etent_CreatedBy` INT,
+	`etent_LastUpdBy` INT,
+	`etent_Date` DATE,
+	`etent_EmployeeShiftID` INT,
+	`etent_EmployeeID` INT,
+	`etent_EmployeeSalaryID` INT,
+	`etent_EmployeeFixedSalaryFlag` CHAR(50),
+	`etent_RegularHoursWorked` DECIMAL(11,6),
+	`etent_OvertimeHoursWorked` DECIMAL(11,6),
+	`etent_UndertimeHours` DECIMAL(11,6),
+	`etent_NightDifferentialHours` DECIMAL(11,6),
+	`etent_NightDifferentialOTHours` DECIMAL(11,6),
+	`etent_HoursLate` DECIMAL(11,6),
+	`etent_PayRateID` INT,
+	`etent_TotalDayPay` DECIMAL(11,6),
+	`etent_TotalHoursWorked` DECIMAL(11,6),
+	`etent_RegularHoursAmount` DECIMAL(11,6),
+	`etent_OvertimeHoursAmount` DECIMAL(11,6),
+	`etent_UndertimeHoursAmount` DECIMAL(11,6),
+	`etent_NightDiffHoursAmount` DECIMAL(11,6),
+	`etent_NightDiffOTHoursAmount` DECIMAL(11,6),
+	`etent_HoursLateAmount` DECIMAL(11,6),
+	`leavePayment` DECIMAL(11,6)
+) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 
@@ -83,7 +109,7 @@ INSERT INTO employeetimeentry
 	# ,	etent_TotalDayPay
 	, IF((etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount) = 0
 	     , etent_TotalDayPay + etent_NightDiffOTHoursAmount
-	     , (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount))
+	     , (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount + leavePayment))
 	,is_valid_for_holipayment
 ) ON 
 DUPLICATE 
@@ -108,41 +134,11 @@ UPDATE
 	# ,TotalDayPay = etent_TotalDayPay
 	,TotalDayPay = IF((etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount) = 0
 	     , etent_TotalDayPay + etent_NightDiffOTHoursAmount
-	     , (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount))
+	     , (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount + leavePayment))
 	     
 	,EmployeeShiftID = etent_EmployeeShiftID
 	,EmployeeSalaryID=etent_EmployeeSalaryID
 	,IsValidForHolidayPayment=is_valid_for_holipayment;SELECT @@Identity AS id INTO etentID;
-	
-	/*SELECT etent_OrganizationID
-	,CURRENT_TIMESTAMP()
-	,etent_CreatedBy
-	,etent_CreatedBy
-	,etent_Date
-	,etent_EmployeeShiftID
-	,etent_EmployeeID
-	,etent_EmployeeSalaryID
-	,etent_EmployeeFixedSalaryFlag
-	,etent_TotalHoursWorked
-	,etent_RegularHoursWorked
-	,	etent_RegularHoursAmount
-	,etent_OvertimeHoursWorked
-	,	etent_OvertimeHoursAmount
-	,etent_UndertimeHours
-	,	etent_UndertimeHoursAmount
-	,etent_NightDifferentialHours
-	,	etent_NightDiffHoursAmount
-	,etent_NightDifferentialOTHours
-	,	etent_NightDiffOTHoursAmount
-	,etent_HoursLate
-	,	etent_HoursLateAmount
-	,IF(etent_HoursLateAmount = 0, '0', '1')
-	,etent_PayRateID
-	# ,	etent_TotalDayPay
-	, IF((etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount) = 0
-	     , etent_TotalDayPay + etent_NightDiffOTHoursAmount
-	     , (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount))
-	,is_valid_for_holipayment INTO OUTFILE 'D:/New Downloads/result.txt';*/
 	
 RETURN etentID;
 

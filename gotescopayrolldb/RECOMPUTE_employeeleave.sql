@@ -36,7 +36,7 @@ IF atleast_one = '1' THEN
 	AND (elv.LeaveStartDate <= ToPayDate OR elv.LeaveEndDate <= ToPayDate)
 	INTO @ids;
 
-	/**/DELETE FROM employeeleave WHERE FIND_IN_SET(RowID, @ids) > 0;
+	/**/ DELETE FROM employeeleave WHERE FIND_IN_SET(RowID, @ids) > 0;
 
 	INSERT INTO employeeleave
 	(

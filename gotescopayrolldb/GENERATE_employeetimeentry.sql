@@ -6,7 +6,17 @@
 
 DROP FUNCTION IF EXISTS `GENERATE_employeetimeentry`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(`ete_EmpRowID` INT, `ete_OrganizID` INT, `ete_Date` DATE, `ete_UserRowID` INT) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(
+	`ete_EmpRowID` INT,
+	`ete_OrganizID` INT,
+	`ete_Date` DATE,
+	`ete_UserRowID` INT
+
+
+
+
+
+) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 
@@ -126,7 +136,8 @@ DECLARE payrateRowID INT(11);
 DECLARE ete_TotalDayPay DECIMAL(11,6);
 
 
-DECLARE hasLeave CHAR(1) DEFAULT '0';
+DECLARE hasLeave BOOL DEFAULT FALSE;
+DECLARE leaveId INT(11);
 
 DECLARE OTCount INT(11) DEFAULT 0;
 
@@ -147,6 +158,7 @@ DECLARE default_regholi_payrate DECIMAL(11,2) DEFAULT 2.0;
 
 DECLARE has_timelogs_onthisdate
         ,is_valid_for_holipayment BOOL DEFAULT FALSE;
+DECLARE timeLogId INT(11);
 
 UPDATE employeeovertime ot SET ot.LastUpd=IFNULL(ADDDATE(ot.LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP()) WHERE ot.EmployeeID=ete_EmpRowID AND ot.OrganizationID=ete_OrganizID AND ete_Date BETWEEN ot.OTStartDate AND ot.OTEndDate AND ot.OTStatus='Approved';
 
@@ -261,13 +273,16 @@ IF isRestDay IS NULL THEN
 
 END IF;
 
-SELECT EXISTS(SELECT RowID
-					FROM employeetimeentrydetails
-					WHERE EmployeeID=ete_EmpRowID
-					AND `Date`=ete_Date
-					AND OrganizationID=ete_OrganizID
-					LIMIT 1) `Result`
-INTO has_timelogs_onthisdate;
+SELECT i.RowID
+FROM (SELECT RowID
+		FROM employeetimeentrydetails
+		WHERE EmployeeID=ete_EmpRowID
+		AND `Date`=ete_Date
+		AND OrganizationID=ete_OrganizID
+		LIMIT 1) i
+INTO timeLogId;
+
+SET has_timelogs_onthisdate = timeLogId IS NOT NULL;
 
 SELECT
 COUNT(RowID)
@@ -340,6 +355,17 @@ ELSE
 
 
 END IF;
+
+SELECT i.RowID
+FROM (SELECT
+		elv.RowID
+		FROM employeeleave elv
+		WHERE elv.EmployeeID=ete_EmpRowID AND elv.`Status`='Approved'
+		AND elv.OrganizationID=ete_OrganizID
+		AND ete_Date BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
+		LIMIT 1) i
+INTO leaveId;
+SET hasLeave = leaveId IS NOT NULL;
 
 SET @timeStampLogIn = NULL;
 SET @timeStampLogOut = NULL;
@@ -767,23 +793,75 @@ ELSE
 			
 	END IF;
 
-	IF etd_TimeIn > shifttimefrom THEN
+	IF hasLeave THEN
 	
-		SELECT COMPUTE_TimeDifference(shifttimefrom, etd_TimeIn)
-		INTO ete_HrsLate;
-
-	ELSE
-	
-		SELECT COMPUTE_TimeDifference(etd_TimeIn, shifttimefrom)
-		INTO ete_HrsLate;
-
-	END IF;
+		SET @leaveStartTime = NULL; SET @leaveEndTime = NULL;
+		SET @shBreakStartDateTime = NULL;
+		SET @hoursBreak = 0.0; SET @shiftHours = 0.0;
+		SET @logStampIn = NULL; SET @logStampOut = NULL;
+		SET @shStartDateTime = NULL;
 		
-	IF etd_TimeOut < shifttimeto THEN
-	
-		SELECT COMPUTE_TimeDifference(etd_TimeOut, shifttimeto)
+		SELECT elv.LeaveStartTime, elv.LeaveEndTime
+		, GetNextStartDateTime(CONCAT_DATETIME(ete_Date, sh.TimeFrom), sh.BreakTimeFrom)
+		, (sh.ShiftHours - sh.WorkHours)
+		, etd.TimeStampIn, etd.TimeStampOut
+		, CONCAT_DATETIME(ete_Date, sh.TimeFrom)
+		, sh.ShiftHours
+		FROM employeeleave elv
+		INNER JOIN shift sh ON sh.RowID = sh_rowID
+		LEFT JOIN employeetimeentrydetails etd ON etd.RowID = timeLogId
+		WHERE elv.RowID = leaveId
+		INTO @leaveStartTime
+		     , @leaveEndTime
+			  , @shBreakStartDateTime
+			  , @hoursBreak
+			  , @logStampIn, @logStampOut
+			  , @shStartDateTime
+			  , @shiftHours;
+
+		SET @shBreakEndDateTime = ADDDATE(@shBreakStartDateTime, INTERVAL @hoursBreak HOUR);
+		
+		SET @leaveStartDateTime = CONCAT_DATETIME(ete_Date, shifttimefrom);
+		SET @leaveEndDateTime = GetNextStartDateTime(CONCAT_DATETIME(ete_Date, shifttimefrom), @leaveEndTime);
+		
+		SET @shEndDateTime = ADDDATE(@shStartDateTime, INTERVAL @shiftHours HOUR);
+		
+		SELECT TIMESTAMPDIFF(SECOND
+									, @shStartDateTime
+									, LEAST(IFNULL(@leaveStartDateTime, @logStampIn)
+												, IFNULL(@logStampIn, @leaveStartDateTime))
+									) / 3600
+		INTO ete_HrsLate;
+		IF ete_HrsLate < 0 THEN SET ete_HrsLate = 0; END IF;
+
+		SELECT TIMESTAMPDIFF(SECOND
+									, GREATEST(IFNULL(@leaveEndDateTime, @logStampOut)
+													, IFNULL(@logStampOut, @leaveEndDateTime))
+									, @shEndDateTime
+									) / 3600
 		INTO ete_HrsUnder;
+		IF ete_HrsUnder < 0 THEN SET ete_HrsUnder = 0; END IF;
 		
+	ELSE
+		IF etd_TimeIn > shifttimefrom THEN
+		
+			SELECT COMPUTE_TimeDifference(shifttimefrom, etd_TimeIn)
+			INTO ete_HrsLate;
+
+		ELSE
+		
+			SELECT COMPUTE_TimeDifference(etd_TimeIn, shifttimefrom)
+			INTO ete_HrsLate;
+
+		END IF;
+
+		IF etd_TimeOut < shifttimeto THEN
+		
+			SELECT COMPUTE_TimeDifference(etd_TimeOut, shifttimeto)
+			INTO ete_HrsUnder;
+			
+		END IF;
+
 	END IF;
 	
 	SET ete_NDiffHrs = 0;
@@ -869,13 +947,6 @@ IF ete_HrsLate IS NULL THEN
 END IF;
 
 
-/*IF ete_HrsLate > 4 AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 9 THEN
-	SET ete_HrsLate = COMPUTE_TimeDifference(SUBTIME(shifttimeto,'04:00'), shifttimeto);
-
-ELSEIF ete_HrsLate > 5 AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 10 THEN
-	SET ete_HrsLate = COMPUTE_TimeDifference(SUBTIME(shifttimeto,'05:00'), shifttimeto);
-
-END IF;*/
 SET @minutePerHour = 60;
 SET @secPerHour = @minutePerHour * 60;
 SET @breakHours = ( TIME_TO_SEC(TIMEDIFF(@breakTo, @breakFrom)) / @secPerHour );
@@ -885,16 +956,18 @@ SET @breakFractionMinutes = ( (@breakHours MOD 1) * @minutePerHour );
 SET @breakFrom = CONCAT_DATETIME(ete_Date, @breakFrom);
 SET @breakTo = ADDDATE(ADDDATE(@breakFrom, INTERVAL @breakHoursFloor HOUR), INTERVAL @breakFractionMinutes MINUTE);
 
-IF @breakFrom <= @timeStampLogIn AND @breakTo <= @timeStampLogIn #AND ete_Date = '2018-12-26'
+IF @breakFrom <= @timeStampLogIn AND @breakTo <= @timeStampLogIn
 	THEN
 	SET ete_HrsLate = ete_HrsLate - @breakHours;
-ELSEIF @timeStampLogIn BETWEEN @breakFrom AND @breakTo AND ete_Date = '2018-12-26' THEN
+ELSEIF @timeStampLogIn BETWEEN @breakFrom AND @breakTo
+	THEN
 	SET @breakHours = ( TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(@timeStampLogIn, @@time_format), DATE_FORMAT(@breakFrom, @@time_format))) / @secPerHour );
-#	SELECT @timeStampLogIn, DATE_FORMAT(@timeStampLogIn, @@time_format), ete_HrsLate, @breakHours, @breakHoursFloor, @breakFractionMinutes, @breakFrom, @breakTo INTO OUTFILE 'D:/test.txt';
 	SET ete_HrsLate = ete_HrsLate - @breakHours;
 END IF;
 
-IF ete_HrsUnder IS NULL THEN
+IF ete_HrsLate < 0 THEN SET ete_HrsLate = 0; END IF;
+
+/*IF ete_HrsUnder IS NULL THEN
 	SET ete_HrsUnder = 0;
 END IF;
 
@@ -904,7 +977,7 @@ IF ete_HrsUnder > 4 AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 9 T
 ELSEIF ete_HrsUnder > 5 AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 10 THEN
 	SET ete_HrsUnder = COMPUTE_TimeDifference(SUBTIME(shifttimeto,'05:00'), shifttimeto);
 
-END IF;
+END IF;*/
 
 IF ete_OvertimeHrs IS NULL THEN
 	SET ete_OvertimeHrs = 0;
@@ -1037,7 +1110,7 @@ IF pr_DayBefore IS NULL THEN
 		SET yester_TotDayPay = 0;
 		
 	END IF;
-		
+	
 	IF ete_Date < e_StartDate THEN 
 		
 
@@ -1069,15 +1142,24 @@ IF pr_DayBefore IS NULL THEN
 				, 0
 				, 0
 				, 0
+				, 0
 		) INTO anyINT;
 		
 
 	ELSEIF yester_TotDayPay = 0 THEN
 
+		SELECT elv.OfficialValidHours
+		FROM employeeleave elv
+		WHERE elv.RowID = leaveId
+		INTO @lv_hrs;
+
+		SET @leavePayment = (IFNULL(@lv_hrs, 0) * IFNULL(rateperhour, 0));
+
 		IF isRestDay = '1' THEN
-		
+
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
-										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate);
+										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
+										 + @leavePayment;
 										 
 			SELECT INSUPD_employeetimeentries(
 					anyINT
@@ -1104,30 +1186,16 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffHrs * rateperhour) * ndiffrate
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
+					, @leavePayment
 			) INTO anyINT;
 			
 			
 		ELSEIF isRestDay = '0' THEN
 
-			SELECT elv.OfficialValidHours
-			FROM employeeleave elv
-			# INNER JOIN dates d ON d.DateValue BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
-			WHERE elv.EmployeeID = ete_EmpRowID
-			AND elv.OrganizationID = ete_OrganizID
-			AND ete_Date BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
-			LIMIT 1 INTO
-			@leave_hours;
-			
-			IF ete_RegHrsWorkd = 0 THEN
-				SET ete_TotalDayPay = (IFNULL(@leave_hours, 0) * rateperhour);
-				
-			ELSE
-				
-				SET ete_TotalDayPay = (IFNULL(@leave_hours, 0) * rateperhour)
-				                      + ((ete_RegHrsWorkd * rateperhour) * commonrate)
-				                    	 + ((ete_OvertimeHrs * rateperhourforOT) * otrate);
-			END IF;
-			
+			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
+			                    	 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
+			                    	 + @leavePayment;
+
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID
@@ -1153,70 +1221,28 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffHrs * rateperhour) * ndiffrate
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
+					, @leavePayment
 			) INTO anyINT;
-
-			/*SELECT anyINT
-					, ete_OrganizID
-					, ete_UserRowID
-					, ete_UserRowID
-					, ete_Date
-					, eshRowID
-					, ete_EmpRowID
-					, esalRowID
-					, '0'
-					, ete_RegHrsWorkd
-					, ete_OvertimeHrs
-					, ete_HrsUnder
-					, ete_NDiffHrs
-					, ete_NDiffOTHrs
-					, ete_HrsLate
-					, payrateRowID
-					, ete_TotalDayPay
-					, ete_RegHrsWorkd + ete_OvertimeHrs
-					, ((ete_RegHrsWorkd - ete_NDiffHrs) * rateperhour) * commonrate
-					, (ete_OvertimeHrs * rateperhourforOT) * otrate
-					, (ete_HrsUnder * rateperhour)
-					, (ete_NDiffHrs * rateperhour) * ndiffrate
-					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
-					, (ete_HrsLate * rateperhour) INTO OUTFILE 'D:/New Downloads/result.txt';*/
+			
 		END IF;
 	
 	ELSE
 
 			
-		
-		SELECT CAST(EXISTS(
-		SELECT
-		elv.RowID
-		FROM employeeleave elv
-		WHERE elv.EmployeeID=ete_EmpRowID AND elv.`Status`='Approved'
-		AND elv.OrganizationID=ete_OrganizID
-		AND ete_Date BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
-		LIMIT 1) AS CHAR) 'CharResult'
-		INTO hasLeave;
 
 
-		IF hasLeave = '0' THEN
+
+		IF hasLeave = FALSE THEN
 	
 			
 			
 			IF isRestDay = '1' THEN
-
-				IF ete_RegHrsWorkd = 140 THEN # IF ete_RegHrsWorkd > 8 THEN
-					SET ete_RegHrsWorkd = 8;
-				
-				END IF;
-
-				/*SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * ((commonrate + restday_rate) - 1))
-											 + ((ete_OvertimeHrs * rateperhourforOT) * restdayot_rate);*/#(otrate * restdayot_rate)#((otrate + restdayot_rate) - 1))
-				
+			
 				SET ete_TotalDayPay =	((ete_RegHrsWorkd * rateperhour) * restday_rate)
 												+ (ete_OvertimeHrs * rateperhourforOT) * restdayot_rate
 												+ (ete_NDiffHrs * rateperhour) * ndiffrate;
 											 
 				SET ete_HrsLate = 0.0;
-
-SET yes_true = 1;
 
 				SELECT INSUPD_employeetimeentries(
 						anyINT
@@ -1243,6 +1269,7 @@ SET yes_true = 1;
 						, (ete_NDiffHrs * rateperhour) * ndiffrate
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
+						, 0
 				) INTO anyINT;
 				
 			ELSE
@@ -1276,20 +1303,26 @@ SET yes_true = 1;
 						, (ete_NDiffHrs * rateperhour) * ndiffrate
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
+						, 0
 				) INTO anyINT;
 				
 				
 			END IF;
 				
 		ELSE
-		
-			SET @lv_hrs = IFNULL((SELECT (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.MaternityLeaveHours) `Result` FROM employeetimeentry et WHERE et.EmployeeID=ete_EmpRowID AND et.OrganizationID=ete_OrganizID AND et.`Date`=ete_Date), 0);
-		
-			SET hasLeave = '1';
+
+			SELECT elv.OfficialValidHours
+			FROM employeeleave elv
+			WHERE elv.RowID = leaveId
+			INTO @lv_hrs;
+
+			SET @leavePayment = IFNULL(@lv_hrs, 0) * rateperhour;
+
+			SET hasLeave = TRUE;
 	
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
-										 + (@lv_hrs * rateperhour);
+										 + @leavePayment;
 			
 			SELECT INSUPD_employeetimeentries(
 					anyINT
@@ -1316,6 +1349,7 @@ SET yes_true = 1;
 					, (ete_NDiffHrs * rateperhour) * ndiffrate
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
+					, @leavePayment
 			) INTO anyINT;
 			
 		END IF;
@@ -1419,6 +1453,7 @@ ELSE
 					, (ete_NDiffHrs * rateperhour) * ndiffrate
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
+					, (@availed_leave_hrs * rateperhour)
 			) INTO anyINT;
 			
 		ELSE
@@ -1436,7 +1471,7 @@ ELSE
 				SET ete_TotalDayPay = dailypay;
 				
 			END IF;
-			IF hasLeave = '1' THEN SET ete_TotalDayPay = ete_TotalDayPay + (IFNULL((SELECT VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours FROM employeetimeentry WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date),0) * rateperhour); END IF;
+			IF hasLeave THEN SET ete_TotalDayPay = ete_TotalDayPay + (IFNULL((SELECT VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours FROM employeetimeentry WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date),0) * rateperhour); END IF;
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID
@@ -1462,6 +1497,7 @@ ELSE
 					, (ete_NDiffHrs * rateperhour) * ndiffrate
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
+					, (@availed_leave_hrs * rateperhour)
 			) INTO anyINT;
 			
 		END IF;
@@ -1500,6 +1536,7 @@ ELSE
 					, (ete_NDiffHrs * rateperhour) * ndiffrate
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
+					, (@availed_leave_hrs * rateperhour)
 			) INTO anyINT;
 				
 			
@@ -1519,7 +1556,7 @@ ELSE
 				SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 											 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
 											 + (@availed_leave_hrs * rateperhour);
-				IF hasLeave = '1' THEN SET ete_TotalDayPay = ete_TotalDayPay + (IFNULL((SELECT VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours FROM employeetimeentry WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date),0) * rateperhour); END IF;				 
+				IF hasLeave THEN SET ete_TotalDayPay = ete_TotalDayPay + (IFNULL((SELECT VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours FROM employeetimeentry WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date),0) * rateperhour); END IF;				 
 				SELECT INSUPD_employeetimeentries(
 						anyINT
 						, ete_OrganizID
@@ -1545,6 +1582,7 @@ ELSE
 						, (ete_NDiffHrs * rateperhour) * ndiffrate
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
+						, (@availed_leave_hrs * rateperhour)
 				) INTO anyINT;
 				
 			ELSE
@@ -1569,6 +1607,7 @@ ELSE
 						, ete_HrsLate
 						, payrateRowID
 						, ete_TotalDayPay
+						, 0
 						, 0
 						, 0
 						, 0

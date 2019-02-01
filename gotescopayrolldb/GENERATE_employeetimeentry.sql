@@ -821,7 +821,7 @@ ELSE
 
 		SET @shBreakEndDateTime = ADDDATE(@shBreakStartDateTime, INTERVAL @hoursBreak HOUR);
 		
-		SET @leaveStartDateTime = CONCAT_DATETIME(ete_Date, shifttimefrom);
+		SET @leaveStartDateTime = CONCAT_DATETIME(ete_Date, @leaveStartTime);
 		SET @leaveEndDateTime = GetNextStartDateTime(CONCAT_DATETIME(ete_Date, shifttimefrom), @leaveEndTime);
 		
 		SET @shEndDateTime = ADDDATE(@shStartDateTime, INTERVAL @shiftHours HOUR);
@@ -833,7 +833,7 @@ ELSE
 									) / 3600
 		INTO ete_HrsLate;
 		IF ete_HrsLate < 0 THEN SET ete_HrsLate = 0; END IF;
-
+		
 		SELECT TIMESTAMPDIFF(SECOND
 									, GREATEST(IFNULL(@leaveEndDateTime, @logStampOut)
 													, IFNULL(@logStampOut, @leaveEndDateTime))

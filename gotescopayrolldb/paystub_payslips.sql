@@ -34,6 +34,8 @@ DECLARE paydate_from
 
 DECLARE logo MEDIUMBLOB DEFAULT NULL;
 
+SET @totalDeductions = 0.0;
+
 /*SELECT ImageBlob
 FROM images
 WHERE (RowID=1
@@ -166,16 +168,17 @@ ps.RowID
 ,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceAmount`, ',', '\n')) `Column49`
 
 /**/ , ( ps.TotalGrossSalary + IFNULL(adj_positive.`PayAmount`, 0) ) `Column60`
-, ( ps.TotalLoans
+
+, @totalDeductions := 
+  ( ps.TotalLoans
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
-	 # + (IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0))
-	 + IFNULL(adj_negative.`PayAmount` * -1, 0) ) `Column61`
-	 
-, ( ps.TotalLoans
-    + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
-	 # + (IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0))
+	 + ps.TotalEmpWithholdingTax
 	 ) `Column62`
-# , '50,000.00' `Column60`, '50,000.00' `Column61`, '50,000.00' `Column62`
+
+, ROUND(( @totalDeductions
+			+ IFNULL(adj_negative.`PayAmount` * -1, 0) 
+			), 2) `Column61`
+
 
 FROM proper_payroll ps
 

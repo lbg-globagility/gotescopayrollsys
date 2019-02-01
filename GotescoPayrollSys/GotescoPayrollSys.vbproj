@@ -67,7 +67,8 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\gotescomarketing.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
@@ -1378,7 +1379,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\msword.ico" />
     <EmbeddedResource Include="Core Forms\REPORTS\Employee Leave Ledger.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Employee Leave Ledger.vb</LastGenOutput>
@@ -1423,7 +1423,6 @@
     <None Include="log4.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\gotescomarketing.ico" />
     <EmbeddedResource Include="AboutAndVersion.resx">
       <DependentUpon>AboutAndVersion.vb</DependentUpon>
     </EmbeddedResource>

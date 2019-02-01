@@ -7141,6 +7141,12 @@ Public Class EmpTimeEntry
     End Sub
 
     Dim new_conn As New MySqlConnection
+
+    Private Sub tstbnResetLeaveBalance_Click(sender As Object, e As EventArgs) Handles tstbnResetLeaveBalance.Click
+        Dim form As New PreviewLeaveBalanceForm
+        form.ShowDialog()
+    End Sub
+
     Dim new_cmd As New MySqlCommand
 
     Function computehrswork_employeetimeentry(Optional etent_EmployeeID As Object = Nothing, _

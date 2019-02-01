@@ -5,7 +5,7 @@ Imports MySql.Data.MySqlClient
 
 Public Class PayrollGeneration
     Public errlogger As ILog = LogManager.GetLogger("LoggerWork")
-    Private model1 As New Model1
+    Private model1 As New DatabaseContext
     Private new_philhealth_collect As IQueryable(Of newphilhealthimplement) = model1.NewPhilHealth.OfType(Of newphilhealthimplement)()
 
     'Private wtax As IQueryable(Of WithholdingTaxBracket) = model1.NewWithholdingTax.OfType(Of WithholdingTaxBracket)()

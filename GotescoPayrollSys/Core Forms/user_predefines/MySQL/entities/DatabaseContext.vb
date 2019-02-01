@@ -3,8 +3,9 @@ Imports System.Data.Entity
 Imports System.Linq
 Imports GotescoPayrollSys.myModule
 Imports System.Data.Common
+Imports AccuPay.Entity
 
-Public Class Model1
+Public Class DatabaseContext
     Inherits DbContext
 
     ' Your context has been configured to use a 'Model1' connection string from your application's
@@ -48,12 +49,17 @@ Public Class Model1
 
     Public Overridable Property TimeEntryLogsPerCutOff() As DbSet(Of TimeEntryLogsPerCutOff)
 
+    Public Overridable Property Employees() As DbSet(Of Employee)
+
     Public Overridable Property EmployeeEntity() As DbSet(Of EmployeeEntity)
 
     Public Overridable Property EmployeeTimeEntryDetails() As DbSet(Of EmployeeTimeEntryDetails)
 
-    Public Overridable Property PayPeriods() As DbSet(Of PayPeriods)
+    Public Overridable Property PayPeriods() As DbSet(Of PayPeriod)
 
+    Public Overridable Property Categories() As DbSet(Of Category)
+
+    Public Overridable Property Products() As DbSet(Of Product)
 End Class
 
 'Public Class MyEntity

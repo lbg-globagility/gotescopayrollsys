@@ -461,7 +461,7 @@ Public Class selectPayPeriod
 
     Private Async Sub UpdateMinimumWage(min_wage As Double, rowId As Integer)
         Try
-            Using context As New Model1
+            Using context As New DatabaseContext
                 context.Database.Log = Function(message As String)
                                            Console.WriteLine(message)
                                        End Function

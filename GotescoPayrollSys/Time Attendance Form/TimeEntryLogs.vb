@@ -1,6 +1,7 @@
 ﻿'Option Strict On
 Imports NHotkey.WindowsForms
 Imports NHotkey
+Imports System.Data.Entity
 
 Public Class TimeEntryLogs
 
@@ -207,7 +208,7 @@ Public Class TimeEntryLogs
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        SearchEmployees()
+        SearchEmployeesAsync()
 
         LoadTimeLogs()
     End Sub
@@ -269,7 +270,7 @@ Public Class TimeEntryLogs
 
                 Dim _count = 0
 
-                Using _mod = New Model1
+                Using _mod = New DatabaseContext
 
                     For Each dgrow In dgvrows
 
@@ -357,7 +358,7 @@ Public Class TimeEntryLogs
 
         Try
             If e_primkey IsNot Nothing Then
-                Using _mod = New Model1
+                Using _mod = New DatabaseContext
 
                     For Each dgrow In dgvrows
 
@@ -625,7 +626,7 @@ Public Class TimeEntryLogs
     Private Sub LoadPayPeriods()
 
         Try
-            Using _mod = New Model1
+            Using _mod = New DatabaseContext
 
                 Dim _payperiods =
                     (From t In _mod.TimeEntryLogsPerCutOff
@@ -654,7 +655,7 @@ Public Class TimeEntryLogs
         End If
 
         Try
-            Using _mod = New Model1
+            Using _mod = New DatabaseContext
                 Dim _employees =
                     (From e In _mod.EmployeeEntity
                      Where e.OrganizationID = organization_rowid
@@ -681,7 +682,7 @@ Public Class TimeEntryLogs
         End Try
     End Sub
 
-    Private Sub SearchEmployees()
+    Private Async Sub SearchEmployeesAsync()
         DataGridViewX2.Rows.Clear()
         Dim str_search As String
 
@@ -689,24 +690,14 @@ Public Class TimeEntryLogs
 
         If str_search.Length > 0 Then
             Try
-                Using _mod = New Model1
-                    Dim _employees =
-                        (From e In _mod.EmployeeEntity
-                         Where e.OrganizationID = organization_rowid And
-                         e.FullName.Contains(str_search)
-                         Let employeeinfo = e
-                         Select New With {.Employee_ID = employeeinfo.EmployeeID,
-                                          .Full_Name = employeeinfo.FullName,
-                                          .EPrimaryKey = employeeinfo.RowID}
-                         ).
-                     OrderBy(Function(e) e.Full_Name)
+                Using _mod = New DatabaseContext
+                    Dim _employees = Await _mod.Employees.
+                        Where(Function(e) Nullable.Equals(e.OrganizationID, organization_rowid)).
+                        Where(Function(e) CBool(String.Concat(e.LastName, e.FirstName).Contains(str_search) Or e.EmployeeNo.Contains(str_search))).
+                        ToListAsync
 
-                    'DataGridViewX2.DataSource = _employees.ToList
-                    For Each _employee In _employees.ToList
-
-                        DataGridViewX2.Rows.Add(_employee.Employee_ID,
-                                                _employee.Full_Name,
-                                                _employee.EPrimaryKey)
+                    For Each e In _employees.ToList
+                        DataGridViewX2.Rows.Add(e.EmployeeNo, ConcatFullName(e.LastName, e.FirstName), e.RowID)
                     Next
 
                 End Using
@@ -719,12 +710,17 @@ Public Class TimeEntryLogs
 
     End Sub
 
+    Private Function ConcatFullName(ParamArray nameParts() As String) As String
+        Return String.Join(", ", nameParts)
+    End Function
+
+
     Private Sub LoadTimeLogs()
 
         DataGridViewX3.Rows.Clear()
 
         Try
-            Using _mod = New Model1
+            Using _mod = New DatabaseContext
 
                 Dim datef, datet As Date?
 
@@ -775,7 +771,7 @@ Public Class TimeEntryLogs
     Private Sub SetPageNumber(lnklabel As LinkLabel)
 
         If Last.Name = lnklabel.Name Then
-            Using _mod = New Model1
+            Using _mod = New DatabaseContext
                 Dim _employees =
                     (From e In _mod.EmployeeEntity
                      Where e.OrganizationID = organization_rowid

@@ -1,6 +1,6 @@
 ﻿Public Class showAuditTrail
 
-    Private mod1 As New Model1
+    Private mod1 As New DatabaseContext
 
     Private _audittrails As IQueryable(Of ProperDisplayAuditTrail) = mod1.ProperDisplayAuditTrail.OfType(Of ProperDisplayAuditTrail)()
     'Private _audittrails As IQueryable(Of AuditTrail) = mod1.AuditTrail.OfType(Of AuditTrail)()

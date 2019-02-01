@@ -256,6 +256,12 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Core Forms\Common\SqlReaderExtensions.vb" />
+    <Compile Include="Core Forms\DateRangePickerDialog.designer.vb">
+      <DependentUpon>DateRangePickerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Core Forms\DateRangePickerDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Core Forms\DeptManagerPool.Designer.vb">
       <DependentUpon>DeptManagerPool.vb</DependentUpon>
     </Compile>
@@ -278,6 +284,12 @@
       <DependentUpon>PayPeriodGUI.vb</DependentUpon>
     </Compile>
     <Compile Include="Core Forms\PayPeriodGUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core Forms\PreviewLeaveBalanceForm.designer.vb">
+      <DependentUpon>PreviewLeaveBalanceForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Core Forms\PreviewLeaveBalanceForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core Forms\Report classes\PayrollSummaryExcelFormatReportProvider.vb" />
@@ -386,13 +398,19 @@
     <Compile Include="Core Forms\USER CONTROLS\CustomBalloonToolTip.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\user_predefines\Custom\LeaveLedger.vb" />
+    <Compile Include="Core Forms\user_predefines\Custom\LeaveTransaction.vb" />
+    <Compile Include="Core Forms\user_predefines\Custom\RenewLeaveBalancePolicy.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Category.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Employee.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeEntity.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeTimeEntryDetails.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAuditTrail.vb" />
-    <Compile Include="Core Forms\user_predefines\MySQL\entities\Model1.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\DatabaseContext.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
-    <Compile Include="Core Forms\user_predefines\MySQL\entities\PayPeriods.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PayPeriod.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Product.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\ProperDisplayAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\TimeEntryLogsPerCutOff.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
@@ -1379,6 +1397,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Core Forms\DateRangePickerDialog.resx">
+      <DependentUpon>DateRangePickerDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\PreviewLeaveBalanceForm.resx">
+      <DependentUpon>PreviewLeaveBalanceForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\REPORTS\Employee Leave Ledger.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Employee Leave Ledger.vb</LastGenOutput>

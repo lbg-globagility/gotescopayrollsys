@@ -80,9 +80,19 @@ Public Class PreviewLeaveBalanceForm
             Try
                 Await command.ExecuteNonQueryAsync()
                 transaction.Commit()
+
+                MessageBox.Show("Leave balance were reset successfully",
+                                "Done reset leave balance",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information)
             Catch ex As Exception
                 _logger.Error("RenewLeaveBalances", ex)
                 transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                                "Error occured",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Exclamation)
             End Try
 
         End Using

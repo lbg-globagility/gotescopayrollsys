@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Configuration
 Imports System.Text.RegularExpressions
 Imports System.Threading.Tasks
 
@@ -21,7 +22,11 @@ Public Class MySQLExecuteCommand
 
     Private err_msg As String = String.Empty
 
+    Private configCommandTimeOut As Integer = 0
+
     Private err As Exception
+
+    Private config As Specialized.NameValueCollection = ConfigurationManager.AppSettings
 
 #End Region
 
@@ -29,6 +34,8 @@ Public Class MySQLExecuteCommand
 
     Sub New(imysql_cmd As IMySQLCommander)
         mysql_cmd = imysql_cmd
+
+        configCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
 
         is_user_defined_dbobj =
             (mysql_cmd.CommandQuery.Contains(firstchar_requiredforparametername))
@@ -196,8 +203,8 @@ Public Class MySQLExecuteCommand
         ResetError()
 
         Try
-
-            Dim mysql_connectn = New MySqlConnection(mysql_conn_text)
+            Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+            Dim mysql_connectn = New MySqlConnection(connectionText)
 
             prepared_mysqlcmd =
                 New MySqlCommand(mysql_cmd.CommandQuery,
@@ -332,9 +339,8 @@ Public Class MySQLExecuteCommand
 
         ResetError()
 
-        Dim mysql_transac As MySqlTransaction
-
-        mysql_transac = prepared_mysqlcmd.Connection.BeginTransaction
+        Dim mysql_transac As MySqlTransaction =
+            prepared_mysqlcmd.Connection.BeginTransaction
 
         Dim fdsfsd
 

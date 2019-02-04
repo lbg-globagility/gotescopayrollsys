@@ -6,6 +6,7 @@
 #define MyAppPublisher "Globagility, Inc."
 #define MyAppURL "http://www.globagilityinc.com/"
 #define MyAppExeName "GotescoPayrollSys.exe"
+#define DatabaseName "gotescopayrolldb"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -94,15 +95,61 @@ Source: ".\GotescoPayrollSys\bin\Debug\Core Forms\rpt\*.rpt"; DestDir: "{app}"; 
 ; Source: ".\GotescoPayrollSys\bin\Debug\rpt\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
 ; Source: "D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys\bin\Debug\Lambert Form\*.rpt"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+[Code]
+var databaseName, serverName: String;
+var
+  Page: TInputQueryWizardPage;
+  UserName, UserCompany: String;
+
+function GetHost(Param: string): string;
+begin
+  Result := Page.Values[0];
+end;
+
+function GetDatabase(Param: string): string;
+begin
+  Result := Page.Values[1];
+end;
+
+procedure InitializeWizard();
+begin
+  Page := CreateInputQueryPage(wpWelcome,
+  'Database Information', 'Database to connect to',
+  'Please specify the database host and name, then click Next.');
+
+  { Add items (False means it's not a password edit) }
+  Page.Add('Host:', False);
+  Page.Add('Database:', False);
+
+  { Set initial values (optional) }
+  begin    
+    if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Globagility\DBConn\Gotesco',
+       'server', serverName) then
+    begin
+    end;
+  end;
+  serverName := ExpandConstant(serverName);
+  Page.Values[0] := serverName ;
+
+  begin    
+    if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Globagility\DBConn\Gotesco',
+       'database', databaseName) then
+    begin
+    end;
+  end;
+  databaseName := ExpandConstant(databaseName);
+  Page.Values[1] := databaseName;
+end;
                                                  
 [Registry]
 
 Root: HKLM; Subkey: "SOFTWARE\Globagility"; Permissions: everyone-full
 Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn"; Permissions: everyone-full
 
-Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "database"; ValueData: "gotescopayrolldb"; Permissions: everyone-full
+Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "database"; ValueData: "{code:GetDatabase}"; Permissions: everyone-full
 Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "password"; ValueData: "globagility"; Permissions: everyone-full
-Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "server"; ValueData: "localhost"; Permissions: everyone-full
+Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "server"; ValueData: "{code:GetHost}"; Permissions: everyone-full
 Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  Flags: createvalueifdoesntexist;	ValueType: string; ValueName: "user id"; ValueData: "root"; Permissions: everyone-full
 Root: HKLM; Subkey: "SOFTWARE\Globagility\DBConn\Gotesco";  ValueType: string; ValueName: "apppath"; ValueData: "{app}"; Permissions: everyone-full
                     

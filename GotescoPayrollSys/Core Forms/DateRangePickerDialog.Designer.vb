@@ -76,7 +76,7 @@ Partial Class DateRangePickerDialog
         Me.PayperiodsDataGridView.Name = "PayperiodsDataGridView"
         Me.PayperiodsDataGridView.ReadOnly = True
         Me.PayperiodsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.PayperiodsDataGridView.Size = New System.Drawing.Size(440, 224)
+        Me.PayperiodsDataGridView.Size = New System.Drawing.Size(440, 335)
         Me.PayperiodsDataGridView.TabIndex = 4
         '
         'Column3
@@ -127,7 +127,7 @@ Partial Class DateRangePickerDialog
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 32)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(440, 224)
+        Me.Panel1.Size = New System.Drawing.Size(440, 335)
         Me.Panel1.TabIndex = 5
         '
         'Panel2
@@ -179,7 +179,7 @@ Partial Class DateRangePickerDialog
         Me.Panel3.Controls.Add(Me.Button2)
         Me.Panel3.Controls.Add(Me.Button1)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel3.Location = New System.Drawing.Point(0, 256)
+        Me.Panel3.Location = New System.Drawing.Point(0, 367)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(440, 33)
         Me.Panel3.TabIndex = 7
@@ -188,7 +188,7 @@ Partial Class DateRangePickerDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(440, 289)
+        Me.ClientSize = New System.Drawing.Size(440, 400)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel3)
@@ -197,6 +197,7 @@ Partial Class DateRangePickerDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "DateRangePickerDialog"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         CType(Me.PayperiodsDataGridView, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)

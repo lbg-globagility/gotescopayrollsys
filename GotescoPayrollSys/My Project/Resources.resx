@@ -254,7 +254,7 @@
     <value>..\Resources\money.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SystemOwner" xml:space="preserve">
-    <value>Metro Tiles</value>
+    <value>Gotesco Marketing Inc.</value>
   </data>
   <data name="r_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\r_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -282,5 +282,8 @@
   </data>
   <data name="msword1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\msword.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SystemDeveloper" xml:space="preserve">
+    <value>Globagility Inc.</value>
   </data>
 </root>

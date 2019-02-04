@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Threading.Tasks
+Imports MySql.Data.MySqlClient
 
 Public Class TimEntduration
 
@@ -1159,20 +1160,21 @@ Public Class TimEntduration
 
         Dim sql1 As New SQL(str_query,
                             parram_arrays)
+        sql1.ExecuteQueryAsync()
 
-        Dim ds As New DataSet
-        ds = sql1.GetFoundRows
+        'Dim ds As New DataSet
+        ''ds = sql1.GetFoundRows
 
-        Dim dt As New DataTable
-        dt = ds.Tables.Item(0)
+        'Dim dt As New DataTable
+        'dt = ds.Tables.Item(0)
 
-        Dim i = 0
+        'Dim i = 0
 
-        Dim progress_value As Integer
+        'Dim progress_value As Integer
 
-        Dim row_count = (dt.Rows.Count - 1)
+        'Dim row_count = (dt.Rows.Count - 1)
 
-        Dim half_progress = 50
+        'Dim half_progress = 50
 
         'For Each drow As DataRow In dt.Rows
 
@@ -1190,6 +1192,7 @@ Public Class TimEntduration
         '        ((i / row_count) * half_progress)
 
         '    bgWork.ReportProgress((half_progress + progress_value), String.Empty)
+
         bgWork.ReportProgress(100)
         If sql1.HasError Then
             Throw sql1.ErrorException
@@ -1199,9 +1202,54 @@ Public Class TimEntduration
 
         'Next
 
-        Console.WriteLine(progress_value)
-
     End Sub
+
+    Private Async Function TimeEntryGenerationAsync() As Task(Of Boolean)
+        Dim str_query As String =
+            String.Concat(
+            "SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid) `Result`",
+            " FROM dates d",
+            " INNER JOIN (SELECT RowID, OrganizationID, StartDate, TerminationDate, PayFrequencyID, PositionID FROM employee WHERE OrganizationID=?og_rowid) e ON e.OrganizationID=?og_rowid",
+            " INNER JOIN (SELECT RowID, DivisionId FROM `position` WHERE OrganizationID=?og_rowid) pos ON pos.RowID=e.PositionID",
+            " INNER JOIN (SELECT RowID FROM division WHERE OrganizationID=?og_rowid) dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(?div_rowid, dv.RowID)",
+            " INNER JOIN (SELECT RowID, PayFrequencyType FROM payfrequency) pf ON pf.RowID=e.PayFrequencyID AND pf.PayFrequencyType='Semi-monthly'",
+            " WHERE d.DateValue BETWEEN ?day_from AND ?day_to",
+            " ORDER BY e.RowID, d.DateValue;")
+
+        Dim succeed As Boolean = False
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=28800;")
+
+        Using command = New MySqlCommand(str_query, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("?og_rowid", org_rowid)
+                .AddWithValue("?u_rowid", user_row_id)
+                .AddWithValue("?day_from", dayFrom)
+                .AddWithValue("?day_to", dayTo)
+                .AddWithValue("?div_rowid", If(DivisionID = 0, DBNull.Value, DivisionID))
+
+            End With
+
+            'command.CommandTimeout = Integer.MaxValue
+
+            Await command.Connection.OpenAsync
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync
+
+            Try
+                Await command.ExecuteNonQueryAsync()
+                transaction.Commit()
+                succeed = True
+            Catch ex As Exception
+                _logger.Error("TimeEntryGenerationAsync", ex)
+                transaction.Rollback()
+            End Try
+
+        End Using
+
+        Return succeed
+    End Function
 
     'BEFORE_LAST_METHOD
     Private Sub bgWork_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgWork.ProgressChanged
@@ -1390,50 +1438,90 @@ Public Class TimEntduration
         Panel2.Enabled = True
     End Sub
 
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgworkRECOMPUTE_employeeleave.DoWork
+    Private Async Sub BackgroundWorker1_DoWorkAsync(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgworkRECOMPUTE_employeeleave.DoWork
+        Dim succeed = Await StoreLeaveInOtherTableAsPrepAsync()
 
-        'Dim n_ExecuteQuery As New ExecuteQuery("CALL RESET_employeeleave_duplicate('" & orgztnID & "','" & dayFrom & "','" & dayTo & "'" &
-        '                                       ", '" & quer_empPayFreq & "', " & DivisionID & ");", 999999)
+        Dim progress = 25
 
-        Dim sql As New SQL("CALL RESET_employeeleave_duplicate(?og_rowid, ?day_from, ?day_to, ?pay_freq, ?div_rowid);",
-                           New Object() {org_rowid,
-                                         dayFrom,
-                                         dayTo,
-                                         quer_empPayFreq,
-                                         If(DivisionID = 0, DBNull.Value, DivisionID)})
+        bgworkRECOMPUTE_employeeleave.ReportProgress(progress, "")
 
-        sql.ExecuteQuery()
+        If succeed Then
+            Await ReInsertLeaveAsync()
 
-        If sql.HasError Then
-            Throw sql.ErrorException
+            progress += 25
+            bgworkRECOMPUTE_employeeleave.ReportProgress(progress, "")
+
         Else
-
-            bgworkRECOMPUTE_employeeleave.ReportProgress(25, "")
-
-            Dim sql1 As New SQL("CALL RECOMPUTE_employeeleave(?og_rowid, ?day_from, ?day_to, ?div_rowid);",
-                                New Object() {org_rowid,
-                                              dayFrom,
-                                              dayTo,
-                                              If(DivisionID = 0, DBNull.Value, DivisionID)})
-
-            sql1.ExecuteQuery()
-
-            If sql1.HasError Then
-                Throw sql1.ErrorException
-            Else
-
-                bgworkRECOMPUTE_employeeleave.ReportProgress(50, "")
-
-            End If
-
+            Throw New Exception("StoreLeaveInOtherTableAsPrepAsync")
         End If
-
-        'n_ExecuteQuery =
-        '    New ExecuteQuery("CALL RECOMPUTE_employeeleave('" & orgztnID & "','" & dayFrom & "','" & dayTo & "', " & DivisionID & ");", 999999)
-
-        Console.WriteLine(50)
-
     End Sub
+
+    Private Async Function ReInsertLeaveAsync() As Task(Of Boolean)
+        Dim succeed As Boolean = False
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=28800;")
+
+        Using command = New MySqlCommand("CALL RECOMPUTE_employeeleave(@og_rowid, @day_from, @day_to, @div_rowid);",
+                                         New MySqlConnection(connectionText))
+            With command.Parameters
+                .AddWithValue("@og_rowid", org_rowid)
+                .AddWithValue("@day_from", dayFrom)
+                .AddWithValue("@day_to", dayTo)
+                .AddWithValue("@div_rowid", If(DivisionID = 0, DBNull.Value, DivisionID))
+
+            End With
+
+            Await command.Connection.OpenAsync
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync
+
+            Try
+                Await command.ExecuteNonQueryAsync()
+                transaction.Commit()
+                succeed = True
+            Catch ex As Exception
+                _logger.Error("ReInsertLeave", ex)
+                transaction.Rollback()
+            End Try
+
+        End Using
+
+        Return succeed
+    End Function
+
+    Private Async Function StoreLeaveInOtherTableAsPrepAsync() As Task(Of Boolean)
+        Dim succeed As Boolean = False
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=28800;")
+
+        Using command = New MySqlCommand("CALL RESET_employeeleave_duplicate(@og_rowid, @day_from, @day_to, @pay_freq, @div_rowid);",
+                                         New MySqlConnection(connectionText))
+            With command.Parameters
+                .AddWithValue("@og_rowid", org_rowid)
+                .AddWithValue("@day_from", dayFrom)
+                .AddWithValue("@day_to", dayTo)
+                .AddWithValue("@pay_freq", quer_empPayFreq)
+                .AddWithValue("@div_rowid", If(DivisionID = 0, DBNull.Value, DivisionID))
+
+            End With
+
+            Await command.Connection.OpenAsync
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync
+
+            Try
+                Await command.ExecuteNonQueryAsync()
+                transaction.Commit()
+                succeed = True
+            Catch ex As Exception
+                _logger.Error("StoreLeaveInOtherTableAsPrepAsync", ex)
+                transaction.Rollback()
+            End Try
+
+        End Using
+
+        Return succeed
+    End Function
 
     Private Sub bgworkRECOMPUTE_employeeleave_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgworkRECOMPUTE_employeeleave.ProgressChanged
 

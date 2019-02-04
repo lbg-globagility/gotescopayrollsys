@@ -1141,22 +1141,23 @@ Public Class TimEntduration
 
         Dim parram_arrays =
             New Object() {user_row_id,
+                          dayFrom,
+                          dayTo,
                           org_rowid,
                           If(DivisionID = 0, DBNull.Value, DivisionID),
                           dayFrom,
                           dayTo}
 
-        'CONCAT('SELECT GENERATE_employeetimeentry(', e.RowID, ', ', e.OrganizationID, ', \'', d.DateValue, '\', ", user_row_id, ");')
         Dim str_query As String =
-            String.Concat("SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ", user_row_id, ") `Result`",
-                          ", ?u_rowid `UserRowID`",
-                          " FROM dates d",
-                          " INNER JOIN employee e ON e.OrganizationID=?og_rowid AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')",
-                          " INNER JOIN `position` pos ON pos.RowID=e.PositionID",
-                          " INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(?div_rowid, dv.RowID)",
-                          " INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID AND pf.PayFrequencyType='Semi-monthly'",
-                          " WHERE d.DateValue BETWEEN ?day_from AND ?day_to",
-                          " ORDER BY e.RowID, d.DateValue;")
+            String.Concat(
+            "SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid) `Result`",
+            " FROM dates d",
+            " INNER JOIN (SELECT RowID, OrganizationID, StartDate, TerminationDate, PayFrequencyID, PositionID FROM employee WHERE OrganizationID=", org_rowid, " AND GREATEST(StartDate, ?payDateFrom) BETWEEN StartDate AND IFNULL(TerminationDate, ?payDateTo)) e ON e.OrganizationID=?og_rowid",
+            " INNER JOIN (SELECT RowID, DivisionId FROM `position` WHERE OrganizationID=", org_rowid, ") pos ON pos.RowID=e.PositionID",
+            " INNER JOIN (SELECT RowID FROM division WHERE OrganizationID=", org_rowid, ") dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(?div_rowid, dv.RowID)",
+            " INNER JOIN (SELECT RowID, PayFrequencyType FROM payfrequency) pf ON pf.RowID=e.PayFrequencyID AND pf.PayFrequencyType='Semi-monthly'",
+            " WHERE d.DateValue BETWEEN ?day_from AND ?day_to",
+            " ORDER BY e.RowID, d.DateValue;")
 
         Dim sql1 As New SQL(str_query,
                             parram_arrays)

@@ -22,7 +22,7 @@ Partial Class PreviewLeaveBalanceForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgvEmployees = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.eRowId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.eId = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -65,14 +65,14 @@ Partial Class PreviewLeaveBalanceForm
         Me.dgvEmployees.ColumnHeadersHeight = 34
         Me.dgvEmployees.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvEmployees.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.eRowId, Me.eId, Me.eLastName, Me.eFirstName, Me.eVacationLeaveAllowance, Me.eVacationLeaveBalance, Me.eSickLeaveAllowance, Me.eSickLeaveBalance, Me.eAddtlLeaveAllowance, Me.eAddtlLeaveBalance})
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvEmployees.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvEmployees.DefaultCellStyle = DataGridViewCellStyle1
         Me.dgvEmployees.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvEmployees.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgvEmployees.Location = New System.Drawing.Point(0, 0)
@@ -82,7 +82,7 @@ Partial Class PreviewLeaveBalanceForm
         Me.dgvEmployees.RowHeadersWidth = 32
         Me.dgvEmployees.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvEmployees.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvEmployees.Size = New System.Drawing.Size(969, 415)
+        Me.dgvEmployees.Size = New System.Drawing.Size(960, 415)
         Me.dgvEmployees.TabIndex = 138
         '
         'eRowId
@@ -167,7 +167,7 @@ Partial Class PreviewLeaveBalanceForm
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel1.Location = New System.Drawing.Point(0, 415)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(969, 35)
+        Me.Panel1.Size = New System.Drawing.Size(960, 35)
         Me.Panel1.TabIndex = 139
         '
         'ProgressBar1
@@ -181,7 +181,7 @@ Partial Class PreviewLeaveBalanceForm
         '
         'btnClose
         '
-        Me.btnClose.Location = New System.Drawing.Point(882, 6)
+        Me.btnClose.Location = New System.Drawing.Point(873, 6)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(75, 23)
         Me.btnClose.TabIndex = 0
@@ -190,7 +190,7 @@ Partial Class PreviewLeaveBalanceForm
         '
         'btnReset
         '
-        Me.btnReset.Location = New System.Drawing.Point(689, 6)
+        Me.btnReset.Location = New System.Drawing.Point(680, 6)
         Me.btnReset.Name = "btnReset"
         Me.btnReset.Size = New System.Drawing.Size(187, 23)
         Me.btnReset.TabIndex = 0
@@ -204,7 +204,7 @@ Partial Class PreviewLeaveBalanceForm
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnSaveEmp})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(964, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(960, 25)
         Me.ToolStrip1.TabIndex = 140
         Me.ToolStrip1.Text = "ToolStrip1"
         Me.ToolStrip1.Visible = False
@@ -284,7 +284,7 @@ Partial Class PreviewLeaveBalanceForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(969, 450)
+        Me.ClientSize = New System.Drawing.Size(960, 450)
         Me.Controls.Add(Me.dgvEmployees)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.Panel1)

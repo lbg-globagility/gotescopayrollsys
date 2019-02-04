@@ -14,6 +14,7 @@ Public Class DatabaseContext
     '
     ' If you wish to target a different database and/or database provider, modify the 'Model1'
     ' connection string in the application configuration file.
+
     'Public Sub New()
     '    Dim newConn = New DataBaseConnection
     '    MyBase.New(newConn.GetStringMySQLConnectionString, True)
@@ -60,9 +61,5 @@ Public Class DatabaseContext
     Public Overridable Property Categories() As DbSet(Of Category)
 
     Public Overridable Property Products() As DbSet(Of Product)
-End Class
 
-'Public Class MyEntity
-'    Public Property Id() As Int32
-'    Public Property Name() As String
-'End Class
+End Class

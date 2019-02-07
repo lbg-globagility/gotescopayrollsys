@@ -25,9 +25,6 @@ Partial Class DateRangePickerDialog
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.PayperiodsDataGridView = New System.Windows.Forms.DataGridView()
-        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -37,6 +34,10 @@ Partial Class DateRangePickerDialog
         Me.btnIncrementYear = New System.Windows.Forms.Button()
         Me.btnDecrementYear = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.PayperiodsDataGridView, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -69,7 +70,7 @@ Partial Class DateRangePickerDialog
         Me.PayperiodsDataGridView.AllowUserToResizeRows = False
         Me.PayperiodsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.PayperiodsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.PayperiodsDataGridView.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column3, Me.Column1, Me.Column2})
+        Me.PayperiodsDataGridView.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column3, Me.Column1, Me.Column2, Me.Column4})
         Me.PayperiodsDataGridView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PayperiodsDataGridView.Location = New System.Drawing.Point(0, 0)
         Me.PayperiodsDataGridView.MultiSelect = False
@@ -78,27 +79,6 @@ Partial Class DateRangePickerDialog
         Me.PayperiodsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.PayperiodsDataGridView.Size = New System.Drawing.Size(440, 335)
         Me.PayperiodsDataGridView.TabIndex = 4
-        '
-        'Column3
-        '
-        Me.Column3.DataPropertyName = "Period"
-        Me.Column3.HeaderText = "Period"
-        Me.Column3.Name = "Column3"
-        Me.Column3.ReadOnly = True
-        '
-        'Column1
-        '
-        Me.Column1.DataPropertyName = "PayFromDate"
-        Me.Column1.HeaderText = "Start"
-        Me.Column1.Name = "Column1"
-        Me.Column1.ReadOnly = True
-        '
-        'Column2
-        '
-        Me.Column2.DataPropertyName = "PayToDate"
-        Me.Column2.HeaderText = "End"
-        Me.Column2.Name = "Column2"
-        Me.Column2.ReadOnly = True
         '
         'DataGridViewTextBoxColumn1
         '
@@ -144,7 +124,7 @@ Partial Class DateRangePickerDialog
         'lblYear
         '
         Me.lblYear.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblYear.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblYear.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblYear.Location = New System.Drawing.Point(147, 0)
         Me.lblYear.Name = "lblYear"
         Me.lblYear.Size = New System.Drawing.Size(146, 32)
@@ -184,6 +164,35 @@ Partial Class DateRangePickerDialog
         Me.Panel3.Size = New System.Drawing.Size(440, 33)
         Me.Panel3.TabIndex = 7
         '
+        'Column3
+        '
+        Me.Column3.DataPropertyName = "Period"
+        Me.Column3.HeaderText = "Period"
+        Me.Column3.Name = "Column3"
+        Me.Column3.ReadOnly = True
+        '
+        'Column1
+        '
+        Me.Column1.DataPropertyName = "PayFromDate"
+        Me.Column1.HeaderText = "Start"
+        Me.Column1.Name = "Column1"
+        Me.Column1.ReadOnly = True
+        '
+        'Column2
+        '
+        Me.Column2.DataPropertyName = "PayToDate"
+        Me.Column2.HeaderText = "End"
+        Me.Column2.Name = "Column2"
+        Me.Column2.ReadOnly = True
+        '
+        'Column4
+        '
+        Me.Column4.DataPropertyName = "Year"
+        Me.Column4.HeaderText = "Year"
+        Me.Column4.Name = "Column4"
+        Me.Column4.ReadOnly = True
+        Me.Column4.Visible = False
+        '
         'DateRangePickerDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -198,6 +207,7 @@ Partial Class DateRangePickerDialog
         Me.MinimizeBox = False
         Me.Name = "DateRangePickerDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Select cut-off period"
         CType(Me.PayperiodsDataGridView, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
@@ -210,9 +220,6 @@ Partial Class DateRangePickerDialog
     Friend WithEvents PayperiodsDataGridView As DataGridView
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
-    Friend WithEvents Column3 As DataGridViewTextBoxColumn
-    Friend WithEvents Column1 As DataGridViewTextBoxColumn
-    Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Panel2 As Panel
@@ -220,4 +227,8 @@ Partial Class DateRangePickerDialog
     Friend WithEvents lblYear As Label
     Friend WithEvents btnIncrementYear As Button
     Friend WithEvents btnDecrementYear As Button
+    Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents Column1 As DataGridViewTextBoxColumn
+    Friend WithEvents Column2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
 End Class

@@ -190,11 +190,11 @@ Partial Class PreviewLeaveBalanceForm
         '
         'btnReset
         '
-        Me.btnReset.Location = New System.Drawing.Point(680, 6)
+        Me.btnReset.Location = New System.Drawing.Point(652, 6)
         Me.btnReset.Name = "btnReset"
-        Me.btnReset.Size = New System.Drawing.Size(187, 23)
+        Me.btnReset.Size = New System.Drawing.Size(215, 23)
         Me.btnReset.TabIndex = 0
-        Me.btnReset.Text = "Select effecitivity date and &Reset"
+        Me.btnReset.Text = "Reset from most current period"
         Me.btnReset.UseVisualStyleBackColor = True
         '
         'ToolStrip1
@@ -295,6 +295,7 @@ Partial Class PreviewLeaveBalanceForm
         Me.MinimizeBox = False
         Me.Name = "PreviewLeaveBalanceForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Preview leave allowance and balance"
         CType(Me.dgvEmployees, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.ToolStrip1.ResumeLayout(False)

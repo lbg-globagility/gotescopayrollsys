@@ -126,6 +126,7 @@ Partial Class EmpTimeEntry
         Me.tsbtnCancelempawar = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnCloseempawar = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnAudittrail = New System.Windows.Forms.ToolStripButton()
+        Me.tstbnResetLeaveBalance = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
@@ -404,7 +405,7 @@ Partial Class EmpTimeEntry
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.tstbnResetLeaveBalance = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         CType(Me.dgvEmployi, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
         Me.TabControl2.SuspendLayout()
@@ -956,7 +957,7 @@ Partial Class EmpTimeEntry
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.Transparent
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNewtimeent, Me.tsbtnSavetimeent, Me.tsbtnrecalc, Me.tsbtnCancelempawar, Me.tsbtnCloseempawar, Me.tsbtnAudittrail, Me.tstbnResetLeaveBalance, Me.ToolStripProgressBar1})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNewtimeent, Me.tsbtnSavetimeent, Me.tsbtnrecalc, Me.tsbtnCancelempawar, Me.tsbtnCloseempawar, Me.tsbtnAudittrail, Me.ToolStripLabel1, Me.tstbnResetLeaveBalance, Me.ToolStripProgressBar1})
         Me.ToolStrip1.Location = New System.Drawing.Point(3, 3)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(843, 25)
@@ -1014,6 +1015,16 @@ Partial Class EmpTimeEntry
         Me.tsbtnAudittrail.Size = New System.Drawing.Size(23, 22)
         Me.tsbtnAudittrail.Text = "ToolStripButton1"
         Me.tsbtnAudittrail.ToolTipText = "Show audit trails"
+        '
+        'tstbnResetLeaveBalance
+        '
+        Me.tstbnResetLeaveBalance.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.tstbnResetLeaveBalance.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tstbnResetLeaveBalance.Image = CType(resources.GetObject("tstbnResetLeaveBalance.Image"), System.Drawing.Image)
+        Me.tstbnResetLeaveBalance.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.tstbnResetLeaveBalance.Name = "tstbnResetLeaveBalance"
+        Me.tstbnResetLeaveBalance.Size = New System.Drawing.Size(23, 22)
+        Me.tstbnResetLeaveBalance.Text = "Renew Leave Balances"
         '
         'ToolStripProgressBar1
         '
@@ -1386,7 +1397,7 @@ Partial Class EmpTimeEntry
         Me.ToolStrip3.Location = New System.Drawing.Point(1, 25)
         Me.ToolStrip3.Name = "ToolStrip3"
         Me.ToolStrip3.ShowItemToolTips = False
-        Me.ToolStrip3.Size = New System.Drawing.Size(3195, 25)
+        Me.ToolStrip3.Size = New System.Drawing.Size(3406, 25)
         Me.ToolStrip3.TabIndex = 168
         Me.ToolStrip3.Text = "ToolStrip3"
         '
@@ -3070,7 +3081,7 @@ Partial Class EmpTimeEntry
         Me.ToolStrip2.Location = New System.Drawing.Point(6, 65)
         Me.ToolStrip2.Name = "ToolStrip2"
         Me.ToolStrip2.ShowItemToolTips = False
-        Me.ToolStrip2.Size = New System.Drawing.Size(8926, 25)
+        Me.ToolStrip2.Size = New System.Drawing.Size(9049, 25)
         Me.ToolStrip2.TabIndex = 164
         Me.ToolStrip2.Text = "ToolStrip2"
         '
@@ -3527,15 +3538,12 @@ Partial Class EmpTimeEntry
         'BackgroundWorker1
         '
         '
-        'tstbnResetLeaveBalance
+        'ToolStripLabel1
         '
-        Me.tstbnResetLeaveBalance.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.tstbnResetLeaveBalance.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tstbnResetLeaveBalance.Image = CType(resources.GetObject("tstbnResetLeaveBalance.Image"), System.Drawing.Image)
-        Me.tstbnResetLeaveBalance.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.tstbnResetLeaveBalance.Name = "tstbnResetLeaveBalance"
-        Me.tstbnResetLeaveBalance.Size = New System.Drawing.Size(23, 22)
-        Me.tstbnResetLeaveBalance.Text = "Renew Leave Balances"
+        Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(22, 22)
+        Me.ToolStripLabel1.Text = "     "
         '
         'EmpTimeEntry
         '
@@ -3948,4 +3956,5 @@ Partial Class EmpTimeEntry
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripProgressBar1 As System.Windows.Forms.ToolStripProgressBar
     Friend WithEvents tstbnResetLeaveBalance As ToolStripButton
+    Friend WithEvents ToolStripLabel1 As ToolStripLabel
 End Class

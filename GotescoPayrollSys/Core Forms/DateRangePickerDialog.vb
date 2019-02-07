@@ -14,13 +14,13 @@ Public Class DateRangePickerDialog
 
     Private _payperiods As IList(Of PayPeriod)
 
-    Public Year As Integer = Date.Today.Year
+    Public PeriodYear As Integer = Date.Today.Year
 
     Private _start As Date
 
     Private _end As Date
 
-    Private _rowId As Integer
+    Private _rowId, _year As Integer
 
     Public ReadOnly Property Start As Date
         Get
@@ -40,21 +40,27 @@ Public Class DateRangePickerDialog
         End Get
     End Property
 
+    Public ReadOnly Property Year As Integer
+        Get
+            Return _year
+        End Get
+    End Property
+
     Private Async Sub DateRangePickerDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         PayperiodsDataGridView.AutoGenerateColumns = False
 
         Await LoadPayPeriods()
 
-        lblYear.Text = Convert.ToString(Year)
+        lblYear.Text = Convert.ToString(PeriodYear)
 
-        btnDecrementYear.Text = String.Concat("← ", (Year - 1))
-        btnIncrementYear.Text = String.Concat((Year + 1), " →")
+        btnDecrementYear.Text = String.Concat("← ", (PeriodYear - 1))
+        btnIncrementYear.Text = String.Concat((PeriodYear + 1), " →")
     End Sub
 
     Private Async Function LoadPayPeriods() As Threading.Tasks.Task
         Using context = New DatabaseContext()
             _payperiods = Await context.PayPeriods.
-                Where(Function(p) Nullable.Equals(p.Year, Year)).
+                Where(Function(p) Nullable.Equals(p.Year, PeriodYear)).
                 Where(Function(p) Nullable.Equals(p.OrganizationID, z_OrganizationID)).
                 Where(Function(p) Nullable.Equals(p.PayFrequencyID, _payFrequencyId)).
                 ToListAsync()
@@ -74,6 +80,8 @@ Public Class DateRangePickerDialog
 
         _start = payperiod.PayFromDate.Value
         _end = payperiod.PayToDate.Value
+
+        _year = payperiod.Year
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -110,6 +118,12 @@ Public Class DateRangePickerDialog
             End Get
         End Property
 
+        Public ReadOnly Property Year As Integer
+            Get
+                Return PayPeriod.Year.Value
+            End Get
+        End Property
+
         Public ReadOnly Property Period As String
             Get
                 If PayPeriod.IsMonthly Then
@@ -140,14 +154,14 @@ Public Class DateRangePickerDialog
         Dim linkLabel = DirectCast(sender, Button)
         Dim factor = Convert.ToInt32(linkLabel.Tag)
 
-        Year = Year + factor
+        PeriodYear = PeriodYear + factor
 
-        lblYear.Text = Convert.ToString(Year)
+        lblYear.Text = Convert.ToString(PeriodYear)
 
         Await LoadPayPeriods()
 
-        btnDecrementYear.Text = String.Concat("← ", (Year - 1))
-        btnIncrementYear.Text = String.Concat((Year + 1), " →")
+        btnDecrementYear.Text = String.Concat("← ", (PeriodYear - 1))
+        btnIncrementYear.Text = String.Concat((PeriodYear + 1), " →")
     End Sub
 
 End Class

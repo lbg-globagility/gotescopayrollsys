@@ -7,7 +7,8 @@ Imports MySql.Data.MySqlClient
 Public Class PreviewLeaveBalanceForm
     Public _logger As ILog = LogManager.GetLogger("LoggerWork")
 
-    Private payPeriodId As Integer
+    Private payPeriodId As Integer = 0
+    Private periodYear As Integer = 0
 
     Private periodDateFrom, periodDateTo As Date
 
@@ -40,6 +41,7 @@ Public Class PreviewLeaveBalanceForm
                 payPeriodId = dialog.Id
                 periodDateFrom = dialog.Start
                 periodDateTo = dialog.End
+                periodYear = dialog.Year
                 isOk = True
             End If
         End Using
@@ -63,13 +65,15 @@ Public Class PreviewLeaveBalanceForm
     End Sub
 
     Private Async Function RenewLeaveBalances() As Threading.Tasks.Task
-        Using command = New MySqlCommand("CALL LEAVE_gainingbalance(@orgId, NULL, @userId, @dateFrom, @dateTo);",
+        Using command = New MySqlCommand(String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
+                                                       "CALL `UpdateLeaveItems`(@orgId, @yearPeriod);"),
                                          New MySqlConnection(mysql_conn_text))
             With command.Parameters
                 .AddWithValue("@orgId", organizationId)
                 .AddWithValue("@userId", user_row_id)
                 .AddWithValue("@dateFrom", periodDateFrom)
                 .AddWithValue("@dateTo", periodDateTo)
+                .AddWithValue("@yearPeriod", periodYear)
 
             End With
 
@@ -90,7 +94,7 @@ Public Class PreviewLeaveBalanceForm
                 transaction.Rollback()
 
                 MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
-                                "Error occured",
+                                "Error reset leave balance",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Exclamation)
             End Try

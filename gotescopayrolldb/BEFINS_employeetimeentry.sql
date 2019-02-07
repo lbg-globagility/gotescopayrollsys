@@ -217,7 +217,7 @@ IF isRest_day = '0' THEN
 			ELSEIF has_shift = '1' AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0 THEN
 					
-				IF @calcspecholi = 1 THEN
+				IF @calcspecholi = 1 AND NEW.IsValidForHolidayPayment = TRUE THEN
 					
 					IF emp_type = 'Daily' THEN
 					

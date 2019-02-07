@@ -69,15 +69,12 @@ IF will_check_before_orelse_after = TRUE THEN
 		            FROM employeetimeentry ete
 						INNER JOIN employee e
 						ON e.RowID=ete.EmployeeID AND e.OrganizationID=ete.OrganizationID AND e.RowID=emp_rowid
-						INNER JOIN employeeshift esh ON esh.RowID=ete.EmployeeShiftID
-						INNER JOIN payrate pr ON pr.RowID=ete.PayRateID AND pr.`PayRate`=@default_payrate
+						INNER JOIN employeeshift esh ON esh.RowID=ete.EmployeeShiftID AND esh.RestDay=FALSE
+						INNER JOIN payrate pr ON pr.RowID=ete.PayRateID AND pr.PayType='Regular day'
 						WHERE ete.OrganizationID=organiz_id
 						AND ete.`Date` < et_date
 						ORDER BY ete.`Date` DESC
 						LIMIT 1) ett ON ett.RowID=et.RowID
-		# INNER JOIN employee e
-		        # ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID AND e.RowID=emp_rowid
-		# INNER JOIN employeeshift esh ON esh.RowID=et.EmployeeShiftID
 		WHERE et.TotalDayPay > 0
 		ORDER BY et.`Date` DESC
 		LIMIT 1

@@ -172,7 +172,7 @@ IF isRest_day = '0' THEN
 	ELSE
 
 		IF isDateNotHoliday = '0' THEN
-		
+
 			SET @calclegalholi = '0';
 			SET @calcspecholi = '0';
 			
@@ -198,13 +198,13 @@ IF isRest_day = '0' THEN
 			ELSEIF has_shift = '1' AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0
 					AND (@calclegalholi = 0 AND @calcspecholi = 0) THEN
-					
+
 				SET NEW.Absent = 0; # 0 @daily_pay;
 					
 			ELSEIF has_shift = '1' AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0
 					AND @calclegalholi = 1 THEN
-					
+
 				IF NEW.IsValidForHolidayPayment = 1 THEN
 				
 					SET NEW.TotalDayPay = @daily_pay;
@@ -219,8 +219,8 @@ IF isRest_day = '0' THEN
 					
 			ELSEIF has_shift = '1' AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0 THEN
-					
-				IF @calcspecholi = 1 THEN
+
+				IF @calcspecholi = 1 AND NEW.IsValidForHolidayPayment = TRUE THEN
 					
 					IF emp_type = 'Daily' THEN
 					
@@ -243,31 +243,28 @@ IF isRest_day = '0' THEN
 				
 				END IF;
 				
-			ELSE#IF NEW.TotalDayPay > 0 THEN
-				IF NEW.TotalDayPay < 1 THEN
-				
-					IF NEW.IsValidForHolidayPayment = 1 THEN
-					
-						SET NEW.TotalDayPay = @daily_pay;
-						SET NEW.Absent = 0.0;
-						
-					ELSE
-					
-						SET NEW.TotalDayPay = 0.0;
-						SET NEW.Absent = IF(isRest_day = 0, @daily_pay, 0);
-						
-					END IF;
-				
+			ELSE
+
+				/*IF NEW.TotalDayPay < 1 THEN
 				ELSE
 					SET NEW.Absent = 0.0;
-						
-				END IF;
+				END IF;*/
+				IF NEW.IsValidForHolidayPayment = 1 THEN
+				
+					SET NEW.TotalDayPay = @daily_pay;
+					SET NEW.Absent = 0.0;
 					
+				ELSE
+				
+					SET NEW.TotalDayPay = 0.0;
+					SET NEW.Absent = IF(isRest_day = 0, @daily_pay, 0);
+					
+				END IF;
+
 			END IF;
-		
+
 		ELSE
 			SET NEW.Absent = IFNULL(NEW.Absent,0);
-		SET NEW.TaxableDailyBonus = 11792;
 		END IF;
 			
 	END IF;

@@ -46,7 +46,8 @@ SELECT (IS_WORKINGDAY_PRESENT_DURINGHOLI(etent_OrganizationID, etent_EmployeeID,
 			# AND IS_WORKINGDAY_PRESENT_DURINGHOLI(etent_OrganizationID, etent_EmployeeID, etent_Date, FALSE) = 1
 		) `Result`
 FROM payrate pr
-WHERE pr.RowID=etent_PayRateID AND pr.`PayRate` > default_payrate
+WHERE pr.RowID=etent_PayRateID #AND pr.`PayRate` > default_payrate
+AND pr.PayType != 'Regular day'
 INTO is_valid_for_holipayment;
 
 SET is_valid_for_holipayment = IFNULL(is_valid_for_holipayment,FALSE);

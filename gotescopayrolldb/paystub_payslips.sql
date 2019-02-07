@@ -173,6 +173,7 @@ ps.RowID
   ( ps.TotalLoans
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 + ps.TotalEmpWithholdingTax
+	 + ROUND(IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0), 2)
 	 ) `Column62`
 
 , ROUND(( @totalDeductions

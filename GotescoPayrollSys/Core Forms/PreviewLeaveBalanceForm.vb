@@ -1,4 +1,5 @@
-﻿Imports System.Data.Entity
+﻿Imports System.Configuration
+Imports System.Data.Entity
 Imports AccuPay.Entity
 Imports log4net
 Imports Microsoft.EntityFrameworkCore
@@ -20,8 +21,14 @@ Public Class PreviewLeaveBalanceForm
 
     Dim organizationId As Integer = 0
 
+    Private config As Specialized.NameValueCollection = ConfigurationManager.AppSettings
+
+    Private configCommandTimeOut As Integer = 0
+
     Private Async Sub PreviewLeaveBalanceForm_LoadAsync(sender As Object, e As EventArgs) Handles MyBase.Load
         organizationId = Convert.ToInt32(org_rowid)
+
+        configCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
 
         Await LoadEmployees()
     End Sub
@@ -65,9 +72,11 @@ Public Class PreviewLeaveBalanceForm
     End Sub
 
     Private Async Function RenewLeaveBalances() As Threading.Tasks.Task
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
         Using command = New MySqlCommand(String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
                                                        "CALL `UpdateLeaveItems`(@orgId, @yearPeriod);"),
-                                         New MySqlConnection(mysql_conn_text))
+                                         New MySqlConnection(connectionText))
             With command.Parameters
                 .AddWithValue("@orgId", organizationId)
                 .AddWithValue("@userId", user_row_id)

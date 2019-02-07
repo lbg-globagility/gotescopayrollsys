@@ -6,6 +6,7 @@ Imports System.Text
 Imports System.ComponentModel
 Imports log4net
 Imports OfficeOpenXml
+Imports System.Configuration
 
 Public Class PayStub
 
@@ -62,6 +63,10 @@ Public Class PayStub
     Private _currPaginate As Integer = -1
     Private pageRecordCount As Integer = 10
 
+    Private configCommandTimeOut As Integer = 0
+
+    Private config As Specialized.NameValueCollection = ConfigurationManager.AppSettings
+
     Property VeryFirstPayPeriodIDOfThisYear As Object
 
         Get
@@ -88,10 +93,8 @@ Public Class PayStub
 
     Private Sub PayStub_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CurrLinkPage = First
-        'customTabControl3.DrawMode = TabDrawMode.Normal
-        'customTabControl3.DisplayStyle = TabStyle.Rounded
 
-        'dbconn()
+        configCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
 
         viewID = VIEW_privilege("Employee Pay Slip", org_rowid)
 
@@ -2565,33 +2568,65 @@ Public Class PayStub
 
     Public errlogger As ILog = LogManager.GetLogger("LoggerWork")
 
-    Private Sub GainingLeaveBalances()
+    Private Async Sub GainingLeaveBalancesAsync()
 
-        Dim params = New Object() {org_rowid, user_row_id, paypFrom, paypTo}
+        'Dim params = New Object() {org_rowid, user_row_id, paypFrom, paypTo}
 
-        Dim sql As New SQL("CALL LEAVE_gainingbalance(?OrganizID, NULL, ?UserRowID, ?minimum_date, ?custom_maximum_date);", params)
+        'Dim sql As New SQL("CALL LEAVE_gainingbalance(?OrganizID, NULL, ?UserRowID, ?minimum_date, ?custom_maximum_date);", params)
 
-        sql.ExecuteQueryAsync()
+        'sql.ExecuteQueryAsync()
 
-        If sql.HasError Then
-            errlogger.Error("PayStub.GainingLeaveBalances", sql.ErrorException)
-            Console.WriteLine(String.Concat("PayStub.GainingLeaveBalances ", sql.ErrorException.Message))
-        End If
+        'If sql.HasError Then
+        '    errlogger.Error("PayStub.GainingLeaveBalances", sql.ErrorException)
+        '    Console.WriteLine(String.Concat("PayStub.GainingLeaveBalances ", sql.ErrorException.Message))
+        'End If
 
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Using command = New MySqlCommand(String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
+                                                       "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);"),
+                                         New MySqlConnection(connectionText))
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", paypFrom)
+                .AddWithValue("@dateTo", paypTo)
+                .AddWithValue("@periodId", paypRowID)
+
+            End With
+
+            Await command.Connection.OpenAsync
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync
+
+            Try
+                Await command.ExecuteNonQueryAsync()
+                transaction.Commit()
+            Catch ex As Exception
+                _logger.Error("LEAVE_gainingbalance & MASSUPD_employeeloanschedulebacktrack_ofthisperiod", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                                "",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Exclamation)
+            End Try
+
+        End Using
     End Sub
 
 #End Region
 
     Private Sub LoanHistoryItems()
-        Dim params = New Object() {org_rowid, paypRowID, user_row_id}
-        Dim sql As New SQL("CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(?og_rowid, ?pp_rowid, ?user_rowid, NULL);",
-                           params)
-        sql.ExecuteQueryAsync()
+        'Dim params = New Object() {org_rowid, paypRowID, user_row_id}
+        'Dim sql As New SQL("CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(?og_rowid, ?pp_rowid, ?user_rowid, NULL);",
+        '                   params)
+        'sql.ExecuteQueryAsync()
 
-        If sql.HasError Then
-            errlogger.Error("PayStub.LoanHistoryItems", sql.ErrorException)
-            Console.WriteLine(String.Concat("PayStub.LoanHistoryItems ", sql.ErrorException.Message))
-        End If
+        'If sql.HasError Then
+        '    errlogger.Error("PayStub.LoanHistoryItems", sql.ErrorException)
+        '    Console.WriteLine(String.Concat("PayStub.LoanHistoryItems ", sql.ErrorException.Message))
+        'End If
 
     End Sub
 
@@ -11591,7 +11626,7 @@ Public Class PayStub
 
                 Dim task_leave_gain_balance =
                     Task.Run(Sub()
-                                 GainingLeaveBalances()
+                                 GainingLeaveBalancesAsync()
                                  LoanHistoryItems()
                                  MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll, OK")
                              End Sub)

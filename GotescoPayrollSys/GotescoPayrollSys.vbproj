@@ -67,8 +67,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>gotescomarketing.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
@@ -1397,6 +1396,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="gotescomarketing.ico" />
     <EmbeddedResource Include="Core Forms\DateRangePickerDialog.resx">
       <DependentUpon>DateRangePickerDialog.vb</DependentUpon>
     </EmbeddedResource>

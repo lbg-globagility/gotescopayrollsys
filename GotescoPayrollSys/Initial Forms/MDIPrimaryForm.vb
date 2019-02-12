@@ -282,6 +282,9 @@ Public Class MDIPrimaryForm
 
                     .ReloadOrganization()
 
+                    If Debugger.IsAttached Then
+                        .AssignDefaultCredentials()
+                    End If
                 End With
 
                 MessageBoxManager.Unregister()

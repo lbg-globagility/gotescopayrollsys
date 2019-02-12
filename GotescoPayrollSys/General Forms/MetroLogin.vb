@@ -83,6 +83,15 @@
 
         'CustomDatePicker1.Value = datenow
 
+        If Debugger.IsAttached Then
+            AssignDefaultCredentials()
+        End If
+
+    End Sub
+
+    Public Sub AssignDefaultCredentials()
+        txtbxUserID.Text = "admin1"
+        txtbxPword.Text = "yellow1"
     End Sub
 
     Private Sub Login_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtbxPword.KeyPress,

@@ -468,6 +468,8 @@ Partial Class PayStub
         Me.bgwPrintAllPaySlip = New System.ComponentModel.BackgroundWorker()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.Label87 = New System.Windows.Forms.Label()
+        Me.Label93 = New System.Windows.Forms.Label()
         CType(Me.dgvpayper, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cms1.SuspendLayout()
         CType(Me.dgvemployees, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1253,6 +1255,8 @@ Partial Class PayStub
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label39)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label38)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Label93)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Label87)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label36)
         Me.SplitContainer1.Size = New System.Drawing.Size(880, 412)
         Me.SplitContainer1.SplitterDistance = 216
@@ -4283,14 +4287,14 @@ Partial Class PayStub
         'DeclaredToolStripMenuItem1
         '
         Me.DeclaredToolStripMenuItem1.Name = "DeclaredToolStripMenuItem1"
-        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
         Me.DeclaredToolStripMenuItem1.Tag = "0"
         Me.DeclaredToolStripMenuItem1.Text = "Declared"
         '
         'ActualToolStripMenuItem1
         '
         Me.ActualToolStripMenuItem1.Name = "ActualToolStripMenuItem1"
-        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
         Me.ActualToolStripMenuItem1.Tag = "1"
         Me.ActualToolStripMenuItem1.Text = "Actual"
         '
@@ -4563,6 +4567,24 @@ Partial Class PayStub
         'Timer1
         '
         Me.Timer1.Interval = 2500
+        '
+        'Label87
+        '
+        Me.Label87.AutoSize = True
+        Me.Label87.Location = New System.Drawing.Point(233, 265)
+        Me.Label87.Name = "Label87"
+        Me.Label87.Size = New System.Drawing.Size(14, 13)
+        Me.Label87.TabIndex = 176
+        Me.Label87.Text = "₱"
+        '
+        'Label93
+        '
+        Me.Label93.AutoSize = True
+        Me.Label93.Location = New System.Drawing.Point(233, 246)
+        Me.Label93.Name = "Label93"
+        Me.Label93.Size = New System.Drawing.Size(14, 13)
+        Me.Label93.TabIndex = 176
+        Me.Label93.Text = "₱"
         '
         'PayStub
         '
@@ -5045,4 +5067,6 @@ Partial Class PayStub
     Friend WithEvents txtRestDayHrs As System.Windows.Forms.TextBox
     Friend WithEvents txtRestDayPay As System.Windows.Forms.TextBox
     Friend WithEvents Label85 As System.Windows.Forms.Label
+    Friend WithEvents Label93 As Label
+    Friend WithEvents Label87 As Label
 End Class

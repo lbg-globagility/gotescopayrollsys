@@ -23,7 +23,7 @@ DECLARE TaxableDailyAllowanceAmount DECIMAL(11,6);
 
 DECLARE rate_this_date DECIMAL(11,6);
 DECLARE hourly_rate DECIMAL(11,6);
-DECLARE isSpecialHoliday CHAR(1);
+DECLARE isSpecialHoliday, isLegalHoliday, itsHoliday BOOL DEFAULT FALSE;
 DECLARE isPresentInWorkingDaysPriorToThisDate CHAR(1) DEFAULT '0';
 DECLARE payrate_this_date DECIMAL(11,2);
 
@@ -43,8 +43,8 @@ SET e_rateperday = IFNULL(@e_rateperday,0);
 
 SELECT EXISTS(SELECT et.RowID FROM employeetimeentry et INNER JOIN payrate pr ON pr.RowID=et.PayRateID WHERE et.EmployeeID=NEW.EmployeeID AND et.OrganizationID=NEW.OrganizationID AND et.`Date` BETWEEN SUBDATE(NEW.`Date`, INTERVAL 3 DAY) AND SUBDATE(NEW.`Date`, INTERVAL 1 DAY) AND et.EmployeeShiftID IS NOT NULL AND et.TotalDayPay > 0 ORDER BY et.`Date` DESC LIMIT 1) INTO isPresentInWorkingDaysPriorToThisDate;
 
-SELECT (PayType = 'Regular Day'),(LOCATE('Special',PayType) > 0) FROM payrate WHERE RowID=NEW.PayRateID INTO isDateNotHoliday,isSpecialHoliday;
-
+SELECT (PayType = 'Regular Day'),(LOCATE('Special',PayType) > 0), (PayType='Regular Holiday') FROM payrate WHERE RowID=NEW.PayRateID INTO isDateNotHoliday,isSpecialHoliday,isLegalHoliday;
+SET itsHoliday = (isSpecialHoliday OR isLegalHoliday);
 SET @myperfectshifthrs = 0.0;
 
 SELECT `PayRate`,e_rateperday FROM payrate pr WHERE pr.RowID=NEW.PayRateID INTO payrate_this_date,rate_this_date;SET perfect_hrs = 1;SET @myperfectshifthrs = 1;
@@ -192,15 +192,36 @@ IF isRest_day = '0' THEN
 			INTO @calclegalholi
 					,@calcspecholi,emp_type
 					,@daily_pay;
-			
+
 			IF (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) > 0 THEN
 				SET NEW.Absent = 0.0;
-			ELSEIF has_shift = '1' AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
-					AND NEW.TotalDayPay = 0
-					AND (@calclegalholi = 0 AND @calcspecholi = 0) THEN
-
-				SET NEW.Absent = 0; # 0 @daily_pay;
+				
+			ELSEIF has_shift = TRUE AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
+					AND NEW.TotalDayPay = 0 THEN
+#					AND (@calclegalholi = 0 AND @calcspecholi = 0) THEN
 					
+					IF isSpecialHoliday = TRUE THEN
+						IF NEW.IsValidForHolidayPayment = TRUE
+							AND @calcspecholi = TRUE THEN
+							
+							SET NEW.TotalDayPay = @daily_pay;
+							SET NEW.Absent = 0;
+						ELSE
+							SET NEW.Absent = @daily_pay;
+						END IF;
+					END IF;
+					
+					IF isLegalHoliday = TRUE THEN
+						IF NEW.IsValidForHolidayPayment = TRUE
+							AND @calclegalholi = TRUE THEN
+							
+							SET NEW.TotalDayPay = @daily_pay;
+							SET NEW.Absent = 0;
+						ELSE
+							SET NEW.Absent = @daily_pay;
+						END IF;
+					END IF;
+
 			ELSEIF has_shift = '1' AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0
 					AND @calclegalholi = 1 THEN

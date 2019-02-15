@@ -32,6 +32,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeetimeentries`(
 	`etent_NightDiffOTHoursAmount` DECIMAL(11,6),
 	`etent_HoursLateAmount` DECIMAL(11,6),
 	`leavePayment` DECIMAL(11,6)
+
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -42,12 +44,24 @@ DECLARE is_valid_for_holipayment BOOL DEFAULT FALSE;
 
 DECLARE default_payrate DECIMAL(11,2) DEFAULT 1.0;
 
-SELECT (IS_WORKINGDAY_PRESENT_DURINGHOLI(etent_OrganizationID, etent_EmployeeID, etent_Date, TRUE) = 1
-			# AND IS_WORKINGDAY_PRESENT_DURINGHOLI(etent_OrganizationID, etent_EmployeeID, etent_Date, FALSE) = 1
-		) `Result`
-FROM payrate pr
-WHERE pr.RowID=etent_PayRateID #AND pr.`PayRate` > default_payrate
-AND pr.PayType != 'Regular day'
+SET @specialNonWorkingHoliday = 'Special Non-Working Holiday';
+SET @legalHoliday = 'Regular Holiday';
+
+SELECT EXISTS(SELECT pr.RowID
+					FROM payrate pr
+					INNER JOIN employee e ON e.RowID = etent_EmployeeID AND e.CalcSpecialHoliday = TRUE
+					WHERE pr.RowID = etent_PayRateID
+					AND pr.PayType = @specialNonWorkingHoliday
+					AND IS_WORKINGDAY_PRESENT_DURINGHOLI(pr.OrganizationID, e.RowID, pr.`Date`, TRUE) = TRUE
+					
+				UNION
+					SELECT pr.RowID
+					FROM payrate pr
+					INNER JOIN employee e ON e.RowID = etent_EmployeeID AND e.CalcHoliday = TRUE
+					WHERE pr.RowID = etent_PayRateID
+					AND pr.PayType = @legalHoliday
+					AND IS_WORKINGDAY_PRESENT_DURINGHOLI(pr.OrganizationID, e.RowID, pr.`Date`, TRUE) = TRUE
+					)
 INTO is_valid_for_holipayment;
 
 SET is_valid_for_holipayment = IFNULL(is_valid_for_holipayment,FALSE);

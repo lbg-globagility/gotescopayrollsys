@@ -8,7 +8,10 @@ DROP PROCEDURE IF EXISTS `UpdateLeaveItems`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateLeaveItems`(
 	IN `orgId` INT,
-	IN `yearPeriod` INT
+	IN `startingPeriodId` INT
+
+
+
 )
 BEGIN
 

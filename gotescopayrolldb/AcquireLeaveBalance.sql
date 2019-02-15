@@ -4,15 +4,14 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-DROP PROCEDURE IF EXISTS `LEAVE_gainingbalance`;
+DROP PROCEDURE IF EXISTS `AcquireLeaveBalance`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `LEAVE_gainingbalance`(
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `AcquireLeaveBalance`(
 	IN `OrganizID` INT,
 	IN `EmpRowID` INT,
 	IN `UserRowID` INT,
 	IN `minimum_date` DATE,
 	IN `custom_maximum_date` DATE
-
 
 
 
@@ -28,7 +27,7 @@ DECLARE count_semi_monthly_period_peryear INT DEFAULT 24;
 
 DECLARE e_indx, e_count, count_leavetype, _i, leavetypeid, payFreqId INT DEFAULT 0;
 
-DECLARE i, payFrequencyID, yearPeriod INT DEFAULT 0;
+DECLARE i INT DEFAULT 0;
 
 DECLARE payDateFrom, payDateTo DATE;
 
@@ -62,7 +61,7 @@ e.LeavePerPayPeriod =				( e.LeaveAllowance / count_semi_monthly_period_peryear 
 
 , e.LastUpd=CURRENT_TIMESTAMP()
 , e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
-WHERE e.OrganizationID = OrganizID
+WHERE e.OrganizationID = OrganizID AND e.RowID = EmpRowID
 AND e.DateRegularized BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus = regularEmplymentStatus
@@ -86,7 +85,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveTenthYearService / count_semi_monthly_peri
 
 , e.LastUpd=CURRENT_TIMESTAMP()
 , e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
-WHERE e.OrganizationID = OrganizID
+WHERE e.OrganizationID = OrganizID AND e.RowID = EmpRowID
 AND ADDDATE(e.DateRegularized, INTERVAL 5 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus = regularEmplymentStatus
@@ -110,7 +109,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveFifteenthYearService / count_semi_monthly_
 
 , e.LastUpd=CURRENT_TIMESTAMP()
 , e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
-WHERE e.OrganizationID = OrganizID
+WHERE e.OrganizationID = OrganizID AND e.RowID = EmpRowID
 AND ADDDATE(e.DateRegularized, INTERVAL 10 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus = regularEmplymentStatus
@@ -134,7 +133,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_mon
 
 , e.LastUpd=CURRENT_TIMESTAMP()
 , e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
-WHERE e.OrganizationID = OrganizID
+WHERE e.OrganizationID = OrganizID AND e.RowID = EmpRowID
 AND ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus = regularEmplymentStatus
@@ -154,7 +153,6 @@ AND e.EmploymentStatus = regularEmplymentStatus
 
 SELECT MIN(ppd.PayFromDate)
 , MAX(ppd.PayToDate)
-, ppd.TotalGrossSalary, ppd.`Year`
 FROM payperiod pp
 INNER JOIN payperiod ppd ON ppd.OrganizationID=pp.OrganizationID AND ppd.TotalGrossSalary=pp.TotalGrossSalary AND ppd.`Year`=pp.`Year`
 WHERE pp.OrganizationID = OrganizID
@@ -163,39 +161,7 @@ AND pp.PayFromDate = payDateFrom
 AND pp.PayToDate = payDateTo
 INTO thisYearPayDateFrom
      , thisYearPayDateTo
-     , payFrequencyID, yearPeriod
 ;
-
-SELECT MIN(ii.PayFromDate) `PayFromDate`
-, MAX(ii.PayToDate) `PayToDate`
-FROM (SELECT i.*
-		FROM (SELECT pp.*
-				FROM payperiod pp
-				WHERE pp.OrganizationID=OrganizID
-				AND pp.TotalGrossSalary=payFrequencyID
-				AND pp.`Year`=yearPeriod
-			UNION
-				SELECT pp.*
-				FROM payperiod pp
-				WHERE pp.OrganizationID=OrganizID
-				AND pp.TotalGrossSalary=payFrequencyID
-				AND pp.`Year`=yearPeriod+1
-				) i
-		WHERE i.PayFromDate >= payDateFrom
-		ORDER BY i.`Year`, i.OrdinalValue
-		LIMIT count_semi_monthly_period_peryear
-		) ii
-INTO thisYearPayDateFrom
-     , thisYearPayDateTo
-;
-
-
-
-
-
-
-
-
 
 # less than 10th year, between 6th & 9th year ###############################
 UPDATE employee e
@@ -208,7 +174,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveTenthYearService / count_semi_monthly_peri
 
 , e.LastUpd=CURRENT_TIMESTAMP()
 , e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
-WHERE e.OrganizationID = OrganizID
+WHERE e.OrganizationID = OrganizID AND e.RowID = EmpRowID
 AND (ADDDATE(e.DateRegularized, INTERVAL 6 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 7 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 8 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
@@ -229,7 +195,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveFifteenthYearService / count_semi_monthly_
 
 , e.LastUpd=CURRENT_TIMESTAMP()
 , e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
-WHERE e.OrganizationID = OrganizID
+WHERE e.OrganizationID = OrganizID AND e.RowID = EmpRowID
 AND (ADDDATE(e.DateRegularized, INTERVAL 11 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 12 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 13 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
@@ -250,7 +216,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_mon
 
 , e.LastUpd=CURRENT_TIMESTAMP()
 , e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
-WHERE e.OrganizationID = OrganizID
+WHERE e.OrganizationID = OrganizID AND e.RowID = EmpRowID
 AND ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) NOT BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
 AND (ADDDATE(e.DateRegularized, INTERVAL 16 YEAR) <= thisYearPayDateFrom
      OR ADDDATE(e.DateRegularized, INTERVAL 16 YEAR) <= thisYearPayDateTo)
@@ -272,15 +238,15 @@ INNER JOIN (SELECT et.RowID,et.EmployeeID
 				AND et.`Date` BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
 				GROUP BY et.EmployeeID) ete ON ete.RowID IS NOT NULL AND ete.EmployeeID = e.RowID
 SET
-e.LeaveBalance = e.LeaveAllowance - IFNULL(ete.VacationLeaveHours,0)
-, e.SickLeaveBalance = e.SickLeaveAllowance - IFNULL(ete.SickLeaveHours,0)
-, e.MaternityLeaveBalance = e.MaternityLeaveAllowance - IFNULL(ete.MaternityLeaveHours,0)
-, e.OtherLeaveBalance = e.OtherLeaveAllowance - IFNULL(ete.OtherLeaveHours,0)
-, e.AdditionalVLBalance = e.AdditionalVLAllowance - IFNULL(ete.AdditionalVLHours,0)
+e.LeaveBalance = e.LeaveAllowance - IF(IFNULL(ete.VacationLeaveHours,0) < 0, 0, IFNULL(ete.VacationLeaveHours,0))
+, e.SickLeaveBalance = e.SickLeaveAllowance - IF(IFNULL(ete.SickLeaveHours,0) < 0, 0, IFNULL(ete.SickLeaveHours,0))
+, e.MaternityLeaveBalance = e.MaternityLeaveAllowance - IF(IFNULL(ete.MaternityLeaveHours,0) < 0, 0, IFNULL(ete.MaternityLeaveHours,0))
+, e.OtherLeaveBalance = e.OtherLeaveAllowance - IF(IFNULL(ete.OtherLeaveHours,0) < 0, 0, IFNULL(ete.OtherLeaveHours,0))
+, e.AdditionalVLBalance = e.AdditionalVLAllowance - IF(IFNULL(ete.AdditionalVLHours,0) < 0, 0, IFNULL(ete.AdditionalVLHours,0))
 
 , e.LastUpd = ADDDATE(e.LastUpd, INTERVAL 1 SECOND)
 , e.LastUpdBy = IFNULL(e.LastUpdBy, e.CreatedBy)
-WHERE e.OrganizationID = OrganizID
+WHERE e.OrganizationID = OrganizID AND e.RowID = EmpRowID
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus = regularEmplymentStatus
 ;

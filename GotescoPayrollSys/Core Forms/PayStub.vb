@@ -6480,15 +6480,8 @@ Public Class PayStub
         Dim e_asc As String = Asc(e.KeyChar)
 
         If e_asc = 13 Then
-            'tsbtnSearch
             tsbtnSearchEmployee_Click(sender, e)
-        Else
-            Dim keypressresult = TrapCharKey(e_asc) And TrapNumKey(e_asc)
-
-            e.Handled = keypressresult
-
         End If
-
     End Sub
 
     Private Sub tsbtnSearchEmployee_Click(sender As Object, e As EventArgs) Handles tsbtnSearch.Click

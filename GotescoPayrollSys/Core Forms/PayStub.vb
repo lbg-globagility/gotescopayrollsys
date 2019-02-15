@@ -11552,7 +11552,7 @@ Public Class PayStub
 
     End Sub
 
-    Private Sub tsbtnDelEmpPayroll_Click(sender As Object, e As EventArgs) Handles tsbtnDelEmpPayroll.Click
+    Private Async Sub tsbtnDelEmpPayroll_ClickAsync(sender As Object, e As EventArgs) Handles tsbtnDelEmpPayroll.Click
 
         If currentEmployeeID = Nothing Then
         Else
@@ -11568,18 +11568,53 @@ Public Class PayStub
 
             If prompt = Windows.Forms.DialogResult.Yes Then
 
-                Dim n_ExecuteQuery As New ExecuteQuery("SELECT RowID" &
-                                                       " FROM paystub" &
-                                                       " WHERE EmployeeID='" & dgvemployees.Tag & "'" &
-                                                       " AND OrganizationID='" & org_rowid & "'" &
-                                                       " AND PayPeriodID='" & paypRowID & "'" &
-                                                       " LIMIT 1;")
+                'Dim n_ExecuteQuery As New ExecuteQuery("SELECT RowID" &
+                '                                       " FROM paystub" &
+                '                                       " WHERE EmployeeID='" & dgvemployees.Tag & "'" &
+                '                                       " AND OrganizationID='" & org_rowid & "'" &
+                '                                       " AND PayPeriodID='" & paypRowID & "'" &
+                '                                       " LIMIT 1;")
 
-                Dim paystubRowID As Object = Nothing
+                'Dim paystubRowID As Object = Nothing
 
-                paystubRowID = n_ExecuteQuery.Result
+                'paystubRowID = n_ExecuteQuery.Result
 
-                n_ExecuteQuery = New ExecuteQuery("CALL DEL_specificpaystub('" & paystubRowID & "');")
+                'n_ExecuteQuery = New ExecuteQuery("CALL DEL_specificpaystub('" & paystubRowID & "');")
+
+                Dim query = String.Concat("CALL `DEL_specificpaystub`((SELECT RowID FROM paystub WHERE OrganizationID=@orgId AND EmployeeID=@eId AND PayPeriodID=@ppId LIMIT 1));")
+
+                Using command = New MySqlCommand(query, New MySqlConnection(mysql_conn_text))
+                    With command
+                        .Parameters.AddWithValue("@orgId", org_rowid)
+                        .Parameters.AddWithValue("@eId", dgvemployees.Tag)
+                        .Parameters.AddWithValue("@ppId", paypRowID)
+                    End With
+
+                    Await command.Connection.OpenAsync()
+
+                    Dim transaction = command.Connection.BeginTransaction()
+                    Dim succeed = False
+                    Try
+                        Await command.ExecuteNonQueryAsync()
+                        transaction.Commit()
+                        succeed = True
+                    Catch ex As Exception
+                        transaction.Rollback()
+                        _logger.Error("Error deleting paystub", ex)
+                        MessageBox.Show(String.Concat("Oops! Something went wrong, please contact ", My.Resources.SystemDeveloper, " to report this issue."), "Error deleting paystub", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Finally
+                        If succeed Then
+                            MessageBox.Show("Successfully deleted paystub.", "Done delete paystub", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                            Select Case tabEarned.SelectedIndex
+                                Case 0
+                                    TabPage1_Enter1(TabPage1, New EventArgs)
+                                Case 1
+                                    TabPage4_Enter1(TabPage4, New EventArgs)
+                            End Select
+                        End If
+                    End Try
+                End Using
 
             End If
 

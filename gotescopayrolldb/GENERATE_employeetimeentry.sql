@@ -544,6 +544,19 @@ ELSE
 #			SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
 			INTO ete_RegHrsWorkd;
 			
+			SET @lessBreak = 0.00;
+			
+			IF (@breakStarts BETWEEN @timeStampLogIn AND @timeStampLogOut)
+			   AND (@breakEnds BETWEEN @timeStampLogIn AND @timeStampLogOut) THEN
+				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @breakEnds) / 3600;
+			ELSEIF @timeStampLogOut BETWEEN @timeStampLogIn AND @breakEnds THEN
+				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogOut) / 3600;
+			ELSEIF @timeStampLogIn BETWEEN @breakStarts AND @timeStampLogOut THEN
+				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogIn) / 3600;
+			END IF;
+			
+			SET ete_RegHrsWorkd = ete_RegHrsWorkd - IFNULL(@lessBreak, 0);
+			
 			SET etd_TimeOut = shifttimeto;
 			
 		ELSE
@@ -563,10 +576,23 @@ ELSE
 												  ) / 3600	
 #			SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
 			INTO ete_RegHrsWorkd;
-
-			IF shifttimeto > etd_TimeOut THEN
 			
-				SET ete_HrsUnder = COMPUTE_TimeDifference(etd_TimeOut,shifttimeto);
+			SET @lessBreak = 0.00;
+			
+			IF (@breakStarts BETWEEN @timeStampLogIn AND @timeStampLogOut)
+			   AND (@breakEnds BETWEEN @timeStampLogIn AND @timeStampLogOut) THEN
+				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @breakEnds) / 3600;
+			ELSEIF @timeStampLogOut BETWEEN @timeStampLogIn AND @breakEnds THEN
+				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogOut) / 3600;
+			ELSEIF @timeStampLogIn BETWEEN @breakStarts AND @timeStampLogOut THEN
+				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogIn) / 3600;
+			END IF;
+			
+			SET ete_RegHrsWorkd = ete_RegHrsWorkd - IFNULL(@lessBreak, 0);
+			
+			IF @dutyEnd > @timeStampLogOut THEN
+			
+				SET ete_HrsUnder = TIMESTAMPDIFF(SECOND, @timeStampLogOut, @dutyEnd) / 3600;
 			
 			END IF;
 			
@@ -918,9 +944,9 @@ ELSE
 			
 			SET ete_HrsUnder = ete_HrsUnder - IFNULL(@lunchBreakHourCount, 0);
 
-		ELSEIF etd_TimeOut < shifttimeto THEN
+		ELSEIF @timeStampLogOut < @dutyEnd THEN
 		
-			SELECT COMPUTE_TimeDifference(etd_TimeOut, shifttimeto)
+			SELECT TIMESTAMPDIFF(SECOND, @timeStampLogOut, @dutyEnd) / 3600
 			INTO ete_HrsUnder;
 			
 		END IF;

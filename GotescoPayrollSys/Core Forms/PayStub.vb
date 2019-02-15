@@ -11568,19 +11568,6 @@ Public Class PayStub
 
             If prompt = Windows.Forms.DialogResult.Yes Then
 
-                'Dim n_ExecuteQuery As New ExecuteQuery("SELECT RowID" &
-                '                                       " FROM paystub" &
-                '                                       " WHERE EmployeeID='" & dgvemployees.Tag & "'" &
-                '                                       " AND OrganizationID='" & org_rowid & "'" &
-                '                                       " AND PayPeriodID='" & paypRowID & "'" &
-                '                                       " LIMIT 1;")
-
-                'Dim paystubRowID As Object = Nothing
-
-                'paystubRowID = n_ExecuteQuery.Result
-
-                'n_ExecuteQuery = New ExecuteQuery("CALL DEL_specificpaystub('" & paystubRowID & "');")
-
                 Dim query = String.Concat("CALL `DEL_specificpaystub`((SELECT RowID FROM paystub WHERE OrganizationID=@orgId AND EmployeeID=@eId AND PayPeriodID=@ppId LIMIT 1));")
 
                 Using command = New MySqlCommand(query, New MySqlConnection(mysql_conn_text))

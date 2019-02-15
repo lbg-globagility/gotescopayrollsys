@@ -14,6 +14,48 @@ BEGIN
 
 DECLARE vacationId, sickId, otherId, addtlId, maternityId INT(11) DEFAULT NULL;
 
+DECLARE yearPeriod, payFrequencyId INT(11);
+
+DECLARE payDateFrom, thisYearPayDateFrom, thisYearPayDateTo DATE;
+
+DECLARE twiceAMonthPeriodCount INT(11) DEFAULT 24;
+
+SELECT pp.PayFromDate, pp.`Year`, pp.TotalGrossSalary
+FROM payperiod pp
+WHERE pp.RowID = startingPeriodId
+INTO payDateFrom, yearPeriod, payFrequencyId;
+
+SELECT MIN(ii.PayFromDate) `PayFromDate`
+, MAX(ii.PayToDate) `PayToDate`
+FROM (SELECT i.*
+		FROM (SELECT pp.*
+				FROM payperiod pp
+				WHERE pp.OrganizationID=orgId
+				AND pp.TotalGrossSalary=payFrequencyId
+				AND pp.`Year`=yearPeriod
+			UNION
+				SELECT pp.*
+				FROM payperiod pp
+				WHERE pp.OrganizationID=orgId
+				AND pp.TotalGrossSalary=payFrequencyId
+				AND pp.`Year`=yearPeriod+1
+				) i
+		WHERE i.PayFromDate >= payDateFrom
+		ORDER BY i.`Year`, i.OrdinalValue
+		LIMIT twiceAMonthPeriodCount
+		) ii
+INTO thisYearPayDateFrom
+     , thisYearPayDateTo
+;
+
+
+
+
+
+
+
+
+
 SELECT p.RowID, pp.RowID, piii.RowID, piv.RowID, pv.RowID
 FROM product p
 INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave type'
@@ -81,7 +123,11 @@ INNER JOIN (SELECT
 				
 				FROM employeetimeentry et
 				INNER JOIN employee e ON e.RowID=et.EmployeeID
-				INNER JOIN payperiod pp ON et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate AND pp.`Year` = yearPeriod AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=et.OrganizationID
+				INNER JOIN payperiod pp
+                    ON et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
+                       AND (pp.PayFromDate >= thisYearPayDateFrom AND pp.PayToDate <= thisYearPayDateTo)
+							  AND pp.TotalGrossSalary=e.PayFrequencyID
+							  AND pp.OrganizationID=et.OrganizationID
 				WHERE (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours + et.MaternityLeaveHours) > 0
 				AND et.OrganizationID = orgId
 				GROUP BY pp.RowID, e.RowID

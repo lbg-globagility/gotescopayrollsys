@@ -26,7 +26,7 @@ DECLARE count_semi_monthly_period_peryear INT DEFAULT 24;
 
 DECLARE e_indx, e_count, count_leavetype, _i, leavetypeid, payFreqId INT DEFAULT 0;
 
-DECLARE i INT DEFAULT 0;
+DECLARE i, payFrequencyID, yearPeriod INT DEFAULT 0;
 
 DECLARE payDateFrom, payDateTo DATE;
 
@@ -152,6 +152,7 @@ AND e.EmploymentStatus = regularEmplymentStatus
 
 SELECT MIN(ppd.PayFromDate)
 , MAX(ppd.PayToDate)
+, ppd.TotalGrossSalary, ppd.`Year`
 FROM payperiod pp
 INNER JOIN payperiod ppd ON ppd.OrganizationID=pp.OrganizationID AND ppd.TotalGrossSalary=pp.TotalGrossSalary AND ppd.`Year`=pp.`Year`
 WHERE pp.OrganizationID = OrganizID
@@ -160,7 +161,39 @@ AND pp.PayFromDate = payDateFrom
 AND pp.PayToDate = payDateTo
 INTO thisYearPayDateFrom
      , thisYearPayDateTo
+     , payFrequencyID, yearPeriod
 ;
+
+SELECT MIN(ii.PayFromDate) `PayFromDate`
+, MAX(ii.PayToDate) `PayToDate`
+FROM (SELECT i.*
+		FROM (SELECT pp.*
+				FROM payperiod pp
+				WHERE pp.OrganizationID=OrganizID
+				AND pp.TotalGrossSalary=payFrequencyID
+				AND pp.`Year`=yearPeriod
+			UNION
+				SELECT pp.*
+				FROM payperiod pp
+				WHERE pp.OrganizationID=OrganizID
+				AND pp.TotalGrossSalary=payFrequencyID
+				AND pp.`Year`=yearPeriod+1
+				) i
+		WHERE i.PayFromDate >= payDateFrom
+		ORDER BY i.`Year`, i.OrdinalValue
+		LIMIT count_semi_monthly_period_peryear
+		) ii
+INTO thisYearPayDateFrom
+     , thisYearPayDateTo
+;
+
+
+
+
+
+
+
+
 
 # less than 10th year, between 6th & 9th year ###############################
 UPDATE employee e

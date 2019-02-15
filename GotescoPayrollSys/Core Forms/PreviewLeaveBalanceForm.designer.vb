@@ -194,7 +194,7 @@ Partial Class PreviewLeaveBalanceForm
         Me.btnReset.Name = "btnReset"
         Me.btnReset.Size = New System.Drawing.Size(215, 23)
         Me.btnReset.TabIndex = 0
-        Me.btnReset.Text = "Reset from most current period"
+        Me.btnReset.Text = "Reset from starting period"
         Me.btnReset.UseVisualStyleBackColor = True
         '
         'ToolStrip1

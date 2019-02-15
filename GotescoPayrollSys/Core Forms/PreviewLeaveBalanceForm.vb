@@ -75,14 +75,14 @@ Public Class PreviewLeaveBalanceForm
         Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
 
         Using command = New MySqlCommand(String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
-                                                       "CALL `UpdateLeaveItems`(@orgId, @yearPeriod);"),
+                                                       "CALL `UpdateLeaveItems`(@orgId, @startingPeriodId);"),
                                          New MySqlConnection(connectionText))
             With command.Parameters
                 .AddWithValue("@orgId", organizationId)
                 .AddWithValue("@userId", user_row_id)
                 .AddWithValue("@dateFrom", periodDateFrom)
                 .AddWithValue("@dateTo", periodDateTo)
-                .AddWithValue("@yearPeriod", periodYear)
+                .AddWithValue("@startingPeriodId", payPeriodId)
 
             End With
 

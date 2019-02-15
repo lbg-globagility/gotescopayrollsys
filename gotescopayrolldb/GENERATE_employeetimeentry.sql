@@ -488,10 +488,15 @@ IF isRestDay = '1' THEN
 	
 ELSE 
 
+	SET @breakStarts=NULL;
+	SET @breakEnds=NULL;
+
 	SELECT
 	etd.TimeIn
 	,IF(e_UTOverride = 1, etd.TimeOut, IFNULL(sh.TimeTo,etd.TimeOut))
 	, etd.TimeStampIn, etd.TimeStampOut
+	, sh.BreakTimeFrom
+	, sh.BreakTimeTo
 	FROM employeetimeentrydetails etd
 	LEFT JOIN employeeshift esh ON esh.OrganizationID=etd.OrganizationID AND esh.EmployeeID=etd.EmployeeID AND etd.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
@@ -502,26 +507,56 @@ ELSE
 	INTO etd_TimeIn
 	     ,etd_TimeOut
 		  ,@timeStampLogIn
-		  ,@timeStampLogOut;
+		  ,@timeStampLogOut
+		  , @breakStarts
+		  , @breakEnds;
 	
 	SELECT GRACE_PERIOD(etd_TimeIn, shifttimefrom, e_LateGracePeriod)
 	INTO etd_TimeIn;
 
 	IF otstartingtime IS NULL
 		AND otstartingtime IS NULL THEN
-		
+
 		IF IF(HOUR(etd_TimeOut) = 00, ADDTIME(etd_TimeOut,'24:00'), etd_TimeOut) > shifttimeto THEN
-	
-			SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
+
+			SET @dutyStart=CONCAT_DATETIME(ete_Date, shifttimefrom);
+			SET @dutyEnd=GetNextStartDateTime(@dutyStart, shifttimeto);
+			
+			SET @breakStarts=GetNextStartDateTime(@dutyStart, @breakStarts);
+			SET @breakEnds=GetNextStartDateTime(@breakStarts, @breakEnds);
+
+			SELECT TIMESTAMPDIFF(SECOND
+			                     , GREATEST(@dutyStart
+										           #, @timeStampLogIn
+													  , IF(@timeStampLogIn BETWEEN @breakStarts AND @breakEnds, @breakEnds, @timeStampLogIn)
+													  )
+										, LEAST(IF(@timeStampLogOut BETWEEN @breakStarts AND @breakEnds, @breakStarts, @timeStampLogOut)
+										        #, @timeStampLogOut
+										        , @dutyEnd)
+												  ) / 3600
+#			SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
 			INTO ete_RegHrsWorkd;
 			
 			SET etd_TimeOut = shifttimeto;
 			
 		ELSE
-		
-			SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
-			INTO ete_RegHrsWorkd;
+
+			SET @dutyStart=CONCAT_DATETIME(ete_Date, shifttimefrom);
+			SET @dutyEnd=GetNextStartDateTime(@dutyStart, shifttimeto);
 			
+			SET @breakStarts=GetNextStartDateTime(@dutyStart, @breakStarts);
+			SET @breakEnds=GetNextStartDateTime(@breakStarts, @breakEnds);
+
+			SELECT TIMESTAMPDIFF(SECOND
+			                     , GREATEST(@dutyStart
+													  , IF(@timeStampLogIn BETWEEN @breakStarts AND @breakEnds, @breakEnds, @timeStampLogIn)
+													  )
+										, LEAST(IF(@timeStampLogOut BETWEEN @breakStarts AND @breakEnds, @breakStarts, @timeStampLogOut)
+										        , @dutyEnd)
+												  ) / 3600	
+#			SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
+			INTO ete_RegHrsWorkd;
+
 			IF shifttimeto > etd_TimeOut THEN
 			
 				SET ete_HrsUnder = COMPUTE_TimeDifference(etd_TimeOut,shifttimeto);
@@ -841,7 +876,7 @@ ELSE
 									) / 3600
 		INTO ete_HrsUnder;
 		IF ete_HrsUnder < 0 THEN SET ete_HrsUnder = 0; END IF;
-		
+
 	ELSE
 		IF etd_TimeIn > shifttimefrom THEN
 		
@@ -855,13 +890,35 @@ ELSE
 
 		END IF;
 
-		IF etd_TimeOut < shifttimeto THEN
+		SET @lunchBreakStart = GetNextStartDateTime(CONCAT_DATETIME(ete_Date, shifttimefrom), @breakFrom);
+		SET @lunchBreakEnd = GetNextStartDateTime(@lunchBreakStart, @breakTo);
+		
+		SET @dutyStart = CONCAT_DATETIME(ete_Date, shifttimefrom);
+		SET @dutyEnd = GetNextStartDateTime(@dutyStart, shifttimeto);
+
+		IF @timeStampLogOut BETWEEN @lunchBreakStart AND @lunchBreakEnd THEN
+
+			SELECT TIMESTAMPDIFF(SECOND, @lunchBreakEnd, @dutyEnd) / 3600 `UndertimeHours`
+#			SELECT COMPUTE_TimeDifference(TIME(@lunchBreakEnd), shifttimeto)
+			INTO ete_HrsUnder;
+
+		ELSEIF @timeStampLogOut BETWEEN @dutyStart AND @lunchBreakStart THEN
+			
+			SET @lunchBreakHourCount = TIMESTAMPDIFF(SECOND, @lunchBreakStart, @lunchBreakEnd) / 3600;
+			
+			SELECT TIMESTAMPDIFF(SECOND, @timeStampLogOut, @dutyEnd) / 3600 `UndertimeHours`
+			INTO ete_HrsUnder;
+			
+			SET ete_HrsUnder = ete_HrsUnder - IFNULL(@lunchBreakHourCount, 0);
+
+		ELSEIF etd_TimeOut < shifttimeto THEN
 		
 			SELECT COMPUTE_TimeDifference(etd_TimeOut, shifttimeto)
 			INTO ete_HrsUnder;
 			
 		END IF;
 
+		SET ete_HrsUnder = IFNULL(ete_HrsUnder, 0);
 	END IF;
 	
 	SET ete_NDiffHrs = 0;
@@ -923,7 +980,8 @@ IF ete_RegHrsWorkd IS NULL THEN
 	SET ete_RegHrsWorkd = 0;
 END IF;
 
-IF isRestDay = '0' THEN
+#IF isRestDay = '0' THEN
+IF FALSE THEN
 
 	IF (ete_RegHrsWorkd > 4 AND ete_RegHrsWorkd < 5) AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 9 THEN
 		SET ete_RegHrsWorkd = 4;
@@ -1093,6 +1151,7 @@ ELSEIF IFNULL(OTCount,0) = 1 && ete_OvertimeHrs = 0 THEN
 	
 END IF;
 
+	SET @leavePayment = 0; SET @lv_hrs = 0;
 
 IF pr_DayBefore IS NULL THEN
 

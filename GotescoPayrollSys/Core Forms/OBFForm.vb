@@ -351,9 +351,9 @@ Public Class OBFForm
                 SBConcat.ConcatResult("SELECT e.RowID, CONCAT_WS(', ', e.LastName, e.FirstName, IF(LENGTH(TRIM(e.MiddleName)) = 0, NULL, e.MiddleName)) `EmpFullName`",
                                       ", MAX(e.Created) `Created`",
                                       " FROM employee e",
-                                      " INNER JOIN organization og ON og.RowID=e.OrganizationID",
-                                      " WHERE og.NoPurpose='0'",
-                                      " GROUP BY e.OrganizationID, CONCAT(e.LastName, e.FirstName, e.MiddleName);")).ResultTable
+                                      " INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose='0'",
+                                      " WHERE FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
+                                      " GROUP BY CONCAT(e.LastName, e.FirstName, e.MiddleName);")).ResultTable
 
         If dtempfullname IsNot Nothing Then
 

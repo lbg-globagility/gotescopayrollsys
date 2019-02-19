@@ -39,7 +39,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: ".\GotescoPayrollSys\bin\Debug\CollapsibleGroupBox.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\GotescoPayrollSys\bin\Debug\app.config"; DestDir: "{app}"; Flags: ignoreversion
+; Source: ".\GotescoPayrollSys\bin\Debug\app.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.CrystalReports.Engine.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportAppServer.ClientDoc.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\GotescoPayrollSys\bin\Debug\CrystalDecisions.ReportAppServer.CommLayer.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -70,7 +70,7 @@ Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe"; DestDir: "{app}";
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.pdb"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+; Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.xml"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\LBGClassLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\log4.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
@@ -178,3 +178,6 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent shellexec
 
+[InstallDelete]
+Name: {app}\app.config; Type: files
+Name: {app}\GotescoPayrollSys.vshost.exe.config; Type: files

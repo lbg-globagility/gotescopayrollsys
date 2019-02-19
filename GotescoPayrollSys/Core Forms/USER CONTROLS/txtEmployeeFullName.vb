@@ -66,10 +66,11 @@ Public Class txtEmployeeFullName
         Static once As String = String.Empty
 
         If once <> MyBase.Text Then
-
             once = MyBase.Text
+        Else
+        End If
 
-            If ValNoComma(isExistCount) > 1 Then
+        If ValNoComma(isExistCount) > 1 Then
 
                 Dim n_OrganizationPrompt As New OrganizationPrompt
 
@@ -77,19 +78,22 @@ Public Class txtEmployeeFullName
                 'n_OrganizationPrompt.OrganizationTableColumnName = "CONCAT(e.LastName,', ',e.FirstName,IF(e.MiddleName = '', '', CONCAT(', ',e.MiddleName)))"
                 n_OrganizationPrompt.OrganizationTableColumnName = "CONCAT_WS(', ', e.LastName, e.FirstName, IF(LENGTH(TRIM(e.MiddleName)) = 0, NULL, e.MiddleName))"
 
-                'If n_OrganizationPrompt.ShowDialog = DialogResult.OK Then
+                Dim confirmOk = n_OrganizationPrompt.ShowDialog = DialogResult.OK
 
-                '    organization_RowID = n_OrganizationPrompt.RowIDValue
+                If confirmOk Then
 
-                '    If organization_RowID = String.Empty Then
+                    organization_RowID = n_OrganizationPrompt.RowIDValue
 
-                '        Me.Focus()
+                    If organization_RowID = String.Empty Then
 
-                '    End If
+                        Me.Focus()
 
-                'Else
+                    End If
 
-                'End If
+                Else
+                    Me.Focus()
+                    Return
+                End If
 
                 Dim str_quer As String =
                     SBConcat.ConcatResult("SELECT e.OrganizationID",
@@ -108,12 +112,20 @@ Public Class txtEmployeeFullName
 
             Else
 
-                organization_RowID = _
-                    EXECQUER("SELECT" & _
-                            " OrganizationID" & _
-                            " FROM employee" & _
-                            " WHERE " & dbcol_employee & "='" & MyBase.Text & "'" & _
-                            " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
+                Dim str_quer As String =
+                    SBConcat.ConcatResult("SELECT e.OrganizationID",
+                                          " FROM employee e",
+                                          " INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose='0'",
+                                          " WHERE ", dbcol_employee,
+                                          " = ?search_text",
+                                          " GROUP BY e.OrganizationID, CONCAT(e.LastName, e.FirstName, e.MiddleName)",
+                                          " HAVING MAX(e.Created) IS NOT NULL",
+                                          " ORDER BY CONCAT(e.LastName, e.FirstName, e.MiddleName);")
+
+                Dim sql As New SQL(str_quer,
+                                   New Object() {MyBase.Text})
+
+                organization_RowID = Convert.ToString(sql.GetFoundRow)
 
             End If
 
@@ -143,6 +155,7 @@ Public Class txtEmployeeFullName
                                           " WHERE ", dbcol_employee,
                                           " = ?search_text",
                                           " AND e.OrganizationID = ?og_rowid",
+                                          " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
                                           " ORDER BY e.Created DESC, CONCAT(e.LastName, e.FirstName, e.MiddleName)",
                                           " LIMIT 1;")
                 '" HAVING MAX(e.Created) IS NOT NULL",
@@ -159,11 +172,7 @@ Public Class txtEmployeeFullName
 
             End If
 
-        Else
-
-        End If
-
-        MyBase.OnLeave(e)
+            MyBase.OnLeave(e)
 
     End Sub
 

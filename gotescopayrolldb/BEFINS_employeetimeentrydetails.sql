@@ -10,7 +10,13 @@ DELIMITER //
 CREATE TRIGGER `BEFINS_employeetimeentrydetails` BEFORE INSERT ON `employeetimeentrydetails` FOR EACH ROW BEGIN
 
 DECLARE shift_id INT(11);
+
 DECLARE timestamp_created DATETIME;
+
+DECLARE old_timein_sec INT(11);
+
+DECLARE old_timeout_sec INT(11);
+
 IF NEW.TimeIn IS NOT NULL AND NEW.TimeOut IS NOT NULL THEN
 	
 	IF NEW.TimeIn = NEW.TimeOut THEN
@@ -23,9 +29,19 @@ END IF;
 
 # SET timestamp_created = (SELECT etd.Created FROM employeetimeentrydetails etd INNER JOIN (SELECT pp.RowID,pp.PayFromDate, pp.PayToDate FROM employee e INNER JOIN payperiod pp ON pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=e.OrganizationID AND NEW.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID LIMIT 1) i ON i.RowID IS NOT NULL OR i.RowID IS NULL WHERE etd.EmployeeID=NEW.EmployeeID AND etd.OrganizationID=NEW.OrganizationID AND etd.`Date` BETWEEN i.PayFromDate AND i.PayToDate LIMIT 1);
 
+SET old_timein_sec = IFNULL(SECOND(NEW.TimeIn),0);
+SET old_timeout_sec = IFNULL(SECOND(NEW.TimeOut),0);
 
+SET @time_in_format = CONCAT('%H:%i:', LPAD(old_timein_sec, 2, 0));
+SET @time_out_format = CONCAT('%H:%i:', LPAD(old_timeout_sec, 2, 0));
 
+SET @is_start_time_reachedtomorrow = (SUBDATE(TIMESTAMP(TIME(0)), INTERVAL 1 SECOND)
+                                      = SUBDATE(TIMESTAMP(MAKETIME(HOUR(NEW.TimeIn),0,0)), INTERVAL 1 SECOND));
 
+SET @is_start_time_reachedtomorrow = IFNULL(@is_start_time_reachedtomorrow, FALSE);
+
+SET NEW.TimeStampIn = CONCAT_DATETIME(ADDDATE(NEW.`Date`, INTERVAL @is_start_time_reachedtomorrow DAY), TIME_FORMAT(NEW.TimeIn, @time_in_format));
+SET NEW.TimeStampOut = CONCAT_DATETIME(ADDDATE(NEW.`Date`, INTERVAL IS_TIMERANGE_REACHTOMORROW(NEW.TimeIn, NEW.TimeOut) DAY), TIME_FORMAT(NEW.TimeOut, @time_out_format));
 
 END//
 DELIMITER ;

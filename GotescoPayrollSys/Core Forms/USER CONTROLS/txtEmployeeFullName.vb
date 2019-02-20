@@ -50,9 +50,9 @@ Public Class txtEmployeeFullName
 
     End Property
 
-    Protected Overrides Sub OnTextChanged(e As EventArgs)
-        MyBase.OnTextChanged(e)
-    End Sub
+    'Protected Overrides Sub OnTextChanged(e As EventArgs)
+    '    MyBase.OnTextChanged(e)
+    'End Sub
 
     Protected Overrides Sub OnLeave(e As EventArgs)
 
@@ -72,30 +72,30 @@ Public Class txtEmployeeFullName
 
         If ValNoComma(isExistCount) > 1 Then
 
-                Dim n_OrganizationPrompt As New OrganizationPrompt
+            Dim n_OrganizationPrompt As New OrganizationPrompt
 
-                n_OrganizationPrompt.EmployeeRowIDValue = MyBase.Text
-                'n_OrganizationPrompt.OrganizationTableColumnName = "CONCAT(e.LastName,', ',e.FirstName,IF(e.MiddleName = '', '', CONCAT(', ',e.MiddleName)))"
-                n_OrganizationPrompt.OrganizationTableColumnName = "CONCAT_WS(', ', e.LastName, e.FirstName, IF(LENGTH(TRIM(e.MiddleName)) = 0, NULL, e.MiddleName))"
+            n_OrganizationPrompt.EmployeeRowIDValue = MyBase.Text
+            'n_OrganizationPrompt.OrganizationTableColumnName = "CONCAT(e.LastName,', ',e.FirstName,IF(e.MiddleName = '', '', CONCAT(', ',e.MiddleName)))"
+            n_OrganizationPrompt.OrganizationTableColumnName = "CONCAT_WS(', ', e.LastName, e.FirstName, IF(LENGTH(TRIM(e.MiddleName)) = 0, NULL, e.MiddleName))"
 
-                Dim confirmOk = n_OrganizationPrompt.ShowDialog = DialogResult.OK
+            Dim confirmOk = n_OrganizationPrompt.ShowDialog = DialogResult.OK
 
-                If confirmOk Then
+            If confirmOk Then
 
-                    organization_RowID = n_OrganizationPrompt.RowIDValue
+                organization_RowID = n_OrganizationPrompt.RowIDValue
 
-                    If organization_RowID = String.Empty Then
+                If organization_RowID = String.Empty Then
 
-                        Me.Focus()
-
-                    End If
-
-                Else
                     Me.Focus()
-                    Return
+
                 End If
 
-                Dim str_quer As String =
+            Else
+                Me.Focus()
+                Return
+            End If
+
+            Dim str_quer As String =
                     SBConcat.ConcatResult("SELECT e.OrganizationID",
                                           " FROM employee e",
                                           " INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose='0'",
@@ -105,31 +105,32 @@ Public Class txtEmployeeFullName
                                           " HAVING MAX(e.Created) IS NOT NULL",
                                           " ORDER BY CONCAT(e.LastName, e.FirstName, e.MiddleName);")
 
-                Dim sql As New SQL(str_quer,
+            Dim sql As New SQL(str_quer,
                                    New Object() {MyBase.Text})
 
-                organization_RowID = Convert.ToString(sql.GetFoundRow)
+            organization_RowID = Convert.ToString(sql.GetFoundRow)
 
-            Else
+        Else
 
-                Dim str_quer As String =
+            Dim str_quer As String =
                     SBConcat.ConcatResult("SELECT e.OrganizationID",
                                           " FROM employee e",
                                           " INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose='0'",
                                           " WHERE ", dbcol_employee,
                                           " = ?search_text",
+                                          " AND e.EmploymentStatus NOT IN ('Resigned','Terminated')",
                                           " GROUP BY e.OrganizationID, CONCAT(e.LastName, e.FirstName, e.MiddleName)",
                                           " HAVING MAX(e.Created) IS NOT NULL",
                                           " ORDER BY CONCAT(e.LastName, e.FirstName, e.MiddleName);")
 
-                Dim sql As New SQL(str_quer,
+            Dim sql As New SQL(str_quer,
                                    New Object() {MyBase.Text})
 
-                organization_RowID = Convert.ToString(sql.GetFoundRow)
+            organization_RowID = Convert.ToString(sql.GetFoundRow)
 
-            End If
+        End If
 
-            Dim isExists = _
+        Dim isExists = _
                 EXECQUER("SELECT EXISTS(SELECT" & _
                             " RowID" & _
                             " FROM employee" & _

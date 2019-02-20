@@ -2583,8 +2583,18 @@ Public Class PayStub
 
         Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
 
+        Dim updateLeaveItems = String.Concat("CALL `UpdateLeaveItems`(", org_rowid,
+                                             ", (SELECT ppd.RowID",
+                                             " FROM payperiod pp",
+                                             " INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year`",
+                                             " WHERE pp.PayFromDate='", paypFrom, "'",
+                                             " AND pp.PayToDate='", paypTo, "'",
+                                             " AND pp.OrganizationID=", org_rowid,
+                                             " ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));")
+
         Using command = New MySqlCommand(String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
-                                                       "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);"),
+                                                       "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);",
+                                                       updateLeaveItems),
                                          New MySqlConnection(connectionText))
             With command.Parameters
                 .AddWithValue("@orgId", org_rowid)

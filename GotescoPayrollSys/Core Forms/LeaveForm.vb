@@ -64,29 +64,29 @@ Public Class LeaveForm
         'enlistToCboBox("SELECT DISTINCT(DisplayValue) FROM listofval WHERE Type='Leave Type' AND Active='Yes';", _
         '               cboleavetypes)
 
-        enlistToCboBox("SELECT p.PartNo" & _
-                        " FROM product p" & _
-                        " INNER JOIN category c ON c.RowID=p.CategoryID" & _
-                        " WHERE c.CategoryName='Leave Type'" & _
-                        " AND p.OrganizationID='" & org_rowid & "';", _
+        enlistToCboBox("SELECT p.PartNo" &
+                        " FROM product p" &
+                        " INNER JOIN category c ON c.RowID=p.CategoryID" &
+                        " WHERE c.CategoryName='Leave Type'" &
+                        " AND p.OrganizationID='" & org_rowid & "';",
                        cboleavetypes)
 
-        enlistToCboBox("SELECT Name FROM organization WHERE NoPurpose='0' ORDER BY Name;", _
+        enlistToCboBox("SELECT Name FROM organization WHERE NoPurpose='0' ORDER BY Name;",
                        cboOrganization)
 
         If n_LeaveRowID <> Nothing Then
 
             Dim dtLeaveRow As New DataTable
 
-            dtLeaveRow = _
-            New SQLQueryToDatatable("SELECT el.*" & _
-                        ",e.EmployeeID AS EmpID" & _
-                        ",IFNULL(og.Name,'') AS OrgName" & _
-                        ",TIME_FORMAT(el.LeaveStartTime,'%r') AS LvStartTime" & _
-                        ",TIME_FORMAT(el.LeaveEndTime,'%r') AS LvEndTime" & _
-                        " FROM employeeleave el" & _
-                        " LEFT JOIN employee e ON e.RowID=el.EmployeeID" & _
-                        " LEFT JOIN organization og ON og.RowID=el.OrganizationID" & _
+            dtLeaveRow =
+            New SQLQueryToDatatable("SELECT el.*" &
+                        ",e.EmployeeID AS EmpID" &
+                        ",IFNULL(og.Name,'') AS OrgName" &
+                        ",TIME_FORMAT(el.LeaveStartTime,'%r') AS LvStartTime" &
+                        ",TIME_FORMAT(el.LeaveEndTime,'%r') AS LvEndTime" &
+                        " FROM employeeleave el" &
+                        " LEFT JOIN employee e ON e.RowID=el.EmployeeID" &
+                        " LEFT JOIN organization og ON og.RowID=el.OrganizationID" &
                         " WHERE el.RowID='" & n_LeaveRowID & "';").ResultTable
 
             If dtLeaveRow IsNot Nothing Then
@@ -263,13 +263,13 @@ Public Class LeaveForm
 
                 'MsgBox(Trim(StrReverse(StrReverse("3:15 AM").ToString.Substring(i, ("3:15 AM").ToString.Length - i))).Length)
 
-                Dim amTime As String = Trim(StrReverse(StrReverse(endtime.ToString).Substring(i, _
+                Dim amTime As String = Trim(StrReverse(StrReverse(endtime.ToString).Substring(i,
                                                                                   endtime.ToString.Length - i)
                                           )
                                )
 
-                amTime = If(getStrBetween(amTime, "", ":") = "12", _
-                            24 & ":" & StrReverse(getStrBetween(StrReverse(amTime), "", ":")), _
+                amTime = If(getStrBetween(amTime, "", ":") = "12",
+                            24 & ":" & StrReverse(getStrBetween(StrReverse(amTime), "", ":")),
                             amTime)
 
                 retrnObj = amTime
@@ -290,7 +290,7 @@ Public Class LeaveForm
 
         'LeaveRowID
         If n_LeaveRowID = Nothing Then
-            n_LeaveRowID = _
+            n_LeaveRowID =
                 INSUPD_employeeleave()
         Else
             INSUPD_employeeleave()

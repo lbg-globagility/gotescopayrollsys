@@ -131,8 +131,8 @@ INNER JOIN (SELECT
                        AND (pp.PayFromDate >= thisYearPayDateFrom AND pp.PayToDate <= thisYearPayDateTo)
 							  AND pp.TotalGrossSalary=e.PayFrequencyID
 							  AND pp.OrganizationID=et.OrganizationID
-				WHERE (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours + et.MaternityLeaveHours) > 0
-				AND et.OrganizationID = orgId
+				WHERE et.OrganizationID = orgId
+#				AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours + et.MaternityLeaveHours) > 0
 				GROUP BY pp.RowID, e.RowID
 				ORDER BY e.RowID, pp.`Year`, pp.OrdinalValue) i
 				) ii ON ps.EmployeeID = ii.EmployeeID AND ps.PayPeriodID = ii.PayPeriodID
@@ -148,6 +148,12 @@ SET psi.PayAmount = ii.VacationBalanceDecrement
 , psiii.PayAmount = ii.OtherBalanceDecrement
 , psiv.PayAmount = ii.AdditionalBalanceDecrement
 , psv.PayAmount = ii.MaternityBalanceDecrement
+
+, psi.LastUpd = CURRENT_TIMESTAMP()
+, psii.LastUpd = CURRENT_TIMESTAMP()
+, psiii.LastUpd = CURRENT_TIMESTAMP()
+, psiv.LastUpd = CURRENT_TIMESTAMP()
+, psv.LastUpd = CURRENT_TIMESTAMP()
 ;
 
 END//

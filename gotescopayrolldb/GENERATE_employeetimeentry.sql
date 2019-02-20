@@ -527,6 +527,12 @@ ELSE
 		IF IF(HOUR(etd_TimeOut) = 00, ADDTIME(etd_TimeOut,'24:00'), etd_TimeOut) > shifttimeto THEN
 
 			SET @dutyStart=CONCAT_DATETIME(ete_Date, shifttimefrom);
+			SET @dutyGraceStart = ADDDATE(@dutyStart, INTERVAL e_LateGracePeriod MINUTE);
+			
+			IF @timeStampLogIn BETWEEN @dutyStart AND @dutyGraceStart THEN
+				SET @timeStampLogIn = @dutyStart;
+			END IF;
+			
 			SET @dutyEnd=GetNextStartDateTime(@dutyStart, shifttimeto);
 			
 			SET @breakStarts=GetNextStartDateTime(@dutyStart, @breakStarts);
@@ -562,6 +568,12 @@ ELSE
 		ELSE
 
 			SET @dutyStart=CONCAT_DATETIME(ete_Date, shifttimefrom);
+			SET @dutyGraceStart = ADDDATE(@dutyStart, INTERVAL e_LateGracePeriod MINUTE);
+			
+			IF @timeStampLogIn BETWEEN @dutyStart AND @dutyGraceStart THEN
+				SET @timeStampLogIn = @dutyStart;
+			END IF;
+			
 			SET @dutyEnd=GetNextStartDateTime(@dutyStart, shifttimeto);
 			
 			SET @breakStarts=GetNextStartDateTime(@dutyStart, @breakStarts);

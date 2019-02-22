@@ -555,10 +555,10 @@ ELSE
 			IF (@breakStarts BETWEEN @timeStampLogIn AND @timeStampLogOut)
 			   AND (@breakEnds BETWEEN @timeStampLogIn AND @timeStampLogOut) THEN
 				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @breakEnds) / 3600;
-			ELSEIF @timeStampLogOut BETWEEN @timeStampLogIn AND @breakEnds THEN
+			/*ELSEIF @timeStampLogOut BETWEEN @timeStampLogIn AND @breakEnds THEN
 				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogOut) / 3600;
 			ELSEIF @timeStampLogIn BETWEEN @breakStarts AND @timeStampLogOut THEN
-				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogIn) / 3600;
+				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogIn) / 3600;*/
 			END IF;
 			
 			SET ete_RegHrsWorkd = ete_RegHrsWorkd - IFNULL(@lessBreak, 0);
@@ -594,10 +594,10 @@ ELSE
 			IF (@breakStarts BETWEEN @timeStampLogIn AND @timeStampLogOut)
 			   AND (@breakEnds BETWEEN @timeStampLogIn AND @timeStampLogOut) THEN
 				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @breakEnds) / 3600;
-			ELSEIF @timeStampLogOut BETWEEN @timeStampLogIn AND @breakEnds THEN
+			/*ELSEIF @timeStampLogOut BETWEEN @timeStampLogIn AND @breakEnds THEN
 				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogOut) / 3600;
 			ELSEIF @timeStampLogIn BETWEEN @breakStarts AND @timeStampLogOut THEN
-				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogIn) / 3600;
+				SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @timeStampLogIn) / 3600;*/
 			END IF;
 			
 			SET ete_RegHrsWorkd = ete_RegHrsWorkd - IFNULL(@lessBreak, 0);

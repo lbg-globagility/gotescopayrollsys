@@ -279,7 +279,7 @@ LEFT JOIN (SELECT
 # #######################
 
  LEFT JOIN (SELECT ii.*
-            ,GROUP_CONCAT(UCASE(ii.LoanName)) `Column35`
+            ,GROUP_CONCAT(ii.LoanName) `Column35`
             /*,GROUP_CONCAT(ROUND(ii.DeductionAmount, 2)) `Column38`
             ,GROUP_CONCAT(ROUND(ii.BalanceOfLoan, 2)) `Column33`*/
             

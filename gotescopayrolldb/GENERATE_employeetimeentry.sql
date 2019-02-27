@@ -617,260 +617,40 @@ ELSE
 		SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
 		INTO ete_OvertimeHrs;
 			
-	ELSE 
-		 
-		SELECT COMPUTE_TimeDifference(otstartingtime, etd_TimeOut)
-		INTO ete_OvertimeHrs;
+	ELSE
 	
-		IF TIME_FORMAT(otstartingtime,'%p') = 'PM'
-			AND TIME_FORMAT(otendingtime,'%p') = 'AM'
-			AND TIME_FORMAT(etd_TimeOut,'%p') = 'AM' THEN 
-	
-			SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
-			INTO ete_RegHrsWorkd;
+		SET @dutyStart=CONCAT_DATETIME(ete_Date, shifttimefrom);
+		SET @dutyGraceStart = ADDDATE(@dutyStart, INTERVAL e_LateGracePeriod MINUTE);
 		
-			IF ADDTIME(etd_TimeOut,'24:00') BETWEEN otstartingtime AND ADDTIME(otendingtime,'24:00') THEN
-			
-				SELECT COMPUTE_TimeDifference(otstartingtime, etd_TimeOut)
-				INTO ete_OvertimeHrs;
-				
-				SET etd_TimeOut = SUBTIME(otstartingtime, '00:00:01');
-				
-			ELSEIF etd_TimeOut > otendingtime THEN
-			
-				SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-				INTO ete_OvertimeHrs;
-		
-				SET etd_TimeOut = SUBTIME(otstartingtime,'00:00:01');
-				
-			ELSE
-			
-				SELECT COMPUTE_TimeDifference(otstartingtime, etd_TimeOut)
-				INTO ete_OvertimeHrs;
-		
-				SET ete_OvertimeHrs = ete_OvertimeHrs - COMPUTE_TimeDifference(otendingtime,etd_TimeOut);
-				
-				SET etd_TimeOut = SUBTIME(otstartingtime,'00:00:01');
-				
-			END IF;
-		
-		ELSEIF TIME_FORMAT(otstartingtime,'%p') = 'PM'
-				 AND TIME_FORMAT(otendingtime,'%p') = 'AM'
-				 AND TIME_FORMAT(etd_TimeOut,'%p') = 'PM' THEN
-
-			SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
-			INTO ete_RegHrsWorkd;
-			
-			/*SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-			INTO ete_OvertimeHrs;
-		
-			IF etd_TimeOut BETWEEN otstartingtime AND ADDTIME(otendingtime,'24:00') THEN
-			
-				SELECT COMPUTE_TimeDifference(etd_TimeIn,SUBTIME(otstartingtime,'00:00:01'))
-				INTO ete_RegHrsWorkd;
-				
-			ELSEIF etd_TimeOut < shifttimeto THEN
-			
-				SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
-				INTO ete_RegHrsWorkd;
-				
-				SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-				INTO ete_OvertimeHrs;
-		
-			
-			
-				
-				
-				
-			END IF;*/
-			
-			SET @sec_per_hour = 3600;
-			
-			SET @proper_ot_endtime_stamp = IF(CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL IS_TIMERANGE_REACHTOMORROW(otstartingtime, otendingtime) DAY), otendingtime) > CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL IS_TIMERANGE_REACHTOMORROW(etd_TimeIn, etd_TimeOut) DAY), etd_TimeOut)
-			                                  , CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL IS_TIMERANGE_REACHTOMORROW(etd_TimeIn, etd_TimeOut) DAY), etd_TimeOut)
-			                                  , CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL IS_TIMERANGE_REACHTOMORROW(otstartingtime, otendingtime) DAY), otendingtime));
-			
-			SET ete_OvertimeHrs = (TIMESTAMPDIFF(SECOND
-			                                     ,CONCAT_DATETIME(ete_Date, otstartingtime)
-			                                     ,@proper_ot_endtime_stamp) / @sec_per_hour);
-			
-			IF ete_OvertimeHrs IS NULL OR ete_OvertimeHrs < 0 THEN SET ete_OvertimeHrs = 0; END IF;
-			
-		ELSEIF TIME_FORMAT(otstartingtime,'%p') = 'AM'
-				 AND TIME_FORMAT(otendingtime,'%p') = 'PM'
-				 AND TIME_FORMAT(etd_TimeOut,'%p') = 'PM' THEN
-		
-			SELECT COMPUTE_TimeDifference(etd_TimeIn, IF(etd_TimeOut > shifttimeto, shifttimeto, etd_TimeOut))
-			INTO ete_RegHrsWorkd; 
-			
-			SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-			INTO ete_OvertimeHrs;
-	
-		ELSEIF TIME_FORMAT(otstartingtime,'%p') = 'AM'
-				 AND TIME_FORMAT(otendingtime,'%p') = 'PM'
-				 AND TIME_FORMAT(etd_TimeOut,'%p') = 'AM' THEN
-
-			SELECT COMPUTE_TimeDifference(etd_TimeIn, IF(etd_TimeOut > shifttimeto, shifttimeto, etd_TimeOut))
-			INTO ete_RegHrsWorkd;
-			
-			IF (etd_TimeIn < otstartingtime AND etd_TimeIn < otendingtime) THEN
-			
-				SET ete_OvertimeHrs = 0;
-		
-			ELSEIF etd_TimeOut BETWEEN shifttimeto AND otendingtime THEN
-			
-				SELECT COMPUTE_TimeDifference(otstartingtime, etd_TimeOut)
-				INTO ete_OvertimeHrs;
-		
-			ELSEIF etd_TimeOut > otendingtime THEN
-		
-				SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-				INTO ete_OvertimeHrs;
-		
-			END IF;
-				
-		ELSEIF TIME_FORMAT(otstartingtime,'%p') = 'PM'
-				 AND TIME_FORMAT(otendingtime,'%p') = 'PM'
-				 AND TIME_FORMAT(etd_TimeOut,'%p') = 'AM' THEN
-
-			SELECT COMPUTE_TimeDifference(etd_TimeIn, IF(etd_TimeOut > shifttimeto, shifttimeto, etd_TimeOut))
-			INTO ete_RegHrsWorkd;
-			
-			IF DATE_FORMAT(etd_TimeOut, '%H') = '00' THEN
-			
-				IF (DATE_FORMAT(etd_TimeOut, '24:%i:%s') > otstartingtime AND DATE_FORMAT(etd_TimeOut, '24:%i:%s') > otendingtime) THEN 
-				
-					SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-					INTO ete_OvertimeHrs;
-			
-					SET etd_TimeOut = SUBTIME(otstartingtime,'00:00:01');
-							
-					SELECT COMPUTE_TimeDifference(etd_TimeIn, etd_TimeOut)
-					INTO ete_RegHrsWorkd;
-					
-				ELSE
-					SET ete_OvertimeHrs = 0.0;
-					
-				END IF;
-			
-			ELSE
-		
-				IF (etd_TimeOut > otstartingtime AND etd_TimeOut > otendingtime) THEN 
-				
-					SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-					INTO ete_OvertimeHrs;
-			
-					SET etd_TimeOut = SUBTIME(otstartingtime,'00:00:01');
-							
-					SELECT COMPUTE_TimeDifference(etd_TimeIn, etd_TimeOut)
-					INTO ete_RegHrsWorkd;
-					
-				ELSE
-					SET ete_OvertimeHrs = 0.0;
-					
-					SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-					INTO ete_OvertimeHrs;
-			
-				END IF;
-			
-			END IF;
-										
-		ELSE
-		
-			IF TIME_FORMAT(otstartingtime,'%p') = 'PM'
-					 AND TIME_FORMAT(otendingtime,'%p') = 'AM' THEN
-				
-				IF etd_TimeOut BETWEEN otstartingtime AND ADDTIME(otendingtime,'24:00') THEN
-				
-					SELECT COMPUTE_TimeDifference(etd_TimeIn,SUBTIME(otstartingtime,'00:00:01'))
-					INTO ete_RegHrsWorkd;
-			
-					IF COMPUTE_TimeDifference(otendingtime, etd_TimeOut) > 0 THEN
-					
-						SELECT COMPUTE_TimeDifference(otstartingtime, etd_TimeOut)
-						INTO ete_OvertimeHrs;
-						
-					ELSE
-						
-						SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-						INTO ete_OvertimeHrs;
-						
-					END IF;
-			
-				ELSE
-					
-					IF etd_TimeOut > shifttimeto THEN
-						
-						SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
-						INTO ete_RegHrsWorkd;
-						
-					ELSE
-					
-						SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
-						INTO ete_RegHrsWorkd;
-						
-					END IF;
-					
-				END IF;
-				
-			ELSE
-			
-				IF etd_TimeOut BETWEEN otstartingtime AND otendingtime THEN
-				
-					
-					SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
-					INTO ete_RegHrsWorkd;
-				
-					SELECT COMPUTE_TimeDifference(otstartingtime, etd_TimeOut)
-					INTO ete_OvertimeHrs;
-				
-					SET etd_TimeOut = shifttimeto;
-				
-				ELSE
-				
-					IF shifttimefrom > otendingtime THEN
-						
-						SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
-						INTO ete_RegHrsWorkd; 
-						
-						SET ete_RegHrsWorkd = ete_RegHrsWorkd - COMPUTE_TimeDifference(shifttimeto,etd_TimeOut);
-						
-						SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-						INTO ete_OvertimeHrs;
-					
-					ELSEIF etd_TimeOut < otstartingtime AND etd_TimeOut < otendingtime THEN
-					
-						SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
-						INTO ete_RegHrsWorkd;
-						
-						SET ete_OvertimeHrs = 0;
-						
-					ELSEIF etd_TimeOut < otstartingtime THEN
-					
-						SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
-						INTO ete_RegHrsWorkd;
-						
-						SET ete_OvertimeHrs = 0;
-						
-					ELSE
-				
-						SELECT COMPUTE_TimeDifference(etd_TimeIn,shifttimeto)
-						INTO ete_RegHrsWorkd;
-						
-						
-						SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-						INTO ete_OvertimeHrs;
-						
-						SET etd_TimeOut = SUBTIME(otstartingtime, '00:00:01');
-					
-					END IF;
-					
-				END IF;
-				
-			END IF;
-			
+		IF @timeStampLogIn BETWEEN @dutyStart AND @dutyGraceStart THEN
+			SET @timeStampLogIn = @dutyStart;
 		END IF;
-			
+		
+		SET @dutyEnd=GetNextStartDateTime(@dutyStart, shifttimeto);
+		
+		SET @breakStarts=GetNextStartDateTime(@dutyStart, @breakStarts);
+		SET @breakEnds=GetNextStartDateTime(@breakStarts, @breakEnds);
+
+		SELECT TIMESTAMPDIFF(SECOND
+		                     , GREATEST(@dutyStart
+												  , IF(@timeStampLogIn BETWEEN @breakStarts AND @breakEnds, @breakEnds, @timeStampLogIn)
+												  )
+									, LEAST(IF(@timeStampLogOut BETWEEN @breakStarts AND @breakEnds, @breakStarts, @timeStampLogOut)
+									        , @dutyEnd)
+											  ) / 3600
+		INTO ete_RegHrsWorkd;
+		
+		SET @lessBreak = 0.00;
+		
+		IF (@breakStarts BETWEEN @timeStampLogIn AND @timeStampLogOut)
+		   AND (@breakEnds BETWEEN @timeStampLogIn AND @timeStampLogOut) THEN
+			SET @lessBreak = TIMESTAMPDIFF(SECOND, @breakStarts, @breakEnds) / 3600;
+		END IF;
+		
+		SET ete_RegHrsWorkd = ete_RegHrsWorkd - IFNULL(@lessBreak, 0);
+		
+		SELECT CalculateOvertimeHours(shifttimefrom, shifttimefrom, ete_Date, ete_EmpRowID)
+		INTO ete_OvertimeHrs;
 	END IF;
 
 	IF hasLeave THEN
@@ -1124,77 +904,7 @@ END IF;
 		
 	SET @secs_per_hour = (60 * 60); # sixty seconds times sixty minutes
 
-IF IFNULL(OTCount,0) > 1 THEN
-	
-	SELECT
-   (TIMESTAMPDIFF(SECOND
-	               , IF(@etd_login > CONCAT_DATETIME(ete_Date, eot.OTStartTime)
-					        , @etd_login
-						 	 , CONCAT_DATETIME(ete_Date, eot.OTStartTime))
-					   , CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL IS_TIMERANGE_REACHTOMORROW(eot.OTStartTime, eot.OTEndTime) DAY), eot.OTEndTime)) / @secs_per_hour) `Resultt`
-	FROM employeeovertime eot
-	WHERE eot.EmployeeID=ete_EmpRowID
-	AND eot.OrganizationID=ete_OrganizID
-	AND ete_Date
-	BETWEEN eot.OTStartDate
-	AND COALESCE(eot.OTEndDate,eot.OTStartDate)
-	AND eot.OTStatus='Approved' AND has_timelogs_onthisdate = TRUE
-	AND eot.RowID!=aftershiftOTRowID
-	LIMIT 1
-	INTO anotherOTHours;
-	
-	IF anotherOTHours IS NULL
-	   OR anotherOTHours < 0 THEN
-		
-		SET anotherOTHours = 0.0;
-	END IF;
-	
-	SET ete_OvertimeHrs = ete_OvertimeHrs + anotherOTHours;
-	
-ELSEIF IFNULL(OTCount,0) = 1 && ete_OvertimeHrs = 0 THEN
-	
-	SET @valid_ndiffhrs = 0.00;
-	
-	SET @eot_rowid = NULL;
-	
-	SELECT
-   (TIMESTAMPDIFF(SECOND
-	               , IF(@etd_login > CONCAT_DATETIME(ete_Date, eot.OTStartTime)
-					        , @etd_login
-						 	 , CONCAT_DATETIME(ete_Date, eot.OTStartTime))
-					   , CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL IS_TIMERANGE_REACHTOMORROW(eot.OTStartTime, eot.OTEndTime) DAY), eot.OTEndTime)) / @secs_per_hour) `Resultt`
-	/*,COMPUTE_TimeDifference(OTStartTime
-							, IF((OTEndTime <= og.NightDifferentialTimeTo OR OTEndTime <= shifttimefrom), OTEndTime, IF(shifttimefrom > og.NightDifferentialTimeTo, shifttimefrom, og.NightDifferentialTimeTo)))*/
-	,IF(ADDTIME(TIMESTAMP(eot.OTStartDate), og.NightDifferentialTimeTo)
-		BETWEEN
-		ADDTIME(TIMESTAMP(eot.OTStartDate), eot.OTStartTime)
-		AND ADDTIME(TIMESTAMP(eot.OTStartDate)
-						, IF(TIME_FORMAT(eot.OTEndTime, '%H:%i') = TIME_FORMAT(shifttimefrom, '%H:%i'), TIME(SUBTIME(shifttimefrom, '00:00:01')), OTEndTime))
-		
-		, COMPUTE_TimeDifference(eot.OTStartTime, og.NightDifferentialTimeTo)
-		, COMPUTE_TimeDifference(eot.OTStartTime
-										, IF((eot.OTEndTime <= og.NightDifferentialTimeTo OR eot.OTEndTime <= shifttimefrom)
-												, eot.OTEndTime
-												, IF(shifttimefrom > og.NightDifferentialTimeTo, shifttimefrom, og.NightDifferentialTimeTo)))) `Result`
-	FROM employeeovertime eot
-	INNER JOIN organization og ON og.RowID=eot.OrganizationID
-	WHERE eot.EmployeeID=ete_EmpRowID
-	AND eot.OrganizationID=ete_OrganizID
-	AND eot.OTStatus='Approved' AND has_timelogs_onthisdate = TRUE
-	AND ete_Date BETWEEN eot.OTStartDate AND eot.OTStartDate
-	AND eot.RowID!=aftershiftOTRowID
-	LIMIT 1
-	INTO anotherOTHours,@valid_ndiffhrs;
-	
-	IF anotherOTHours IS NULL
-	   OR anotherOTHours < 0 THEN
-		
-		SET anotherOTHours = 0.0;
-	END IF;
-	
-	SET ete_OvertimeHrs = ete_OvertimeHrs + anotherOTHours;
-	
-END IF;
+/**/
 
 	SET @leavePayment = 0; SET @lv_hrs = 0;
 

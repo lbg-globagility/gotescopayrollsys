@@ -12,18 +12,29 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `GetNextStartDateTime`(
 
 
 
+
 ) RETURNS datetime
     DETERMINISTIC
 BEGIN
 
 DECLARE breakStartDateTime DATETIME DEFAULT NULL;
+DECLARE oneMinute INT(11) DEFAULT 1;
 
-SELECT ADDDATE(shiftStartDateTime, INTERVAL i.MinuteInterval MINUTE) `Result`
+/*SELECT ADDDATE(shiftStartDateTime, INTERVAL i.MinuteInterval MINUTE) `Result`
 FROM tenhour i
 WHERE TIME(ADDDATE(shiftStartDateTime, INTERVAL i.MinuteInterval MINUTE)) = breakStartTime
 LIMIT 1
 INTO breakStartDateTime
-;
+;*/
+
+SET @startingDateTime = shiftStartDateTime;
+
+WHILE TIME(@startingDateTime) < breakStartTime DO
+	SET @startingDateTime = ADDDATE(shiftStartDateTime, INTERVAL oneMinute MINUTE);
+	SET oneMinute = oneMinute + 1;
+END WHILE;
+
+SET breakStartDateTime = @startingDateTime;
 
 RETURN breakStartDateTime;
 

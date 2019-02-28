@@ -83,7 +83,7 @@ FROM (SELECT i.*
 		ORDER BY i.RowID, pp.OrdinalValue, p.PartNo
 		) ls
 GROUP BY ls.RowID
-ORDER BY ls.`Column3`
+ORDER BY ls.`Column1`, ls.`Column3`
 ;
 
 END//

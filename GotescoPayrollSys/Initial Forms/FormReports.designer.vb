@@ -27,7 +27,7 @@ Partial Class FormReports
         Me.PanelReport = New System.Windows.Forms.Panel()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.tsbtnstartreport = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -48,20 +48,22 @@ Partial Class FormReports
         'ToolStrip1
         '
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnstartreport})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(1006, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
-        'tsbtnstartreport
+        'ToolStripButton1
         '
-        Me.tsbtnstartreport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsbtnstartreport.Image = Global.GotescoPayrollSys.My.Resources.Resources.Copy_of_Home_front_view00112
-        Me.tsbtnstartreport.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.tsbtnstartreport.Name = "tsbtnstartreport"
-        Me.tsbtnstartreport.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton1.Text = "ToolStripButton1"
+        Me.ToolStripButton1.ToolTipText = "Show Reports"
         '
         'FormReports
         '
@@ -83,5 +85,5 @@ Partial Class FormReports
     Friend WithEvents PanelReport As System.Windows.Forms.Panel
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
-    Friend WithEvents tsbtnstartreport As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton1 As ToolStripButton
 End Class

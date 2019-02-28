@@ -40,12 +40,12 @@ Public Class FormReports
 
         'lvMainMenu.LargeImageList = ImageList1
 
-        tsbtnstartreport_Click(sender, e)
+        ToolStripButton1_Click(sender, e)
 
     End Sub
 
-    Private Sub tsbtnstartreport_Click(sender As Object, e As EventArgs) Handles tsbtnstartreport.Click
-        
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+
         ChangeForm(ReportsList)
 
     End Sub

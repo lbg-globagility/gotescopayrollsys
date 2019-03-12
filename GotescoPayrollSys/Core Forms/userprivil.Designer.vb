@@ -24,6 +24,14 @@ Partial Class userprivil
     Private Sub InitializeComponent()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.dgvposit = New System.Windows.Forms.DataGridView()
+        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Last = New System.Windows.Forms.LinkLabel()
         Me.Nxt = New System.Windows.Forms.LinkLabel()
         Me.Prev = New System.Windows.Forms.LinkLabel()
@@ -65,14 +73,6 @@ Partial Class userprivil
         Me.DataGridViewTextBoxColumn10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvposit, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -110,6 +110,61 @@ Partial Class userprivil
         Me.dgvposit.ReadOnly = True
         Me.dgvposit.Size = New System.Drawing.Size(306, 554)
         Me.dgvposit.TabIndex = 109
+        '
+        'Column1
+        '
+        Me.Column1.HeaderText = "RowID"
+        Me.Column1.Name = "Column1"
+        Me.Column1.ReadOnly = True
+        '
+        'Column2
+        '
+        Me.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.Column2.HeaderText = "Position Name"
+        Me.Column2.Name = "Column2"
+        Me.Column2.ReadOnly = True
+        '
+        'Column3
+        '
+        Me.Column3.HeaderText = "ParentPositionID"
+        Me.Column3.Name = "Column3"
+        Me.Column3.ReadOnly = True
+        Me.Column3.Visible = False
+        '
+        'Column4
+        '
+        Me.Column4.HeaderText = "DivisionId"
+        Me.Column4.Name = "Column4"
+        Me.Column4.ReadOnly = True
+        Me.Column4.Visible = False
+        '
+        'Column5
+        '
+        Me.Column5.HeaderText = "Created"
+        Me.Column5.Name = "Column5"
+        Me.Column5.ReadOnly = True
+        Me.Column5.Visible = False
+        '
+        'Column6
+        '
+        Me.Column6.HeaderText = "CreatedBy"
+        Me.Column6.Name = "Column6"
+        Me.Column6.ReadOnly = True
+        Me.Column6.Visible = False
+        '
+        'Column7
+        '
+        Me.Column7.HeaderText = "LastUpd"
+        Me.Column7.Name = "Column7"
+        Me.Column7.ReadOnly = True
+        Me.Column7.Visible = False
+        '
+        'Column8
+        '
+        Me.Column8.HeaderText = "LastUpdBy"
+        Me.Column8.Name = "Column8"
+        Me.Column8.ReadOnly = True
+        Me.Column8.Visible = False
         '
         'Last
         '
@@ -224,7 +279,7 @@ Partial Class userprivil
         Me.dgvpositview.Location = New System.Drawing.Point(3, 44)
         Me.dgvpositview.MultiSelect = False
         Me.dgvpositview.Name = "dgvpositview"
-        Me.dgvpositview.Size = New System.Drawing.Size(806, 603)
+        Me.dgvpositview.Size = New System.Drawing.Size(822, 603)
         Me.dgvpositview.TabIndex = 0
         '
         'Column9
@@ -474,61 +529,6 @@ Partial Class userprivil
         Me.DataGridViewTextBoxColumn12.HeaderText = "Column15"
         Me.DataGridViewTextBoxColumn12.Name = "DataGridViewTextBoxColumn12"
         Me.DataGridViewTextBoxColumn12.Visible = False
-        '
-        'Column1
-        '
-        Me.Column1.HeaderText = "RowID"
-        Me.Column1.Name = "Column1"
-        Me.Column1.ReadOnly = True
-        '
-        'Column2
-        '
-        Me.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.Column2.HeaderText = "Position Name"
-        Me.Column2.Name = "Column2"
-        Me.Column2.ReadOnly = True
-        '
-        'Column3
-        '
-        Me.Column3.HeaderText = "ParentPositionID"
-        Me.Column3.Name = "Column3"
-        Me.Column3.ReadOnly = True
-        Me.Column3.Visible = False
-        '
-        'Column4
-        '
-        Me.Column4.HeaderText = "DivisionId"
-        Me.Column4.Name = "Column4"
-        Me.Column4.ReadOnly = True
-        Me.Column4.Visible = False
-        '
-        'Column5
-        '
-        Me.Column5.HeaderText = "Created"
-        Me.Column5.Name = "Column5"
-        Me.Column5.ReadOnly = True
-        Me.Column5.Visible = False
-        '
-        'Column6
-        '
-        Me.Column6.HeaderText = "CreatedBy"
-        Me.Column6.Name = "Column6"
-        Me.Column6.ReadOnly = True
-        Me.Column6.Visible = False
-        '
-        'Column7
-        '
-        Me.Column7.HeaderText = "LastUpd"
-        Me.Column7.Name = "Column7"
-        Me.Column7.ReadOnly = True
-        Me.Column7.Visible = False
-        '
-        'Column8
-        '
-        Me.Column8.HeaderText = "LastUpdBy"
-        Me.Column8.Name = "Column8"
-        Me.Column8.ReadOnly = True
-        Me.Column8.Visible = False
         '
         'userprivil
         '

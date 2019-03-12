@@ -371,6 +371,21 @@ Public Class userprivil
 
     Dim dontCreate As SByte = 0
 
+    Private Enum SingleYesOrNo As Short
+        N = 0
+        Y = 1
+    End Enum
+
+    Private Function GetSingleYesOrNo(value As Object) As String
+        Dim returningValue As String
+        If Convert.ToInt16(value) = SingleYesOrNo.N Then
+            returningValue = SingleYesOrNo.N.ToString()
+        Else
+            returningValue = SingleYesOrNo.Y.ToString()
+        End If
+        Return returningValue
+    End Function
+
     Private Async Sub tsbtnSaveUserPrivil_ClickAsync(sender As Object, e As EventArgs) Handles tsbtnSaveUserPrivil.Click
 
         dgvpositview.EndEdit(True)
@@ -379,7 +394,10 @@ Public Class userprivil
 
         Dim gridRows = dgvpositview.Rows.OfType(Of DataGridViewRow).Where(Function(r) Not r.IsNewRow)
 
-        If Not gridRows.Any() Then
+        Dim selectedPositionRow = dgvposit.CurrentRow
+
+        If Not gridRows.Any() _
+            Or selectedPositionRow Is Nothing Then
             Exit Sub
         End If
 
@@ -387,10 +405,21 @@ Public Class userprivil
 
         Dim privilegeIDs = gridRows.Select(Function(r) Convert.ToInt32(r.Cells(Column9.Name).Value)).ToList()
 
+        Dim currentPositionName As String = Convert.ToString(selectedPositionRow.Cells(Column2.Name).Value)
+
         Using context = New DatabaseContext
-            Dim privileges = Await context.PositionPrivileges.
-                Where(Function(p) privilegeIDs.Any(Function(privID) p.RowID = privID)).
+
+            Dim allPrivileges = Await context.PositionPrivileges.
+                Include(Function(privi) privi.Position).
+                Include(Function(privi) privi.PrivilegeType).
+                Include(Function(privi) privi.Organization).
+                Where(Function(p) Not p.Organization.NoPurpose).
+                Where(Function(p) p.Position.PositionName = currentPositionName).
                 ToListAsync()
+
+            Dim privileges = allPrivileges.
+                Where(Function(p) privilegeIDs.Any(Function(privID) p.RowID = privID)).
+                ToList()
 
             For Each dgvrow In gridRows
                 With dgvrow
@@ -398,11 +427,14 @@ Public Class userprivil
                     Dim privilege = privileges.Where(Function(p) Equals(p.RowID, rowID)).FirstOrDefault
 
                     If privilege Is Nothing Then Continue For
-                    privilege.Creates = Convert.ToInt16(.Cells(Column11.Name).Value)
-                    privilege.Updates = Convert.ToInt16(.Cells(Column12.Name).Value)
-                    privilege.Deleting = Convert.ToInt16(.Cells(Column13.Name).Value)
-                    privilege.ReadOnly = Convert.ToInt16(.Cells(Column14.Name).Value)
+                    privilege.Creates = GetSingleYesOrNo(.Cells(Column11.Name).Value)
+                    privilege.Updates = GetSingleYesOrNo(.Cells(Column12.Name).Value)
+                    privilege.Deleting = GetSingleYesOrNo(.Cells(Column13.Name).Value)
+                    privilege.ReadOnly = GetSingleYesOrNo(.Cells(Column14.Name).Value)
+
+                    AlsoUpdateSimilarPrivilegesAcrossOrganizations(allPrivileges, privilege)
                 End With
+
             Next
 
             Try
@@ -465,14 +497,32 @@ Public Class userprivil
 
         InfoBalloon("User privilege has been successfully saved.", "Successfully save", lblforballoon, 0, -69)
 
-        dgvposit_SelectionChanged(sender, e)
+        'dgvposit_SelectionChanged(sender, e)
 
-        If dgvpositview.RowCount - 1 > row_indx Then
-            dgvpositview.Item(col_indx, row_indx).Selected = True
-        End If
+        'If dgvpositview.RowCount - 1 > row_indx Then
+        '    dgvpositview.Item(col_indx, row_indx).Selected = True
+        'End If
 
         AddHandler dgvposit.SelectionChanged, AddressOf dgvposit_SelectionChanged
 
+    End Sub
+
+    Private Sub AlsoUpdateSimilarPrivilegesAcrossOrganizations(allPrivileges As IList(Of PositionPrivilege), positionPrivilege As PositionPrivilege)
+        Dim _position = positionPrivilege.Position
+        Dim _view = positionPrivilege.PrivilegeType
+
+        Dim similarPrivileges = allPrivileges.
+            Where(Function(p) Not Equals(p.RowID, positionPrivilege.RowID)).
+            Where(Function(p) Nullable.Equals(p.Position?.PositionName, _position.PositionName)).
+            Where(Function(p) Nullable.Equals(p.PrivilegeType.ViewName, _view.ViewName)).
+            ToList()
+
+        For Each _privilege In similarPrivileges
+            _privilege.Creates = positionPrivilege.Creates
+            _privilege.Updates = positionPrivilege.Updates
+            _privilege.Deleting = positionPrivilege.Deleting
+            _privilege.ReadOnly = positionPrivilege.ReadOnly
+        Next
     End Sub
 
     Function INSUPD_position_view(Optional pv_RowID As Object = Nothing,

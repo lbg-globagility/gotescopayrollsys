@@ -1,0 +1,2 @@
+ALTER TABLE `organization`
+	CHANGE COLUMN `NoPurpose` `NoPurpose` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'This serves as a flag as dummy data, for developers purpose only' AFTER `MinWageEmpHDMFContrib`;

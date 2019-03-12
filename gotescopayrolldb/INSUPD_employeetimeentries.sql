@@ -34,6 +34,13 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeetimeentries`(
 	`leavePayment` DECIMAL(11,6)
 
 
+,
+	`leavePaidHours` DECIMAL(11,6)
+
+
+,
+	`typeOfLeave` VARCHAR(50)
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -43,9 +50,22 @@ DECLARE etentID INT(11);
 DECLARE is_valid_for_holipayment BOOL DEFAULT FALSE;
 
 DECLARE default_payrate DECIMAL(11,2) DEFAULT 1.0;
+DECLARE vlHrs, slHrs, mlHrs, olHrs, addlHrs DECIMAL(11,2) DEFAULT 0;
 
 SET @specialNonWorkingHoliday = 'Special Non-Working Holiday';
 SET @legalHoliday = 'Regular Holiday';
+
+IF typeOfLeave = 'Additional VL' THEN
+	SET addlHrs = leavePaidHours;
+ELSEIF typeOfLeave = 'Maternity/paternity leave' THEN
+	SET mlHrs = leavePaidHours;
+ELSEIF typeOfLeave = 'Others' THEN
+	SET olHrs = leavePaidHours;
+ELSEIF typeOfLeave = 'Sick leave' THEN
+	SET slHrs = leavePaidHours;
+ELSEIF typeOfLeave = 'Vacation leave' THEN
+	SET vlHrs = leavePaidHours;
+END IF;
 
 SELECT EXISTS(SELECT pr.RowID
 					FROM payrate pr
@@ -95,6 +115,7 @@ INSERT INTO employeetimeentry
 	,PayRateID
 	,TotalDayPay
 	,IsValidForHolidayPayment
+	, VacationLeaveHours, SickLeaveHours, MaternityLeaveHours, OtherLeaveHours, AdditionalVLHours
 ) VALUES (
 	# etent_RowID,
 	etent_OrganizationID
@@ -126,6 +147,7 @@ INSERT INTO employeetimeentry
 	     , etent_TotalDayPay + etent_NightDiffOTHoursAmount
 	     , (etent_RegularHoursAmount + etent_OvertimeHoursAmount + etent_NightDiffHoursAmount + etent_NightDiffOTHoursAmount + leavePayment))
 	,is_valid_for_holipayment
+	, vlHrs, slHrs, mlHrs, olHrs, addlHrs
 ) ON 
 DUPLICATE 
 KEY 
@@ -153,7 +175,15 @@ UPDATE
 	     
 	,EmployeeShiftID = etent_EmployeeShiftID
 	,EmployeeSalaryID=etent_EmployeeSalaryID
-	,IsValidForHolidayPayment=is_valid_for_holipayment;SELECT @@Identity AS id INTO etentID;
+	,IsValidForHolidayPayment=is_valid_for_holipayment
+	
+	, VacationLeaveHours = vlHrs
+	, SickLeaveHours = slHrs
+	, MaternityLeaveHours = mlHrs
+	, OtherLeaveHours = olHrs
+	, AdditionalVLHours = addlHrs
+	;
+	SELECT @@Identity AS id INTO etentID;
 	
 RETURN etentID;
 

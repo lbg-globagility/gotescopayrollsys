@@ -6,86 +6,32 @@
 
 DROP PROCEDURE IF EXISTS `RECOMPUTE_employeeleave`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RECOMPUTE_employeeleave`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE, IN `DivisionRowID` INT)
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RECOMPUTE_employeeleave`(
+	IN `OrganizID` INT,
+	IN `FromPayDate` DATE,
+	IN `ToPayDate` DATE,
+	IN `DivisionRowID` INT
+
+
+
+)
     DETERMINISTIC
 BEGIN
-#RECOMPUTE_employeeleave
-DECLARE anyint INT(11);
 
-DECLARE empleaveRowIDtodel VARCHAR(250);
+/*SET @rowIds = NULL;
 
-DECLARE atleast_one CHAR(1);
+SELECT GROUP_CONCAT(et.RowID)
+FROM employeetimeentry et
+INNER JOIN employee e ON e.OrganizationID=OrganizID AND et.EmployeeID=e.RowID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+INNER JOIN `position` pos ON pos.RowID=e.PositionID
+INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID)
+WHERE et.OrganizationID=OrganizID
+AND et.EmployeeID=e.RowID
+AND et.`Date` BETWEEN FromPayDate AND ToPayDate
+INTO @rowIds
+;
 
-SELECT EXISTS(SELECT lv.RowID FROM employeeleave lv INNER JOIN employee e ON e.RowID=lv.EmployeeID AND e.OrganizationID=lv.OrganizationID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated') INNER JOIN `position` pos ON pos.RowID=e.PositionID INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID) WHERE lv.OrganizationID=OrganizID AND (lv.LeaveStartDate >= FromPayDate OR lv.LeaveEndDate >= FromPayDate) AND (lv.LeaveStartDate <= ToPayDate OR lv.LeaveEndDate <= ToPayDate) LIMIT 1) INTO atleast_one;
-
-
-
-IF atleast_one = '1' THEN
-
-	SET @ids = NULL;
-
-	SET SESSION group_concat_max_len = 20480;
-
-	SELECT GROUP_CONCAT(elv.RowID)
-	FROM employeeleave elv
-	INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
-	INNER JOIN `position` pos ON pos.RowID=e.PositionID
-	INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID)
-	WHERE elv.OrganizationID=OrganizID
-	AND (elv.LeaveStartDate >= FromPayDate OR elv.LeaveEndDate >= FromPayDate)
-	AND (elv.LeaveStartDate <= ToPayDate OR elv.LeaveEndDate <= ToPayDate)
-	INTO @ids;
-
-	/**/ DELETE FROM employeeleave WHERE FIND_IN_SET(RowID, @ids) > 0;
-
-	INSERT INTO employeeleave
-	(
-		OrganizationID
-		,Created
-		,LeaveStartTime
-		,LeaveType
-		,CreatedBy
-		,LastUpd
-		,LastUpdBy
-		,EmployeeID
-		,LeaveEndTime
-		,LeaveStartDate
-		,LeaveEndDate
-		,Reason
-		,Comments
-		,Image
-		,`Status`
-		,LeaveTypeID
-		,AdditionalOverrideLeaveBalance
-	) SELECT elv.OrganizationID
-		,elv.Created
-		,elv.LeaveStartTime
-		,elv.LeaveType
-		,elv.CreatedBy
-		,elv.LastUpd
-		,elv.LastUpdBy
-		,elv.EmployeeID
-		,elv.LeaveEndTime
-		,elv.LeaveStartDate
-		,elv.LeaveEndDate
-		,elv.Reason
-		,elv.Comments
-		,elv.Image
-		,elv.`Status`
-		,p.RowID
-		,elv.AdditionalOverrideLeaveBalance
-	FROM employeeleave_duplicate elv
-	INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
-	INNER JOIN `position` pos ON pos.RowID=e.PositionID
-	INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID) 
-	LEFT JOIN product p ON p.PartNo=elv.LeaveType AND p.OrganizationID=OrganizID AND p.`Category`='Leave Type'
-	WHERE elv.OrganizationID=OrganizID
-	AND (elv.LeaveStartDate >= FromPayDate OR elv.LeaveEndDate >= FromPayDate)
-	AND (elv.LeaveStartDate <= ToPayDate OR elv.LeaveEndDate <= ToPayDate);
-	
-	
-
-END IF;
+DELETE FROM employeetimeentry WHERE FIND_IN_SET(RowID, @rowIds) > 0; ALTER TABLE employeetimeentry AUTO_INCREMENT = 0;*/
 
 END//
 DELIMITER ;

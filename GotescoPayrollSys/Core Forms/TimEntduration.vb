@@ -1447,7 +1447,7 @@ Public Class TimEntduration
         bgworkRECOMPUTE_employeeleave.ReportProgress(progress, "")
 
         If succeed Then
-            Await ReInsertLeaveAsync()
+            'Await ReInsertLeaveAsync()
 
             progress += 25
             bgworkRECOMPUTE_employeeleave.ReportProgress(progress, "")

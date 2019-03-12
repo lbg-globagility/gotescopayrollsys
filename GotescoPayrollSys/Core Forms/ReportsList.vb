@@ -34,35 +34,37 @@ Public Class ReportsList
         Dim _providers =
             providers.OfType(Of IReportProvider).Where(Function(p) p.GotescoReportName.Length > 0)
 
+        Dim reportNames = _providers.Select(Function(r) r.GotescoReportName).ToList
+        Dim _reportNames = String.Join(",", reportNames.ToArray)
+
         Dim str_quer As String =
-            String.Concat("SELECT REPLACE(l.DisplayValue, '\'', '') `DisplayValue`",
-                          " FROM listofval l",
-                          " INNER JOIN `user` u ON u.RowID=", user_row_id,
-                          " INNER JOIN position_view pv ON pv.PositionID = u.PositionID AND pv.OrganizationID = ", org_rowid, " AND pv.ReadOnly = 'Y'",
-                          " INNER JOIN `view` v ON v.RowID=pv.ViewID AND v.ViewName=l.DisplayValue",
-                          " WHERE l.`Type` = 'Report List'",
-                          " AND l.Active = 'Yes';")
+            String.Concat("SELECT l.DisplayValue",
+                          " FROM `user` u",
+                          " INNER JOIN `position` upos ON upos.RowID=u.PositionID",
+                          " INNER JOIN `position` pos ON pos.PositionName=upos.PositionName AND pos.OrganizationID=", org_rowid,
+                          " INNER JOIN position_view pv ON pv.PositionID=pos.RowID AND pv.OrganizationID=pos.OrganizationID AND FIND_IN_SET('Y', CONCAT_WS(',', pv.ReadOnly, pv.Creates, pv.Updates, pv.Deleting)) > 0",
+                          " INNER JOIN `view` v ON v.RowID=pv.ViewID",
+                          " INNER JOIN listofval l ON l.DisplayValue=v.ViewName AND FIND_IN_SET(l.DisplayValue, ?reportNames) > 0",
+                          " WHERE u.RowID = ", user_row_id, ";")
+        Dim dataTable =
+                New SQL(str_quer, New Object() {_reportNames}).GetFoundRows.Tables(0)
 
-        For Each provider In _providers 'providers
-            Dim dataTable =
-                New SQL(str_quer).GetFoundRows.Tables(0)
-            'New SQL("SELECT REPLACE(l.DisplayValue, '\'', '') `DisplayValue` FROM listofval l WHERE l.`Type` = 'Report List';").GetFoundRows.Tables(0)
-            'New SQL("SELECT l.DisplayValue FROM listofval l WHERE l.`Type` = 'ReportProviders';").GetFoundRows.Tables(0)
+        Dim dRows = dataTable.Rows.OfType(Of DataRow)
+        For Each drow In dRows
+            Dim repName = Convert.ToString(drow(0))
+            Dim reportProvidr = providers.Where(Function(rp) Equals(rp.GotescoReportName, repName))
 
-            'Dim type = provider.GetType().Name
-            Dim type = provider.GotescoReportName
-
-            Dim str_query = OutputText.Display("DisplayValue = '{0}'", type.Replace("'", ""))
-
-            Dim found = dataTable.Select(str_query).Count >= 1
-
-            If found Then
+            If reportProvidr.Any Then
+                Dim provider = reportProvidr.FirstOrDefault
                 Dim newListItem = New ListViewItem(provider.Name)
                 newListItem.Tag = provider
 
                 lvMainMenu.Items.Add(newListItem)
+            Else
+                Continue For
             End If
         Next
+
     End Sub
 
     Private Sub lvMainMenu_KeyDown(sender As Object, e As KeyEventArgs) Handles lvMainMenu.KeyDown

@@ -1,9 +1,10 @@
 ﻿Public Class AgencyFeeReportProvider
     Implements IReportProvider
+    Private Const LocalReportName As String = "Agency Fee"
 
-    Public Property Name As String = "Agency Fee" Implements IReportProvider.Name
+    Public Property Name As String = LocalReportName Implements IReportProvider.Name
 
-    Public Property GotescoReportName As String = String.Empty Implements IReportProvider.GotescoReportName
+    Public Property GotescoReportName As String = LocalReportName Implements IReportProvider.GotescoReportName
 
     Public Sub Run() Implements IReportProvider.Run
         Throw New NotImplementedException()

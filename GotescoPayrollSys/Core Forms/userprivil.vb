@@ -1,9 +1,11 @@
-﻿Public Class userprivil
+﻿Imports System.Data.Entity
+
+Public Class userprivil
 
     Dim view_id As Integer = Nothing
 
     Private Sub userprivil_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        
+
         view_id = VIEW_privilege("User Privilege", org_rowid)
 
         VIEW_position_organization_user()
@@ -154,8 +156,8 @@
 
         params(0, 1) = org_rowid
 
-        EXEC_VIEW_PROCEDURE(params, _
-                             "VIEW_view_of_organization", _
+        EXEC_VIEW_PROCEDURE(params,
+                             "VIEW_view_of_organization",
                              dgvpositview)
 
     End Sub
@@ -266,7 +268,7 @@
 
     End Sub
 
-    Private Sub First_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles First.LinkClicked, Prev.LinkClicked, _
+    Private Sub First_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles First.LinkClicked, Prev.LinkClicked,
                                                                                                 Nxt.LinkClicked, Last.LinkClicked
 
         Dim sendrname As String = DirectCast(sender, LinkLabel).Name
@@ -369,68 +371,50 @@
 
     Dim dontCreate As SByte = 0
 
-    Private Sub tsbtnSaveUserPrivil_Click(sender As Object, e As EventArgs) Handles tsbtnSaveUserPrivil.Click
+    Private Async Sub tsbtnSaveUserPrivil_ClickAsync(sender As Object, e As EventArgs) Handles tsbtnSaveUserPrivil.Click
 
         dgvpositview.EndEdit(True)
 
         lblforballoon.Focus()
 
-        If dgvposit.RowCount = 0 Then
+        Dim gridRows = dgvpositview.Rows.OfType(Of DataGridViewRow).Where(Function(r) Not r.IsNewRow)
+
+        If Not gridRows.Any() Then
             Exit Sub
         End If
 
         RemoveHandler dgvposit.SelectionChanged, AddressOf dgvposit_SelectionChanged
 
-        For Each dgvrow As DataGridViewRow In dgvpositview.Rows
-            With dgvrow
-                If .IsNewRow Then
+        Dim privilegeIDs = gridRows.Select(Function(r) Convert.ToInt32(r.Cells(Column9.Name).Value)).ToList()
 
-                Else
+        Using context = New DatabaseContext
+            Dim privileges = Await context.PositionPrivileges.
+                Where(Function(p) privilegeIDs.Any(Function(privID) p.RowID = privID)).
+                ToListAsync()
 
-                    Dim posview_create = If(.Cells("Column11").Value = 1 Or .Cells("Column11").Value = True, "Y", "N")
-                    Dim posview_update = If(.Cells("Column12").Value = 1 Or .Cells("Column12").Value = True, "Y", "N")
-                    Dim posview_delete = If(.Cells("Column13").Value = 1 Or .Cells("Column13").Value = True, "Y", "N")
-                    Dim posview_readonly = If(.Cells("Column14").Value = 1 Or .Cells("Column14").Value = True, "Y", "N")
+            For Each dgvrow In gridRows
+                With dgvrow
+                    Dim rowID = Convert.ToInt32(.Cells(Column9.Name).Value)
+                    Dim privilege = privileges.Where(Function(p) Equals(p.RowID, rowID)).FirstOrDefault
 
-                    If .Cells("Column9").Value = Nothing Then
+                    If privilege Is Nothing Then Continue For
+                    privilege.Creates = Convert.ToInt16(.Cells(Column11.Name).Value)
+                    privilege.Updates = Convert.ToInt16(.Cells(Column12.Name).Value)
+                    privilege.Deleting = Convert.ToInt16(.Cells(Column13.Name).Value)
+                    privilege.ReadOnly = Convert.ToInt16(.Cells(Column14.Name).Value)
+                End With
+            Next
 
-                        If .Cells("view_RowID").Value = Nothing Then
+            Try
+                Await context.SaveChangesAsync
+            Catch ex As Exception
+                MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
 
-                        Else
-                            .Cells("Column9").Value = _
-                                                INSUPD_position_view(, _
-                                                                    dgvposit.CurrentRow.Cells("Column1").Value, _
-                                                                    .Cells("view_RowID").Value, _
-                                                                    posview_create, _
-                                                                    posview_readonly, _
-                                                                    posview_update, _
-                                                                    posview_delete)
-
-                        End If
-
-                    Else
-
-                        If listofeditrow.Contains(.Cells("Column9").Value) Then
-                            INSUPD_position_view(.Cells("Column9").Value, _
-                                                 dgvposit.CurrentRow.Cells("Column1").Value, _
-                                                  .Cells("view_RowID").Value, _
-                                                  posview_create, _
-                                                  posview_readonly, _
-                                                  posview_update, _
-                                                  posview_delete)
-                        End If
-
-                    End If
-
-                End If
-
-            End With
-            'INSUPD_position_view
-        Next
-
-        position_view_table = retAsDatTbl("SELECT *" & _
-                                          " FROM position_view" & _
-                                          " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" & _
+        position_view_table = retAsDatTbl("SELECT *" &
+                                          " FROM position_view" &
+                                          " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" &
                                           " AND OrganizationID='" & org_rowid & "';")
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_id)
@@ -491,12 +475,12 @@
 
     End Sub
 
-    Function INSUPD_position_view(Optional pv_RowID As Object = Nothing, _
-                                  Optional pv_PositionID As Object = Nothing, _
-                                  Optional pv_ViewID As Object = Nothing, _
-                                  Optional pv_Creates As Object = Nothing, _
-                                  Optional pv_ReadOnly As Object = Nothing, _
-                                  Optional pv_Updates As Object = Nothing, _
+    Function INSUPD_position_view(Optional pv_RowID As Object = Nothing,
+                                  Optional pv_PositionID As Object = Nothing,
+                                  Optional pv_ViewID As Object = Nothing,
+                                  Optional pv_Creates As Object = Nothing,
+                                  Optional pv_ReadOnly As Object = Nothing,
+                                  Optional pv_Updates As Object = Nothing,
                                   Optional pv_Deleting As Object = Nothing) As Object
 
         Dim params(9, 2) As Object
@@ -523,9 +507,9 @@
         params(8, 1) = pv_Updates
         params(9, 1) = pv_Deleting
 
-        INSUPD_position_view = _
-            EXEC_INSUPD_PROCEDURE(params, _
-                                "INSUPD_position_view", _
+        INSUPD_position_view =
+            EXEC_INSUPD_PROCEDURE(params,
+                                "INSUPD_position_view",
                                 "pvRowID")
 
     End Function

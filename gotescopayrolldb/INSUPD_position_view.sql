@@ -50,7 +50,21 @@ UPDATE
 	,Updates=pv_Updates
 	,Deleting=pv_Deleting;SELECT @@Identity AS id INTO pvRowID;
 
+SET @jobPositionName = '';
 
+SELECT PositionName FROM `position` WHERE RowID=pv_PositionID INTO @jobPositionName;
+
+UPDATE position_view pv
+INNER JOIN `position` pos ON pos.RowID=pv.PositionID AND pos.PositionName=@jobPositionName
+SET pv.Creates=pv_Creates
+, pv.Updates=pv_Updates
+, pv.Deleting=pv_Deleting
+, pv.ReadOnly=pv_ReadOnly
+, pv.LastUpd=CURRENT_TIMESTAMP()
+, pv.LastUpdBy=IFNULL(pv.LastUpdBy, pv.CreatedBy)
+WHERE NOT pv.PositionID = pv_PositionID
+AND pv.ViewID=pv_ViewID
+;
 
 RETURN pvRowID;
 

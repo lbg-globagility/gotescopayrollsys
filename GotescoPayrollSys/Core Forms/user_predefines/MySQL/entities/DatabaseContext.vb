@@ -62,4 +62,6 @@ Public Class DatabaseContext
 
     Public Overridable Property Products() As DbSet(Of Product)
 
+    Public Overridable Property PositionPrivileges() As DbSet(Of PositionPrivilege)
+
 End Class

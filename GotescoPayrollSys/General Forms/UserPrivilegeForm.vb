@@ -5,8 +5,8 @@
         Else
             For Each drow As DataGridViewRow In dgvGeneral.Rows
                 Dim dt As New DataTable
-                dt = getDataTableForSQL("Select * from position_view pv inner join position p on pv.PositionID = p.RowID " & _
-                                        "inner join `view` v on pv.ViewID = v.RowID " & _
+                dt = getDataTableForSQL("Select * from position_view pv inner join position p on pv.PositionID = p.RowID " &
+                                        "inner join `view` v on pv.ViewID = v.RowID " &
                                         "Where pv.OrganizationID = " & z_OrganizationID & " And ViewName = '" & drow.Cells(0).Value & "' And p.PositionName = '" & dgvPositionList.CurrentRow.Cells(c_Position.Index).Value & "'")
                 If dt.Rows.Count > 0 Then
                     With dt.Rows(0)
@@ -20,8 +20,8 @@
 
             For Each drow As DataGridViewRow In dgvHRIS.Rows
                 Dim dt As New DataTable
-                dt = getDataTableForSQL("Select * from position_view pv inner join position p on pv.PositionID = p.RowID " & _
-                                        "inner join `view` v on pv.ViewID = v.RowID " & _
+                dt = getDataTableForSQL("Select * from position_view pv inner join position p on pv.PositionID = p.RowID " &
+                                        "inner join `view` v on pv.ViewID = v.RowID " &
                                         "Where pv.OrganizationID = " & z_OrganizationID & " And ViewName = '" & drow.Cells(0).Value & "' And p.PositionName = '" & dgvPositionList.CurrentRow.Cells(c_Position.Index).Value & "' ")
                 If dt.Rows.Count > 0 Then
                     With dt.Rows(0)

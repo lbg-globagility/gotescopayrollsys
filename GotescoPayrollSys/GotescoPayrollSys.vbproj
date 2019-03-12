@@ -409,6 +409,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\DatabaseContext.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PayPeriod.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PositionPrivilege.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Product.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\ProperDisplayAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\TimeEntryLogsPerCutOff.vb" />

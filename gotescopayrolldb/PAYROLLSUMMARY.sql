@@ -156,6 +156,15 @@ SELECT ii.* FROM (
 			# , IFNULL(esa.BasicPay, 0) `DatCol21` # `BasicPay`
 			# , SUM(etp.BasicDayPay) `BasicPay`
 			, SUM(et.RegularHoursAmount) `Basic rate` # `DatCol21` # `BasicPay`
+			, ( ROUND((IF(isActual, esa.TrueSalary, esa.Salary) / 2), 2)
+			    - (SUM(IFNULL(et.HoursLateAmount,0))
+				    + SUM(IFNULL(et.UndertimeHoursAmount,0))
+					 + SUM(IFNULL(et.Absent,0))
+					 + ROUND(SUM(IF(IFNULL(ROUND(et.TotalDayPay,2), 0) = IFNULL(ROUND(et.HolidayPayAmount,2), 0)
+			                      , 0, et.HolidayPayAmount)), 2)
+					 + IFNULL(elv.`SumLeavePay`, 0)
+				    )
+			   ) `Regular`
 			, SUM(et.OvertimeHoursAmount) `OT` # `DatCol37` # `OverTime`
 			# , IFNULL(pst3.PayAmount, 0) `DatCol36` # `HolidayPay`
 			, ROUND(SUM(et.HolidayPayAmount), 2) `Holiday` # `DatCol36` # `HolidayPay`
@@ -242,6 +251,15 @@ UNION
 			, e.EmployeeID `Code` # `DatCol2`
 			, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `Full Name` # `DatCol3`
 			, IFNULL(esa.BasicPay, 0) `Basic rate` # `DatCol21` # `BasicPay`
+			, ( ROUND((IF(isActual, esa.TrueSalary, esa.Salary) / 2), 2)
+			    - (SUM(IFNULL(et.HoursLateAmount,0))
+				    + SUM(IFNULL(et.UndertimeHoursAmount,0))
+					 + SUM(IFNULL(et.Absent,0))
+					 + ROUND(SUM(IF(IFNULL(ROUND(et.TotalDayPay,2), 0) = IFNULL(ROUND(et.HolidayPayAmount,2), 0)
+			                      , 0, et.HolidayPayAmount)), 2)
+					 + IFNULL(elv.`SumLeavePay`, 0)
+				    )
+			   ) `Regular`
 			, SUM(et.OvertimeHoursAmount) `OT` # `DatCol37` # `OverTime`
 			# , IFNULL(pst3.PayAmount, 0) `DatCol36` # `HolidayPay`
 			# , ROUND(SUM(et.HolidayPayAmount), 2) `Holiday` # `DatCol36` # `HolidayPay`

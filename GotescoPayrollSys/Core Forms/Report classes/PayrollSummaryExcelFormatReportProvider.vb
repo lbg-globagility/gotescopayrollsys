@@ -9,6 +9,8 @@ Imports log4net
 Public Class PayrollSummaryExcelFormatReportProvider
     Implements IReportProvider
 
+    Private Const oneValue As Integer = 1
+
 #Region "Vairable declarations"
 
     Private errlogger As ILog = LogManager.GetLogger("LoggerWork")
@@ -260,9 +262,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         wsheet = xcl.Workbook.Worksheets.Add(division_name)
 
-                        Dim col_count = (dt.Columns.Count - 1)
+                        Dim dataColumns = dt.Columns.OfType(Of DataColumn).Where(Function(d) Not d.ColumnName = "RowID")
 
-                        Dim rowindex = 1
+                        Dim rowindex = oneValue
                         wsheet.Row(rowindex).Style.Font.Bold = True
                         wsheet.Cells(rowindex, 2).Value = report_header
 
@@ -272,36 +274,35 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         rowindex = 3
 
-                        Dim dtcolindx = 1
-                        For Each dcol As DataColumn In dt.Columns
+                        Dim dtcolindx = oneValue
+                        For Each dcol In dataColumns
 
                             wsheet.Cells(rowindex, dtcolindx).Value = dcol.ColumnName
-                            dtcolindx += 1
+                            dtcolindx += oneValue
                             wsheet.Row(rowindex).Style.Font.Bold = True
                         Next
 
-                        rowindex += 1
+                        rowindex += oneValue
                         Dim details_start_rowindex = rowindex
 
                         Dim emp_payroll =
                             dt.Select(String.Concat("DivisionName='", division_name, "'"))
 
-                        For Each drow As DataRow In emp_payroll 'dt.Rows
-                            For col = 0 To col_count
-
-                                Dim colindx = (col + 1)
-
-                                wsheet.Cells(rowindex, colindx).Value =
-                                    drow(dt.Columns(col).ColumnName)
+                        For Each drow As DataRow In emp_payroll
+                            Dim dataColumnIndex = oneValue
+                            For Each dataColumn In dataColumns
+                                wsheet.Cells(rowindex, dataColumnIndex).Value =
+                                    drow(dataColumn.ColumnName)
+                                dataColumnIndex += oneValue
                             Next
-                            rowindex += 1
+                            rowindex += oneValue
                         Next
 
-                        wsheet.DeleteColumn(1)
+                        'wsheet.DeleteColumn(oneValue)
 
                         Dim sum_cell_range = String.Join(":",
                                                          String.Concat("C", rowindex),
-                                                         String.Concat("V", rowindex))
+                                                         String.Concat("W", rowindex))
                         ''FromRow, FromColumn, ToRow, ToColumn
                         'wsheet.Cells(sum_cell_range).Formula = String.Format("SUBTOTAL(9,{0})") ', New ExcelAddress(2, 3, 4, 3).Address)
 
@@ -309,7 +310,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                 String.Format("SUM({0})",
                                               New ExcelAddress(details_start_rowindex,
                                                                3,
-                                                               (rowindex - 1),
+                                                               (rowindex - oneValue),
                                                                3).Address) 'column_headers.Count
 
                         wsheet.Cells(sum_cell_range).Style.Font.Bold = True
@@ -318,8 +319,8 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         wsheet.PrinterSettings.PaperSize = ePaperSize.Legal
 
-                        wsheet.PrinterSettings.TopMargin = margin_size(1)
-                        wsheet.PrinterSettings.BottomMargin = margin_size(1)
+                        wsheet.PrinterSettings.TopMargin = margin_size(oneValue)
+                        wsheet.PrinterSettings.BottomMargin = margin_size(oneValue)
                         wsheet.PrinterSettings.LeftMargin = margin_size(0)
                         wsheet.PrinterSettings.RightMargin = margin_size(0)
 
@@ -327,7 +328,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         wsheet.Cells("A1").AutoFitColumns(4.9, 5.3)
 
-                        wsheet.DeleteColumn(23)
+                        'wsheet.DeleteColumn(23)
 
                     Next
 
@@ -357,9 +358,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Dim sql_print_employee_profiles As New SQL("CALL PAYROLLSUMMARY2(?og_rowid, ?min_pp_rowid, ?max_pp_rowid, ?is_actual, ?salaray_distrib);",
                                                    parameters)
 
-        Dim str_salary_distrib_type As String = CStr(parameters(param_item_count - 1))
+        Dim str_salary_distrib_type As String = CStr(parameters(param_item_count - oneValue))
 
-        Static one_value As Integer = 1
+        Static one_value As Integer = oneValue
 
         Try
 
@@ -382,7 +383,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
                 Dim str_period As String =
                     String.Concat("SELECT CONCAT_WS(',', pp.PayFromDate, ppd.PayToDate) `Result`",
                                   " FROM payperiod pp",
-                                  " INNER JOIN payperiod ppd ON ppd.RowID = ", parameters(1),
+                                  " INNER JOIN payperiod ppd ON ppd.RowID = ", parameters(oneValue),
                                   " WHERE pp.RowID = ", parameters(2))
 
                 Dim pp_sql As New SQL(str_period)
@@ -391,17 +392,17 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                 Dim short_dates() As String =
                     New String() {CDate(cut_offs(0)).ToShortDateString,
-                                  CDate(cut_offs(1)).ToShortDateString}
+                                  CDate(cut_offs(oneValue)).ToShortDateString}
 
                 Dim temp_file As String =
                     String.Concat(temp_path,
                                   orgNam,
                                   report_name, str_salary_distrib_type.Replace(" ", ""), "Report",
-                                  String.Concat(short_dates(0).Replace("/", "-"), "TO", short_dates(1).Replace("/", "-")),
+                                  String.Concat(short_dates(0).Replace("/", "-"), "TO", short_dates(oneValue).Replace("/", "-")),
                                   ".xlsx")
 
                 Dim date_range As String =
-                    String.Concat("for the period of ", short_dates(0), " to ", short_dates(1))
+                    String.Concat("for the period of ", short_dates(0), " to ", short_dates(oneValue))
 
                 Dim newFile = New FileInfo(temp_file)
 
@@ -427,7 +428,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         worksheet.Cells.Style.Font.Size = font_size
 
-                        Dim cell1 = worksheet.Cells(1, one_value)
+                        Dim cell1 = worksheet.Cells(oneValue, one_value)
 
                         cell1.Value = orgNam.ToUpper
                         cell1.Style.Font.Bold = True
@@ -439,11 +440,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
                         Dim row_indx As Integer = 5
 
                         Dim col_index As Integer = one_value
-
-                        'For Each dtcol As DataColumn In dt.Columns
-                        '    worksheet.Cells(row_indx, col_index).Value = dtcol.ColumnName
-                        '    col_index += one_value
-                        'Next
 
                         For Each str_header As String In column_headers
                             Dim cell_row5 = worksheet.Cells(row_indx, col_index)
@@ -545,8 +541,8 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         worksheet.PrinterSettings.PaperSize = ePaperSize.Legal
 
-                        worksheet.PrinterSettings.TopMargin = margin_size(1)
-                        worksheet.PrinterSettings.BottomMargin = margin_size(1)
+                        worksheet.PrinterSettings.TopMargin = margin_size(oneValue)
+                        worksheet.PrinterSettings.BottomMargin = margin_size(oneValue)
                         worksheet.PrinterSettings.LeftMargin = margin_size(0)
                         worksheet.PrinterSettings.RightMargin = margin_size(0)
 
@@ -556,7 +552,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         excl_pkg.Save()
 
-                        ii += 1
+                        ii += oneValue
 
                     Next
 

@@ -444,7 +444,7 @@ Public Class userprivil
             Try
                 Await context.SaveChangesAsync
             Catch ex As Exception
-                MessageBox.Show("", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Oops! something went wrong, please contact Globagility Inc.", "Error when save", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Using
 

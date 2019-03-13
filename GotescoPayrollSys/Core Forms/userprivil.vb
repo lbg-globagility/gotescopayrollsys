@@ -421,6 +421,10 @@ Public Class userprivil
                 Where(Function(p) privilegeIDs.Any(Function(privID) p.RowID = privID)).
                 ToList()
 
+            Dim similarPrivileges = allPrivileges.
+                Where(Function(p) Not privilegeIDs.Any(Function(privID) p.RowID = privID)).
+                ToList()
+
             For Each dgvrow In gridRows
                 With dgvrow
                     Dim rowID = Convert.ToInt32(.Cells(Column9.Name).Value)
@@ -432,7 +436,7 @@ Public Class userprivil
                     privilege.Deleting = GetSingleYesOrNo(.Cells(Column13.Name).Value)
                     privilege.ReadOnly = GetSingleYesOrNo(.Cells(Column14.Name).Value)
 
-                    AlsoUpdateSimilarPrivilegesAcrossOrganizations(allPrivileges, privilege)
+                    AlsoUpdateSimilarPrivilegesAcrossOrganizations(similarPrivileges, privilege)
                 End With
 
             Next

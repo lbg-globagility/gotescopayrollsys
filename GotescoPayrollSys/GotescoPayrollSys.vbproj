@@ -1980,7 +1980,7 @@
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="GotescoPayrollSys_TemporaryKey.pfx" />
     <None Include="Core Forms\Dataset\DS1.xsc">

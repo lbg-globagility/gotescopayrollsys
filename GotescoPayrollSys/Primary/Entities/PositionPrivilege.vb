@@ -1,10 +1,11 @@
 ﻿Option Strict On
 
-Imports System.ComponentModel.DataAnnotations.Schema
 Imports System.ComponentModel.DataAnnotations
+Imports System.ComponentModel.DataAnnotations.Schema
 
 <Table("position_view")>
 Public Class PositionPrivilege
+
     <Key>
     <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property RowID As Integer

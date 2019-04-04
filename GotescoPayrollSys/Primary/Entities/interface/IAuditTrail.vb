@@ -1,5 +1,4 @@
-﻿
-Public Interface IAuditTrail
+﻿Public Interface IAuditTrail
 
     Property RowID As Integer
 

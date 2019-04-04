@@ -6,6 +6,7 @@ Public Class PayPeriod
 
     <Key>
     Public Property RowID As Integer
+
     Public Property OrganizationID As Integer?
     Public Property Created As DateTime
     Public Property CreatedBy As Integer?

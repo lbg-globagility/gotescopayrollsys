@@ -3,8 +3,10 @@ Imports System.ComponentModel.DataAnnotations.Schema
 
 <Table("newphilhealthimplement")>
 Public Class newphilhealthimplement
+
     <Key>
     Public Property RowID As Integer
+
     Public Property DeductionType As String
 
     Public Property Rate As Decimal

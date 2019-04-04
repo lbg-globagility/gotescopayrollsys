@@ -53,8 +53,10 @@ Public Class Employee
     Public Property SickLeaveAllowance As Decimal?
     Public Property MaternityLeaveAllowance As Decimal?
     Public Property OtherLeaveAllowance As Decimal?
+
     'Public Property Image As mediumblob?
     Public Property LeavePerPayPeriod As Decimal?
+
     Public Property SickLeavePerPayPeriod As Decimal?
     Public Property MaternityLeavePerPayPeriod As Decimal?
     Public Property OtherLeavePerPayPeriod As Decimal?

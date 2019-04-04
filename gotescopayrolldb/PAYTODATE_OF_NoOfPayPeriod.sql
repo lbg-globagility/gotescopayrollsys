@@ -37,17 +37,52 @@ SELECT RowID,`Month`,`Year` FROM payperiod WHERE EmpLoanEffectiveDateFrom BETWEE
 IF LoanDeductSched = 'Per pay period' THEN
 	SET LoanDeductSched = 'Per pay period';
 		
-	SELECT PayToDate FROM (SELECT RowID,PayToDate,(SELECT @i := @i + 1) `Rank` FROM payperiod WHERE RowID >= paypFrom_RowID AND TotalGrossSalary=payfreqID LIMIT EmpLoanNoOfPayPeriod) AS `DateRank` WHERE IF(EmpLoanNoOfPayPeriod > `DateRank`.`Rank`, `DateRank`.`Rank`=@i, `DateRank`.`Rank`=EmpLoanNoOfPayPeriod) INTO ReturnDate;
+#	SELECT PayToDate FROM (SELECT RowID,PayToDate,(SELECT @i := @i + 1) `Rank` FROM payperiod WHERE RowID >= paypFrom_RowID AND TotalGrossSalary=payfreqID LIMIT EmpLoanNoOfPayPeriod) AS `DateRank` WHERE IF(EmpLoanNoOfPayPeriod > `DateRank`.`Rank`, `DateRank`.`Rank`=@i, `DateRank`.`Rank`=EmpLoanNoOfPayPeriod) INTO ReturnDate;
+	
+	SELECT MAX(i.PayToDate) `Result`
+	FROM (SELECT pp.*
+			FROM payperiod pp
+			WHERE pp.OrganizationID = OrganizID
+			AND pp.TotalGrossSalary = payfreqID
+			AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
+			ORDER BY pp.`Year`, pp.OrdinalValue
+			LIMIT EmpLoanNoOfPayPeriod
+			) i
+	INTO ReturnDate;
 
 ELSEIF LoanDeductSched = 'End of the month' THEN
 	SET LoanDeductSched = 'End of the month';
 
-	SELECT PayToDate FROM (SELECT RowID,PayToDate,(SELECT @i := @i + 1) `Rank` FROM payperiod WHERE RowID >= paypFrom_RowID AND `Half`='0' AND TotalGrossSalary=payfreqID LIMIT EmpLoanNoOfPayPeriod) AS `DateRank` WHERE IF(EmpLoanNoOfPayPeriod > `DateRank`.`Rank`, `DateRank`.`Rank`=@i, `DateRank`.`Rank`=EmpLoanNoOfPayPeriod) INTO ReturnDate;
+#	SELECT PayToDate FROM (SELECT RowID,PayToDate,(SELECT @i := @i + 1) `Rank` FROM payperiod WHERE RowID >= paypFrom_RowID AND `Half`='0' AND TotalGrossSalary=payfreqID LIMIT EmpLoanNoOfPayPeriod) AS `DateRank` WHERE IF(EmpLoanNoOfPayPeriod > `DateRank`.`Rank`, `DateRank`.`Rank`=@i, `DateRank`.`Rank`=EmpLoanNoOfPayPeriod) INTO ReturnDate;
+
+	SELECT MAX(i.PayToDate) `Result`
+	FROM (SELECT pp.*
+			FROM payperiod pp
+			WHERE pp.OrganizationID = OrganizID
+			AND pp.TotalGrossSalary = payfreqID
+			AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
+			AND pp.Half = '0'
+			ORDER BY pp.`Year`, pp.OrdinalValue
+			LIMIT EmpLoanNoOfPayPeriod
+			) i
+	INTO ReturnDate;
 
 ELSEIF LoanDeductSched = 'First half' THEN
 	SET LoanDeductSched = 'First half';
 	
-	SELECT PayToDate FROM (SELECT RowID,PayToDate,(SELECT @i := @i + 1) `Rank` FROM payperiod WHERE RowID >= paypFrom_RowID AND `Half`='1' AND TotalGrossSalary=payfreqID LIMIT EmpLoanNoOfPayPeriod) AS `DateRank` WHERE IF(EmpLoanNoOfPayPeriod > `DateRank`.`Rank`, `DateRank`.`Rank`=@i, `DateRank`.`Rank`=EmpLoanNoOfPayPeriod) INTO ReturnDate;
+#	SELECT PayToDate FROM (SELECT RowID,PayToDate,(SELECT @i := @i + 1) `Rank` FROM payperiod WHERE RowID >= paypFrom_RowID AND `Half`='1' AND TotalGrossSalary=payfreqID LIMIT EmpLoanNoOfPayPeriod) AS `DateRank` WHERE IF(EmpLoanNoOfPayPeriod > `DateRank`.`Rank`, `DateRank`.`Rank`=@i, `DateRank`.`Rank`=EmpLoanNoOfPayPeriod) INTO ReturnDate;
+
+	SELECT MAX(i.PayToDate) `Result`
+	FROM (SELECT pp.*
+			FROM payperiod pp
+			WHERE pp.OrganizationID = OrganizID
+			AND pp.TotalGrossSalary = payfreqID
+			AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
+			AND pp.Half = '1'
+			ORDER BY pp.`Year`, pp.OrdinalValue
+			LIMIT EmpLoanNoOfPayPeriod
+			) i
+	INTO ReturnDate;
 
 END IF;
 

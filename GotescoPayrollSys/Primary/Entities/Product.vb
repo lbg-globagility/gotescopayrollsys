@@ -35,8 +35,10 @@ Namespace Global.AccuPay.Entity
 
         Public Overridable Property LastUpdBy As Integer?
 
-        Public Overridable Property Category As String
+        <Column("Category")>
+        Public Overridable Property CategoryName As String
 
+        <ForeignKey("Category")>
         Public Overridable Property CategoryID As Integer?
 
         <NotMapped>
@@ -50,7 +52,7 @@ Namespace Global.AccuPay.Entity
 
         Public Overridable Property Status As String
 
-        Public Overridable Property Fixed As Boolean
+        Public Overridable Property Fixed As String
 
         <NotMapped>
         Public Overridable Property UnitPrice As Decimal
@@ -156,6 +158,14 @@ Namespace Global.AccuPay.Entity
                 Return Status = "1"
             End Get
         End Property
+
+        Public Overridable ReadOnly Property IsFixed As Boolean
+            Get
+                Return Fixed = "1"
+            End Get
+        End Property
+
+        Public Overridable Property Category As Category
 
     End Class
 

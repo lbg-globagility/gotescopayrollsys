@@ -37,28 +37,34 @@ Public Class DatabaseContext
     ' Add a DbSet for each entity type that you want to include in your model. For more information
     ' on configuring and using a Code First model, see http:'go.microsoft.com/fwlink/?LinkId=390109.
     ' Public Overridable Property MyEntities() As DbSet(Of MyEntity)
-    Public Overridable Property NewPhilHealth() As DbSet(Of newphilhealthimplement)
+    Public Overridable Property NewPhilHealth As DbSet(Of newphilhealthimplement)
 
-    Public Overridable Property NewWithholdingTax() As DbSet(Of WithholdingTaxBracket)
+    Public Overridable Property AuditTrail As DbSet(Of AuditTrail)
 
-    Public Overridable Property AuditTrail() As DbSet(Of AuditTrail)
+    Public Overridable Property ProperDisplayAuditTrail As DbSet(Of ProperDisplayAuditTrail)
 
-    Public Overridable Property ProperDisplayAuditTrail() As DbSet(Of ProperDisplayAuditTrail)
+    Public Overridable Property TimeEntryLogsPerCutOff As DbSet(Of TimeEntryLogsPerCutOff)
 
-    Public Overridable Property TimeEntryLogsPerCutOff() As DbSet(Of TimeEntryLogsPerCutOff)
+    Public Overridable Property Employees As DbSet(Of Employee)
 
-    Public Overridable Property Employees() As DbSet(Of Employee)
+    Public Overridable Property EmployeeEntity As DbSet(Of EmployeeEntity)
 
-    Public Overridable Property EmployeeEntity() As DbSet(Of EmployeeEntity)
+    Public Overridable Property EmployeeTimeEntryDetails As DbSet(Of EmployeeTimeEntryDetails)
 
-    Public Overridable Property EmployeeTimeEntryDetails() As DbSet(Of EmployeeTimeEntryDetails)
+    Public Overridable Property PayPeriods As DbSet(Of PayPeriod)
 
-    Public Overridable Property PayPeriods() As DbSet(Of PayPeriod)
+    Public Overridable Property Categories As DbSet(Of Category)
 
-    Public Overridable Property Categories() As DbSet(Of Category)
+    Public Overridable Property Products As DbSet(Of Product)
 
-    Public Overridable Property Products() As DbSet(Of Product)
+    Public Overridable Property PositionPrivileges As DbSet(Of PositionPrivilege)
 
-    Public Overridable Property PositionPrivileges() As DbSet(Of PositionPrivilege)
+    Public Overridable Property Salaries As DbSet(Of Salary)
+
+    Public Overridable Property PhilHealthBrackets As DbSet(Of PhilHealth)
+
+    Public Overridable Property SociaSecurityBrackets As DbSet(Of SociaSecurityService)
+
+    Public Overridable Property WithHoldingTaxBrackets As DbSet(Of WithHoldingTax)
 
 End Class

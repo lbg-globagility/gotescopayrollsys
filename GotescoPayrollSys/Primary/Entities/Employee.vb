@@ -5,6 +5,7 @@ Imports System.ComponentModel.DataAnnotations.Schema
 Public Class Employee
 
     <Key>
+    <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property RowID As Integer
 
     Public Property CreatedBy As Integer?

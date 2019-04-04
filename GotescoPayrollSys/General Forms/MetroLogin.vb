@@ -88,6 +88,10 @@
             AssignDefaultCredentials()
         End If
 
+        Dim payrollResource As New PayrollResources(222, New Date(2019, 3, 1), New Date(2019, 3, 15))
+        Dim resourcesTask = payrollResource.Load()
+        resourcesTask.Wait()
+
     End Sub
 
     Public Sub AssignDefaultCredentials()

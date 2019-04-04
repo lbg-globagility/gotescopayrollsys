@@ -91,7 +91,7 @@
 
     Public Sub AssignDefaultCredentials()
         txtbxUserID.Text = "admin1"
-        txtbxPword.Text = "yellow1"
+        txtbxPword.Text = "butter1"
     End Sub
 
     Private Sub Login_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtbxPword.KeyPress,
@@ -100,12 +100,7 @@
 
         Dim e_asc = Asc(e.KeyChar)
 
-        If e_asc = 13 Then
-
-            btnlogin_Click(btnlogin, New EventArgs)
-
-        End If
-
+        If e_asc = 13 Then btnlogin_Click(btnlogin, New EventArgs)
     End Sub
 
     Private Const err_log_limit As SByte = 3

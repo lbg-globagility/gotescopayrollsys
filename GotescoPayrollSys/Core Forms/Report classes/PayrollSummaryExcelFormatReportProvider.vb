@@ -9,7 +9,7 @@ Imports log4net
 Public Class PayrollSummaryExcelFormatReportProvider
     Implements IReportProvider
 
-    Private Const oneValue As Integer = 1
+    Private Const ONEVALUE As Integer = 1
 
 #Region "Vairable declarations"
 
@@ -155,7 +155,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     Public Property GotescoReportName As String = String.Empty Implements IReportProvider.GotescoReportName
 
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
+
 #End Region
+
+#Region "Methods"
 
     Private Function ProcedureParameters() As Object()
 
@@ -264,38 +268,38 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         Dim dataColumns = dt.Columns.OfType(Of DataColumn).Where(Function(d) Not d.ColumnName = "RowID")
 
-                        Dim rowindex = oneValue
+                        Dim rowindex = ONEVALUE
                         wsheet.Row(rowindex).Style.Font.Bold = True
-                        wsheet.Cells(rowindex, 2).Value = report_header
+                        wsheet.Cells(rowindex, ONEVALUE).Value = report_header
 
-                        rowindex = 2
+                        rowindex += ONEVALUE
                         wsheet.Row(rowindex).Style.Font.Bold = True
-                        wsheet.Cells(rowindex, 2).Value = report_cutoff
+                        wsheet.Cells(rowindex, ONEVALUE).Value = report_cutoff
 
-                        rowindex = 3
+                        rowindex += ONEVALUE
 
-                        Dim dtcolindx = oneValue
+                        Dim dtcolindx = ONEVALUE
                         For Each dcol In dataColumns
 
                             wsheet.Cells(rowindex, dtcolindx).Value = dcol.ColumnName
-                            dtcolindx += oneValue
+                            dtcolindx += ONEVALUE
                             wsheet.Row(rowindex).Style.Font.Bold = True
                         Next
 
-                        rowindex += oneValue
+                        rowindex += ONEVALUE
                         Dim details_start_rowindex = rowindex
 
                         Dim emp_payroll =
                             dt.Select(String.Concat("DivisionName='", division_name, "'"))
 
                         For Each drow As DataRow In emp_payroll
-                            Dim dataColumnIndex = oneValue
+                            Dim dataColumnIndex = ONEVALUE
                             For Each dataColumn In dataColumns
                                 wsheet.Cells(rowindex, dataColumnIndex).Value =
                                     drow(dataColumn.ColumnName)
-                                dataColumnIndex += oneValue
+                                dataColumnIndex += ONEVALUE
                             Next
-                            rowindex += oneValue
+                            rowindex += ONEVALUE
                         Next
 
                         'wsheet.DeleteColumn(oneValue)
@@ -310,7 +314,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                 String.Format("SUM({0})",
                                               New ExcelAddress(details_start_rowindex,
                                                                3,
-                                                               (rowindex - oneValue),
+                                                               (rowindex - ONEVALUE),
                                                                3).Address) 'column_headers.Count
 
                         wsheet.Cells(sum_cell_range).Style.Font.Bold = True
@@ -319,8 +323,8 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         wsheet.PrinterSettings.PaperSize = ePaperSize.Legal
 
-                        wsheet.PrinterSettings.TopMargin = margin_size(oneValue)
-                        wsheet.PrinterSettings.BottomMargin = margin_size(oneValue)
+                        wsheet.PrinterSettings.TopMargin = margin_size(ONEVALUE)
+                        wsheet.PrinterSettings.BottomMargin = margin_size(ONEVALUE)
                         wsheet.PrinterSettings.LeftMargin = margin_size(0)
                         wsheet.PrinterSettings.RightMargin = margin_size(0)
 
@@ -345,262 +349,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     End Sub
 
-    Private Sub Runs()
+#End Region
 
-        Static last_cell_column As String = basic_alphabet.Last
-
-        Dim bool_result As Short = Convert.ToInt16(is_actual) 'Convert.ToInt16(SalaryActualDeclared)
-
-        Dim parameters() As Object = ProcedureParameters()
-
-        Dim param_item_count = parameters.Count
-
-        Dim sql_print_employee_profiles As New SQL("CALL PAYROLLSUMMARY2(?og_rowid, ?min_pp_rowid, ?max_pp_rowid, ?is_actual, ?salaray_distrib);",
-                                                   parameters)
-
-        Dim str_salary_distrib_type As String = CStr(parameters(param_item_count - oneValue))
-
-        Static one_value As Integer = oneValue
-
-        Try
-
-            Dim ds As New DataSet
-
-            'Dim dt As New DataTable
-
-            'dt = sql_print_employee_profiles.GetFoundRows.Tables(0)
-            ds = sql_print_employee_profiles.GetFoundRows
-
-            If sql_print_employee_profiles.HasError Then
-
-                Throw sql_print_employee_profiles.ErrorException
-            Else
-
-                Static report_name As String = "PayrollSummary"
-
-                Static temp_path As String = Path.GetTempPath()
-
-                Dim str_period As String =
-                    String.Concat("SELECT CONCAT_WS(',', pp.PayFromDate, ppd.PayToDate) `Result`",
-                                  " FROM payperiod pp",
-                                  " INNER JOIN payperiod ppd ON ppd.RowID = ", parameters(oneValue),
-                                  " WHERE pp.RowID = ", parameters(2))
-
-                Dim pp_sql As New SQL(str_period)
-
-                Dim cut_offs = Split(CStr(pp_sql.GetFoundRow), ",")
-
-                Dim short_dates() As String =
-                    New String() {CDate(cut_offs(0)).ToShortDateString,
-                                  CDate(cut_offs(oneValue)).ToShortDateString}
-
-                Dim temp_file As String =
-                    String.Concat(temp_path,
-                                  orgNam,
-                                  report_name, str_salary_distrib_type.Replace(" ", ""), "Report",
-                                  String.Concat(short_dates(0).Replace("/", "-"), "TO", short_dates(oneValue).Replace("/", "-")),
-                                  ".xlsx")
-
-                Dim date_range As String =
-                    String.Concat("for the period of ", short_dates(0), " to ", short_dates(oneValue))
-
-                Dim newFile = New FileInfo(temp_file)
-
-                If newFile.Exists Then
-                    newFile.Delete()
-                    newFile = New FileInfo(temp_file)
-                End If
-
-                'preferred_excel_font.Name = "Source Sans Pro Regular"
-                'preferred_excel_font.Name = preferred_font.Name
-
-                Using excl_pkg = New ExcelPackage(newFile)
-
-                    Dim ii = 0
-
-                    Dim tbl_withrows =
-                        ds.Tables.OfType(Of DataTable).Where(Function(dt) dt.Rows.Count > 0)
-
-                    For Each dtbl As DataTable In tbl_withrows
-
-                        Dim worksheet As ExcelWorksheet =
-                                excl_pkg.Workbook.Worksheets.Add(String.Concat(report_name, ii))
-
-                        worksheet.Cells.Style.Font.Size = font_size
-
-                        Dim cell1 = worksheet.Cells(oneValue, one_value)
-
-                        cell1.Value = orgNam.ToUpper
-                        cell1.Style.Font.Bold = True
-
-                        Dim cell2 = worksheet.Cells(2, one_value)
-
-                        cell2.Value = date_range
-
-                        Dim row_indx As Integer = 5
-
-                        Dim col_index As Integer = one_value
-
-                        For Each str_header As String In column_headers
-                            Dim cell_row5 = worksheet.Cells(row_indx, col_index)
-                            cell_row5.Value = str_header
-                            cell_row5.Style.Font.Bold = True
-
-                            col_index += one_value
-                        Next
-
-                        row_indx += one_value
-
-                        Dim details_start_rowindex = row_indx
-
-                        Dim details_last_rowindex = 0
-
-                        Dim last_cell_range As String = String.Empty
-
-                        For Each dtrow As DataRow In dtbl.Rows
-
-                            Dim cell3 = worksheet.Cells(3, one_value)
-
-                            Dim division_name = dtrow("DatCol1").ToString
-
-                            cell3.Value =
-                                String.Concat("Division: ", division_name)
-
-                            If division_name.Length > 0 Then
-
-                                worksheet.Name = division_name
-
-                            End If
-
-                            Dim row_array = dtrow.ItemArray
-
-                            Dim i = 0
-
-                            'For Each rowval In row_array
-
-                            'Next
-
-                            For Each cell_val As String In cell_mapped_text_value
-
-                                Dim excl_colrow As String =
-                                        String.Concat(basic_alphabet(i),
-                                                      row_indx)
-
-                                Dim _cells = worksheet.Cells(excl_colrow)
-
-                                _cells.Value = dtrow(cell_val)
-
-                                i += one_value
-
-                            Next
-
-                            '********************
-
-                            For Each cell_val As String In cell_mapped_decim_value
-
-                                Dim excl_colrow As String =
-                                        String.Concat(basic_alphabet(i),
-                                                      row_indx)
-
-                                last_cell_range = basic_alphabet(i)
-
-                                Dim _cells = worksheet.Cells(excl_colrow)
-
-                                _cells.Value = dtrow(cell_val)
-
-                                _cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right
-
-                                i += one_value
-
-                            Next
-
-                            details_last_rowindex = row_indx
-
-                            row_indx += one_value
-
-                        Next
-
-                        'last_cell_range = String.Concat(last_cell_range, (row_indx + 1))
-
-                        Dim sum_cell_range = String.Join(":",
-                                                             String.Concat("C", row_indx),
-                                                             String.Concat(last_cell_column, row_indx))
-                        ''FromRow, FromColumn, ToRow, ToColumn
-                        'worksheet.Cells(sum_cell_range).Formula = String.Format("SUBTOTAL(9,{0})") ', New ExcelAddress(2, 3, 4, 3).Address)
-
-                        worksheet.Cells(sum_cell_range).Formula =
-                                String.Format("SUM({0})",
-                                              New ExcelAddress(details_start_rowindex,
-                                                               3,
-                                                               details_last_rowindex,
-                                                               3).Address) 'column_headers.Count
-
-                        worksheet.Cells(sum_cell_range).Style.Font.Bold = True
-
-                        worksheet.PrinterSettings.Orientation = eOrientation.Landscape
-
-                        worksheet.PrinterSettings.PaperSize = ePaperSize.Legal
-
-                        worksheet.PrinterSettings.TopMargin = margin_size(oneValue)
-                        worksheet.PrinterSettings.BottomMargin = margin_size(oneValue)
-                        worksheet.PrinterSettings.LeftMargin = margin_size(0)
-                        worksheet.PrinterSettings.RightMargin = margin_size(0)
-
-                        worksheet.Cells.AutoFitColumns(2, 22.71)
-
-                        worksheet.Cells("A1").AutoFitColumns(4.9, 9.1)
-
-                        excl_pkg.Save()
-
-                        ii += oneValue
-
-                    Next
-
-                End Using
-
-                Process.Start(temp_file)
-
-            End If
-        Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Name))
-        End Try
-
-    End Sub
-
-    Private Function SalaryActualDeclared() As SalaryActualization
-
-        Dim time_logformat As SalaryActualization
-
-        MessageBoxManager.OK = "Declared"
-
-        MessageBoxManager.Cancel = "Actual"
-
-        MessageBoxManager.Register()
-
-        Dim custom_prompt =
-            MessageBox.Show("",
-                            "",
-                            MessageBoxButtons.OKCancel,
-                            MessageBoxIcon.None,
-                            MessageBoxDefaultButton.Button2)
-
-        If custom_prompt = Windows.Forms.DialogResult.OK Then
-            time_logformat = SalaryActualization.Declared
-        ElseIf custom_prompt = Windows.Forms.DialogResult.Cancel Then
-            time_logformat = SalaryActualization.Actual
-        End If
-
-        MessageBoxManager.Unregister()
-
-        Return time_logformat
-
-    End Function
-
-    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 End Class
-
-Public Enum SalaryActualization As Short
-    Declared = 0
-    Actual = 1
-
-End Enum

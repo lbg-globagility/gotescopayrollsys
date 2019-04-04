@@ -7737,17 +7737,18 @@ Public Class PayStub
 
             Dim payfrqncy As New AutoCompleteStringCollection
 
-            Dim sel_query = ""
+            'Dim sel_query = ""
 
-            Dim hasAnEmployee = EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE OrganizationID=" & org_rowid & " LIMIT 1);")
+            'Dim hasAnEmployee = EXECQUER("SELECT EXISTS(SELECT RowID FROM employee WHERE OrganizationID=" & org_rowid & " LIMIT 1);")
 
-            If hasAnEmployee = 1 Then
-                sel_query = "SELECT pp.PayFrequencyType FROM payfrequency pp INNER JOIN employee e ON e.PayFrequencyID=pp.RowID GROUP BY pp.RowID;"
-            Else
-                sel_query = "SELECT PayFrequencyType FROM payfrequency WHERE PayFrequencyType IN ('SEMI-MONTHLY','WEEKLY');"
-            End If
+            'If hasAnEmployee = 1 Then
+            '    sel_query = "SELECT pp.PayFrequencyType FROM payfrequency pp INNER JOIN employee e ON e.PayFrequencyID=pp.RowID GROUP BY pp.RowID;"
+            'Else
+            '    sel_query = "SELECT PayFrequencyType FROM payfrequency WHERE PayFrequencyType IN ('SEMI-MONTHLY','WEEKLY');"
+            'End If
 
-            enlistTheLists(sel_query, payfrqncy)
+            'enlistTheLists(sel_query, payfrqncy)
+            payfrqncy.Add("SEMI-MONTHLY")
 
             Dim first_sender As New ToolStripButton
 
@@ -7761,14 +7762,14 @@ Public Class PayStub
 
                     .AutoSize = False
                     .BackColor = Color.FromArgb(255, 255, 255)
-                    .ImageTransparentColor = System.Drawing.Color.Magenta
-                    .Margin = New System.Windows.Forms.Padding(0, 1, 0, 1)
+                    .ImageTransparentColor = Color.Magenta
+                    .Margin = New Padding(0, 1, 0, 1)
                     .Name = String.Concat("tsbtn" & strval)
-                    .Overflow = System.Windows.Forms.ToolStripItemOverflow.Never
-                    .Size = New System.Drawing.Size(110, 30)
+                    .Overflow = ToolStripItemOverflow.Never
+                    .Size = New Size(110, 30)
                     .Text = strval
-                    .TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-                    .TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+                    .TextAlign = ContentAlignment.MiddleLeft
+                    .TextImageRelation = TextImageRelation.ImageBeforeText
                     .ToolTipText = strval
 
                 End With

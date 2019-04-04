@@ -9,9 +9,10 @@
         'FINANCE1
         '9988
 
-        Console.WriteLine(DecrypedData("ÌÔÚÑÉººº¶"))
-        Console.WriteLine(DecrypedData("ÆÈÈÙÌ"))
-        Console.WriteLine(DecrypedData("¶·¸¹"))
+        'Console.WriteLine(DecrypedData("ÌÔÚÑÉººº¶"))
+        'Console.WriteLine(DecrypedData("ÆÈÈÙÌ"))
+        'Console.WriteLine(DecrypedData("¶·¸¹"))
+        Console.WriteLine(DecrypedData("çúùùê÷¶"))
 
         'A01274
         '1234
@@ -269,6 +270,50 @@
             PhotoImages.Image = ConvertByteToImage(org_emblem.Rows(0)("Image"))
 
         End If
+
+    End Sub
+
+    Private Sub cbxorganiz_DropDown(sender As Object, e As EventArgs) Handles cbxorganiz.DropDown
+
+        'TODO: this code has an error sometimes when there is no organization
+
+        Static cb_font As Font = cbxorganiz.Font
+
+        'Dim cb_width As Integer = cbxorganiz.DropDownWidth
+
+        Dim grp As Graphics = cbxorganiz.CreateGraphics()
+
+        Dim vertScrollBarWidth As Integer = If(cbxorganiz.Items.Count > cbxorganiz.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
+
+        Dim wiidth As Integer = 0
+
+        Dim data_source As New DataTable
+
+        data_source = cbxorganiz.DataSource
+
+        Dim i = 0
+
+        Dim drp_downwidhths As Integer()
+
+        ReDim drp_downwidhths(data_source.Rows.Count - 1)
+
+        For Each strRow As DataRow In data_source.Rows
+
+            wiidth = CInt(grp.MeasureString(CStr(strRow(1)), cb_font).Width) + vertScrollBarWidth
+
+            drp_downwidhths(i) = wiidth
+
+            'If cb_width < wiidth Then
+            '    wiidth = wiidth
+            'End If
+
+            i += 1
+
+        Next
+
+        Dim max_drp_downwidhth As Integer = drp_downwidhths.Max
+
+        cbxorganiz.DropDownWidth = max_drp_downwidhth 'wiidth, cb_width
 
     End Sub
 

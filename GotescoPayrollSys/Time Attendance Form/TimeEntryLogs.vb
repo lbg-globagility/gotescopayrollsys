@@ -115,7 +115,7 @@ Public Class TimeEntryLogs
 
     Private Sub lblYear_TextChanged(sender As Object, e As EventArgs) Handles lblYear.TextChanged
 
-        LoadPayPeriods()
+        LoadPayPeriodsAsync()
 
         ChangeYearLinkLableCaption()
 
@@ -623,26 +623,34 @@ Public Class TimeEntryLogs
 
 #Region "Functions & Methods"
 
-    Private Sub LoadPayPeriods()
+    Private Async Sub LoadPayPeriodsAsync()
 
         Try
             Using _mod = New DatabaseContext
 
-                Dim _payperiods =
-                    (From t In _mod.TimeEntryLogsPerCutOff
-                     Where t.YearValue = this_year And t.OrganizationId = organization_rowid
-                     Group By t.PayPeriodID
-                     Into tl = Group
-                     Let uniquepayperiod = tl.FirstOrDefault
-                     Select New With {.PayFromDate = uniquepayperiod.PayFromDate,
-                                      .PayToDate = uniquepayperiod.PayToDate}
-                     )
+                Dim _payperiods = Await _mod.TimeEntryLogsPerCutOff.
+                    Where(Function(t) t.OrganizationId = z_OrganizationID).
+                    Where(Function(t) t.YearValue = this_year).
+                    GroupBy(Function(t) t.PayPeriodID).
+                    Select(Function(t) New With {
+                    .PayFromDate = t.FirstOrDefault.PayFromDate,
+                    .PayToDate = t.FirstOrDefault.PayToDate}).
+                    ToListAsync()
+                '(From t In _mod.TimeEntryLogsPerCutOff
+                ' Where t.YearValue = this_year And t.OrganizationId = organization_rowid
+                ' Group By t.PayPeriodID
+                ' Into tl = Group
+                ' Let uniquepayperiod = tl.FirstOrDefault
+                ' Select New With {.PayFromDate = uniquepayperiod.PayFromDate,
+                '                  .PayToDate = uniquepayperiod.PayToDate}
+                ' )
 
-                DataGridViewX1.DataSource = _payperiods.ToList
+                DataGridViewX1.DataSource = _payperiods
 
             End Using
         Catch ex As Exception
             ErrorNotif(ex)
+
         End Try
 
     End Sub

@@ -71,7 +71,7 @@ Public Class MainForm
     End Sub
 
     Private Sub btnUserPrevilige_Click(sender As Object, e As EventArgs) Handles btnUserPrevilige.Click
-        ChangeForm(UserPrivilegeForm)
+        'ChangeForm(UserPrivilegeForm)
     End Sub
 
     Private Sub hbtnUsers_Click(sender As Object, e As EventArgs) Handles hbtnUsers.Click

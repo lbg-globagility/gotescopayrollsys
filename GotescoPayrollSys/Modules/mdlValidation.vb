@@ -17,53 +17,6 @@ Module mdlValidation
     Public Z_encryptdata As String
     Public Z_encryptdata2 As String
 
-    Public Sub ShowWaitForm(ByVal message As String)
-
-        MainForm.MainProgressBar.Minimum = 0
-        If Not message = Nothing Then
-            WaitForm.Label1.Text = message
-        End If
-
-        WaitForm.Width = WaitForm.Label1.Width + 20
-        With MainForm
-
-            For x As Integer = 0 To .StatusStrip1.Items.Count - 2
-                .StatusStrip1.Items(x).Visible = False
-            Next
-            .MainProgressBar.Width = .MainProgressBar.Width
-            .TopMost = False
-            .Enabled = False
-            WaitForm.TopLevel = False
-            .Panel1.Controls.Add(WaitForm)
-            WaitForm.Location = New Point((.Panel1.Width / 2) - (WaitForm.Width / 2), (.Panel1.Height / 2) - (WaitForm.Height / 2))
-            WaitForm.Show()
-            WaitForm.BringToFront()
-            .GroupTimer.Stop()
-            .Timer1.Stop()
-            .MainProgressBar.Value = 0
-            .MainProgressBar.Visible = True
-        End With
-    End Sub
-
-    Public Sub CloseWaitForm()
-        With MainForm
-            For x As Integer = 0 To .StatusStrip1.Items.Count - 2
-                .StatusStrip1.Items(x).Visible = True
-                If .StatusStrip1.Items(x).Name.ToUpper() = "TOOLSTRIPSTATUSLABEL5" Then
-                    .StatusStrip1.Items(x).Visible = False
-                End If
-            Next
-        End With
-
-        MainForm.MainProgressBar.Visible = False
-        WaitForm.IsAllowClose = True
-        WaitForm.Close()
-        MainForm.GroupTimer.Start()
-        MainForm.Timer1.Start()
-        MainForm.Enabled = True
-
-    End Sub
-
     Public Sub TextboxTestNumeric(ByVal textboxConts As TextBox, ByVal IntLen As Integer, ByVal DeciLen As Integer)
         If textboxConts.ReadOnly Then
             Exit Sub

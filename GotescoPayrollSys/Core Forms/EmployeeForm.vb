@@ -10298,7 +10298,7 @@ Public Class EmployeeForm
     Private Sub dgvPromotionList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvPromotionList.CellContentClick
         If e.ColumnIndex = c_basicpay.Index Then
             EmpSalaryForm.lbllinkbasicpay.Text = "yes"
-            MainForm.ChangeForm(EmpSalaryForm)
+            'MainForm.ChangeForm(EmpSalaryForm)
 
             'MessageBox.Show(dgvPromotionList.Item(e.ColumnIndex, e.RowIndex).Value.ToString)
         ElseIf e.ColumnIndex = c_empname2.Index Then

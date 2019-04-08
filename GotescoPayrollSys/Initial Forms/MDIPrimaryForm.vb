@@ -257,7 +257,7 @@ Public Class MDIPrimaryForm
 
                 Next
 
-                Await LogOutUser()
+                Await LogOutUserAsync()
 
                 If openform_count >= 5 Then
                     Thread.Sleep(1175)
@@ -304,7 +304,7 @@ Public Class MDIPrimaryForm
 
     End Sub
 
-    Private Shared Async Function LogOutUser() As Tasks.Task
+    Private Shared Async Function LogOutUserAsync() As Tasks.Task
         Using connection As New MySqlConnection(connectionString),
             command As New MySqlCommand("UPDATE `user` SET InSession='0', LastUpd=CURRENT_TIMESTAMP(), LastUpdBy=@userRowID WHERE RowID=@userRowID;", connection)
 

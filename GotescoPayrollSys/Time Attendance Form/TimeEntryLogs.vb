@@ -115,7 +115,7 @@ Public Class TimeEntryLogs
 
     Private Sub lblYear_TextChanged(sender As Object, e As EventArgs) Handles lblYear.TextChanged
 
-        LoadPayPeriods()
+        LoadPayPeriodsAsync()
 
         ChangeYearLinkLableCaption()
 
@@ -623,7 +623,7 @@ Public Class TimeEntryLogs
 
 #Region "Functions & Methods"
 
-    Private Sub LoadPayPeriods()
+    Private Async Sub LoadPayPeriodsAsync()
 
         Try
             Using _mod = New DatabaseContext
@@ -638,7 +638,7 @@ Public Class TimeEntryLogs
                                       .PayToDate = uniquepayperiod.PayToDate}
                      )
 
-                DataGridViewX1.DataSource = _payperiods.ToList
+                DataGridViewX1.DataSource = Await _payperiods.ToListAsync()
 
             End Using
         Catch ex As Exception

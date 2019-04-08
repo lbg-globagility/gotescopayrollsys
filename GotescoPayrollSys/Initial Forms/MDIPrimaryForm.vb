@@ -8,7 +8,7 @@ Imports Microsoft.Win32
 Imports log4net
 
 Public Class MDIPrimaryForm
-    Private Shared logger As ILog = LogManager.GetLogger("CommonLogger")
+    Private Shared logger As ILog = LogManager.GetLogger("LoggerWork")
 
     Dim DefaultFontStyle = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
 
@@ -306,7 +306,7 @@ Public Class MDIPrimaryForm
 
     Private Shared Async Function LogOutUser() As Tasks.Task
         Using connection As New MySqlConnection(connectionString),
-            command As New MySqlCommand("UPDATE `user` SET InSession='0', LastUpd=CURRENT_TIMESTAM(), LastUpdBy=@userRowID WHERE RowID=@userRowID;", connection)
+            command As New MySqlCommand("UPDATE `user` SET InSession='0', LastUpd=CURRENT_TIMESTAMP(), LastUpdBy=@userRowID WHERE RowID=@userRowID;", connection)
 
             command.Parameters.AddWithValue("@userRowID", user_row_id)
 

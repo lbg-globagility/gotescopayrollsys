@@ -13,7 +13,7 @@ DECLARE viewID INT(11);
 
 DECLARE OrgRowID INT(11);
 
-SET OrgRowID = 2;
+SET OrgRowID = (SELECT RowID FROM organization og WHERE og.NoPurpose=FALSE LIMIT 1);
 
 SELECT RowID FROM `view` WHERE ViewName='SSS Contribution Table' AND OrganizationID=OrgRowID LIMIT 1 INTO viewID;
 

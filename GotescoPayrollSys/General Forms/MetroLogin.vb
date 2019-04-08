@@ -1,5 +1,11 @@
-﻿Public Class MetroLogin
+﻿Imports System.Threading.Tasks
+Imports log4net
+Imports MySql.Data.MySqlClient
 
+Public Class MetroLogin
+    Private Shared logger As ILog = LogManager.GetLogger("LoggerWork")
+    Private err_count As Integer
+    Private freq As Integer
     'Public n_FileObserver As New FileObserver(sys_apppath)
 
     Protected Overrides Sub OnLoad(e As EventArgs)
@@ -100,16 +106,17 @@
 
         Dim e_asc = Asc(e.KeyChar)
 
-        If e_asc = 13 Then btnlogin_Click(btnlogin, New EventArgs)
+        If e_asc = 13 Then btnlogin_ClickAsync(btnlogin, New EventArgs)
     End Sub
 
     Private Const err_log_limit As SByte = 3
 
-    Private Sub btnlogin_Click(sender As Object, e As EventArgs) Handles btnlogin.Click
+    Private Async Sub btnlogin_ClickAsync(sender As Object, e As EventArgs) Handles btnlogin.Click
 
-        user_row_id = UserAuthentication()
+        'user_row_id = UserAuthentication()
+        user_row_id = Await LogInUserAsync()
 
-        Static err_count As SByte = 0
+        err_count = 0
 
         If user_row_id > 0 Then
 
@@ -151,7 +158,7 @@
 
             End If
 
-            Static freq As Integer = -1
+            freq = 0
 
             If cbxorganiz.SelectedIndex <> -1 Then
 
@@ -203,6 +210,29 @@
         End If
 
     End Sub
+
+    Private Async Function LogInUserAsync() As Task(Of Integer)
+        Dim i As Integer = 0
+        Using connection As New MySqlConnection(connectionString),
+                    command As New MySqlCommand("SELECT UserAuthentication(@uID, @wordPass);", connection)
+
+            command.Parameters.AddWithValue("@uID", New EncryptData(txtbxUserID.Text).ResultValue)
+            command.Parameters.AddWithValue("@wordPass", New EncryptData(txtbxPword.Text).ResultValue)
+
+            Await connection.OpenAsync()
+            Try
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                If reader.Read() Then i = Convert.ToInt32(reader(0))
+            Catch ex As Exception
+                logger.Error("LogInUserFailed", ex)
+                Dim errMsg = String.Concat("Oops! something went wrong, please", Environment.NewLine, "contact ", My.Resources.SystemDeveloper, " for assistance.")
+                MessageBox.Show(errMsg, "Log in failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
+
+        Return i
+    End Function
 
     Function UserAuthentication() As Integer
 

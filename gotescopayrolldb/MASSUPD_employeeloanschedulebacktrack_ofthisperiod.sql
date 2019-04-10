@@ -31,6 +31,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `MASSUPD_employeeloanschedulebacktra
 
 
 
+
+
+
+
 )
     DETERMINISTIC
 BEGIN

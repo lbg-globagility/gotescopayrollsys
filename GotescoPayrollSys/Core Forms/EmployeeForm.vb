@@ -5742,6 +5742,7 @@ Public Class EmployeeForm
 
         If IsDBNull(txtboxDeptMngr.Tag) = False Then
             emp_data.PositionID = txtboxDeptMngr.Tag
+            emp_data.PositionName = txtboxDeptMngr.Text
         End If
 
         If emp_data.ShowDialog = Windows.Forms.DialogResult.OK Then

@@ -39,9 +39,12 @@ IF is_deptmngr = TRUE THEN
 	,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=obf.EmployeeID AND `Type`=CONCAT('Official Business@',obf.RowID)),'') `FileExtens`
 	, DATE_FORMAT(obf.Created, '%c/%e/%Y %h:%i %p') `Created`
 	FROM employeeofficialbusiness obf
-	INNER JOIN employee e ON e.RowID=obf.EmployeeID AND e.OrganizationID=obf.OrganizationID AND e.DeptManager=dept_mngr_rowid
+	INNER JOIN employee e ON e.RowID=obf.EmployeeID AND e.OrganizationID=obf.OrganizationID #AND e.DeptManager=dept_mngr_rowid
+	INNER JOIN `position` pos ON pos.RowID=e.DeptManager
+	INNER JOIN `position` deptmngr ON deptmngr.PositionName=pos.PositionName
 	WHERE obf.OrganizationID=obf_OrganizationID
 	AND obf.EmployeeID=obf_EmployeeID
+	GROUP BY obj.RowID
 	ORDER BY obf.OffBusStartDate,obf.OffBusEndDate;
 
 ELSE

@@ -15,9 +15,9 @@ Public Class MetroLogin
         'FINANCE1
         '9988
 
-        Console.WriteLine(DecrypedData("ÌÔÚÑÉººº¶"))
-        Console.WriteLine(DecrypedData("ÆÈÈÙÌ"))
-        Console.WriteLine(DecrypedData("¶·¸¹"))
+        Dim manyString As String() = {DecrypedData("ØÆÑÊØ¥ØÚÕÕÔ×Ù¥¶"), DecrypedData("¼º¹º")}
+        Console.WriteLine("{0}", manyString)
+        Console.WriteLine("{1}", manyString)
 
         'A01274
         '1234

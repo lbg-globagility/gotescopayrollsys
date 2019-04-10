@@ -23,7 +23,6 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(
 
 
 
-
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -911,7 +910,7 @@ END IF;
 
 /**/
 
-	SET @leavePayment = 0; SET @lv_hrs = 0; SET @typeOfLeave = '';
+	SET @leavePayment = 0; SET @lv_hrs = 0;
 
 IF pr_DayBefore IS NULL THEN
 
@@ -962,18 +961,15 @@ IF pr_DayBefore IS NULL THEN
 				, 0
 				, 0
 				, 0
-				, @lv_hrs
-				, @typeOfLeave
 		) INTO anyINT;
 		
 
 	ELSEIF yester_TotDayPay = 0 THEN
 
 		SELECT elv.OfficialValidHours
-		, elv.LeaveType
 		FROM employeeleave elv
 		WHERE elv.RowID = leaveId
-		INTO @lv_hrs, @typeOfLeave;
+		INTO @lv_hrs;
 
 		SET @leavePayment = (IFNULL(@lv_hrs, 0) * IFNULL(rateperhour, 0));
 
@@ -1009,8 +1005,6 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, @leavePayment
-					, @lv_hrs
-					, @typeOfLeave
 			) INTO anyINT;
 			
 			
@@ -1046,8 +1040,6 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, @leavePayment
-					, @lv_hrs
-					, @typeOfLeave
 			) INTO anyINT;
 			
 		END IF;
@@ -1096,8 +1088,6 @@ IF pr_DayBefore IS NULL THEN
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
 						, 0
-						, @lv_hrs
-						, @typeOfLeave
 				) INTO anyINT;
 				
 			ELSE
@@ -1132,8 +1122,6 @@ IF pr_DayBefore IS NULL THEN
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
 						, 0
-						, @lv_hrs
-						, @typeOfLeave
 				) INTO anyINT;
 				
 				
@@ -1142,10 +1130,9 @@ IF pr_DayBefore IS NULL THEN
 		ELSE
 
 			SELECT elv.OfficialValidHours
-			, elv.LeaveType
 			FROM employeeleave elv
 			WHERE elv.RowID = leaveId
-			INTO @lv_hrs, @typeOfLeave;
+			INTO @lv_hrs;
 
 			SET @leavePayment = IFNULL(@lv_hrs, 0) * rateperhour;
 
@@ -1181,8 +1168,6 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, @leavePayment
-					, @lv_hrs
-					, @typeOfLeave
 			) INTO anyINT;
 			
 		END IF;
@@ -1222,7 +1207,6 @@ ELSE
 	INTO @availed_leave_hrs;
 	
 	SET @availed_leave_hrs = IFNULL(@availed_leave_hrs, 0);
-	SELECT elv.LeaveType FROM employeeleave elv WHERE elv.RowID=leaveId INTO @typeOfLeave;
 	
 	SELECT
 	IFNULL(et.TotalDayPay,0)
@@ -1288,8 +1272,6 @@ ELSE
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, (@availed_leave_hrs * rateperhour)
-					, @availed_leave_hrs
-					, @typeOfLeave
 			) INTO anyINT;
 			
 		ELSE
@@ -1334,8 +1316,6 @@ ELSE
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, (@availed_leave_hrs * rateperhour)
-					, @availed_leave_hrs
-					, @typeOfLeave
 			) INTO anyINT;
 			
 		END IF;
@@ -1375,8 +1355,6 @@ ELSE
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, (@availed_leave_hrs * rateperhour)
-					, @availed_leave_hrs
-					, @typeOfLeave
 			) INTO anyINT;
 				
 			
@@ -1423,8 +1401,6 @@ ELSE
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
 						, (@availed_leave_hrs * rateperhour)
-						, @availed_leave_hrs
-						, @typeOfLeave
 				) INTO anyINT;
 				
 			ELSE
@@ -1457,8 +1433,6 @@ ELSE
 						, 0
 						, 0
 						, 0
-						, @availed_leave_hrs
-						, @typeOfLeave
 				) INTO anyINT;
 				
 			END IF;

@@ -16,6 +16,8 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `LEAVE_gainingbalance`(
 
 
 
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -284,6 +286,8 @@ WHERE e.OrganizationID = OrganizID
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus = regularEmplymentStatus
 ;
+
+CALL UpdateLeaveBalance(OrganizID, yearPeriod);
 
 END//
 DELIMITER ;

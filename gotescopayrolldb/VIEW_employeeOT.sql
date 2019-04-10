@@ -6,7 +6,13 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeOT`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeOT`(IN `eot_EmployeeID` INT, IN `eot_OrganizationID` INT, IN `pagenumber` INT, IN `user_rowid` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeOT`(
+	IN `eot_EmployeeID` INT,
+	IN `eot_OrganizationID` INT,
+	IN `pagenumber` INT,
+	IN `user_rowid` INT
+
+)
     DETERMINISTIC
 BEGIN
 

@@ -107,16 +107,33 @@
     Private Sub LoadEmployees()
 
         Dim str_searching As Object = tsSearch.Text.Trim
+        Dim noSearch = tsSearch.Text.Trim().Length = 0
+
+        Dim query = $"SELECT e.RowID
+	    ,e.EmployeeID
+	    ,e.LastName
+	    ,e.FirstName
+	    ,e.MiddleName
+	    ,e.EmployeeType
+	    ,e.EmploymentStatus
+	    ,IFNULL(pos.PositionName, '') `PositionName`
+	    ,pf.PayFrequencyType `PayFrequencyType`
+	    ,CONCAT(CONCAT_WS(', ', e.LastName, e.FirstName, e.MiddleName)
+				    ,'?'
+				    ,CONCAT_WS(', ', CONCAT('ID# ', e.EmployeeID), pos.PositionName, CONCAT(e.EmployeeType, ' salary'))) `DisplayInfo`
+        FROM employee e
+        INNER JOIN `position` pos ON pos.RowID=e.PositionID
+        INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID
+        WHERE e.OrganizationID = ?orgID
+        {If(noSearch, String.Empty, "AND CONCAT(e.LastName, e.FirstName, e.EmployeeID) LIKE CONCAT('%', ?searchText, '%')")}
+        ORDER BY CONCAT(e.LastName, e.FirstName);"
 
         Dim param_vals() =
             New Object() {org_rowid,
-                          str_searching,
-                          0,
-                          Integer.MaxValue,
-                          False,
-                          DBNull.Value}
+                          str_searching}
+        If noSearch Then param_vals = New Object() {org_rowid}
 
-        Dim sql As New SQL(str_view_employee_paystub,
+        Dim sql As New SQL(query,
                            param_vals)
 
         Try

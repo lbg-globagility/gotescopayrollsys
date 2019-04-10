@@ -45,12 +45,14 @@
 
     Protected Overrides Sub OnLeave(e As EventArgs)
 
-        Dim isExistCount = _
-            EXECQUER("SELECT" & _
-                        " COUNT(RowID)" & _
-                        " FROM employee" & _
-                        " WHERE EmployeeID='" & MyBase.Text & "'" & _
-                        " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
+        Dim strQuery = $"SELECT COUNT(e.RowID) 
+FROM employee e 
+INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose=FALSE 
+WHERE e.EmployeeID='{Text}'
+AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
+
+        Dim isExistCount =
+            EXECQUER(strQuery)
 
         Static once As String = String.Empty
 

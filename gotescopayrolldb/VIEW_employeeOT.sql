@@ -19,13 +19,17 @@ BEGIN
 DECLARE is_deptmngr BOOL DEFAULT FALSE;
 
 DECLARE dept_mngr_rowid INT(11);
+DECLARE deptMngrJobName TEXT;
 
 SET is_deptmngr = IS_USER_DEPTMNGR(eot_OrganizationID, user_rowid);
 
 SELECT u.PositionID # u.DeptMngrID
+, pos.PositionName
 FROM `user` u
+INNER JOIN `position` pos ON pos.RowID=u.PositionID
 WHERE u.RowID=user_rowid
-INTO dept_mngr_rowid;
+INTO dept_mngr_rowid
+,deptMngrJobName;
 	
 IF is_deptmngr = TRUE THEN
 
@@ -47,8 +51,8 @@ IF is_deptmngr = TRUE THEN
 			, DATE_FORMAT(eot.Created, '%c/%e/%Y %h:%i %p') `Created`
 			FROM employeeovertime eot
 			INNER JOIN employee e ON e.RowID=eot.EmployeeID AND e.OrganizationID=eot.OrganizationID #AND e.DeptManager=dept_mngr_rowid
-			INNER JOIN `position` pos ON pos.RowID=e.DeptManager
-			INNER JOIN `position` deptmngr ON deptmngr.PositionName=pos.PositionName
+			INNER JOIN `position` pos ON pos.RowID=e.DeptManager AND pos.PositionName=deptMngrJobName
+#			INNER JOIN `position` deptmngr ON deptmngr.PositionName=pos.PositionName AND deptmngr.RowID=dept_mngr_rowid
 			WHERE eot.OrganizationID=eot_OrganizationID
 			AND eot.EmployeeID=eot_EmployeeID
 			GROUP BY eot.RowID

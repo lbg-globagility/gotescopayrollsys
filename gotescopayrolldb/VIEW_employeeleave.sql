@@ -50,8 +50,8 @@ IF is_deptmngr = TRUE THEN
 	   , is_deptmngr
 		FROM employeeleave elv
 		INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID #AND e.DeptManager=dept_mngr_rowid
-		INNER JOIN `position` pos ON pos.RowID=e.DeptManager
-		INNER JOIN `position` deptmngr ON deptmngr.PositionName=pos.PositionName
+		INNER JOIN `position` pos ON pos.RowID=e.DeptManager AND pos.PositionName=deptMngrName
+#		INNER JOIN `position` deptmngr ON deptmngr.PositionName=pos.PositionName
 		WHERE elv.OrganizationID=elv_OrganizationID
 		AND elv.EmployeeID=elv_EmployeeID
 		GROUP BY elv.RowID

@@ -6,7 +6,13 @@
 
 DROP PROCEDURE IF EXISTS `RESET_employeeleave_duplicate`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RESET_employeeleave_duplicate`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE, IN `Pay_FrequencyType` VARCHAR(50), IN `DivisionRowID` INT)
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RESET_employeeleave_duplicate`(
+	IN `OrganizID` INT,
+	IN `FromPayDate` DATE,
+	IN `ToPayDate` DATE,
+	IN `Pay_FrequencyType` VARCHAR(50),
+	IN `DivisionRowID` INT
+)
     DETERMINISTIC
 BEGIN
 
@@ -117,6 +123,21 @@ IF atleast_one = TRUE THEN
 	AND (elv.LeaveStartDate >= FromPayDate OR elv.LeaveEndDate >= FromPayDate)
 	AND (elv.LeaveStartDate <= ToPayDate OR elv.LeaveEndDate <= ToPayDate);
 
+	UPDATE employeetimeentry et
+	INNER JOIN employee e ON e.OrganizationID=OrganizID AND et.EmployeeID=e.RowID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+	INNER JOIN `position` pos ON pos.RowID=e.PositionID
+	INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID)
+	INNER JOIN employeeleave elv ON elv.EmployeeID=e.RowID AND et.`Date` BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
+	SET et.VacationLeaveHours=IF(elv.LeaveType='Vacation leave', elv.OfficialValidHours, et.VacationLeaveHours)
+	, et.SickLeaveHours=IF(elv.LeaveType='Sick leave', elv.OfficialValidHours, et.SickLeaveHours)
+	, et.AdditionalVLHours=IF(elv.LeaveType='Additional VL', elv.OfficialValidHours, et.AdditionalVLHours)
+	, et.OtherLeaveHours=IF(elv.LeaveType='Others', elv.OfficialValidHours, et.OtherLeaveHours)
+	, et.MaternityLeaveHours=IF(elv.LeaveType='Maternity/paternity leave', elv.OfficialValidHours, et.MaternityLeaveHours)
+	WHERE et.OrganizationID=OrganizID
+	AND et.EmployeeID=e.RowID
+	AND et.`Date` BETWEEN FromPayDate AND ToPayDate
+	;
+	
 END IF;
 
 END//

@@ -6,7 +6,14 @@
 
 DROP PROCEDURE IF EXISTS `INSUPD_monthlyemployeerestdaypayment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_monthlyemployeerestdaypayment`(IN `og_rowid` INT, IN `e_rowid` INT, IN `pp_rowid` INT, IN `user_rowid` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_monthlyemployeerestdaypayment`(
+	IN `og_rowid` INT,
+	IN `e_rowid` INT,
+	IN `pp_rowid` INT,
+	IN `user_rowid` INT
+
+
+)
     DETERMINISTIC
 BEGIN
 
@@ -25,6 +32,14 @@ AND ps.PayPeriodID = pp_rowid
 INTO ps_rowid
      ,date_from
      ,date_to;
+
+UPDATE paystubitem psi
+INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo='Restday pay'
+SET psi.PayAmount=0
+, psi.LastUpdBy=user_rowid
+WHERE psi.OrganizationID=og_rowid
+AND psi.PayStubID=ps_rowid
+;
 
 # SET SESSION low_priority_updates = ON;# LOW_PRIORITY 
 

@@ -15,8 +15,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `LeavePrediction`(
 	IN `whatYear` INT
 
 
+
+
 )
 BEGIN
+
+DECLARE isVacation, isSick, isAddtl, isOther, isMaternity BOOL DEFAULT FALSE;
+
+SET isVacation = typeOfLeave = 'Vacation leave';
+SET isSick = typeOfLeave = 'Sick leave';
+SET isAddtl = typeOfLeave = 'Additional VL';
+SET isOther = typeOfLeave = 'Others';
+SET isMaternity = typeOfLeave = 'Maternity/paternity leave';
 
 SET @orgID = organizationID;
 SET @thisYear = whatYear;
@@ -38,11 +48,11 @@ SELECT elv.OrganizationID, elv.Created, elv.LeaveStartTime, elv.LeaveType, elv.C
 , e.OtherLeaveAllowance, e.OtherLeaveBalance
 , e.AdditionalVLAllowance, e.AdditionalVLBalance
 , pp.RowID `PayperiodID`
-, et.VacationLeaveHours
-, et.SickLeaveHours
-, et.OtherLeaveHours
-, et.AdditionalVLHours
-, et.MaternityLeaveHours
+, GREATEST(IF(isVacation, elv.OfficialValidHours, 0), et.VacationLeaveHours) `VacationLeaveHours`
+, GREATEST(IF(isSick, elv.OfficialValidHours, 0), et.SickLeaveHours) `SickLeaveHours`
+, GREATEST(IF(isOther, elv.OfficialValidHours, 0), et.OtherLeaveHours) `OtherLeaveHours`
+, GREATEST(IF(isAddtl, elv.OfficialValidHours, 0), et.AdditionalVLHours) `AdditionalVLHours`
+, GREATEST(IF(isMaternity, elv.OfficialValidHours, 0), et.MaternityLeaveHours) `MaternityLeaveHours`
 , et.`Date`
 
 FROM employeeleave elv

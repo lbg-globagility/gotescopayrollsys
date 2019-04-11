@@ -55,6 +55,7 @@ Public Class txtEmployeeFullName
     'End Sub
 
     Protected Overrides Sub OnLeave(e As EventArgs)
+        If DesignMode Then Return
 
         Dim strQuery = $"SELECT COUNT(e.RowID) 
 FROM employee e 

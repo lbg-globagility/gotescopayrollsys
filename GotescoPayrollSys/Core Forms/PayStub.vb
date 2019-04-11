@@ -8345,10 +8345,6 @@ Public Class PayStub
 
     End Sub
 
-    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click 'DECLARED
-
-    End Sub
-
     Private Sub ObjectDisplayFieldCleanser(_container As TabPage, replace_value As String)
 
         Try
@@ -8363,6 +8359,10 @@ Public Class PayStub
             MsgBox(getErrExcptn(ex, "ObjectDisplayFieldCleanser"))
 
         End Try
+
+    End Sub
+
+    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click 'DECLARED
 
     End Sub
 

@@ -44,6 +44,7 @@
     End Sub
 
     Protected Overrides Sub OnLeave(e As EventArgs)
+        If DesignMode Then Return
 
         Dim strQuery = $"SELECT COUNT(e.RowID) 
 FROM employee e 
@@ -85,32 +86,32 @@ AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
 
             Else
 
-                organization_RowID = _
-                    EXECQUER("SELECT" & _
-                            " OrganizationID" & _
-                            " FROM employee" & _
-                            " WHERE EmployeeID='" & MyBase.Text & "'" & _
+                organization_RowID =
+                    EXECQUER("SELECT" &
+                            " OrganizationID" &
+                            " FROM employee" &
+                            " WHERE EmployeeID='" & MyBase.Text & "'" &
                             " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
 
             End If
 
-            Dim isExists = _
-                EXECQUER("SELECT EXISTS(SELECT" & _
-                            " RowID" & _
-                            " FROM employee" & _
-                            " WHERE EmployeeID='" & MyBase.Text & "'" & _
-                            " AND OrganizationID='" & organization_RowID & "'" & _
+            Dim isExists =
+                EXECQUER("SELECT EXISTS(SELECT" &
+                            " RowID" &
+                            " FROM employee" &
+                            " WHERE EmployeeID='" & MyBase.Text & "'" &
+                            " AND OrganizationID='" & organization_RowID & "'" &
                             " AND EmploymentStatus NOT IN ('Resigned','Terminated'));")
 
             n_Exists = CBool(isExists)
 
             If n_Exists Then
 
-                n_RowIDValue = EXECQUER("SELECT" & _
-                                        " RowID" & _
-                                        " FROM employee" & _
-                                        " WHERE EmployeeID='" & MyBase.Text & "'" & _
-                                        " AND OrganizationID='" & organization_RowID & "'" & _
+                n_RowIDValue = EXECQUER("SELECT" &
+                                        " RowID" &
+                                        " FROM employee" &
+                                        " WHERE EmployeeID='" & MyBase.Text & "'" &
+                                        " AND OrganizationID='" & organization_RowID & "'" &
                                         " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
 
             Else

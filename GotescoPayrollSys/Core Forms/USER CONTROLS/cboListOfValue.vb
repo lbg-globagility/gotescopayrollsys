@@ -32,6 +32,7 @@ Public Class cboListOfValue
 
             n_OrderByColumn = value
 
+            If DesignMode Then Return
             ListOfValColumns()
 
             Try
@@ -80,6 +81,7 @@ Public Class cboListOfValue
     End Sub
 
     Private Sub enlistingToCBoxItems()
+        If DesignMode Then Return
 
         Dim dr As MySqlDataReader
         Try
@@ -138,41 +140,41 @@ Public Class cboListOfValue
     End Sub
 
     Private Sub enlistingTheLists(ByVal AutoCompStrCollec As AutoCompleteStringCollection)
+        If DesignMode Then Return
 
-        If sys_db <> Nothing Then
+        If sys_db Is Nothing Then Return
 
+        Try
             Dim dr As MySqlDataReader
-            Try
-                If conn.State = ConnectionState.Open Then : conn.Close() : End If
-                conn.Open()
-                cmd = New MySqlCommand
-                With cmd
-                    .Connection = conn
-                    .CommandType = CommandType.Text
-                    .CommandText = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='" & sys_db & "' AND `TABLE_NAME`='listofval';"
-                End With
-                dr = cmd.ExecuteReader()
 
-                Items.Clear()
+            If conn.State = ConnectionState.Open Then : conn.Close() : End If
+            conn.Open()
+            cmd = New MySqlCommand
+            With cmd
+                .Connection = conn
+                .CommandType = CommandType.Text
+                .CommandText = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='" & sys_db & "' AND `TABLE_NAME`='listofval';"
+            End With
+            dr = cmd.ExecuteReader()
 
-                Do While dr.Read
-                    If dr.GetString(0) <> "" Then
-                        'Me.Items.Add(dr(0)) 'GetString
-                        AutoCompStrCollec.Add(dr.GetString(0))
-                    End If
-                Loop
-                dr.Close()
-                hasERR = 0
-            Catch ex As Exception
-                hasERR = 1
-                MsgBox(getErrExcptn(ex, "cboListOfValue"), MsgBoxStyle.Information, "UNEXPECTED MESSAGE")
-            Finally
-                conn.Close()
-                cmd.Dispose()
-                conn.Close()
-            End Try
+            Items.Clear()
 
-        End If
+            Do While dr.Read
+                If dr.GetString(0) <> "" Then
+                    'Me.Items.Add(dr(0)) 'GetString
+                    AutoCompStrCollec.Add(dr.GetString(0))
+                End If
+            Loop
+            dr.Close()
+            hasERR = 0
+        Catch ex As Exception
+            hasERR = 1
+            MsgBox(getErrExcptn(ex, "cboListOfValue"), MsgBoxStyle.Information, "UNEXPECTED MESSAGE")
+        Finally
+            conn.Close()
+            cmd.Dispose()
+            conn.Close()
+        End Try
 
     End Sub
 

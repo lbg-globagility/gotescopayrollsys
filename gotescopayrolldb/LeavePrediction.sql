@@ -17,6 +17,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `LeavePrediction`(
 
 
 
+
 )
 BEGIN
 
@@ -62,7 +63,6 @@ INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossS
 WHERE elv.OrganizationID=@orgID
 AND elv.`Status` = 'Approved'
 AND elv.LeaveType = typeOfLeave
-#		AND elv.EmployeeID=149
 ORDER BY CONCAT(e.LastName, e.FirstName, e.MiddleName), et.`Date`
 ;
 

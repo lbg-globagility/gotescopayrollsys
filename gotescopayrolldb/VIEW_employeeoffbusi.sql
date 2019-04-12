@@ -11,6 +11,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeoffbusi`(
 	IN `obf_OrganizationID` INT,
 	IN `user_rowid` INT
 
+
 )
     DETERMINISTIC
 BEGIN
@@ -49,7 +50,7 @@ IF is_deptmngr = TRUE THEN
 	INNER JOIN `position` deptmngr ON deptmngr.PositionName=pos.PositionName
 	WHERE obf.OrganizationID=obf_OrganizationID
 	AND obf.EmployeeID=obf_EmployeeID
-	GROUP BY obj.RowID
+	GROUP BY obf.RowID
 	ORDER BY obf.OffBusStartDate,obf.OffBusEndDate;
 
 ELSE

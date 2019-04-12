@@ -28,3 +28,5 @@ GotescoPayrollSys/bin/
 
 GotescoPayrollSys/obj/
 .vs/GotescoPayrollSys/
+gotescopayrolldb/INSERTINTO_onedayseconds.sql
+gotescopayrolldb/testview.sql

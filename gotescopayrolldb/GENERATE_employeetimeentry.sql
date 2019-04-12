@@ -23,6 +23,11 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(
 
 
 
+
+
+
+
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -445,7 +450,7 @@ IF isRestDay = '1' THEN
 	SET ete_NDiffHrs = 0.0;
 	
 	SET ete_NDiffOTHrs = 0.0;
-	
+
 	IF otstartingtime IS NOT NULL
 		AND otendingtime IS NOT NULL THEN
 		
@@ -622,7 +627,7 @@ ELSE
 		INTO ete_OvertimeHrs;
 			
 	ELSE
-	
+
 		SET @dutyStart=CONCAT_DATETIME(ete_Date, shifttimefrom);
 		SET @dutyGraceStart = ADDDATE(@dutyStart, INTERVAL e_LateGracePeriod MINUTE);
 		
@@ -653,8 +658,9 @@ ELSE
 		
 		SET ete_RegHrsWorkd = ete_RegHrsWorkd - IFNULL(@lessBreak, 0);
 		
-		SELECT CalculateOvertimeHours(shifttimefrom, shifttimefrom, ete_Date, ete_EmpRowID)
+		SELECT CalculateOvertimeHours(shifttimefrom, shifttimeto, ete_Date, ete_EmpRowID)
 		INTO ete_OvertimeHrs;
+		
 	END IF;
 
 	IF hasLeave THEN

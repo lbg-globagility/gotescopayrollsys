@@ -9,8 +9,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateLeaveBalance`(
 	IN `OrganizID` INT,
 	IN `yearPeriod` INT
+
+
+
+
 )
 BEGIN
+
+DECLARE eIndex INT(11) DEFAULT 0;
+
 
 CALL `LeavePrediction`(OrganizID, 'Additional VL', yearPeriod);
 UPDATE employee e
@@ -18,11 +25,81 @@ INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.AdditionalVLBalance = i.CurrentLeaveBalance
 ;
 
+SET @eIDCount = (SELECT COUNT(EmployeeID) FROM currentleavebalancepredict);
+SET eIndex = 1;
+
+WHILE eIndex < @eIDCount DO
+
+	SET @eID = (SELECT EmployeeID FROM currentleavebalancepredict LIMIT eIndex, 1);
+	SET @i = NULL;
+	SET @psiRowID = NULL;
+	
+	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
+	CREATE TEMPORARY TABLE paystubitemleavebalance
+	SELECT psi.RowID
+	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
+	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
+	, e.AdditionalVLAllowance
+	FROM payperiod pp
+	INNER JOIN paystub ps ON ps.PayPeriodID=pp.RowID AND ps.EmployeeID=@eID
+	INNER JOIN employee e ON e.RowID=ps.EmployeeID
+	INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID
+	INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo='Additional VL'
+	INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave type'
+	WHERE pp.`Year`=yearPeriod
+	AND pp.OrganizationID=OrganizID
+	ORDER BY pp.OrdinalValue
+	;
+	
+	UPDATE paystubitem psi
+	INNER JOIN paystubitemleavebalance i ON i.RowID=psi.RowID
+	SET psi.PayAmount = IFNULL(IFNULL(i.`ProperLeaveBalance`, i.`Result`), i.AdditionalVLAllowance)
+	;
+	
+	SET eIndex = eIndex + 1;
+END WHILE;
+
+
 CALL `LeavePrediction`(OrganizID, 'Maternity/paternity leave', yearPeriod);
 UPDATE employee e
 INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.MaternityLeaveBalance = i.CurrentLeaveBalance
 ;
+
+SET @eIDCount = (SELECT COUNT(EmployeeID) FROM currentleavebalancepredict);
+SET eIndex = 1;
+
+WHILE eIndex < @eIDCount DO
+
+	SET @eID = (SELECT EmployeeID FROM currentleavebalancepredict LIMIT eIndex, 1);
+	SET @i = NULL;
+	SET @psiRowID = NULL;
+	
+	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
+	CREATE TEMPORARY TABLE paystubitemleavebalance
+	SELECT psi.RowID
+	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
+	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
+	, e.MaternityLeaveAllowance
+	FROM payperiod pp
+	INNER JOIN paystub ps ON ps.PayPeriodID=pp.RowID AND ps.EmployeeID=@eID
+	INNER JOIN employee e ON e.RowID=ps.EmployeeID
+	INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID
+	INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo='Maternity/paternity leave'
+	INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave type'
+	WHERE pp.`Year`=yearPeriod
+	AND pp.OrganizationID=OrganizID
+	ORDER BY pp.OrdinalValue
+	;
+	
+	UPDATE paystubitem psi
+	INNER JOIN paystubitemleavebalance i ON i.RowID=psi.RowID
+	SET psi.PayAmount = IFNULL(IFNULL(i.`ProperLeaveBalance`, i.`Result`), i.MaternityLeaveAllowance)
+	;
+	
+	SET eIndex = eIndex + 1;
+END WHILE;
+
 
 CALL `LeavePrediction`(OrganizID, 'Others', yearPeriod);
 UPDATE employee e
@@ -30,17 +107,121 @@ INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.OtherLeaveBalance = i.CurrentLeaveBalance
 ;
 
+SET @eIDCount = (SELECT COUNT(EmployeeID) FROM currentleavebalancepredict);
+SET eIndex = 1;
+
+WHILE eIndex < @eIDCount DO
+
+	SET @eID = (SELECT EmployeeID FROM currentleavebalancepredict LIMIT eIndex, 1);
+	SET @i = NULL;
+	SET @psiRowID = NULL;
+	
+	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
+	CREATE TEMPORARY TABLE paystubitemleavebalance
+	SELECT psi.RowID
+	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
+	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
+	, e.OtherLeaveAllowance
+	FROM payperiod pp
+	INNER JOIN paystub ps ON ps.PayPeriodID=pp.RowID AND ps.EmployeeID=@eID
+	INNER JOIN employee e ON e.RowID=ps.EmployeeID
+	INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID
+	INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo='Others'
+	INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave type'
+	WHERE pp.`Year`=yearPeriod
+	AND pp.OrganizationID=OrganizID
+	ORDER BY pp.OrdinalValue
+	;
+	
+	UPDATE paystubitem psi
+	INNER JOIN paystubitemleavebalance i ON i.RowID=psi.RowID
+	SET psi.PayAmount = IFNULL(IFNULL(i.`ProperLeaveBalance`, i.`Result`), i.OtherLeaveAllowance)
+	;
+	
+	SET eIndex = eIndex + 1;
+END WHILE;
+
+
 CALL `LeavePrediction`(OrganizID, 'Sick leave', yearPeriod);
 UPDATE employee e
 INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.SickLeaveBalance = i.CurrentLeaveBalance
 ;
 
+SET @eIDCount = (SELECT COUNT(EmployeeID) FROM currentleavebalancepredict);
+SET eIndex = 1;
+
+WHILE eIndex < @eIDCount DO
+
+	SET @eID = (SELECT EmployeeID FROM currentleavebalancepredict LIMIT eIndex, 1);
+	SET @i = NULL;
+	SET @psiRowID = NULL;
+	
+	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
+	CREATE TEMPORARY TABLE paystubitemleavebalance
+	SELECT psi.RowID
+	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
+	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
+	, e.SickLeaveAllowance
+	FROM payperiod pp
+	INNER JOIN paystub ps ON ps.PayPeriodID=pp.RowID AND ps.EmployeeID=@eID
+	INNER JOIN employee e ON e.RowID=ps.EmployeeID
+	INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID
+	INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo='Sick leave'
+	INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave type'
+	WHERE pp.`Year`=yearPeriod
+	AND pp.OrganizationID=OrganizID
+	ORDER BY pp.OrdinalValue
+	;
+	
+	UPDATE paystubitem psi
+	INNER JOIN paystubitemleavebalance i ON i.RowID=psi.RowID
+	SET psi.PayAmount = IFNULL(IFNULL(i.`ProperLeaveBalance`, i.`Result`), i.SickLeaveAllowance)
+	;
+	
+	SET eIndex = eIndex + 1;
+END WHILE;
+
+
 CALL `LeavePrediction`(OrganizID, 'Vacation leave', yearPeriod);
 UPDATE employee e
 INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.LeaveBalance = i.CurrentLeaveBalance
 ;
+
+SET @eIDCount = (SELECT COUNT(EmployeeID) FROM currentleavebalancepredict);
+SET eIndex = 1;
+
+WHILE eIndex < @eIDCount DO
+
+	SET @eID = (SELECT EmployeeID FROM currentleavebalancepredict LIMIT eIndex, 1);
+	SET @i = NULL;
+	SET @psiRowID = NULL;
+	
+	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
+	CREATE TEMPORARY TABLE paystubitemleavebalance
+	SELECT psi.RowID
+	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
+	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
+	, e.LeaveAllowance
+	FROM payperiod pp
+	INNER JOIN paystub ps ON ps.PayPeriodID=pp.RowID AND ps.EmployeeID=@eID
+	INNER JOIN employee e ON e.RowID=ps.EmployeeID
+	INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID
+	INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo='Vacation leave'
+	INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave type'
+	WHERE pp.`Year`=yearPeriod
+	AND pp.OrganizationID=OrganizID
+	ORDER BY pp.OrdinalValue
+	;
+	
+	UPDATE paystubitem psi
+	INNER JOIN paystubitemleavebalance i ON i.RowID=psi.RowID
+	SET psi.PayAmount = IFNULL(IFNULL(i.`ProperLeaveBalance`, i.`Result`), i.LeaveAllowance)
+	;
+	
+	SET eIndex = eIndex + 1;
+END WHILE;
 
 END//
 DELIMITER ;

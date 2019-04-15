@@ -701,13 +701,9 @@ INSERT INTO paystubitem
 				INNER JOIN payperiod pp ON pp.RowID=NEW.PayPeriodID
 				WHERE eb.OrganizationID=NEW.OrganizationID
 				AND eb.AllowanceFrequency IS NOT NULL
-				AND ((eb.AllowanceFrequency = 'Semi-monthly' AND pp.TotalGrossSalary=1)
-				     OR (eb.AllowanceFrequency = 'Monthly' AND pp.Half=0 AND pp.TotalGrossSalary=1))
-				AND IFNULL(eb.BonusAmount, 0) != 0
-				AND (eb.EffectiveStartDate IS NOT NULL
-				     AND eb.EffectiveEndDate IS NOT NULL)
-				AND (eb.EffectiveStartDate >= NEW.PayFromDate OR eb.EffectiveEndDate >= NEW.PayFromDate)
-				AND (eb.EffectiveStartDate <= NEW.PayToDate OR eb.EffectiveEndDate <= NEW.PayToDate)
+				AND (eb.EffectiveStartDate IS NOT NULL AND eb.EffectiveEndDate IS NOT NULL)
+				AND (eb.EffectiveStartDate >= pp.PayFromDate OR eb.EffectiveEndDate >= pp.PayFromDate)
+				AND (eb.EffectiveStartDate <= pp.PayToDate OR eb.EffectiveEndDate <= pp.PayToDate)
 				
 			UNION
 				SELECT

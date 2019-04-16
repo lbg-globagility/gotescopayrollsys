@@ -1,3 +1,0 @@
-ALTER TABLE `employeeleave`
-	ADD COLUMN `OfficialValidHours` DECIMAL(11,2) NULL DEFAULT '0.00' AFTER `AdditionalOverrideLeaveBalance`,
-	ADD COLUMN `OfficialValidDays` DECIMAL(11,2) NULL DEFAULT '0.00' AFTER `OfficialValidHours`;

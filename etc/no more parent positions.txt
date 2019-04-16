@@ -1,5 +1,0 @@
-UPDATE `position` pos INNER JOIN employee e ON e.PositionID=pos.RowID SET pos.ParentPositionID=NULL, pos.LastUpdBy=IFNULL(pos.LastUpdBy, pos.CreatedBy)
-;
-
-UPDATE `position` pos SET pos.ParentPositionID=NULL, pos.LastUpdBy=IFNULL(pos.LastUpdBy, pos.CreatedBy) WHERE pos.ParentPositionID IS NOT NULL
-;

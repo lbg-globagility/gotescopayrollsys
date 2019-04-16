@@ -1,2 +1,0 @@
-
-# UPDATE employeeleave SET LastUpd=IFNULL(ADDDATE(LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP()), LastUpdBy=IFNULL(LastUpdBy, CreatedBy) WHERE OrganizationID=1;

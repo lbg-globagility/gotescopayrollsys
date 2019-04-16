@@ -31,6 +31,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `MASSUPD_employeeloanschedulebacktra
 
 
 
+
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -59,7 +63,7 @@ SET @has_loans = FALSE;
 
 
 
-	/**/ SELECT#els.*,
+	/*SELECT#els.*,
 		INSUP_employeeloanschedulebacktrack(els.OrganizationID, user_rowid, els.EmployeeID, els.PayStubRowId, els.RowID, els.PayPeriodID, 0, 0, '')
 	   #, CONCAT_WS(', ', els.OrganizationID, user_rowid, els.EmployeeID, els.PayStubID, els.RowID, els.PayPeriodID, 0, 0, '') `Result`
 		FROM employeeloanschedules els
@@ -68,10 +72,50 @@ SET @has_loans = FALSE;
 		AND els.PayPeriodID = pp_rowid
 		# AND els.PayStubID IS NOT NULL
 		AND els.PayStubRowId IS NOT NULL
-		;
+		;*/
 		
-
-
+CALL `LoanPrediction`(og_rowid)
+;
+INSERT INTO employeeloanschedulebacktrack
+(
+	OrganizationID
+	,CreatedBy
+	,EmployeeID
+	,PayStubID
+	,LoanschedID
+	,Balance
+	,CountPayPeriodLeft
+	,DeductedAmount
+	,`Status`
+	
+) SELECT og_rowid
+	, user_rowid
+	, ii.EmployeeID
+	, ii.`PaystubPrimaID`
+	, ii.RowID
+	, ii.LoanBalance
+	, ROUND((ii.LoanBalance / ii.TotalLoanAmount) * ii.NoOfPayPeriod, 2)
+	, ii.DeductionAmount
+	, ii.`Status`
+	FROM (SELECT i.*
+			, ps.RowID `PaystubPrimaID`
+			FROM loanpredict i
+			LEFT JOIN paystub ps ON ps.EmployeeID=i.EmployeeID AND ps.PayPeriodID=i.PayPeriodID AND ps.OrganizationID=i.OrganizationID
+			WHERE i.PayPeriodID = pp_rowid
+			AND i.OrganizationID = og_rowid
+			AND i.LoanTypeID = IFNULL(loantypeid, i.LoanTypeID)
+			) ii
+	WHERE ii.`PaystubPrimaID` IS NOT NULL
+ON DUPLICATE KEY UPDATE
+	LastUpd = CURRENT_TIMESTAMP()
+	,LastUpdBy = user_rowid
+	,PayStubID = ii.`PaystubPrimaID`
+	,LoanschedID = ii.RowID
+	,Balance = ii.LoanBalance
+	,CountPayPeriodLeft = ROUND((ii.LoanBalance / ii.TotalLoanAmount) * ii.NoOfPayPeriod, 2)
+	,DeductedAmount = ii.DeductionAmount
+	,`Status` = ii.`Status`
+;
 
 WHILE _index < _count DO
 		

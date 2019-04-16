@@ -6,20 +6,28 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeleave`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeleave`(IN `elv_EmployeeID` INT, IN `elv_OrganizationID` INT, IN `user_rowid` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeleave`(
+	IN `elv_EmployeeID` INT,
+	IN `elv_OrganizationID` INT,
+	IN `user_rowid` INT
+)
     DETERMINISTIC
 BEGIN
 
 DECLARE is_deptmngr BOOL DEFAULT FALSE;
 
 DECLARE dept_mngr_rowid INT(11);
+DECLARE deptMngrName TEXT;
 
 SET is_deptmngr = IS_USER_DEPTMNGR(elv_OrganizationID, user_rowid);
 
 SELECT u.PositionID # u.DeptMngrID
+, pos.PositionName
 FROM `user` u
+INNER JOIN `position` pos ON pos.RowID=u.PositionID
 WHERE u.RowID=user_rowid
-INTO dept_mngr_rowid;
+INTO dept_mngr_rowid
+,deptMngrName;
 
 IF is_deptmngr = TRUE THEN
 
@@ -41,9 +49,12 @@ IF is_deptmngr = TRUE THEN
 	   , DATE_FORMAT(elv.Created, '%c/%e/%Y %h:%i %p') `Created`
 	   , is_deptmngr
 		FROM employeeleave elv
-		INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.DeptManager=dept_mngr_rowid
+		INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID #AND e.DeptManager=dept_mngr_rowid
+		INNER JOIN `position` pos ON pos.RowID=e.DeptManager AND pos.PositionName=deptMngrName
+#		INNER JOIN `position` deptmngr ON deptmngr.PositionName=pos.PositionName
 		WHERE elv.OrganizationID=elv_OrganizationID
 		AND elv.EmployeeID=elv_EmployeeID
+		GROUP BY elv.RowID
 ;
 
 ELSE

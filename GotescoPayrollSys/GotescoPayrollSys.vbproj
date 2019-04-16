@@ -511,12 +511,6 @@
     <Compile Include="HRIS Forms\EmployeeLoanHistoryForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HRIS Forms\EmployeePromotionForm.Designer.vb">
-      <DependentUpon>EmployeePromotionForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="HRIS Forms\EmployeePromotionForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="HRIS Forms\EmpSalaryForm.Designer.vb">
       <DependentUpon>EmpSalaryForm.vb</DependentUpon>
     </Compile>
@@ -533,12 +527,6 @@
       <DependentUpon>LoanScheduleForm.vb</DependentUpon>
     </Compile>
     <Compile Include="HRIS Forms\LoanScheduleForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="General Forms\MainForm.Designer.vb">
-      <DependentUpon>MainForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="General Forms\MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Initial Forms\FormReports.designer.vb">
@@ -1344,12 +1332,6 @@
       <DependentUpon>rptRF-1.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="General Forms\UserPrivilegeForm.Designer.vb">
-      <DependentUpon>UserPrivilegeForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="General Forms\UserPrivilegeForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="General Forms\UsersForm.Designer.vb">
       <DependentUpon>UsersForm.vb</DependentUpon>
     </Compile>
@@ -1357,12 +1339,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Settings.vb" />
-    <Compile Include="Time Attendance Form\AttendanceTimeEntryForm.Designer.vb">
-      <DependentUpon>AttendanceTimeEntryForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Time Attendance Form\AttendanceTimeEntryForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Time Attendance Form\EmployeeShiftControls.designer.vb">
       <DependentUpon>EmployeeShiftControls.vb</DependentUpon>
     </Compile>
@@ -1546,9 +1522,6 @@
     <EmbeddedResource Include="HRIS Forms\EmployeeLoanHistoryForm.resx">
       <DependentUpon>EmployeeLoanHistoryForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HRIS Forms\EmployeePromotionForm.resx">
-      <DependentUpon>EmployeePromotionForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="HRIS Forms\EmpSalaryForm.resx">
       <DependentUpon>EmpSalaryForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1557,9 +1530,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="HRIS Forms\LoanScheduleForm.resx">
       <DependentUpon>LoanScheduleForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="General Forms\MainForm.resx">
-      <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Initial Forms\FormReports.resx">
       <DependentUpon>FormReports.vb</DependentUpon>
@@ -1956,14 +1926,8 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptRF-1.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="General Forms\UserPrivilegeForm.resx">
-      <DependentUpon>UserPrivilegeForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="General Forms\UsersForm.resx">
       <DependentUpon>UsersForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Time Attendance Form\AttendanceTimeEntryForm.resx">
-      <DependentUpon>AttendanceTimeEntryForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Time Attendance Form\EmployeeShiftControls.resx">
       <DependentUpon>EmployeeShiftControls.vb</DependentUpon>

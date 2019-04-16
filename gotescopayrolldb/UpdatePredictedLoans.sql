@@ -4,25 +4,27 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-DROP PROCEDURE IF EXISTS `VIEW_paystubitemundeclared`;
+DROP PROCEDURE IF EXISTS `UpdatePredictedLoans`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_paystubitemundeclared`(
-	IN `paystitm_PayStubID` INT
-)
-    DETERMINISTIC
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdatePredictedLoans`()
 BEGIN
 
-SELECT
-paystitm.RowID `paystitmID`
-, paystitm.PayStubID
-, paystitm.ProductID
-, SUBSTRING_INDEX(p.PartNo,'.',-1) `Item`
-, paystitm.PayAmount
-FROM paystubitem paystitm
-INNER JOIN product p ON p.RowID=paystitm.ProductID AND p.ActiveData=TRUE
-WHERE paystitm.PayStubID = paystitm_PayStubID
-AND paystitm.Undeclared = TRUE
-;
+DECLARE i, orgCount INT(11) DEFAULT 0;
+DECLARE orgID INT(11) DEFAULT 0;
+
+SELECT COUNT(RowID) FROM organization INTO orgCount;
+
+WHILE i < orgCount DO
+	SELECT og.RowID
+	FROM organization og
+	ORDER BY og.RowID
+	LIMIT i, 1
+	INTO orgID;
+	
+#	SELECT CONC
+	
+	SET i = i + 1;
+END WHILE;
 
 END//
 DELIMITER ;

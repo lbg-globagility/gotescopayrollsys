@@ -2962,17 +2962,6 @@ Public Class PayStub
 
     End Sub
 
-    Private Sub PrintAllPaySlip(sender As Object, e As EventArgs) Handles DeclaredToolStripMenuItem1.Click,
-                                                                            ActualToolStripMenuItem1.Click
-
-        'Dim IsActualFlag = Convert.ToInt16(DirectCast(sender, ToolStripMenuItem).Tag)
-
-        'Dim n_PrintAllPaySlipOfficialFormat As _
-        '    New PrintAllPaySlipOfficialFormat(ValNoComma(paypRowID),
-        '                                      IsActualFlag)
-
-    End Sub
-
     Private Sub PrintAllPaySlip_Click(sender As Object, e As EventArgs) Handles _
         DeclaredToolStripMenuItem1.Click,
         ActualToolStripMenuItem1.Click
@@ -8357,10 +8346,6 @@ Public Class PayStub
 
     End Sub
 
-    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click 'DECLARED
-
-    End Sub
-
     Private Sub ObjectDisplayFieldCleanser(_container As TabPage, replace_value As String)
 
         Try
@@ -8375,6 +8360,10 @@ Public Class PayStub
             MsgBox(getErrExcptn(ex, "ObjectDisplayFieldCleanser"))
 
         End Try
+
+    End Sub
+
+    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click 'DECLARED
 
     End Sub
 

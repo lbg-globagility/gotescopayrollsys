@@ -5,8 +5,10 @@ Imports Indigo.CollapsibleGroupBox
 Imports Indigo
 Imports System.Threading
 Imports Microsoft.Win32
+Imports log4net
 
 Public Class MDIPrimaryForm
+    Private Shared logger As ILog = LogManager.GetLogger("LoggerWork")
 
     Dim DefaultFontStyle = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
 
@@ -153,7 +155,7 @@ Public Class MDIPrimaryForm
 
     Dim ClosingForm As Form = Nothing 'New
 
-    Private Sub MDIPrimaryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Async Sub MDIPrimaryForm_FormClosingAsync(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'Dim prompt = MsgBox("Do you want to log out ?", MsgBoxStyle.YesNo, "Confirmation")
 
         LockTime()
@@ -255,12 +257,7 @@ Public Class MDIPrimaryForm
 
                 Next
 
-                Dim n_ExecuteQuery As _
-                    New ExecuteQuery("UPDATE user" &
-                                     " SET InSession='0'" &
-                                     ",LastUpd=CURRENT_TIMESTAMP()" &
-                                     ",LastUpdBy='" & user_row_id & "'" &
-                                     " WHERE RowID='" & user_row_id & "';")
+                Await LogOutUserAsync()
 
                 If openform_count >= 5 Then
                     Thread.Sleep(1175)
@@ -306,6 +303,23 @@ Public Class MDIPrimaryForm
         End If
 
     End Sub
+
+    Private Shared Async Function LogOutUserAsync() As Tasks.Task
+        Using connection As New MySqlConnection(connectionString),
+            command As New MySqlCommand("UPDATE `user` SET InSession='0', LastUpd=CURRENT_TIMESTAMP(), LastUpdBy=@userRowID WHERE RowID=@userRowID;", connection)
+
+            command.Parameters.AddWithValue("@userRowID", user_row_id)
+
+            Await connection.OpenAsync()
+            Try
+                Dim i = Await command.ExecuteNonQueryAsync()
+            Catch ex As Exception
+                logger.Error("LogOutUserFailed", ex)
+                Dim errMsg = String.Concat("Oops! something went wrong, please", Environment.NewLine, "contact ", My.Resources.SystemDeveloper, " for assistance.")
+                MessageBox.Show(errMsg, "Log out failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
+    End Function
 
     Private Sub CenterMe()
         'Dim g As Graphics = Me.CreateGraphics()

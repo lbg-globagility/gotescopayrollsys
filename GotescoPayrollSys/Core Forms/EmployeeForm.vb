@@ -3,11 +3,9 @@
 'Imports Emgu.CV.OCR
 'Imports Emgu.CV.
 'Imports Tesseract.Interop
-Imports System.Text.RegularExpressions
-Imports MySql.Data.MySqlClient
 Imports System.IO
-Imports System.Threading
 Imports System.Threading.Tasks
+Imports MySql.Data.MySqlClient
 
 Public Class EmployeeForm
 
@@ -5742,6 +5740,7 @@ Public Class EmployeeForm
 
         If IsDBNull(txtboxDeptMngr.Tag) = False Then
             emp_data.PositionID = txtboxDeptMngr.Tag
+            emp_data.PositionName = txtboxDeptMngr.Text
         End If
 
         If emp_data.ShowDialog = Windows.Forms.DialogResult.OK Then
@@ -10298,7 +10297,7 @@ Public Class EmployeeForm
     Private Sub dgvPromotionList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvPromotionList.CellContentClick
         If e.ColumnIndex = c_basicpay.Index Then
             EmpSalaryForm.lbllinkbasicpay.Text = "yes"
-            MainForm.ChangeForm(EmpSalaryForm)
+            'MainForm.ChangeForm(EmpSalaryForm)
 
             'MessageBox.Show(dgvPromotionList.Item(e.ColumnIndex, e.RowIndex).Value.ToString)
         ElseIf e.ColumnIndex = c_empname2.Index Then

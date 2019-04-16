@@ -38,6 +38,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystub_proc`(
 
 
 
+
+
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -54,7 +59,7 @@ DECLARE SumPayStubAdjustments DECIMAL(15,4) DEFAULT 0;
 DECLARE ps_TotalUndeclaredSalary DECIMAL(20,6) DEFAULT 0.0;
 DECLARE ps_rowIDs VARCHAR(2000);
 
-SELECT RowID FROM paystub WHERE EmployeeID=pstub_EmployeeID AND OrganizationID=pstub_OrganizationID AND PayFromDate=pstub_PayFromDate AND PayToDate=pstub_PayToDate INTO ps_rowIDs;
+SELECT RowID FROM paystub WHERE EmployeeID=pstub_EmployeeID AND OrganizationID=pstub_OrganizationID AND PayFromDate=pstub_PayFromDate AND PayToDate=pstub_PayToDate LIMIT 1 INTO ps_rowIDs;
 DELETE FROM paystubactual WHERE RowID != ps_rowIDs AND EmployeeID=pstub_EmployeeID AND OrganizationID=pstub_OrganizationID AND PayFromDate=pstub_PayFromDate AND PayToDate=pstub_PayToDate;
 
 SELECT RowID FROM paystub WHERE PayPeriodID=pstub_PayPeriodID AND EmployeeID=pstub_EmployeeID AND OrganizationID=pstub_OrganizationID AND PayFromDate=pstub_PayFromDate AND PayToDate=pstub_PayToDate LIMIT 1 INTO existingrowrecord;

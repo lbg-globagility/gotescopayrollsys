@@ -39,16 +39,16 @@
                       ",'' `e_midname`",
                       ",'' `e_type`",
                       ",'' `e_status`",
-                      ",pstn.RowID",
+                      ",MIN(pstn.RowID) `RowID`",
                       ",pstn.PositionName",
                       ",'' `e_payfreqtype`",
-                      ",'' `e_dispinfo`",
+                      ",CONCAT('', ?og_rowid) `e_dispinfo`",
                       " FROM employee e",
                       " INNER JOIN `position` pos ON pos.RowID=e.PositionID",
                       " INNER JOIN `position` pstn ON pstn.PositionName=pos.PositionName AND pstn.OrganizationID=e.OrganizationID",
                       " INNER JOIN `user` u ON u.DeptMngrID=e.RowID",
-                      " WHERE e.OrganizationID=?og_rowid",
                       " GROUP BY pstn.RowID;")
+    '" WHERE e.OrganizationID=?og_rowid",
 
     Private char_enter_key = ChrW(13)
 
@@ -75,17 +75,18 @@
 
         tsSearch_KeyPress(tsSearch, New KeyPressEventArgs(char_enter_key))
 
+        Dim columnPositionName = e_posname.Name
+
         If has_pre_selected_emp Then
 
             Dim dgv_rows =
-                dgvEmployee.Rows.Cast(Of DataGridViewRow).Where(Function(dgv) dgv.Cells("e_posrowid").Value = pre_selected_emprowid)
+                dgvEmployee.Rows.Cast(Of DataGridViewRow).Where(Function(dgv) dgv.Cells(columnPositionName).Value = PositionName)
 
             dgvEmployee.ClearSelection()
 
             For Each dgv In dgv_rows
 
-                'dgvEmployee.Item("e_id", dgv.Index).Selected = True
-                dgvEmployee.CurrentCell = dgv.Cells("e_posname")
+                dgvEmployee.CurrentCell = dgv.Cells(columnPositionName)
 
             Next
 

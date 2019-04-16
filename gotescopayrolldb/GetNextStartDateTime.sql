@@ -19,20 +19,26 @@ BEGIN
 
 DECLARE breakStartDateTime DATETIME DEFAULT NULL;
 DECLARE oneMinute INT(11) DEFAULT 1;
-
-/*SELECT ADDDATE(shiftStartDateTime, INTERVAL i.MinuteInterval MINUTE) `Result`
-FROM tenhour i
-WHERE TIME(ADDDATE(shiftStartDateTime, INTERVAL i.MinuteInterval MINUTE)) = breakStartTime
-LIMIT 1
-INTO breakStartDateTime
-;*/
+DECLARE isNotEqual BOOL DEFAULT TRUE;
+DECLARE runThroughHere BOOL DEFAULT FALSE;
 
 SET @startingDateTime = shiftStartDateTime;
 
-WHILE TIME(@startingDateTime) < breakStartTime DO
+/**/ WHILE TIME(@startingDateTime) < breakStartTime DO
 	SET @startingDateTime = ADDDATE(shiftStartDateTime, INTERVAL oneMinute MINUTE);
 	SET oneMinute = oneMinute + 1;
+	SET runThroughHere = TRUE;
 END WHILE;
+
+IF NOT runThroughHere THEN
+	SET @startingDateTime = TIMESTAMP(DATE(ADDDATE(shiftStartDateTime, INTERVAL 1 DAY)));
+	SET shiftStartDateTime = @startingDateTime;
+
+	WHILE TIME(@startingDateTime) < breakStartTime DO
+		SET @startingDateTime = ADDDATE(shiftStartDateTime, INTERVAL oneMinute MINUTE);
+		SET oneMinute = oneMinute + 1;
+	END WHILE;
+END IF;
 
 SET breakStartDateTime = @startingDateTime;
 

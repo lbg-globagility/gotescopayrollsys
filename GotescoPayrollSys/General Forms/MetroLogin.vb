@@ -1,5 +1,11 @@
-﻿Public Class MetroLogin
+﻿Imports System.Threading.Tasks
+Imports log4net
+Imports MySql.Data.MySqlClient
 
+Public Class MetroLogin
+    Private Shared logger As ILog = LogManager.GetLogger("LoggerWork")
+    Private err_count As Integer
+    Private freq As Integer
     'Public n_FileObserver As New FileObserver(sys_apppath)
 
     Protected Overrides Sub OnLoad(e As EventArgs)
@@ -9,10 +15,9 @@
         'FINANCE1
         '9988
 
-        'Console.WriteLine(DecrypedData("ÌÔÚÑÉººº¶"))
-        'Console.WriteLine(DecrypedData("ÆÈÈÙÌ"))
-        'Console.WriteLine(DecrypedData("¶·¸¹"))
-        Console.WriteLine(DecrypedData("çúùùê÷¶"))
+        Dim manyString As String() = {DecrypedData("ØÆÑÊØ¥ØÚÕÕÔ×Ù¥¶"), DecrypedData("¼º¹º")}
+        Console.WriteLine("{0}", manyString)
+        Console.WriteLine("{1}", manyString)
 
         'A01274
         '1234
@@ -88,10 +93,6 @@
             AssignDefaultCredentials()
         End If
 
-        Dim payrollResource As New PayrollResources(222, New Date(2019, 3, 1), New Date(2019, 3, 15))
-        Dim resourcesTask = payrollResource.Load()
-        resourcesTask.Wait()
-
     End Sub
 
     Public Sub AssignDefaultCredentials()
@@ -105,21 +106,17 @@
 
         Dim e_asc = Asc(e.KeyChar)
 
-        If e_asc = 13 Then
-
-            btnlogin_Click(btnlogin, New EventArgs)
-
-        End If
-
+        If e_asc = 13 Then btnlogin_ClickAsync(btnlogin, New EventArgs)
     End Sub
 
     Private Const err_log_limit As SByte = 3
 
-    Private Sub btnlogin_Click(sender As Object, e As EventArgs) Handles btnlogin.Click
+    Private Async Sub btnlogin_ClickAsync(sender As Object, e As EventArgs) Handles btnlogin.Click
 
-        user_row_id = UserAuthentication()
+        'user_row_id = UserAuthentication()
+        user_row_id = Await LogInUserAsync()
 
-        Static err_count As SByte = 0
+        err_count = 0
 
         If user_row_id > 0 Then
 
@@ -161,7 +158,7 @@
 
             End If
 
-            Static freq As Integer = -1
+            freq = 0
 
             If cbxorganiz.SelectedIndex <> -1 Then
 
@@ -213,6 +210,29 @@
         End If
 
     End Sub
+
+    Private Async Function LogInUserAsync() As Task(Of Integer)
+        Dim i As Integer = 0
+        Using connection As New MySqlConnection(connectionString),
+                    command As New MySqlCommand("SELECT UserAuthentication(@uID, @wordPass);", connection)
+
+            command.Parameters.AddWithValue("@uID", New EncryptData(txtbxUserID.Text).ResultValue)
+            command.Parameters.AddWithValue("@wordPass", New EncryptData(txtbxPword.Text).ResultValue)
+
+            Await connection.OpenAsync()
+            Try
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                If reader.Read() Then i = Convert.ToInt32(reader(0))
+            Catch ex As Exception
+                logger.Error("LogInUserFailed", ex)
+                Dim errMsg = String.Concat("Oops! something went wrong, please", Environment.NewLine, "contact ", My.Resources.SystemDeveloper, " for assistance.")
+                MessageBox.Show(errMsg, "Log in failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
+
+        Return i
+    End Function
 
     Function UserAuthentication() As Integer
 
@@ -274,50 +294,6 @@
             PhotoImages.Image = ConvertByteToImage(org_emblem.Rows(0)("Image"))
 
         End If
-
-    End Sub
-
-    Private Sub cbxorganiz_DropDown(sender As Object, e As EventArgs) Handles cbxorganiz.DropDown
-
-        'TODO: this code has an error sometimes when there is no organization
-
-        Static cb_font As Font = cbxorganiz.Font
-
-        'Dim cb_width As Integer = cbxorganiz.DropDownWidth
-
-        Dim grp As Graphics = cbxorganiz.CreateGraphics()
-
-        Dim vertScrollBarWidth As Integer = If(cbxorganiz.Items.Count > cbxorganiz.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
-
-        Dim wiidth As Integer = 0
-
-        Dim data_source As New DataTable
-
-        data_source = cbxorganiz.DataSource
-
-        Dim i = 0
-
-        Dim drp_downwidhths As Integer()
-
-        ReDim drp_downwidhths(data_source.Rows.Count - 1)
-
-        For Each strRow As DataRow In data_source.Rows
-
-            wiidth = CInt(grp.MeasureString(CStr(strRow(1)), cb_font).Width) + vertScrollBarWidth
-
-            drp_downwidhths(i) = wiidth
-
-            'If cb_width < wiidth Then
-            '    wiidth = wiidth
-            'End If
-
-            i += 1
-
-        Next
-
-        Dim max_drp_downwidhth As Integer = drp_downwidhths.Max
-
-        cbxorganiz.DropDownWidth = max_drp_downwidhth 'wiidth, cb_width
 
     End Sub
 
@@ -457,6 +433,46 @@
     End Sub
 
     Private Sub txtbxUserID_Click(sender As Object, e As EventArgs) Handles txtbxUserID.Click
+
+    End Sub
+
+    Private Sub cbxorganiz_DropDown(sender As Object, e As EventArgs) Handles cbxorganiz.DropDown
+
+        'TODO: this code has an error sometimes when there is no organization
+
+        Static cb_font As Font = cbxorganiz.Font
+
+        'Dim cb_width As Integer = cbxorganiz.DropDownWidth
+
+        Dim grp As Graphics = cbxorganiz.CreateGraphics()
+
+        Dim vertScrollBarWidth As Integer = If(cbxorganiz.Items.Count > cbxorganiz.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
+
+        Dim wiidth As Integer = 0
+
+        Dim data_source As New DataTable
+
+        data_source = cbxorganiz.DataSource
+
+        Dim i = 0
+
+        Dim drp_downwidhths As Integer()
+
+        ReDim drp_downwidhths(data_source.Rows.Count - 1)
+
+        For Each strRow As DataRow In data_source.Rows
+
+            wiidth = CInt(grp.MeasureString(CStr(strRow(1)), cb_font).Width) + vertScrollBarWidth
+
+            drp_downwidhths(i) = wiidth
+
+            i += 1
+
+        Next
+
+        Dim max_drp_downwidhth As Integer = drp_downwidhths.Max
+
+        cbxorganiz.DropDownWidth = max_drp_downwidhth 'wiidth, cb_width
 
     End Sub
 

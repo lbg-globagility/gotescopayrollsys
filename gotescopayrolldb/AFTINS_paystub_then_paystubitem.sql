@@ -5,7 +5,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TRIGGER IF EXISTS `AFTINS_paystub_then_paystubitem`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `AFTINS_paystub_then_paystubitem` AFTER INSERT ON `paystub` FOR EACH ROW BEGIN
 
@@ -69,7 +69,7 @@ DECLARE default_min_hrswork INT(11) DEFAULT 8;
 
 DECLARE firstPayDateFrom, firstPayDateTo DATE;
 
-SELECT RowID FROM product WHERE OrganizationID=NEW.OrganizationID AND LCASE(PartNo)='ecola' AND `Category`='Allowance type' INTO ecola_rowid;
+SELECT RowID FROM product WHERE OrganizationID=NEW.OrganizationID AND LCASE(PartNo)='ecola' AND `Category`='Allowance type' LIMIT 1 INTO ecola_rowid;
 
 SELECT TRIM(SUBSTRING_INDEX(TRIM(SUBSTRING_INDEX(ii.COLUMN_COMMENT,',',2)),',',-1)) FROM information_schema.`COLUMNS` ii WHERE ii.TABLE_SCHEMA='gotescopayrolldatabaseoct3' AND ii.COLUMN_NAME='Status' AND ii.TABLE_NAME='employeeloanschedule' INTO loan_inprogress_status;
 
@@ -97,24 +97,24 @@ ELSE
 END IF;
 	
 
-SELECT RowID FROM product WHERE PartNo='.PAGIBIG' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='.PAGIBIG' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, NEW.TotalEmpHDMF) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='.PhilHealth' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='.PhilHealth' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, NEW.TotalEmpPhilhealth) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='.SSS' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='.SSS' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, NEW.TotalEmpSSS) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='Absent' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Absent' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT SUM(Absent) FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO anyamount;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='Tardiness' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Tardiness' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT SUM(HoursLateAmount) FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO anyamount;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='Undertime' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Undertime' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT SUM(UndertimeHoursAmount) FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO anyamount;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 
@@ -122,7 +122,7 @@ SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy
 
 
 
-SELECT RowID FROM product WHERE PartNo='Holiday pay' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Holiday pay' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 
 
 SELECT SUM(ete.HolidayPayAmount)
@@ -140,15 +140,15 @@ WHERE ete.EmployeeID=NEW.EmployeeID AND ete.OrganizationID=NEW.OrganizationID AN
 
 INSERT INTO paystubitem(RowID,OrganizationID,Created,CreatedBy,PayStubID,ProductID,PayAmount,Undeclared) VALUES (NULL,NEW.OrganizationID,CURRENT_TIMESTAMP(),NEW.LastUpdBy,NEW.RowID,product_rowid,anyamount,1) ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP(),LastUpdBy=NEW.LastUpdBy,PayAmount=anyamount;
 
-SELECT RowID FROM product WHERE PartNo='Night differential' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Night differential' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT SUM(NightDiffHoursAmount) FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO anyamount;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='Night differential OT' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Night differential OT' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT SUM(NightDiffOTHoursAmount) FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO anyamount;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='Overtime' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Overtime' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT SUM(OvertimeHoursAmount) FROM employeetimeentry WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO anyamount;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 
@@ -161,16 +161,16 @@ SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy
 
 
 
-SELECT RowID FROM product WHERE PartNo='Gross Income' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Gross Income' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, NEW.TotalGrossSalary) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='Net Income' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Net Income' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, NEW.TotalNetSalary) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='Taxable Income' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Taxable Income' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, NEW.TotalTaxableSalary) INTO anyint;
 
-SELECT RowID FROM product WHERE PartNo='Withholding Tax' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+SELECT RowID FROM product WHERE PartNo='Withholding Tax' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, NEW.TotalEmpWithholdingTax) INTO anyint;
 
 
@@ -701,13 +701,9 @@ INSERT INTO paystubitem
 				INNER JOIN payperiod pp ON pp.RowID=NEW.PayPeriodID
 				WHERE eb.OrganizationID=NEW.OrganizationID
 				AND eb.AllowanceFrequency IS NOT NULL
-				AND ((eb.AllowanceFrequency = 'Semi-monthly' AND pp.TotalGrossSalary=1)
-				     OR (eb.AllowanceFrequency = 'Monthly' AND pp.Half=0 AND pp.TotalGrossSalary=1))
-				AND IFNULL(eb.BonusAmount, 0) != 0
-				AND (eb.EffectiveStartDate IS NOT NULL
-				     AND eb.EffectiveEndDate IS NOT NULL)
-				AND (eb.EffectiveStartDate >= NEW.PayFromDate OR eb.EffectiveEndDate >= NEW.PayFromDate)
-				AND (eb.EffectiveStartDate <= NEW.PayToDate OR eb.EffectiveEndDate <= NEW.PayToDate)
+				AND (eb.EffectiveStartDate IS NOT NULL AND eb.EffectiveEndDate IS NOT NULL)
+				AND (eb.EffectiveStartDate >= pp.PayFromDate OR eb.EffectiveEndDate >= pp.PayFromDate)
+				AND (eb.EffectiveStartDate <= pp.PayToDate OR eb.EffectiveEndDate <= pp.PayToDate)
 				
 			UNION
 				SELECT
@@ -737,7 +733,7 @@ UPDATE
 
 SELECT GET_employeeundeclaredsalarypercent(NEW.EmployeeID,NEW.OrganizationID,NEW.PayFromDate,NEW.PayToDate) INTO actualrate;
 
-SELECT e.StartDate,e.EmployeeType,pf.PayFrequencyType FROM employee e INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID INTO e_startdate,e_type,pftype;
+SELECT e.StartDate,e.EmployeeType,pf.PayFrequencyType FROM employee e INNER JOIN payfrequency pf ON pf.RowID=e.PayFrequencyID WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID LIMIT 1 INTO e_startdate,e_type,pftype;
 
 SELECT (e_startdate BETWEEN NEW.PayFromDate AND NEW.PayToDate) INTO IsFirstTimeSalary;
 
@@ -940,7 +936,7 @@ IF isOneYearService = TRUE THEN
 	
 	
 	
-	SELECT RowID FROM product WHERE PartNo='Maternity/paternity leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Maternity/paternity leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 	
 	
 	
@@ -954,7 +950,7 @@ IF isOneYearService = TRUE THEN
 			SELECT 0 `MaternityLeaveHours`) i
 	INTO anyint;
 	
-	SELECT RowID FROM product WHERE PartNo='Others' AND OrganizationID=NEW.OrganizationID AND `Category`='Leave Type' INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Others' AND OrganizationID=NEW.OrganizationID AND `Category`='Leave Type' LIMIT 1 INTO product_rowid;
 	
 	
 	
@@ -969,7 +965,7 @@ IF isOneYearService = TRUE THEN
 			SELECT 0 `OtherLeaveHours`) i
 	INTO anyint;
 	
-	SELECT RowID FROM product WHERE PartNo='Sick leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Sick leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 	
 	
 	
@@ -984,7 +980,7 @@ IF isOneYearService = TRUE THEN
 			SELECT 0 `SickLeaveHours`) i
 	INTO anyint;
 	
-	SELECT RowID FROM product WHERE PartNo='Vacation leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Vacation leave' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 	
 	
 	
@@ -999,7 +995,7 @@ IF isOneYearService = TRUE THEN
 			SELECT 0 `VacationLeaveHours`) i
 	INTO anyint;
 
-	SELECT RowID FROM product WHERE PartNo='Additional VL' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Additional VL' AND `Category`='Leave Type' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 	
 	
 	
@@ -1018,23 +1014,23 @@ ELSE
 
 	SET anyamount = 0;
 	
-	SELECT RowID FROM product WHERE PartNo='Maternity/paternity leave' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Maternity/paternity leave' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 	
 	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 	
-	SELECT RowID FROM product WHERE PartNo='Others' AND OrganizationID=NEW.OrganizationID AND `Category`='Leave Type' INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Others' AND OrganizationID=NEW.OrganizationID AND `Category`='Leave Type' LIMIT 1 INTO product_rowid;
 	
 	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 	
-	SELECT RowID FROM product WHERE PartNo='Sick leave' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Sick leave' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 	
 	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 	
-	SELECT RowID FROM product WHERE PartNo='Vacation leave' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Vacation leave' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 	
 	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 
-	SELECT RowID FROM product WHERE PartNo='Additional VL' AND OrganizationID=NEW.OrganizationID INTO product_rowid;
+	SELECT RowID FROM product WHERE PartNo='Additional VL' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO product_rowid;
 	
 	SELECT INSUPD_paystubitem(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, NEW.RowID, product_rowid, anyamount) INTO anyint;
 	

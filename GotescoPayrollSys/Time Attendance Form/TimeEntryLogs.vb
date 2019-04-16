@@ -628,29 +628,21 @@ Public Class TimeEntryLogs
         Try
             Using _mod = New DatabaseContext
 
-                Dim _payperiods = Await _mod.TimeEntryLogsPerCutOff.
-                    Where(Function(t) t.OrganizationId = z_OrganizationID).
-                    Where(Function(t) t.YearValue = this_year).
-                    GroupBy(Function(t) t.PayPeriodID).
-                    Select(Function(t) New With {
-                    .PayFromDate = t.FirstOrDefault.PayFromDate,
-                    .PayToDate = t.FirstOrDefault.PayToDate}).
-                    ToListAsync()
-                '(From t In _mod.TimeEntryLogsPerCutOff
-                ' Where t.YearValue = this_year And t.OrganizationId = organization_rowid
-                ' Group By t.PayPeriodID
-                ' Into tl = Group
-                ' Let uniquepayperiod = tl.FirstOrDefault
-                ' Select New With {.PayFromDate = uniquepayperiod.PayFromDate,
-                '                  .PayToDate = uniquepayperiod.PayToDate}
-                ' )
+                Dim _payperiods =
+                    (From t In _mod.TimeEntryLogsPerCutOff
+                     Where t.YearValue = this_year And t.OrganizationId = organization_rowid
+                     Group By t.PayPeriodID
+                     Into tl = Group
+                     Let uniquepayperiod = tl.FirstOrDefault
+                     Select New With {.PayFromDate = uniquepayperiod.PayFromDate,
+                                      .PayToDate = uniquepayperiod.PayToDate}
+                     )
 
-                DataGridViewX1.DataSource = _payperiods
+                DataGridViewX1.DataSource = Await _payperiods.ToListAsync()
 
             End Using
         Catch ex As Exception
             ErrorNotif(ex)
-
         End Try
 
     End Sub

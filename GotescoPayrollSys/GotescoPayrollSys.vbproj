@@ -414,12 +414,14 @@
     <Compile Include="Primary\Entities\interface\IAuditTrail.vb" />
     <Compile Include="Primary\Entities\DatabaseContext.vb" />
     <Compile Include="Primary\Entities\interface\ILoanSchedule.vb" />
+    <Compile Include="Primary\Entities\interface\ISalary.vb" />
     <Compile Include="Primary\Entities\LoanSchedule.vb" />
     <Compile Include="Primary\Entities\LoanScheduleWithPayPeriod.vb" />
     <Compile Include="Primary\Entities\newphilhealthimplement.vb" />
     <Compile Include="Primary\Entities\Organization.vb" />
     <Compile Include="Primary\Entities\PayPeriod.vb" />
     <Compile Include="Primary\Entities\PhilHealth.vb" />
+    <Compile Include="Primary\Entities\SalariesWithSSS.vb" />
     <Compile Include="Primary\Entities\SociaSecurityService.vb" />
     <Compile Include="Primary\Entities\Position.vb" />
     <Compile Include="Primary\Entities\PositionPrivilege.vb" />

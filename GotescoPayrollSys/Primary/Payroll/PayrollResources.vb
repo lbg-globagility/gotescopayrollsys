@@ -74,7 +74,8 @@ Public Class PayrollResources
                     LoadEmployeesAync(),
                     LoadLoanSchedulesWithPayPeriodAsync(),
                     LoadSalariesAsync(),
-                    LoadProductsAsync()
+                    LoadProductsAsync(),
+                    LoadSalariesWithSSSAsync()
                     })
     End Function
 
@@ -160,6 +161,67 @@ Public Class PayrollResources
         Catch ex As Exception
             Throw New ResourceLoadingException("Salaries", ex)
         End Try
+    End Function
+
+    Public Async Function LoadSalariesWithSSSAsync() As Task
+
+        Dim sql = <![CDATA[CALL `SalariesWithSSSContrib`(@organizationID);
+SELECT i.* FROM salarieswithsssamount i WHERE i.PayPeriodID=@payPeriodID;]]>.Value
+
+        Using connection As New MySqlConnection(connectionString),
+            command As New MySqlCommand(sql, connection)
+
+            With command.Parameters
+                .AddWithValue("@organizationID", 18) 'z_OrganizationID
+                .AddWithValue("@payPeriodID", _payPeriodID)
+            End With
+
+            Await connection.OpenAsync()
+            Try
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                Dim list As New List(Of SalariesWithSSS)
+                While Await reader.ReadAsync()
+                    list.Add(CreateSalaryWithSSS(reader))
+                End While
+
+            Catch ex As Exception
+                Throw New ResourceLoadingException("SalariesWithSSS", ex)
+            End Try
+        End Using
+    End Function
+
+    Private Shared Function CreateSalaryWithSSS(reader As Common.DbDataReader) As SalariesWithSSS
+        Return New SalariesWithSSS With {
+            .RowID = reader.GetValue(Of Integer)("RowID"),
+            .EmployeeID = reader.GetValue(Of Integer)("EmployeeID"),
+            .Created = reader.GetValue(Of Date)("Created"),
+            .CreatedBy = reader.GetValue(Of Integer)("CreatedBy"),
+            .LastUpd = reader.GetValue(Of Date?)("LastUpd"),
+            .LastUpdBy = reader.GetValue(Of Integer?)("LastUpdBy"),
+            .OrganizationID = reader.GetValue(Of Integer?)("OrganizationID"),
+            .FilingStatusID = reader.GetValue(Of Integer?)("FilingStatusID"),
+            .PaySocialSecurityID = reader.GetValue(Of Integer?)("PaySocialSecurityID"),
+            .PayPhilhealthID = reader.GetValue(Of Integer?)("PayPhilhealthID"),
+            .PhilHealthDeduction = reader.GetValue(Of Decimal?)("PhilHealthDeduction"),
+            .HDMFAmount = reader.GetValue(Of Decimal?)("HDMFAmount"),
+            .TrueSalary = reader.GetValue(Of Decimal?)("TrueSalary"),
+            .BasicPay = reader.GetValue(Of Decimal?)("BasicPay"),
+            .SalaryAmount = reader.GetValue(Of Decimal?)("Salary"),
+            .UndeclaredSalary = reader.GetValue(Of Decimal?)("UndeclaredSalary"),
+            .BasicDailyPay = reader.GetValue(Of Decimal?)("BasicDailyPay"),
+            .BasicHourlyPay = reader.GetValue(Of Decimal?)("BasicHourlyPay"),
+            .NoofDependents = reader.GetValue(Of Integer?)("NoofDependents"),
+            .MaritalStatus = reader.GetValue(Of String)("MaritalStatus"),
+            .PositionID = reader.GetValue(Of Integer?)("PositionID"),
+            .EffectiveDateFrom = reader.GetValue(Of Date?)("EffectiveDateFrom"),
+            .EffectiveDateTo = reader.GetValue(Of Date?)("EffectiveDateTo"),
+            .ContributeToGovt = reader.GetValue(Of Char?)("ContributeToGovt"),
+            .OverrideDiscardSSSContrib = reader.GetValue(Of Boolean)("OverrideDiscardSSSContrib"),
+            .OverrideDiscardPhilHealthContrib = reader.GetValue(Of Boolean)("OverrideDiscardPhilHealthContrib"),
+            .PayPeriodID = reader.GetValue(Of Integer)("PayPeriodID"),
+            .NewSSSContribution = reader.GetValue(Of Decimal)("Result")
+        }
     End Function
 
     Public Async Function LoadProductsAsync() As Task

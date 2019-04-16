@@ -1,0 +1,11 @@
+
+UPDATE employeesalary esa
+SET
+esa.UndeclaredSalary = 0
+,esa.LastUpd=CURRENT_TIMESTAMP()
+,esa.LastUpdBy=IFNULL(esa.LastUpdBy, esa.CreatedBy)
+WHERE esa.UndeclaredSalary = (esa.Salary * -1)
+# WHERE esa.RowID=164
+;
+
+

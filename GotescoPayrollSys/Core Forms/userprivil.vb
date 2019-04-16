@@ -1,0 +1,797 @@
+﻿Imports System.Data.Entity
+
+Public Class userprivil
+
+    Dim view_id As Integer = Nothing
+
+    Private Sub userprivil_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        view_id = VIEW_privilege("User Privilege", org_rowid)
+
+        VIEW_position_organization_user()
+
+        Dim formuserprivilege = position_view_table.Select("ViewID = " & view_id)
+
+        If formuserprivilege.Count = 0 Then
+            tsbtnNewUserPrivil.Visible = 0
+            tsbtnSaveUserPrivil.Visible = 0
+            dontUpdate = 1
+            dontCreate = 1
+        Else
+            For Each drow In formuserprivilege
+                If drow("ReadOnly").ToString = "Y" Then
+                    ''ToolStripButton2.Visible = 0
+
+                    tsbtnNewUserPrivil.Visible = 0
+                    tsbtnSaveUserPrivil.Visible = 0
+                    dontUpdate = 1
+                    Exit For
+                Else
+                    If drow("Creates").ToString = "N" Then
+                        ''ToolStripButton2.Visible = 0
+
+                        tsbtnNewUserPrivil.Visible = 0
+                        dontCreate = 1
+                    Else
+                        tsbtnNewUserPrivil.Visible = 1
+                        dontCreate = 0
+                        ''ToolStripButton2.Visible = 1
+                    End If
+
+                    'If drow("Deleting").ToString = "N" Then
+                    '    ToolStripButton3.Visible = 0
+                    'Else
+                    '    ToolStripButton3.Visible = 1
+                    'End If
+
+                    If drow("Updates").ToString = "N" Then
+                        dontUpdate = 1
+                    Else
+                        dontUpdate = 0
+                    End If
+
+                End If
+
+            Next
+
+        End If
+
+        dgvposit_SelectionChanged(sender, e)
+
+        AddHandler dgvposit.SelectionChanged, AddressOf dgvposit_SelectionChanged
+
+    End Sub
+
+    Dim pagination As Integer = 0
+
+    Dim curr_user_positionRowID = ValNoComma(New ExecuteQuery("SELECT IFNULL(u.PositionID,0) AS PositionID FROM user u INNER JOIN position p ON p.RowID=u.PositionID WHERE u.RowID='" & user_row_id & "';").Result)
+
+    Sub VIEW_position_organization_user()
+
+        Dim params(2, 2) As Object
+
+        params(0, 0) = "pos_OrganizationID"
+        params(1, 0) = "pagination"
+        params(2, 0) = "current_userID"
+
+        params(0, 1) = org_rowid
+        params(1, 1) = pagination
+        params(2, 1) = user_row_id
+
+        'EXEC_VIEW_PROCEDURE(params, _
+        '                     "VIEW_position_organization_user", _
+        '                     dgvposit)
+
+        Dim n_ReadSQLProcedureToDatatable As _
+            New ReadSQLProcedureToDatatable("VIEW_position_organization_user",
+                                            org_rowid,
+                                            pagination,
+                                            user_row_id)
+
+        Dim catchdt As New DataTable
+
+        catchdt = n_ReadSQLProcedureToDatatable.ResultTable
+
+        dgvposit.Rows.Clear()
+
+        For Each drow As DataRow In catchdt.Rows
+
+            Dim row_array = drow.ItemArray
+
+            Dim n_row =
+                dgvposit.Rows.Add(row_array)
+
+        Next
+
+    End Sub
+
+    Sub VIEW_position_view(ByVal PositionID As Object)
+
+        'Dim params(1, 2) As Object
+
+        'params(0, 0) = "pv_OrganizationID"
+        'params(1, 0) = "pv_PositionID"
+
+        'params(0, 1) = orgztnID
+        'params(1, 1) = PositionID
+
+        'EXEC_VIEW_PROCEDURE(params, _
+        '                     "VIEW_position_view", _
+        '                     dgvpositview)
+
+        dgvpositview.Rows.Clear()
+
+        Dim para_meters =
+            New Object() {org_rowid, PositionID}
+
+        Dim sql As New SQL("CALL VIEW_position_view(?og_rowid, ?pos_rowid);",
+                           para_meters)
+
+        Try
+
+            Dim dt As New DataTable
+            dt = sql.GetFoundRows.Tables(0)
+
+            If sql.HasError Then
+                Throw sql.ErrorException
+            Else
+                For Each drow As DataRow In dt.Rows
+                    Dim row_array = drow.ItemArray
+                    dgvpositview.Rows.Add(row_array)
+
+                Next
+            End If
+
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Name))
+        End Try
+
+    End Sub
+
+    Sub VIEW_view_of_organization()
+
+        Dim params(1, 2) As Object
+
+        params(0, 0) = "vw_OrganizationID"
+
+        params(0, 1) = org_rowid
+
+        EXEC_VIEW_PROCEDURE(params,
+                             "VIEW_view_of_organization",
+                             dgvpositview)
+
+    End Sub
+
+    Private Sub dgvposit_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvposit.CellContentClick
+
+    End Sub
+
+    Private Sub dgvposit_SelectionChanged(sender As Object, e As EventArgs) ' Handles dgvposit.SelectionChanged
+
+        If tsbtnNewUserPrivil.Enabled = False Then
+            tsbtnNewUserPrivil.Enabled = True
+        End If
+
+        RemoveHandler CheckBox1.CheckedChanged, AddressOf CheckBox1_CheckedChanged
+        RemoveHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+        RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+        RemoveHandler CheckBox4.CheckedChanged, AddressOf CheckBox4_CheckedChanged
+
+        listofeditrow.Clear()
+
+        If dgvposit.RowCount <> 0 Then
+            With dgvposit.CurrentRow
+                VIEW_position_view(.Cells("Column1").Value)
+
+                If dgvpositview.RowCount = 1 Then
+                    VIEW_view_of_organization()
+                End If
+
+            End With
+
+            CheckBox1.Checked = False
+            CheckBox2.Checked = False
+            CheckBox3.Checked = False
+            CheckBox4.Checked = False
+
+            Dim createcount = 0
+            Dim updatecount = 0
+            Dim deletecount = 0
+            Dim read_only = 0
+
+            For Each dgvrow As DataGridViewRow In dgvpositview.Rows
+
+                If dgvrow.Cells("Column11").Value = 1 Then
+                    createcount += 1
+                End If
+
+                If dgvrow.Cells("Column12").Value = 1 Then
+                    updatecount += 1
+                End If
+
+                If dgvrow.Cells("Column13").Value = 1 Then
+                    deletecount += 1
+                End If
+
+                If dgvrow.Cells("Column14").Value = 1 Then
+                    read_only += 1
+                End If
+
+            Next
+
+            If createcount = 0 Then
+                CheckBox1.Checked = False
+            Else
+                CheckBox1.Checked = If(dgvpositview.RowCount - 1 <> createcount, False, True)
+            End If
+
+            If updatecount = 0 Then
+                CheckBox2.Checked = False
+            Else
+                CheckBox2.Checked = If(dgvpositview.RowCount - 1 <> updatecount, False, True)
+            End If
+
+            If deletecount = 0 Then
+                CheckBox3.Checked = False
+            Else
+                CheckBox3.Checked = If(dgvpositview.RowCount - 1 <> deletecount, False, True)
+            End If
+
+            If read_only = 0 Then
+                CheckBox4.Checked = False
+            Else
+
+                CheckBox4.Checked = If(dgvpositview.RowCount - 1 <> read_only, False, True)
+            End If
+
+        Else
+
+            CheckBox1.Checked = False
+            CheckBox1_CheckedChanged(sender, e)
+
+            CheckBox2.Checked = False
+            CheckBox2_CheckedChanged(sender, e)
+
+            CheckBox3.Checked = False
+            CheckBox3_CheckedChanged(sender, e)
+
+            CheckBox4.Checked = False
+            CheckBox4_CheckedChanged(sender, e)
+
+
+        End If
+
+        AddHandler CheckBox1.CheckedChanged, AddressOf CheckBox1_CheckedChanged
+        AddHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+        AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+        AddHandler CheckBox4.CheckedChanged, AddressOf CheckBox4_CheckedChanged
+
+    End Sub
+
+    Private Sub First_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles First.LinkClicked, Prev.LinkClicked,
+                                                                                                Nxt.LinkClicked, Last.LinkClicked
+
+        Dim sendrname As String = DirectCast(sender, LinkLabel).Name
+
+        RemoveHandler dgvposit.SelectionChanged, AddressOf dgvposit_SelectionChanged
+
+        If sendrname = "First" Then
+            pagination = 0
+        ElseIf sendrname = "Prev" Then
+            'If pagination - 100 < 0 Then
+            '    pagination = 0
+            'Else
+            '    pagination -= 100
+            'End If
+
+            Dim modcent = pagination Mod 100
+
+            If modcent = 0 Then
+
+                pagination -= 100
+
+            Else
+
+                pagination -= modcent
+
+            End If
+
+            If pagination < 0 Then
+
+                pagination = 0
+
+            End If
+
+        ElseIf sendrname = "Nxt" Then
+
+            Dim modcent = pagination Mod 100
+
+            If modcent = 0 Then
+                pagination += 100
+
+            Else
+                pagination -= modcent
+
+                pagination += 100
+
+            End If
+        ElseIf sendrname = "Last" Then
+            Dim lastpage = Val(EXECQUER("SELECT COUNT(RowID) / 100 FROM position WHERE OrganizationID=" & org_rowid & ";"))
+
+            Dim remender = lastpage Mod 1
+
+            pagination = (lastpage - remender) * 100
+
+            If pagination - 100 < 100 Then
+                'pagination = 0
+
+            End If
+
+            'pagination = If(lastpage - 100 >= 100, _
+            '                lastpage - 100, _
+            '                lastpage)
+
+        End If
+
+        VIEW_position_organization_user()
+
+        dgvposit_SelectionChanged(sender, e)
+
+        AddHandler dgvposit.SelectionChanged, AddressOf dgvposit_SelectionChanged
+
+    End Sub
+
+    Private Sub tsbtnNewUserPrivil_Click(sender As Object, e As EventArgs) Handles tsbtnNewUserPrivil.Click
+
+        'tsbtnNewUserPrivil.Enabled = False
+
+        'RemoveHandler CheckBox1.CheckedChanged, AddressOf CheckBox1_CheckedChanged
+        'RemoveHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+        'RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+        'RemoveHandler CheckBox4.CheckedChanged, AddressOf CheckBox4_CheckedChanged
+
+        'CheckBox1.Checked = False
+
+        'CheckBox2.Checked = False
+
+        'CheckBox3.Checked = False
+
+        'CheckBox4.Checked = False
+
+        'VIEW_view_of_organization()
+
+        'AddHandler CheckBox1.CheckedChanged, AddressOf CheckBox1_CheckedChanged
+        'AddHandler CheckBox2.CheckedChanged, AddressOf CheckBox2_CheckedChanged
+        'AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+        'AddHandler CheckBox4.CheckedChanged, AddressOf CheckBox4_CheckedChanged
+
+    End Sub
+
+    Dim dontUpdate As SByte = 0
+
+    Dim dontCreate As SByte = 0
+
+    Private Enum SingleYesOrNo As Short
+        N = 0
+        Y = 1
+    End Enum
+
+    Private Function GetSingleYesOrNo(value As Object) As String
+        Dim returningValue As String
+        If Convert.ToInt16(value) = SingleYesOrNo.N Then
+            returningValue = SingleYesOrNo.N.ToString()
+        Else
+            returningValue = SingleYesOrNo.Y.ToString()
+        End If
+        Return returningValue
+    End Function
+
+    Private Async Sub tsbtnSaveUserPrivil_ClickAsync(sender As Object, e As EventArgs) Handles tsbtnSaveUserPrivil.Click
+
+        dgvpositview.EndEdit(True)
+
+        lblforballoon.Focus()
+
+        Dim gridRows = dgvpositview.Rows.OfType(Of DataGridViewRow).Where(Function(r) Not r.IsNewRow)
+
+        Dim selectedPositionRow = dgvposit.CurrentRow
+
+        If Not gridRows.Any() _
+            Or selectedPositionRow Is Nothing Then
+            Exit Sub
+        End If
+
+        RemoveHandler dgvposit.SelectionChanged, AddressOf dgvposit_SelectionChanged
+
+        Dim privilegeIDs = gridRows.Select(Function(r) Convert.ToInt32(r.Cells(Column9.Name).Value)).ToList()
+
+        Dim currentPositionName As String = Convert.ToString(selectedPositionRow.Cells(Column2.Name).Value)
+
+        Using context = New DatabaseContext
+
+            Dim allPrivileges = Await context.PositionPrivileges.
+                Include(Function(privi) privi.Position).
+                Include(Function(privi) privi.PrivilegeType).
+                Include(Function(privi) privi.Organization).
+                Where(Function(p) Not p.Organization.NoPurpose).
+                Where(Function(p) p.Position.PositionName = currentPositionName).
+                ToListAsync()
+
+            Dim privileges = allPrivileges.
+                Where(Function(p) privilegeIDs.Any(Function(privID) p.RowID = privID)).
+                ToList()
+
+            Dim similarPrivileges = allPrivileges.
+                Where(Function(p) Not privilegeIDs.Any(Function(privID) p.RowID = privID)).
+                ToList()
+
+            For Each dgvrow In gridRows
+                With dgvrow
+                    Dim rowID = Convert.ToInt32(.Cells(Column9.Name).Value)
+                    Dim privilege = privileges.Where(Function(p) Equals(p.RowID, rowID)).FirstOrDefault
+
+                    If privilege Is Nothing Then Continue For
+                    privilege.Creates = GetSingleYesOrNo(.Cells(Column11.Name).Value)
+                    privilege.Updates = GetSingleYesOrNo(.Cells(Column12.Name).Value)
+                    privilege.Deleting = GetSingleYesOrNo(.Cells(Column13.Name).Value)
+                    privilege.ReadOnly = GetSingleYesOrNo(.Cells(Column14.Name).Value)
+
+                    AlsoUpdateSimilarPrivilegesAcrossOrganizations(similarPrivileges, privilege)
+                End With
+
+            Next
+
+            Try
+                Await context.SaveChangesAsync
+            Catch ex As Exception
+                MessageBox.Show("Oops! something went wrong, please contact Globagility Inc.", "Error when save", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
+
+        position_view_table = retAsDatTbl("SELECT *" &
+                                          " FROM position_view" &
+                                          " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" &
+                                          " AND OrganizationID='" & org_rowid & "';")
+
+        Dim formuserprivilege = position_view_table.Select("ViewID = " & view_id)
+
+        If formuserprivilege.Count = 0 Then
+            tsbtnNewUserPrivil.Visible = 0
+            tsbtnSaveUserPrivil.Visible = 0
+            dontUpdate = 1
+            dontCreate = 1
+        Else
+            For Each drow In formuserprivilege
+                If drow("ReadOnly").ToString = "Y" Then
+                    'ToolStripButton2.Visible = 0
+                    tsbtnSaveUserPrivil.Visible = 0
+                    dontUpdate = 1
+                    Exit For
+                Else
+                    If drow("Creates").ToString = "N" Then
+                        'ToolStripButton2.Visible = 0
+                        dontCreate = 1
+                    Else
+                        dontCreate = 0
+                        'ToolStripButton2.Visible = 1
+                    End If
+
+                    'If drow("Deleting").ToString = "N" Then
+                    '    ToolStripButton3.Visible = 0
+                    'Else
+                    '    ToolStripButton3.Visible = 1
+                    'End If
+
+                    If drow("Updates").ToString = "N" Then
+                        dontUpdate = 1
+                    Else
+                        dontUpdate = 0
+                    End If
+
+                End If
+
+            Next
+
+        End If
+
+        Dim row_indx As Integer = dgvpositview.CurrentRow.Index
+        Dim col_indx As String = dgvpositview.Columns(dgvposit.CurrentCell.ColumnIndex).Name
+
+        listofeditrow.Clear()
+
+        InfoBalloon("User privilege has been successfully saved.", "Successfully save", lblforballoon, 0, -69)
+
+        'dgvposit_SelectionChanged(sender, e)
+
+        'If dgvpositview.RowCount - 1 > row_indx Then
+        '    dgvpositview.Item(col_indx, row_indx).Selected = True
+        'End If
+
+        AddHandler dgvposit.SelectionChanged, AddressOf dgvposit_SelectionChanged
+
+    End Sub
+
+    Private Sub AlsoUpdateSimilarPrivilegesAcrossOrganizations(allPrivileges As IList(Of PositionPrivilege), positionPrivilege As PositionPrivilege)
+        Dim _position = positionPrivilege.Position
+        Dim _view = positionPrivilege.PrivilegeType
+
+        Dim similarPrivileges = allPrivileges.
+            Where(Function(p) Not Equals(p.RowID, positionPrivilege.RowID)).
+            Where(Function(p) Nullable.Equals(p.Position?.PositionName, _position.PositionName)).
+            Where(Function(p) Nullable.Equals(p.PrivilegeType.ViewName, _view.ViewName)).
+            ToList()
+
+        For Each _privilege In similarPrivileges
+            _privilege.Creates = positionPrivilege.Creates
+            _privilege.Updates = positionPrivilege.Updates
+            _privilege.Deleting = positionPrivilege.Deleting
+            _privilege.ReadOnly = positionPrivilege.ReadOnly
+        Next
+    End Sub
+
+    Function INSUPD_position_view(Optional pv_RowID As Object = Nothing,
+                                  Optional pv_PositionID As Object = Nothing,
+                                  Optional pv_ViewID As Object = Nothing,
+                                  Optional pv_Creates As Object = Nothing,
+                                  Optional pv_ReadOnly As Object = Nothing,
+                                  Optional pv_Updates As Object = Nothing,
+                                  Optional pv_Deleting As Object = Nothing) As Object
+
+        Dim params(9, 2) As Object
+
+        params(0, 0) = "pv_RowID"
+        params(1, 0) = "pv_PositionID"
+        params(2, 0) = "pv_OrganizationID"
+        params(3, 0) = "pv_CreatedBy"
+        params(4, 0) = "pv_LastUpdBy"
+        params(5, 0) = "pv_ViewID"
+        params(6, 0) = "pv_Creates"
+        params(7, 0) = "pv_ReadOnly"
+        params(8, 0) = "pv_Updates"
+        params(9, 0) = "pv_Deleting"
+
+        params(0, 1) = If(pv_RowID = Nothing, DBNull.Value, pv_RowID)
+        params(1, 1) = pv_PositionID
+        params(2, 1) = org_rowid
+        params(3, 1) = user_row_id
+        params(4, 1) = user_row_id
+        params(5, 1) = pv_ViewID
+        params(6, 1) = pv_Creates
+        params(7, 1) = pv_ReadOnly
+        params(8, 1) = pv_Updates
+        params(9, 1) = pv_Deleting
+
+        INSUPD_position_view =
+            EXEC_INSUPD_PROCEDURE(params,
+                                "INSUPD_position_view",
+                                "pvRowID")
+
+    End Function
+
+    Private Sub tsbtnCancelUserPrivil_Click(sender As Object, e As EventArgs) Handles tsbtnCancelUserPrivil.Click
+        dgvposit_SelectionChanged(sender, e)
+
+    End Sub
+
+    Private Sub tsbtnCloseUserPrivil_Click(sender As Object, e As EventArgs) Handles tsbtnCloseUserPrivil.Click
+        Close()
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) 'Handles CheckBox1.CheckedChanged
+
+        Dim boolval = CheckBox1.Checked
+
+        'MsgBox(boolval.ToString)
+
+        For Each dgvrow As DataGridViewRow In dgvpositview.Rows
+            With dgvrow
+                If .IsNewRow Then
+
+                Else
+                    .Cells("Column11").Value = boolval
+                    If .Cells("Column9").Value = Nothing Then
+                    Else
+                        listofeditrow.Add(Trim(.Cells("Column9").Value))
+                    End If
+                End If
+            End With
+        Next
+
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) 'Handles CheckBox2.CheckedChanged
+
+        Dim boolval = CheckBox2.Checked
+
+        'MsgBox(boolval.ToString)
+
+        For Each dgvrow As DataGridViewRow In dgvpositview.Rows
+            With dgvrow
+                If .IsNewRow Then
+
+                Else
+                    .Cells("Column12").Value = boolval
+                    If .Cells("Column9").Value = Nothing Then
+                    Else
+                        listofeditrow.Add(Trim(.Cells("Column9").Value))
+                    End If
+                End If
+            End With
+        Next
+
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) 'Handles CheckBox3.CheckedChanged
+
+        Dim boolval = CheckBox3.Checked
+
+        'MsgBox(boolval.ToString)
+
+        For Each dgvrow As DataGridViewRow In dgvpositview.Rows
+            With dgvrow
+                If .IsNewRow Then
+
+                Else
+                    .Cells("Column13").Value = boolval
+                    If .Cells("Column9").Value = Nothing Then
+                    Else
+                        listofeditrow.Add(Trim(.Cells("Column9").Value))
+                    End If
+                End If
+            End With
+        Next
+
+    End Sub
+
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) 'Handles CheckBox4.CheckedChanged
+
+        Dim boolval = CheckBox4.Checked
+
+        'MsgBox(boolval.ToString)
+
+        For Each dgvrow As DataGridViewRow In dgvpositview.Rows
+            With dgvrow
+                If .IsNewRow Then
+
+                Else
+                    .Cells("Column14").Value = boolval
+                    If .Cells("Column9").Value = Nothing Then
+                    Else
+                        listofeditrow.Add(Trim(.Cells("Column9").Value))
+                    End If
+                End If
+            End With
+        Next
+
+    End Sub
+
+    Private Sub TabControl1_DrawItem(sender As Object, e As DrawItemEventArgs) Handles TabControl1.DrawItem
+        TabControlColor(TabControl1, e)
+    End Sub
+
+    Private Sub dgvpositview_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvpositview.CellContentClick
+
+    End Sub
+
+    Dim listofeditrow As New AutoCompleteStringCollection
+
+    Private Sub dgvpositview_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgvpositview.CellEndEdit
+        If dgvpositview.Item("Column9", e.RowIndex).Value = Nothing Then
+
+        Else '17352
+
+            Dim theRowID = dgvpositview.Item("Column9", e.RowIndex).Value
+
+            listofeditrow.Add(Trim(dgvpositview.Item("Column9", e.RowIndex).Value))
+        End If
+
+    End Sub
+
+    Private Sub userprivil_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+
+        InfoBalloon(, , lblforballoon, , , 1)
+
+        If previousForm IsNot Nothing Then
+            If previousForm.Name = Name Then
+                previousForm = Nothing
+            End If
+        End If
+
+        'If FormLeft.Contains("User Privilege") Then
+        '    FormLeft.Remove("User Privilege")
+        'End If
+
+        'If FormLeft.Count = 0 Then
+        '    MDIPrimaryForm.Text = "Welcome"
+        'Else
+        '    MDIPrimaryForm.Text = "Welcome to " & FormLeft.Item(FormLeft.Count - 1)
+        'End If
+
+        showAuditTrail.Close()
+
+        GeneralForm.listGeneralForm.Remove(Name)
+    End Sub
+
+    Private Sub dgvpositview_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvpositview.DataError
+        e.ThrowException = False
+
+    End Sub
+
+    Private Sub tsbtnAudittrail_Click(sender As Object, e As EventArgs) Handles tsbtnAudittrail.Click
+        showAuditTrail.Show()
+
+        showAuditTrail.loadAudTrail(view_id)
+
+        showAuditTrail.BringToFront()
+
+    End Sub
+
+    Private Sub dgvposit_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvposit.RowsAdded
+
+        If dgvposit.Item("Column1", e.RowIndex).Value = curr_user_positionRowID Then
+
+            dgvposit.Item("Column2", e.RowIndex).Style.BackColor = Color.FromArgb(255, 158, 0) '94
+
+            dgvposit.Item("Column2", e.RowIndex).Style.ForeColor = Color.White
+
+            'dgvposit.Item("Column2", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 158, 0)
+            dgvposit.Item("Column2", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 174, 0)
+
+        Else
+
+            dgvposit.Item("Column2", e.RowIndex).Style.BackColor = Color.White
+
+            dgvposit.Item("Column2", e.RowIndex).Style.ForeColor = Color.DimGray
+
+            dgvposit.Item("Column2", e.RowIndex).Style.SelectionBackColor = System.Drawing.SystemColors.Highlight
+
+        End If
+
+    End Sub
+
+    Protected Overrides Sub OnActivated(e As EventArgs)
+        KeyPreview = True
+        MyBase.OnActivated(e)
+    End Sub
+
+    Protected Overrides Sub OnDeactivate(e As EventArgs)
+        KeyPreview = False
+        MyBase.OnDeactivate(e)
+    End Sub
+
+    Private Sub dgvpositview_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles dgvpositview.RowsAdded
+
+        Dim is_newrow = dgvpositview.Rows(e.RowIndex).IsNewRow
+
+        Static col_count = dgvpositview.Columns.Count
+
+        Static last_columnindex = (col_count - 1)
+
+        'Dim sel_dgvrow = dgvpositview.Item(dgvpositview.Columns.Item(1).Name, e.RowIndex)
+        Dim sel_dgvrow = dgvpositview.Rows(e.RowIndex)
+
+        If is_newrow _
+            Or dgvpositview.Item(last_columnindex, e.RowIndex).Value = "Report" Then
+
+            'dgvpositview.Item("Column10", e.RowIndex).Style.BackColor = Color.FromArgb(255, 158, 0) '94
+            sel_dgvrow.DefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240)
+
+            sel_dgvrow.DefaultCellStyle.ForeColor = Color.Black
+
+            'dgvposit.Item("Column2", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 158, 0)
+            'dgvpositview.Item("Column10", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 174, 0)
+            sel_dgvrow.DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight
+
+        Else
+
+            sel_dgvrow.DefaultCellStyle.BackColor = Color.White
+
+            sel_dgvrow.DefaultCellStyle.ForeColor = Color.Black
+
+            sel_dgvrow.DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight
+
+        End If
+
+    End Sub
+
+End Class

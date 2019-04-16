@@ -1,0 +1,21 @@
+9:32 AM 11/17/2017
+ALTER TABLE `employeeleave`
+	ADD COLUMN `Status2` VARCHAR(50) NULL DEFAULT 'Pending' AFTER `Status`;
+
+ALTER TABLE `employeeofficialbusiness`
+	ADD COLUMN `OffBusStatus2` VARCHAR(50) NULL DEFAULT 'Pending' AFTER `OffBusStatus`;
+
+ALTER TABLE `employeeovertime`
+	ADD COLUMN `OTStatus2` VARCHAR(50) NULL DEFAULT 'Pending' AFTER `OTStatus`;
+
+############################################################################################
+
+10:34 AM 11/17/2017
+ALTER TABLE `user`
+	ADD COLUMN `DeptMngrID` INT(11) NULL DEFAULT NULL AFTER `InSession`;
+
+ALTER TABLE `employee`
+	ADD COLUMN `DeptManager` INT(11) NULL DEFAULT NULL AFTER `LeaveAboveFifteenthYearService`;
+
+############################################################################################
+

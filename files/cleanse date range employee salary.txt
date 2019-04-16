@@ -1,0 +1,3 @@
+UPDATE `gotescopayrolldb_latest`.`employeesalary` SET `EffectiveDateTo`='2013-01-28' WHERE  `RowID`=52;
+UPDATE `gotescopayrolldb_latest`.`employeesalary` SET `EffectiveDateTo`='2017-01-31' WHERE  `RowID`=101;
+UPDATE `gotescopayrolldb_latest`.`employeesalary` SET `EffectiveDateTo`='2017-01-31' WHERE  `RowID`=281;

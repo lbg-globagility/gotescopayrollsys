@@ -1,0 +1,34 @@
+*.v12.suo
+GotescoPayrollSys/obj/Debug/*.*
+GotescoPayrollSys/bin/Debug/*.exe
+GotescoPayrollSys/bin/Debug/*.pdb
+*.exe
+Output/
+
+*.pdb
+*.suo
+
+*.3
+
+*.2
+
+*.1
+
+*.log
+
+GotescoPayrollSys/Core Forms/PayStub\.resx
+
+GotescoPayrollSys/bin/Debug/GotescoPayrollSys\.exe\.config
+
+GotescoPayrollSys/bin/Debug/vs959B\.tmp 
+ 
+*.tmp
+
+GotescoPayrollSys/bin/
+
+GotescoPayrollSys/obj/
+.vs/GotescoPayrollSys/
+gotescopayrolldb/INSERTINTO_onedayseconds.sql
+gotescopayrolldb/testview.sql
+GotescoPayrollSys.Test/bin/Debug/*.*
+GotescoPayrollSys.Test/obj/Debug/*.*

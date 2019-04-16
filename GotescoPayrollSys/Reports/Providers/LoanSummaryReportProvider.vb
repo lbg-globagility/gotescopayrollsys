@@ -1,0 +1,171 @@
+﻿Option Strict On
+
+Imports CrystalDecisions.CrystalReports.Engine
+
+Public Class LoanSummaryReportProvider
+    Implements IReportProvider
+
+    Public Property Name As String = "Loan Payment Report" Implements IReportProvider.Name
+
+    Public Property GotescoReportName As String = "Employee Loan Report" Implements IReportProvider.GotescoReportName
+
+    Public Sub Run() Implements IReportProvider.Run
+        Method2()
+    End Sub
+
+    Private Sub Method1()
+
+        Dim n_PayrollSummaDateSelection As New PayPeriodSelectionWithLoanTypes
+
+        If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
+
+            Dim date_from, date_to, _loanTypeID As Object
+
+            date_from = n_PayrollSummaDateSelection.DateFrom
+            date_to = n_PayrollSummaDateSelection.DateTo
+            _loanTypeID = n_PayrollSummaDateSelection.LoanTypeId
+
+            Dim sql_print_employee_loanreports As _
+                New SQL("CALL RPT_loans(?og_rowid, ?date_f, ?date_t, ?loan_typeid);",
+                        New Object() {org_rowid, date_from, date_to, _loanTypeID})
+
+            Try
+
+                Dim dt As New DataTable
+
+                dt = sql_print_employee_loanreports.GetFoundRows.Tables(0)
+
+                If sql_print_employee_loanreports.HasError Then
+
+                    Throw sql_print_employee_loanreports.ErrorException
+                Else
+
+                    Dim rptdoc As New LoanReports
+
+                    rptdoc.SetDataSource(dt)
+
+                    Dim crvwr As New CrysRepForm
+
+                    Dim objText As TextObject = Nothing
+
+                    objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("PeriodDate"), TextObject)
+
+                    objText.Text =
+                        String.Concat("for the period of ",
+                                      DirectCast(date_from, Date).ToShortDateString,
+                                       " to ",
+                                      DirectCast(date_to, Date).ToShortDateString)
+
+                    objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtOrganizationName"), TextObject)
+
+                    objText.Text = orgNam.ToUpper
+
+                    crvwr.crysrepvwr.ReportSource = rptdoc
+
+                    crvwr.Show()
+
+                End If
+            Catch ex As Exception
+
+                MsgBox(getErrExcptn(ex, Name))
+            Finally
+
+            End Try
+
+        End If
+
+    End Sub
+
+    Private Sub Method2()
+
+        Dim n_PayrollSummaDateSelection As New PayPeriodSelectionWithLoanTypes
+
+        If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
+
+            Dim date_from, date_to, _loanTypeID As Object
+
+            date_from = n_PayrollSummaDateSelection.DateFrom
+            date_to = n_PayrollSummaDateSelection.DateTo
+            _loanTypeID = n_PayrollSummaDateSelection.LoanTypeId
+
+            Dim sql_print_employee_loanreports As _
+                New SQL("CALL RPT_loansummary(?og_rowid, ?date_f, ?date_t, ?loan_typeid);",
+                        New Object() {org_rowid, date_from, date_to, _loanTypeID})
+
+            Try
+
+                Dim dt As New DataTable 'DS1.DatTbl2DataTable
+
+                'dt = sql_print_employee_loanreports.GetFoundRows.Tables(0)
+                sql_print_employee_loanreports.ExecuteQuery()
+
+                If sql_print_employee_loanreports.HasError Then
+
+                    Throw sql_print_employee_loanreports.ErrorException
+                Else
+
+                    Dim ds As New DataSet
+                    ds = sql_print_employee_loanreports.GetFoundRows
+
+                    Dim first_tbl As DataTable
+                    first_tbl = ds.Tables(0)
+
+                    'Console.WriteLine(dt.Columns.Count)
+                    'dt.Columns.Clear()
+
+                    'For Each col As DataColumn In first_tbl.Columns
+                    '    Dim newcol As New DataColumn
+                    '    newcol = col
+                    '    Console.WriteLine(newcol.ColumnName)
+                    '    dt.Columns.Add(newcol)
+                    'Next
+
+                    dt.Merge(first_tbl)
+
+                    Dim tbl_withrows = ds.Tables.OfType(Of DataTable).Where(Function(dtt) dtt.Rows.Count > 0)
+
+                    For Each dtbl As DataTable In tbl_withrows
+                        For Each drow As DataRow In dtbl.Rows
+                            Dim row_array = drow.ItemArray
+                            dt.Rows.Add(row_array)
+                        Next
+                    Next
+
+                    Dim rptdoc As New LoanReports
+
+                    rptdoc.SetDataSource(dt)
+
+                    Dim crvwr As New CrysRepForm
+
+                    Dim objText As TextObject = Nothing
+
+                    objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("PeriodDate"), TextObject)
+
+                    objText.Text =
+                        String.Concat("for the period of ",
+                                      DirectCast(date_from, Date).ToShortDateString,
+                                      " to ",
+                                      DirectCast(date_to, Date).ToShortDateString)
+
+                    objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtOrganizationName"), TextObject)
+
+                    objText.Text = orgNam.ToUpper
+
+                    crvwr.crysrepvwr.ReportSource = rptdoc
+
+                    crvwr.Show()
+
+                End If
+            Catch ex As Exception
+
+                MsgBox(getErrExcptn(ex, Name))
+            Finally
+
+            End Try
+
+        End If
+
+    End Sub
+
+    Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
+End Class

@@ -1,0 +1,296 @@
+﻿Public Class HRISForm
+
+    Public listHRISForm As New List(Of String)
+
+    Sub ChangeForm(ByVal Formname As Form, Optional ViewName As String = Nothing)
+
+        reloadViewPrivilege()
+
+        Dim view_ID = VIEW_privilege(ViewName, org_rowid)
+
+        Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
+
+        If formuserprivilege.Count <> 0 Then
+
+            For Each drow In formuserprivilege
+
+                If drow("ReadOnly").ToString = "Y" Then
+
+                    'ChangeForm(Formname)
+                    'previousForm = Formname
+
+                    Exit For
+                Else
+
+                    If drow("Creates").ToString = "Y" _
+                        Or drow("Updates").ToString = "Y" _
+                        Or drow("Deleting").ToString = "Y" Then
+
+                        'ChangeForm(Formname)
+                        'previousForm = Formname
+
+                        Exit For
+                    Else
+                        Exit Sub
+                    End If
+
+                End If
+
+            Next
+        Else
+            Exit Sub
+        End If
+
+        Try
+            Application.DoEvents()
+            Dim FName As String = Formname.Name
+            Formname.TopLevel = False
+            Formname.KeyPreview = True
+            If listHRISForm.Contains(FName) Then
+                Formname.Show()
+                Formname.BringToFront()
+                Formname.Focus()
+            Else
+                PanelHRIS.Controls.Add(Formname)
+                listHRISForm.Add(Formname.Name)
+
+                Formname.Show()
+                Formname.BringToFront()
+                Formname.Focus()
+                'Formname.Location = New Point((PanelHRIS.Width / 2) - (Formname.Width / 2), (PanelHRIS.Height / 2) - (Formname.Height / 2))
+                'Formname.Anchor = AnchorStyles.Top And AnchorStyles.Bottom And AnchorStyles.Right And AnchorStyles.Left
+                'Formname.WindowState = FormWindowState.Maximized
+                Formname.Dock = DockStyle.Fill
+                'PerformLayout
+            End If
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Name))
+        End Try
+    End Sub
+
+    Private Sub PositionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PositionToolStripMenuItem.Click
+
+        Dim n_UserAccessRights As New UserAccessRights(EmpPosition.ViewIdentification)
+
+        'If n_UserAccessRights.ResultValue(AccessRightName.HasReadOnly) Then
+
+        ChangeForm(EmpPosition, "Position")
+        previousForm = EmpPosition
+
+        'End If
+
+        'ChangeForm(Positn)
+        'previousForm = Positn
+
+    End Sub
+
+    Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles DivisionToolStripMenuItem.Click
+        ChangeForm(DivisionForm, "Division")
+
+        previousForm = DivisionForm
+    End Sub
+
+    Private Sub ToolStripMenuItem6_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem6.Click
+
+        EmployeeForm.tabctrlemp.SelectedIndex = 0
+        EmployeeForm.tabIndx = 0
+        ChangeForm(EmployeeForm, "Employee Personal Profile")
+        EmployeeForm.tbpempchklist.Focus()
+        'Employee.tbpempchklist_Enter(sender, e)
+    End Sub
+
+    Private Sub PersonalinfoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PersonalinfoToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 1
+        EmployeeForm.tabIndx = 1
+        ChangeForm(EmployeeForm, "Employee Personal Profile")
+        EmployeeForm.tbpEmployee.Focus()
+        'Employee.tbpEmployee_Enter(sender, e)
+    End Sub
+
+    Private Sub EmpSalToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EmpSalToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 2
+        EmployeeForm.tabIndx = 2
+        ChangeForm(EmployeeForm, "Employee Salary")
+        EmployeeForm.tbpSalary.Focus()
+        'Employee.tbpSalary_Enter(sender, e)
+    End Sub
+
+    Private Sub AwardsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AwardsToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 3
+        EmployeeForm.tabIndx = 3
+        ChangeForm(EmployeeForm, "Employee Award")
+        EmployeeForm.tbpAwards.Focus()
+        'Employee.tbpAwards_Enter(sender, e)
+    End Sub
+
+    Private Sub CertificatesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CertificatesToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 4
+        EmployeeForm.tabIndx = 4
+        ChangeForm(EmployeeForm, "Employee Certification")
+        EmployeeForm.tbpCertifications.Focus()
+        'Employee.tbpCertifications_Enter(sender, e)
+    End Sub
+
+    Private Sub LeaveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LeaveToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 5
+        EmployeeForm.tabIndx = 5
+        ChangeForm(EmployeeForm, "Employee Leave")
+        EmployeeForm.tbpLeave.Focus()
+        'Employee.tbpLeave_Enter(sender, e)
+    End Sub
+
+    Private Sub MedicalRecordToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MedicalRecordToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 6
+        EmployeeForm.tabIndx = 6
+        ChangeForm(EmployeeForm, "Employee Medical Profile")
+        'Employee.tbpMedRec.Focus()
+        'Employee.tbpMedRec_Enter(sender, e)
+    End Sub
+
+    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem2.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 6
+        EmployeeForm.tabIndx = 6
+        ChangeForm(EmployeeForm, "Employee Disciplinary Action")
+        EmployeeForm.tbpDiscipAct.Focus()
+        'Employee.tbpDiscipAct_Enter(sender, e)
+    End Sub
+
+    Private Sub EducBGToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EducBGToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 7
+        EmployeeForm.tabIndx = 7
+        ChangeForm(EmployeeForm, "Employee Educational Background")
+        EmployeeForm.tbpEducBG.Focus()
+        'Employee.tbpEducBG_Enter(sender, e)
+    End Sub
+
+    Private Sub PrevEmplyrToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PrevEmplyrToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 8
+        EmployeeForm.tabIndx = 8
+        ChangeForm(EmployeeForm, "Employee Previous Employer")
+        EmployeeForm.tbpPrevEmp.Focus()
+        'Employee.tbpPrevEmp_Enter(sender, e)
+    End Sub
+
+    Private Sub ToolStripMenuItem3_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem3.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 9
+        EmployeeForm.tabIndx = 9
+        ChangeForm(EmployeeForm, "Employee Promotion")
+        EmployeeForm.tbpPromotion.Focus()
+        'Employee.tbpPromotion_Enter(sender, e)
+    End Sub
+
+    Private Sub LoadSchedToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoanSchedToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 10
+        EmployeeForm.tabIndx = 10
+        ChangeForm(EmployeeForm, "Employee Loan Schedule")
+        'ChangeForm(LoanScheduleForm)
+        EmployeeForm.tbpLoans.Focus()
+        'Employee.tbpLoans_Enter(sender, e)
+    End Sub
+
+    Private Sub LoanHistoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoanHistoToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 11
+        EmployeeForm.tabIndx = 11
+        ChangeForm(EmployeeForm, "Employee Loan History")
+        EmployeeForm.tbpLoanHist.Focus()
+        'Employee.tbpLoanHist_Enter(sender, e)
+        'ChangeForm(EmployeeLoanHistoryForm)
+    End Sub
+
+    Private Sub ToolStripMenuItem4_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem4.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 12
+        EmployeeForm.tabIndx = 12
+        ChangeForm(EmployeeForm, "Employee Pay Slip")
+        EmployeeForm.tbpPayslip.Focus()
+        'Employee.tbpPayslip_Enter(sender, e)
+    End Sub
+
+    Private Sub ToolStripMenuItem7_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem7.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 13
+        EmployeeForm.tabIndx = 13
+        ChangeForm(EmployeeForm, "Employee Allowance")
+        EmployeeForm.tbpempallow.Focus()
+        'Employee.tbpempallow_Enter(sender, e)
+    End Sub
+
+    Private Sub ToolStripMenuItem8_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem8.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 14
+        EmployeeForm.tabIndx = 14
+        ChangeForm(EmployeeForm, "Employee Overtime")
+        EmployeeForm.tbpEmpOT.Focus()
+        'Employee.tbpEmpOT_Enter(sender, e)
+    End Sub
+
+    Private Sub ToolStripMenuItem9_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem9.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 15
+        EmployeeForm.tabIndx = 15
+        ChangeForm(EmployeeForm, "Official Business filing")
+        EmployeeForm.tbpOBF.Focus()
+        'Employee.tbpOBF_Enter(sender, e)
+    End Sub
+
+    Private Sub ToolStripMenuItem10_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem10.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 16
+        EmployeeForm.tabIndx = 16
+        ChangeForm(EmployeeForm, "Employee Bonus")
+        EmployeeForm.tbpBonus.Focus()
+        'Employee.tbpBonus_Enter(sender, e)
+    End Sub
+
+    Private Sub HRISForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+
+        For Each objctrl As Control In PanelHRIS.Controls
+            If TypeOf objctrl Is Form Then
+                DirectCast(objctrl, Form).Close()
+
+            End If
+        Next
+
+    End Sub
+
+    Private Sub HRISForm_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        'Label1.Text = Me.Width & " PanelHRIS " & PanelHRIS.Width
+    End Sub
+
+    Private Sub HRISForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub AttachmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AttachmentToolStripMenuItem.Click
+        EmployeeForm.tabctrlemp.SelectedIndex = 17
+        EmployeeForm.tabIndx = 17
+        ChangeForm(EmployeeForm, "Employee Attachment")
+        EmployeeForm.tbpAttachment.Focus()
+        'Employee.tbpAttachment_Enter(sender, e)
+    End Sub
+
+    Sub reloadViewPrivilege()
+
+        Dim hasPositionViewUpdate = EXECQUER("SELECT EXISTS(SELECT" &
+                                             " RowID" &
+                                             " FROM position_view" &
+                                             " WHERE OrganizationID='" & org_rowid & "'" &
+                                             " AND DATE_FORMAT(LastUpd,'%Y-%m-%d') = CURDATE());")
+
+        If hasPositionViewUpdate = "1" Then
+
+            position_view_table = retAsDatTbl("SELECT *" &
+                                              " FROM position_view" &
+                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" &
+                                              " AND OrganizationID='" & org_rowid & "';")
+
+        End If
+
+    End Sub
+
+    Private Sub OffSetToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OffSetToolStripMenuItem.Click
+
+        'Dim n_OffSetting As New OffSetting
+
+        ChangeForm(OffSetting)
+
+        previousForm = OffSetting
+
+    End Sub
+
+End Class

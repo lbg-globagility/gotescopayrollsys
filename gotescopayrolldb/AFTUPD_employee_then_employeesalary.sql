@@ -119,7 +119,7 @@ IF NEW.NoOfDependents != OLD.NoOfDependents OR NEW.MaritalStatus != COALESCE(OLD
 		
 		SET @default_hdmf_amount = 100;
 	
-		INSERT INTO employeesalary
+		/*INSERT INTO employeesalary
 		(
 			RowID
 			,EmployeeID
@@ -199,7 +199,7 @@ IF NEW.NoOfDependents != OLD.NoOfDependents OR NEW.MaritalStatus != COALESCE(OLD
 		ON DUPLICATE KEY UPDATE
 			LastUpd=CURRENT_TIMESTAMP()
 			,LastUpdBy=NEW.LastUpdBy
-			,EffectiveDateTo=IF(@second_to_the_latest_date < SUBDATE(preEffDateToEmpSallatest, INTERVAL 1 DAY), SUBDATE(preEffDateToEmpSallatest, INTERVAL 1 DAY), @second_to_the_latest_date);
+			,EffectiveDateTo=IF(@second_to_the_latest_date < SUBDATE(preEffDateToEmpSallatest, INTERVAL 1 DAY), SUBDATE(preEffDateToEmpSallatest, INTERVAL 1 DAY), @second_to_the_latest_date);*/
 			
 	END IF;
 

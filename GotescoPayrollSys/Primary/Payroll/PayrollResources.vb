@@ -15,6 +15,8 @@ Public Class PayrollResources
     Private _employees As List(Of Employee)
     Private _products As List(Of Product)
     Private _philHealthBrackets As List(Of PhilHealth)
+    Private _socialSecurityBrackets As List(Of SocialSecurity)
+    Private _salariesWithSss As List(Of SalariesWithSSS)
 
     Public Sub New(payPeriodID As Integer, payDateFrom As Date, payDateTo As Date)
         _payPeriodID = payPeriodID
@@ -185,6 +187,7 @@ SELECT i.* FROM salarieswithsssamount i WHERE i.PayPeriodID=@payPeriodID;]]>.Val
                     list.Add(CreateSalaryWithSSS(reader))
                 End While
 
+                _salariesWithSss = list
             Catch ex As Exception
                 Throw New ResourceLoadingException("SalariesWithSSS", ex)
             End Try
@@ -221,6 +224,53 @@ SELECT i.* FROM salarieswithsssamount i WHERE i.PayPeriodID=@payPeriodID;]]>.Val
             .OverrideDiscardPhilHealthContrib = reader.GetValue(Of Boolean)("OverrideDiscardPhilHealthContrib"),
             .PayPeriodID = reader.GetValue(Of Integer)("PayPeriodID"),
             .NewSSSContribution = reader.GetValue(Of Decimal)("Result")
+        }
+    End Function
+
+    Public Async Function LoadSocialSecurityTableAsync() As Task
+
+        Dim sql = <![CDATA[SELECT sss.* FROM paysocialsecurity sss WHERE sss.EffectiveDateFrom <= @dateFrom AND sss.EffectiveDateTo >= @dateTo;]]>.Value
+
+        Using connection As New MySqlConnection(connectionString),
+            command As New MySqlCommand(sql, connection)
+
+            With command.Parameters
+                .AddWithValue("@dateFrom", _payDateFrom)
+                .AddWithValue("@dateTo", _payDateTo)
+            End With
+
+            Await connection.OpenAsync()
+            Try
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                Dim list As New List(Of SocialSecurity)
+                While Await reader.ReadAsync()
+                    list.Add(CreateSocialSecurity(reader))
+                End While
+
+                _socialSecurityBrackets = list
+            Catch ex As Exception
+                Throw New ResourceLoadingException("SocialSecurityTable", ex)
+            End Try
+        End Using
+    End Function
+
+    Private Shared Function CreateSocialSecurity(reader As Common.DbDataReader) As SocialSecurity
+        Return New SocialSecurity With {
+            .RowID = reader.GetValue(Of Integer)("RowID"),
+            .Created = reader.GetValue(Of DateTime)("Created"),
+            .CreatedBy = reader.GetValue(Of Integer)("CreatedBy"),
+            .LastUpd = reader.GetValue(Of DateTime)("LastUpd"),
+            .LastUpdBy = reader.GetValue(Of Integer)("LastUpdBy"),
+            .RangeFromAmount = reader.GetValue(Of Decimal)("RangeFromAmount"),
+            .RangeToAmount = reader.GetValue(Of Decimal)("RangeToAmount"),
+            .MonthlySalaryCredit = reader.GetValue(Of Decimal)("MonthlySalaryCredit"),
+            .EmployeeContributionAmount = reader.GetValue(Of Decimal)("EmployeeContributionAmount"),
+            .EmployerContributionAmount = reader.GetValue(Of Decimal)("EmployerContributionAmount"),
+            .EmployeeECAmount = reader.GetValue(Of Decimal)("EmployeeECAmount"),
+            .HiddenData = reader.GetValue(Of Char)("HiddenData"),
+            .EffectiveDateFrom = reader.GetValue(Of Date)("EffectiveDateFrom"),
+            .EffectiveDateTo = reader.GetValue(Of Date)("EffectiveDateTo")
         }
     End Function
 

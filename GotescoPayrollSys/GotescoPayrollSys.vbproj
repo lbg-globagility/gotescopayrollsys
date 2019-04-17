@@ -422,6 +422,7 @@
     <Compile Include="Primary\Entities\PayPeriod.vb" />
     <Compile Include="Primary\Entities\PhilHealth.vb" />
     <Compile Include="Primary\Entities\SalariesWithSSS.vb" />
+    <Compile Include="Primary\Entities\SocialSecurity.vb" />
     <Compile Include="Primary\Entities\SociaSecurityService.vb" />
     <Compile Include="Primary\Entities\Position.vb" />
     <Compile Include="Primary\Entities\PositionPrivilege.vb" />

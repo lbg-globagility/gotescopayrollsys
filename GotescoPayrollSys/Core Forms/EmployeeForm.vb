@@ -22238,6 +22238,42 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     End Sub
 
+    Private Async Sub ToolStripMenuItem1_ClickAsync(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
+
+        Dim loanID = Convert.ToInt32(dgvLoanList.Tag)
+
+        If dgvLoanList.RowCount = 0 Or loanID = 0 Then Return
+
+        Dim nForm As New LoanBackground(loanID)
+        If Not nForm.ShowDialog = DialogResult.OK Then Return
+
+        Dim query As String =
+                    String.Concat("UPDATE employeeloanschedule",
+                                  " SET `Status`='Cancelled'",
+                                  ", LastUpd=CURRENT_TIMESTAMP()",
+                                  ", LastUpdBy=@userID",
+                                  ", DiscontinuedDate=@discontinuedDate",
+                                  " WHERE RowID=@baseLoanID",
+                                  " AND OrganizationID=@orgID;")
+
+        Using connection As New MySqlConnection(connectionString),
+            command As New MySqlCommand(query, connection)
+
+            With command.Parameters
+                .AddWithValue("@userID", user_row_id)
+                .AddWithValue("@baseLoanID", loanID)
+                .AddWithValue("@orgID", org_rowid)
+                .AddWithValue("@discontinuedDate", nForm.LoanPrediction.PayToDate)
+            End With
+
+            Await connection.OpenAsync()
+            Await command.ExecuteNonQueryAsync()
+
+        End Using
+
+        dgvEmp_SelectionChanged(dgvEmp, New EventArgs)
+    End Sub
+
     Private Sub dgvLoanList_CurrentCellChanged(sender As Object, e As EventArgs) Handles dgvLoanList.CurrentCellChanged
 
         If dgvLoanList.RowCount <= 0 Then

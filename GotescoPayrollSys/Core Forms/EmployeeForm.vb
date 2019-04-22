@@ -3,11 +3,9 @@
 'Imports Emgu.CV.OCR
 'Imports Emgu.CV.
 'Imports Tesseract.Interop
-Imports System.Text.RegularExpressions
-Imports MySql.Data.MySqlClient
 Imports System.IO
-Imports System.Threading
 Imports System.Threading.Tasks
+Imports MySql.Data.MySqlClient
 
 Public Class EmployeeForm
 

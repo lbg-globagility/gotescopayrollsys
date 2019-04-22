@@ -1,4 +1,6 @@
 ﻿
+Imports MySql.Data.MySqlClient
+
 Public Class LoanCancellation
 
     Dim ReferenceLoanID As Object = Nothing
@@ -204,7 +206,7 @@ Public Class LoanCancellation
 
     End Sub
 
-    Private Sub tsbtnSaveLoan_Click1(sender As Object, e As EventArgs)
+    Private Async Sub tsbtnSaveLoan_Click1Async(sender As Object, e As EventArgs)
 
         tsbtnSaveLoan.Enabled = False
 
@@ -352,7 +354,7 @@ Public Class LoanCancellation
                             ',els_DeductionSchedule,els_TotalBalanceLeft,els_DeductionAmount,els_Status
                             ',els_LoanTypeID,els_DeductionPercentage,els_NoOfPayPeriod,els_LoanPayPeriodLeft,els_Comments,els_ReferenceLoanID
 
-                            .Cells("elsRowID").Value = _
+                            .Cells("elsRowID").Value =
                                 New ReadSQLFunction("INSUPD_employeeloanschedule",
                                                         "returnvalue",
                                                     If(.Cells("elsRowID").Value = Nothing, DBNull.Value, .Cells("elsRowID").Value),
@@ -406,21 +408,41 @@ Public Class LoanCancellation
 
             Next
 
+            'Dim effectiveStartDates = dgvLoanItem.Rows.
+            '        OfType(Of DataGridViewRow).
+            '        Where(Function(row) Not row.IsNewRow).
+            '        Select(Function(row) CDate(row.Cells(elsDedEffectiveDateFrom.Name).Value)).
+            '        ToList()
+            'effectiveStartDates.Any()
+
             If dgvLoanItem.RowCount > 1 Then
 
-                Dim n_ExecuteQuery As _
-                    New ExecuteQuery("UPDATE employeeloanschedule" &
-                                     " SET `Status`='Cancelled'" &
-                                     ",LastUpd=CURRENT_TIMESTAMP()" &
-                                     ",LastUpdBy='" & user_row_id & "'" &
-                                     " WHERE RowID='" & ReferenceLoanID & "'" &
-                                     " AND OrganizationID='" & org_rowid & "';")
+                Dim query As String =
+                    String.Concat("UPDATE employeeloanschedule",
+                                  " SET `Status`='Cancelled'",
+                                  ", LastUpd=CURRENT_TIMESTAMP()",
+                                  ", LastUpdBy=@userID",
+                                  ", SubstituteEndDate=PAYTODATE_OF_NoOfPayPeriod(DedEffectiveDateFrom, (Noofpayperiod - LoanPayPeriodLeft), EmployeeID, DeductionSchedule)",
+                                  " WHERE RowID=@baseLoanID",
+                                  " AND OrganizationID=@orgID;")
 
-                'SubstituteEndDate
+                Using connection As New MySqlConnection(connectionString),
+                    command As New MySqlCommand(query, connection)
+
+                    With command.Parameters
+                        .AddWithValue("@userID", user_row_id)
+                        .AddWithValue("@baseLoanID", ReferenceLoanID)
+                        .AddWithValue("@orgID", org_rowid)
+                        '.AddWithValue("@subEndDate", effectiveStartDates.Min.AddDays(-1))
+                    End With
+
+                    Await connection.OpenAsync()
+                    Await command.ExecuteNonQueryAsync()
+                End Using
 
             End If
 
-            DialogResult = Windows.Forms.DialogResult.OK
+            DialogResult = DialogResult.OK
 
         Else
 
@@ -527,7 +549,7 @@ Public Class LoanCancellation
 
                         End If
 
-                        dgvLoanItem.Item("elsDedEffectiveDateFrom", e.RowIndex).Tag = _
+                        dgvLoanItem.Item("elsDedEffectiveDateFrom", e.RowIndex).Tag =
                             MYSQLDateFormat(CDate(dgvLoanItem.Item("elsDedEffectiveDateFrom", e.RowIndex).Value))
 
                     End If
@@ -563,7 +585,7 @@ Public Class LoanCancellation
                     dgvLoanItem.Item("elsLoanPayPeriodLeft", e.RowIndex).Value = ValNoComma(dgvLoanItem.Item("elsNoOfPayPeriod", e.RowIndex).Value)
 
                 End If
-                
+
                 If elsDeductionAmount.Index <> e.RowIndex Then
 
                     dgvLoanItem.Item("elsDeductionAmount", e.RowIndex).Value = ValNoComma(dgvLoanItem.Item("elsTotalLoanAmount", e.RowIndex).Value) _
@@ -674,7 +696,7 @@ Public Class LoanCancellation
 
     Private Sub cmbStatus_TextChanged(sender As Object, e As EventArgs) Handles cmbStatus.TextChanged
 
-        RemoveHandler tsbtnSaveLoan.Click, AddressOf tsbtnSaveLoan_Click1
+        RemoveHandler tsbtnSaveLoan.Click, AddressOf tsbtnSaveLoan_Click1Async
 
         If cmbStatus.Text.Length > 0 Then
 
@@ -682,7 +704,7 @@ Public Class LoanCancellation
 
             Else
 
-                AddHandler tsbtnSaveLoan.Click, AddressOf tsbtnSaveLoan_Click1
+                AddHandler tsbtnSaveLoan.Click, AddressOf tsbtnSaveLoan_Click1Async
 
             End If
 
@@ -701,7 +723,7 @@ Public Class LoanCancellation
                 If tsbtnSaveLoan.Enabled Then
                     Close()
                 End If
-                
+
             End If
 
             Return Not dgvLoanItem.IsCurrentCellInEditMode

@@ -7,6 +7,7 @@ Imports System.ComponentModel
 Imports log4net
 Imports OfficeOpenXml
 Imports System.Configuration
+Imports System.Data.Entity
 
 Public Class PayStub
 
@@ -2274,7 +2275,7 @@ Public Class PayStub
 
                                                            'bgworkgenpayroll.RunWorkerAsync()
 
-                                                           ThreadingPayrollGeneration(thread_max)
+                                                           ThreadingPayrollGenerationAsync(thread_max)
 
                                                        End Sub, TaskScheduler.FromCurrentSynchronizationContext)
 
@@ -2298,9 +2299,10 @@ Public Class PayStub
 
     Dim emp_list_batcount As Integer = 0
 
-    Private Sub ThreadingPayrollGeneration(Optional starting_batchindex As Integer = 0)
+    Private Async Sub ThreadingPayrollGenerationAsync(Optional starting_batchindex As Integer = 0)
 
         '# ################################################################################################################################################ #
+        Dim sssBrackets As New List(Of SssBracket)
 
         Timer1.Stop()
         Timer1.Enabled = False
@@ -2392,6 +2394,9 @@ Public Class PayStub
                 Console.WriteLine("Payroll Form disabled now")
 
             End If
+
+            sssBrackets = Await LoadSssBracketsAsync()
+
         Catch ex As Exception
             Dim err_msg As String = getErrExcptn(ex, Name)
             erro_msg_length = err_msg.Length
@@ -2450,6 +2455,8 @@ Public Class PayStub
                                                                               withthirteenthmonthpay, Me)
 
                             With n_PayrollGeneration
+                                .SssBrackets = sssBrackets
+
                                 .PayrollDateFrom = paypFrom
                                 .PayrollDateTo = paypTo
                                 .PayrollRecordID = paypRowID
@@ -2499,6 +2506,24 @@ Public Class PayStub
         End Try
 
     End Sub
+
+    Private Async Function LoadSssBracketsAsync() As Task(Of IList(Of SssBracket))
+        Dim list As New List(Of SssBracket)
+
+        Dim dateFromYmd = Split(paypFrom, "-")
+        Dim dateToYmd = Split(paypTo, "-")
+
+        Dim dateFrom = New Date(dateFromYmd.First, dateFromYmd(1), dateFromYmd.Last)
+        Dim dateTo = New Date(dateToYmd.First, dateToYmd(1), dateToYmd.Last)
+
+        Using context = New DatabaseContext
+            list = Await context.SssBrackets.
+                Where(Function(sss) sss.EffectiveDateFrom <= dateFrom AndAlso sss.EffectiveDateTo >= dateTo).
+                ToListAsync()
+        End Using
+
+        Return list
+    End Function
 
     Dim payroll_emp_count As Integer = 0
 
@@ -11624,7 +11649,7 @@ Public Class PayStub
 
             'If payroll_emp_count >= max_rec_perpage Then
             If emp_list_batcount > thread_max Then
-                ThreadingPayrollGeneration(indxStartBatch)
+                ThreadingPayrollGenerationAsync(indxStartBatch)
             End If
 
             Console.WriteLine("batch has finished...")

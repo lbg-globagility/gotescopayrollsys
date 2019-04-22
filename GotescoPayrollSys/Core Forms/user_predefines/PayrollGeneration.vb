@@ -279,6 +279,16 @@ Public Class PayrollGeneration
 
     End Property
 
+    Private _sssBrackets As IList(Of SssBracket)
+    Public Property SssBrackets() As IList(Of SssBracket)
+        Get
+            Return _sssBrackets
+        End Get
+        Set(ByVal value As IList(Of SssBracket))
+            _sssBrackets = value
+        End Set
+    End Property
+
     'n_PayrollRecordID
 
     Private strPHHdeductsched,
@@ -932,15 +942,15 @@ Public Class PayrollGeneration
                         'sss_ee = ValNoComma(sss.Compute("MIN(EmployeeContributionAmount)", String.Concat("RowID = ", ValNoComma(drowsal("PaySocialSecurityID")))))
                         'sss_er = ValNoComma(sss.Compute("MIN(EmployerContributionAmount)", String.Concat("RowID = ", ValNoComma(drowsal("PaySocialSecurityID")))))
 
-                        Dim sss_param = New Object() {amount_used_to_get_sss_contrib}
+                        'Dim sss_param = New Object() {amount_used_to_get_sss_contrib}
 
-                        Dim sss_sql As New SQL(sss_contrib_quer, sss_param)
-                        Dim catch_result As New DataTable
-                        catch_result = sss_sql.GetFoundRows.Tables(0)
-                        For Each ss_row As DataRow In catch_result.Rows
-                            sss_ee = ss_row(0)
-                            sss_er = ss_row(1)
-                        Next
+                        'Dim sss_sql As New SQL(sss_contrib_quer, sss_param)
+                        'Dim catch_result As New DataTable
+                        'catch_result = sss_sql.GetFoundRows.Tables(0)
+                        'For Each ss_row As DataRow In catch_result.Rows
+                        sss_ee = SssCalculator(amount_used_to_get_sss_contrib, EmployeeEmployer.Employee)
+                        sss_er = SssCalculator(amount_used_to_get_sss_contrib, EmployeeEmployer.Employer)
+                        'Next
 
                         'End If
 
@@ -1463,6 +1473,28 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         filingStatus.Dispose()
 
     End Sub
+
+    Private Enum EmployeeEmployer
+        Employee
+        Employer
+    End Enum
+
+    Private Function SssCalculator(amount As Decimal, employeeEmployer As EmployeeEmployer) As Decimal
+        Dim sssBracket = _sssBrackets.
+            Where(Function(sss) sss.RangeFromAmount <= amount AndAlso sss.RangeToAmount >= amount).
+            FirstOrDefault
+
+        If sssBracket Is Nothing Then Return 0
+
+        Dim returnValue As Decimal
+        If employeeEmployer = EmployeeEmployer.Employee Then
+            returnValue = sssBracket.EmployeeContributionAmount
+        ElseIf employeeEmployer = EmployeeEmployer.Employer Then
+            returnValue = sssBracket.EmployerContributionAmount
+        End If
+
+        Return returnValue
+    End Function
 
     Private Function CalcNewPhilHealth(amount_worked As Decimal, is_for_employee As Boolean, Optional new_philhealth_deduction As Decimal = 0) As Decimal
         Static base_multiplier As Decimal = 0.01

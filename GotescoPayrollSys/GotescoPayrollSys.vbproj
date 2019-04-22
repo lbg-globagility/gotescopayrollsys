@@ -421,6 +421,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PrivilegeType.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Product.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\ProperDisplayAuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\SssBracket.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\TimeEntryLogsPerCutOff.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
     <Compile Include="Core Forms\user_predefines\OutputText.vb" />

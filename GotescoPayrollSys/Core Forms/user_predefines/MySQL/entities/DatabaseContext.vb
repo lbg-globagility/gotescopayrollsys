@@ -64,4 +64,6 @@ Public Class DatabaseContext
 
     Public Overridable Property PositionPrivileges() As DbSet(Of PositionPrivilege)
 
+    Public Overridable Property SssBrackets() As DbSet(Of SssBracket)
+
 End Class

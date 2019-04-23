@@ -292,6 +292,7 @@ Partial Class LoanBackground
         Me.Column34.HeaderText = ""
         Me.Column34.Name = "Column34"
         Me.Column34.ReadOnly = True
+        Me.Column34.Visible = False
         '
         'Column22
         '

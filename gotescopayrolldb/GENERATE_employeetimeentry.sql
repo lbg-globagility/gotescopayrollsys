@@ -510,9 +510,10 @@ ELSE
 	,IF(e_UTOverride = 1, etd.TimeOut, IFNULL(sh.TimeTo,etd.TimeOut))
 	,IF(etd.TimeStampIn BETWEEN CONCAT_DATETIME(ete_Date, MAKETIME(0,0,0)) AND ADDDATE(CONCAT_DATETIME(ete_Date, sh.TimeFrom), INTERVAL e.LateGracePeriod MINUTE), CONCAT_DATETIME(ete_Date, sh.TimeFrom), etd.TimeStampIn) `TimeStampIn`
 #	, etd.TimeStampIn
-	, IF(e_UTOverride = 1, etd.TimeStampOut
+	, IF(e_UTOverride = 1
 			, LEAST(IFNULL(GetNextStartDateTime(CONCAT_DATETIME(ete_Date, sh.TimeFrom), sh.TimeTo), etd.TimeStampOut)
 						, etd.TimeStampOut)
+			, IFNULL(GetNextStartDateTime(CONCAT_DATETIME(ete_Date, sh.TimeFrom), sh.TimeTo), etd.TimeStampOut)
 			) `TimeStampOut`
 	, sh.BreakTimeFrom
 	, sh.BreakTimeTo

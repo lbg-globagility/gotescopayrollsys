@@ -3,8 +3,8 @@
 Imports System.ComponentModel.DataAnnotations
 Imports System.ComponentModel.DataAnnotations.Schema
 
-<Table("paysocialsecurity")>
-Public Class SociaSecurityService
+<Table("socialsecurityservice")>
+Public Class SocialSecurityService
     <Key>
     <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property RowID As Integer

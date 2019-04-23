@@ -52,7 +52,7 @@ Public Class Salary
 
     Public Overridable Property Employee As Employee
 
-    Public Overridable Property SociaSecurityService As SociaSecurityService
+    Public Overridable Property SociaSecurityService As SocialSecurityService
 
     Public Overridable Property PhilHealth As PhilHealth
 

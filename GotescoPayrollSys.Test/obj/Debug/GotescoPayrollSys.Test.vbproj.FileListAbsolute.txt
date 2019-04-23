@@ -63,3 +63,9 @@ D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys.Test\bin\Debug
 D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.vbproj.CopyComplete
 D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.dll
 D:\Visual Studio 2013 project\GotescoPayrollSys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.xml
+D:\Repos\gotescopayrollsys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.vbprojAssemblyReference.cache
+D:\Repos\gotescopayrollsys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.Resources.resources
+D:\Repos\gotescopayrollsys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.vbproj.GenerateResource.cache
+D:\Repos\gotescopayrollsys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.vbproj.CoreCompileInputs.cache
+D:\Repos\gotescopayrollsys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.dll
+D:\Repos\gotescopayrollsys\GotescoPayrollSys.Test\obj\Debug\GotescoPayrollSys.Test.xml

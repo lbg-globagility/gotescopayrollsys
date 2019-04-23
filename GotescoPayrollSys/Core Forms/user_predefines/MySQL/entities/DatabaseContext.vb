@@ -64,6 +64,10 @@ Public Class DatabaseContext
 
     Public Overridable Property PositionPrivileges() As DbSet(Of PositionPrivilege)
 
+    Public Overridable Property Salaries As DbSet(Of Salary)
+
     Public Overridable Property SssBrackets() As DbSet(Of SssBracket)
+
+    Public Overridable Property PhilHealthBrackets() As DbSet(Of PhilHealth)
 
 End Class

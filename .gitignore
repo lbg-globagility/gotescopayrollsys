@@ -30,3 +30,5 @@ GotescoPayrollSys/obj/
 .vs/GotescoPayrollSys/
 gotescopayrolldb/INSERTINTO_onedayseconds.sql
 gotescopayrolldb/testview.sql
+GotescoPayrollSys.Test/bin/Debug/*.*
+GotescoPayrollSys.Test/obj/Debug/*.*

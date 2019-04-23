@@ -1197,6 +1197,7 @@
     <Compile Include="Core Forms\viewtotloan.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Primary\Payroll\PayrollResources.vb" />
     <Compile Include="Reports\Providers\AgencyFeeReportProvider.vb" />
     <Compile Include="Reports\Providers\AttendanceSheetReportProvider.vb" />
     <Compile Include="Reports\Providers\DateRangeDialog.Designer.vb">

@@ -11911,7 +11911,7 @@ Public Class EmployeeForm
 
         If objGotFoc IsNot Nothing _
             And (is_user_override_phh = False And is_user_override_sss = False) Then
-            edited_employeesalary(objGotFoc, e)
+            edited_employeesalaryAsync(objGotFoc, e)
         End If
 
         If errprovidSal.GetError(dptFromSal) <> Nothing Then
@@ -12224,7 +12224,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     Dim payfreqdivisor = Val(0)
 
-    Private Sub edited_employeesalary(sender As Object, e As EventArgs) Handles txtEmpDeclaSal.Leave,
+    Private Async Sub edited_employeesalaryAsync(sender As Object, e As EventArgs) Handles txtEmpDeclaSal.Leave,
                                                                                 txtBasicrateSal.Leave,
                                                                                 txtPhilHealthSal.Leave,
                                                                                 txtSSSSal.Leave,
@@ -12410,8 +12410,31 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                     End If
 
-                    Dim objval = EXECQUER("SELECT COALESCE(EmployeeContributionAmount,0) FROM paysocialsecurity WHERE COALESCE(" & the_salary &
-                                          ",0) BETWEEN RangeFromAmount AND RangeToAmount ORDER BY MonthlySalaryCredit DESC LIMIT 1;")
+                    Dim sssContributionAmount As Decimal
+                    Dim query = <![CDATA[SELECT GetSSSContribution(@employeePrimaID, @salaryAmount, @salaryEffectiveDateFrom, @salaryEffectiveDateTo);]]>.Value
+                    Using connection As New MySqlConnection(connectionString),
+                        command As New MySqlCommand(query, connection)
+
+                        With command.Parameters
+                            .AddWithValue("@employeePrimaID", sameEmpID)
+                            .AddWithValue("@salaryAmount", the_salary)
+                            .AddWithValue("@salaryEffectiveDateFrom", dptFromSal.Value.Date)
+                            .AddWithValue("@salaryEffectiveDateTo", dtpToSal.Value.Date)
+                        End With
+
+                        Await connection.OpenAsync()
+                        Try
+                            Dim reader = Await command.ExecuteReaderAsync()
+
+                            Dim models = New List(Of LoanScheduleWithPayPeriod)
+                            While Await reader.ReadAsync()
+                                sssContributionAmount = Convert.ToDecimal(reader(0))
+                            End While
+
+                        Catch ex As Exception
+                            MessageBox.Show(String.Concat("Oops! something went wrong. See details :", vbNewLine, ex.Message), "Error SSS contribution", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        End Try
+                    End Using
 
                     If btnNewSal.Enabled = False Then
 
@@ -12420,10 +12443,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     If isorgSSSdeductsched = 0 _
                         Or isorgSSSdeductsched = 1 Then 'End of the month OR First half of the month
 
-                        txtSSSSal.Text = Val(objval)
+                        txtSSSSal.Text = Val(sssContributionAmount)
                     Else
 
-                        txtSSSSal.Text = Val(objval) / payfreqdivisor
+                        txtSSSSal.Text = Val(sssContributionAmount) / payfreqdivisor
 
                     End If
 

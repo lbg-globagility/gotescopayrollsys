@@ -93,24 +93,18 @@ Public Class DataBaseConnection
 
             End If
 
+            Dim fields = {Convert.ToString(regKey.GetValue("server")),
+                Convert.ToString(regKey.GetValue("user id")),
+                Convert.ToString(regKey.GetValue("password")),
+                Convert.ToString(regKey.GetValue("database"))}
 
-            ver = Convert.ToString(regKey.GetValue("server")) & ";" &
-                Convert.ToString(regKey.GetValue("user id")) & ";" & _
-                Convert.ToString(regKey.GetValue("password")) & ";" & _
-                Convert.ToString(regKey.GetValue("database")) & ";"
+            sys_servername = fields.FirstOrDefault
 
+            sys_userid = fields(1)
 
-            Dim str_explode() As String = Split(ver, ";")
+            sys_password = fields(2)
 
-            sys_servername = str_explode(0) 'regKey.GetValue("server")
-
-            sys_userid = str_explode(1) 'regKey.GetValue("user id")
-
-            sys_password = str_explode(2) 'regKey.GetValue("password")
-
-            sys_db = str_explode(3) 'regKey.GetValue("database")
-
-            'sys_apppath = regKey.GetValue("apppath")
+            sys_db = fields.LastOrDefault
 
             installerpath = sys_apppath
 
@@ -119,10 +113,8 @@ Public Class DataBaseConnection
             n_PasswordOfDatabase = sys_password
             n_NameOfDatabase = sys_db
 
-            connstringresult = "server=" & sys_servername & _
-                ";user id=" & sys_userid & _
-                ";password=" & sys_password & _
-                ";database=" & sys_db & ";"
+            connstringresult =
+                String.Join(";", {$"server={sys_servername}", $"user id={sys_userid}", $"password={sys_password}", $"database={sys_db}", String.Empty})
 
             db_connectinstring = connstringresult
 

@@ -273,6 +273,12 @@
     <Compile Include="Core Forms\EmployeeData.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Core Forms\LoanBackground.Designer.vb">
+      <DependentUpon>LoanBackground.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Core Forms\LoanBackground.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Core Forms\OBFForm.Designer.vb">
       <DependentUpon>OBFForm.vb</DependentUpon>
     </Compile>
@@ -406,32 +412,24 @@
     <Compile Include="Core Forms\user_predefines\Custom\LeaveLedger.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\LeaveTransaction.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\RenewLeaveBalancePolicy.vb" />
-    <Compile Include="Primary\Entities\AuditTrail.vb" />
-    <Compile Include="Primary\Entities\Category.vb" />
-    <Compile Include="Primary\Entities\Employee.vb" />
-    <Compile Include="Primary\Entities\EmployeeEntity.vb" />
-    <Compile Include="Primary\Entities\EmployeeTimeEntryDetails.vb" />
-    <Compile Include="Primary\Entities\interface\IAuditTrail.vb" />
-    <Compile Include="Primary\Entities\DatabaseContext.vb" />
-    <Compile Include="Primary\Entities\interface\ILoanSchedule.vb" />
-    <Compile Include="Primary\Entities\interface\ISalary.vb" />
-    <Compile Include="Primary\Entities\LoanSchedule.vb" />
-    <Compile Include="Primary\Entities\LoanScheduleWithPayPeriod.vb" />
-    <Compile Include="Primary\Entities\newphilhealthimplement.vb" />
-    <Compile Include="Primary\Entities\Organization.vb" />
-    <Compile Include="Primary\Entities\PayPeriod.vb" />
-    <Compile Include="Primary\Entities\PhilHealth.vb" />
-    <Compile Include="Primary\Entities\SalariesWithSSS.vb" />
-    <Compile Include="Primary\Entities\SocialSecurity.vb" />
-    <Compile Include="Primary\Entities\SociaSecurityService.vb" />
-    <Compile Include="Primary\Entities\Position.vb" />
-    <Compile Include="Primary\Entities\PositionPrivilege.vb" />
-    <Compile Include="Primary\Entities\PrivilegeType.vb" />
-    <Compile Include="Primary\Entities\Product.vb" />
-    <Compile Include="Primary\Entities\ProperDisplayAuditTrail.vb" />
-    <Compile Include="Primary\Entities\Salary.vb" />
-    <Compile Include="Primary\Entities\TimeEntryLogsPerCutOff.vb" />
-    <Compile Include="Primary\Entities\WithHoldingTax.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Category.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Employee.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeEntity.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeTimeEntryDetails.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\DatabaseContext.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Organization.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PayPeriod.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Position.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PositionPrivilege.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PrivilegeType.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Product.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\ProperDisplayAuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\SssBracket.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\TimeEntryLogsPerCutOff.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
     <Compile Include="Core Forms\user_predefines\OutputText.vb" />
     <Compile Include="Core Forms\user_predefines\TimeInTimeOutParser.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\EmployeeCollection.vb" />
@@ -1389,6 +1387,9 @@
     <Content Include="gotescomarketing.ico" />
     <EmbeddedResource Include="Core Forms\DateRangePickerDialog.resx">
       <DependentUpon>DateRangePickerDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\LoanBackground.resx">
+      <DependentUpon>LoanBackground.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\PayStub.resx">
       <DependentUpon>PayStub.vb</DependentUpon>

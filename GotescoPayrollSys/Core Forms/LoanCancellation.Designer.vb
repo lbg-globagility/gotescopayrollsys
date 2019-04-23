@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class LoanCancellation
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,14 +20,12 @@ Partial Class LoanCancellation
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(LoanCancellation))
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.tsbtnSaveLoan = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnCancel = New System.Windows.Forms.ToolStripButton()
@@ -42,10 +40,10 @@ Partial Class LoanCancellation
         Me.elsLoanNumber = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.elsTotalLoanAmount = New GotescoPayrollSys.DataGridViewNumberColumn()
         Me.elsTotalBalanceLeft = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elsDedEffectiveDateFrom = New GotescoPayrollSys.DataGridViewDateColumn()
+        Me.elsDedEffectiveDateFrom = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
         Me.elsDeductionSchedule = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.elsNoOfPayPeriod = New GotescoPayrollSys.DataGridViewNumberColumn()
-        Me.elsDedEffectiveDateTo = New GotescoPayrollSys.DataGridViewDateColumn()
+        Me.elsDedEffectiveDateTo = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
         Me.elsLoanPayPeriodLeft = New GotescoPayrollSys.DataGridViewNumberColumn()
         Me.elsDeductionAmount = New GotescoPayrollSys.DataGridViewNumberColumn()
         Me.elsStatus = New System.Windows.Forms.DataGridViewComboBoxColumn()
@@ -226,14 +224,14 @@ Partial Class LoanCancellation
         Me.dgvLoanItem.BackgroundColor = System.Drawing.Color.White
         Me.dgvLoanItem.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvLoanItem.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.elsRowID, Me.elsLoanType, Me.elsLoanNumber, Me.elsTotalLoanAmount, Me.elsTotalBalanceLeft, Me.elsDedEffectiveDateFrom, Me.elsDeductionSchedule, Me.elsNoOfPayPeriod, Me.elsDedEffectiveDateTo, Me.elsLoanPayPeriodLeft, Me.elsDeductionAmount, Me.elsStatus, Me.elsDeductionPercentage, Me.elsComments})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvLoanItem.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvLoanItem.DefaultCellStyle = DataGridViewCellStyle1
         Me.dgvLoanItem.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvLoanItem.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgvLoanItem.Location = New System.Drawing.Point(0, 0)
@@ -280,17 +278,38 @@ Partial Class LoanCancellation
         '
         'elsDedEffectiveDateFrom
         '
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.Format = "M/d/yyyy"
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.elsDedEffectiveDateFrom.DefaultCellStyle = DataGridViewCellStyle1
+        '
+        '
+        '
+        Me.elsDedEffectiveDateFrom.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.elsDedEffectiveDateFrom.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.elsDedEffectiveDateFrom.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elsDedEffectiveDateFrom.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
         Me.elsDedEffectiveDateFrom.HeaderText = "Effective date from"
-        Me.elsDedEffectiveDateFrom.MaxInputLength = 11
+        Me.elsDedEffectiveDateFrom.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.elsDedEffectiveDateFrom.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.elsDedEffectiveDateFrom.MonthCalendar.BackgroundStyle.Class = ""
+        Me.elsDedEffectiveDateFrom.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.elsDedEffectiveDateFrom.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.elsDedEffectiveDateFrom.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elsDedEffectiveDateFrom.MonthCalendar.DisplayMonth = New Date(2019, 4, 1, 0, 0, 0, 0)
+        Me.elsDedEffectiveDateFrom.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.elsDedEffectiveDateFrom.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.elsDedEffectiveDateFrom.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.elsDedEffectiveDateFrom.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elsDedEffectiveDateFrom.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
         Me.elsDedEffectiveDateFrom.Name = "elsDedEffectiveDateFrom"
         Me.elsDedEffectiveDateFrom.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.elsDedEffectiveDateFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
@@ -312,17 +331,36 @@ Partial Class LoanCancellation
         '
         'elsDedEffectiveDateTo
         '
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.Format = "M/d/yyyy"
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.elsDedEffectiveDateTo.DefaultCellStyle = DataGridViewCellStyle2
+        '
+        '
+        '
+        Me.elsDedEffectiveDateTo.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.elsDedEffectiveDateTo.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.elsDedEffectiveDateTo.HeaderText = "Effective date to"
-        Me.elsDedEffectiveDateTo.MaxInputLength = 11
+        Me.elsDedEffectiveDateTo.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.elsDedEffectiveDateTo.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.elsDedEffectiveDateTo.MonthCalendar.BackgroundStyle.Class = ""
+        Me.elsDedEffectiveDateTo.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.elsDedEffectiveDateTo.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.elsDedEffectiveDateTo.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elsDedEffectiveDateTo.MonthCalendar.DisplayMonth = New Date(2019, 4, 1, 0, 0, 0, 0)
+        Me.elsDedEffectiveDateTo.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.elsDedEffectiveDateTo.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.elsDedEffectiveDateTo.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.elsDedEffectiveDateTo.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elsDedEffectiveDateTo.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
         Me.elsDedEffectiveDateTo.Name = "elsDedEffectiveDateTo"
         Me.elsDedEffectiveDateTo.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.elsDedEffectiveDateTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
@@ -671,15 +709,15 @@ Partial Class LoanCancellation
         '
         'DataGridViewDateColumn1
         '
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle4.Format = "M/d/yyyy"
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewDateColumn1.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.Format = "M/d/yyyy"
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewDateColumn1.DefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridViewDateColumn1.HeaderText = "Effective date from"
         Me.DataGridViewDateColumn1.MaxInputLength = 11
         Me.DataGridViewDateColumn1.Name = "DataGridViewDateColumn1"
@@ -696,15 +734,15 @@ Partial Class LoanCancellation
         '
         'DataGridViewDateColumn2
         '
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.Format = "M/d/yyyy"
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewDateColumn2.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.Format = "M/d/yyyy"
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewDateColumn2.DefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridViewDateColumn2.HeaderText = "Effective date to"
         Me.DataGridViewDateColumn2.MaxInputLength = 11
         Me.DataGridViewDateColumn2.Name = "DataGridViewDateColumn2"
@@ -887,20 +925,20 @@ Partial Class LoanCancellation
     Friend WithEvents DataGridViewNumberColumn4 As GotescoPayrollSys.DataGridViewNumberColumn
     Friend WithEvents DataGridViewNumberColumn5 As GotescoPayrollSys.DataGridViewNumberColumn
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
-    Friend WithEvents elsRowID As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elsLoanType As System.Windows.Forms.DataGridViewComboBoxColumn
-    Friend WithEvents elsLoanNumber As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elsTotalLoanAmount As GotescoPayrollSys.DataGridViewNumberColumn
-    Friend WithEvents elsTotalBalanceLeft As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elsDedEffectiveDateFrom As GotescoPayrollSys.DataGridViewDateColumn
-    Friend WithEvents elsDeductionSchedule As System.Windows.Forms.DataGridViewComboBoxColumn
-    Friend WithEvents elsNoOfPayPeriod As GotescoPayrollSys.DataGridViewNumberColumn
-    Friend WithEvents elsDedEffectiveDateTo As GotescoPayrollSys.DataGridViewDateColumn
-    Friend WithEvents elsLoanPayPeriodLeft As GotescoPayrollSys.DataGridViewNumberColumn
-    Friend WithEvents elsDeductionAmount As GotescoPayrollSys.DataGridViewNumberColumn
-    Friend WithEvents elsStatus As System.Windows.Forms.DataGridViewComboBoxColumn
-    Friend WithEvents elsDeductionPercentage As GotescoPayrollSys.DataGridViewNumberColumn
-    Friend WithEvents elsComments As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents PanelEqual As System.Windows.Forms.Panel
     Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents elsRowID As DataGridViewTextBoxColumn
+    Friend WithEvents elsLoanType As DataGridViewComboBoxColumn
+    Friend WithEvents elsLoanNumber As DataGridViewTextBoxColumn
+    Friend WithEvents elsTotalLoanAmount As DataGridViewNumberColumn
+    Friend WithEvents elsTotalBalanceLeft As DataGridViewTextBoxColumn
+    Friend WithEvents elsDedEffectiveDateFrom As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents elsDeductionSchedule As DataGridViewComboBoxColumn
+    Friend WithEvents elsNoOfPayPeriod As DataGridViewNumberColumn
+    Friend WithEvents elsDedEffectiveDateTo As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents elsLoanPayPeriodLeft As DataGridViewNumberColumn
+    Friend WithEvents elsDeductionAmount As DataGridViewNumberColumn
+    Friend WithEvents elsStatus As DataGridViewComboBoxColumn
+    Friend WithEvents elsDeductionPercentage As DataGridViewNumberColumn
+    Friend WithEvents elsComments As DataGridViewTextBoxColumn
 End Class

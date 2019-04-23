@@ -61,10 +61,6 @@ Public Class DatabaseContext
 
     Public Overridable Property Salaries As DbSet(Of Salary)
 
-    Public Overridable Property PhilHealthBrackets As DbSet(Of PhilHealth)
-
-    Public Overridable Property SociaSecurityBrackets As DbSet(Of SociaSecurityService)
-
-    Public Overridable Property WithHoldingTaxBrackets As DbSet(Of WithHoldingTax)
+    Public Overridable Property SssBrackets() As DbSet(Of SssBracket)
 
 End Class

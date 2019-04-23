@@ -81,10 +81,10 @@ ELSE
 
 END IF;
 
-IF NEW.`Status` = cancelled_status THEN
+IF NEW.`Status` = 'Cancelled' THEN #cancelled_status
 
 	SET NEW.SubstituteEndDate = PAYTODATE_OF_NoOfPayPeriod(NEW.DedEffectiveDateFrom
-	,IF((NEW.Noofpayperiod - NEW.LoanPayPeriodLeft) = 0, NEW.Noofpayperiod, (NEW.Noofpayperiod - NEW.LoanPayPeriodLeft))
+	,(NEW.Noofpayperiod - NEW.LoanPayPeriodLeft)
 	,NEW.EmployeeID
 	,NEW.DeductionSchedule);
 	

@@ -22226,38 +22226,41 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     End Sub
 
-    Private Sub CancelOutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CancelOutToolStripMenuItem.Click
+    Private Async Sub CancelOutToolStripMenuItem_ClickAsync(sender As Object, e As EventArgs) Handles CancelOutToolStripMenuItem.Click
 
-        If cmbStatus.Enabled Then
+        Dim loanID = Convert.ToInt32(dgvLoanList.Tag)
 
-            Dim prompt =
-            MessageBox.Show("This process will totally cancel this loan, proceed ?", "Cancel loan", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+        If dgvLoanList.RowCount = 0 Or loanID = 0 Then Return
 
-            If prompt = DialogResult.Yes Then
-
-                Dim sql As New SQL(
+        Dim query As String =
                     String.Concat("UPDATE employeeloanschedule",
                                   " SET `Status`='Cancelled'",
-                                  ",LastUpd=CURRENT_TIMESTAMP()",
-                                  ",LastUpdBy='", user_row_id, "'",
-                                  " WHERE RowID='", Convert.ToInt32(dgvLoanList.Tag), "'",
-                                  " AND OrganizationID='", org_rowid, "';"))
+                                  ", LastUpd=CURRENT_TIMESTAMP()",
+                                  ", LastUpdBy=@userID",
+                                  ", DiscontinuedDate=NULL",
+                                  " WHERE RowID=@baseLoanID;")
 
-                Dim n_task =
-                    Task.Run(Sub()
-                                 sql.ExecuteQueryAsync()
-                             End Sub)
+        Dim succeed = False
+        Try
+            Using connection As New MySqlConnection(connectionString),
+            command As New MySqlCommand(query, connection)
 
-                n_task.Wait()
+                With command.Parameters
+                    .AddWithValue("@userID", user_row_id)
+                    .AddWithValue("@baseLoanID", loanID)
+                End With
 
-                If sql.HasError Then
-                    _logger.Error("Updating loan status to cancel ", sql.ErrorException)
-                Else
-                    ToolStripButton23_Click(sender, e)
-                End If
-            End If
+                Await connection.OpenAsync()
+                Await command.ExecuteNonQueryAsync()
 
-        End If
+                succeed = True
+            End Using
+        Catch ex As Exception
+            _logger.Error("Error cancelling loan", ex)
+            MessageBox.Show($"Cancelling loan failed, please report this issue to {My.Resources.SystemDeveloper}.", "Cancel loan failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            If succeed Then dgvEmp_SelectionChanged(dgvEmp, New EventArgs)
+        End Try
 
     End Sub
 
@@ -22279,22 +22282,29 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                                   " WHERE RowID=@baseLoanID",
                                   " AND OrganizationID=@orgID;")
 
-        Using connection As New MySqlConnection(connectionString),
+        Dim succeed = False
+        Try
+            Using connection As New MySqlConnection(connectionString),
             command As New MySqlCommand(query, connection)
 
-            With command.Parameters
-                .AddWithValue("@userID", user_row_id)
-                .AddWithValue("@baseLoanID", loanID)
-                .AddWithValue("@orgID", org_rowid)
-                .AddWithValue("@discontinuedDate", nForm.LoanPrediction.PayToDate)
-            End With
+                With command.Parameters
+                    .AddWithValue("@userID", user_row_id)
+                    .AddWithValue("@baseLoanID", loanID)
+                    .AddWithValue("@orgID", org_rowid)
+                    .AddWithValue("@discontinuedDate", nForm.LoanPrediction.PayToDate)
+                End With
 
-            Await connection.OpenAsync()
-            Await command.ExecuteNonQueryAsync()
+                Await connection.OpenAsync()
+                Await command.ExecuteNonQueryAsync()
 
-        End Using
+            End Using
+        Catch ex As Exception
+            _logger.Error("Error discontinuing loan", ex)
+            MessageBox.Show($"Discontinuing loan failed, please report this issue to {My.Resources.SystemDeveloper}.", "Discontinue loan failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            If succeed Then dgvEmp_SelectionChanged(dgvEmp, New EventArgs)
+        End Try
 
-        dgvEmp_SelectionChanged(dgvEmp, New EventArgs)
     End Sub
 
     Private Sub dgvLoanList_CurrentCellChanged(sender As Object, e As EventArgs) Handles dgvLoanList.CurrentCellChanged

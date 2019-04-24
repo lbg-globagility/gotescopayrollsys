@@ -9,6 +9,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_employeeloanschedules_ofthisperiod`(
 	IN `org_rowid` INT,
 	IN `payperiod_rowid` INT
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -28,7 +30,7 @@ FROM (SELECT i.*
 		SELECT i.*
 		FROM loanpredict i
 		WHERE i.PayperiodID=payperiod_rowid
-		AND LCASE(i.`Status`) = 'Cancelled'
+		AND LCASE(i.`Status`) = 'cancelled'
 		AND i.DiscontinuedDate IS NOT NULL
 		) ii
 WHERE ii.PayperiodID=payperiod_rowid

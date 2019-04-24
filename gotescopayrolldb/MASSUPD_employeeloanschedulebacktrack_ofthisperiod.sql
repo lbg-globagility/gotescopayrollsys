@@ -35,6 +35,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `MASSUPD_employeeloanschedulebacktra
 
 
 
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -76,7 +78,7 @@ SET @has_loans = FALSE;
 		
 CALL `LoanPrediction`(og_rowid)
 ;
-INSERT INTO employeeloanschedulebacktrack
+/*INSERT INTO employeeloanschedulebacktrack
 (
 	OrganizationID
 	,CreatedBy
@@ -88,14 +90,16 @@ INSERT INTO employeeloanschedulebacktrack
 	,DeductedAmount
 	,`Status`
 	
-) SELECT og_rowid
+)*/ SELECT og_rowid
 	, user_rowid
 	, ii.EmployeeID
 	, ii.`PaystubPrimaID`
 	, ii.RowID
 	, ii.LoanBalance
-	, ROUND((ii.LoanBalance / ii.TotalLoanAmount) * ii.NoOfPayPeriod, 2)
-	, ii.DeductionAmount
+#	, ROUND((ii.LoanBalance / ii.TotalLoanAmount) * ii.NoOfPayPeriod, 2)
+	, (ii.NoOfPayPeriod - ii.OrdinalIndex)
+#	, ii.DeductionAmount
+	, ii.ProperDeductAmount
 	, ii.`Status`
 	FROM (SELECT i.*
 			, ps.RowID `PaystubPrimaID`
@@ -105,101 +109,22 @@ INSERT INTO employeeloanschedulebacktrack
 			AND i.OrganizationID = og_rowid
 			AND i.LoanTypeID = IFNULL(loantypeid, i.LoanTypeID)
 			) ii
-	WHERE ii.`PaystubPrimaID` IS NOT NULL
+/*	WHERE ii.`PaystubPrimaID` IS NOT NULL
 ON DUPLICATE KEY UPDATE
 	LastUpd = CURRENT_TIMESTAMP()
 	,LastUpdBy = user_rowid
 	,PayStubID = ii.`PaystubPrimaID`
 	,LoanschedID = ii.RowID
 	,Balance = ii.LoanBalance
-	,CountPayPeriodLeft = ROUND((ii.LoanBalance / ii.TotalLoanAmount) * ii.NoOfPayPeriod, 2)
-	,DeductedAmount = ii.DeductionAmount
-	,`Status` = ii.`Status`
+#	,CountPayPeriodLeft = ROUND((ii.LoanBalance / ii.TotalLoanAmount) * ii.NoOfPayPeriod, 2)
+	,CountPayPeriodLeft = (ii.NoOfPayPeriod - ii.OrdinalIndex)
+	,DeductedAmount = ii.ProperDeductAmount
+	,`Status` = ii.`Status`*/
 ;
 
-WHILE _index < _count DO
-		
-	SELECT p.RowID
-	FROM product p
-	WHERE p.OrganizationID = og_rowid
-	AND p.`Category` = 'Loan Type'
-	AND p.ActiveData = '1'
-	LIMIT _index, 1
-	INTO p_id;
+/*
 
-	/**/ SET @has_loans = EXISTS(SELECT els.RowID
-	FROM employeeloanschedules els
-	WHERE els.OrganizationID=og_rowid
-	AND els.LoanTypeID=p_id
-	AND els.PayPeriodID=pp_rowid
-	AND els.PayStubID IS NOT NULL
-	LIMIT 1);
-
-	SET @_rowid = 0;
-	SET @isnotequal = FALSE;
-	SET @bal = 0.00;
-	SET @decrem = 0;
-
-	IF @has_loans THEN
-	
-		/**/ INSERT INTO paystubitem(OrganizationID, Created, CreatedBy, PayStubID, ProductID, PayAmount, Undeclared)
-		SELECT
-			og_rowid, CURRENT_TIMESTAMP(), user_rowid, i.PayStubRowID, p_id
-			, i.`CorrectedDeductionAmount`
-			, FALSE
-		FROM (SELECT
-		
-				els.EmployeeID
-				
-				, (@isnotequal := (@_rowid != els.RowID)) `IsNotEqual`
-				
-				, IF(@isnotequal
-				     , (@_rowid := els.RowID)
-					  , @_rowid
-					  ) `CustomRowID`
-				
-				,IF(@isnotequal = TRUE
-				    , (@bal := (els.TotalLoanAmount - els.DeductionAmount))
-					 , ROUND((@bal := (@bal - els.DeductionAmount)), 6)
-					 ) `RunningBalance`
-				
-				,IF(@isnotequal = TRUE
-				    , (@decrem := els.NoOfPayPeriod - 1)
-					 , (@decrem := @decrem - 1)
-					 ) `DecrementNumOfPayperiod`
-		
-				,IF(@bal != 0 AND @decrem = 0
-				    , 0
-					 , ROUND(@bal, 6)
-					 ) `CorrectedRunningBalance`
-				
-				, IF(@decrem = 0 # @bal != 0 AND 
-				     , ROUND((els.DeductionAmount + @bal), 6)
-					  , els.DeductionAmount
-					  ) `CorrectedDeductionAmount`
-				
-				, els.PayStubRowID # PayStubID
-				, p.Strength `Nondeductible`
-				, els.PayPeriodID
-				
-				FROM employeeloanschedules els
-				INNER JOIN product p ON p.RowID = els.LoanTypeID AND p.RowID = p_id
-				WHERE els.OrganizationID = og_rowid
-				AND IF(els.SubstituteEndDate IS NULL, els.`Status`, loanstatus_inprogress) IN (loanstatus_inprogress, 'Complete')
-				ORDER BY els.RowID, els.`Year`, els.`Month`
-				) i
-				## WHERE i.PayStubID IS NOT NULL
-				WHERE i.PayStubRowID IS NOT NULL
-				AND i.PayPeriodID = pp_rowid
-		/**/ ON DUPLICATE KEY UPDATE
-		LastUpd=CURRENT_TIMESTAMP()
-		, LastUpdBy = user_rowid
-		, PayAmount = i.`CorrectedDeductionAmount`
-		;
-	END IF;
-	
-		SET _index = _index + 1;
-END WHILE;
+*/
 
 END//
 DELIMITER ;

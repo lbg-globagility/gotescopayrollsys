@@ -6,7 +6,12 @@
 
 DROP FUNCTION IF EXISTS `PAYTODATE_OF_NoOfPayPeriod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `PAYTODATE_OF_NoOfPayPeriod`(`EmpLoanEffectiveDateFrom` DATE, `EmpLoanNoOfPayPeriod` INT, `Employee_RowID` INT, `LoanDeductSched` VARCHAR(100)) RETURNS date
+CREATE DEFINER=`root`@`localhost` FUNCTION `PAYTODATE_OF_NoOfPayPeriod`(
+	`EmpLoanEffectiveDateFrom` DATE,
+	`EmpLoanNoOfPayPeriod` INT,
+	`Employee_RowID` INT,
+	`LoanDeductSched` VARCHAR(100)
+) RETURNS date
     DETERMINISTIC
 BEGIN
 
@@ -56,12 +61,21 @@ ELSEIF LoanDeductSched = 'End of the month' THEN
 #	SELECT PayToDate FROM (SELECT RowID,PayToDate,(SELECT @i := @i + 1) `Rank` FROM payperiod WHERE RowID >= paypFrom_RowID AND `Half`='0' AND TotalGrossSalary=payfreqID LIMIT EmpLoanNoOfPayPeriod) AS `DateRank` WHERE IF(EmpLoanNoOfPayPeriod > `DateRank`.`Rank`, `DateRank`.`Rank`=@i, `DateRank`.`Rank`=EmpLoanNoOfPayPeriod) INTO ReturnDate;
 
 	SELECT MAX(i.PayToDate) `Result`
-	FROM (SELECT pp.*
-			FROM payperiod pp
-			WHERE pp.OrganizationID = OrganizID
-			AND pp.TotalGrossSalary = payfreqID
-			AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
-			AND pp.Half = '0'
+	FROM (
+			SELECT pp.*
+			FROM (SELECT pp.*
+					FROM payperiod pp
+					WHERE pp.OrganizationID = OrganizID
+					AND pp.TotalGrossSalary = payfreqID
+					AND EmpLoanEffectiveDateFrom BETWEEN pp.PayFromDate AND pp.PayToDate
+					AND pp.Half = '0'
+				UNION
+					SELECT pp.*
+					FROM payperiod pp
+					WHERE pp.OrganizationID = OrganizID
+					AND pp.TotalGrossSalary = payfreqID
+					AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
+					AND pp.Half = '0') pp
 			ORDER BY pp.`Year`, pp.OrdinalValue
 			LIMIT EmpLoanNoOfPayPeriod
 			) i

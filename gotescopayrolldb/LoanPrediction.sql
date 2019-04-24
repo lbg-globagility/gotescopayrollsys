@@ -12,6 +12,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `LoanPrediction`(
 
 
 
+
+
 )
 BEGIN
 
@@ -23,8 +25,11 @@ SET els.DedEffectiveDateTo = `PAYTODATE_OF_NoOfPayPeriod`(els.DedEffectiveDateFr
 
 SET @elsID = 0;
 SET @isAnotherID = FALSE;
-SET @totalLoan = 0.0;
+SET @totalLoan = 0.00;
 SET @ordinalIndex = 0;
+SET @propDeductAmt = 0.00;
+SET @progInterval = 0;
+SET @progAmt = 0.00;
 
 DROP TEMPORARY TABLE IF EXISTS loanpredict;
 DROP TABLE IF EXISTS loanpredict;
@@ -40,6 +45,15 @@ SELECT i.*
 		, @ordinalIndex := @ordinalIndex + 1) `OrdinalIndex`
 , (@totalLoan <= 0 AND @ordinalIndex = i.NoOfPayPeriod) `IsLast`
 
+, @progAmt := @ordinalIndex / i.NoOfPayPeriod `Progress`
+
+, IF(@isAnotherID
+     , @progInterval := @progAmt
+	  , @progInterval := @progAmt - ((@ordinalIndex - 1) / i.NoOfPayPeriod)
+	  ) `ProgressInterval`
+
+, ROUND(@progInterval * i.TotalLoanAmount, 2) `ProperDeductAmount`
+
 FROM (SELECT els.*
 		, pp.RowID `PayperiodID`, pp.PayFromDate, pp.PayToDate
 		, e.EmployeeID `EmployeeUniqueID`
@@ -47,7 +61,7 @@ FROM (SELECT els.*
 		FROM employeeloanschedule els
 		INNER JOIN employee e ON e.RowID=els.EmployeeID
 		INNER JOIN payperiod pp ON pp.OrganizationID=els.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID
-		AND (pp.PayFromDate >= els.DedEffectiveDateFrom AND pp.PayToDate <= els.DedEffectiveDateTo)
+		AND (pp.PayFromDate >= els.DedEffectiveDateFrom AND pp.PayToDate <= IFNULL(els.DiscontinuedDate, els.DedEffectiveDateTo))
 		WHERE els.OrganizationID = organizID
 		ORDER BY els.RowID, pp.`Year`, pp.OrdinalValue
 		) i

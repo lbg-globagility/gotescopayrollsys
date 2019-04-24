@@ -29,6 +29,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(
 
 
 
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN

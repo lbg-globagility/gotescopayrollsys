@@ -545,14 +545,27 @@ INSERT INTO paystubitem(OrganizationID,Created,CreatedBy,PayStubID,ProductID,Pay
 	,NEW.RowID
 	,els.LoanTypeID
 	,els.DeductionAmount
-	,'0'
-FROM employeeloanschedule els
-WHERE els.EmployeeID=NEW.EmployeeID
-AND els.OrganizationID=NEW.OrganizationID
-AND LOCATE(els.LoanTypeID,anyvchar) > 0
-AND els.DeductionSchedule IN ('Per pay period',payperiod_type)
-AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR IFNULL(els.SubstituteEndDate,els.DedEffectiveDateTo) >= NEW.PayFromDate)
-AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR IFNULL(els.SubstituteEndDate,els.DedEffectiveDateTo) <= NEW.PayToDate)
+	,FALSE
+FROM (SELECT els.*
+		FROM employeeloanschedule els
+		WHERE els.EmployeeID=NEW.EmployeeID
+		AND els.OrganizationID=NEW.OrganizationID
+		AND LCASE(els.`Status`) IN ('in progress', 'complete')
+		AND els.DiscontinuedDate IS NULL
+		AND els.DeductionSchedule IN ('Per pay period',payperiod_type)
+		AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DedEffectiveDateTo >= NEW.PayFromDate)
+		AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DedEffectiveDateTo <= NEW.PayToDate)
+	UNION
+		SELECT els.*
+		FROM employeeloanschedule els
+		WHERE els.EmployeeID=NEW.EmployeeID
+		AND els.OrganizationID=NEW.OrganizationID
+		AND LCASE(els.`Status`) = 'cancelled'
+		AND els.DiscontinuedDate IS NOT NULL
+		AND els.DeductionSchedule IN ('Per pay period',payperiod_type)
+		AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DiscontinuedDate >= NEW.PayFromDate)
+		AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DiscontinuedDate <= NEW.PayToDate)
+		) els
 ON
 DUPLICATE
 KEY

@@ -526,18 +526,29 @@ INSERT INTO paystubitem(OrganizationID,Created,CreatedBy,PayStubID,ProductID,Pay
 	,CURRENT_TIMESTAMP()
 	,NEW.CreatedBy
 	,NEW.RowID
-	,p_loan.RowID
+	,els.LoanTypeID
 	,IFNULL(els.DeductionAmount,0)
-	,'0'
-	FROM product p_loan
-	INNER JOIN payperiod pp ON pp.RowID=NEW.PayPeriodID
-	LEFT JOIN employeeloanschedule els
-			ON els.OrganizationID=p_loan.OrganizationID
-			AND els.EmployeeID=NEW.EmployeeID AND els.LoanTypeID=p_loan.RowID
-			AND (pp.PayFromDate >= els.DedEffectiveDateFrom OR pp.PayToDate >= els.DedEffectiveDateFrom)
-			AND (pp.PayFromDate <= els.DedEffectiveDateTo OR pp.PayToDate <= els.DedEffectiveDateTo)
+	,FALSE
+	FROM (SELECT els.*
+			FROM employeeloanschedule els
+			WHERE els.EmployeeID=NEW.EmployeeID
+			AND els.OrganizationID=NEW.OrganizationID
+			AND LCASE(els.`Status`) IN ('in progress', 'complete')
+			AND els.DiscontinuedDate IS NULL
 			AND els.DeductionSchedule IN ('Per pay period',payperiod_type)
-	WHERE p_loan.OrganizationID=NEW.OrganizationID AND p_loan.`Category`='Loan Type'
+			AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DedEffectiveDateTo >= NEW.PayFromDate)
+			AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DedEffectiveDateTo <= NEW.PayToDate)
+		UNION
+			SELECT els.*
+			FROM employeeloanschedule els
+			WHERE els.EmployeeID=NEW.EmployeeID
+			AND els.OrganizationID=NEW.OrganizationID
+			AND LCASE(els.`Status`) = 'cancelled'
+			AND els.DiscontinuedDate IS NOT NULL
+			AND els.DeductionSchedule IN ('Per pay period',payperiod_type)
+			AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DiscontinuedDate >= NEW.PayFromDate)
+			AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DiscontinuedDate <= NEW.PayToDate)
+			) els
 ON DUPLICATE KEY UPDATE
 	LastUpdBy=NEW.CreatedBy;
 	/*SELECT

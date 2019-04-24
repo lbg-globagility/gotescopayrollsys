@@ -537,6 +537,15 @@ AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR IFNULL(els.SubstituteEndDate
 AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR IFNULL(els.SubstituteEndDate,els.DedEffectiveDateTo) <= NEW.PayToDate)
 INTO anyvchar;
 
+UPDATE paystubitem psi
+INNER JOIN product p ON p.RowID=psi.ProductID
+INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Loan type'
+SET psi.PayAmount=0
+, psi.LastUpd=CURRENT_TIMESTAMP()
+, psi.LastUpdBy=NEW.LastUpdBy
+WHERE psi.PayStubID=NEW.RowID
+;
+
 INSERT INTO paystubitem(OrganizationID,Created,CreatedBy,PayStubID,ProductID,PayAmount,Undeclared)
 	SELECT
 	NEW.OrganizationID
@@ -576,7 +585,7 @@ UPDATE
 
 SET loantype_IDs = REPLACE(loantype_IDs,',,',',');
 
-INSERT INTO paystubitem(OrganizationID,Created,CreatedBy,PayStubID,ProductID,PayAmount,Undeclared)
+/*INSERT INTO paystubitem(OrganizationID,Created,CreatedBy,PayStubID,ProductID,PayAmount,Undeclared)
 	SELECT
 	NEW.OrganizationID
 	,CURRENT_TIMESTAMP()
@@ -595,7 +604,7 @@ KEY
 UPDATE
 	LastUpd = CURRENT_TIMESTAMP()
 	,LastUpdBy = NEW.LastUpdBy
-	,PayAmount = 0.0;
+	,PayAmount = 0.0;*/
 
 /* ########################################################################## */
 
@@ -617,7 +626,7 @@ SET @min_decremnt = 1;
 
 SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 
-	INSERT INTO paystubitem
+	/*INSERT INTO paystubitem
 	(
 		OrganizationID
 		, Created
@@ -646,7 +655,7 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 	DUPLICATE KEY UPDATE
 		LastUpd   =@loan_items_timestamp
 		,LastUpdBy=NEW.LastUpdBy
-		,PayAmount=els.DeductionAmount;
+		,PayAmount=els.DeductionAmount;*/
 	
 	INSERT INTO employeeloanhistory
 	(

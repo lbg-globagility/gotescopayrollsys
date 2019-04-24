@@ -432,6 +432,8 @@ Partial Class PayStub
         Me.paystb_TotalAdjustments = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label39 = New System.Windows.Forms.Label()
         Me.Label38 = New System.Windows.Forms.Label()
+        Me.Label93 = New System.Windows.Forms.Label()
+        Me.Label87 = New System.Windows.Forms.Label()
         Me.Label36 = New System.Windows.Forms.Label()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.tsbtngenpayroll = New System.Windows.Forms.ToolStripButton()
@@ -468,8 +470,6 @@ Partial Class PayStub
         Me.bgwPrintAllPaySlip = New System.ComponentModel.BackgroundWorker()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.Label87 = New System.Windows.Forms.Label()
-        Me.Label93 = New System.Windows.Forms.Label()
         CType(Me.dgvpayper, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cms1.SuspendLayout()
         CType(Me.dgvemployees, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1381,6 +1381,7 @@ Partial Class PayStub
         Me.txtRestDayPay.ShortcutsEnabled = False
         Me.txtRestDayPay.Size = New System.Drawing.Size(100, 13)
         Me.txtRestDayPay.TabIndex = 519
+        Me.txtRestDayPay.Tag = "AcceptsDecimal"
         Me.txtRestDayPay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label85
@@ -1414,6 +1415,7 @@ Partial Class PayStub
         Me.txtPaidLeave.ShortcutsEnabled = False
         Me.txtPaidLeave.Size = New System.Drawing.Size(100, 13)
         Me.txtPaidLeave.TabIndex = 516
+        Me.txtPaidLeave.Tag = "AcceptsDecimal"
         Me.txtPaidLeave.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'LinkLabel5
@@ -2417,6 +2419,7 @@ Partial Class PayStub
         Me.txtTotalAdjustments.ShortcutsEnabled = False
         Me.txtTotalAdjustments.Size = New System.Drawing.Size(100, 16)
         Me.txtTotalAdjustments.TabIndex = 510
+        Me.txtTotalAdjustments.Tag = "AcceptsDecimal"
         Me.txtTotalAdjustments.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label67
@@ -2866,6 +2869,7 @@ Partial Class PayStub
         Me.lblsubtotmisc.ShortcutsEnabled = False
         Me.lblsubtotmisc.Size = New System.Drawing.Size(100, 16)
         Me.lblsubtotmisc.TabIndex = 257
+        Me.lblsubtotmisc.Tag = "AcceptsDecimal"
         Me.lblsubtotmisc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label5
@@ -3015,12 +3019,13 @@ Partial Class PayStub
         Me.lblsubtot.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.lblsubtot.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
         Me.lblsubtot.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.lblsubtot.Location = New System.Drawing.Point(253, 285)
+        Me.lblsubtot.Location = New System.Drawing.Point(251, 285)
         Me.lblsubtot.Name = "lblsubtot"
         Me.lblsubtot.ReadOnly = True
         Me.lblsubtot.ShortcutsEnabled = False
         Me.lblsubtot.Size = New System.Drawing.Size(100, 16)
         Me.lblsubtot.TabIndex = 256
+        Me.lblsubtot.Tag = "AcceptsDecimal"
         Me.lblsubtot.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label30
@@ -3837,12 +3842,13 @@ Partial Class PayStub
         Me.txtemptotbon.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtemptotbon.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
         Me.txtemptotbon.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.txtemptotbon.Location = New System.Drawing.Point(253, 381)
+        Me.txtemptotbon.Location = New System.Drawing.Point(251, 381)
         Me.txtemptotbon.Name = "txtemptotbon"
         Me.txtemptotbon.ReadOnly = True
         Me.txtemptotbon.ShortcutsEnabled = False
         Me.txtemptotbon.Size = New System.Drawing.Size(100, 16)
         Me.txtemptotbon.TabIndex = 196
+        Me.txtemptotbon.Tag = "AcceptsDecimal"
         Me.txtemptotbon.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label13
@@ -3861,12 +3867,13 @@ Partial Class PayStub
         Me.txtemptotallow.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtemptotallow.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
         Me.txtemptotallow.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.txtemptotallow.Location = New System.Drawing.Point(253, 334)
+        Me.txtemptotallow.Location = New System.Drawing.Point(251, 334)
         Me.txtemptotallow.Name = "txtemptotallow"
         Me.txtemptotallow.ReadOnly = True
         Me.txtemptotallow.ShortcutsEnabled = False
         Me.txtemptotallow.Size = New System.Drawing.Size(100, 16)
         Me.txtemptotallow.TabIndex = 198
+        Me.txtemptotallow.Tag = "AcceptsDecimal"
         Me.txtemptotallow.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label12
@@ -3891,6 +3898,7 @@ Partial Class PayStub
         Me.txtemptotloan.ShortcutsEnabled = False
         Me.txtemptotloan.Size = New System.Drawing.Size(100, 16)
         Me.txtemptotloan.TabIndex = 195
+        Me.txtemptotloan.Tag = "AcceptsDecimal"
         Me.txtemptotloan.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label14
@@ -3921,6 +3929,7 @@ Partial Class PayStub
         Me.txtempsss.ShortcutsEnabled = False
         Me.txtempsss.Size = New System.Drawing.Size(100, 20)
         Me.txtempsss.TabIndex = 183
+        Me.txtempsss.Tag = "AcceptsDecimal"
         Me.txtempsss.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtempphh
@@ -3932,6 +3941,7 @@ Partial Class PayStub
         Me.txtempphh.ShortcutsEnabled = False
         Me.txtempphh.Size = New System.Drawing.Size(100, 20)
         Me.txtempphh.TabIndex = 184
+        Me.txtempphh.Tag = "AcceptsDecimal"
         Me.txtempphh.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label9
@@ -3952,6 +3962,7 @@ Partial Class PayStub
         Me.txtemphdmf.ShortcutsEnabled = False
         Me.txtemphdmf.Size = New System.Drawing.Size(100, 20)
         Me.txtemphdmf.TabIndex = 190
+        Me.txtemphdmf.Tag = "AcceptsDecimal"
         Me.txtemphdmf.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label10
@@ -3975,6 +3986,7 @@ Partial Class PayStub
         Me.txtempwtax.ShortcutsEnabled = False
         Me.txtempwtax.Size = New System.Drawing.Size(100, 16)
         Me.txtempwtax.TabIndex = 182
+        Me.txtempwtax.Tag = "AcceptsDecimal"
         Me.txtempwtax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label6
@@ -4009,6 +4021,7 @@ Partial Class PayStub
         Me.txttaxabsal.ShortcutsEnabled = False
         Me.txttaxabsal.Size = New System.Drawing.Size(100, 16)
         Me.txttaxabsal.TabIndex = 178
+        Me.txttaxabsal.Tag = "AcceptsDecimal"
         Me.txttaxabsal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtnetsal
@@ -4023,6 +4036,7 @@ Partial Class PayStub
         Me.txtnetsal.ShortcutsEnabled = False
         Me.txtnetsal.Size = New System.Drawing.Size(127, 22)
         Me.txtnetsal.TabIndex = 177
+        Me.txtnetsal.Tag = "AcceptsDecimal"
         Me.txtnetsal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'txtgrosssal
@@ -4031,12 +4045,13 @@ Partial Class PayStub
         Me.txtgrosssal.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtgrosssal.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
         Me.txtgrosssal.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.txtgrosssal.Location = New System.Drawing.Point(253, 437)
+        Me.txtgrosssal.Location = New System.Drawing.Point(251, 437)
         Me.txtgrosssal.Name = "txtgrosssal"
         Me.txtgrosssal.ReadOnly = True
         Me.txtgrosssal.ShortcutsEnabled = False
         Me.txtgrosssal.Size = New System.Drawing.Size(100, 16)
         Me.txtgrosssal.TabIndex = 176
+        Me.txtgrosssal.Tag = "AcceptsDecimal"
         Me.txtgrosssal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'dgvpaystubitem
@@ -4246,6 +4261,24 @@ Partial Class PayStub
         Me.Label38.Size = New System.Drawing.Size(14, 13)
         Me.Label38.TabIndex = 259
         Me.Label38.Text = "₱"
+        '
+        'Label93
+        '
+        Me.Label93.AutoSize = True
+        Me.Label93.Location = New System.Drawing.Point(233, 246)
+        Me.Label93.Name = "Label93"
+        Me.Label93.Size = New System.Drawing.Size(14, 13)
+        Me.Label93.TabIndex = 176
+        Me.Label93.Text = "₱"
+        '
+        'Label87
+        '
+        Me.Label87.AutoSize = True
+        Me.Label87.Location = New System.Drawing.Point(233, 265)
+        Me.Label87.Name = "Label87"
+        Me.Label87.Size = New System.Drawing.Size(14, 13)
+        Me.Label87.TabIndex = 176
+        Me.Label87.Text = "₱"
         '
         'Label36
         '
@@ -4567,24 +4600,6 @@ Partial Class PayStub
         'Timer1
         '
         Me.Timer1.Interval = 2500
-        '
-        'Label87
-        '
-        Me.Label87.AutoSize = True
-        Me.Label87.Location = New System.Drawing.Point(233, 265)
-        Me.Label87.Name = "Label87"
-        Me.Label87.Size = New System.Drawing.Size(14, 13)
-        Me.Label87.TabIndex = 176
-        Me.Label87.Text = "₱"
-        '
-        'Label93
-        '
-        Me.Label93.AutoSize = True
-        Me.Label93.Location = New System.Drawing.Point(233, 246)
-        Me.Label93.Name = "Label93"
-        Me.Label93.Size = New System.Drawing.Size(14, 13)
-        Me.Label93.TabIndex = 176
-        Me.Label93.Text = "₱"
         '
         'PayStub
         '

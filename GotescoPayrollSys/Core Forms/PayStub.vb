@@ -8380,6 +8380,14 @@ Public Class PayStub
             For Each ctrl In fsdfsd
                 ctrl.Text = replace_value
             Next
+
+            Dim fsdfsdfsd = SplitContainer1.Panel2.Controls.OfType(Of TextBox).
+                Where(Function(tBox) Convert.ToString(tBox.Tag) = "AcceptsDecimal").
+                ToList()
+
+            For Each ctrl In fsdfsdfsd
+                ctrl.Text = replace_value
+            Next
         Catch ex As Exception
 
             MsgBox(getErrExcptn(ex, "ObjectDisplayFieldCleanser"))
@@ -8400,9 +8408,9 @@ Public Class PayStub
 
         TabPage4.Text = TabPage4.Text.Trim
 
-        ObjectDisplayFieldCleanser(TabPage1, 0.0)
+        ObjectDisplayFieldCleanser(TabPage1, "0.00")
 
-        ObjectDisplayFieldCleanser(tbpleavebal, 0.0)
+        ObjectDisplayFieldCleanser(tbpleavebal, "0.00")
 
         Label3.Text = "Taxable income :"
         Dim EmployeeRowID = dgvemployees.Tag
@@ -8619,9 +8627,9 @@ Public Class PayStub
 
         TabPage1.Text = TabPage1.Text.Trim
 
-        ObjectDisplayFieldCleanser(TabPage4, 0.0)
+        ObjectDisplayFieldCleanser(TabPage4, "0.00")
 
-        ObjectDisplayFieldCleanser(tbpleavebal, 0.0)
+        ObjectDisplayFieldCleanser(tbpleavebal, "0.00")
 
         'For Each ctrl As Control In TabPage4.Controls
         '    If TypeOf ctrl Is TextBox Then

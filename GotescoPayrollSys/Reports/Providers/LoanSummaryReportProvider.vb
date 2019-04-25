@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports CrystalDecisions.CrystalReports.Engine
+Imports MySql.Data.MySqlClient
 
 Public Class LoanSummaryReportProvider
     Implements IReportProvider
@@ -9,8 +10,11 @@ Public Class LoanSummaryReportProvider
 
     Public Property GotescoReportName As String = "Employee Loan Report" Implements IReportProvider.GotescoReportName
 
+    Private ReadOnly stringType As Type = Type.GetType("System.String")
+    Private ReadOnly decimalType As Type = Type.GetType("System.Decimal")
+
     Public Sub Run() Implements IReportProvider.Run
-        Method2()
+        Method3Async()
     End Sub
 
     Private Sub Method1()
@@ -165,6 +169,115 @@ Public Class LoanSummaryReportProvider
 
         End If
 
+    End Sub
+
+    Private Async Sub Method3Async()
+        Dim n_PayrollSummaDateSelection As New PayPeriodSelectionWithLoanTypes
+
+        If Not n_PayrollSummaDateSelection.ShowDialog = DialogResult.OK Then Return
+
+        Dim dateFrom, dateTo, loanTypeID As Object
+
+        dateFrom = n_PayrollSummaDateSelection.DateFrom
+        dateTo = n_PayrollSummaDateSelection.DateTo
+        loanTypeID = n_PayrollSummaDateSelection.LoanTypeId
+
+        Dim queryText = String.Empty
+        'Dim filtersLoanType = <![CDATA[INNER JOIN product p ON p.RowID=i.LoanTypeID]]>.Value
+        'If Not IsDBNull(loanTypeID) Then filtersLoanType = <![CDATA[INNER JOIN product p ON p.RowID=i.LoanTypeID AND i.RowID=@loanTypeID]]>.Value
+
+        queryText =
+        <![CDATA[CALL `LoanPrediction`(@orgID);
+            SELECT
+            i.RowID
+            , e.EmployeeID `DatCol1`
+            , CONCAT_WS(', ', e.LastName, e.FirstName) `DatCol2`
+            , p.PartNo `DatCol3`
+            , i.ProperDeductAmount `DatCol4`
+            , i.PayFromDate
+            , REPLACE(TRIM(TRAILING 0 FROM i.LoanBalance), ',', '')*1 `DatCol6`
+            ,DATE_FORMAT(i.`PayToDate`, '%c/%e/%Y') `DatCol5`
+            FROM loanpredict i
+            INNER JOIN employee e ON e.RowID=i.EmployeeID
+            INNER JOIN product p ON p.RowID=i.LoanTypeID AND p.RowID=IFNULL(@loanTypeID, p.RowID)
+            INNER JOIN paystub ps ON ps.EmployeeID=e.RowID AND ps.PayPeriodID=i.PayperiodID
+            INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.ProductID=p.RowID
+            WHERE i.PayFromDate>=@dateFrom
+            AND i.PayToDate<=@dateTo
+            ORDER BY CONCAT(e.LastName, e.FirstName), i.PayFromDate, i.PayToDate
+            ;]]>.Value
+
+        Dim columns =
+            {New DataColumn("DatCol1", stringType),
+            New DataColumn("DatCol2", stringType),
+            New DataColumn("DatCol3", stringType),
+            New DataColumn("DatCol4", decimalType),
+            New DataColumn("DatCol5", stringType),
+            New DataColumn("DatCol6", decimalType)}
+
+        Dim dt As New DataTable
+        dt.Columns.AddRange(columns)
+
+        Dim succeed = False
+
+        Using connection As New MySqlConnection(connectionString),
+            command As New MySqlCommand(queryText, connection)
+
+            With command.Parameters
+                .AddWithValue("@orgID", org_rowid)
+                .AddWithValue("@dateFrom", dateFrom)
+                .AddWithValue("@dateTo", dateTo)
+                .AddWithValue("@loanTypeID", loanTypeID) 'If(IsDBNull(loanTypeID), "NULL", loanTypeID)
+            End With
+
+            Await connection.OpenAsync()
+            Try
+                Dim reader = Await command.ExecuteReaderAsync()
+                succeed = reader.HasRows
+
+                While Await reader.ReadAsync()
+                    dt.Rows.Add({reader.GetValue(Of String)(columns.First.ColumnName),
+                                reader.GetValue(Of String)(columns(1).ColumnName),
+                                reader.GetValue(Of String)(columns(2).ColumnName),
+                                reader.GetValue(Of Decimal)(columns(3).ColumnName),
+                                reader.GetValue(Of String)(columns(4).ColumnName),
+                                reader.GetValue(Of Decimal)(columns.Last.ColumnName)})
+                End While
+
+            Catch ex As Exception
+                MessageBox.Show($"Failed generating the Loan Payment report.{vbNewLine}{vbNewLine}{ex.Message}",
+                                "Failed Loan Payment report", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+
+                If succeed Then
+                    Dim rptdoc As New LoanReports
+
+                    rptdoc.SetDataSource(dt)
+
+                    Dim crvwr As New CrysRepForm
+
+                    Dim objText As TextObject = Nothing
+
+                    objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("PeriodDate"), TextObject)
+
+                    objText.Text =
+                        String.Concat("for the period of ",
+                                      DirectCast(dateFrom, Date).ToShortDateString,
+                                      " to ",
+                                      DirectCast(dateTo, Date).ToShortDateString)
+
+                    objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtOrganizationName"), TextObject)
+
+                    objText.Text = orgNam.ToUpper
+
+                    crvwr.crysrepvwr.ReportSource = rptdoc
+
+                    crvwr.Show()
+                End If
+
+            End Try
+
+        End Using
     End Sub
 
     Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate

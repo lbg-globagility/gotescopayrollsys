@@ -93,10 +93,6 @@ Public Class MetroLogin
             AssignDefaultCredentials()
         End If
 
-        Dim resources = New PayrollResources(20108, New Date(2019, 4, 1), New Date(2019, 4, 15))
-        Dim resourcesTask = resources.Load()
-        resourcesTask.Wait()
-
     End Sub
 
     Public Sub AssignDefaultCredentials()

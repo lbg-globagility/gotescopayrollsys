@@ -309,7 +309,18 @@ LEFT JOIN (SELECT
 						, i.`Status`
 						, p.PartNo `LoanName`
 						, i.PayPeriodID
-						FROM loanpredict i
+						FROM (SELECT lp.*
+								FROM loanpredict lp
+								WHERE lp.PayperiodID=pp_rowid
+								AND LCASE(lp.`Status`) IN ('in progress', 'complete')
+								AND lp.DiscontinuedDate IS NULL
+							UNION
+								SELECT lp.*
+								FROM loanpredict lp
+								WHERE lp.PayperiodID=pp_rowid
+								AND LCASE(lp.`Status`) = 'cancelled'
+								AND lp.DiscontinuedDate IS NOT NULL
+								) i
 						INNER JOIN product p ON p.RowID=i.LoanTypeID
 						WHERE i.PayperiodID=pp_rowid
 						) ii

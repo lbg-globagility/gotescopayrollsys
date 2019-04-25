@@ -36,6 +36,9 @@ DECLARE logo MEDIUMBLOB DEFAULT NULL;
 
 SET @totalDeductions = 0.0;
 
+CALL `LoanPrediction`(og_rowid)
+;
+
 /*SELECT ImageBlob
 FROM images
 WHERE (RowID=1
@@ -289,63 +292,29 @@ LEFT JOIN (SELECT
             ,GROUP_CONCAT(REPLACE(FORMAT(ROUND(ii.Balance, 2), 2)
 				                      , ',', '|')
 				              ) `Column33`
-            FROM (/*SELECT i.RowID
-						,i.EmployeeID
-						,i.TotalLoanAmount
-						,i.ppRowID
-						,i.psRowID
-						,(i.TotalLoanAmount - SUM(i.Deduction)) `BalanceOfLoan`
-						,i.LoanName
-						,MAX(i.DeductionAmount) `DeductionAmount`
-						FROM (SELECT
-								els.RowID
-								,els.OrganizationID
-								,els.EmployeeID
-								,els.TotalLoanAmount
-								,pp.RowID `ppRowID`
-								,pp.PayFromDate
-								,pp.PayToDate
-								,pp.OrdinalValue
-								, (@_ordinal := (@_ordinal + 1)) `AscOrder`
-								, (@deduct_amt := ROUND((els.TotalLoanAmount / els.NoOfPayPeriod), 2)) `DeductAmt`
-								
-								,(@_deduction :=
-								 IF(@_ordinal = els.NoOfPayPeriod
-								    , ( @deduct_amt + (els.TotalLoanAmount - (@deduct_amt * els.NoOfPayPeriod)) )
-									 , els.DeductionAmount)) `Deduction`
-								
-								,IF(pp.RowID = pp_rowid, @_deduction, 0) `DeductionAmount`
-								
-								,ps.RowID `psRowID`
-								,e.EmployeeID `EmployeeUniqueId`
-								,p.PartNo `LoanName`
-								FROM employeeloanschedule els
-								INNER JOIN employee e ON e.RowID=els.EmployeeID
-								INNER JOIN payperiod pp ON pp.OrganizationID=els.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID
-								AND (els.DedEffectiveDateFrom >= pp.PayFromDate OR els.DedEffectiveDateTo >= pp.PayFromDate)
-								AND (els.DedEffectiveDateFrom <= pp.PayToDate OR els.DedEffectiveDateTo <= pp.PayToDate)
-								
-								LEFT JOIN paystub ps ON ps.OrganizationID=els.OrganizationID AND ps.EmployeeID=els.EmployeeID AND ps.PayPeriodID=pp.RowID
-								
-								INNER JOIN product p ON p.RowID=els.LoanTypeID
-								
-								WHERE els.RowID > 0
-								AND els.OrganizationID=og_rowid
-								# paydate_from paydat_to
-								AND (els.DedEffectiveDateFrom >= paydate_from OR els.DedEffectiveDateTo >= paydate_from)
-								AND (els.DedEffectiveDateFrom <= paydat_to OR els.DedEffectiveDateTo <= paydat_to)
-								ORDER BY pp.OrdinalValue
-						) i
-						WHERE i.psRowID IS NOT NULL
-						GROUP BY i.RowID*/
-						SELECT plb.*
-						FROM paysliploanbalances plb
-						WHERE plb.OrganizationID = og_rowid
-						AND plb.PayPeriodID = pp_rowid
-				      ) ii
-			  GROUP BY ii.EmployeeID
-           ) psiloan
-       ON psiloan.EmployeeID = ps.EmployeeID
+ 				FROM (SELECT
+						i.OrganizationID
+						, i.Created
+						, i.CreatedBy
+						, i.LastUpd
+						, i.LastUpdBy
+						, i.EmployeeID
+						, i.PayStubID
+						, i.RowID `LoanschedID`
+						, i.LoanBalance `Balance`
+						
+						, FLOOR(((i.NoOfPayPeriod-i.OrdinalIndex)/i.NoOfPayPeriod)*i.NoOfPayPeriod) `CountPayPeriodLeft`
+						
+						, i.ProperDeductAmount `DeductedAmount`
+						, i.`Status`
+						, p.PartNo `LoanName`
+						, i.PayPeriodID
+						FROM loanpredict i
+						INNER JOIN product p ON p.RowID=i.LoanTypeID
+						WHERE i.PayperiodID=pp_rowid
+						) ii
+ 				GROUP BY ii.EmployeeID
+				) psiloan ON psiloan.EmployeeID = ps.EmployeeID
 
 # #######################
 

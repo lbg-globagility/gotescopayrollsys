@@ -197,7 +197,16 @@ Public Class LoanSummaryReportProvider
             , i.PayFromDate
             , REPLACE(TRIM(TRAILING 0 FROM i.LoanBalance), ',', '')*1 `DatCol6`
             ,DATE_FORMAT(i.`PayToDate`, '%c/%e/%Y') `DatCol5`
-            FROM loanpredict i
+            FROM (SELECT lp.*
+                  FROM loanpredict lp
+                  WHERE LCASE(lp.`Status`) IN ('in progress', 'complete')
+                  AND lp.DiscontinuedDate IS NULL
+                UNION
+                  SELECT lp.*
+                  FROM loanpredict lp
+                  WHERE LCASE(lp.`Status`) = 'cancelled'
+                  AND lp.DiscontinuedDate IS NOT NULL
+                  ) i
             INNER JOIN employee e ON e.RowID=i.EmployeeID
             INNER JOIN product p ON p.RowID=i.LoanTypeID AND p.RowID=IFNULL(@loanTypeID, p.RowID)
             INNER JOIN paystub ps ON ps.EmployeeID=e.RowID AND ps.PayPeriodID=i.PayperiodID

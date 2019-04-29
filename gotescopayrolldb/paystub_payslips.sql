@@ -233,7 +233,7 @@ LEFT JOIN (SELECT
 			  ,SUM(et.TaxableDailyBonus) `TaxableDailyBonus`
 			  ,SUM(et.NonTaxableDailyBonus) `NonTaxableDailyBonus`
 			  ,SUM(et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours) `LeaveHours`
-			  ,SUM(et.Leavepayment) `Leavepayment`
+			  ,SUM(et.Leavepayment * et.ActualSalaryRate) `Leavepayment`
 			  , IF(is_actual = 1
 			       , SUM(i.RestDayActualPay)
 					 , SUM(i.RestDayAmount)) `RestDayAmount`

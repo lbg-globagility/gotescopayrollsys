@@ -100,8 +100,8 @@ ps.RowID
 , NEWLINECHARTRIMMER(REPLACE(psiallw.`Column34`, ',', '\r\n')) `Column34`
 , NEWLINECHARTRIMMER(REPLACE(psiallw.`Column37`, ',', '\r\n')) `Column37`
 
-, NEWLINECHARTRIMMER(REPLACE(psibon.`Column36`, ',', '\n')) `Column36`
-, NEWLINECHARTRIMMER(REPLACE(psibon.`Column39`, ',', '\n')) `Column39`
+, NEWLINECHARTRIMMER(RidCharacater(REPLACE(psibon.`Column36`, ',', '\r\n'), '\r\n')) `Column36`
+, NEWLINECHARTRIMMER(RidCharacater(REPLACE(psibon.`Column39`, ',', '\r\n'), '\r\n')) `Column39`
 
 /**/ , REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column35`, ',', '\n'))
           , '|', ',')  `Column35`
@@ -243,7 +243,7 @@ LEFT JOIN (SELECT
 			           , et.RegularHoursWorked
 						  , 0)) `HolidayHours`
 			  FROM proper_time_entry et
-			  INNER JOIN employee e ON e.RowID=et.EmployeeID
+			  
 			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
 			  
 			  WHERE et.OrganizationID=og_rowid
@@ -268,8 +268,8 @@ LEFT JOIN (SELECT
        
 LEFT JOIN (SELECT
            PayStubID
-           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column36`
-           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column39`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '\r\n', p.PartNo)) `Column36`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '\r\n', ROUND(psi.PayAmount, 2))) `Column39`
            FROM paystubitem psi
 			  INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Bonus' AND p.ActiveData=1
 			  WHERE psi.OrganizationID = og_rowid

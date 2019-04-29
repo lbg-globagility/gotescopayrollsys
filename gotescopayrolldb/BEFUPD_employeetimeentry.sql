@@ -271,8 +271,10 @@ IF isRest_day = '0' THEN
 					SET NEW.Absent = 0.0;
 				END IF;*/
 				IF NEW.IsValidForHolidayPayment = 1 THEN
-				
-					SET NEW.TotalDayPay = @daily_pay;
+					
+					IF NEW.TotalDayPay = 0 THEN
+						SET NEW.TotalDayPay = @daily_pay;
+					END IF;
 					SET NEW.Absent = 0.0;
 					
 				ELSE

@@ -207,7 +207,7 @@ LEFT JOIN (SELECT
 			  ,et.EmployeeID
 			  ,et.EmployeeSalaryID
 			  ,SUM(et.RegularHoursWorked) `RegularHoursWorked`
-			  ,SUM(et.RegularHoursAmount) `RegularHoursAmount`
+			  ,SUM(IF(et.IsValidForHolidayPayment, et.RegularHoursAmount - et.HolidayPayAmount, et.RegularHoursAmount)) `RegularHoursAmount`
 			  ,SUM(et.TotalHoursWorked) `TotalHoursWorked`
 			  ,SUM(et.OvertimeHoursWorked) `OvertimeHoursWorked`
 			  ,SUM(et.OvertimeHoursAmount) `OvertimeHoursAmount`
@@ -243,7 +243,7 @@ LEFT JOIN (SELECT
 			           , et.RegularHoursWorked
 						  , 0)) `HolidayHours`
 			  FROM proper_time_entry et
-			  
+			  INNER JOIN employee e ON e.RowID=et.EmployeeID
 			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
 			  
 			  WHERE et.OrganizationID=og_rowid

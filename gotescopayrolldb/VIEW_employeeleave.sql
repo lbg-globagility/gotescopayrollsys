@@ -10,6 +10,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeleave`(
 	IN `elv_EmployeeID` INT,
 	IN `elv_OrganizationID` INT,
 	IN `user_rowid` INT
+
 )
     DETERMINISTIC
 BEGIN
@@ -54,7 +55,7 @@ IF is_deptmngr = TRUE THEN
 #		INNER JOIN `position` deptmngr ON deptmngr.PositionName=pos.PositionName
 		WHERE elv.OrganizationID=elv_OrganizationID
 		AND elv.EmployeeID=elv_EmployeeID
-		AND elv.LeaveTypeID IS NOT NULL
+#		AND elv.LeaveTypeID IS NOT NULL
 		GROUP BY elv.RowID
 ;
 
@@ -80,7 +81,7 @@ ELSE
 		INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.DeptManager IS NULL
 		WHERE elv.OrganizationID=elv_OrganizationID
 		AND elv.EmployeeID=elv_EmployeeID
-		AND elv.LeaveTypeID IS NOT NULL
+#		AND elv.LeaveTypeID IS NOT NULL
 
 	UNION
 		SELECT
@@ -108,7 +109,7 @@ ELSE
 		WHERE elv.OrganizationID=elv_OrganizationID
 					  AND elv.Status2 = 'Approved'
 		AND elv.EmployeeID=elv_EmployeeID
-		AND elv.LeaveTypeID IS NOT NULL
+#		AND elv.LeaveTypeID IS NOT NULL
 ;
 
 END IF;

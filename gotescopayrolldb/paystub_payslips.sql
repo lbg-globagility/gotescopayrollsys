@@ -25,6 +25,7 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
 
 
 
+
 )
     DETERMINISTIC
 BEGIN
@@ -207,7 +208,8 @@ LEFT JOIN (SELECT
 			  ,et.EmployeeID
 			  ,et.EmployeeSalaryID
 			  ,SUM(et.RegularHoursWorked) `RegularHoursWorked`
-			  ,SUM(IF(et.IsValidForHolidayPayment, et.RegularHoursAmount - et.HolidayPayAmount, et.RegularHoursAmount)) `RegularHoursAmount`
+#			  ,SUM(IF(et.IsValidForHolidayPayment, et.RegularHoursAmount - et.HolidayPayAmount, et.RegularHoursAmount)) `RegularHoursAmount`
+			  ,SUM(et.RegularHoursAmount) `RegularHoursAmount`
 			  ,SUM(et.TotalHoursWorked) `TotalHoursWorked`
 			  ,SUM(et.OvertimeHoursWorked) `OvertimeHoursWorked`
 			  ,SUM(et.OvertimeHoursAmount) `OvertimeHoursAmount`

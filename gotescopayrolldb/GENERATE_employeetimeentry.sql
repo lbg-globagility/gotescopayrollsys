@@ -30,6 +30,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(
 
 
 
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -339,15 +340,17 @@ IF OTCount = 1 THEN
 	FROM employeeovertime eot INNER JOIN (SELECT etd.TimeOut, etd.TimeIn FROM employeetimeentrydetails etd WHERE etd.EmployeeID=ete_EmpRowID AND etd.OrganizationID=ete_OrganizID AND etd.`Date`=ete_Date LIMIT 1) empIn ON empIn.TimeOut IS NULL OR empIn.TimeOut IS NOT NULL
 	WHERE eot.EmployeeID=ete_EmpRowID
 	AND eot.OrganizationID=ete_OrganizID
-	AND eot.OTStartTime >= shifttimeto
-	AND eot.OTStatus='Approved' AND has_timelogs_onthisdate = TRUE
+#	AND eot.OTStartTime >= shifttimeto
+	AND eot.OTStatus='Approved'
+	AND eot.OTStatus=eot.OTStatus2
+	AND has_timelogs_onthisdate = TRUE
 	AND (ete_Date BETWEEN eot.OTStartDate AND eot.OTEndDate)
 	ORDER BY eot.OTStartTime DESC
 	LIMIT 1
 	INTO otstartingtime
 		  ,otendingtime
 		  ,aftershiftOTRowID;
-
+	
 ELSE
 	
 	SELECT
@@ -504,7 +507,7 @@ ELSE
 
 	SET @breakStarts=NULL;
 	SET @breakEnds=NULL;
-
+	
 	SELECT
 	IF(etd.TimeStampIn BETWEEN CONCAT_DATETIME(ete_Date, MAKETIME(0,0,0)) AND ADDDATE(CONCAT_DATETIME(ete_Date, sh.TimeFrom), INTERVAL e.LateGracePeriod MINUTE), sh.TimeFrom, etd.TimeIn) `TimeIn`
 #	etd.TimeIn
@@ -1198,7 +1201,7 @@ IF pr_DayBefore IS NULL THEN
 	END IF;
 
 ELSE
-	
+
 	SELECT
 	(IS_WORKINGDAY_PRESENT_DURINGHOLI(ete_OrganizID, ete_EmpRowID, ete_Date, TRUE) # checks the attendance prior to holiday
 	 # AND IS_WORKINGDAY_PRESENT_DURINGHOLI(ete_OrganizID, ete_EmpRowID, ete_Date, FALSE) # checks the attendance after the holiday

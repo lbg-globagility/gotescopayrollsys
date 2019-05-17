@@ -31,15 +31,22 @@ SET @propDeductAmt = 0.00;
 SET @progInterval = 0;
 SET @progAmt = 0.00;
 
+SET @loanBalans = 0.00;
+
 DROP TEMPORARY TABLE IF EXISTS loanpredict;
 DROP TABLE IF EXISTS loanpredict;
 CREATE TEMPORARY TABLE loanpredict
 SELECT i.*
 , (@isAnotherID := @elsID != i.RowID) `IsAnother`
 , IF(@isAnotherID, (@elsID := i.RowID), @elsID) `AssignAnotherID`
-, IF(@isAnotherID
+
+, @loanBalans :=
+ TRIM(
+   IF(@isAnotherID
 		, (@totalLoan := i.TotalLoanAmount - i.DeductionAmount)
-		, (@totalLoan := @totalLoan - i.DeductionAmount)) `LoanBalance`
+		, (@totalLoan := @totalLoan - i.DeductionAmount))
+		)+0 `LoanBalance`
+
 , IF(@isAnotherID
 		, @ordinalIndex := 1
 		, @ordinalIndex := @ordinalIndex + 1) `OrdinalIndex`
@@ -47,12 +54,17 @@ SELECT i.*
 
 , @progAmt := @ordinalIndex / i.NoOfPayPeriod `Progress`
 
-, IF(@isAnotherID
+, TRIM(
+  IF(@isAnotherID
      , @progInterval := @progAmt
 	  , @progInterval := @progAmt - ((@ordinalIndex - 1) / i.NoOfPayPeriod)
-	  ) `ProgressInterval`
+	  ))+0 `ProgressInterval`
 
-, ROUND(@progInterval * i.TotalLoanAmount, 2) `ProperDeductAmount`
+, TRIM(
+  IF(@loanBalans < 0
+     , ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2)
+     , ROUND(@progInterval * i.TotalLoanAmount, 2)
+	  ))+0 `ProperDeductAmount`
 
 FROM (SELECT els.*
 		, pp.RowID `PayperiodID`, pp.PayFromDate, pp.PayToDate

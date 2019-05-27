@@ -114,11 +114,9 @@
 
         cmbPosition.Items.Clear()
 
-        cmbPosition.Items.Add("")
-
         cmbPosition.Items.AddRange(CType(SQL_ArrayList(strQuery).ToArray(GetType(String)), String()))
 
-        cmbPosition.SelectedIndex = 0
+        cmbPosition.SelectedIndex = -1
 
     End Sub
 
@@ -217,7 +215,13 @@
                     Exit Sub
                 End If
 
-                Dim position As String = getStringItem("Select RowID From Position Where PositionName = '" & cmbPosition.Text & "' And OrganizationID = " & z_OrganizationID & "")
+                Dim queryGetPositionID =
+                    $"SELECT pos.RowID
+                    FROM `position` pos
+                    INNER JOIN `user` u ON u.RowID={user_row_id} AND u.OrganizationID=pos.OrganizationID
+                    WHERE pos.PositionName='{cmbPosition.Text}'
+                    LIMIT 1;"
+                Dim position As String = getStringItem(queryGetPositionID)
 
                 Dim getposition As Integer = Val(position)
 
@@ -233,7 +237,7 @@
 
                         ElseIf position_count > 1 Then
 
-                            getposition = getStringItem("SELECT PositionID FROM user WHERE RowID = '" & user_row_id & "';")
+                            getposition = getStringItem(queryGetPositionID)
 
                         End If
 

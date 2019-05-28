@@ -26,6 +26,14 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
 
 
 
+
+
+
+
+
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -54,6 +62,10 @@ FROM payperiod pp
 WHERE pp.RowID=pp_rowid
 INTO paydate_from
      ,paydat_to;
+
+
+CALL GetUnearnedAllowance(og_rowid, paydate_from, paydat_to);
+
 
 SELECT MAX(pp.PayToDate)
 FROM payperiod pp
@@ -137,13 +149,13 @@ ps.RowID
 ,IFNULL(FORMAT(et.NightDiffOTHoursAmount, 2), 0) `Column24`
 
 ,FORMAT(IFNULL(et.`AbsentHours`, 0),2) `Column41`
-,FORMAT(IFNULL(et.Absent, 0),2) `Column26`
+,FORMAT(IFNULL(et.Absent, 0) + IFNULL(ua.AbsentAllowance, 0), 2) `Column26`
 
 ,FORMAT(IFNULL(et.HoursLate,0), 2) `Column42`
-,FORMAT(IFNULL(et.HoursLateAmount, 0), 2) `Column27`
+,FORMAT(IFNULL(et.HoursLateAmount, 0) + IFNULL(ua.LateAllowance, 0), 2) `Column27`
 
 ,FORMAT(IFNULL(et.UndertimeHours,0), 2) `Column43`
-,FORMAT(IFNULL(et.UndertimeHoursAmount, 0), 2) `Column28`
+,FORMAT(IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(ua.UndertimeAllowance, 0), 2) `Column28`
 
 ,logo `Column40`
 
@@ -178,12 +190,24 @@ ps.RowID
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 + ps.TotalEmpWithholdingTax
 	 + ROUND(IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0), 2)
+	 + IFNULL(ua.LateAllowance, 0)
+	 + IFNULL(ua.UndertimeAllowance, 0)
+	 + IFNULL(ua.AbsentAllowance, 0)
 	 ) `Column62`
 
 , ROUND(( @totalDeductions
 			+ IFNULL(adj_negative.`PayAmount` * -1, 0) 
 			), 2) `Column61`
 
+, IF(ps.TotalAllowance > 0
+     , CONCAT_WS(' '
+                 , CONCAT_WS(' &', IF(et.HolidayPayAmount>0, 'holiday', NULL)
+					              , IF(et.`Leavepayment`>0, ' leave', NULL)
+					              )
+                 , 'included in'
+                 , REPLACE(RidCharacater(psiallw.`Column34`, ','), ',', '')
+	              )
+	  , '') `Column64`
 
 FROM proper_payroll ps
 
@@ -510,6 +534,9 @@ LEFT JOIN (SELECT GROUP_CONCAT(eapp.AllowanceAmount) `AllowanceAmount`
 			  WHERE eapp.OrganizationID=og_rowid
 			  AND eapp.PayPeriodId=pp_rowid
 			  GROUP BY eapp.EmployeeID) eapp ON eapp.EmployeeID=ps.EmployeeID
+
+LEFT JOIN unearnedallowance ua ON ua.EmployeeID=ps.EmployeeID
+
 WHERE ps.OrganizationID=og_rowid
 AND ps.PayPeriodID=pp_rowid
 AND ps.AsActual=is_actual

@@ -728,7 +728,7 @@ ELSE
 	UPDATE employeesalary es
 	SET es.PaySocialSecurityID = psssID
 	,es.PayPhilhealthID = phhID
-	,es.HDMFAmount = 100.0
+#	,es.HDMFAmount = 100.0
 	,es.LastUpd = CURRENT_TIMESTAMP()
 	,es.LastUpdBy = NEW.LastUpdBy
 	WHERE es.EmployeeID=NEW.RowID

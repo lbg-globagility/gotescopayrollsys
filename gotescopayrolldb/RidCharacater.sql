@@ -15,12 +15,20 @@ BEGIN
 
 DECLARE repeatCount INT(11) DEFAULT 5;
 
-DECLARE i INT(11) DEFAULT 1;
+DECLARE i INT(11) DEFAULT 0;
 
 DECLARE returnValue TEXT DEFAULT '';
+DECLARE annoyingText TEXT DEFAULT '';
+
 SET returnValue = textValue;
 WHILE i < repeatCount DO
-	SET returnValue = REPLACE(returnValue, REPEAT(customCharacter, repeatCount), customCharacter);
+	SET annoyingText = REPEAT(customCharacter, repeatCount);
+	
+	SET returnValue = TRIM(LEADING annoyingText FROM returnValue);
+	SET returnValue = TRIM(TRAILING annoyingText FROM returnValue);
+	
+	SET returnValue = REPLACE(returnValue, annoyingText, customCharacter);
+	
 	SET repeatCount = repeatCount - 1;
 END WHILE;
 

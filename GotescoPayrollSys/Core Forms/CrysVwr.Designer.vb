@@ -84,7 +84,7 @@ Partial Class CrysVwr
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(36, 36)
         Me.ToolStripButton1.Text = "Export as MS Word Document"
-        Me.ToolStripButton1.ToolTipText = "Export as MS Word 97-2003 Document (*.doc)"
+        Me.ToolStripButton1.ToolTipText = "Export as MS Word Document"
         '
         'btnExportPayrollSummaToExcel
         '

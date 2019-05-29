@@ -122,11 +122,16 @@ Public Class CrysVwr
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        ExportAsWordDocument()
+
+    End Sub
+
+    Public Sub ExportAsWordDocument()
         If CrystalReportViewer1.ReportSource Is Nothing Then
             Return
         End If
 
-        inputFileName = InputBox("Input a file name to be exported.", "Export as MS Word").Trim
+        inputFileName = InputBox("Input a file name to be exported.", "Export as MS Word Document").Trim
 
         If inputFileName.Length > 0 Then
             Dim rpt As ReportClass = CrystalReportViewer1.ReportSource
@@ -140,7 +145,6 @@ Public Class CrysVwr
                 MsgBox("Error occured when exporting.", MsgBoxStyle.Critical, "Export failed")
             End Try
         End If
-
     End Sub
 
     Private Sub btnExportPayrollSummaToExcel_Click(sender As Object, e As EventArgs) Handles btnExportPayrollSummaToExcel.Click

@@ -24,13 +24,13 @@ Partial Class CrysVwr
     Private Sub InitializeComponent()
         Me.CrystalReportViewer1 = New CrystalDecisions.Windows.Forms.CrystalReportViewer()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.btnExportPayrollSummaToExcel = New System.Windows.Forms.Button()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel1.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'CrystalReportViewer1
@@ -55,6 +55,15 @@ Partial Class CrysVwr
         Me.Panel1.Size = New System.Drawing.Size(793, 37)
         Me.Panel1.TabIndex = 1
         '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.ToolStrip1)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(200, 37)
+        Me.Panel2.TabIndex = 2
+        '
         'ToolStrip1
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.Transparent
@@ -74,7 +83,7 @@ Partial Class CrysVwr
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton1.Text = "Export as MS Word 97-2003 Document"
+        Me.ToolStripButton1.Text = "Export as MS Word Document"
         Me.ToolStripButton1.ToolTipText = "Export as MS Word 97-2003 Document (*.doc)"
         '
         'btnExportPayrollSummaToExcel
@@ -88,15 +97,6 @@ Partial Class CrysVwr
         Me.btnExportPayrollSummaToExcel.UseVisualStyleBackColor = True
         Me.btnExportPayrollSummaToExcel.Visible = False
         '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.ToolStrip1)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Left
-        Me.Panel2.Location = New System.Drawing.Point(0, 0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(200, 37)
-        Me.Panel2.TabIndex = 2
-        '
         'CrysVwr
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -109,10 +109,10 @@ Partial Class CrysVwr
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.Panel1.ResumeLayout(False)
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

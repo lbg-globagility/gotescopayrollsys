@@ -169,7 +169,7 @@ IF NEW.OTStatus = 'Approved' THEN
 	   AND @sh_timestamp_start >= @ot_timestamp_end THEN
 	   
 	   SET @valid_ndiff_hrs = (TIMESTAMPDIFF(SECOND
-	                                      , LEAST(@ot_timestamp_end, @etd_timelog_in)
+	                                      , GREATEST(@ot_timestamp_end, @etd_timelog_in)
 	                                      , SUBDATE(@og_ndiff_timeto, INTERVAL 1 DAY)
 													  )
 									/ (@min_per_hour * @sec_per_min));

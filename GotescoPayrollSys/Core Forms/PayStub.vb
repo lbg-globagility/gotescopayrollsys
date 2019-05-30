@@ -2988,12 +2988,24 @@ Public Class PayStub
     End Sub
 
     Private Sub PrintAllPaySlip_Click(sender As Object, e As EventArgs) Handles _
-        DeclaredToolStripMenuItem1.Click,
-        ActualToolStripMenuItem1.Click
+        ExportAsWordDocumentToolStripMenuItem.Click, PrintPreviewToolStripMenuItem.Click,
+        ExportAsWordDocumentToolStripMenuItem1.Click, PrintPreviewToolStripMenuItem1.Click
 
         Dim current_tsitem As New ToolStripMenuItem
 
         current_tsitem = DirectCast(sender, ToolStripMenuItem)
+
+        Dim fileName As String = String.Empty
+        Dim isExportAsWordDoc As Boolean = {ExportAsWordDocumentToolStripMenuItem.Name, ExportAsWordDocumentToolStripMenuItem1.Name}.
+            Contains(current_tsitem.Name)
+
+        If isExportAsWordDoc Then
+            fileName = InputBox("Name this file as", "Export as MS Word Document").Trim
+            If fileName.Trim.Length = 0 Then
+                MessageBox.Show("Invalid file name.", "Export as MS Word Document", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+        End If
 
         Dim param_values =
             New Object() {org_rowid,
@@ -3011,9 +3023,8 @@ Public Class PayStub
         Finally
 
             If sql.HasError = False Then
-                '8766 - total pixel height of a pay slip -- PayslipByTwos
                 '9657 -- NewPayslipByTwos
-                Dim payroll_payslip As New payslip 'NewPayslipByTwos'printallpayslipotherformat2'PayslipByTwos
+                Dim payroll_payslip As New payslip
 
                 With payroll_payslip.ReportDefinition.Sections(2)
                     Dim objText As CrystalDecisions.CrystalReports.Engine.TextObject = .ReportObjects("OrgName")
@@ -3035,35 +3046,21 @@ Public Class PayStub
 
                 End With
 
-                'Dim new_ds As New DataSet
-
-                'result_tbl.TableName = "DatTab1"
-                'new_ds.Tables.Add(result_tbl.Copy)
-
-                'Dim new_dt As New DataTable
-                'new_dt = result_tbl.Copy
-                'new_dt.TableName = "DatTbl"
-                'new_ds.Tables.Add(new_dt)
-
-                'payroll_payslip.SetDataSource(new_ds)
                 payroll_payslip.SetDataSource(result_tbl)
 
                 Dim crvwr As New CrysVwr
 
                 With crvwr
-
                     .CrystalReportViewer1.ReportSource = payroll_payslip
 
-                    .Show()
-
+                    If isExportAsWordDoc Then
+                        .ExportAsWordDocument(fileName)
+                    Else
+                        .Show()
+                    End If
                 End With
-
-                'new_ds.Dispose()
-
             End If
-
         End Try
-
     End Sub
 
     Private Sub tsbtnprintall_Click(sender As Object, e As EventArgs) 'Handles DeclaredToolStripMenuItem1.Click 'tsbtnprintall.Click

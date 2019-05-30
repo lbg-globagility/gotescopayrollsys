@@ -122,25 +122,27 @@ Public Class CrysVwr
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        ExportAsWordDocument()
+
+        inputFileName = InputBox("Name this file as", "Export as MS Word Document").Trim
+        If inputFileName.Trim.Length = 0 Then Return
+
+        ExportAsWordDocument(inputFileName)
 
     End Sub
 
-    Public Sub ExportAsWordDocument()
+    Public Sub ExportAsWordDocument(nameOfFile As String)
         If CrystalReportViewer1.ReportSource Is Nothing Then
             Return
         End If
 
-        inputFileName = InputBox("Input a file name to be exported.", "Export as MS Word Document").Trim
-
-        If inputFileName.Length > 0 Then
+        If nameOfFile.Trim.Length > 0 Then
             Dim rpt As ReportClass = CrystalReportViewer1.ReportSource
 
-            Dim fullpathfile = String.Concat(Path.GetTempPath, inputFileName, ".doc")
+            Dim fullPathFile = String.Concat(Path.GetTempPath, nameOfFile, ".doc")
             Try
                 rpt.ExportToDisk(CrystalDecisions.Shared.ExportFormatType.WordForWindows,
-                                 fullpathfile)
-                Process.Start(fullpathfile)
+                                 fullPathFile)
+                Process.Start(fullPathFile)
             Catch ex As Exception
                 MsgBox("Error occured when exporting.", MsgBoxStyle.Critical, "Export failed")
             End Try

@@ -439,7 +439,11 @@ Partial Class PayStub
         Me.tsbtngenpayroll = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnprintall = New System.Windows.Forms.ToolStripDropDownButton()
         Me.DeclaredToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExportAsWordDocumentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PrintPreviewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ActualToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExportAsWordDocumentToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PrintPreviewToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsbtnClose = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnPayrollSumma = New System.Windows.Forms.ToolStripDropDownButton()
         Me.DeclaredToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
@@ -4319,17 +4323,47 @@ Partial Class PayStub
         '
         'DeclaredToolStripMenuItem1
         '
+        Me.DeclaredToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportAsWordDocumentToolStripMenuItem, Me.PrintPreviewToolStripMenuItem})
         Me.DeclaredToolStripMenuItem1.Name = "DeclaredToolStripMenuItem1"
-        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
+        Me.DeclaredToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
         Me.DeclaredToolStripMenuItem1.Tag = "0"
         Me.DeclaredToolStripMenuItem1.Text = "Declared"
         '
+        'ExportAsWordDocumentToolStripMenuItem
+        '
+        Me.ExportAsWordDocumentToolStripMenuItem.Name = "ExportAsWordDocumentToolStripMenuItem"
+        Me.ExportAsWordDocumentToolStripMenuItem.Size = New System.Drawing.Size(211, 22)
+        Me.ExportAsWordDocumentToolStripMenuItem.Tag = "0"
+        Me.ExportAsWordDocumentToolStripMenuItem.Text = "Export as Word document"
+        '
+        'PrintPreviewToolStripMenuItem
+        '
+        Me.PrintPreviewToolStripMenuItem.Name = "PrintPreviewToolStripMenuItem"
+        Me.PrintPreviewToolStripMenuItem.Size = New System.Drawing.Size(211, 22)
+        Me.PrintPreviewToolStripMenuItem.Tag = "0"
+        Me.PrintPreviewToolStripMenuItem.Text = "Print preview"
+        '
         'ActualToolStripMenuItem1
         '
+        Me.ActualToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportAsWordDocumentToolStripMenuItem1, Me.PrintPreviewToolStripMenuItem1})
         Me.ActualToolStripMenuItem1.Name = "ActualToolStripMenuItem1"
-        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
+        Me.ActualToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
         Me.ActualToolStripMenuItem1.Tag = "1"
         Me.ActualToolStripMenuItem1.Text = "Actual"
+        '
+        'ExportAsWordDocumentToolStripMenuItem1
+        '
+        Me.ExportAsWordDocumentToolStripMenuItem1.Name = "ExportAsWordDocumentToolStripMenuItem1"
+        Me.ExportAsWordDocumentToolStripMenuItem1.Size = New System.Drawing.Size(211, 22)
+        Me.ExportAsWordDocumentToolStripMenuItem1.Tag = "1"
+        Me.ExportAsWordDocumentToolStripMenuItem1.Text = "Export as Word document"
+        '
+        'PrintPreviewToolStripMenuItem1
+        '
+        Me.PrintPreviewToolStripMenuItem1.Name = "PrintPreviewToolStripMenuItem1"
+        Me.PrintPreviewToolStripMenuItem1.Size = New System.Drawing.Size(211, 22)
+        Me.PrintPreviewToolStripMenuItem1.Tag = "1"
+        Me.PrintPreviewToolStripMenuItem1.Text = "Print preview"
         '
         'tsbtnClose
         '
@@ -5084,4 +5118,8 @@ Partial Class PayStub
     Friend WithEvents Label85 As System.Windows.Forms.Label
     Friend WithEvents Label93 As Label
     Friend WithEvents Label87 As Label
+    Friend WithEvents ExportAsWordDocumentToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents PrintPreviewToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ExportAsWordDocumentToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents PrintPreviewToolStripMenuItem1 As ToolStripMenuItem
 End Class

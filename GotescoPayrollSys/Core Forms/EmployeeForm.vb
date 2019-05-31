@@ -12411,7 +12411,13 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     End If
 
                     Dim sssContributionAmount As Decimal
-                    Dim query = <![CDATA[SELECT GetSSSContribution(@employeePrimaID, @salaryAmount, @salaryEffectiveDateFrom, @salaryEffectiveDateTo);]]>.Value
+                    Dim query =
+                    <![CDATA[SELECT GetSSSContribution(
+                            (SELECT EmployeeType FROM employee WHERE RowID=@employeePrimaID)
+                            , @employeePrimaID
+                            , @salaryAmount
+                            , @salaryEffectiveDateFrom
+                            , @salaryEffectiveDateTo);]]>.Value
                     Using connection As New MySqlConnection(connectionString),
                         command As New MySqlCommand(query, connection)
 

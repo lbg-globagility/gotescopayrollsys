@@ -85,11 +85,19 @@ IF NEW.EffectiveDateTo IS NULL AND OLD.EffectiveDateTo IS NOT NULL THEN
 	SET NEW.EffectiveDateTo = OLD.EffectiveDateTo;
 END IF;*/
 
-SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(
-											IFNULL((SELECT s.MonthlySalary
-											        FROM employeesalary_withdailyrate s
-													  WHERE s.RowID = NEW.RowID
-													  LIMIT 1), 0), TRUE);
+IF NEW.OverrideDiscardPhilHealthContrib = FALSE THEN
+	SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(
+												IFNULL((SELECT s.MonthlySalary
+												        FROM employeesalary_withdailyrate s
+														  WHERE s.RowID = NEW.RowID
+														  LIMIT 1), 0), TRUE);
+
+ELSE
+	SET NEW.PhilHealthDeduction = 0;
+	SET NEW.PayPhilhealthID=NULL;
+END IF;
+
+IF NEW.OverrideDiscardSSSContrib = TRUE THEN SET NEW.PaySocialSecurityID=NULL; END IF;
 
 END//
 DELIMITER ;

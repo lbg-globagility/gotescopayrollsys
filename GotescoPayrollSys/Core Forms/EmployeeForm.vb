@@ -11910,10 +11910,10 @@ Public Class EmployeeForm
 
         pbEmpPicSal.Focus()
 
-        If objGotFoc IsNot Nothing _
-            And (is_user_override_phh = False And is_user_override_sss = False) Then
-            edited_employeesalaryAsync(objGotFoc, e)
-        End If
+        'If objGotFoc IsNot Nothing _
+        '    And (is_user_override_phh = False And is_user_override_sss = False) Then
+        '    edited_employeesalaryAsync(objGotFoc, e)
+        'End If
 
         If errprovidSal.GetError(dptFromSal) <> Nothing Then
             WarnBalloon(errprovidSal.GetError(dptFromSal), "", lblforballoon, 0, -69)
@@ -12108,7 +12108,7 @@ Public Class EmployeeForm
     End Sub
 
     Private Sub btnCancelSal_Click(sender As Object, e As EventArgs) Handles btnCancelSal.Click
-
+        listofEditEmpSal.Clear()
         'dptFromSal.MinDate = "1/1/1900"
 
         'dtpToSal.MinDate = "1/1/1900"
@@ -12433,7 +12433,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         Try
                             Dim reader = Await command.ExecuteReaderAsync()
 
-                            Dim models = New List(Of LoanScheduleWithPayPeriod)
                             While Await reader.ReadAsync()
                                 sssContributionAmount = Convert.ToDecimal(reader(0))
                             End While
@@ -12854,9 +12853,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             End Try
         End If
 
-        is_user_override_phh = False
-        is_user_override_sss = False
-
     End Sub
 
     Private Sub cleartextsal()
@@ -12874,6 +12870,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         errprovidSal.SetError(dptFromSal, Nothing)
         errprovidSal.SetError(dtpToSal, Nothing)
 
+        is_user_override_sss = False
+        is_user_override_phh = False
         'dptFromSal.MinDate = Format(CDate("1/1/1900"), machineShortDateFormat)
         'dtpToSal.MinDate = Format(CDate("1/1/1900"), machineShortDateFormat)
 
@@ -13286,6 +13284,11 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     '    'dtpToSal.Value = CDate(.Item("EffectiveDateTo")).ToString(machineShortDateFormat)
                     'End If
 
+                    Dim inList = listofEditEmpSal.Any(Function(i) i = RowID.ToString())
+                    If Not inList Then
+                        is_user_override_sss = Convert.ToBoolean(.Item("OverrideDiscardSSSContrib"))
+                        is_user_override_phh = Convert.ToBoolean(.Item("OverrideDiscardPhilHealthContrib"))
+                    End If
                 End With
             Next
 
@@ -13392,6 +13395,134 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     Private Sub txtPhilHealthSal_TextChanged(sender As Object, e As EventArgs) Handles txtPhilHealthSal.TextChanged
 
+    End Sub
+
+    Private Function HasSelectedSalary() As Boolean
+        Dim row = dgvemployeesalary.CurrentRow
+        If row Is Nothing Then Return False
+
+        Dim salaryID = Convert.ToString(row.Cells(c_RowIDSal.Name).Value)
+        Dim inList = listofEditEmpSal.Any(Function(i) i = salaryID)
+        If inList Then listofEditEmpSal.Remove(salaryID)
+        listofEditEmpSal.Add(salaryID)
+
+        Return True
+    End Function
+
+    Private Async Sub btnAutoCalcPhilHealth_ClickAsync(sender As Object, e As EventArgs) Handles btnAutoCalcPhilHealth.Click
+        If Not HasSelectedSalary() Then Return
+
+        is_user_override_phh = False
+        btnAutoCalcPhilHealth.Enabled = False
+
+        Dim phHContribAmount As Decimal
+        Dim query =
+        <![CDATA[SELECT phh.EmployeeShare
+                FROM payphilhealth phh
+                INNER JOIN employee e ON e.RowID=@employeePrimaID
+                WHERE IF(LCASE(e.EmployeeType)='daily', @givenSalary * (e.WorkDaysPerYear / 12), @givenSalary) 
+                BETWEEN phh.SalaryRangeFrom AND phh.SalaryRangeTo
+                ORDER BY phh.SalaryBase DESC
+                LIMIT 1;]]>.Value
+        Dim succeed = False
+        Try
+            Using connection As New MySqlConnection(connectionString),
+                        command As New MySqlCommand(query, connection)
+
+                With command.Parameters
+                    .AddWithValue("@employeePrimaID", sameEmpID)
+                    .AddWithValue("@givenSalary", Convert.ToDecimal(txtEmpDeclaSal.Text.Trim.Replace(",", "")))
+                End With
+
+                Await connection.OpenAsync()
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                While Await reader.ReadAsync()
+                    phHContribAmount = Convert.ToDecimal(reader(0))
+                    succeed = True
+                End While
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show($"Oops! something went wrong. See details :{vbNewLine}{ex.Message}", "Auto-calculate PhilHealth contribution", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            btnAutoCalcPhilHealth.Enabled = True
+
+            If succeed Then
+                txtPhilHealthSal.Text = phHContribAmount
+            Else
+                Dim row = dgvemployeesalary.CurrentRow
+                If row IsNot Nothing Then
+                    Dim salaryID = Convert.ToString(row.Cells(c_RowIDSal.Name).Value)
+                    Dim inList = listofEditEmpSal.Any(Function(i) i = salaryID)
+                    If inList Then listofEditEmpSal.Remove(salaryID)
+                End If
+            End If
+        End Try
+
+    End Sub
+
+    Private Sub btnSetNonePhilHealth_Click(sender As Object, e As EventArgs) Handles btnSetNonePhilHealth.Click
+        If Not HasSelectedSalary() Then Return
+
+        is_user_override_phh = True
+        txtPhilHealthSal.Text = 0
+    End Sub
+
+    Private Async Sub btnAutoCalcSSS_ClickAsync(sender As Object, e As EventArgs) Handles btnAutoCalcSSS.Click
+        If Not HasSelectedSalary() Then Return
+
+        is_user_override_sss = False
+        btnAutoCalcSSS.Enabled = False
+
+        Dim sssContributionAmount As Decimal
+        Dim query =
+        <![CDATA[SELECT GetSSSContribution(
+                (SELECT EmployeeType FROM employee WHERE RowID=@employeePrimaID)
+                , @employeePrimaID
+                , (SELECT IF(LCASE(e.EmployeeType)='daily', @salaryAmount * (e.WorkDaysPerYear / 12), @salaryAmount) FROM employee e WHERE e.RowID=@employeePrimaID)
+                , @salaryEffectiveDateFrom
+                , @salaryEffectiveDateTo);]]>.Value
+        Using connection As New MySqlConnection(connectionString),
+            command As New MySqlCommand(query, connection)
+
+            With command.Parameters
+                .AddWithValue("@employeePrimaID", sameEmpID)
+                .AddWithValue("@salaryAmount", Convert.ToDecimal(txtEmpDeclaSal.Text.Trim.Replace(",", "")))
+                .AddWithValue("@salaryEffectiveDateFrom", dptFromSal.Value.Date)
+                .AddWithValue("@salaryEffectiveDateTo", dtpToSal.Value.Date)
+            End With
+
+            Try
+                Await connection.OpenAsync()
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                While Await reader.ReadAsync()
+                    sssContributionAmount = Convert.ToDecimal(reader(0))
+                End While
+
+            Catch ex As Exception
+                Dim row = dgvemployeesalary.CurrentRow
+                If row IsNot Nothing Then
+                    Dim salaryID = Convert.ToString(row.Cells(c_RowIDSal.Name).Value)
+                    Dim inList = listofEditEmpSal.Any(Function(i) i = salaryID)
+                    If inList Then listofEditEmpSal.Remove(salaryID)
+                End If
+
+                MessageBox.Show($"Oops! something went wrong. See details :{vbNewLine}{ex.Message}", "Auto-calculate SSS contribution", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                txtSSSSal.Text = sssContributionAmount
+
+                btnAutoCalcSSS.Enabled = True
+            End Try
+        End Using
+    End Sub
+
+    Private Sub btnSetNoneSSS_Click(sender As Object, e As EventArgs) Handles btnSetNoneSSS.Click
+        If Not HasSelectedSalary() Then Return
+
+        is_user_override_sss = True
+        txtSSSSal.Text = 0
     End Sub
 
     Private Sub txttruesalary_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtToComputeSal.KeyPress
@@ -22010,6 +22141,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     End Sub
 
     Private Sub cbobank_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbobank.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub grpbasicsalaryaddeduction_Enter_1(sender As Object, e As EventArgs) Handles grpbasicsalaryaddeduction.Enter
 
     End Sub
 

@@ -27,12 +27,23 @@ IF IFNULL(NEW.UndeclaredSalary,0) = 0 THEN
 END IF;
 
 IF e_type = 'Daily' THEN
-
-	SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(((NEW.Salary * e_workdays_peryear) / month_count), TRUE);
+	IF NEW.OverrideDiscardPhilHealthContrib = FALSE THEN
+		SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(((NEW.Salary * e_workdays_peryear) / month_count), TRUE);
+	ELSE
+		SET NEW.PhilHealthDeduction = 0;
+		SET NEW.PayPhilhealthID=NULL;
+	END IF;
 ELSE
 
-	SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement((NEW.Salary / (e_workdays_peryear / month_count)), TRUE);
+	IF NEW.OverrideDiscardPhilHealthContrib = FALSE THEN
+		SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement((NEW.Salary / (e_workdays_peryear / month_count)), TRUE);
+	ELSE
+		SET NEW.PhilHealthDeduction = 0;
+		SET NEW.PayPhilhealthID=NULL;
+	END IF;
 END IF;
+
+IF NEW.OverrideDiscardSSSContrib = TRUE THEN SET NEW.PaySocialSecurityID=NULL; END IF;
 
 END//
 DELIMITER ;

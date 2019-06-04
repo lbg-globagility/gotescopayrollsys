@@ -147,9 +147,11 @@ SELECT COUNT(RowID) FROM employeesalary WHERE EmployeeID=esal_EmployeeID AND Org
 			
 		END IF;
 		
-		SELECT RowID FROM paysocialsecurity WHERE COALESCE(salaryToUseForContrib,0) BETWEEN RangeFromAmount AND IF(COALESCE(salaryToUseForContrib,0) > RangeToAmount, COALESCE(salaryToUseForContrib,0) + 1, RangeToAmount) ORDER BY MonthlySalaryCredit DESC LIMIT 1 INTO sss_amt;
+#		SELECT RowID FROM paysocialsecurity WHERE COALESCE(salaryToUseForContrib,0) BETWEEN RangeFromAmount AND IF(COALESCE(salaryToUseForContrib,0) > RangeToAmount, COALESCE(salaryToUseForContrib,0) + 1, RangeToAmount) ORDER BY MonthlySalaryCredit DESC LIMIT 1 INTO sss_amt;
+		SELECT sss.RowID FROM paysocialsecurity sss INNER JOIN employee e ON e.RowID=esal_EmployeeID WHERE IF(LCASE(e.EmployeeType)='daily', esal_Salary * (e.WorkDaysPerYear / 12), esal_Salary) BETWEEN sss.RangeFromAmount AND sss.RangeToAmount ORDER BY sss.MonthlySalaryCredit DESC LIMIT 1 INTO sss_amt;
 	
-		SELECT RowID FROM payphilhealth WHERE COALESCE(salaryToUseForContrib,0) BETWEEN SalaryRangeFrom AND IF(COALESCE(salaryToUseForContrib,0) > SalaryRangeTo, COALESCE(salaryToUseForContrib,0) + 1, SalaryRangeTo) ORDER BY SalaryBase DESC LIMIT 1 INTO phh_amt;
+#		SELECT RowID FROM payphilhealth WHERE COALESCE(salaryToUseForContrib,0) BETWEEN SalaryRangeFrom AND IF(COALESCE(salaryToUseForContrib,0) > SalaryRangeTo, COALESCE(salaryToUseForContrib,0) + 1, SalaryRangeTo) ORDER BY SalaryBase DESC LIMIT 1 INTO phh_amt;
+		SELECT phh.RowID FROM payphilhealth phh INNER JOIN employee e ON e.RowID=esal_EmployeeID WHERE IF(LCASE(e.EmployeeType)='daily', esal_Salary * (e.WorkDaysPerYear / 12), esal_Salary) BETWEEN phh.SalaryRangeFrom AND phh.SalaryRangeTo ORDER BY phh.SalaryBase DESC LIMIT 1 INTO phh_amt;
 	
 	
 	SELECT GET_HDMFAmount(salaryToUseForContrib) INTO hdmf_amt;
@@ -235,8 +237,8 @@ SELECT COUNT(RowID) FROM employeesalary WHERE EmployeeID=esal_EmployeeID AND Org
 		,esal_CreatedBy
 		,esal_OrganizationID
 		,EmpFStatID
-		,sss_amt
-		,phh_amt
+		,IF(esal_DiscardSSS=TRUE, NULL, sss_amt)
+		,IF(esal_DiscardPhH=TRUE, NULL, phh_amt)
 		,esal_HDMFAmount
 		,esal_Salary / IF(LOCATE(EmpType,CONCAT('MonthlyFixed')) > 0, PAYFREQUENCY_DIVISOR(pay_freq_type), PAYFREQUENCY_DIVISOR(EmpType))
 		,esal_Salary
@@ -256,8 +258,8 @@ SELECT COUNT(RowID) FROM employeesalary WHERE EmployeeID=esal_EmployeeID AND Org
 		LastUpd=CURRENT_TIMESTAMP()
 		,LastUpdBy=esal_LastUpdBy
 		,FilingStatusID=EmpFStatID
-		,PaySocialSecurityID=sss_amt
-		,PayPhilhealthID=phh_amt
+		,PaySocialSecurityID=IF(esal_DiscardSSS=TRUE, NULL, sss_amt)
+		,PayPhilhealthID=IF(esal_DiscardPhH=TRUE, NULL, phh_amt)
 		,HDMFAmount=IF(esal_HDMFAmount != 0,esal_HDMFAmount,hdmf_amt)
 		,BasicPay=esal_Salary / IF(LOCATE(EmpType,CONCAT('MonthlyFixed')) > 0, PAYFREQUENCY_DIVISOR(pay_freq_type), PAYFREQUENCY_DIVISOR(EmpType))
 		,Salary=esal_Salary

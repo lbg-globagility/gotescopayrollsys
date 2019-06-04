@@ -6,7 +6,10 @@
 
 DROP FUNCTION IF EXISTS `GET_PhilHealthContribNewImplement`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_PhilHealthContribNewImplement`(`amount_worked` DECIMAL(15,4), `is_employee_share` BOOL) RETURNS decimal(15,4)
+CREATE DEFINER=`root`@`localhost` FUNCTION `GET_PhilHealthContribNewImplement`(
+	`amount_worked` DECIMAL(15,4),
+	`is_employee_share` BOOL
+) RETURNS decimal(15,4)
     DETERMINISTIC
 BEGIN
 
@@ -37,10 +40,10 @@ ELSEIF max_contrib < _amount THEN
 	SET _amount = max_contrib;
 END IF;
 
-/*SET value1 = (_amount / 2);
-SET value2 = (_amount - value1);*/
-SET value1 = _amount;
-SET value2 = value1;
+SET value1 = (_amount / 2);
+SET value2 = (_amount - value1);
+/*SET value1 = _amount;
+SET value2 = value1;*/
 
 IF is_employee_share THEN
 	SET return_value = LEAST(value1, value2);

@@ -36,3 +36,4 @@ GotescoPayrollSys.Test/obj/Debug
 GotescoPayrollSys.Test/obj/Debug
 *.tmp
 GotescoPayrollSys.Test/bin/Debug/nunit_random_seed.tmp
+gotescopayrolldb/AFTUPD_paystubs.sql

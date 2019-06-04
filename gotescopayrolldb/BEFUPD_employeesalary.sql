@@ -5,7 +5,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TRIGGER IF EXISTS `BEFUPD_employeesalary`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `BEFUPD_employeesalary` BEFORE UPDATE ON `employeesalary` FOR EACH ROW BEGIN
 
@@ -85,19 +85,21 @@ IF NEW.EffectiveDateTo IS NULL AND OLD.EffectiveDateTo IS NOT NULL THEN
 	SET NEW.EffectiveDateTo = OLD.EffectiveDateTo;
 END IF;*/
 
-IF NEW.OverrideDiscardPhilHealthContrib = FALSE THEN
-	SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(
-												IFNULL((SELECT s.MonthlySalary
-												        FROM employeesalary_withdailyrate s
-														  WHERE s.RowID = NEW.RowID
-														  LIMIT 1), 0), TRUE);
+SET @monthlySalary=IFNULL(IF(LCASE(e_type)='daily', NEW.Salary * (e_workdayyear / 12), NEW.Salary), 0);
 
+IF NEW.OverrideDiscardPhilHealthContrib = FALSE THEN
+	SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(@monthlySalary, TRUE);
+#	SELECT e_type, e_workdayyear, NEW.Salary INTO OUTFILE 'D:/TEST.txt';
 ELSE
 	SET NEW.PhilHealthDeduction = 0;
 	SET NEW.PayPhilhealthID=NULL;
 END IF;
 
-IF NEW.OverrideDiscardSSSContrib = TRUE THEN SET NEW.PaySocialSecurityID=NULL; END IF;
+IF NEW.OverrideDiscardSSSContrib = FALSE THEN
+	SET NEW.PaySocialSecurityID=GetSSSContributionID(e_type, NEW.EmployeeID, @monthlySalary, NEW.EffectiveDateFrom, NEW.EffectiveDateTo);
+ELSE
+	SET NEW.PaySocialSecurityID=NULL;
+END IF;
 
 END//
 DELIMITER ;

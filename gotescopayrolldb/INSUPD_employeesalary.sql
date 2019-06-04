@@ -6,7 +6,26 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeesalary`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeesalary`(`esal_RowID` INT, `esal_EmployeeID` INT, `esal_CreatedBy` INT, `esal_LastUpdBy` INT, `esal_OrganizationID` INT, `esal_BasicPay` DECIMAL(11,6), `esal_Salary` DECIMAL(11,6), `esal_NoofDependents` INT, `esal_MaritalStatus` VARCHAR(50), `esal_PositionID` INT, `esal_EffectiveDateFrom` DATE, `esal_EffectiveDateTo` DATE, `esal_HDMFAmount` DECIMAL(10,2), `esal_TrueSalary` DECIMAL(10,2), `esal_IsDoneByImporting` TEXT, `esal_DiscardSSS` TINYINT, `esal_DiscardPhH` TINYINT) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeesalary`(
+	`esal_RowID` INT,
+	`esal_EmployeeID` INT,
+	`esal_CreatedBy` INT,
+	`esal_LastUpdBy` INT,
+	`esal_OrganizationID` INT,
+	`esal_BasicPay` DECIMAL(11,6),
+	`esal_Salary` DECIMAL(11,6),
+	`esal_NoofDependents` INT,
+	`esal_MaritalStatus` VARCHAR(50),
+	`esal_PositionID` INT,
+	`esal_EffectiveDateFrom` DATE,
+	`esal_EffectiveDateTo` DATE,
+	`esal_HDMFAmount` DECIMAL(10,2),
+	`esal_TrueSalary` DECIMAL(10,2),
+	`esal_IsDoneByImporting` TEXT,
+	`esal_DiscardSSS` TINYINT,
+	`esal_DiscardPhH` TINYINT
+
+) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

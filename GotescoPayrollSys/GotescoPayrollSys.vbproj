@@ -414,6 +414,7 @@
     <Compile Include="Core Forms\user_predefines\Custom\LeaveTransaction.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\RenewLeaveBalancePolicy.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Bonus.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Category.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\DatabaseContext.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Employee.vb" />

@@ -3,6 +3,7 @@
 'Imports Emgu.CV.OCR
 'Imports Emgu.CV.
 'Imports Tesseract.Interop
+Imports System.Data.Entity
 Imports System.IO
 Imports System.Threading.Tasks
 Imports MySql.Data.MySqlClient
@@ -19324,6 +19325,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                 tsbtnNewBon.Visible = 0
                 tsbtnSaveBon.Visible = 0
+                tsbtnDelBon.Visible = False
 
                 dontUpdateBon = 1
             Else
@@ -19341,11 +19343,11 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                             tsbtnNewBon.Visible = 1
                         End If
 
-                        'If drow("Deleting").ToString = "N" Then
-                        '    tsbtnDeletePosition.Visible = 0
-                        'Else
-                        '    tsbtnDeletePosition.Visible = 1
-                        'End If
+                        If drow("Deleting").ToString = "N" Then
+                            tsbtnDelBon.Visible = 0
+                        Else
+                            tsbtnDelBon.Visible = 1
+                        End If
 
                         If drow("Updates").ToString = "N" Then
                             dontUpdateBon = 1
@@ -19519,6 +19521,48 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
         'AddHandler dgvEmp.SelectionChanged, AddressOf dgvEmp_SelectionChanged
 
+    End Sub
+
+    Private Async Sub tsbtnDelBon_ClickAsync(sender As Object, e As EventArgs) Handles tsbtnDelBon.Click
+        tsbtnDelBon.Enabled = False
+
+        Dim enableDelButton = Sub()
+                                  tsbtnDelBon.Enabled = True
+                              End Sub
+        Dim bonusRow = dgvempbon.CurrentRow
+
+        If bonusRow Is Nothing Then
+            MessageBox.Show("Selected record is invalid to delete", "Delete bonus", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            enableDelButton()
+            Return
+        End If
+        Dim bonusID = Convert.ToInt32(bonusRow.Cells(bon_RowID.Name).Value)
+
+        If bonusID = 0 Then enableDelButton() : Return
+
+        Dim ask = $"Are you sure want to delete {Convert.ToDecimal(bonusRow.Cells(bon_Amount.Name).Value)} {Convert.ToString(bonusRow.Cells(bon_Type.Name).Value)} ?"
+        Dim prompt = MessageBox.Show(ask, "Delete bonus", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+        Dim aggreed = prompt = DialogResult.Yes
+        If Not aggreed Then enableDelButton() : Return
+
+        Dim succeed = False
+        Try
+            Using context = New DatabaseContext
+                Dim bonus = Await context.Bonuses.FirstOrDefaultAsync(Function(b) b.RowID = bonusID)
+                If bonus IsNot Nothing Then
+                    context.Bonuses.Remove(bonus)
+                    Await context.SaveChangesAsync()
+                    succeed = True
+                End If
+            End Using
+        Catch ex As Exception
+            MessageBox.Show($"Failed to delete bonus :{Environment.NewLine}{ex.Message}",
+                            "Delete bonus",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            enableDelButton()
+            If succeed Then dgvempbon.Rows.Remove(bonusRow)
+        End Try
     End Sub
 
     Private Sub tsbtnCancelBon_Click(sender As Object, e As EventArgs) Handles tsbtnCancelBon.Click

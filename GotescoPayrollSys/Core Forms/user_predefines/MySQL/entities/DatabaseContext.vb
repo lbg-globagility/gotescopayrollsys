@@ -70,4 +70,6 @@ Public Class DatabaseContext
 
     Public Overridable Property PhilHealthBrackets() As DbSet(Of PhilHealth)
 
+    Public Overridable Property Bonuses() As DbSet(Of Bonus)
+
 End Class

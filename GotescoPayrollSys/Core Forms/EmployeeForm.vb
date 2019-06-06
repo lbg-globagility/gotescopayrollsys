@@ -12415,7 +12415,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     Dim query =
                     <![CDATA[SELECT GetSSSContribution(
                             (SELECT EmployeeType FROM employee WHERE RowID=@employeePrimaID)
-                            , @employeePrimaID
+                            , (SELECT WorkDaysPerYear FROM employee WHERE RowID=@employeePrimaID)
                             , @salaryAmount
                             , @salaryEffectiveDateFrom
                             , @salaryEffectiveDateTo);]]>.Value
@@ -13478,8 +13478,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         Dim sssContributionAmount As Decimal
         Dim query =
         <![CDATA[SELECT GetSSSContribution(
-                (SELECT EmployeeType FROM employee WHERE RowID=@employeePrimaID)
-                , @employeePrimaID
+                (SELECT EmployeeType FROM employee WHERE RowID=@employeePrimaID)                
+                , (SELECT WorkDaysPerYear FROM employee WHERE RowID=@employeePrimaID)
                 , (SELECT IF(LCASE(e.EmployeeType)='daily', @salaryAmount * (e.WorkDaysPerYear / 12), @salaryAmount) FROM employee e WHERE e.RowID=@employeePrimaID)
                 , @salaryEffectiveDateFrom
                 , @salaryEffectiveDateTo);]]>.Value

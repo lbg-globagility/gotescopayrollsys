@@ -14,11 +14,11 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `GetSSSContribution`(
 	`salaryEffectiveDateTo` DATE
 
 
-) RETURNS decimal(10,0)
+) RETURNS decimal(11,2)
     DETERMINISTIC
 BEGIN
 
-DECLARE returnValue DECIMAL DEFAULT 0;
+DECLARE returnValue DECIMAL(11, 2) DEFAULT 0;
 
 DECLARE dailyType TEXT DEFAULT 'daily';
 DECLARE monthCount INT DEFAULT 12;

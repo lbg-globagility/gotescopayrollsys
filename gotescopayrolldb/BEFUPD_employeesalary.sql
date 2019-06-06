@@ -96,7 +96,7 @@ ELSE
 END IF;
 
 IF NEW.OverrideDiscardSSSContrib = FALSE THEN
-	SET NEW.PaySocialSecurityID=GetSSSContributionID(e_type, NEW.EmployeeID, @monthlySalary, NEW.EffectiveDateFrom, NEW.EffectiveDateTo);
+	SET NEW.PaySocialSecurityID=GetSSSContributionID(e_type, e_workdayyear, @monthlySalary, NEW.EffectiveDateFrom, NEW.EffectiveDateTo);
 ELSE
 	SET NEW.PaySocialSecurityID=NULL;
 END IF;

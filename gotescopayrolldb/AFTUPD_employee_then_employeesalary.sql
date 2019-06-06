@@ -106,14 +106,14 @@ IF NEW.NoOfDependents != OLD.NoOfDependents OR NEW.MaritalStatus != COALESCE(OLD
 		
 	
 	SET preEffDateFromEmpSallatest = IF(DATEDIFF(CURRENT_DATE(),preEffDateFromEmpSal) = 0, ADDDATE(CURRENT_DATE(), INTERVAL 1 DAY), IF(DATEDIFF(CURRENT_DATE(),preEffDateFromEmpSal) < 0, ADDDATE(preEffDateFromEmpSal, INTERVAL 1 DAY), ADDDATE(CURRENT_DATE(), INTERVAL -1 DAY)));
-	
-		UPDATE employeesalary SET
-		LastUpdBy=NEW.LastUpdBy
-		,EffectiveDateTo=preEffDateFromEmpSallatest
-		WHERE RowID=prevesalRowID;
-		
-		
-	
+
+
+
+
+
+
+
+
 		SELECT ADDDATE(EffectiveDateTo, INTERVAL 1 DAY) FROM employeesalary WHERE RowID=prevesalRowID LIMIT 1 INTO preEffDateToEmpSallatest;
 		SET @emp_true_sal = (SELECT TrueSalary FROM employeesalary WHERE RowID=prevesalRowID);
 		
@@ -207,31 +207,34 @@ IF NEW.NoOfDependents != OLD.NoOfDependents OR NEW.MaritalStatus != COALESCE(OLD
 
 END IF;
 
-IF NEW.EmploymentStatus = 'Resigned' THEN
 
-	UPDATE employeesalary SET
-	LastUpdBy=NEW.LastUpdBy
-	,EffectiveDateTo=CURRENT_DATE()
-	WHERE EmployeeID=NEW.RowID
-	AND OrganizationID=NEW.OrganizationID
-	AND EffectiveDateTo IS NULL;
 
-END IF;
 
-IF NEW.EmploymentStatus = 'Terminated' THEN
 
-	IF NEW.TerminationDate IS NOT NULL THEN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
-		UPDATE employeesalary SET
-		LastUpdBy=NEW.LastUpdBy
-		,EffectiveDateTo=NEW.TerminationDate
-		WHERE EmployeeID=NEW.RowID
-		AND OrganizationID=NEW.OrganizationID
-		AND EffectiveDateTo IS NULL;
-
-	END IF;
-	
-END IF;
 
 
 
@@ -359,14 +362,14 @@ IF NEW.WorkDaysPerYear != OLD.WorkDaysPerYear THEN
 	SELECT RowID FROM paysocialsecurity WHERE emp_fullmonthsalary BETWEEN RangeFromAmount AND IF(emp_fullmonthsalary > RangeToAmount, (emp_fullmonthsalary + 1), RangeToAmount) ORDER BY MonthlySalaryCredit DESC LIMIT 1 INTO psssID;
 	
 	SELECT RowID FROM payphilhealth WHERE emp_fullmonthsalary BETWEEN SalaryRangeFrom AND IF(emp_fullmonthsalary > SalaryRangeTo, (emp_fullmonthsalary + 1), SalaryRangeTo) ORDER BY SalaryBase DESC LIMIT 1 INTO phhID;
-	
-	UPDATE employeesalary SET
-	PaySocialSecurityID=psssID
-	,PayPhilhealthID=phhID
-	,LastUpdBy=NEW.LastUpdBy
-	WHERE EmployeeID=NEW.RowID
-	AND OrganizationID=NEW.OrganizationID
-	AND EffectiveDateTo IS NULL;
+
+
+
+
+
+
+
+
 
 	INSERT INTO audittrail (LastUpd,LastUpdBy,CreatedBy,OrganizationID,ViewID,FieldChanged,ChangedRowID,OldValue,NewValue,ActionPerformed) VALUES (CURRENT_TIMESTAMP(),NEW.LastUpdBy,NEW.LastUpdBy,NEW.OrganizationID,viewID,'WorkDaysPerYear',NEW.RowID,OLD.WorkDaysPerYear,NEW.WorkDaysPerYear,'Update');
 
@@ -725,14 +728,14 @@ ELSE
 		
 	END IF;
 
-	UPDATE employeesalary es
-	SET es.PaySocialSecurityID = psssID
-	,es.PayPhilhealthID = phhID
-#	,es.HDMFAmount = 100.0
-	,es.LastUpd = CURRENT_TIMESTAMP()
-	,es.LastUpdBy = NEW.LastUpdBy
-	WHERE es.EmployeeID=NEW.RowID
-	AND es.OrganizationID=NEW.OrganizationID;
+
+
+
+
+
+	
+	
+
 	
 END IF;
 

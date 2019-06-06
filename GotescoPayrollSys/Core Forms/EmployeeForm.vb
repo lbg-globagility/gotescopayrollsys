@@ -19708,6 +19708,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     Dim bon_prevval(4) As Object
 
     Private Sub dgvempbon_SelectionChanged(sender As Object, e As EventArgs) 'Handles dgvempbon.SelectionChanged
+        Dim noDate = String.Join("/", "01", "01", "0001")
+        Dim machineDateNow As String = Format(CDate(dbnow), machineShortDateFormat)
+
         If dgvempbon.RowCount <> 1 Then
             With dgvempbon.CurrentRow
 
@@ -19722,16 +19725,32 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     cbobontype.Text = .Cells("bon_Type").Value
                     cbobonfreq.Text = .Cells("bon_Frequency").Value
 
-                    If Trim(.Cells("bon_Start").Value) <> Nothing Then
-                        dtpbonstartdate.Value = Format(CDate(.Cells("bon_Start").Value), machineShortDateFormat)
+                    Dim bonusStartDate = .Cells(bon_Start.Name).Value
+                    If IsDBNull(bonusStartDate) Then
+                        dtpbonstartdate.Value = dtpbonstartdate.MinDate.Date
                     Else
-                        dtpbonstartdate.Value = Format(CDate(dbnow), machineShortDateFormat)
+                        Dim strDate = Convert.ToString(bonusStartDate).Trim
+                        If String.IsNullOrWhiteSpace(strDate) _
+                            Or noDate = strDate Then
+                            'dtpbonstartdate.Value = machineDateNow
+                            dtpbonstartdate.Value = dtpbonstartdate.MinDate.Date
+                        Else
+                            dtpbonstartdate.Value = Format(CDate(bonusStartDate), machineShortDateFormat)
+                        End If
                     End If
 
-                    If Trim(.Cells("bon_End").Value) <> Nothing Then
-                        dtpbonenddate.Value = Format(CDate(.Cells("bon_End").Value), machineShortDateFormat)
+                    Dim bonusEndDate = .Cells(bon_End.Name).Value
+                    If IsDBNull(bonusEndDate) Then
+                        dtpbonenddate.Value = dtpbonenddate.MinDate.Date
                     Else
-                        dtpbonenddate.Value = Format(CDate(dbnow), machineShortDateFormat)
+                        Dim strDate = Convert.ToString(bonusEndDate).Trim
+                        If String.IsNullOrWhiteSpace(Convert.ToString(bonusEndDate).Trim) _
+                            Or noDate = strDate Then
+                            'dtpbonenddate.Value = machineDateNow
+                            dtpbonenddate.Value = dtpbonenddate.MinDate.Date
+                        Else
+                            dtpbonenddate.Value = Format(CDate(bonusEndDate), machineShortDateFormat)
+                        End If
                     End If
 
                     txtbonamt.Text = .Cells("bon_Amount").Value
@@ -19745,8 +19764,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
                     cbobontype.Text = ""
                     cbobonfreq.Text = ""
-                    dtpbonstartdate.Value = Format(CDate(dbnow), machineShortDateFormat)
-                    dtpbonenddate.Value = Format(CDate(dbnow), machineShortDateFormat)
+                    dtpbonstartdate.Value = machineDateNow
+                    dtpbonenddate.Value = machineDateNow
                     txtbonamt.Text = ""
 
                 End If
@@ -19761,8 +19780,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             bon_prevval(3) = ""
             bon_prevval(4) = ""
 
-            dtpbonstartdate.Value = Format(CDate(dbnow), machineShortDateFormat)
-            dtpbonenddate.Value = Format(CDate(dbnow), machineShortDateFormat)
+            dtpbonstartdate.Value = machineDateNow
+            dtpbonenddate.Value = machineDateNow
         End If
     End Sub
 

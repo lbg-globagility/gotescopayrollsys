@@ -948,8 +948,11 @@ Public Class PayrollGeneration
                         'Dim catch_result As New DataTable
                         'catch_result = sss_sql.GetFoundRows.Tables(0)
                         'For Each ss_row As DataRow In catch_result.Rows
-                        sss_ee = SssCalculator(amount_used_to_get_sss_contrib, EmployeeEmployer.Employee)
-                        sss_er = SssCalculator(amount_used_to_get_sss_contrib, EmployeeEmployer.Employer)
+                        Dim dontContribSss As Boolean = Convert.ToBoolean(drowsal("OverrideDiscardSSSContrib"))
+                        If Not dontContribSss Then
+                            sss_ee = SssCalculator(amount_used_to_get_sss_contrib, EmployeeEmployer.Employee)
+                            sss_er = SssCalculator(amount_used_to_get_sss_contrib, EmployeeEmployer.Employer)
+                        End If
                         'Next
 
                         'End If
@@ -975,46 +978,36 @@ Public Class PayrollGeneration
 
                         End If
 
-                        'Dim phh_ee = ValNoComma(phh.Compute("MIN(EmployeeShare)", String.Concat("RowID = ", ValNoComma(drowsal("PayPhilhealthID")))))
-                        'Dim phh_er = ValNoComma(phh.Compute("MIN(EmployerShare)", String.Concat("RowID = ", ValNoComma(drowsal("PayPhilhealthID")))))
-                        ''Dim phh_ee = ValNoComma(phh.Compute("MIN(EmployeeShare)", "SalaryRangeFrom <= " & amount_used_to_get_sss_contrib & " AND " & amount_used_to_get_sss_contrib & " <= SalaryRangeTo")) 'monthly_computed_salary
-                        ''Dim phh_er = ValNoComma(phh.Compute("MIN(EmployerShare)", "SalaryRangeFrom <= " & amount_used_to_get_sss_contrib & " AND " & amount_used_to_get_sss_contrib & " <= SalaryRangeTo")) 'monthly_computed_salary
-                        ' ''Dim phh_ee = ValNoComma(phh.Compute("MIN(EmployeeShare)", "RowID = " & ValNoComma(drowsal("PayPhilhealthID"))))
-                        ' ''Dim phh_er = ValNoComma(phh.Compute("MIN(EmployerShare)", "RowID = " & ValNoComma(drowsal("PayPhilhealthID"))))
 
                         Dim phh_ee, phh_er As Double
                         Dim phh_param = New Object() {amount_used_to_get_sss_contrib}
                         Dim employeePrimaKey = Convert.ToInt32(drow("RowID"))
                         Dim phh_sql As New SQL(phh_contrib_quer, phh_param)
                         Dim caught_result As New DataTable
-                        'If is_year2018 = False Then
-                        If is_year2018 Then
-                            ''Dim new2018PhilHealtContrib As String =
-                            ''    String.Concat("SELECT GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", TRUE) `EmployeeShare`",
-                            ''                  ", GET_PhilHealthContribNewImplement(", amount_used_to_get_sss_contrib, ", FALSE) `EmployerShare`",
-                            ''                  ";")
-
-                            ''caught_result = New SQL(new2018PhilHealtContrib).GetFoundRows.Tables(0)
-                            phh_ee = CalcNewPhilHealth(amount_used_to_get_sss_contrib, True, CDec(drowsal("PhilHealthDeduction")))
-                            phh_er = CalcNewPhilHealth(amount_used_to_get_sss_contrib, False, CDec(drowsal("PhilHealthDeduction")))
+                        Dim dontContribPhilHealth As Boolean = Convert.ToBoolean(drowsal("OverrideDiscardPhilHealthContrib"))
+                        If dontContribPhilHealth Then
+                            phh_ee = 0
+                            phh_er = 0
                         Else
-                            caught_result = phh_sql.GetFoundRows.Tables(0)
-                            For Each phh_row As DataRow In caught_result.Rows
-                                phh_ee = phh_row(0)
-                                phh_er = phh_row(1)
-                            Next
+                            If is_year2018 Then
+
+                                phh_ee = CalcNewPhilHealth(amount_used_to_get_sss_contrib, True, CDec(drowsal("PhilHealthDeduction")))
+                                phh_er = CalcNewPhilHealth(amount_used_to_get_sss_contrib, False, CDec(drowsal("PhilHealthDeduction")))
+                            Else
+                                caught_result = phh_sql.GetFoundRows.Tables(0)
+                                For Each phh_row As DataRow In caught_result.Rows
+                                    phh_ee = phh_row(0)
+                                    phh_er = phh_row(1)
+                                Next
+                            End If
                         End If
 
                         If isEndOfMonth = isorgPHHdeductsched Then
-                            'pstub_TotalEmpPhilhealth = CDec(drowsal("EmployeeShare"))
-                            'pstub_TotalCompPhilhealth = CDec(drowsal("EmployerShare"))
 
                             pstub_TotalEmpPhilhealth = phh_ee
                             pstub_TotalCompPhilhealth = phh_er
                         Else
                             If isorgPHHdeductsched = 2 Then 'Per pay period
-                                'pstub_TotalEmpPhilhealth = CDec(drowsal("EmployeeShare"))
-                                'pstub_TotalCompPhilhealth = CDec(drowsal("EmployerShare"))
 
                                 pstub_TotalEmpPhilhealth = phh_ee
                                 pstub_TotalCompPhilhealth = phh_er

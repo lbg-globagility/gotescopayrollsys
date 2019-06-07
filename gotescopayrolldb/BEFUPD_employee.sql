@@ -110,6 +110,14 @@ IF NEW.WorkDaysPerYear = 0 THEN
 	SET NEW.WorkDaysPerYear = 313;
 END IF;
 
+IF NEW.EmploymentStatus
+	IN ('Regular'
+	,'Probationary'
+	,'Service Contract') THEN
+	
+	SET NEW.TerminationDate = NULL;
+END IF;
+
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;

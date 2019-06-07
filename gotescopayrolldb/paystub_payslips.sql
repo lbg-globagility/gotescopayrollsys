@@ -181,7 +181,7 @@ ps.RowID
 ,NEWLINECHARTRIMMER(REPLACE(adj_negative.`AdjustmentAmount`, ',', '\n')) `Column53`
 
 ,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceName`, ',', '\n')) `Column48`
-,NEWLINECHARTRIMMER(REPLACE(eapp.`AmountPresentation`, ',', '\n')) `Column49`
+,REPLACE(NEWLINECHARTRIMMER(REPLACE(eapp.`AmountPresentation`, ',', '\n')), '|', ',') `Column49`
 
 /**/ , ( ps.TotalGrossSalary + IFNULL(adj_positive.`PayAmount`, 0) ) `Column60`
 
@@ -529,7 +529,7 @@ LEFT JOIN (SELECT d.PayStubID
 
 LEFT JOIN (SELECT GROUP_CONCAT(eapp.AllowanceAmount) `AllowanceAmount`
            , GROUP_CONCAT(eapp.AllowanceName) `AllowanceName`
-           , GROUP_CONCAT(eapp.AmountPresentation) `AmountPresentation`
+           , GROUP_CONCAT(REPLACE(FORMAT(eapp.AmountPresentation, 2), ',', '|')) `AmountPresentation`
 			  , eapp.EmployeeID
 			  FROM employeeallowance_perperiod eapp
 			  WHERE eapp.OrganizationID=og_rowid

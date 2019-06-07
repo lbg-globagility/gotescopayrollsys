@@ -34,6 +34,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeetimeentries`(
 	`leavePayment` DECIMAL(11,6)
 
 
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -84,12 +85,14 @@ INSERT INTO employeetimeentry
 	,OvertimeHoursWorked
 	,OvertimeHoursAmount
 	,UndertimeHours
+	,HoursUndertime
 	,UndertimeHoursAmount
 	,NightDifferentialHours
 	,NightDiffHoursAmount
 	,NightDifferentialOTHours
 	,NightDiffOTHoursAmount
 	,HoursLate
+	,HoursTardy
 	,HoursLateAmount
 	,LateFlag
 	,PayRateID
@@ -112,11 +115,13 @@ INSERT INTO employeetimeentry
 	,etent_OvertimeHoursWorked
 	,	etent_OvertimeHoursAmount
 	,etent_UndertimeHours
+	,etent_UndertimeHours
 	,	etent_UndertimeHoursAmount
 	,etent_NightDifferentialHours
 	,	etent_NightDiffHoursAmount
 	,etent_NightDifferentialOTHours
 	,	etent_NightDiffOTHoursAmount
+	,etent_HoursLate
 	,etent_HoursLate
 	,	etent_HoursLateAmount
 	,IF(etent_HoursLateAmount = 0, '0', '1')
@@ -138,12 +143,14 @@ UPDATE
 	,OvertimeHoursWorked = etent_OvertimeHoursWorked
 	,OvertimeHoursAmount = etent_OvertimeHoursAmount
 	,UndertimeHours = etent_UndertimeHours
+	,HoursUndertime=etent_UndertimeHours
 	,UndertimeHoursAmount = etent_UndertimeHoursAmount
 	,NightDifferentialHours = etent_NightDifferentialHours
 	,NightDiffHoursAmount = etent_NightDiffHoursAmount
 	,NightDifferentialOTHours = etent_NightDifferentialOTHours
 	,NightDiffOTHoursAmount = etent_NightDiffOTHoursAmount
 	,HoursLate = etent_HoursLate
+	,HoursTardy = etent_HoursLate
 	,HoursLateAmount = etent_HoursLateAmount
 	,LateFlag = IF(etent_HoursLateAmount = 0, '0', '1')
 	# ,TotalDayPay = etent_TotalDayPay

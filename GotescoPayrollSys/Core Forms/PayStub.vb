@@ -2287,23 +2287,23 @@ Public Class PayStub
     Private Async Sub RecomputeHighPrecisionLateUndertimeAsync()
         Dim sql = <![CDATA[CALL RecomputeHighPrecisionLateUndertime(@orgID, STR_TO_DATE(@dateFrom, @@date_format), STR_TO_DATE(@dateTo, @@date_format));]]>.Value
 
-        Try
-            Using connection As New MySqlConnection(connectionString),
+        Using connection As New MySqlConnection(connectionString),
                 command As New MySqlCommand(sql, connection)
 
-                With command.Parameters
-                    .AddWithValue("@orgID", org_rowid)
-                    .AddWithValue("@dateFrom", paypFrom)
-                    .AddWithValue("@dateTo", paypTo)
-                End With
+            With command.Parameters
+                .AddWithValue("@orgID", org_rowid)
+                .AddWithValue("@dateFrom", paypFrom)
+                .AddWithValue("@dateTo", paypTo)
+            End With
 
+            Try
                 Await connection.OpenAsync()
 
                 Await command.ExecuteNonQueryAsync()
-            End Using
-        Catch ex As Exception
-            errlogger.Error("RecomputeHighPrecisionLateUndertimeAsync", ex)
-        End Try
+            Catch ex As Exception
+                errlogger.Error("RecomputeHighPrecisionLateUndertimeAsync", ex)
+            End Try
+        End Using
     End Sub
 
     Dim multi_threads(0) As Thread

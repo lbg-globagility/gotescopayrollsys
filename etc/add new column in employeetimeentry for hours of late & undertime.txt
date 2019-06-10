@@ -1,0 +1,3 @@
+ALTER TABLE `employeetimeentry`
+	ADD COLUMN `HoursUndertime` DECIMAL(11,6) NULL DEFAULT '0' AFTER `UndertimeHours`,
+	ADD COLUMN `HoursTardy` DECIMAL(11,6) NULL DEFAULT '0' AFTER `HoursLate`;

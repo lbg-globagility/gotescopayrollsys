@@ -1951,6 +1951,9 @@ Public Class PayStub
                                       '                                                 "0",
                                       '                                                 paypFrom,
                                       '                                                 paypTo}).GetFoundRows.Tables(0)
+
+                                      RecomputeHighPrecisionLateUndertimeAsync()
+
                                       Dim str_quer_semimon_allowance =
                                           String.Concat("SELECT i.*",
                                                         ",i.AllowanceAmount - (SUM(i.HoursToLess) * (i.DailyAllowance / 8)) `TotalAllowanceAmount`",
@@ -2279,6 +2282,28 @@ Public Class PayStub
 
                                                        End Sub, TaskScheduler.FromCurrentSynchronizationContext)
 
+    End Sub
+
+    Private Async Sub RecomputeHighPrecisionLateUndertimeAsync()
+        Dim sql = <![CDATA[CALL RecomputeHighPrecisionLateUndertime(@orgID, STR_TO_DATE(@dateFrom, @@date_format), STR_TO_DATE(@dateTo, @@date_format));]]>.Value
+
+        Try
+            Using connection As New MySqlConnection(connectionString),
+                command As New MySqlCommand(sql, connection)
+
+                With command.Parameters
+                    .AddWithValue("@orgID", org_rowid)
+                    .AddWithValue("@dateFrom", paypFrom)
+                    .AddWithValue("@dateTo", paypTo)
+                End With
+
+                Await connection.OpenAsync()
+
+                Await command.ExecuteNonQueryAsync()
+            End Using
+        Catch ex As Exception
+            errlogger.Error("RecomputeHighPrecisionLateUndertimeAsync", ex)
+        End Try
     End Sub
 
     Dim multi_threads(0) As Thread

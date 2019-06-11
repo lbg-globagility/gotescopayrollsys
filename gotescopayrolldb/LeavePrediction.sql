@@ -61,7 +61,7 @@ INNER JOIN employee e ON e.RowID=elv.EmployeeID
 INNER JOIN employeetimeentry et ON et.EmployeeID=e.RowID AND et.`Date` BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
 INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate AND pp.`Year`=@thisYear
 WHERE elv.OrganizationID=@orgID
-AND elv.`Status` = 'Approved'
+#AND elv.`Status` = 'Approved'
 AND elv.LeaveType = typeOfLeave
 ORDER BY CONCAT(e.LastName, e.FirstName, e.MiddleName), et.`Date`
 ;
@@ -102,8 +102,8 @@ IF typeOfLeave = 'Vacation leave' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - i.VacationLeaveHours)
-			, (@leaveBal := @leaveBal - i.VacationLeaveHours)) `ProperLeaveBalance`
+			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.VacationLeaveHours, 0))
+			, (@leaveBal := @leaveBal - IFNEGATIVE(i.VacationLeaveHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`
@@ -120,8 +120,8 @@ ELSEIF typeOfLeave = 'Sick leave' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - i.SickLeaveHours)
-			, (@leaveBal := @leaveBal - i.SickLeaveHours)) `ProperLeaveBalance`
+			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.SickLeaveHours, 0))
+			, (@leaveBal := @leaveBal - IFNEGATIVE(i.SickLeaveHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`
@@ -138,8 +138,8 @@ ELSEIF typeOfLeave = 'Additional VL' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - i.AdditionalVLHours)
-			, (@leaveBal := @leaveBal - i.AdditionalVLHours)) `ProperLeaveBalance`
+			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.AdditionalVLHours, 0))
+			, (@leaveBal := @leaveBal - IFNEGATIVE(i.AdditionalVLHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`
@@ -156,8 +156,8 @@ ELSEIF typeOfLeave = 'Others' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - i.OtherLeaveHours)
-			, (@leaveBal := @leaveBal - i.OtherLeaveHours)) `ProperLeaveBalance`
+			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.OtherLeaveHours, 0))
+			, (@leaveBal := @leaveBal - IFNEGATIVE(i.OtherLeaveHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`
@@ -174,8 +174,8 @@ ELSEIF typeOfLeave = 'Maternity/paternity leave' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - i.MaternityLeaveHours)
-			, (@leaveBal := @leaveBal - i.MaternityLeaveHours)) `ProperLeaveBalance`
+			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.MaternityLeaveHours, 0))
+			, (@leaveBal := @leaveBal - IFNEGATIVE(i.MaternityLeaveHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`

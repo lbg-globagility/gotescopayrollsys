@@ -48,6 +48,7 @@ SELECT elv.OrganizationID, elv.Created, elv.LeaveStartTime, elv.LeaveType, elv.C
 , e.SickLeaveAllowance, e.SickLeaveBalance
 , e.OtherLeaveAllowance, e.OtherLeaveBalance
 , e.AdditionalVLAllowance, e.AdditionalVLBalance
+, e.MaternityLeaveAllowance, e.MaternityLeaveBalance
 , pp.RowID `PayperiodID`
 , GREATEST(IF(isVacation, elv.OfficialValidHours, 0), et.VacationLeaveHours) `VacationLeaveHours`
 , GREATEST(IF(isSick, elv.OfficialValidHours, 0), et.SickLeaveHours) `SickLeaveHours`
@@ -93,7 +94,7 @@ SET @eID = 0;
 SET @leaveBal = NULL;
 SET @indx = 1;
 
-IF typeOfLeave = 'Vacation leave' THEN
+IF isVacation THEN
 
 	DROP TEMPORARY TABLE IF EXISTS leavebalancepredict;
 	DROP TABLE IF EXISTS leavebalancepredict;
@@ -111,7 +112,7 @@ IF typeOfLeave = 'Vacation leave' THEN
 	FROM leavepredict i
 	;
 
-ELSEIF typeOfLeave = 'Sick leave' THEN
+ELSEIF isSick THEN
 
 	DROP TEMPORARY TABLE IF EXISTS leavebalancepredict;
 	DROP TABLE IF EXISTS leavebalancepredict;
@@ -120,7 +121,7 @@ ELSEIF typeOfLeave = 'Sick leave' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.SickLeaveHours, 0))
+			, (@leaveBal := i.SickLeaveAllowance - IFNEGATIVE(i.SickLeaveHours, 0))
 			, (@leaveBal := @leaveBal - IFNEGATIVE(i.SickLeaveHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
@@ -129,7 +130,7 @@ ELSEIF typeOfLeave = 'Sick leave' THEN
 	FROM leavepredict i
 	;
 
-ELSEIF typeOfLeave = 'Additional VL' THEN
+ELSEIF isAddtl THEN
 
 	DROP TEMPORARY TABLE IF EXISTS leavebalancepredict;
 	DROP TABLE IF EXISTS leavebalancepredict;
@@ -138,7 +139,7 @@ ELSEIF typeOfLeave = 'Additional VL' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.AdditionalVLHours, 0))
+			, (@leaveBal := i.AdditionalVLAllowance - IFNEGATIVE(i.AdditionalVLHours, 0))
 			, (@leaveBal := @leaveBal - IFNEGATIVE(i.AdditionalVLHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
@@ -147,7 +148,7 @@ ELSEIF typeOfLeave = 'Additional VL' THEN
 	FROM leavepredict i
 	;
 
-ELSEIF typeOfLeave = 'Others' THEN
+ELSEIF isOther THEN
 
 	DROP TEMPORARY TABLE IF EXISTS leavebalancepredict;
 	DROP TABLE IF EXISTS leavebalancepredict;
@@ -156,7 +157,7 @@ ELSEIF typeOfLeave = 'Others' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.OtherLeaveHours, 0))
+			, (@leaveBal := i.OtherLeaveAllowance - IFNEGATIVE(i.OtherLeaveHours, 0))
 			, (@leaveBal := @leaveBal - IFNEGATIVE(i.OtherLeaveHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
@@ -165,7 +166,7 @@ ELSEIF typeOfLeave = 'Others' THEN
 	FROM leavepredict i
 	;
 
-ELSEIF typeOfLeave = 'Maternity/paternity leave' THEN
+ELSEIF isMaternity THEN
 
 	DROP TEMPORARY TABLE IF EXISTS leavebalancepredict;
 	DROP TABLE IF EXISTS leavebalancepredict;
@@ -174,7 +175,7 @@ ELSEIF typeOfLeave = 'Maternity/paternity leave' THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.MaternityLeaveHours, 0))
+			, (@leaveBal := i.MaternityLeaveAllowance - IFNEGATIVE(i.MaternityLeaveHours, 0))
 			, (@leaveBal := @leaveBal - IFNEGATIVE(i.MaternityLeaveHours, 0))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1

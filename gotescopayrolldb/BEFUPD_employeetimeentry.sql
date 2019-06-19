@@ -195,7 +195,7 @@ IF isRest_day = '0' THEN
 
 			IF (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) > 0 THEN
 				SET NEW.Absent = 0.0;
-				
+
 			ELSEIF has_shift = TRUE AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0 THEN
 #					AND (@calclegalholi = 0 AND @calcspecholi = 0) THEN
@@ -343,21 +343,41 @@ IF isRest_day = '1' AND NEW.EmployeeShiftID IS NOT NULL THEN
 END IF;
 
 SELECT e_rateperday INTO rate_this_date;
-SET NEW.HolidayPayAmount = (SELECT IF(NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount = 0 AND e.CalcHoliday='1' AND LOCATE('Regular Holi',pr.PayType) > 0 AND isPresentInWorkingDaysPriorToThisDate='1'
-													, rate_this_date
-#													, IF(e.CalcSpecialHoliday = '1' AND LOCATE('Special',pr.PayType) > 0 AND e.EmployeeType IN ('Fixed','Monthly') AND isSpecialHoliday = '1' AND isPresentInWorkingDaysPriorToThisDate = '1' AND NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount = 0
-													, IF(e.CalcSpecialHoliday = TRUE AND isSpecialHoliday = TRUE AND e.EmployeeType IN ('Fixed','Monthly') AND NEW.IsValidForHolidayPayment=TRUE AND NEW.RegularHoursAmount = 0
-															, rate_this_date
-															, IF(e.CalcSpecialHoliday='1' AND LOCATE('Special',pr.PayType) > 0
-																	, NEW.RegularHoursAmount * (payrate_this_date MOD 1)
-																	, IF(e.CalcHoliday='1' AND pr.PayType='Regular Holiday' AND NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount > 0 AND NEW.RegularHoursAmount > rate_this_date
-																		, IF(NEW.TotalDayPay > NEW.RegularHoursAmount
-																		, NEW.RegularHoursAmount, NEW.TotalDayPay) / payrate_this_date, 0)
-																	)))
-												FROM employee e
-												INNER JOIN payrate pr ON pr.RowID=NEW.PayRateID AND pr.PayType!='Regular Day'
-												WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID);
-												
+IF LCASE(@employee_type)='monthly' THEN
+	IF NEW.IsValidForHolidayPayment = 1 THEN
+		SET NEW.HolidayPayAmount = rate_this_date;
+		
+		SET @additional=((NEW.RegularHoursWorked * (rate_this_date / default_working_hrs)) * (payrate_this_date-1));
+		IF IFNULL(@additional, 0) > 0 THEN
+			SET NEW.HolidayPayAmount = NEW.HolidayPayAmount + @additional;
+		END IF;
+		
+		SET NEW.TotalDayPay=(
+		+ NEW.OvertimeHoursAmount
+		+ NEW.NightDiffHoursAmount
+		+ NEW.NightDiffOTHoursAmount
+		+ NEW.HolidayPayAmount);
+	ELSE
+		SET NEW.HolidayPayAmount = 0;
+	END IF;
+ELSE
+	SET NEW.HolidayPayAmount = (SELECT IF(NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount = 0 AND e.CalcHoliday='1' AND LOCATE('Regular Holi',pr.PayType) > 0 AND isPresentInWorkingDaysPriorToThisDate='1'
+														, rate_this_date
+	#													, IF(e.CalcSpecialHoliday = '1' AND LOCATE('Special',pr.PayType) > 0 AND e.EmployeeType IN ('Fixed','Monthly') AND isSpecialHoliday = '1' AND isPresentInWorkingDaysPriorToThisDate = '1' AND NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount = 0
+														, IF(e.CalcSpecialHoliday = TRUE AND isSpecialHoliday = TRUE AND e.EmployeeType IN ('Fixed','Monthly') AND NEW.IsValidForHolidayPayment=TRUE AND NEW.RegularHoursAmount = 0
+																, rate_this_date
+																, IF(e.CalcSpecialHoliday='1' AND LOCATE('Special',pr.PayType) > 0
+																		, NEW.RegularHoursAmount * (payrate_this_date MOD 1)
+																		, IF(e.CalcHoliday='1' AND pr.PayType='Regular Holiday' AND NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount > 0 AND NEW.RegularHoursAmount > rate_this_date
+																			, IF(NEW.TotalDayPay > NEW.RegularHoursAmount
+																			, NEW.RegularHoursAmount, NEW.TotalDayPay) / payrate_this_date, 0)
+																		)))
+													FROM employee e
+													INNER JOIN payrate pr ON pr.RowID=NEW.PayRateID AND pr.PayType!='Regular Day'
+													WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID);
+
+END IF;
+
 IF NEW.HolidayPayAmount IS NULL THEN
 	SET NEW.HolidayPayAmount = 0;
 END IF;

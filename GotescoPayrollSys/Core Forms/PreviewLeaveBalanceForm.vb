@@ -2,7 +2,6 @@
 Imports System.Data.Entity
 Imports AccuPay.Entity
 Imports log4net
-Imports Microsoft.EntityFrameworkCore
 Imports MySql.Data.MySqlClient
 
 Public Class PreviewLeaveBalanceForm
@@ -61,7 +60,6 @@ Public Class PreviewLeaveBalanceForm
 
                     Await RenewLeaveBalances()
                 End If
-
             Else
 
             End If
@@ -88,7 +86,7 @@ Public Class PreviewLeaveBalanceForm
 
             Await command.Connection.OpenAsync
 
-            Dim transaction = Await command.Connection.BeginTransactionAsync
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
 
             Try
                 Await command.ExecuteNonQueryAsync()

@@ -22,15 +22,27 @@ SET @dateFrom = periodDateFrom;
 SET @dateTo = periodDateTo;
 
 SET @orgID = organizatID;
+SET @dailyAllowance=0.00;
+SET @hourlyAllowance=0.00;
+
+SET @monthCount=12;
+SET @twiceAMonth=2;
 
 DROP TEMPORARY TABLE IF EXISTS unearnedallowance; DROP TABLE IF EXISTS unearnedallowance; CREATE TEMPORARY TABLE unearnedallowance
 SELECT
 i.EmployeeID
-/**/, (SUM(i.LateHours) * TRIM(i.TotalAllowanceAmt / 8)+0) `LateAllowance`
+/* , (SUM(i.LateHours) * TRIM(i.TotalAllowanceAmt / 8)+0) `LateAllowance`
 , (SUM(i.UndertimeHours) * TRIM(i.TotalAllowanceAmt / 8)+0) `UndertimeAllowance`
 , (SUM(i.AbsentHours) * TRIM(i.TotalAllowanceAmt / 8)+0) `AbsentAllowance`
+*/
+, @dailyAllowance := (i.AllowanceAmount / ((e.WorkDaysPerYear / @monthCount) / @twiceAMonth)) `DailyAllowance`
+, @hourlyAllowance := @dailyAllowance / 8 `HourlyAllowance`
+, TRIM(SUM(i.LateHours * @hourlyAllowance))+0 `LateAllowance`
+, TRIM(SUM(i.UndertimeHours * @hourlyAllowance))+0 `UndertimeAllowance`
+, TRIM(SUM(i.AbsentHours * @hourlyAllowance))+0 `AbsentAllowance`
 
 FROM paystubitem_sum_semimon_allowance_group_prodid i
+INNER JOIN employee e ON e.RowID=i.EmployeeID
 WHERE i.OrganizationID=@orgID
 AND i.`Date` BETWEEN @dateFrom AND @dateTo
 GROUP BY i.EmployeeID

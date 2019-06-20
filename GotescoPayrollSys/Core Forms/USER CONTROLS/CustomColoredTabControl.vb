@@ -1,5 +1,4 @@
-﻿
-Public Class CustomColoredTabControl
+﻿Public Class CustomColoredTabControl
 
     Inherits TabControl
 
@@ -21,8 +20,8 @@ Public Class CustomColoredTabControl
 
     End Sub
 
-    Sub ThisTabControlColor(ByVal TabCntrl As TabControl, _
-                        ByVal ee As System.Windows.Forms.DrawItemEventArgs, _
+    Sub ThisTabControlColor(ByVal TabCntrl As TabControl,
+                        ByVal ee As System.Windows.Forms.DrawItemEventArgs,
                         Optional formColor As Color = Nothing)
 
         Dim g As Graphics = ee.Graphics
@@ -93,8 +92,7 @@ Public Class CustomColoredTabControl
 
                 ''ee.Graphics.DrawRectangle(_myPen, myTabRect)
 
-
-                'Dim myCustRectBot = New Rectangle(x, ee.Bounds.Y, TabCntrl.Width - x, ee.Bounds.Height) 'TabCntrl.Width 
+                'Dim myCustRectBot = New Rectangle(x, ee.Bounds.Y, TabCntrl.Width - x, ee.Bounds.Height) 'TabCntrl.Width
 
                 ''ee.Graphics.DrawRectangle(custPen, myCustRect)
 

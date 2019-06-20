@@ -1,40 +1,37 @@
-﻿Imports Femiani.Forms.UI
-Imports Femiani.Forms.UI.Input
+﻿Imports Femiani.Forms.UI.Input
 
 Public Class SelectFromEmployee
 
-    Dim loadEmpQuery = "SELECT" & _
-                        " emp.EmployeeID" & _
-                        ",emp.FirstName" & _
-                        ",emp.MiddleName" & _
-                        ",emp.LastName" & _
-                        ",emp.Surname" & _
-                        ",emp.Nickname" & _
-                        ",emp.TINNo" & _
-                        ",emp.SSSNo" & _
-                        ",emp.HDMFNo" & _
-                        ",emp.PhilHealthNo" & _
-                        ",COALESCE(pos.PositionName,'') 'PositionName'" & _
-                        ",COALESCE(emp.PositionID,'') 'PositionID'" & _
-                        ",emp.EmploymentStatus" & _
-                        ",emp.HomeAddress" & _
-                        ",IF(emp.Gender='M','Male','Female') 'Gender'" & _
-                        ",emp.MaritalStatus" & _
-                        ",emp.NoOfDependents" & _
-                        ",COALESCE(DATE_FORMAT(emp.Birthdate,'%m/%d%Y'),'') 'Birthdate'" & _
-                        ",COALESCE(DATE_FORMAT(emp.StartDate,'%m/%d/%Y'),'') 'StartDate'" & _
-                        ",payf.PayFrequencyType 'PayFrequency'" & _
-                        ",emp.PayFrequencyID" & _
-                        ",emp.Image" & _
-                        " FROM employee emp" & _
-                        " LEFT JOIN position pos ON pos.RowID=emp.PositionID" & _
+    Dim loadEmpQuery = "SELECT" &
+                        " emp.EmployeeID" &
+                        ",emp.FirstName" &
+                        ",emp.MiddleName" &
+                        ",emp.LastName" &
+                        ",emp.Surname" &
+                        ",emp.Nickname" &
+                        ",emp.TINNo" &
+                        ",emp.SSSNo" &
+                        ",emp.HDMFNo" &
+                        ",emp.PhilHealthNo" &
+                        ",COALESCE(pos.PositionName,'') 'PositionName'" &
+                        ",COALESCE(emp.PositionID,'') 'PositionID'" &
+                        ",emp.EmploymentStatus" &
+                        ",emp.HomeAddress" &
+                        ",IF(emp.Gender='M','Male','Female') 'Gender'" &
+                        ",emp.MaritalStatus" &
+                        ",emp.NoOfDependents" &
+                        ",COALESCE(DATE_FORMAT(emp.Birthdate,'%m/%d%Y'),'') 'Birthdate'" &
+                        ",COALESCE(DATE_FORMAT(emp.StartDate,'%m/%d/%Y'),'') 'StartDate'" &
+                        ",payf.PayFrequencyType 'PayFrequency'" &
+                        ",emp.PayFrequencyID" &
+                        ",emp.Image" &
+                        " FROM employee emp" &
+                        " LEFT JOIN position pos ON pos.RowID=emp.PositionID" &
                         " LEFT JOIN payfrequency payf ON payf.RowID=emp.PayFrequencyID"
 
     Private Sub SelectFromEmployee_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-
         LoadEmployees()
-
 
         dgvEmployee_SelectionChanged(sender, e)
 
@@ -75,34 +72,33 @@ Public Class SelectFromEmployee
 
             End If
 
-
         End If
 
         dgvEmployee.Rows.Clear()
 
         For Each drow As DataRow In empTable.Rows
 
-            dgvEmployee.Rows.Add(drow(0), _
-                                  drow(1), _
-                                  drow(2), _
-                                  drow(3), _
-                                  drow(4), _
-                                  drow(5), _
-                                  drow(6), _
-                                  drow(7), _
-                                  drow(8), _
-                                  drow(9), _
-                                  drow(10), _
-                                  drow(11), _
-                                  drow(12), _
-                                  drow(13), _
-                                  drow(14), _
-                                  drow(15), _
-                                  drow(16), _
-                                  drow(17), _
-                                  drow(18), _
-                                  drow(19), _
-                                  drow(20), _
+            dgvEmployee.Rows.Add(drow(0),
+                                  drow(1),
+                                  drow(2),
+                                  drow(3),
+                                  drow(4),
+                                  drow(5),
+                                  drow(6),
+                                  drow(7),
+                                  drow(8),
+                                  drow(9),
+                                  drow(10),
+                                  drow(11),
+                                  drow(12),
+                                  drow(13),
+                                  drow(14),
+                                  drow(15),
+                                  drow(16),
+                                  drow(17),
+                                  drow(18),
+                                  drow(19),
+                                  drow(20),
                                   drow(21))
 
         Next
@@ -124,20 +120,12 @@ Public Class SelectFromEmployee
         If dgvEmployee.RowCount <> 0 Then
             With dgvEmployee.CurrentRow
 
-
-
-
-
-
-
-
                 If IsDBNull(.Cells("Column22").Value) Then
                 Else
                     pbEmpPic.Image = ConvByteToImage(DirectCast(.Cells("Column22").Value, Byte()))
                 End If
 
             End With
-
         Else
 
         End If
@@ -226,7 +214,6 @@ Public Class SelectFromEmployee
                 If EmpTimeDetail.dgvetentdet.CurrentRow.IsNewRow Then
                     EmpTimeDetail.dgvetentdet.Rows.Add()
                 End If
-
             Else
                 For Each dgvrow As DataGridViewRow In EmpTimeDetail.dgvetentdet.Rows
                     If dgvrow.IsNewRow Then
@@ -274,7 +261,7 @@ Public Class SelectFromEmployee
         Close()
     End Sub
 
-    Private Sub EnterKeyPressForSearch(sender As Object, e As KeyPressEventArgs) Handles txtEmpID.KeyPress, txtFName.KeyPress, txtMName.KeyPress, _
+    Private Sub EnterKeyPressForSearch(sender As Object, e As KeyPressEventArgs) Handles txtEmpID.KeyPress, txtFName.KeyPress, txtMName.KeyPress,
                                                                                          txtLName.KeyPress, txtSName.KeyPress
         Dim e_asc As String = Asc(e.KeyChar)
 
@@ -295,7 +282,7 @@ Public Class SelectFromEmployee
 
     Dim theSearchQuery5 As String = Nothing
 
-    Private Sub cbosearch1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cbosearch1.KeyPress, cbosearch2.KeyPress, cbosearch3.KeyPress, _
+    Private Sub cbosearch1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cbosearch1.KeyPress, cbosearch2.KeyPress, cbosearch3.KeyPress,
                                                                                       cbosearch4.KeyPress, cbosearch5.KeyPress
         Dim e_asc As String = Asc(e.KeyChar)
 
@@ -313,9 +300,9 @@ Public Class SelectFromEmployee
 
     End Sub
 
-    Private Sub cbosearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbosearch1.SelectedIndexChanged, cbosearch2.SelectedIndexChanged, cbosearch3.SelectedIndexChanged, _
-                                                                                          cbosearch4.SelectedIndexChanged, cbosearch5.SelectedIndexChanged, _
-                                                                                          cbosearch1.SelectedValueChanged, cbosearch2.SelectedValueChanged, cbosearch3.SelectedValueChanged, _
+    Private Sub cbosearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbosearch1.SelectedIndexChanged, cbosearch2.SelectedIndexChanged, cbosearch3.SelectedIndexChanged,
+                                                                                          cbosearch4.SelectedIndexChanged, cbosearch5.SelectedIndexChanged,
+                                                                                          cbosearch1.SelectedValueChanged, cbosearch2.SelectedValueChanged, cbosearch3.SelectedValueChanged,
                                                                                           cbosearch4.SelectedValueChanged, cbosearch5.SelectedValueChanged
         Dim senderSelIndx = DirectCast(sender, ComboBox)
 
@@ -614,7 +601,7 @@ Public Class SelectFromEmployee
 
     Dim previousSearch As String = Nothing
 
-    Private Sub PaginationEmployee(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles Prev.LinkClicked, Nxt.LinkClicked, _
+    Private Sub PaginationEmployee(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles Prev.LinkClicked, Nxt.LinkClicked,
                                                                                                  First.LinkClicked, Last.LinkClicked
 
         Dim sender_linklabel = DirectCast(sender, LinkLabel)
@@ -631,7 +618,6 @@ Public Class SelectFromEmployee
             If modcent = 0 Then
 
                 pagination -= 100
-
             Else
 
                 pagination -= modcent
@@ -650,7 +636,6 @@ Public Class SelectFromEmployee
 
             If modcent = 0 Then
                 pagination += 100
-
             Else
                 pagination -= modcent
 
@@ -699,7 +684,6 @@ Public Class SelectFromEmployee
             Close()
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -712,13 +696,13 @@ Public Class SelectFromEmployee
 
     Private Sub bgautocomplete_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgautocomplete.DoWork
 
-        dattbl = retAsDatTbl("SELECT EmployeeID" & _
-                             ",FirstName" & _
-                             ",MiddleName" & _
-                             ",LastName" & _
-                             ",Surname" & _
-                             " FROM employee" & _
-                             " WHERE OrganizationID='" & org_rowid & "'" & _
+        dattbl = retAsDatTbl("SELECT EmployeeID" &
+                             ",FirstName" &
+                             ",MiddleName" &
+                             ",LastName" &
+                             ",Surname" &
+                             " FROM employee" &
+                             " WHERE OrganizationID='" & org_rowid & "'" &
                              " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
 
         If dattbl IsNot Nothing Then
@@ -753,7 +737,6 @@ Public Class SelectFromEmployee
         ElseIf e.Cancelled Then
 
             MessageBox.Show("Background work cancelled.")
-
         Else
 
         End If

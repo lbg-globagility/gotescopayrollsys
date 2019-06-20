@@ -1,7 +1,7 @@
 ﻿'Option Strict On
-Imports NHotkey.WindowsForms
-Imports NHotkey
 Imports System.Data.Entity
+Imports NHotkey
+Imports NHotkey.WindowsForms
 
 Public Class TimeEntryLogs
 
@@ -713,7 +713,6 @@ Public Class TimeEntryLogs
     Private Function ConcatFullName(ParamArray nameParts() As String) As String
         Return String.Join(", ", nameParts)
     End Function
-
 
     Private Sub LoadTimeLogs()
 

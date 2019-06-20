@@ -71,9 +71,6 @@
 
     End Property
 
-
-
-
     Private Sub fillshiftentry()
         Dim dt As New DataTable
         dt = getDataTableForSQL("Select TIME_FORMAT(TimeFrom, '%h:%i %p') timef, TIME_FORMAT(TimeTo, '%h:%i %p') timet" &
@@ -120,6 +117,7 @@
     End Sub
 
     Dim view_ID As Integer = Nothing
+
     ' Default Form.Size = 509, 424
     Private Sub ShiftEntryForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If Not dgvshiftentry.Rows.Count = 0 Then
@@ -140,7 +138,6 @@
             'btnNew.Visible = 0
             'btnSave.Visible = 0
             'btnDelete.Visible = 0
-
         Else
             For Each drow In formuserprivilege
                 If drow("ReadOnly").ToString = "Y" Then
@@ -201,7 +198,7 @@
         chkHasLunchBreak.Checked = False
         dgvshiftentry.Tag = Nothing
         Try
-            
+
             dtpTimeFrom.Text = dgvshiftentry.CurrentRow.Cells(c_timef.Index).Value
             dtpTimeTo.Text = dgvshiftentry.CurrentRow.Cells(c_timet.Index).Value
 
@@ -256,7 +253,6 @@
             dgvshiftentry_CellClick(sender, New DataGridViewCellEventArgs(c_timef.Index, dgvshiftentry.CurrentRow.Index))
 
             DialogResult = Windows.Forms.DialogResult.OK
-
         Else
 
             DialogResult = Windows.Forms.DialogResult.Cancel
@@ -305,11 +301,8 @@
                 Dim shiftid As String = getStringItem("Select MAX(RowID) From Shift")
                 Dim getshiftid As Integer = Val(shiftid)
 
-
-
                 IsNew = 0
                 fillshiftentry()
-
             Else
                 If dontUpdate = 1 Then
                     Exit Sub
@@ -477,4 +470,5 @@
         End If
         dtpBreakTimeTo.Enabled = chkHasLunchBreak.Checked
     End Sub
+
 End Class

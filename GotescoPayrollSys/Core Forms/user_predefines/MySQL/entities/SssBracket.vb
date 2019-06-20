@@ -5,6 +5,7 @@ Imports System.ComponentModel.DataAnnotations.Schema
 
 <Table("paysocialsecurity")>
 Public Class SssBracket
+
     <Key>
     <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property RowID As Integer

@@ -280,6 +280,7 @@ Public Class PayrollGeneration
     End Property
 
     Private _sssBrackets As IList(Of SssBracket)
+
     Public Property SssBrackets() As IList(Of SssBracket)
         Get
             Return _sssBrackets
@@ -977,7 +978,6 @@ Public Class PayrollGeneration
                             End If
 
                         End If
-
 
                         Dim phh_ee, phh_er As Double
                         Dim phh_param = New Object() {amount_used_to_get_sss_contrib}

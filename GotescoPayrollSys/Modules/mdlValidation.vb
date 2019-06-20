@@ -1,6 +1,4 @@
-﻿Imports System.Data.SqlClient
-Imports MySql.Data.MySqlClient
-Imports System.Data
+﻿Imports MySql.Data.MySqlClient
 
 Module mdlValidation
     Public z_OrganizationID As Integer
@@ -69,7 +67,7 @@ Module mdlValidation
 
     End Sub
 
-    Public Function SetWarningIfEmpty(ByVal co As Control, _
+    Public Function SetWarningIfEmpty(ByVal co As Control,
                                       Optional SetErrorString As String = Nothing)
         Z_ErrorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink
         If co.Text.Trim = Nothing Then
@@ -182,7 +180,7 @@ Module mdlValidation
         Dim ItemNumber As Integer = 0
         Try
             connection.Open()
-            Dim command As MySqlCommand = _
+            Dim command As MySqlCommand =
                    New MySqlCommand(Sqlcommand, connection)
             command.CommandType = CommandType.Text
             Dim DR As MySqlDataReader = command.ExecuteReader
@@ -321,7 +319,7 @@ Module mdlValidation
         Dim ArString As New ArrayList
         Try
             connection.Open()
-            Dim command As MySqlCommand = _
+            Dim command As MySqlCommand =
                    New MySqlCommand(Sqlcommand, connection)
             command.CommandType = CommandType.Text
             Dim DR As MySqlDataReader = command.ExecuteReader
@@ -422,7 +420,7 @@ Module mdlValidation
         Dim itemSTR As String = Nothing
         Try
             connection.Open()
-            Dim command As MySqlCommand = _
+            Dim command As MySqlCommand =
                    New MySqlCommand(Sqlcommand, connection)
             command.CommandType = CommandType.Text
             Dim DR As MySqlDataReader = command.ExecuteReader
@@ -443,7 +441,7 @@ Module mdlValidation
         Dim ArString As New ArrayList
         Try
             connection.Open()
-            Dim command As MySqlCommand = _
+            Dim command As MySqlCommand =
                    New MySqlCommand(Sqlcommand, connection)
             command.CommandType = CommandType.Text
             Dim DR As MySqlDataReader = command.ExecuteReader
@@ -532,7 +530,7 @@ Module mdlValidation
         Dim ItemNumber As New Object
         Try
             connection.Open()
-            Dim command As MySqlCommand = _
+            Dim command As MySqlCommand =
                    New MySqlCommand(Sqlcommand, connection)
             command.CommandType = CommandType.Text
             Dim DR As MySqlDataReader = command.ExecuteReader
@@ -595,7 +593,7 @@ Module mdlValidation
         connection.Open()
         Try
             Dim strcol As AutoCompleteStringCollection = New AutoCompleteStringCollection
-            Dim command As MySqlCommand = _
+            Dim command As MySqlCommand =
             New MySqlCommand("select concat(FirstName, ' ', MiddleName, ' ', LastName) as Name from employee order by rowid desc", connection)
             command.CommandType = CommandType.Text
             Dim DR As MySqlDataReader = command.ExecuteReader
@@ -617,7 +615,7 @@ Module mdlValidation
         connection.Open()
         Try
             Dim strcol As AutoCompleteStringCollection = New AutoCompleteStringCollection
-            Dim command As MySqlCommand = _
+            Dim command As MySqlCommand =
             New MySqlCommand("select EmployeeID from employee order by rowid desc", connection)
             command.CommandType = CommandType.Text
             Dim DR As MySqlDataReader = command.ExecuteReader

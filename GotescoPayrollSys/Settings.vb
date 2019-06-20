@@ -1,6 +1,5 @@
-﻿
-Namespace My
-    
+﻿Namespace My
+
     'This class allows you to handle specific events on the settings class:
     ' The SettingChanging event is raised before a setting's value is changed.
     ' The PropertyChanged event is raised after a setting's value is changed.
@@ -15,5 +14,7 @@ Namespace My
         Protected Overrides Sub Finalize()
             MyBase.Finalize()
         End Sub
+
     End Class
+
 End Namespace

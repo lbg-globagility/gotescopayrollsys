@@ -1,7 +1,6 @@
 ﻿Imports CrystalDecisions.CrystalReports.Engine
 Imports CrystalDecisions.Shared
 Imports MySql.Data.MySqlClient
-Imports MySql.Data
 
 Public Class Josh_CrysRepForm
 
@@ -23,7 +22,6 @@ Public Class Josh_CrysRepForm
         Dim paramDiscreteValue2 As New ParameterDiscreteValue
         Dim paramDiscreteValue3 As New ParameterDiscreteValue
         Dim paramDiscreteValue4 As New ParameterDiscreteValue
-
 
         paramField.Name = "EmployeeName"
         paramDiscreteValue.Value = employeeName

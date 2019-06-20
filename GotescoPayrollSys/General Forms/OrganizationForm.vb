@@ -1,9 +1,4 @@
 ﻿Imports System.IO
-Imports System.Drawing
-Imports System.Windows.Forms
-Imports MySql.Data.MySqlClient
-Imports System.Globalization
-
 
 Public Class OrganizationForm
     Dim payFreq As New AutoCompleteStringCollection
@@ -51,6 +46,7 @@ Public Class OrganizationForm
         cmborganizationTypeCB.Items.AddRange(CType(SQL_ArrayList(strQuery).ToArray(GetType(String)), String()))
         cmborganizationTypeCB.SelectedIndex = 0
     End Sub
+
     Sub filltype()
         Dim strQuery As String = "select DisplayValue from ListOfVal Where Type = 'Type'"
         cmbtypeCB.Items.Clear()
@@ -58,6 +54,7 @@ Public Class OrganizationForm
         cmbtypeCB.Items.AddRange(CType(SQL_ArrayList(strQuery).ToArray(GetType(String)), String()))
         cmbtypeCB.SelectedIndex = 0
     End Sub
+
     'concat(streetaddress1,' ', coalesce(streetaddress2,''),',',' ',citytown,',',' ',country)
     Sub filladdress()
         'Dim strQuery As String = "select concat(streetaddress1,' ', streetaddress2,'',',',' ',citytown,',',' ',country) from Address"
@@ -105,7 +102,7 @@ Public Class OrganizationForm
 
     Private Sub fillOrganizationList()
         Dim dt As New DataTable
-        dt = getDataTableForSQL("select * from organization o LEFT join address a on o.PrimaryAddressID = a.RowID " & _
+        dt = getDataTableForSQL("select * from organization o LEFT join address a on o.PrimaryAddressID = a.RowID " &
                                 "LEFT join contact c on o.PrimaryContactID = c.RowID WHERE o.NoPurpose='0' ORDER BY o.Name;")
 
         ' where o.RowID = " & z_OrganizationID & "
@@ -144,21 +141,20 @@ Public Class OrganizationForm
             address_RowID = Nothing
         Else
             Dim dt As New DataTable
-            dt = getDataTableForSQL("select *,COALESCE(CONCAT(CURRENT_DATE(),TIME_FORMAT(NightShiftTimeFrom,' %h:%i %p')),'') 'nightshiftstart'" & _
-                                    ",COALESCE(CONCAT(CURRENT_DATE(),TIME_FORMAT(NightShiftTimeTo,' %h:%i %p')),'') 'nightshiftend'" & _
-                                    ",COALESCE(CONCAT(CURRENT_DATE(),TIME_FORMAT(NightDifferentialTimeFrom,' %h:%i %p')),'') 'ndiffshiftstart'" & _
-                                    ",COALESCE(CONCAT(CURRENT_DATE(),TIME_FORMAT(NightDifferentialTimeTo,' %h:%i %p')),'') 'ndiffshiftend'" & _
-                                    " from organization o LEFT join address a on o.PrimaryAddressID = a.RowID " & _
+            dt = getDataTableForSQL("select *,COALESCE(CONCAT(CURRENT_DATE(),TIME_FORMAT(NightShiftTimeFrom,' %h:%i %p')),'') 'nightshiftstart'" &
+                                    ",COALESCE(CONCAT(CURRENT_DATE(),TIME_FORMAT(NightShiftTimeTo,' %h:%i %p')),'') 'nightshiftend'" &
+                                    ",COALESCE(CONCAT(CURRENT_DATE(),TIME_FORMAT(NightDifferentialTimeFrom,' %h:%i %p')),'') 'ndiffshiftstart'" &
+                                    ",COALESCE(CONCAT(CURRENT_DATE(),TIME_FORMAT(NightDifferentialTimeTo,' %h:%i %p')),'') 'ndiffshiftend'" &
+                                    " from organization o LEFT join address a on o.PrimaryAddressID = a.RowID " &
                                     "LEFT join contact c on o.PrimaryContactID = c.RowID where o.RowID = '" & dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value & "'")
 
-            'organizationid = " & z_OrganizationID & " and 
+            'organizationid = " & z_OrganizationID & " and
 
             For Each drow As DataRow In dt.Rows
 
                 With drow
                     'concat(streetaddress1,' ', coalesce(streetaddress2,''),',',' ',citytown,',',' ',country)
                     Dim rowid As Integer = .Item("RowID").ToString
-
 
                     Dim addid As String = .Item("AddressID").ToString
                     Dim primaddid As String = .Item("PrimaryAddressID").ToString
@@ -169,7 +165,6 @@ Public Class OrganizationForm
 
                     Dim tinno As String = getStringItem("Select Tinno from Organization where rowid = '" & Val(rowid) & "'")
                     Dim gettinno As String = tinno
-
 
                     txtcompAltEmailTxt.Text = .Item("AltEmailAddress").ToString
                     txtcompAltPhoneTxt.Text = .Item("AltPhone").ToString
@@ -207,11 +202,9 @@ Public Class OrganizationForm
                         Dim img As Object = .Item("Image")
                         If IsDBNull(img) Then
                             PhotoImages.Image = Nothing
-
                         Else
                             PhotoImages.Image = ConvertByteToImage(.Item("Image"))
                         End If
-
                     Catch ex As Exception
                     End Try
 
@@ -302,9 +295,8 @@ Public Class OrganizationForm
 
         End If
 
-
-
     End Sub
+
     'Private Sub addAddressLink1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles addAddressLink1.Click
     '    address.ShowDialog()
 
@@ -352,8 +344,8 @@ Public Class OrganizationForm
                 getcaddrid = 0
             End If
 
-            I_contact(cmbstatusCB.Text, z_datetime, z_OrganizationID, txtcontMainPhoneTxt.Text, txtlastNameTxt.Text, txtfirstNameTxt.Text, _
-                  txtmiddleNameTxt.Text, txtmobilePhoneTxt.Text, txtworkPhoneTxt.Text, cmbgenderCB.Text, txtjobTitleTxt.Text, _
+            I_contact(cmbstatusCB.Text, z_datetime, z_OrganizationID, txtcontMainPhoneTxt.Text, txtlastNameTxt.Text, txtfirstNameTxt.Text,
+                  txtmiddleNameTxt.Text, txtmobilePhoneTxt.Text, txtworkPhoneTxt.Text, cmbgenderCB.Text, txtjobTitleTxt.Text,
                   txtemailAddTxt.Text, txtcontAltPhoneTxt.Text, txtcontFaxNumTxt.Text, z_datetime, user_row_id, user_row_id, cmbsalutationCB.Text, cmbtypeCB.Text, txtsuffixTxt.Text, getcaddrid, txttinNumTxt.Text)
 
             Dim contID As String = getStringItem("Select MAX(RowID) from Contact")
@@ -363,26 +355,25 @@ Public Class OrganizationForm
             Dim getaddrid As Integer = ValNoComma(address_RowID)
 
             If txtfilename.Text = Nothing Then
-                SP_Organization(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text, _
-                          txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, z_datetime, _
-                          user_row_id, z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, _
-                          Val(txtvlallow.Text), _
-                          Val(txtslallow.Text), _
-                          Val(txtmlallow.Text), _
-                          Val(txtotherallow.Text), _
-                          MilitTime(Format(CDate(nightdiffshiftfrom.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightdiffshiftto.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightshiftfrom.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightshiftto.Value), "hh:mm tt")), _
-                          payfreqID, _
-                          cbophhdeductsched.Text, _
-                          cbosssdeductsched.Text, _
-                          cbohdmfdeductsched.Text, _
-                          txtmindayperyear.Text, _
-                          txtRDO.Text, _
-                          txtZIP.Text, _
+                SP_Organization(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text,
+                          txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, z_datetime,
+                          user_row_id, z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text,
+                          Val(txtvlallow.Text),
+                          Val(txtslallow.Text),
+                          Val(txtmlallow.Text),
+                          Val(txtotherallow.Text),
+                          MilitTime(Format(CDate(nightdiffshiftfrom.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightdiffshiftto.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightshiftfrom.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightshiftto.Value), "hh:mm tt")),
+                          payfreqID,
+                          cbophhdeductsched.Text,
+                          cbosssdeductsched.Text,
+                          cbohdmfdeductsched.Text,
+                          txtmindayperyear.Text,
+                          txtRDO.Text,
+                          txtZIP.Text,
                           cboTaxDeductSched.Text)
-
             Else
                 Dim fs As FileStream
                 Dim br As BinaryReader
@@ -401,24 +392,24 @@ Public Class OrganizationForm
 
                 getaddrid = ValNoComma(address_RowID)
 
-                SP_OrganizationWithImage(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text, _
-                      txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, z_datetime, _
-                      user_row_id, z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, ImageData, _
-                          Val(txtvlallow.Text), _
-                          Val(txtslallow.Text), _
-                          Val(txtmlallow.Text), _
-                          Val(txtotherallow.Text), _
-                          MilitTime(Format(CDate(nightdiffshiftfrom.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightdiffshiftto.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightshiftfrom.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightshiftto.Value), "hh:mm tt")), _
-                          payfreqID, _
-                          cbophhdeductsched.Text, _
-                          cbosssdeductsched.Text, _
-                          cbohdmfdeductsched.Text, _
-                          txtmindayperyear.Text, _
-                          txtRDO.Text, _
-                          txtZIP.Text, _
+                SP_OrganizationWithImage(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text,
+                      txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, z_datetime,
+                      user_row_id, z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, ImageData,
+                          Val(txtvlallow.Text),
+                          Val(txtslallow.Text),
+                          Val(txtmlallow.Text),
+                          Val(txtotherallow.Text),
+                          MilitTime(Format(CDate(nightdiffshiftfrom.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightdiffshiftto.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightshiftfrom.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightshiftto.Value), "hh:mm tt")),
+                          payfreqID,
+                          cbophhdeductsched.Text,
+                          cbosssdeductsched.Text,
+                          cbohdmfdeductsched.Text,
+                          txtmindayperyear.Text,
+                          txtRDO.Text,
+                          txtZIP.Text,
                           cboTaxDeductSched.Text)
             End If
 
@@ -426,7 +417,6 @@ Public Class OrganizationForm
             dgvCompanyList.Enabled = True
             myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
             txtfilename.Clear()
-
         Else
             If dontUpdate = 1 Then
                 Exit Sub
@@ -445,12 +435,10 @@ Public Class OrganizationForm
             Dim caddrID As String = getStringItem("Select max(RoWID) from address where concat(StreetAddress1,' ', StreetAddress2,'',',',' ',CityTown,',',' ',Country) = '" & cmbaddressCB.Text & "'")
             Dim getcaddrid As Integer = Val(caddrID)
 
-            I_contactUpdate(cmbstatusCB.Text, txtcontMainPhoneTxt.Text, txtlastNameTxt.Text, txtfirstNameTxt.Text, _
-          txtmiddleNameTxt.Text, txtmobilePhoneTxt.Text, txtworkPhoneTxt.Text, cmbgenderCB.Text, txtjobTitleTxt.Text, _
-          txtemailAddTxt.Text, txtcontAltPhoneTxt.Text, txtcontFaxNumTxt.Text, z_datetime, user_row_id, cmbsalutationCB.Text, _
+            I_contactUpdate(cmbstatusCB.Text, txtcontMainPhoneTxt.Text, txtlastNameTxt.Text, txtfirstNameTxt.Text,
+          txtmiddleNameTxt.Text, txtmobilePhoneTxt.Text, txtworkPhoneTxt.Text, cmbgenderCB.Text, txtjobTitleTxt.Text,
+          txtemailAddTxt.Text, txtcontAltPhoneTxt.Text, txtcontFaxNumTxt.Text, z_datetime, user_row_id, cmbsalutationCB.Text,
           cmbtypeCB.Text, txtsuffixTxt.Text, getcaddrid, txttinNumTxt.Text, Val(dgvCompanyList.CurrentRow.Cells(c_ContactID.Index).Value))
-
-
 
             Dim contID As String = getStringItem("Select MAX(RowID) from Contact")
             Dim getContID As Integer = Val(contID)
@@ -465,24 +453,24 @@ Public Class OrganizationForm
             getaddrid = ValNoComma(address_RowID)
 
             If txtfilename.Text = Nothing Then
-                SP_OrganizationUpdate(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text, _
-                          txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, _
-                           z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value, _
-                          Val(txtvlallow.Text), _
-                          Val(txtslallow.Text), _
-                          Val(txtmlallow.Text), _
-                          Val(txtotherallow.Text), _
-                          MilitTime(Format(CDate(nightdiffshiftfrom.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightdiffshiftto.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightshiftfrom.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightshiftto.Value), "hh:mm tt")), _
-                          payfreqID, _
-                          cbophhdeductsched.Text, _
-                          cbosssdeductsched.Text, _
-                          cbohdmfdeductsched.Text, _
-                          txtmindayperyear.Text, _
-                          txtRDO.Text, _
-                          txtZIP.Text, _
+                SP_OrganizationUpdate(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text,
+                          txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text,
+                           z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value,
+                          Val(txtvlallow.Text),
+                          Val(txtslallow.Text),
+                          Val(txtmlallow.Text),
+                          Val(txtotherallow.Text),
+                          MilitTime(Format(CDate(nightdiffshiftfrom.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightdiffshiftto.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightshiftfrom.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightshiftto.Value), "hh:mm tt")),
+                          payfreqID,
+                          cbophhdeductsched.Text,
+                          cbosssdeductsched.Text,
+                          cbohdmfdeductsched.Text,
+                          txtmindayperyear.Text,
+                          txtRDO.Text,
+                          txtZIP.Text,
                           cboTaxDeductSched.Text)
                 myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
                 txtfilename.Clear()
@@ -501,24 +489,24 @@ Public Class OrganizationForm
 
                 getaddrid = ValNoComma(address_RowID)
 
-                SP_OrganizationWithImageUpdate(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text, _
-                      txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text, _
-                       z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, ImageData, dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value, _
-                          Val(txtvlallow.Text), _
-                          Val(txtslallow.Text), _
-                          Val(txtmlallow.Text), _
-                          Val(txtotherallow.Text), _
-                          MilitTime(Format(CDate(nightdiffshiftfrom.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightdiffshiftto.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightshiftfrom.Value), "hh:mm tt")), _
-                          MilitTime(Format(CDate(nightshiftto.Value), "hh:mm tt")), _
-                          payfreqID, _
-                          cbophhdeductsched.Text, _
-                          cbosssdeductsched.Text, _
-                          cbohdmfdeductsched.Text, _
-                          txtmindayperyear.Text, _
-                          txtRDO.Text, _
-                          txtZIP.Text, _
+                SP_OrganizationWithImageUpdate(txtcompanyName.Text, getaddrid, Trim(contID), txtcompMainPhoneTxt.Text, txtcompFaxNumTxt.Text,
+                      txtcompEmailTxt.Text, txtcompAltEmailTxt.Text, txtcompAltPhoneTxt.Text, txtcompUrl.Text,
+                       z_datetime, user_row_id, txttinNumTxt.Text, txttradeName.Text, cmborganizationTypeCB.Text, ImageData, dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value,
+                          Val(txtvlallow.Text),
+                          Val(txtslallow.Text),
+                          Val(txtmlallow.Text),
+                          Val(txtotherallow.Text),
+                          MilitTime(Format(CDate(nightdiffshiftfrom.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightdiffshiftto.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightshiftfrom.Value), "hh:mm tt")),
+                          MilitTime(Format(CDate(nightshiftto.Value), "hh:mm tt")),
+                          payfreqID,
+                          cbophhdeductsched.Text,
+                          cbosssdeductsched.Text,
+                          cbohdmfdeductsched.Text,
+                          txtmindayperyear.Text,
+                          txtRDO.Text,
+                          txtZIP.Text,
                           cboTaxDeductSched.Text)
                 myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
                 txtfilename.Clear()
@@ -531,9 +519,6 @@ Public Class OrganizationForm
             End If
 
         End If
-
-
-
 
         SetWarningIfEmpty(txtcompanyName, "Hide this Error Provider")
         SetWarningIfEmpty(txtcompMainPhoneTxt, "Hide this Error Provider")
@@ -578,7 +563,6 @@ Public Class OrganizationForm
     Private Sub txttinNumTxt_TextChanged(sender As Object, e As EventArgs) Handles txttinNumTxt.TextChanged
         TextboxTestNumeric(sender, 30, 2)
     End Sub
-
 
     Private Sub txtmobilePhoneTxt_TextChanged(sender As Object, e As EventArgs) Handles txtmobilePhoneTxt.TextChanged
         TextboxTestNumeric(sender, 30, 2)
@@ -684,7 +668,6 @@ Public Class OrganizationForm
             btnNew.Visible = 0
             btnSave.Visible = 0
             btnDelete.Visible = 0
-
         Else
             For Each drow In formuserprivilege
                 If drow("ReadOnly").ToString = "Y" Then
@@ -759,7 +742,6 @@ Public Class OrganizationForm
 
     End Sub
 
-
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
 
     End Sub
@@ -816,7 +798,7 @@ Public Class OrganizationForm
             Dim LastCharIsComma = String.Empty
 
             Try
-                LastCharIsComma = _
+                LastCharIsComma =
                 full_address.Substring((addressstringlength - 1), 1)
             Catch ex As Exception
                 LastCharIsComma = String.Empty
@@ -859,8 +841,8 @@ Public Class OrganizationForm
 
             If dialogue_box = Windows.Forms.DialogResult.Yes Then
 
-                EXECQUER("UPDATE organization" & _
-                         " SET Image=NULL" & _
+                EXECQUER("UPDATE organization" &
+                         " SET Image=NULL" &
                          " WHERE RowID='" & dgvCompanyList.CurrentRow.Cells(c_rowID.Index).Value & "';")
 
                 PhotoImages.Image = Nothing
@@ -868,7 +850,6 @@ Public Class OrganizationForm
                 txtfilename.Clear()
 
             End If
-
         Else
 
             PhotoImages.Image = Nothing
@@ -902,8 +883,8 @@ Public Class OrganizationForm
 
         params(0, 1) = org_rowid
 
-        Dim _divisor = EXEC_INSUPD_PROCEDURE(params, _
-                                              "COUNT_payperiodthisyear", _
+        Dim _divisor = EXEC_INSUPD_PROCEDURE(params,
+                                              "COUNT_payperiodthisyear",
                                               "payp_count")
 
         payp_count = CInt(_divisor)
@@ -1152,13 +1133,13 @@ Public Class OrganizationForm
 
                 'MsgBox(Trim(StrReverse(StrReverse("3:15 AM").ToString.Substring(i, ("3:15 AM").ToString.Length - i))).Length)
 
-                Dim amTime As String = Trim(StrReverse(StrReverse(endtime.ToString).Substring(i, _
+                Dim amTime As String = Trim(StrReverse(StrReverse(endtime.ToString).Substring(i,
                                                                                   endtime.ToString.Length - i)
                                           )
                                )
 
-                amTime = If(getStrBetween(amTime, "", ":") = "12", _
-                            24 & ":" & StrReverse(getStrBetween(StrReverse(amTime), "", ":")), _
+                amTime = If(getStrBetween(amTime, "", ":") = "12",
+                            24 & ":" & StrReverse(getStrBetween(StrReverse(amTime), "", ":")),
                             amTime)
 
                 retrnObj = amTime
@@ -1252,4 +1233,5 @@ Public Class OrganizationForm
     Private Sub cmbprimaryAddress_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbprimaryAddress.SelectedIndexChanged
 
     End Sub
+
 End Class

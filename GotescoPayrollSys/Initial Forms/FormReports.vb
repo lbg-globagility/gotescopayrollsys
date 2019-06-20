@@ -1,5 +1,4 @@
-﻿
-Public Class FormReports
+﻿Public Class FormReports
 
     Public listReportsForm As New List(Of String)
 
@@ -13,7 +12,6 @@ Public Class FormReports
             If listReportsForm.Contains(FName) Then
                 Formname.Show()
                 Formname.BringToFront()
-
             Else
                 PanelReport.Controls.Add(Formname)
                 listReportsForm.Add(Formname.Name)
@@ -27,7 +25,6 @@ Public Class FormReports
                 Formname.Dock = DockStyle.Fill
 
             End If
-
         Catch ex As Exception
 
             Exit Sub

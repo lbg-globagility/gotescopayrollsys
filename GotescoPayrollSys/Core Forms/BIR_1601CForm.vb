@@ -6,7 +6,7 @@ Public Class BIR_1601CForm
 
     Public TaxDateTo As Object = Nothing
 
-    Sub New(Optional date_From As Object = Nothing, _
+    Sub New(Optional date_From As Object = Nothing,
             Optional date_To As Object = Nothing)
 
         ' This call is required by the designer.
@@ -55,7 +55,6 @@ Public Class BIR_1601CForm
         ElseIf e.Cancelled Then
 
             MessageBox.Show("Background work cancelled.")
-
         Else
 
         End If

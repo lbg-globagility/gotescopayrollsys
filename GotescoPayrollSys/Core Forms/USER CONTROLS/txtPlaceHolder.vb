@@ -1,5 +1,4 @@
-﻿
-Namespace PayrollSystem
+﻿Namespace PayrollSystem
 
 End Namespace
 
@@ -46,6 +45,7 @@ Public Class txtPlaceHolder
     End Property
 
     Dim me_PlaceHolderForeColor As Color = Color.FromArgb(191, 191, 255)
+
     '<Browsable(True), DefaultValue(staticPlaceHolderForeColor), Description("Gets or sets the place holder of this object.")> _
     Public Property PlaceHolderForeColor As Color
 
@@ -127,14 +127,13 @@ Public Class txtPlaceHolder
 
         'End If
 
-
         MyBase.OnTextChanged(e)
 
     End Sub
 
     Protected Overrides Sub OnKeyPress(e As KeyPressEventArgs)
         'n_PlaceHolderText = Me.Text _
-        '    And 
+        '    And
         'If Me.ForeColor = me_PlaceHolderForeColor Then
 
         '    Me.PasswordChar = strEmpty

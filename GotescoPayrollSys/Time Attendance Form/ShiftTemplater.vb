@@ -1,5 +1,4 @@
-﻿Imports System.Reflection
-Imports Femiani.Forms.UI.Input
+﻿Imports Femiani.Forms.UI.Input
 Imports Microsoft.Win32
 
 Public Enum MonthName As Integer
@@ -68,7 +67,6 @@ Public Class ShiftTemplater
                 If month_int Mod 2 = 0 Then
 
                     'dgvcalendar.Item(i, n_dgvrow).Style.BackColor = Color.White
-
                 Else
 
                     dgvcalendar.Item(i, n_dgvrow).Style.BackColor = Color.FromArgb(242, 242, 242)
@@ -141,7 +139,6 @@ Public Class ShiftTemplater
             If shift_value = Nothing Then
 
                 Label2.Text = Nothing
-
             Else
 
                 Label2.Text = New ExecuteQuery("SELECT " &
@@ -155,7 +152,6 @@ Public Class ShiftTemplater
                                                " AND OrganizationID='" & org_rowid & "';").Result
 
             End If
-
         Else
 
             Label1.Text = String.Empty
@@ -279,7 +275,6 @@ Public Class ShiftTemplater
                                                  ptY)
 
                 n_ShiftList.BringToFront()
-
             Else
 
                 'For i = 0 To ii
@@ -328,7 +323,6 @@ Public Class ShiftTemplater
                                 .Tag(1) = Nothing
 
                                 .Value = .Tag(2)
-
                             Else
 
                                 Dim value_obj = .Tag(0)
@@ -565,8 +559,8 @@ End Class
 
 Friend Class DrawGridCustomHeaderColumns
 
-    Sub New(ByVal dgv As DataGridView, _
-     ByVal e As DataGridViewCellPaintingEventArgs, ByVal img As Image, _
+    Sub New(ByVal dgv As DataGridView,
+     ByVal e As DataGridViewCellPaintingEventArgs, ByVal img As Image,
      ByVal Style As DGVHeaderImageAlignments)
 
         ' All of the graphical Processing is done here.
@@ -574,28 +568,28 @@ Friend Class DrawGridCustomHeaderColumns
         ' Fill the BackGround with the BackGroud Color of Headers.
         ' This step is necessary, for transparent images, or what's behind
         ' would be painted instead.
-        gr.FillRectangle( _
-         New SolidBrush(dgv.ColumnHeadersDefaultCellStyle.BackColor), _
+        gr.FillRectangle(
+         New SolidBrush(dgv.ColumnHeadersDefaultCellStyle.BackColor),
          e.CellBounds)
         If img IsNot Nothing Then
             Select Case Style
                 Case DGVHeaderImageAlignments.FillCell
-                    gr.DrawImage( _
-                     img, e.CellBounds.X, e.CellBounds.Y, _
+                    gr.DrawImage(
+                     img, e.CellBounds.X, e.CellBounds.Y,
                      e.CellBounds.Width, e.CellBounds.Height)
                 Case DGVHeaderImageAlignments.SingleCentered
-                    gr.DrawImage(img, _
-                     ((e.CellBounds.Width - img.Width) \ 2) + e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img,
+                     ((e.CellBounds.Width - img.Width) \ 2) + e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.SingleLeft
-                    gr.DrawImage(img, e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img, e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.SingleRight
-                    gr.DrawImage(img, _
-                     (e.CellBounds.Width - img.Width) + e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img,
+                     (e.CellBounds.Width - img.Width) + e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.Tile
                     ' ********************************************************
@@ -616,8 +610,8 @@ Friend Class DrawGridCustomHeaderColumns
                     Dim br As New TextureBrush(img, Drawing2D.WrapMode.Tile)
                     gr.FillRectangle(br, e.ClipBounds)
                 Case Else
-                    gr.DrawImage( _
-                     img, e.CellBounds.X, e.CellBounds.Y, _
+                    gr.DrawImage(
+                     img, e.CellBounds.X, e.CellBounds.Y,
                      e.ClipBounds.Width, e.CellBounds.Height)
             End Select
         End If
@@ -673,7 +667,7 @@ Friend Class DrawGridCustomHeaderColumns
             Dim newForeColor = Color.FromArgb(0, 0, 0)
 
             With dgv.ColumnHeadersDefaultCellStyle
-                gr.DrawString(e.Value.ToString, .Font, _
+                gr.DrawString(e.Value.ToString, .Font,
                  New SolidBrush(newForeColor), e.CellBounds, sf)
             End With
         End Using

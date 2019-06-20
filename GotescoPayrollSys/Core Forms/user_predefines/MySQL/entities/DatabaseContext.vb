@@ -1,8 +1,5 @@
-Imports System
-Imports System.Data.Entity
-Imports System.Linq
-Imports GotescoPayrollSys.myModule
 Imports System.Data.Common
+Imports System.Data.Entity
 Imports AccuPay.Entity
 
 Public Class DatabaseContext

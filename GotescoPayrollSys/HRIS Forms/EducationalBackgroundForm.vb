@@ -37,7 +37,7 @@
         If dgvEmplist.Rows.Count = 0 Then
         Else
             Dim dt As New DataTable
-            dt = getDataTableForSQL("Select * from employeeeducation ed inner join employee ee on ed.EmployeeID = ee.RowID " & _
+            dt = getDataTableForSQL("Select * from employeeeducation ed inner join employee ee on ed.EmployeeID = ee.RowID " &
                                     "where ee.OrganizationID = '" & z_OrganizationID & "' and ee.EmployeeID = '" & dgvEmplist.CurrentRow.Cells(c_EmpID.Index).Value & "'")
 
             dgvEducback.Rows.Clear()
@@ -58,44 +58,44 @@
                 End With
             Next
         End If
-        
+
     End Sub
+
     Private Sub fillselectRowID()
-       
-            Dim dt As New DataTable
-            dt = getDataTableForSQL("Select * from employeeeducation ed inner join employee ee on ed.EmployeeID = ee.RowID " & _
-                                    "where ee.OrganizationID = '" & z_OrganizationID & "' And ee.RowID = '" & dgvEmplist.CurrentRow.Cells(c_rowID.Index).Value & "'")
 
-            dgvEducback.Rows.Clear()
-            For Each drow As DataRow In dt.Rows
-                Dim n As Integer = dgvEducback.Rows.Add()
-                With drow
-                    dgvEducback.Rows.Item(n).Cells(c_EmplyeeID.Index).Value = .Item("EmployeeID").ToString
-                    dgvEducback.Rows.Item(n).Cells(c_name.Index).Value = .Item("Name").ToString
-                    dgvEducback.Rows.Item(n).Cells(c_school.Index).Value = .Item("School").ToString
-                    dgvEducback.Rows.Item(n).Cells(c_degree.Index).Value = .Item("Degree").ToString
-                    dgvEducback.Rows.Item(n).Cells(c_course.Index).Value = .Item("Course").ToString
-                    dgvEducback.Rows.Item(n).Cells(c_minor.Index).Value = .Item("Minor").ToString
-                    dgvEducback.Rows.Item(n).Cells(c_EducationalType.Index).Value = .Item("EducationType").ToString
-                    dgvEducback.Rows.Item(n).Cells(c_Datefrom.Index).Value = CDate(.Item("DateFrom")).ToString("MM/dd/yyyy")
-                    dgvEducback.Rows.Item(n).Cells(c_Dateto.Index).Value = CDate(.Item("DateTo")).ToString("MM/dd/yyyy")
-                    dgvEducback.Rows.Item(n).Cells(c_Remarks.Index).Value = .Item("Remarks").ToString
-                    dgvEducback.Rows.Item(n).Cells(c_RowID1.Index).Value = .Item("RowID").ToString
-                End With
-            Next
+        Dim dt As New DataTable
+        dt = getDataTableForSQL("Select * from employeeeducation ed inner join employee ee on ed.EmployeeID = ee.RowID " &
+                                "where ee.OrganizationID = '" & z_OrganizationID & "' And ee.RowID = '" & dgvEmplist.CurrentRow.Cells(c_rowID.Index).Value & "'")
 
-        
+        dgvEducback.Rows.Clear()
+        For Each drow As DataRow In dt.Rows
+            Dim n As Integer = dgvEducback.Rows.Add()
+            With drow
+                dgvEducback.Rows.Item(n).Cells(c_EmplyeeID.Index).Value = .Item("EmployeeID").ToString
+                dgvEducback.Rows.Item(n).Cells(c_name.Index).Value = .Item("Name").ToString
+                dgvEducback.Rows.Item(n).Cells(c_school.Index).Value = .Item("School").ToString
+                dgvEducback.Rows.Item(n).Cells(c_degree.Index).Value = .Item("Degree").ToString
+                dgvEducback.Rows.Item(n).Cells(c_course.Index).Value = .Item("Course").ToString
+                dgvEducback.Rows.Item(n).Cells(c_minor.Index).Value = .Item("Minor").ToString
+                dgvEducback.Rows.Item(n).Cells(c_EducationalType.Index).Value = .Item("EducationType").ToString
+                dgvEducback.Rows.Item(n).Cells(c_Datefrom.Index).Value = CDate(.Item("DateFrom")).ToString("MM/dd/yyyy")
+                dgvEducback.Rows.Item(n).Cells(c_Dateto.Index).Value = CDate(.Item("DateTo")).ToString("MM/dd/yyyy")
+                dgvEducback.Rows.Item(n).Cells(c_Remarks.Index).Value = .Item("Remarks").ToString
+                dgvEducback.Rows.Item(n).Cells(c_RowID1.Index).Value = .Item("RowID").ToString
+            End With
+        Next
+
     End Sub
+
     Private Sub fillselecteducback()
         If dgvEducback.Rows.Count = 0 Then
         Else
             Dim dt As New DataTable
-            dt = getDataTableForSQL("Select * from employeeeducation ed inner join employee ee on ed.EmployeeID = ee.RowID " & _
+            dt = getDataTableForSQL("Select * from employeeeducation ed inner join employee ee on ed.EmployeeID = ee.RowID " &
                                     "where ee.OrganizationID = '" & z_OrganizationID & "' And ed.RowID = '" & dgvEducback.CurrentRow.Cells(c_RowID1.Index).Value & "'")
             cleartextbox()
             For Each drow As DataRow In dt.Rows
                 With drow
-
 
                     txtSchool.Text = .Item("School").ToString
                     txtDegree.Text = .Item("Degree").ToString
@@ -109,9 +109,8 @@
                 End With
             Next
         End If
-        
-    End Sub
 
+    End Sub
 
     Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click
         btnNew.Enabled = False
@@ -125,8 +124,8 @@
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If isNew = 1 Then
 
-            SP_EducBackGround(z_datetime, user_row_id, z_datetime, user_row_id, z_OrganizationID, dgvEmplist.CurrentRow.Cells(c_rowID.Index).Value, _
-                              dtpFrom.Value.ToString("MM/dd/yyyy"), dtpto.Value.ToString("MM/dd/yyyy"), _
+            SP_EducBackGround(z_datetime, user_row_id, z_datetime, user_row_id, z_OrganizationID, dgvEmplist.CurrentRow.Cells(c_rowID.Index).Value,
+                              dtpFrom.Value.ToString("MM/dd/yyyy"), dtpto.Value.ToString("MM/dd/yyyy"),
                               txtCourse.Text, txtSchool.Text, txtDegree.Text, txtMinor.Text, cmbEducType.Text, txtRemarks.Text)
 
             myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
@@ -135,10 +134,9 @@
             isNew = 0
             btnNew.Enabled = True
             dgvEducback.Enabled = True
-
         Else
-            SP_employeeeducationUpdate(dtpFrom.Value.ToString("MM/dd/yyyy"), dtpto.Value.ToString("MM/dd/yyyy"), _
-                          txtCourse.Text, txtSchool.Text, txtDegree.Text, txtMinor.Text, cmbEducType.Text, txtRemarks.Text, _
+            SP_employeeeducationUpdate(dtpFrom.Value.ToString("MM/dd/yyyy"), dtpto.Value.ToString("MM/dd/yyyy"),
+                          txtCourse.Text, txtSchool.Text, txtDegree.Text, txtMinor.Text, cmbEducType.Text, txtRemarks.Text,
                           dgvEducback.CurrentRow.Cells(c_RowID1.Index).Value)
 
             myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)

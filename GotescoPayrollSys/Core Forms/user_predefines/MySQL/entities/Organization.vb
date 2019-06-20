@@ -1,10 +1,11 @@
 ﻿Option Strict On
 
-Imports System.ComponentModel.DataAnnotations.Schema
 Imports System.ComponentModel.DataAnnotations
+Imports System.ComponentModel.DataAnnotations.Schema
 
 <Table("organization")>
 Public Class Organization
+
     <Key>
     <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property RowID As Integer
@@ -64,4 +65,5 @@ Public Class Organization
     'Public Property MinWageEmpPhHContrib As Decimal?
     'Public Property MinWageEmpHDMFContrib As Decimal?
     Public Property NoPurpose As Boolean
+
 End Class

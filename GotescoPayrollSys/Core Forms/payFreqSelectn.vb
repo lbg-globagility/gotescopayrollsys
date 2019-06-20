@@ -8,8 +8,8 @@
 
         For Each drow As DataRow In dtpayfreq.Rows
 
-            dgvpayfreq.Rows.Add(CBool(drow("CheckBox")), _
-                                CStr(drow("PayFrequencyType")), _
+            dgvpayfreq.Rows.Add(CBool(drow("CheckBox")),
+                                CStr(drow("PayFrequencyType")),
                                 CInt(drow("RowID")))
 
         Next

@@ -1,6 +1,7 @@
 ﻿Public Class EmpDisciplinaryActionForm
     Dim IsNew As Integer
     Dim RowID As Integer
+
     Private Sub fillemplyeelist()
         'If dgvEmplist.Rows.Count = 0 Then
         'ElseCOALESCE(StreetAddress1,' ')
@@ -34,13 +35,14 @@
 
                 txtEmpID.Text = .Item("EmployeeID").ToString
                 'txtempid.Text = .Item("EmployeeID").ToString
-                txtEmpName.Text = .Item("Name").ToString
-                rowid = .Item("RowID").ToString
+                txtEmpname.Text = .Item("Name").ToString
+                RowID = .Item("RowID").ToString
             End With
         Next
         'End If
 
     End Sub
+
     Private Sub controltrue()
         cmbFinding.Enabled = True
         txtAction.Enabled = True
@@ -49,6 +51,7 @@
         dtpFrom.Enabled = True
         dtpTo.Enabled = True
     End Sub
+
     Private Sub controlclear()
         cmbFinding.SelectedIndex = -1
         txtAction.Clear()
@@ -65,10 +68,11 @@
         cmbFinding.Items.AddRange(CType(SQL_ArrayList(strQuery).ToArray(GetType(String)), String()))
         cmbFinding.SelectedIndex = 0
     End Sub
+
     Private Sub fillempdisciplinary()
         If Not dgvEmpList.Rows.Count = 0 Then
             Dim dt As New DataTable
-            dt = getDataTableForSQL("Select * From employeedisciplinaryaction ed inner join product p on ed.FindingID = p.RowID " & _
+            dt = getDataTableForSQL("Select * From employeedisciplinaryaction ed inner join product p on ed.FindingID = p.RowID " &
                                     "Where ed.OrganizationID = '" & z_OrganizationID & "' And ed.EmployeeID = '" & RowID & "' Order by ed.RowID DESC")
             dgvDisciplinaryList.Rows.Clear()
             If dt.Rows.Count > 0 Then
@@ -87,15 +91,15 @@
                 Next
             End If
         End If
-        
 
     End Sub
+
     Private Function fillempdisciplinaryselected(ByVal dID As Integer) As Boolean
 
         If Not dgvDisciplinaryList.Rows.Count = 0 Then
             Dim dt As New DataTable
 
-            dt = getDataTableForSQL("Select * From employeedisciplinaryaction ed inner join product p on ed.FindingID = p.RowID " & _
+            dt = getDataTableForSQL("Select * From employeedisciplinaryaction ed inner join product p on ed.FindingID = p.RowID " &
                                     "Where ed.OrganizationID = '" & z_OrganizationID & "' And ed.RowID = '" & dID & "'")
 
             If dt.Rows.Count > 0 Then
@@ -116,6 +120,7 @@
         Return True
 
     End Function
+
     Private Sub lblAddFindingname_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lblAddFindingname.LinkClicked
         FindingForm.ShowDialog()
 
@@ -133,11 +138,10 @@
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If IsNew = 1 Then
 
-
             Dim fID As String = getStringItem("Select RowID From product where PartNo = '" & cmbFinding.Text & "' And organizationID = '" & z_OrganizationID & "'")
             Dim getfID As Integer = Val(fID)
 
-            sp_employeedisciplinaryaction(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, txtAction.Text, txtComments.Text, _
+            sp_employeedisciplinaryaction(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, txtAction.Text, txtComments.Text,
                                           txtDesc.Text, getfID, RowID, dtpFrom.Value.ToString("yyyy-MM-dd"), dtpTo.Value.ToString("yyyy-MM-dd"))
 
             dgvEmpList.Enabled = True
@@ -149,8 +153,8 @@
         Else
             Dim fID As String = getStringItem("Select RowID From product where PartNo = '" & cmbFinding.Text & "' And organizationID = '" & z_OrganizationID & "'")
             Dim getfID As Integer = Val(fID)
-            DirectCommand("UPDATE employeedisciplinaryaction SET Action = '" & txtAction.Text & "', DateFrom = '" & dtpFrom.Value.ToString("yyyy-MM-dd") & "' " & _
-                          ", DateTO = '" & dtpTo.Value.ToString("yyyy-MM-dd") & "', FindingDescription = '" & txtDesc.Text & "', Comments = '" & txtComments.Text & "', " & _
+            DirectCommand("UPDATE employeedisciplinaryaction SET Action = '" & txtAction.Text & "', DateFrom = '" & dtpFrom.Value.ToString("yyyy-MM-dd") & "' " &
+                          ", DateTO = '" & dtpTo.Value.ToString("yyyy-MM-dd") & "', FindingDescription = '" & txtDesc.Text & "', Comments = '" & txtComments.Text & "', " &
                           "FindingID = '" & getfID & "' Where RowID = '" & dgvDisciplinaryList.CurrentRow.Cells(c_rowid.Index).Value & "'")
             fillempdisciplinary()
             fillempdisciplinaryselected(dgvDisciplinaryList.CurrentRow.Cells(c_rowid.Index).Value)
@@ -168,7 +172,6 @@
             fillempdisciplinaryselected(dgvDisciplinaryList.CurrentRow.Cells(c_rowid.Index).Value)
         End If
 
-
     End Sub
 
     Private Sub dgvEmpList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvEmpList.CellClick
@@ -179,8 +182,6 @@
             If Not dgvDisciplinaryList.Rows.Count = 0 Then
                 fillempdisciplinaryselected(dgvDisciplinaryList.CurrentRow.Cells(c_rowid.Index).Value)
             End If
-
-
         Catch ex As Exception
 
         End Try
@@ -198,7 +199,6 @@
             End If
 
             controltrue()
-
         Catch ex As Exception
 
         End Try
@@ -211,7 +211,6 @@
             If Not dgvDisciplinaryList.Rows.Count = 0 Then
                 fillempdisciplinaryselected(dgvDisciplinaryList.CurrentRow.Cells(c_rowid.Index).Value)
             End If
-
         Catch ex As Exception
 
         End Try

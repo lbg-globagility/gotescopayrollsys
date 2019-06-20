@@ -96,13 +96,12 @@ Public Class ReadSQLFunctionV2
                 n_ReturnValue = datread(0)
 
             End With
-
         Catch ex As Exception
             _hasError = True
             MsgBox(getErrExcptn(ex, MyBase.ToString), , SQLProcedureName)
         Finally
             priv_da.Dispose()
-            
+
             priv_conn.Close()
 
             priv_conn.Dispose()

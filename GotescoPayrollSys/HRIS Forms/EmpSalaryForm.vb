@@ -23,6 +23,7 @@
             End With
         Next
     End Sub
+
     Private Sub cleartext()
         txtBasicrate.Clear()
         txtPagibig.Clear()
@@ -88,11 +89,9 @@
                     dgvemployeesalary.Rows.Item(n).Cells(c_rowid.Index).Value = .Item("RowID")
                 End With
             Next
-
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical, "Error Code fillEmpSalaryList")
         End Try
-
 
         Return True
 
@@ -149,7 +148,6 @@
                         Dim getpt As String = pt
                         txtpaytype.Text = getpt
 
-
                     End With
                 Next
             Else
@@ -157,10 +155,10 @@
             End If
         End If
 
-
         Return True
 
     End Function
+
     Private Function fillseletedEnterEmpID(ByVal RowID As Integer) As Boolean
 
         Dim dt As New DataTable
@@ -194,7 +192,6 @@
 
                     Dim getpaysssID As String = paysssID
 
-
                     txtSSS.Text = FormatNumber(getpaysssID, 2)
                     txtPhilHealth.Text = FormatNumber(getpayphID, 2)
                     'cmbFilingStatus.Text = getfsID
@@ -211,14 +208,11 @@
 
         End If
 
-
         Return True
 
     End Function
 
     Private Sub EmpSalaryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-       
-        
 
         fillempployeeList()
         fillSelectedEmpSalaryList(dgvEmpList.CurrentRow.Cells(c_EmployeeID.Index).Value)
@@ -250,10 +244,9 @@
         basicrate = CDec(IIf(Decimal.TryParse(txtBasicrate.Text, Nothing), txtBasicrate.Text, "0"))
 
         Dim dtemp As New DataTable
-        dtemp = getDataTableForSQL("Select * From employee ee inner join employeedependents ed on ee.RowID = ed.ParentEmployeeID  " & _
+        dtemp = getDataTableForSQL("Select * From employee ee inner join employeedependents ed on ee.RowID = ed.ParentEmployeeID  " &
                                    "where ee.EmployeeID = '" & dgvEmpList.CurrentRow.Cells(c_empID.Index).Value & "' And ee.OrganizationID = '" & z_OrganizationID & "'")
 
-     
         noofdepd = 0
         mStat = 0
         'If dtemp.Rows.Count > 0 Then
@@ -265,12 +258,10 @@
         Dim fsid As String = getStringItem("Select FilingStatus From filingstatus where MaritalStatus = '" & mStat & "' And Dependent = '" & noofdepd & "'")
         Dim getfsid As String = fsid
 
-
-
         Dim dt2 As New DataTable
-        dt2 = getDataTableForSQL("select * from paywithholdingtax ph inner join payfrequency pf on ph.PayFrequencyID = pf.RowID " & _
-                                 "inner join filingstatus fs on ph.FilingStatusID = fs.RowID " & _
-                                 "where fs.FilingStatus = '" & getfsid & "' And fs.MaritalStatus = '" & mStat & "' And pf.PayFrequencyType = '" & txtpaytype.Text & "' " & _
+        dt2 = getDataTableForSQL("select * from paywithholdingtax ph inner join payfrequency pf on ph.PayFrequencyID = pf.RowID " &
+                                 "inner join filingstatus fs on ph.FilingStatusID = fs.RowID " &
+                                 "where fs.FilingStatus = '" & getfsid & "' And fs.MaritalStatus = '" & mStat & "' And pf.PayFrequencyType = '" & txtpaytype.Text & "' " &
                                  "And ph.TaxableIncomeFromAmount <= '" & basicrate & "' And ph.TaxableIncomeToAmount >= '" & basicrate & "'")
 
         'txtTAX.Clear()
@@ -289,8 +280,6 @@
 
                     grandtotal = Val(exin) + Val(excessandexemption)
 
-
-
                 End With
             Next
         End If
@@ -298,7 +287,6 @@
 
     Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click
         isNew = 1
-
 
         grpbasicsalaryaddeduction.Enabled = True
         btnSave.Enabled = True
@@ -315,8 +303,8 @@
             dt = getDataTableForSQL("select * from employeesalary es inner join employee ee on es.EmployeeID = ee.RowID Where es.RowID = '" & Val(dgvemployeesalary.CurrentRow.Cells(c_rowid.Index).Value) & "'")
             If dt.Rows.Count > 0 Then
                 Dim rowid As Integer = dt.Rows(0)("RowID")
-                DirectCommand("UPDATE employeesalary SET filingstatusID = '" & filingid & "', MaritalStatus = '" & mStat & "', NoofDependents = '" & noofdepd & "', " & _
-                              "BasicPay = '" & CDec(txtBasicrate.Text) & "', HDMFAmount = '" & txtPagibig.Text & "', PayPhilHealthID = '" & z_phID & "', PaySocialSecurityID = '" & z_ssid & "', " & _
+                DirectCommand("UPDATE employeesalary SET filingstatusID = '" & filingid & "', MaritalStatus = '" & mStat & "', NoofDependents = '" & noofdepd & "', " &
+                              "BasicPay = '" & CDec(txtBasicrate.Text) & "', HDMFAmount = '" & txtPagibig.Text & "', PayPhilHealthID = '" & z_phID & "', PaySocialSecurityID = '" & z_ssid & "', " &
                               "EffectiveDateFrom = '" & CDate(dptFrom.Value).ToString("yyyy-MM-dd") & "', EffectiveDateTo = '" & CDate(dtpTo.Value).ToString("yyyy-MM-dd") & "' Where RowID = '" & rowid & "'")
             End If
         End If
@@ -336,7 +324,6 @@
             fillseletedEnterEmpID(dgvemployeesalary.CurrentRow.Cells(c_rowid.Index).Value)
             grpbasicsalaryaddeduction.Enabled = True
             btnDelete.Enabled = True
-
         Catch ex As Exception
 
         End Try
@@ -345,7 +332,6 @@
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         If MsgBox("Are you sure you want to remove this employe salary No." & dgvemployeesalary.CurrentRow.Cells(c_rowid.Index).Value & "?", MsgBoxStyle.YesNo, "Removing...") = MsgBoxResult.Yes Then
             DirectCommand("DELETE FROM employeesalary where RowID = '" & dgvemployeesalary.CurrentRow.Cells(c_rowid.Index).Value & "'")
-
 
             fillSelectedEmpSalaryList(dgvEmpList.CurrentRow.Cells(c_EmployeeID.Index).Value)
             fillseletedEnterEmpID(dgvemployeesalary.CurrentRow.Cells(c_rowid.Index).Value)
@@ -373,14 +359,10 @@
             fillseletedEnterEmpID(dgvemployeesalary.CurrentRow.Cells(c_rowid.Index).Value)
             grpbasicsalaryaddeduction.Enabled = True
             btnDelete.Enabled = True
-
         Catch ex As Exception
 
         End Try
     End Sub
-
-
-
 
     Private Sub dgvemployeesalary_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvemployeesalary.CellContentClick
 

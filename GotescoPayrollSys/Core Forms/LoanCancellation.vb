@@ -1,5 +1,4 @@
-﻿
-Imports MySql.Data.MySqlClient
+﻿Imports MySql.Data.MySqlClient
 
 Public Class LoanCancellation
 
@@ -302,7 +301,6 @@ Public Class LoanCancellation
                         hasErrors = True
 
                         Exit For
-
                     Else
 
                     End If
@@ -328,8 +326,6 @@ Public Class LoanCancellation
 
         Next
 
-
-
         If hasErrors = False Then 'valid data
 
             For Each dgvrow As DataGridViewRow In dgvLoanItem.Rows
@@ -339,7 +335,6 @@ Public Class LoanCancellation
                 If dgvrow.IsNewRow Then
 
                     Continue For
-
                 Else
 
                     With dgvrow
@@ -375,7 +370,6 @@ Public Class LoanCancellation
                                                     .Cells("elsLoanPayPeriodLeft").Value,
                                                     .Cells("elsComments").Value,
                                                     ReferenceLoanID).ReturnValue
-
                         Else
 
                             Dim n_ReadSQLFunction As _
@@ -443,7 +437,6 @@ Public Class LoanCancellation
             End If
 
             DialogResult = DialogResult.OK
-
         Else
 
             If errorRowIndex > -1 _
@@ -471,13 +464,10 @@ Public Class LoanCancellation
 
     Private Sub dgvLoanItem_CellBeginEdit(sender As Object, e As DataGridViewCellCancelEventArgs) Handles dgvLoanItem.CellBeginEdit
 
-
-
         If elsTotalLoanAmount.Index = e.ColumnIndex Then
 
             totalloanamount_before_edit = ValNoComma(dgvLoanItem.Item("elsTotalLoanAmount",
                                                                       e.RowIndex).Value)
-
         Else
             totalloanamount_before_edit = 0
         End If
@@ -515,12 +505,10 @@ Public Class LoanCancellation
                 Or elsNoOfPayPeriod.Index = e.ColumnIndex Then
 
                 If dgvLoanItem.Item("elsDeductionSchedule", e.RowIndex).Value = Nothing Then
-
                 Else
 
                     'If dgvLoanItem.Item("elsDedEffectiveDateFrom", e.RowIndex).Tag = Nothing _
                     If dgvLoanItem.Item("elsDedEffectiveDateFrom", e.RowIndex).Value = Nothing Then
-
                     Else
 
                         Dim payperiod_to =
@@ -540,7 +528,6 @@ Public Class LoanCancellation
                             dgvLoanItem.Item("elsDedEffectiveDateTo", e.RowIndex).Value = Nothing
 
                             dgvLoanItem.Item("elsDedEffectiveDateTo", e.RowIndex).Tag = Nothing
-
                         Else
 
                             dgvLoanItem.Item("elsDedEffectiveDateTo", e.RowIndex).Value = CDate(payperiod_to).ToShortDateString
@@ -564,20 +551,17 @@ Public Class LoanCancellation
 
                 dgvLoanItem.Item("elsTotalBalanceLeft", e.RowIndex).Value = ValNoComma(dgvLoanItem.Item("elsTotalLoanAmount", e.RowIndex).Value)
 
-
             ElseIf elsDeductionAmount.Index = e.ColumnIndex Then
 
                 Dim int_result = ValNoComma(dgvLoanItem.Item("elsTotalLoanAmount", e.RowIndex).Value) _
                     / ValNoComma(dgvLoanItem.Item("elsDeductionAmount", e.RowIndex).Value)
 
                 dgvLoanItem.Item("elsNoOfPayPeriod", e.RowIndex).Value = Math.Round(int_result, 0)
-
             Else
 
             End If
 
             If dgvLoanItem.Rows(e.RowIndex).IsNewRow Then
-
             Else
 
                 If elsLoanPayPeriodLeft.Index <> e.RowIndex Then
@@ -608,7 +592,6 @@ Public Class LoanCancellation
                 End If
 
             End If
-
         Else
 
         End If
@@ -653,7 +636,6 @@ Public Class LoanCancellation
                 Label2.Text = ValNoComma(Label2.Text) + ValNoComma(dgvLoanItem.Item("elsTotalLoanAmount", e.RowIndex).Value)
 
             End If
-
         Catch ex As Exception
 
             MsgBox(getErrExcptn(ex, Name))
@@ -681,7 +663,6 @@ Public Class LoanCancellation
                 Label2.Text = ValNoComma(Label2.Text) - ValNoComma(e.Row.Cells("elsTotalLoanAmount").Value)
 
             End If
-
         Catch ex As Exception
 
             MsgBox(getErrExcptn(ex, Name))
@@ -701,7 +682,6 @@ Public Class LoanCancellation
         If cmbStatus.Text.Length > 0 Then
 
             If cmbStatus.Text = status_last_index_value Then
-
             Else
 
                 AddHandler tsbtnSaveLoan.Click, AddressOf tsbtnSaveLoan_Click1Async
@@ -717,7 +697,6 @@ Public Class LoanCancellation
         If keyData = Keys.Escape Then
 
             If dgvLoanItem.IsCurrentCellInEditMode Then
-
             Else
 
                 If tsbtnSaveLoan.Enabled Then
@@ -727,7 +706,6 @@ Public Class LoanCancellation
             End If
 
             Return Not dgvLoanItem.IsCurrentCellInEditMode
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

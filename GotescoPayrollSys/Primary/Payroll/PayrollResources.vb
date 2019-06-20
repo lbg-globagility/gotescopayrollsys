@@ -1,4 +1,5 @@
 ﻿Option Strict On
+
 Imports System.Data.Entity
 Imports System.Threading.Tasks
 Imports AccuPay.Entity
@@ -341,6 +342,7 @@ SELECT i.* FROM salarieswithsssamount i WHERE i.PayPeriodID=@payPeriodID;]]>.Val
     End Function
 
 #End Region
+
 End Class
 
 Public Class ResourceLoadingException

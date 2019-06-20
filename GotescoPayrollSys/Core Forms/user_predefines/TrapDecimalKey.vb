@@ -1,5 +1,4 @@
-﻿
-Public Class TrapDecimalKey
+﻿Public Class TrapDecimalKey
 
     Dim n_ResultTrap As Boolean = False
 
@@ -39,30 +38,25 @@ Public Class TrapDecimalKey
                         TrapDecimalKey = True
 
                         onedot = 2
-
                     Else
                         TrapDecimalKey = False
 
                         onedot = 0
 
                     End If
-
                 Else
                     If textboxstring.Contains(".") Then
                         TrapDecimalKey = True
-
                     Else
                         TrapDecimalKey = False
 
                     End If
 
                 End If
-
             Else
                 TrapDecimalKey = False
 
             End If
-
         Else
             TrapDecimalKey = True
 

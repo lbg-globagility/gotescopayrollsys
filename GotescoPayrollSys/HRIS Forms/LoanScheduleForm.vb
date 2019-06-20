@@ -1,12 +1,12 @@
-﻿
-
-Public Class LoanScheduleForm
+﻿Public Class LoanScheduleForm
 
     Dim IsNew As Integer = 0
+
     Sub filldedsched()
         cmbdedsched.Items.Clear()
         fillCombobox("Select DisplayValue From ListOFVal where Type = 'Deduction Schedule'", cmbdedsched)
     End Sub
+
     Private Sub fillemplyeelist()
         'If dgvEmplist.Rows.Count = 0 Then
         'ElseCOALESCE(StreetAddress1,' ')
@@ -27,6 +27,7 @@ Public Class LoanScheduleForm
         'End If
 
     End Sub
+
     Private Sub fillloadsched()
         If dgvEmpList.Rows.Count = 0 Then
             Exit Sub
@@ -51,6 +52,7 @@ Public Class LoanScheduleForm
             End With
         Next
     End Sub
+
     Private Sub fillloadschedselected()
         If dgvLoanList.Rows.Count = 0 Then
             Exit Sub
@@ -79,6 +81,7 @@ Public Class LoanScheduleForm
             End With
         Next
     End Sub
+
     Private Sub cleartextbox()
         txtloanamt.Clear()
         txtbal.Clear()
@@ -91,6 +94,7 @@ Public Class LoanScheduleForm
         dateto.Value = Date.Now
         txtremarks.Clear()
     End Sub
+
     Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click
         btnNew.Enabled = False
         IsNew = 1
@@ -123,21 +127,20 @@ Public Class LoanScheduleForm
         Dim empid As Integer = dgvEmpList.CurrentRow.Cells(c_ID.Index).Value
         If IsNew = 1 Then
 
-            SP_LoadSchedule(user_row_id, user_row_id, z_datetime, z_datetime, Val(txtloannumber.Text), datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"), _
-                            z_OrganizationID, Val(empid), CDec(txtloanamt.Text), cmbdedsched.Text, CDec(txtbal.Text), CDec(txtdedamt.Text), _
+            SP_LoadSchedule(user_row_id, user_row_id, z_datetime, z_datetime, Val(txtloannumber.Text), datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"),
+                            z_OrganizationID, Val(empid), CDec(txtloanamt.Text), cmbdedsched.Text, CDec(txtbal.Text), CDec(txtdedamt.Text),
                             CDec(txtnoofpayper.Text), txtremarks.Text, cmbStatus.Text, CDec(txtdedpercent.Text))
             fillloadsched()
             fillloadschedselected()
             myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
         Else
-            SP_UpdateLoadSchedule(user_row_id, z_datetime, Val(txtloannumber.Text), datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"), _
-                                 CDec(txtloanamt.Text), cmbdedsched.Text, CDec(txtdedamt.Text), _
+            SP_UpdateLoadSchedule(user_row_id, z_datetime, Val(txtloannumber.Text), datefrom.Value.ToString("yyyy-MM-dd"), dateto.Value.ToString("yyyy-MM-dd"),
+                                 CDec(txtloanamt.Text), cmbdedsched.Text, CDec(txtdedamt.Text),
                                  CDec(txtnoofpayper.Text), txtremarks.Text, cmbStatus.Text, CDec(txtdedpercent.Text), dgvLoanList.CurrentRow.Cells(c_rowid.Index).Value)
             fillloadsched()
             fillloadschedselected()
             myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
         End If
-
 
         IsNew = 0
         dgvEmpList.Enabled = True
@@ -145,7 +148,6 @@ Public Class LoanScheduleForm
     End Sub
 
     Private Sub LoanScheduleForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-
 
         filldedsched()
         fillemplyeelist()
@@ -209,4 +211,5 @@ Public Class LoanScheduleForm
     Private Sub txtdedpercent_TextChanged(sender As Object, e As EventArgs) Handles txtdedpercent.TextChanged
 
     End Sub
+
 End Class

@@ -212,6 +212,7 @@ Public Class ListOfValueForm
             Next
         End If
     End Sub
+
     Private Sub cleartextbox()
         txtDescription.Clear()
         txtDisplayval.Clear()
@@ -220,8 +221,8 @@ Public Class ListOfValueForm
         cmbStatus.SelectedIndex = -1
         txtParentLIC.Clear()
 
-
     End Sub
+
     Private Sub tsNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click
         grplistval.Enabled = True
         btnSave.Enabled = True
@@ -251,9 +252,8 @@ Public Class ListOfValueForm
 
                 If .Cells("c_rowid").Value = Nothing Then
 
-                    .Cells("c_rowid").Value = _
+                    .Cells("c_rowid").Value =
                     sp_list(txtDisplayval.Text, txtLIC.Text, txtType.Text, txtParentLIC.Text, cmbStatus.Text, txtDescription.Text, z_datetime, user_row_id, z_datetime, 1, user_row_id)
-
                 Else
 
                 End If
@@ -323,7 +323,6 @@ Public Class ListOfValueForm
         If autcoListOfValType.Text.Trim.Length = 0 Then
 
             Button4_Click(Button4, New EventArgs)
-
         Else
 
             Button4_Click(btnSearchNow, New EventArgs)
@@ -361,7 +360,6 @@ Public Class ListOfValueForm
     Private Sub ListOfValueForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         'filllistofvalues()
 
-
         view_ID = VIEW_privilege("List of value", org_rowid)
 
         Dim formuserprivilege = position_view_table.Select("ViewID = " & view_ID)
@@ -371,7 +369,6 @@ Public Class ListOfValueForm
             btnNew.Visible = 0
             btnSave.Visible = 0
             btnDelete.Visible = 0
-
         Else
             For Each drow In formuserprivilege
                 If drow("ReadOnly").ToString = "Y" Then
@@ -484,7 +481,6 @@ Public Class ListOfValueForm
             If modcent = 0 Then
 
                 pagination -= 50
-
             Else
 
                 pagination -= modcent
@@ -506,7 +502,6 @@ Public Class ListOfValueForm
             If modcent = 0 Then
 
                 pagination += 50
-
             Else
 
                 pagination -= modcent
@@ -557,7 +552,6 @@ Public Class ListOfValueForm
         Static once As SByte = 0
 
         If once = 0 Then
-
         Else
 
             Try
@@ -565,7 +559,6 @@ Public Class ListOfValueForm
                 prev_rowindex = dgvlistofvaltype.CurrentRow.Index
 
                 prev_colindex = dgvlistofvaltype.CurrentCell.ColumnIndex
-
             Catch ex As Exception
 
                 prev_rowindex = -1
@@ -595,7 +588,6 @@ Public Class ListOfValueForm
             If autcoListOfValType.Text.Trim.Length = 0 Then
 
                 dt = n_SQLQueryToDatatable.ResultTable
-
             Else
 
                 n_SQLQueryToDatatable = New SQLQueryToDatatable("SELECT DISTINCT(`Type`) FROM listofval WHERE `Type` LIKE '%" & autcoListOfValType.Text & "%' LIMIT " & pagination & ", 50;")
@@ -603,7 +595,6 @@ Public Class ListOfValueForm
                 dt = n_SQLQueryToDatatable.ResultTable
 
             End If
-
         Else
 
             n_SQLQueryToDatatable = New SQLQueryToDatatable("SELECT DISTINCT(`Type`) FROM listofval LIMIT " & pagination & ", 50;")
@@ -655,7 +646,6 @@ Public Class ListOfValueForm
         If dgvlistofvaltype.RowCount <> 0 Then
 
             strcurrent_type = dgvlistofvaltype.CurrentRow.Cells("Column1").Value
-
         Else
 
             strcurrent_type = String.Empty
@@ -748,7 +738,6 @@ Public Class ListOfValueForm
         ElseIf e.Cancelled Then
 
             MessageBox.Show("Background work cancelled.")
-
         Else
 
         End If

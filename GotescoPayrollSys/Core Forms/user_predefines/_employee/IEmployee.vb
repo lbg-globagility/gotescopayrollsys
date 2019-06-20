@@ -1,5 +1,4 @@
-﻿
-Public Interface IEmployee
+﻿Public Interface IEmployee
     Property RowID As Integer?
     Property CreatedBy As Integer?
     Property Created As DateTime

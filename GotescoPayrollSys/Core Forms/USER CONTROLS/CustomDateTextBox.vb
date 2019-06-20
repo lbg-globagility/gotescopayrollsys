@@ -1,7 +1,4 @@
-﻿Imports System.Threading
-
-
-Public Class CustomDateTextBox
+﻿Public Class CustomDateTextBox
 
     Inherits CustomObject.TextBox
 
@@ -92,7 +89,7 @@ Public Class CustomDateTextBox
         Else
             Timer2.Stop()
         End If
-        
+
         Timer2.Enabled = agree
 
     End Sub
@@ -110,10 +107,8 @@ Public Class CustomDateTextBox
 
             Try
                 returnvalue = CDate(catchvalue).ToShortDateString
-
             Catch ex As Exception
                 returnvalue = Nothing
-
             Finally
 
                 If returnvalue = Nothing Then
@@ -123,7 +118,6 @@ Public Class CustomDateTextBox
                                  balloon_x,
                                  balloon_y,
                                  2980)
-
                 Else
 
                     MyBase.Text = returnvalue
@@ -131,7 +125,7 @@ Public Class CustomDateTextBox
                     tooltip.Hide(Me)
 
                 End If
-                
+
                 StartTimer(True)
 
             End Try

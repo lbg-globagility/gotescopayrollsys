@@ -26,7 +26,6 @@
 
             If dt.Rows.Count > 0 Then
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
-
             Else
                 sp_list(txtname.Text, txtname.Text, "Organization Type", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 OrganizationForm.fillorganizationtype()
@@ -35,13 +34,11 @@
                 Close()
             End If
 
-
         ElseIf lblName.Text.Trim = "Type" Then
             dt = getDataTableForSQL("Select * From ListOFVal where Type = 'Type' And DisplayValue = '" & txtname.Text & "'")
 
             If dt.Rows.Count > 0 Then
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
-
             Else
                 sp_list(txtname.Text, txtname.Text, "Type", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 OrganizationForm.filltype()
@@ -55,7 +52,6 @@
 
             If dt.Rows.Count > 0 Then
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
-
             Else
                 sp_list(txtname.Text, txtname.Text, "Status", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 OrganizationForm.fillstatus()
@@ -69,7 +65,6 @@
 
             If dt.Rows.Count > 0 Then
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
-
             Else
                 sp_list(txtname.Text, txtname.Text, "Salutation", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 OrganizationForm.fillpersonalstatus()
@@ -82,7 +77,6 @@
 
             If dt.Rows.Count > 0 Then
                 myBalloonWarn("Already Exist", "Duplicate Entry", txtname, , -65)
-
             Else
                 sp_list(txtname.Text, txtname.Text, "Deduction Schedule", "", "Yes", "", z_datetime, user_row_id, z_datetime, 1, user_row_id)
                 LoanScheduleForm.filldedsched()
@@ -91,7 +85,7 @@
                 Close()
             End If
         End If
-      
 
     End Sub
+
 End Class

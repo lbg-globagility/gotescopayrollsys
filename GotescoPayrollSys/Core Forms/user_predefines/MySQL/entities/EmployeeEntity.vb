@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
-Imports System.ComponentModel.DataAnnotations.Schema
 Imports System.ComponentModel.DataAnnotations
+Imports System.ComponentModel.DataAnnotations.Schema
 
 <Table("employeesimpleview")>
 Public Class EmployeeEntity

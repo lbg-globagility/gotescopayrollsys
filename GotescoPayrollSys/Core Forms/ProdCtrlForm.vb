@@ -1,5 +1,4 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
 
 Public Class ProdCtrlForm
 
@@ -27,23 +26,21 @@ Public Class ProdCtrlForm
 
         If ToolStripButton2.Enabled Then
 
-            Dim haschangestoDB = _
-                EXECQUER("SELECT EXISTS(SELECT" & _
-                         " RowID" & _
-                         " FROM product" & _
-                         " WHERE OrganizationID='" & org_rowid & "'" & _
-                         " AND `Category`='" & n_categname & "'" & _
-                         " AND (DATE_FORMAT(Created, '%Y-%m-%d') = CURDATE() OR DATE_FORMAT(LastUpd, '%Y-%m-%d') = CURDATE())" & _
+            Dim haschangestoDB =
+                EXECQUER("SELECT EXISTS(SELECT" &
+                         " RowID" &
+                         " FROM product" &
+                         " WHERE OrganizationID='" & org_rowid & "'" &
+                         " AND `Category`='" & n_categname & "'" &
+                         " AND (DATE_FORMAT(Created, '%Y-%m-%d') = CURDATE() OR DATE_FORMAT(LastUpd, '%Y-%m-%d') = CURDATE())" &
                          " LIMIT 1);")
 
             If haschangestoDB = 1 Then
                 DialogResult = Windows.Forms.DialogResult.OK
-
             Else
                 DialogResult = Windows.Forms.DialogResult.Cancel
 
             End If
-
         Else
             e.Cancel = True
 
@@ -57,10 +54,10 @@ Public Class ProdCtrlForm
 
     End Sub
 
-    Function INS_product(Optional prod_rowID As Object = Nothing, _
-                         Optional p_Name As Object = Nothing, _
-                         Optional p_PartNo As Object = Nothing, _
-                         Optional p_CategName As Object = Nothing, _
+    Function INS_product(Optional prod_rowID As Object = Nothing,
+                         Optional p_Name As Object = Nothing,
+                         Optional p_PartNo As Object = Nothing,
+                         Optional p_CategName As Object = Nothing,
                          Optional p_Status As Object = "Active",
                          Optional p_Strength As Object = "0") As Object
 
@@ -112,7 +109,6 @@ Public Class ProdCtrlForm
                 returnvalue = datrd(0)
 
             End With
-
         Catch ex As Exception
             MsgBox(ex.Message & " INSUPD_product")
             returnvalue = Nothing
@@ -143,7 +139,6 @@ Public Class ProdCtrlForm
 
         dgvproducts.EndEdit(True)
 
-
         For Each drow As DataGridViewRow In dgvproducts.Rows
 
             If drow.IsNewRow = False Then
@@ -156,7 +151,7 @@ Public Class ProdCtrlForm
                     datastatus = "0"
                 End If
 
-                Dim returnval = _
+                Dim returnval =
                 INS_product(drow.Cells("RowID").Value,
                             drow.Cells("PartNo").Value,
                             drow.Cells("PartNo").Value,
@@ -166,7 +161,6 @@ Public Class ProdCtrlForm
                 If drow.Cells("RowID").Value = Nothing Then
                     drow.Cells("RowID").Value = returnval
                 End If
-
             Else
 
                 Continue For
@@ -198,10 +192,10 @@ Public Class ProdCtrlForm
 
         Dim selectAllProduct As New DataTable
 
-        selectAllProduct = retAsDatTbl("SELECT p.*, IF(p.`Status` = '0', 'No', 'Yes') AS IStatus" & _
-                                       " FROM product p" & _
-                                       " INNER JOIN category c ON c.OrganizationID='" & org_rowid & "' AND CategoryName='" & n_categname & "'" & _
-                                       " WHERE p.OrganizationID='" & org_rowid & "'" & _
+        selectAllProduct = retAsDatTbl("SELECT p.*, IF(p.`Status` = '0', 'No', 'Yes') AS IStatus" &
+                                       " FROM product p" &
+                                       " INNER JOIN category c ON c.OrganizationID='" & org_rowid & "' AND CategoryName='" & n_categname & "'" &
+                                       " WHERE p.OrganizationID='" & org_rowid & "'" &
                                        " AND p.CategoryID=c.RowID;")
 
         'dgvproducts.Rows.Clear()
@@ -292,7 +286,6 @@ Public Class ProdCtrlForm
             Close()
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

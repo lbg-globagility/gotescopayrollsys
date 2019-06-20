@@ -1,14 +1,12 @@
-﻿Imports MySql.Data.MySqlClient
-Imports MySql.Data
+﻿'Imports Microsoft.Office.Interop.Excel
+Imports System.Data.OleDb
+Imports System.IO
 Imports CrystalDecisions.CrystalReports.Engine
 Imports CrystalDecisions.Shared
-Imports System.IO
-
-Imports Excel = Microsoft.Office.Interop.Excel
-'Imports Microsoft.Office.Interop.Excel
-Imports System.Data.OleDb
-Imports Microsoft.Win32
 Imports log4net
+Imports Microsoft.Win32
+Imports MySql.Data.MySqlClient
+Imports Excel = Microsoft.Office.Interop.Excel
 
 Module myModule
     Public _logger As ILog = LogManager.GetLogger("LoggerWork")
@@ -109,13 +107,11 @@ Module myModule
             conn.ConnectionString = mysql_conn_text
 
             hasERR = 0
-
         Catch ex As Exception
 
             hasERR = 1
 
             MsgBox(ex.Message & " ERR_NO 77-10 : dbconn", MsgBoxStyle.Critical, "Server Connection")
-
         Finally
             'REG_EDIT_DBCONNECTION()
 
@@ -141,6 +137,7 @@ Module myModule
 
         'Return MsgBox(mystr, , "Unexpected Message")
     End Function
+
     Sub filltable(ByVal datgrid As Object,
                          Optional _quer As String = Nothing,
                          Optional Params As Array = Nothing,
@@ -240,7 +237,7 @@ Module myModule
                             dgvlistcatcher.Rows(r).Cells(c).Value = dr_val
 
                             If dgvlistcatcher.Rows(r).Cells(c).Visible Then
-                                xtraCatcher.Add(dr_val) 'dgvlistcatcher.Rows(r).Cells(c).ColumnIndex.ToString & "@" & 
+                                xtraCatcher.Add(dr_val) 'dgvlistcatcher.Rows(r).Cells(c).ColumnIndex.ToString & "@" &
                             End If
                         Next
                     Loop
@@ -251,13 +248,12 @@ Module myModule
                             dgvlistcatcher.Rows(r).Cells(c).Value = dr(c)
 
                             If dgvlistcatcher.Rows(r).Cells(c).Visible Then
-                                xtraCatcher.Add(dr(c)) 'dgvlistcatcher.Rows(r).Cells(c).ColumnIndex.ToString & "@" & 
+                                xtraCatcher.Add(dr(c)) 'dgvlistcatcher.Rows(r).Cells(c).ColumnIndex.ToString & "@" &
                             End If
                         Next
                     Loop
                 End If
             End If
-
 
             dr.Close()
             hasERR = 0
@@ -319,6 +315,7 @@ Module myModule
 
         Return theObj
     End Function
+
     Sub enlistTheLists(ByVal sqlcmd As String, ByVal listcatcher As AutoCompleteStringCollection, Optional isClear As SByte = Nothing)
         Dim dr As MySqlDataReader
         Try
@@ -346,6 +343,7 @@ Module myModule
         End Try
         conn.Close()
     End Sub
+
     Sub enlistToCboBox(ByVal sqlcmd As String, ByVal listcatcher As ComboBox, Optional isClear As SByte = Nothing)
         Dim dr As MySqlDataReader
         Try
@@ -392,6 +390,7 @@ Module myModule
             TrapDecimKey = True
         End If
     End Function
+
     Public Function TrapNumKey(ByVal KCode As String) As Boolean    '//textbox keypress event insert number ONLY
         If (KCode >= 48 And KCode <= 57) Or KCode = 8 Then
             TrapNumKey = False
@@ -441,6 +440,7 @@ Module myModule
             crParamFldDeftn.ApplyCurrentValues(crParamrVals)
         End If
     End Sub
+
     Sub rptDefntn(obj As Object,
                   Optional nemofRptDefntn As String = Nothing,
                   Optional rptdocu As ReportDocument = Nothing)
@@ -476,6 +476,7 @@ Module myModule
 
         AddHandler txtlngth.TextChanged, AddressOf qty_TextChanged
     End Sub
+
     Sub qty_TextChanged(sender As Object, e As EventArgs)
         Dim txtlngth As New TextBox
         txtlngth = DirectCast(sender, TextBox)
@@ -493,6 +494,7 @@ Module myModule
             RemoveHandler txtlngth.TextChanged, AddressOf qty_TextChanged
         End Try
     End Sub
+
     Sub rmks_KeyPress(ByVal sender As Object, ByVal e As KeyPressEventArgs)
         Dim txtlngth As New TextBox
         txtlngth = DirectCast(sender, TextBox)
@@ -572,8 +574,7 @@ Module myModule
 
                 ''ee.Graphics.DrawRectangle(_myPen, myTabRect)
 
-
-                'Dim myCustRectBot = New Rectangle(x, ee.Bounds.Y, TabCntrl.Width - x, ee.Bounds.Height) 'TabCntrl.Width 
+                'Dim myCustRectBot = New Rectangle(x, ee.Bounds.Y, TabCntrl.Width - x, ee.Bounds.Height) 'TabCntrl.Width
 
                 ''ee.Graphics.DrawRectangle(custPen, myCustRect)
 
@@ -640,6 +641,7 @@ Module myModule
     End Sub
 
     Public infohint As ToolTip
+
     Public Sub InfoBalloon(Optional ToolTipStringContent As String = Nothing, Optional ToolTipStringTitle As String = Nothing, Optional objct As System.Windows.Forms.IWin32Window = Nothing, Optional x As Integer = 0, Optional y As Integer = 0, Optional dispo As SByte = 0, Optional duration As Integer = 3000)
         Try
             If dispo = 1 Then
@@ -715,6 +717,7 @@ Module myModule
             'MsgBox(ex.Message & " ERR_NO 77-10 : myEllipseButton")
         End Try
     End Sub
+
     Sub myAutoChk(ByVal dgv As DataGridView, ByVal colName As String, ByVal chkbx As CheckBox)
         Try
             Dim rect As Rectangle = dgv.GetCellDisplayRectangle(dgv.Rows(0).Cells(colName).ColumnIndex, dgv.Rows(0).Cells(colName).RowIndex, True)
@@ -727,6 +730,7 @@ Module myModule
             MsgBox(ex.Message & " ERR_NO 77-10 : myAutoChk")
         End Try
     End Sub
+
     Sub previewImage(ByVal colName As String, ByVal dgv As DataGridView, ByVal pb As PictureBox)
         Try
             For Each r As DataRow In prodImage.Rows
@@ -749,6 +753,7 @@ Module myModule
             'MsgBox(getErrExcptn(ex) & " myModule")
         End Try
     End Sub
+
     Public Function ConvByteToImage(ByVal ImgByte As Byte()) As Image
         Try
             Dim stream As System.IO.MemoryStream
@@ -762,6 +767,7 @@ Module myModule
             Return Nothing
         End Try
     End Function
+
     Public tsb_shmabut As New ToolStripButton
 
     Public Function AdjustComboBoxWidth(ByVal sender As Object, ByVal e As EventArgs)
@@ -831,6 +837,7 @@ Module myModule
     Dim dgvleft As New DataGridView
 
     Dim formFunctn, cmdSearch, s_query As String
+
     Public Function myAutoComp(ByVal dgv As DataGridView) As AutoCompleteStringCollection
         'If simpleSearchAutoComp.Count >= 1 Then
         '    simpleSearchAutoComp.Clear()
@@ -855,7 +862,6 @@ Module myModule
             Next
 
             Return paramAutoComp
-
         Else
             Return Nothing
         End If
@@ -1007,7 +1013,6 @@ Module myModule
                                     " AND ac.AccountType='Supplier'" &
                                     " OR ac.LastUpd LIKE '" & .Text & "'" &
                                     " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
-
                         Else
 
                             Dim theDate As Date = Date.Parse(.Text)
@@ -1033,7 +1038,6 @@ Module myModule
                                 fillDGV(s_query & " r.CreatedBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
                                         " OR r.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
                                         " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
-
                             Else
 
                                 fillDGV(s_query & " o.ContactID=(SELECT RowID FROM contact WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
@@ -1041,14 +1045,12 @@ Module myModule
                                         " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                             End If
-
                         Else 'dito 'True' nga na galing sa user table
                             If formFunctn = "Repairs" Then
 
                                 fillDGV(s_query & " CONCAT(u.LastName ,',',u.FirstName) = '" & .Text & "'" &
                                         " OR ac.LastUpdBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
                                         "' AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
-
                             Else
 
                                 fillDGV(s_query & " o.CreatedBy = (SELECT RowID FROM user WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
@@ -1070,7 +1072,6 @@ Module myModule
 
                             fillDGV(s_query & " CONCAT(c.LastName ,', ',c.FirstName) = '" & Trim(.Text) &
                                     "' AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
-
                         Else
 
                             fillDGV(s_query & " o.ContactID=(SELECT RowID FROM contact WHERE CONCAT(LastName,', ',FirstName) = '" & .Text & "')" &
@@ -1087,7 +1088,6 @@ Module myModule
 
                             fillDGV(s_query & " r.InventoryLocationID=(SELECT RowID FROM inventorylocation WHERE Name = '" & .Text & "' AND Status='Active' AND Type='Main')" &
                                     " AND r.OrganizationID=" & org_rowid & " GROUP BY r.RepairNo ORDER BY r.RepairNo DESC", dgvleft)
-
                         Else
 
                             'AND Type!='Main'
@@ -1096,7 +1096,6 @@ Module myModule
                                     " AND o.OrganizationID=" & org_rowid & " ORDER BY CAST(o.OrderNumber AS INT) DESC", dgvleft, 1)
 
                         End If
-
                     Else 'order Status
 
                         If formFunctn = "Repairs" Then
@@ -1111,7 +1110,6 @@ Module myModule
 
                                 fillDGV(s_query & " ac.EmailAddress = '" & .Text & "'" &
                                         " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
-
                             Else
                                 'kung Address ba?
                                 'CONCAT(COALESCE(StreetAddress1,''),', ',COALESCE(StreetAddress2,''),', ',COALESCE(Barangay,''),', ',COALESCE(CityTown,''),', ',COALESCE(State,''),', ',COALESCE(Country,''),', ',COALESCE(ZipCode,''))
@@ -1120,7 +1118,6 @@ Module myModule
                                     " AND ac.OrganizationID='" & org_rowid & "' AND ac.AccountType='Supplier' ORDER BY ac.CompanyName ASC", dgvleft)
 
                             End If
-
                         Else
 
                             fillDGV(s_query & " o.`Status` = '" & Trim(.Text) &
@@ -1386,7 +1383,6 @@ Module myModule
 
     '        command.Connection.Open()
 
-
     '        Dim adapter As MySqlDataAdapter = New MySqlDataAdapter(command)
     '        adapter.Fill(DataReturn)
     '        command.Connection.Close()
@@ -1400,6 +1396,7 @@ Module myModule
     'End Function
 
     Dim dgvtargetforExport As DataGridView
+
     Sub callExcelExportBtn(Optional tlstrp As ToolStrip = Nothing, Optional dgv As DataGridView = Nothing, Optional grupby As String = Nothing)
 
         tsbtnExportToExcel.Name = "tsbtnExportToExcel"
@@ -1450,7 +1447,6 @@ Module myModule
                              "," & If(OrderBy = Nothing, "NULL", OrderBy) &
                              "," & CreatedBy &
                              ");")
-
 
     End Sub
 
@@ -1630,6 +1626,7 @@ Module myModule
 
         Return getpaysocialsecurity
     End Function
+
     Function INS_employeedepen(Optional Salutation As Object = Nothing, Optional FirstName As Object = Nothing,
                                Optional MiddleName As Object = Nothing, Optional LastName As Object = Nothing,
                                Optional Surname As Object = Nothing, Optional ParentEmployeeID As Object = Nothing,
@@ -1705,12 +1702,12 @@ Module myModule
 
         Return getemployeedepen
     End Function
+
     Public pshRowID As String
 
     Sub UnChk(ByVal chkbx As CheckBox)
         chkbx.Checked = False 'If(chkbx.Checked, False, True)
     End Sub
-
 
     'Dim collofObj(Byte.MaxValue) As Object
     'Dim i As Byte = 0
@@ -1749,7 +1746,8 @@ Module myModule
         Return _mystr
 
     End Function
-    Public Function INSGet_View(ByVal ViewName As String) As String '                             ' & orgztnID 
+
+    Public Function INSGet_View(ByVal ViewName As String) As String '                             ' & orgztnID
         Dim _str = EXECQUER("INSERT INTO view (ViewName,OrganizationID) VALUES('" & ViewName & "',1" &
                                             ");SELECT RowID FROM view WHERE ViewName='" & ViewName &
                                                 "' AND OrganizationID='" & org_rowid & "' LIMIT 1;") '" & orgztnID & "
@@ -1774,7 +1772,6 @@ Module myModule
         Return _str
 
     End Function
-
 
     '=========================================my ERROR NUMBER=====================================
     'MsgBox(getErrExcptn(ex, Me.Name), , "Unexpected Message")
@@ -1826,6 +1823,7 @@ Module myModule
         ''Application.StartupPath = C:\Users\GLOBAL-D\Desktop\Ikhea Lights - Updated System\IkheaLightingInc\bin\x86\Release
         'File.AppendAllText(Application.StartupPath & "\ErrLog.txt", noww & " → " & s & Environment.NewLine)
     End Sub
+
     Private Sub releaseObject(ByVal obj As Object)
         Try
             System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
@@ -1838,8 +1836,10 @@ Module myModule
             GC.Collect()
         End Try
     End Sub
+
     Dim cnString As String = "Provider=Microsoft.Jet.OLEDB.4.0;Persist Security Info=False;Data Source=" & Application.StartupPath & "\dat.mdb"
     Dim dafile As OleDbDataAdapter
+
     Sub fileMaker(ByVal id As String)
         Try
             Static x As SByte = 0
@@ -1911,8 +1911,8 @@ Module myModule
 
                 .Parameters.AddWithValue("cat_RowID", If(cat_RowID = Nothing, DBNull.Value, cat_RowID))
                 .Parameters.AddWithValue("cat_CategoryName", If(cat_CategoryName = Nothing, DBNull.Value, cat_CategoryName))
-                .Parameters.AddWithValue("cat_OrganizationID", org_rowid) 'orgztnID 
-                .Parameters.AddWithValue("cat_CatalogID", If(cat_CatalogID = Nothing, DBNull.Value, cat_CatalogID)) 'orgztnID 
+                .Parameters.AddWithValue("cat_OrganizationID", org_rowid) 'orgztnID
+                .Parameters.AddWithValue("cat_CatalogID", If(cat_CatalogID = Nothing, DBNull.Value, cat_CatalogID)) 'orgztnID
 
                 .Parameters("cat_ID").Direction = ParameterDirection.ReturnValue
                 Dim datRead As MySqlDataReader
@@ -2011,8 +2011,6 @@ Module myModule
                         DGVCatcher.PerformLayout()
                     End If
                 End If
-
-
 
             End With
             hasERR = 0
@@ -2150,6 +2148,7 @@ Module myModule
     End Function
 
 #Region "Reminders"
+
     '**********need to know**********
     '1.) User
     '   - RowID
@@ -2160,7 +2159,7 @@ Module myModule
     '   - RowID
     '   - Organization Name
 
-    '3.) Employee TabControl - Name 
+    '3.) Employee TabControl - Name
 
     '4.) how to call INSERT Row employeesalary
 
@@ -2262,7 +2261,6 @@ Module myModule
         Catch ex As Exception
             hasERR = 1
             MsgBox(getErrExcptn(ex, "myModule"), MsgBoxStyle.Critical)
-
         Finally
             da.Dispose()
             conn.Close()
@@ -2322,7 +2320,6 @@ Module myModule
             MsgBox(getErrExcptn(ex, ProcedureName), MsgBoxStyle.Critical)
 
             returnvalue = Nothing
-
         Finally
 
             mysqlda.Dispose()
@@ -2332,7 +2329,6 @@ Module myModule
         Return returnvalue
 
     End Function
-
 
     Function getWorkBookAsDataSet(ByVal opfiledir As String,
                              Optional FormName As String = "") As Object
@@ -2365,7 +2361,6 @@ Module myModule
             If objConn.State = ConnectionState.Closed Then
 
                 Console.Write("Connection cannot be opened")
-
             Else
 
                 Console.Write("Welcome")
@@ -2375,7 +2370,6 @@ Module myModule
             'Dim datasheet As DataTable = GetSchemaTable(StrConn)
 
             'returnvalue = datasheet
-
 
             Dim schemaTable As DataTable =
                 objConn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables,
@@ -2418,7 +2412,6 @@ Module myModule
             returnvalue = Nothing
 
             MsgBox(getErrExcptn(ex, FormName), MsgBoxStyle.Critical)
-
         Finally
 
             DA.Dispose()
@@ -2429,7 +2422,6 @@ Module myModule
         Return returnvalue
 
     End Function
-
 
     Public Function GetSchemaTable(ByVal connectionString As String) _
         As DataTable
@@ -2494,11 +2486,9 @@ Module myModule
                     'Next
 
                 Next
-
             Catch ex As Exception
 
                 MsgBox(getErrExcptn(ex, "myModule"))
-
             Finally
 
                 dgv.PerformLayout()
@@ -2529,18 +2519,15 @@ Module myModule
             returnvalue = True
 
             objObject.Copy()
-
         Else
 
             returnvalue = False
-
 
         End If
 
         Return returnvalue
 
     End Function
-
 
     Function GetDatatable(Query As String) As DataTable
         Dim dt As New DataTable
@@ -2580,7 +2567,6 @@ Module myModule
                     new_listofStr.Add(ParamString)
 
                 End If
-
             Else
 
                 For combicount = 2 To 5
@@ -2600,7 +2586,6 @@ Module myModule
                         End If
 
                         Exit For
-
                     Else
 
                         Dim splitDispName = Split(ParamString, " ")
@@ -2669,7 +2654,6 @@ Module myModule
                 Next
 
             End If
-
         Catch ex As Exception
 
             MsgBox(getErrExcptn(ex, "myModule"))
@@ -2701,7 +2685,6 @@ Module myModule
             regKey.SetValue("user id", "root")
             regKey.SetValue("password", "globagility")
             regKey.SetValue("database", "metrotilespayroll")
-
         Else
 
             ver = regKey.GetValue("server") & vbNewLine &
@@ -2743,7 +2726,6 @@ Module myModule
             End If
 
             returnvalue = ParamDate.Year & "-" & strmonth & "-" & strday
-
         Catch ex As Exception
             returnvalue = Nothing
         End Try

@@ -13,9 +13,9 @@
 
             Dim istaxab = If(chktaxab.Checked, "1", "0")
 
-            Dim new_ID = EmployeeForm.INS_product(Trim(TextBox1.Text), _
-                             Trim(TextBox1.Text), _
-                             "Bonus", _
+            Dim new_ID = EmployeeForm.INS_product(Trim(TextBox1.Text),
+                             Trim(TextBox1.Text),
+                             "Bonus",
                              istaxab)
 
             EmployeeForm.cbobontype.Items.Add(Trim(TextBox1.Text))
@@ -40,7 +40,6 @@
             Button2_Click(Button2, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

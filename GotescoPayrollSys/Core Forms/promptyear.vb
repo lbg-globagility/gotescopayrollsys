@@ -1,5 +1,4 @@
-﻿
-Public Class promptyear
+﻿Public Class promptyear
 
     Protected Overrides Sub OnLoad(e As EventArgs)
 
@@ -28,7 +27,6 @@ Public Class promptyear
 
     End Property
 
-
     Private Sub promptyear_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
     End Sub
@@ -56,7 +54,6 @@ Public Class promptyear
             Button2_Click(Button2, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

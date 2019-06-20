@@ -1,8 +1,4 @@
-﻿Imports System.Data.SqlClient
-Imports MySql.Data.MySqlClient
-Imports System.Configuration
-Imports System.Data
-Imports System.IO
+﻿Imports MySql.Data.MySqlClient
 
 Module mdlStoredProcedure
 
@@ -10,22 +6,22 @@ Module mdlStoredProcedure
 
     Public connection As MySqlConnection = New MySqlConnection(connectionString)
 
-    Public Function sp_employeedisciplinaryaction(ByVal Created As DateTime, _
-                                 ByVal CreatedBy As Integer, _
-                                 ByVal LastUpD As DateTime, _
-                                 ByVal OrganizationID As Integer, _
-                                 ByVal lastupdby As Integer, _
-                                 ByVal action As String, _
-                                 ByVal comments As String, _
-                                 ByVal FindingDec As String, _
-                                 ByVal FindingID As Integer, _
-                                 ByVal EmpID As Integer, _
-                                 ByVal DateFrom As Date, _
-                                 ByVal DateTo As Date, _
+    Public Function sp_employeedisciplinaryaction(ByVal Created As DateTime,
+                                 ByVal CreatedBy As Integer,
+                                 ByVal LastUpD As DateTime,
+                                 ByVal OrganizationID As Integer,
+                                 ByVal lastupdby As Integer,
+                                 ByVal action As String,
+                                 ByVal comments As String,
+                                 ByVal FindingDec As String,
+                                 ByVal FindingID As Integer,
+                                 ByVal EmpID As Integer,
+                                 ByVal DateFrom As Date,
+                                 ByVal DateTo As Date,
                                  Optional Penalty As Object = Nothing)
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("sp_employeedisciplinaryaction", connection)
         With SQL_command
             Try
@@ -55,17 +51,17 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function sp_finding(ByVal Created As DateTime, _
-                                  ByVal CreatedBy As Integer, _
-                                  ByVal LastUpD As DateTime, _
-                                  ByVal OrganizationID As Integer, _
-                                  ByVal lastupdby As Integer, _
-                                  ByVal PartNo As String, _
-                                  ByVal Description As String, _
+    Public Function sp_finding(ByVal Created As DateTime,
+                                  ByVal CreatedBy As Integer,
+                                  ByVal LastUpD As DateTime,
+                                  ByVal OrganizationID As Integer,
+                                  ByVal lastupdby As Integer,
+                                  ByVal PartNo As String,
+                                  ByVal Description As String,
                                   Optional CategoryID As String = Nothing)
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("sp_finding", connection)
         With SQL_command
             Try
@@ -91,22 +87,22 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function sp_promotion(ByVal Created As DateTime, _
-                                      ByVal CreatedBy As Integer, _
-                                      ByVal LastUpD As DateTime, _
-                                      ByVal OrganizationID As Integer, _
-                                      ByVal lastupdby As Integer, _
-                                      ByVal EffectiveDate As Date, _
-                                      ByVal postfrom As String, _
-                                      ByVal postto As String, _
-                                      ByVal empsalaryid As Object, _
-                                      ByVal flg As String, _
-                                      ByVal empid As Integer, _
+    Public Function sp_promotion(ByVal Created As DateTime,
+                                      ByVal CreatedBy As Integer,
+                                      ByVal LastUpD As DateTime,
+                                      ByVal OrganizationID As Integer,
+                                      ByVal lastupdby As Integer,
+                                      ByVal EffectiveDate As Date,
+                                      ByVal postfrom As String,
+                                      ByVal postto As String,
+                                      ByVal empsalaryid As Object,
+                                      ByVal flg As String,
+                                      ByVal empid As Integer,
                                       Optional I_Reason As String = Nothing,
                                       Optional I_NewAmount As Object = Nothing)
         '
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("sp_emppromotion", connection)
         With SQL_command
             Try
@@ -138,20 +134,20 @@ Module mdlStoredProcedure
 
     End Function
 
-    Public Function sp_employeeshiftentry(ByVal Created As DateTime, _
-                                      ByVal CreatedBy As Integer, _
-                                      ByVal LastUpD As DateTime, _
-                                      ByVal OrganizationID As Integer, _
-                                      ByVal lastupdby As Integer, _
-                                      ByVal Effectivefrom As Date, _
-                                      ByVal Effectiveto As Date, _
-                                      ByVal EmployeeID As Integer, _
-                                      ByVal ShiftID As Integer, _
-                                      ByVal nightshift As String, _
+    Public Function sp_employeeshiftentry(ByVal Created As DateTime,
+                                      ByVal CreatedBy As Integer,
+                                      ByVal LastUpD As DateTime,
+                                      ByVal OrganizationID As Integer,
+                                      ByVal lastupdby As Integer,
+                                      ByVal Effectivefrom As Date,
+                                      ByVal Effectiveto As Date,
+                                      ByVal EmployeeID As Integer,
+                                      ByVal ShiftID As Integer,
+                                      ByVal nightshift As String,
                                       Optional restday As String = Nothing)
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("sp_employeeshiftentry", connection)
         With SQL_command
             Try
@@ -180,19 +176,19 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function sp_shift(ByVal Created As DateTime, _
-                                      ByVal CreatedBy As Integer, _
-                                      ByVal LastUpD As DateTime, _
-                                      ByVal OrganizationID As Integer, _
-                                      ByVal lastupdby As Integer, _
-                                      ByVal timefrom As DateTime, _
+    Public Function sp_shift(ByVal Created As DateTime,
+                                      ByVal CreatedBy As Integer,
+                                      ByVal LastUpD As DateTime,
+                                      ByVal OrganizationID As Integer,
+                                      ByVal lastupdby As Integer,
+                                      ByVal timefrom As DateTime,
                                       ByVal timeto As DateTime,
                                       Optional divisor_to_dailyrate As Object = Nothing,
                                       Optional LunchTimeFrom As Object = Nothing,
                                       Optional LunchTimeTo As Object = Nothing)
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("sp_Shift", connection)
         With SQL_command
             Try
@@ -220,21 +216,21 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function sp_listupd(ByVal RowID As Integer, _
-                                       ByVal DisplayValue As String, _
-                                       ByVal LIC As String, _
-                                       ByVal Type As String, _
-                                       ByVal ParentLIC As String, _
-                                       ByVal Active As String, _
-                                       ByVal Description As String, _
-                                       ByVal Created As DateTime, _
-                                       ByVal CreatedBy As Integer, _
-                                       ByVal LastUpD As DateTime, _
-                                       ByVal orderby As Integer, _
+    Public Function sp_listupd(ByVal RowID As Integer,
+                                       ByVal DisplayValue As String,
+                                       ByVal LIC As String,
+                                       ByVal Type As String,
+                                       ByVal ParentLIC As String,
+                                       ByVal Active As String,
+                                       ByVal Description As String,
+                                       ByVal Created As DateTime,
+                                       ByVal CreatedBy As Integer,
+                                       ByVal LastUpD As DateTime,
+                                       ByVal orderby As Integer,
                                        ByVal lastupdby As Integer)
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_ListofValue", connection)
         With SQL_command
             Try
@@ -262,23 +258,23 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_EducBackGround(ByVal Created As DateTime, _
-                            ByVal CreatedBy As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdBy As Integer, _
-                            ByVal OrgID As Integer, _
-                            ByVal EmpID As Integer, _
-                            ByVal datefrom As String, _
-                            ByVal dateto As String, _
-                            ByVal course As String, _
-                            ByVal school As String, _
-                            ByVal Degree As String, _
-                            ByVal minor As String, _
-                            ByVal EducType As String, _
+    Public Function SP_EducBackGround(ByVal Created As DateTime,
+                            ByVal CreatedBy As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdBy As Integer,
+                            ByVal OrgID As Integer,
+                            ByVal EmpID As Integer,
+                            ByVal datefrom As String,
+                            ByVal dateto As String,
+                            ByVal course As String,
+                            ByVal school As String,
+                            ByVal Degree As String,
+                            ByVal minor As String,
+                            ByVal EducType As String,
                             ByVal Remarks As String) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_employeeeducation", connection)
         With SQL_command
             Try
@@ -311,18 +307,18 @@ Module mdlStoredProcedure
 
     'SP_employeeeducationUpdate
 
-    Public Function SP_employeeeducationUpdate(ByVal datefrom As String, _
-                          ByVal dateto As String, _
-                          ByVal course As String, _
-                          ByVal school As String, _
-                          ByVal Degree As String, _
-                          ByVal minor As String, _
-                          ByVal EducType As String, _
-                          ByVal Remarks As String, _
+    Public Function SP_employeeeducationUpdate(ByVal datefrom As String,
+                          ByVal dateto As String,
+                          ByVal course As String,
+                          ByVal school As String,
+                          ByVal Degree As String,
+                          ByVal minor As String,
+                          ByVal EducType As String,
+                          ByVal Remarks As String,
                           ByVal RowID As Integer) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_employeeeducationUpdate", connection)
         With SQL_command
             Try
@@ -348,20 +344,20 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function I_PositionViewproc(ByVal position As Integer, _
-                                   ByVal viewid As Integer, _
-                                   ByVal create As String, _
-                                   ByVal orgid As Integer, _
-                                   ByVal read As String, _
-                                   ByVal update As String, _
-                                   ByVal delete As String, _
-                                   ByVal Created As DateTime, _
-                                   ByVal CreatedBy As Integer, _
-                                   ByVal LastUpD As DateTime, _
+    Public Function I_PositionViewproc(ByVal position As Integer,
+                                   ByVal viewid As Integer,
+                                   ByVal create As String,
+                                   ByVal orgid As Integer,
+                                   ByVal read As String,
+                                   ByVal update As String,
+                                   ByVal delete As String,
+                                   ByVal Created As DateTime,
+                                   ByVal CreatedBy As Integer,
+                                   ByVal LastUpD As DateTime,
                                    ByVal lastupdby As Integer) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_PositionView", connection)
         With SQL_command
             Try
@@ -388,20 +384,20 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function I_AuditTrail(ByVal Created As DateTime, _
-                                ByVal CreatedBy As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdBy As Integer, _
-                                ByVal OrgID As Integer, _
-                                ByVal ViewID As Integer, _
-                                ByVal FieldChanged As String, _
-                                ByVal ChangedRowID As Integer, _
-                                ByVal OldValue As String, _
-                                ByVal NewValue As String, _
+    Public Function I_AuditTrail(ByVal Created As DateTime,
+                                ByVal CreatedBy As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdBy As Integer,
+                                ByVal OrgID As Integer,
+                                ByVal ViewID As Integer,
+                                ByVal FieldChanged As String,
+                                ByVal ChangedRowID As Integer,
+                                ByVal OldValue As String,
+                                ByVal NewValue As String,
                                 ByVal ActionPerformed As String) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_audittrail", connection)
         With SQL_command
             Try
@@ -430,20 +426,20 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function I_address(ByVal I_StreetAddress1 As String, _
-      ByVal I_StreetAddress2 As String, _
-      ByVal I_CityTown As String, _
-      ByVal I_Country As String, _
-      ByVal I_State As String, _
-      ByVal I_CreatedBy As Integer, _
-      ByVal I_LastUpdBy As Integer, _
-      ByVal I_Created As DateTime, _
-      ByVal I_LastUpd As DateTime, _
-      ByVal I_ZipCode As String, _
+    Public Function I_address(ByVal I_StreetAddress1 As String,
+      ByVal I_StreetAddress2 As String,
+      ByVal I_CityTown As String,
+      ByVal I_Country As String,
+      ByVal I_State As String,
+      ByVal I_CreatedBy As Integer,
+      ByVal I_LastUpdBy As Integer,
+      ByVal I_Created As DateTime,
+      ByVal I_LastUpd As DateTime,
+      ByVal I_ZipCode As String,
       ByVal I_Barangay As String) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_address", connection)
         With SQL_command
             Try
@@ -472,20 +468,20 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function sp_list(ByVal DisplayValue As String, _
-                                           ByVal LIC As String, _
-                                           ByVal Type As String, _
-                                           ByVal ParentLIC As String, _
-                                           ByVal Active As String, _
-                                           ByVal Description As String, _
-                                          ByVal Created As DateTime, _
-                                          ByVal CreatedBy As String, _
-                                          ByVal LastUpD As DateTime, _
-                                          ByVal orderby As Integer, _
+    Public Function sp_list(ByVal DisplayValue As String,
+                                           ByVal LIC As String,
+                                           ByVal Type As String,
+                                           ByVal ParentLIC As String,
+                                           ByVal Active As String,
+                                           ByVal Description As String,
+                                          ByVal Created As DateTime,
+                                          ByVal CreatedBy As String,
+                                          ByVal LastUpD As DateTime,
+                                          ByVal orderby As Integer,
                                           ByVal lastupdby As String) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_ListValue", connection)
         With SQL_command
             Try
@@ -512,15 +508,15 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_payfrequency(ByVal Createdby As Integer, _
-          ByVal LastUpdby As Integer, _
-          ByVal Created As DateTime, _
-          ByVal LastUpd As DateTime, _
-          ByVal paytype As String, _
+    Public Function SP_payfrequency(ByVal Createdby As Integer,
+          ByVal LastUpdby As Integer,
+          ByVal Created As DateTime,
+          ByVal LastUpd As DateTime,
+          ByVal paytype As String,
           ByVal paystart As Date) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_payfrequency", connection)
         With SQL_command
             Try
@@ -544,16 +540,16 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_FilingStatus(ByVal Createdby As Integer, _
-      ByVal LastUpdby As Integer, _
-      ByVal Created As DateTime, _
-      ByVal LastUpd As DateTime, _
-      ByVal filingstatus As String, _
-      ByVal maritalstatus As String, _
+    Public Function SP_FilingStatus(ByVal Createdby As Integer,
+      ByVal LastUpdby As Integer,
+      ByVal Created As DateTime,
+      ByVal LastUpd As DateTime,
+      ByVal filingstatus As String,
+      ByVal maritalstatus As String,
       ByVal dependent As Integer) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_filingstatus", connection)
         With SQL_command
             Try
@@ -578,24 +574,24 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_EmployeeSalary(ByVal Createdby As Integer, _
-                                      ByVal LastUpdby As Integer, _
-                                      ByVal Created As DateTime, _
-                                      ByVal LastUpd As DateTime, _
-                                      ByVal filingstatus As Integer, _
-                                      ByVal maritalstatus As String, _
-                                      ByVal dependent As Integer, _
-                                      ByVal orgid As Integer, _
-                                      ByVal empid As Integer, _
-                                      ByVal sssid As Integer, _
-                                      ByVal philhealthid As Integer, _
-                                      ByVal hdmfid As Double, _
-                                      ByVal basicpay As Double, _
-                                      ByVal datefrom As Date, _
+    Public Function SP_EmployeeSalary(ByVal Createdby As Integer,
+                                      ByVal LastUpdby As Integer,
+                                      ByVal Created As DateTime,
+                                      ByVal LastUpd As DateTime,
+                                      ByVal filingstatus As Integer,
+                                      ByVal maritalstatus As String,
+                                      ByVal dependent As Integer,
+                                      ByVal orgid As Integer,
+                                      ByVal empid As Integer,
+                                      ByVal sssid As Integer,
+                                      ByVal philhealthid As Integer,
+                                      ByVal hdmfid As Double,
+                                      ByVal basicpay As Double,
+                                      ByVal datefrom As Date,
                                       ByVal dateto As Date) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_EmployeeSalary", connection)
         With SQL_command
             Try
@@ -644,28 +640,28 @@ Module mdlStoredProcedure
     '`DeductionPercentage` DECIMAL(10,2),
     '`NoOfPayPeriod` DECIMAL(10,2),
     '`Comments` VARCHAR(2000)
-    Public Function SP_LoadSchedule(ByVal Createdby As Integer, _
-                                  ByVal LastUpdby As Integer, _
-                                  ByVal Created As DateTime, _
-                                  ByVal LastUpd As DateTime, _
-                                  ByVal LoanNumber As String, _
-                                  ByVal DedEffectiveDateFrom As Date, _
-                                  ByVal DedEffectiveDateTo As Date, _
-                                  ByVal orgid As Integer, _
-                                  ByVal empid As Integer, _
-                                  ByVal TotalLoanAmount As Double, _
-                                  ByVal DeductionSchedule As String, _
-                                  ByVal TotalBalanceLeft As Double, _
-                                  ByVal DeductionAmount As Double, _
-                                  ByVal noofpayperiod As Double, _
-                                  ByVal Comments As String, _
-                                  ByVal Status As String, _
-                                  ByVal DeductionPercentage As Double, _
-                                  Optional LoanTypeID As String = Nothing, _
+    Public Function SP_LoadSchedule(ByVal Createdby As Integer,
+                                  ByVal LastUpdby As Integer,
+                                  ByVal Created As DateTime,
+                                  ByVal LastUpd As DateTime,
+                                  ByVal LoanNumber As String,
+                                  ByVal DedEffectiveDateFrom As Date,
+                                  ByVal DedEffectiveDateTo As Date,
+                                  ByVal orgid As Integer,
+                                  ByVal empid As Integer,
+                                  ByVal TotalLoanAmount As Double,
+                                  ByVal DeductionSchedule As String,
+                                  ByVal TotalBalanceLeft As Double,
+                                  ByVal DeductionAmount As Double,
+                                  ByVal noofpayperiod As Double,
+                                  ByVal Comments As String,
+                                  ByVal Status As String,
+                                  ByVal DeductionPercentage As Double,
+                                  Optional LoanTypeID As String = Nothing,
                                   Optional DeductionSched As String = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("sp_empschedule", connection)
         With SQL_command
             Try
@@ -701,24 +697,24 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_UpdateLoadSchedule(ByVal LastUpdby As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LoanNumber As String, _
-                              ByVal DedEffectiveDateFrom As Date, _
-                              ByVal DedEffectiveDateTo As Date, _
-                              ByVal TotalLoanAmount As Double, _
-                              ByVal DeductionSchedule As String, _
-                              ByVal DeductionAmount As Double, _
-                              ByVal noofpayperiod As Double, _
-                              ByVal Comments As String, _
-                              ByVal Status As String, _
-                              ByVal DeductionPercentage As Double, _
-                              ByVal rowid As Integer, _
-                                  Optional LoanTypeID As String = Nothing, _
+    Public Function SP_UpdateLoadSchedule(ByVal LastUpdby As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LoanNumber As String,
+                              ByVal DedEffectiveDateFrom As Date,
+                              ByVal DedEffectiveDateTo As Date,
+                              ByVal TotalLoanAmount As Double,
+                              ByVal DeductionSchedule As String,
+                              ByVal DeductionAmount As Double,
+                              ByVal noofpayperiod As Double,
+                              ByVal Comments As String,
+                              ByVal Status As String,
+                              ByVal DeductionPercentage As Double,
+                              ByVal rowid As Integer,
+                                  Optional LoanTypeID As String = Nothing,
                                   Optional DeductionSched As String = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("sp_updateemploan", connection)
         With SQL_command
             Try
@@ -750,41 +746,41 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_Organization(ByVal Name As String, _
-                                     ByVal PrimaryAddressID As Integer, _
-                                     ByVal PrimaryContactID As Integer, _
-                                     ByVal MainPhone As String, _
-                                     ByVal FaxNumber As String, _
-                                     ByVal EmailAddress As String, _
-                                     ByVal AltEmailAddress As String, _
-                                     ByVal AltPhone As String, _
-                                     ByVal URL As String, _
-                                     ByVal Created As DateTime, _
-                                     ByVal CreatedBy As Integer, _
-                                     ByVal LastUpd As DateTime, _
-                                     ByVal LastUpdBy As Integer, _
-                                     ByVal TINNumber As String, _
-                                     ByVal Tradename As String, _
-                                     ByVal orgType As String, _
-                                     Optional I_VacationLeaveDays As Object = Nothing, _
-                                     Optional I_SickLeaveDays As Object = Nothing, _
-                                     Optional I_MaternityLeaveDays As Object = Nothing, _
-                                     Optional I_OthersLeaveDays As Object = Nothing, _
-                                     Optional I_NightDifferentialTimeFrom As Object = Nothing, _
-                                     Optional I_NightDifferentialTimeTo As Object = Nothing, _
-                                     Optional I_NightShiftTimeFrom As Object = Nothing, _
-                                     Optional I_NightShiftTimeTo As Object = Nothing, _
-                                     Optional I_PayFrequencyID As Object = Nothing, _
-                                     Optional I_PhilhealthDeductionSchedule As Object = Nothing, _
-                                     Optional I_SSSDeductionSchedule As Object = Nothing, _
-                                     Optional I_PagIbigDeductionSchedule As Object = Nothing, _
-                                     Optional I_WorkDaysPerYear As Object = Nothing, _
-                                     Optional I_RDOCode As Object = Nothing, _
-                                     Optional I_ZIPCode As Object = Nothing, _
+    Public Function SP_Organization(ByVal Name As String,
+                                     ByVal PrimaryAddressID As Integer,
+                                     ByVal PrimaryContactID As Integer,
+                                     ByVal MainPhone As String,
+                                     ByVal FaxNumber As String,
+                                     ByVal EmailAddress As String,
+                                     ByVal AltEmailAddress As String,
+                                     ByVal AltPhone As String,
+                                     ByVal URL As String,
+                                     ByVal Created As DateTime,
+                                     ByVal CreatedBy As Integer,
+                                     ByVal LastUpd As DateTime,
+                                     ByVal LastUpdBy As Integer,
+                                     ByVal TINNumber As String,
+                                     ByVal Tradename As String,
+                                     ByVal orgType As String,
+                                     Optional I_VacationLeaveDays As Object = Nothing,
+                                     Optional I_SickLeaveDays As Object = Nothing,
+                                     Optional I_MaternityLeaveDays As Object = Nothing,
+                                     Optional I_OthersLeaveDays As Object = Nothing,
+                                     Optional I_NightDifferentialTimeFrom As Object = Nothing,
+                                     Optional I_NightDifferentialTimeTo As Object = Nothing,
+                                     Optional I_NightShiftTimeFrom As Object = Nothing,
+                                     Optional I_NightShiftTimeTo As Object = Nothing,
+                                     Optional I_PayFrequencyID As Object = Nothing,
+                                     Optional I_PhilhealthDeductionSchedule As Object = Nothing,
+                                     Optional I_SSSDeductionSchedule As Object = Nothing,
+                                     Optional I_PagIbigDeductionSchedule As Object = Nothing,
+                                     Optional I_WorkDaysPerYear As Object = Nothing,
+                                     Optional I_RDOCode As Object = Nothing,
+                                     Optional I_ZIPCode As Object = Nothing,
                                      Optional WithholdingDeductionSchedule As Object = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_Organization", connection)
         With SQL_command
             Try
@@ -841,40 +837,40 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_OrganizationUpdate(ByVal Name As String, _
-                                 ByVal PrimaryAddressID As Integer, _
-                                 ByVal PrimaryContactID As Object, _
-                                 ByVal MainPhone As String, _
-                                 ByVal FaxNumber As String, _
-                                 ByVal EmailAddress As String, _
-                                 ByVal AltEmailAddress As String, _
-                                 ByVal AltPhone As String, _
-                                 ByVal URL As String, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdBy As Integer, _
-                                 ByVal TINNumber As String, _
-                                 ByVal Tradename As String, _
-                                 ByVal orgType As String, _
-                                 ByVal RowID As Integer, _
-                                 Optional I_VacationLeaveDays As Object = Nothing, _
-                                 Optional I_SickLeaveDays As Object = Nothing, _
-                                 Optional I_MaternityLeaveDays As Object = Nothing, _
-                                 Optional I_OthersLeaveDays As Object = Nothing, _
-                                     Optional I_NightDifferentialTimeFrom As Object = Nothing, _
-                                     Optional I_NightDifferentialTimeTo As Object = Nothing, _
-                                     Optional I_NightShiftTimeFrom As Object = Nothing, _
-                                     Optional I_NightShiftTimeTo As Object = Nothing, _
-                                 Optional I_PayFrequencyID As Object = Nothing, _
-                                     Optional I_PhilhealthDeductionSchedule As Object = Nothing, _
-                                     Optional I_SSSDeductionSchedule As Object = Nothing, _
-                                     Optional I_PagIbigDeductionSchedule As Object = Nothing, _
-                                     Optional I_WorkDaysPerYear As Object = Nothing, _
-                                     Optional I_RDOCode As Object = Nothing, _
-                                     Optional I_ZIPCode As Object = Nothing, _
+    Public Function SP_OrganizationUpdate(ByVal Name As String,
+                                 ByVal PrimaryAddressID As Integer,
+                                 ByVal PrimaryContactID As Object,
+                                 ByVal MainPhone As String,
+                                 ByVal FaxNumber As String,
+                                 ByVal EmailAddress As String,
+                                 ByVal AltEmailAddress As String,
+                                 ByVal AltPhone As String,
+                                 ByVal URL As String,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdBy As Integer,
+                                 ByVal TINNumber As String,
+                                 ByVal Tradename As String,
+                                 ByVal orgType As String,
+                                 ByVal RowID As Integer,
+                                 Optional I_VacationLeaveDays As Object = Nothing,
+                                 Optional I_SickLeaveDays As Object = Nothing,
+                                 Optional I_MaternityLeaveDays As Object = Nothing,
+                                 Optional I_OthersLeaveDays As Object = Nothing,
+                                     Optional I_NightDifferentialTimeFrom As Object = Nothing,
+                                     Optional I_NightDifferentialTimeTo As Object = Nothing,
+                                     Optional I_NightShiftTimeFrom As Object = Nothing,
+                                     Optional I_NightShiftTimeTo As Object = Nothing,
+                                 Optional I_PayFrequencyID As Object = Nothing,
+                                     Optional I_PhilhealthDeductionSchedule As Object = Nothing,
+                                     Optional I_SSSDeductionSchedule As Object = Nothing,
+                                     Optional I_PagIbigDeductionSchedule As Object = Nothing,
+                                     Optional I_WorkDaysPerYear As Object = Nothing,
+                                     Optional I_RDOCode As Object = Nothing,
+                                     Optional I_ZIPCode As Object = Nothing,
                                      Optional WithholdingDeductionSchedule As Object = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_OrganizationUpdate", connection)
         With SQL_command
             Try
@@ -930,42 +926,42 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_OrganizationWithImage(ByVal Name As String, _
-                                 ByVal PrimaryAddressID As Integer, _
-                                 ByVal PrimaryContactID As Integer, _
-                                 ByVal MainPhone As String, _
-                                 ByVal FaxNumber As String, _
-                                 ByVal EmailAddress As String, _
-                                 ByVal AltEmailAddress As String, _
-                                 ByVal AltPhone As String, _
-                                 ByVal URL As String, _
-                                 ByVal Created As DateTime, _
-                                 ByVal CreatedBy As Integer, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdBy As Integer, _
-                                 ByVal TINNumber As String, _
-                                 ByVal Tradename As String, _
-                                 ByVal orgType As String, _
-                                 ByVal image As Object, _
-                                 Optional I_VacationLeaveDays As Object = Nothing, _
-                                 Optional I_SickLeaveDays As Object = Nothing, _
-                                 Optional I_MaternityLeaveDays As Object = Nothing, _
-                                 Optional I_OthersLeaveDays As Object = Nothing, _
-                                     Optional I_NightDifferentialTimeFrom As Object = Nothing, _
-                                     Optional I_NightDifferentialTimeTo As Object = Nothing, _
-                                     Optional I_NightShiftTimeFrom As Object = Nothing, _
-                                     Optional I_NightShiftTimeTo As Object = Nothing, _
-                                 Optional I_PayFrequencyID As Object = Nothing, _
-                                     Optional I_PhilhealthDeductionSchedule As Object = Nothing, _
-                                     Optional I_SSSDeductionSchedule As Object = Nothing, _
-                                     Optional I_PagIbigDeductionSchedule As Object = Nothing, _
-                                     Optional I_WorkDaysPerYear As Object = Nothing, _
-                                     Optional I_RDOCode As Object = Nothing, _
-                                     Optional I_ZIPCode As Object = Nothing, _
+    Public Function SP_OrganizationWithImage(ByVal Name As String,
+                                 ByVal PrimaryAddressID As Integer,
+                                 ByVal PrimaryContactID As Integer,
+                                 ByVal MainPhone As String,
+                                 ByVal FaxNumber As String,
+                                 ByVal EmailAddress As String,
+                                 ByVal AltEmailAddress As String,
+                                 ByVal AltPhone As String,
+                                 ByVal URL As String,
+                                 ByVal Created As DateTime,
+                                 ByVal CreatedBy As Integer,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdBy As Integer,
+                                 ByVal TINNumber As String,
+                                 ByVal Tradename As String,
+                                 ByVal orgType As String,
+                                 ByVal image As Object,
+                                 Optional I_VacationLeaveDays As Object = Nothing,
+                                 Optional I_SickLeaveDays As Object = Nothing,
+                                 Optional I_MaternityLeaveDays As Object = Nothing,
+                                 Optional I_OthersLeaveDays As Object = Nothing,
+                                     Optional I_NightDifferentialTimeFrom As Object = Nothing,
+                                     Optional I_NightDifferentialTimeTo As Object = Nothing,
+                                     Optional I_NightShiftTimeFrom As Object = Nothing,
+                                     Optional I_NightShiftTimeTo As Object = Nothing,
+                                 Optional I_PayFrequencyID As Object = Nothing,
+                                     Optional I_PhilhealthDeductionSchedule As Object = Nothing,
+                                     Optional I_SSSDeductionSchedule As Object = Nothing,
+                                     Optional I_PagIbigDeductionSchedule As Object = Nothing,
+                                     Optional I_WorkDaysPerYear As Object = Nothing,
+                                     Optional I_RDOCode As Object = Nothing,
+                                     Optional I_ZIPCode As Object = Nothing,
                                      Optional WithholdingDeductionSchedule As Object = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_OrgWithImage", connection)
         With SQL_command
             Try
@@ -1023,41 +1019,41 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_OrganizationWithImageUpdate(ByVal Name As String, _
-                                ByVal PrimaryAddressID As Integer, _
-                                ByVal PrimaryContactID As Object, _
-                                ByVal MainPhone As String, _
-                                ByVal FaxNumber As String, _
-                                ByVal EmailAddress As String, _
-                                ByVal AltEmailAddress As String, _
-                                ByVal AltPhone As String, _
-                                ByVal URL As String, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdBy As Integer, _
-                                ByVal TINNumber As String, _
-                                ByVal Tradename As String, _
-                                ByVal orgType As String, _
-                                ByVal image As Object, _
-                                ByVal RowID As Integer, _
-                                 Optional I_VacationLeaveDays As Object = Nothing, _
-                                 Optional I_SickLeaveDays As Object = Nothing, _
-                                 Optional I_MaternityLeaveDays As Object = Nothing, _
-                                 Optional I_OthersLeaveDays As Object = Nothing, _
-                                     Optional I_NightDifferentialTimeFrom As Object = Nothing, _
-                                     Optional I_NightDifferentialTimeTo As Object = Nothing, _
-                                     Optional I_NightShiftTimeFrom As Object = Nothing, _
-                                     Optional I_NightShiftTimeTo As Object = Nothing, _
-                                 Optional I_PayFrequencyID As Object = Nothing, _
-                                     Optional I_PhilhealthDeductionSchedule As Object = Nothing, _
-                                     Optional I_SSSDeductionSchedule As Object = Nothing, _
-                                     Optional I_PagIbigDeductionSchedule As Object = Nothing, _
-                                     Optional I_WorkDaysPerYear As Object = Nothing, _
-                                     Optional I_RDOCode As Object = Nothing, _
-                                     Optional I_ZIPCode As Object = Nothing, _
+    Public Function SP_OrganizationWithImageUpdate(ByVal Name As String,
+                                ByVal PrimaryAddressID As Integer,
+                                ByVal PrimaryContactID As Object,
+                                ByVal MainPhone As String,
+                                ByVal FaxNumber As String,
+                                ByVal EmailAddress As String,
+                                ByVal AltEmailAddress As String,
+                                ByVal AltPhone As String,
+                                ByVal URL As String,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdBy As Integer,
+                                ByVal TINNumber As String,
+                                ByVal Tradename As String,
+                                ByVal orgType As String,
+                                ByVal image As Object,
+                                ByVal RowID As Integer,
+                                 Optional I_VacationLeaveDays As Object = Nothing,
+                                 Optional I_SickLeaveDays As Object = Nothing,
+                                 Optional I_MaternityLeaveDays As Object = Nothing,
+                                 Optional I_OthersLeaveDays As Object = Nothing,
+                                     Optional I_NightDifferentialTimeFrom As Object = Nothing,
+                                     Optional I_NightDifferentialTimeTo As Object = Nothing,
+                                     Optional I_NightShiftTimeFrom As Object = Nothing,
+                                     Optional I_NightShiftTimeTo As Object = Nothing,
+                                 Optional I_PayFrequencyID As Object = Nothing,
+                                     Optional I_PhilhealthDeductionSchedule As Object = Nothing,
+                                     Optional I_SSSDeductionSchedule As Object = Nothing,
+                                     Optional I_PagIbigDeductionSchedule As Object = Nothing,
+                                     Optional I_WorkDaysPerYear As Object = Nothing,
+                                     Optional I_RDOCode As Object = Nothing,
+                                     Optional I_ZIPCode As Object = Nothing,
                                      Optional WithholdingDeductionSchedule As Object = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_OrgWithImageUpdate", connection)
         With SQL_command
             Try
@@ -1114,23 +1110,23 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function I_UsersProc(ByVal lname As String, _
-                                   ByVal fname As String, _
-                                   ByVal mname As String, _
-                                   ByVal userid As Object, _
-                                   ByVal password As Object, _
-                                   ByVal orgid As Integer, _
-                                   ByVal postid As String, _
-                                   ByVal Created As DateTime, _
-                                   ByVal lastupdby As Integer, _
-                                   ByVal CreatedBy As Integer, _
-                                   ByVal LastUpD As DateTime, _
-                                   ByVal status As String, _
+    Public Function I_UsersProc(ByVal lname As String,
+                                   ByVal fname As String,
+                                   ByVal mname As String,
+                                   ByVal userid As Object,
+                                   ByVal password As Object,
+                                   ByVal orgid As Integer,
+                                   ByVal postid As String,
+                                   ByVal Created As DateTime,
+                                   ByVal lastupdby As Integer,
+                                   ByVal CreatedBy As Integer,
+                                   ByVal LastUpD As DateTime,
+                                   ByVal status As String,
                                    ByVal EmailAddress As String,
                                    Optional deptMngrRowID As Object = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_Users", connection)
         With SQL_command
             Try
@@ -1161,23 +1157,23 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function U_UsersProc(ByVal RowID As Integer, _
-                                 ByVal lname As String, _
-                                 ByVal fname As String, _
-                                 ByVal mname As String, _
-                                 ByVal postid As String, _
-                                 ByVal Created As DateTime, _
-                                 ByVal lastupdby As Integer, _
-                                 ByVal CreatedBy As Integer, _
-                                 ByVal LastUpD As DateTime, _
-                                 ByVal status As String, _
+    Public Function U_UsersProc(ByVal RowID As Integer,
+                                 ByVal lname As String,
+                                 ByVal fname As String,
+                                 ByVal mname As String,
+                                 ByVal postid As String,
+                                 ByVal Created As DateTime,
+                                 ByVal lastupdby As Integer,
+                                 ByVal CreatedBy As Integer,
+                                 ByVal LastUpD As DateTime,
+                                 ByVal status As String,
                                  ByVal EmailAddress As String,
                                  Optional enc_userid_value As Object = Nothing,
                                  Optional enc_pword_value As Object = Nothing,
                                  Optional deptMngrRowID As Object = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_Users", connection)
         With SQL_command
             Try
@@ -1211,15 +1207,15 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function I_Position(ByVal postname As String, _
-                                    ByVal Lastupd As DateTime, _
-                                    ByVal Created As DateTime, _
-                                    ByVal CreatedBy As Integer, _
-                                    ByVal OrgID As Integer, _
+    Public Function I_Position(ByVal postname As String,
+                                    ByVal Lastupd As DateTime,
+                                    ByVal Created As DateTime,
+                                    ByVal CreatedBy As Integer,
+                                    ByVal OrgID As Integer,
                                     ByVal LastUpdBy As Integer) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_Position", connection)
         With SQL_command
             Try
@@ -1243,20 +1239,20 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_DivisionUpdate(ByVal Name As String, _
-                                 ByVal MainPhone As String, _
-                                 ByVal FaxNumber As String, _
-                                 ByVal EmailAddress As String, _
-                                 ByVal AltEmailAddress As String, _
-                                 ByVal AltPhone As String, _
-                                 ByVal URL As String, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdBy As Integer, _
-                                 ByVal TINNumber As String, _
-                                 ByVal Tradename As String, _
-                                 ByVal DivisionType As String, _
-                                 ByVal Businessaddr As String, _
-                                 ByVal Contactname As String, _
+    Public Function SP_DivisionUpdate(ByVal Name As String,
+                                 ByVal MainPhone As String,
+                                 ByVal FaxNumber As String,
+                                 ByVal EmailAddress As String,
+                                 ByVal AltEmailAddress As String,
+                                 ByVal AltPhone As String,
+                                 ByVal URL As String,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdBy As Integer,
+                                 ByVal TINNumber As String,
+                                 ByVal Tradename As String,
+                                 ByVal DivisionType As String,
+                                 ByVal Businessaddr As String,
+                                 ByVal Contactname As String,
                                  ByVal RowID As Integer,
     ByVal I_GracePeriod As Object,
     ByVal I_WorkDaysPerYear As Object,
@@ -1278,7 +1274,7 @@ Module mdlStoredProcedure
     Optional auto_ot As Object = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_DivisionUpdate", connection)
         With SQL_command
             Try
@@ -1333,22 +1329,22 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_Division(ByVal Name As String, _
-                                 ByVal MainPhone As String, _
-                                 ByVal FaxNumber As String, _
-                                 ByVal EmailAddress As String, _
-                                 ByVal AltEmailAddress As String, _
-                                 ByVal AltPhone As String, _
-                                 ByVal URL As String, _
-                                 ByVal Created As DateTime, _
-                                 ByVal CreatedBy As Integer, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdBy As Integer, _
-                                 ByVal TINNumber As String, _
-                                 ByVal Tradename As String, _
-                                 ByVal DivisionType As String, _
-                                 ByVal Businessaddr As String, _
-                                 ByVal Contactname As String, _
+    Public Function SP_Division(ByVal Name As String,
+                                 ByVal MainPhone As String,
+                                 ByVal FaxNumber As String,
+                                 ByVal EmailAddress As String,
+                                 ByVal AltEmailAddress As String,
+                                 ByVal AltPhone As String,
+                                 ByVal URL As String,
+                                 ByVal Created As DateTime,
+                                 ByVal CreatedBy As Integer,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdBy As Integer,
+                                 ByVal TINNumber As String,
+                                 ByVal Tradename As String,
+                                 ByVal DivisionType As String,
+                                 ByVal Businessaddr As String,
+                                 ByVal Contactname As String,
                                  ByVal OrgID As Integer,
     ByVal I_GracePeriod As Object,
     ByVal I_WorkDaysPerYear As Object,
@@ -1370,7 +1366,7 @@ Module mdlStoredProcedure
     Optional auto_ot As Object = Nothing) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_Division", connection)
         With SQL_command
             Try
@@ -1427,31 +1423,31 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function I_contact(ByVal Status As String, _
-          ByVal Created As DateTime, _
-          ByVal OrganizationID As Integer, _
-          ByVal MainPhone As String, _
-          ByVal LastName As String, _
-          ByVal FirstName As String, _
-          ByVal MiddleName As String, _
-          ByVal MobilePhone As String, _
-          ByVal WorkPhone As String, _
-          ByVal Gender As String, _
-          ByVal JobTitle As String, _
-          ByVal EmailAddress As String, _
-          ByVal AlternatePhone As String, _
-          ByVal FaxNumber As String, _
-          ByVal LastUpd As DateTime, _
-          ByVal CreatedBy As Integer, _
-          ByVal LastUpdBy As Integer, _
-          ByVal personaltitle As String, _
-          ByVal type As String, _
-          ByVal suffix As String, _
-          ByVal addrID As Integer, _
+    Public Function I_contact(ByVal Status As String,
+          ByVal Created As DateTime,
+          ByVal OrganizationID As Integer,
+          ByVal MainPhone As String,
+          ByVal LastName As String,
+          ByVal FirstName As String,
+          ByVal MiddleName As String,
+          ByVal MobilePhone As String,
+          ByVal WorkPhone As String,
+          ByVal Gender As String,
+          ByVal JobTitle As String,
+          ByVal EmailAddress As String,
+          ByVal AlternatePhone As String,
+          ByVal FaxNumber As String,
+          ByVal LastUpd As DateTime,
+          ByVal CreatedBy As Integer,
+          ByVal LastUpdBy As Integer,
+          ByVal personaltitle As String,
+          ByVal type As String,
+          ByVal suffix As String,
+          ByVal addrID As Integer,
           ByVal tinno As String) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_contact", connection)
         With SQL_command
             Try
@@ -1490,29 +1486,29 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function I_contactUpdate(ByVal Status As String, _
-      ByVal MainPhone As String, _
-      ByVal LastName As String, _
-      ByVal FirstName As String, _
-      ByVal MiddleName As String, _
-      ByVal MobilePhone As String, _
-      ByVal WorkPhone As String, _
-      ByVal Gender As String, _
-      ByVal JobTitle As String, _
-      ByVal EmailAddress As String, _
-      ByVal AlternatePhone As String, _
-      ByVal FaxNumber As String, _
-      ByVal LastUpd As DateTime, _
-      ByVal LastUpdBy As Integer, _
-      ByVal personaltitle As String, _
-      ByVal type As String, _
-      ByVal suffix As String, _
-      ByVal addrID As Integer, _
-      ByVal tinno As String, _
+    Public Function I_contactUpdate(ByVal Status As String,
+      ByVal MainPhone As String,
+      ByVal LastName As String,
+      ByVal FirstName As String,
+      ByVal MiddleName As String,
+      ByVal MobilePhone As String,
+      ByVal WorkPhone As String,
+      ByVal Gender As String,
+      ByVal JobTitle As String,
+      ByVal EmailAddress As String,
+      ByVal AlternatePhone As String,
+      ByVal FaxNumber As String,
+      ByVal LastUpd As DateTime,
+      ByVal LastUpdBy As Integer,
+      ByVal personaltitle As String,
+      ByVal type As String,
+      ByVal suffix As String,
+      ByVal addrID As Integer,
+      ByVal tinno As String,
       ByVal RowID As Integer) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_contactUpdate", connection)
         With SQL_command
             Try
@@ -1549,30 +1545,30 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_employeepreviousemployer(ByVal Name As String, _
-      ByVal Tradename As String, _
-      ByVal OrganizationID As Integer, _
-      ByVal MainPhone As String, _
-      ByVal faxno As String, _
-      ByVal jobtitle As String, _
-      ByVal ExperienceFromTo As String, _
-      ByVal BusinessAddress As String, _
-      ByVal ContactName As String, _
-      ByVal EmailAddress As String, _
-      ByVal AltEmailAddress As String, _
-      ByVal AltPhone As String, _
-      ByVal URL As String, _
-      ByVal TINNo As String, _
-      ByVal JobFunction As String, _
-      ByVal Created As DateTime, _
-      ByVal CreatedBy As Integer, _
-      ByVal LastUpd As DateTime, _
-      ByVal LastUpdBy As Integer, _
-      ByVal OrganizationType As String, _
+    Public Function SP_employeepreviousemployer(ByVal Name As String,
+      ByVal Tradename As String,
+      ByVal OrganizationID As Integer,
+      ByVal MainPhone As String,
+      ByVal faxno As String,
+      ByVal jobtitle As String,
+      ByVal ExperienceFromTo As String,
+      ByVal BusinessAddress As String,
+      ByVal ContactName As String,
+      ByVal EmailAddress As String,
+      ByVal AltEmailAddress As String,
+      ByVal AltPhone As String,
+      ByVal URL As String,
+      ByVal TINNo As String,
+      ByVal JobFunction As String,
+      ByVal Created As DateTime,
+      ByVal CreatedBy As Integer,
+      ByVal LastUpd As DateTime,
+      ByVal LastUpdBy As Integer,
+      ByVal OrganizationType As String,
       ByVal empid As Integer) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_EmployeePreviousEmployer", connection)
         With SQL_command
             Try
@@ -1611,25 +1607,25 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function SP_EmployeePreviousEmployerUpdate(ByVal Name As String, _
-     ByVal Tradename As String, _
-     ByVal MainPhone As String, _
-     ByVal faxno As String, _
-     ByVal jobtitle As String, _
-     ByVal ExperienceFromTo As String, _
-     ByVal BusinessAddress As String, _
-     ByVal ContactName As String, _
-     ByVal EmailAddress As String, _
-     ByVal AltEmailAddress As String, _
-     ByVal AltPhone As String, _
-     ByVal URL As String, _
-     ByVal TINNo As String, _
-     ByVal JobFunction As String, _
-     ByVal OrganizationType As String, _
+    Public Function SP_EmployeePreviousEmployerUpdate(ByVal Name As String,
+     ByVal Tradename As String,
+     ByVal MainPhone As String,
+     ByVal faxno As String,
+     ByVal jobtitle As String,
+     ByVal ExperienceFromTo As String,
+     ByVal BusinessAddress As String,
+     ByVal ContactName As String,
+     ByVal EmailAddress As String,
+     ByVal AltEmailAddress As String,
+     ByVal AltPhone As String,
+     ByVal URL As String,
+     ByVal TINNo As String,
+     ByVal JobFunction As String,
+     ByVal OrganizationType As String,
      ByVal rowID As Integer) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("SP_EmployeePreviousEmployerUpdate", connection)
         With SQL_command
             Try
@@ -1663,22 +1659,22 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function I_ListOfVal(ByVal Created As DateTime, _
-                            ByVal CreatedBy As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdby As Integer, _
-                            ByVal DisplayValue As String, _
-                            ByVal LIC As String, _
-                            ByVal Type As String, _
-                            ByVal ParentLIC As String, _
-                            ByVal Status As String, _
-                            ByVal Description As String, _
-                            ByVal SystemAccountFlg As Char, _
-                            ByVal DisplayAccountFlg As Char, _
+    Public Function I_ListOfVal(ByVal Created As DateTime,
+                            ByVal CreatedBy As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdby As Integer,
+                            ByVal DisplayValue As String,
+                            ByVal LIC As String,
+                            ByVal Type As String,
+                            ByVal ParentLIC As String,
+                            ByVal Status As String,
+                            ByVal Description As String,
+                            ByVal SystemAccountFlg As Char,
+                            ByVal DisplayAccountFlg As Char,
                             ByVal OrderBy As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_listofvalue", connection)
         With SQL_command
             Try
@@ -1708,21 +1704,21 @@ Module mdlStoredProcedure
         Return F_return
     End Function
 
-    Public Function U_ListOfVal(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdby As Integer, _
-                              ByVal DisplayValue As String, _
-                              ByVal LIC As String, _
-                              ByVal Type As String, _
-                              ByVal ParentLIC As String, _
-                              ByVal Status As String, _
-                              ByVal Description As String, _
-                              ByVal SystemAccountFlg As Char, _
-                              ByVal DisplayAccountFlg As Char, _
+    Public Function U_ListOfVal(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdby As Integer,
+                              ByVal DisplayValue As String,
+                              ByVal LIC As String,
+                              ByVal Type As String,
+                              ByVal ParentLIC As String,
+                              ByVal Status As String,
+                              ByVal Description As String,
+                              ByVal SystemAccountFlg As Char,
+                              ByVal DisplayAccountFlg As Char,
                               ByVal OrderBy As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_listofvalues", connection)
         With SQL_command
             Try

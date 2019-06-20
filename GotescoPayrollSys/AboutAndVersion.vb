@@ -3,8 +3,11 @@
 Public Class AboutAndVersion
 
 #Region "CHANGE LOGS"
+
     '©
+
 #Region "version 1.1.7"
+
     '2017-11-20
     '- department managers monitors the approval of leave, ot, and ob before handing over to HR
     '- system user can tagged as department manager
@@ -13,6 +16,7 @@ Public Class AboutAndVersion
 #End Region
 
 #Region "version 1.1.6"
+
     '2017-10-27
     '- fix a leave during a special non-working holiday
     '- fix codes to properly reset and gain leave balance according to employee's years of service
@@ -21,12 +25,14 @@ Public Class AboutAndVersion
 #End Region
 
 #Region "version 1.1.5"
+
     '2017-10-20
-    '- 
+    '-
 
 #End Region
 
 #Region "version 1.1.4"
+
     '2017-10-18
     '- fix semi-monthly allowance computation
     '- Taxable income is equal to ((Basic_regular + Paid_leave + Paid_holiday) - (SSS + PhilHealth + HDMF))
@@ -34,12 +40,14 @@ Public Class AboutAndVersion
 #End Region
 
 #Region "version 1.1.3"
+
     '2017-09-13
     '- PayrollGeneration.vb -- SSS contribution computation, Ecola should also be included
 
 #End Region
 
 #Region "version 1.1.2"
+
     '2017-09-08
     '- fix some issues with the pay slip
 
@@ -49,6 +57,7 @@ Public Class AboutAndVersion
 #End Region
 
 #Region "version 1.1.1"
+
     '2017-08-02
     '- resolve the issue on absent during holiday, there should be no absent amount given that date is a holiday
 
@@ -102,6 +111,7 @@ Public Class AboutAndVersion
 #End Region
 
 #Region "Properties"
+
     ''' <summary>
     ''' Returns the version of this software.
     ''' </summary>

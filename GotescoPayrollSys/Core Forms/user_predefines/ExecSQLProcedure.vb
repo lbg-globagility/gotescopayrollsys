@@ -21,7 +21,6 @@ Public Class ExecSQLProcedure
             priv_conn.ConnectionString =
                 String.Concat(mysql_conn_text,
                               "default command timeout=", n_CommandTimeOut, ";")
-
         Else
 
             priv_conn.ConnectionString = mysql_conn_text
@@ -90,7 +89,6 @@ Public Class ExecSQLProcedure
             End With
 
             _error_message = String.Empty
-
         Catch ex As Exception
             _hasError = True
 
@@ -99,13 +97,12 @@ Public Class ExecSQLProcedure
             _error_message = getErrExcptn(ex, MyBase.ToString)
 
             MsgBox(_error_message, , SQLProcedureName)
-
         Finally
 
             priv_cmd.Connection.Close()
 
             priv_da.Dispose()
-            
+
             priv_conn.Close()
 
             priv_conn.Dispose()

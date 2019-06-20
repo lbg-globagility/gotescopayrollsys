@@ -1451,7 +1451,6 @@ Public Class TimEntduration
 
             progress += 25
             bgworkRECOMPUTE_employeeleave.ReportProgress(progress, "")
-
         Else
             Throw New Exception("StoreLeaveInOtherTableAsPrepAsync")
         End If

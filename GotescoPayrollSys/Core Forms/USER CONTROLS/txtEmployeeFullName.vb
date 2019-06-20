@@ -1,5 +1,4 @@
-﻿
-Public Class txtEmployeeFullName
+﻿Public Class txtEmployeeFullName
 
     'Inherits TextBox
     Inherits Femiani.Forms.UI.Input.CoolTextBox
@@ -57,10 +56,10 @@ Public Class txtEmployeeFullName
     Protected Overrides Sub OnLeave(e As EventArgs)
         If DesignMode Then Return
 
-        Dim strQuery = $"SELECT COUNT(e.RowID) 
-FROM employee e 
-INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose=FALSE 
-WHERE {dbcol_employee}='{Text}' 
+        Dim strQuery = $"SELECT COUNT(e.RowID)
+FROM employee e
+INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose=FALSE
+WHERE {dbcol_employee}='{Text}'
 AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
 
         Dim isExistCount =
@@ -92,7 +91,6 @@ AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
                     Me.Focus()
 
                 End If
-
             Else
                 Me.Focus()
                 Return
@@ -112,7 +110,6 @@ AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
                                    New Object() {MyBase.Text})
 
             organization_RowID = Convert.ToString(sql.GetFoundRow)
-
         Else
 
             Dim str_quer As String =
@@ -133,50 +130,49 @@ AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
 
         End If
 
-        Dim isExists = _
-                EXECQUER("SELECT EXISTS(SELECT" & _
-                            " RowID" & _
-                            " FROM employee" & _
-                            " WHERE " & dbcol_employee & "='" & MyBase.Text & "'" & _
-                            " AND OrganizationID='" & organization_RowID & "'" & _
+        Dim isExists =
+                EXECQUER("SELECT EXISTS(SELECT" &
+                            " RowID" &
+                            " FROM employee" &
+                            " WHERE " & dbcol_employee & "='" & MyBase.Text & "'" &
+                            " AND OrganizationID='" & organization_RowID & "'" &
                             " AND EmploymentStatus NOT IN ('Resigned','Terminated'));")
 
-            n_Exists = CBool(isExists)
+        n_Exists = CBool(isExists)
 
-            If n_Exists Then
+        If n_Exists Then
 
-                'n_RowIDValue = EXECQUER("SELECT" & _
-                '                        " RowID" & _
-                '                        " FROM employee" & _
-                '                        " WHERE " & dbcol_employee & "='" & MyBase.Text & "'" & _
-                '                        " AND OrganizationID='" & organization_RowID & "'" & _
-                '                        " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
+            'n_RowIDValue = EXECQUER("SELECT" & _
+            '                        " RowID" & _
+            '                        " FROM employee" & _
+            '                        " WHERE " & dbcol_employee & "='" & MyBase.Text & "'" & _
+            '                        " AND OrganizationID='" & organization_RowID & "'" & _
+            '                        " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
 
-                Dim str_quer As String =
-                    SBConcat.ConcatResult("SELECT e.RowID",
-                                          " FROM employee e",
-                                          " INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose='0'",
-                                          " WHERE ", dbcol_employee,
-                                          " = ?search_text",
-                                          " AND e.OrganizationID = ?og_rowid",
-                                          " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
-                                          " ORDER BY e.Created DESC, CONCAT(e.LastName, e.FirstName, e.MiddleName)",
-                                          " LIMIT 1;")
-                '" HAVING MAX(e.Created) IS NOT NULL",
-                '" GROUP BY e.OrganizationID, CONCAT(e.LastName, e.FirstName, e.MiddleName)",
+            Dim str_quer As String =
+                SBConcat.ConcatResult("SELECT e.RowID",
+                                      " FROM employee e",
+                                      " INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose='0'",
+                                      " WHERE ", dbcol_employee,
+                                      " = ?search_text",
+                                      " AND e.OrganizationID = ?og_rowid",
+                                      " AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0",
+                                      " ORDER BY e.Created DESC, CONCAT(e.LastName, e.FirstName, e.MiddleName)",
+                                      " LIMIT 1;")
+            '" HAVING MAX(e.Created) IS NOT NULL",
+            '" GROUP BY e.OrganizationID, CONCAT(e.LastName, e.FirstName, e.MiddleName)",
 
-                Dim sql As New SQL(str_quer,
-                                   New Object() {MyBase.Text,
-                                                 organization_RowID})
+            Dim sql As New SQL(str_quer,
+                               New Object() {MyBase.Text,
+                                             organization_RowID})
 
-                n_RowIDValue = Convert.ToString(sql.GetFoundRow)
+            n_RowIDValue = Convert.ToString(sql.GetFoundRow)
+        Else
+            n_RowIDValue = String.Empty
 
-            Else
-                n_RowIDValue = String.Empty
+        End If
 
-            End If
-
-            MyBase.OnLeave(e)
+        MyBase.OnLeave(e)
 
     End Sub
 

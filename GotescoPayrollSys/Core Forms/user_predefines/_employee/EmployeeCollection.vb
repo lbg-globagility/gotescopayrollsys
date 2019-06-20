@@ -1,6 +1,4 @@
 ﻿Imports System.Collections.ObjectModel
-Imports System.ComponentModel
-Imports System.Threading.Tasks
 
 Public Class EmployeeCollection
     Implements IEmployee
@@ -164,7 +162,6 @@ Public Class EmployeeCollection
             sql.ExecuteQuery()
 
             If sql.HasError Then
-
             Else
                 Static dt As New DataTable
                 dt = sql.GetFoundRows.Tables(0)

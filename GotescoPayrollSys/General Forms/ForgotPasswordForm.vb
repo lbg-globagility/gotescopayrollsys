@@ -1,6 +1,7 @@
 ﻿Imports System.Net.Mail
 
 Public Class ForgotPasswordForm
+
     Sub fillPosition()
         Dim strQuery As String = "select Name from Organization"
         cmbCompany.Items.Clear()
@@ -8,6 +9,7 @@ Public Class ForgotPasswordForm
         cmbCompany.Items.AddRange(CType(SQL_ArrayList(strQuery).ToArray(GetType(String)), String()))
         cmbCompany.SelectedIndex = 0
     End Sub
+
     Private Sub btnSend_Click(sender As Object, e As EventArgs) Handles btnSend.Click
         'If txtEmailAdd.Text = "" Or txtUserID.Text = "" Or cmbCompany.Text = "--Select One" Then
         '    MsgBox("Please complete all fields.", MsgBoxStyle.Exclamation, "System message")
@@ -101,7 +103,6 @@ Public Class ForgotPasswordForm
             Close()
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

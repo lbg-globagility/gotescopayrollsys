@@ -16,58 +16,58 @@ Public Class EmpPosition
 
     Public ShowMeAsDialog As Boolean = False
 
-    Public q_employee As String = "SELECT e.RowID," & _
-        "e.EmployeeID 'Employee ID'," & _
-        "e.FirstName 'First Name'," & _
-        "e.MiddleName 'Middle Name'," & _
-        "e.LastName 'Last Name'," & _
-        "e.Surname," & _
-        "e.Nickname," & _
-        "e.MaritalStatus 'Marital Status'," & _
-        "COALESCE(e.NoOfDependents,0) 'No. Of Dependents'," & _
-        "COALESCE(DATE_FORMAT(e.Birthdate,'%m/%d/%Y'),'') 'Birthdate'," & _
-        "COALESCE(DATE_FORMAT(e.Startdate,'%m/%d/%Y'),'') 'Startdate'," & _
-        "e.JobTitle 'Job Title'," & _
-        "COALESCE(pos.PositionName,'') 'Position'," & _
-        "e.Salutation," & _
-        "e.TINNo 'TIN'," & _
-        "e.SSSNo 'SSS No.'," & _
-        "e.HDMFNo 'PAGIBIG No.'," & _
-        "e.PhilHealthNo 'PhilHealth No.'," & _
-        "e.WorkPhone 'Work Phone No.'," & _
-        "e.HomePhone 'Home Phone No.'," & _
-        "e.MobilePhone 'Mobile Phone No.'," & _
-        "e.HomeAddress 'Home address'," & _
-        "e.EmailAddress 'Email address'," & _
-        "COALESCE(IF(e.Gender='M','Male','Female'),'') 'Gender'," & _
-        "e.EmploymentStatus 'Employment Status'," & _
-        "IFNULL(pf.PayFrequencyType,'') 'Pay Frequency'," & _
-        "e.UndertimeOverride," & _
-        "e.OvertimeOverride," & _
-        "COALESCE(pos.RowID,'') 'PositionID'" & _
-        ",IFNULL(e.PayFrequencyID,'') 'PayFrequencyID'" & _
-        ",e.EmployeeType" & _
-        ",e.LeaveBalance" & _
-        ",e.SickLeaveBalance" & _
-        ",e.MaternityLeaveBalance" & _
-        ",e.LeaveAllowance" & _
-        ",e.SickLeaveAllowance" & _
-        ",e.MaternityLeaveAllowance" & _
-        ",e.LeavePerPayPeriod" & _
-        ",e.SickLeavePerPayPeriod" & _
-        ",e.MaternityLeavePerPayPeriod" & _
-        ",COALESCE(fstat.RowID,3) 'fstatRowID'" & _
-        ",'' 'Image'" & _
-        ",DATE_FORMAT(e.Created,'%m/%d/%Y') 'Creation Date'," & _
-        "CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2))) 'Created by'," & _
-        "COALESCE(DATE_FORMAT(e.LastUpd,'%m/%d/%Y'),'') 'Last Update'," & _
-        "(SELECT CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2)))  FROM user WHERE RowID=e.LastUpdBy) 'LastUpdate by'" & _
-        " " & _
-        "FROM employee e " & _
-        "LEFT JOIN user u ON e.CreatedBy=u.RowID " & _
-        "LEFT JOIN position pos ON e.PositionID=pos.RowID " & _
-        "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " & _
-        "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents " & _
+    Public q_employee As String = "SELECT e.RowID," &
+        "e.EmployeeID 'Employee ID'," &
+        "e.FirstName 'First Name'," &
+        "e.MiddleName 'Middle Name'," &
+        "e.LastName 'Last Name'," &
+        "e.Surname," &
+        "e.Nickname," &
+        "e.MaritalStatus 'Marital Status'," &
+        "COALESCE(e.NoOfDependents,0) 'No. Of Dependents'," &
+        "COALESCE(DATE_FORMAT(e.Birthdate,'%m/%d/%Y'),'') 'Birthdate'," &
+        "COALESCE(DATE_FORMAT(e.Startdate,'%m/%d/%Y'),'') 'Startdate'," &
+        "e.JobTitle 'Job Title'," &
+        "COALESCE(pos.PositionName,'') 'Position'," &
+        "e.Salutation," &
+        "e.TINNo 'TIN'," &
+        "e.SSSNo 'SSS No.'," &
+        "e.HDMFNo 'PAGIBIG No.'," &
+        "e.PhilHealthNo 'PhilHealth No.'," &
+        "e.WorkPhone 'Work Phone No.'," &
+        "e.HomePhone 'Home Phone No.'," &
+        "e.MobilePhone 'Mobile Phone No.'," &
+        "e.HomeAddress 'Home address'," &
+        "e.EmailAddress 'Email address'," &
+        "COALESCE(IF(e.Gender='M','Male','Female'),'') 'Gender'," &
+        "e.EmploymentStatus 'Employment Status'," &
+        "IFNULL(pf.PayFrequencyType,'') 'Pay Frequency'," &
+        "e.UndertimeOverride," &
+        "e.OvertimeOverride," &
+        "COALESCE(pos.RowID,'') 'PositionID'" &
+        ",IFNULL(e.PayFrequencyID,'') 'PayFrequencyID'" &
+        ",e.EmployeeType" &
+        ",e.LeaveBalance" &
+        ",e.SickLeaveBalance" &
+        ",e.MaternityLeaveBalance" &
+        ",e.LeaveAllowance" &
+        ",e.SickLeaveAllowance" &
+        ",e.MaternityLeaveAllowance" &
+        ",e.LeavePerPayPeriod" &
+        ",e.SickLeavePerPayPeriod" &
+        ",e.MaternityLeavePerPayPeriod" &
+        ",COALESCE(fstat.RowID,3) 'fstatRowID'" &
+        ",'' 'Image'" &
+        ",DATE_FORMAT(e.Created,'%m/%d/%Y') 'Creation Date'," &
+        "CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2))) 'Created by'," &
+        "COALESCE(DATE_FORMAT(e.LastUpd,'%m/%d/%Y'),'') 'Last Update'," &
+        "(SELECT CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2)))  FROM user WHERE RowID=e.LastUpdBy) 'LastUpdate by'" &
+        " " &
+        "FROM employee e " &
+        "LEFT JOIN user u ON e.CreatedBy=u.RowID " &
+        "LEFT JOIN position pos ON e.PositionID=pos.RowID " &
+        "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " &
+        "LEFT JOIN filingstatus fstat ON fstat.MaritalStatus=e.MaritalStatus AND fstat.Dependent=e.NoOfDependents " &
         "WHERE e.OrganizationID=" & org_rowid
 
     '",Image 'Image'" & _
@@ -195,7 +195,7 @@ Public Class EmpPosition
 
         'alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & orgztnID & " AND ParentPositionID IS NOT NULL AND ParentPositionID!=RowID GROUP BY ParentPositionID;")
 
-        alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & org_rowid & " AND ParentPositionID IS NULL" & _
+        alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & org_rowid & " AND ParentPositionID IS NULL" &
                                     " AND RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & org_rowid & ");")
 
         'For Each drow As DataRow In alphaposition.Rows
@@ -210,9 +210,9 @@ Public Class EmpPosition
 
     End Sub
 
-    Sub Positiontreeviewfiller(Optional primkey As Object = Nothing, _
-                       Optional strval As Object = Nothing, _
-                       Optional trnod As TreeNode = Nothing, _
+    Sub Positiontreeviewfiller(Optional primkey As Object = Nothing,
+                       Optional strval As Object = Nothing,
+                       Optional trnod As TreeNode = Nothing,
                        Optional tree_view As TreeView = Nothing)
 
         Dim n_nod As TreeNode = Nothing
@@ -235,8 +235,8 @@ Public Class EmpPosition
 
     End Sub
 
-    Sub Divisiontreeviewfiller(Optional primkey As Object = Nothing, _
-                       Optional strval As Object = Nothing, _
+    Sub Divisiontreeviewfiller(Optional primkey As Object = Nothing,
+                       Optional strval As Object = Nothing,
                        Optional trnod As TreeNode = Nothing)
 
         Dim n_nod As TreeNode = Nothing
@@ -266,8 +266,8 @@ Public Class EmpPosition
 
     End Sub
 
-    Sub DivisonPosition(Optional primkey As Object = Nothing, _
-                       Optional strval As Object = Nothing, _
+    Sub DivisonPosition(Optional primkey As Object = Nothing,
+                       Optional strval As Object = Nothing,
                        Optional trnod As TreeNode = Nothing)
 
         Dim n_nod As TreeNode = Nothing
@@ -566,7 +566,7 @@ Public Class EmpPosition
 
     Dim pagination As Integer = 0
 
-    Private Sub Nxt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles Nxt.LinkClicked, Last.LinkClicked, _
+    Private Sub Nxt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles Nxt.LinkClicked, Last.LinkClicked,
                                                                                               Prev.LinkClicked, First.LinkClicked
 
         Dim sendrname As String = DirectCast(sender, LinkLabel).Name
@@ -783,9 +783,9 @@ Public Class EmpPosition
 
             'Else
 
-            Dim returnval = INSUPD_position(, _
-                Trim(txtPositName.Text), _
-                parentpositID, _
+            Dim returnval = INSUPD_position(,
+                Trim(txtPositName.Text),
+                parentpositID,
                 divisID)
 
             'currentNode.Nodes.Add(Trim(returnval), Trim(txtPositName.Text) & "(Open)")
@@ -806,9 +806,9 @@ Public Class EmpPosition
 
             If selPositionID = Nothing Then
             Else
-                INSUPD_position(selPositionID, _
-                                Trim(txtPositName.Text), _
-                                parentpositID, _
+                INSUPD_position(selPositionID,
+                                Trim(txtPositName.Text),
+                                parentpositID,
                                 If(parentpositID = Nothing, divisID, Nothing))
 
                 InfoBalloon("Position '" & txtPositName.Text & "' has successfully saved.", "Position save successful", lblforballoon, 0, -69)
@@ -842,20 +842,20 @@ Public Class EmpPosition
 
             RemoveHandler tv2.AfterSelect, AddressOf tv2_AfterSelect
 
-            EXECQUER("UPDATE employee SET PositionID=NULL,LastUpdBy=" & user_row_id & " WHERE PositionID='" & selPositionID & "' AND OrganizationID=" & org_rowid & ";" & _
-                     "DELETE FROM `position_view` WHERE PositionID='" & selPositionID & "' AND OrganizationID=" & org_rowid & ";" & _
-                     "DELETE FROM position WHERE RowID='" & selPositionID & "';" & _
+            EXECQUER("UPDATE employee SET PositionID=NULL,LastUpdBy=" & user_row_id & " WHERE PositionID='" & selPositionID & "' AND OrganizationID=" & org_rowid & ";" &
+                     "DELETE FROM `position_view` WHERE PositionID='" & selPositionID & "' AND OrganizationID=" & org_rowid & ";" &
+                     "DELETE FROM position WHERE RowID='" & selPositionID & "';" &
                      "ALTER TABLE position AUTO_INCREMENT = 0;")
 
-            positiontable = retAsDatTbl("SELECT *" & _
-                                        ",COALESCE((SELECT CONCAT('(',FirstName,IF(MiddleName IS NULL,'',CONCAT(' ',LEFT(MiddleName,1))),IF(LastName IS NULL,'',CONCAT(' ',LEFT(LastName,1))),')') FROM employee WHERE OrganizationID=" & org_rowid & " AND PositionID=p.RowID AND TerminationDate IS NULL),'(Open)') 'positionstats'" & _
-                                        " FROM position p" & _
-                                        " WHERE p.OrganizationID=" & org_rowid & "" & _
+            positiontable = retAsDatTbl("SELECT *" &
+                                        ",COALESCE((SELECT CONCAT('(',FirstName,IF(MiddleName IS NULL,'',CONCAT(' ',LEFT(MiddleName,1))),IF(LastName IS NULL,'',CONCAT(' ',LEFT(LastName,1))),')') FROM employee WHERE OrganizationID=" & org_rowid & " AND PositionID=p.RowID AND TerminationDate IS NULL),'(Open)') 'positionstats'" &
+                                        " FROM position p" &
+                                        " WHERE p.OrganizationID=" & org_rowid & "" &
                                         " AND p.RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & org_rowid & ");")
 
             'alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & orgztnID & " AND ParentPositionID IS NOT NULL AND ParentPositionID!=RowID GROUP BY ParentPositionID;")
 
-            alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & org_rowid & " AND ParentPositionID IS NULL" & _
+            alphaposition = retAsDatTbl("SELECT * FROM position WHERE OrganizationID=" & org_rowid & " AND ParentPositionID IS NULL" &
                                         " AND RowID NOT IN (SELECT PositionID FROM user WHERE OrganizationID=" & org_rowid & ");")
 
             For Each drow As DataRow In alphadivision.Rows
@@ -891,9 +891,9 @@ Public Class EmpPosition
 
     End Sub
 
-    Function INSUPD_position(Optional pos_RowID As Object = Nothing, _
-                             Optional pos_PositionName As Object = Nothing, _
-                             Optional pos_ParentPositionID As Object = Nothing, _
+    Function INSUPD_position(Optional pos_RowID As Object = Nothing,
+                             Optional pos_PositionName As Object = Nothing,
+                             Optional pos_ParentPositionID As Object = Nothing,
                              Optional pos_DivisionId As Object = Nothing) As Object
 
         Try

@@ -1,6 +1,6 @@
-﻿Imports System.IO
+﻿Imports System.Collections.ObjectModel
 Imports System.Globalization
-Imports System.Collections.ObjectModel
+Imports System.IO
 
 Module TimeInTimeOutParserModule
 
@@ -16,6 +16,7 @@ Module TimeInTimeOutParserModule
             Me.TimeIn = timeIn
             Me.TimeOut = timeOut
         End Sub
+
     End Class
 
     Class ConventionalTimeLogs
@@ -60,6 +61,7 @@ Module TimeInTimeOutParserModule
     End Class
 
     Class TimeInTimeOutParser
+
         Public Function Parse(filename As String) As Collection(Of FixedFormatTimeEntry)
             Dim timeEntries = New Collection(Of FixedFormatTimeEntry)
 
@@ -123,6 +125,7 @@ Module TimeInTimeOutParserModule
                 )
             End If
         End Sub
+
     End Class
 
 End Module

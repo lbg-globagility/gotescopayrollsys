@@ -4,10 +4,10 @@ Public Class newPostion
 
     Protected Overrides Sub OnLoad(e As EventArgs)
 
-        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT '' AS RowID, '' AS PositionName" & _
-                                                             " UNION" & _
-                                                             " SELECT RowID,PositionName" & _
-                                                             " FROM position" & _
+        Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT '' AS RowID, '' AS PositionName" &
+                                                             " UNION" &
+                                                             " SELECT RowID,PositionName" &
+                                                             " FROM position" &
                                                              " WHERE OrganizationID='" & org_rowid & "';")
 
         With n_SQLQueryToDatatable.ResultTable
@@ -20,12 +20,11 @@ Public Class newPostion
 
         End With
 
-        n_SQLQueryToDatatable = New SQLQueryToDatatable("SELECT '' AS RowID, '' AS Name" & _
-                                                             " UNION" & _
-                                                             " SELECT RowID,Name" & _
-                                                             " FROM `division`" & _
+        n_SQLQueryToDatatable = New SQLQueryToDatatable("SELECT '' AS RowID, '' AS Name" &
+                                                             " UNION" &
+                                                             " SELECT RowID,Name" &
+                                                             " FROM `division`" &
                                                              " WHERE OrganizationID='" & org_rowid & "';")
-
 
         With n_SQLQueryToDatatable.ResultTable
 
@@ -54,8 +53,6 @@ Public Class newPostion
         'For Each r In Employee.positn
         '    cboParentPosit.Items.Add(StrReverse(getStrBetween(StrReverse(r), "", "@")))
         'Next
-
-
 
         'cboDivis.Items.Clear()
 
@@ -113,7 +110,6 @@ Public Class newPostion
 
         End If
 
-
         Dim _rowID = ""
 
         'If Trim(cboParentPosit.Text) = "" Then
@@ -135,9 +131,9 @@ Public Class newPostion
 
     End Sub
 
-    Function INSUPD_position(Optional pos_RowID As Object = Nothing, _
-                             Optional pos_PositionName As Object = Nothing, _
-                             Optional pos_ParentPositionID As Object = Nothing, _
+    Function INSUPD_position(Optional pos_RowID As Object = Nothing,
+                             Optional pos_PositionName As Object = Nothing,
+                             Optional pos_ParentPositionID As Object = Nothing,
                              Optional pos_DivisionId As Object = Nothing) As Object
 
         Try
@@ -185,7 +181,6 @@ Public Class newPostion
         If ValNoComma(n_PositionRowID) = 0 Then
 
             DialogResult = Windows.Forms.DialogResult.Cancel
-
         Else
 
             DialogResult = Windows.Forms.DialogResult.OK
@@ -230,7 +225,6 @@ Public Class newPostion
         If cboDivis.SelectedIndex = -1 Then
 
             divisionRowID = Nothing
-
         Else
 
             divisionRowID = EXECQUER("SELECT RowID FROM division WHERE OrganizationID='" & org_rowid & "' ORDER BY Name LIMIT " & cboDivis.SelectedIndex & ",1;")
@@ -246,7 +240,6 @@ Public Class newPostion
             Button2_Click(Button2, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

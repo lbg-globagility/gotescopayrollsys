@@ -1,10 +1,8 @@
-﻿
-Public Class txtIDOfEmployee
+﻿Public Class txtIDOfEmployee
 
     Dim n_Exists As Boolean = False
 
     'Public Event TextChanging(sender As Object, e As TextChangingEventArgs)
-
 
     Public ReadOnly Property Exists As Boolean
 

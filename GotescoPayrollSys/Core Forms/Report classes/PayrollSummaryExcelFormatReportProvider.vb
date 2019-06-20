@@ -1,10 +1,9 @@
 ﻿Option Strict On
 
 Imports System.IO
-Imports CrystalDecisions.CrystalReports.Engine
+Imports log4net
 Imports OfficeOpenXml
 Imports OfficeOpenXml.Style
-Imports log4net
 
 Public Class PayrollSummaryExcelFormatReportProvider
     Implements IReportProvider

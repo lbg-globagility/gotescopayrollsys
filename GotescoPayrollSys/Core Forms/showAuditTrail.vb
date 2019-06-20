@@ -83,7 +83,6 @@
             dgvaudit.Rows.Clear()
 
             DataGridViewX1.DataSource = data_source.ToList
-
         Catch ex As Exception
             MsgBox("Something went wrong, see log file.", MsgBoxStyle.Critical)
             _logger.Error(String.Concat("loadAudTrail", " - (view_id=", ViewRowID, ", page=", pagination, ")"), ex)
@@ -115,7 +114,6 @@
             Close()
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -126,7 +124,7 @@
 
     Dim pagination = 0
 
-    Private Sub PaginationEmployee(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles Prev.LinkClicked, Nxt.LinkClicked, _
+    Private Sub PaginationEmployee(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles Prev.LinkClicked, Nxt.LinkClicked,
                                                                                                  First.LinkClicked, Last.LinkClicked
 
         Panel1.Enabled = False
@@ -145,7 +143,6 @@
             If modcent = 0 Then
 
                 pagination -= twenty
-
             Else
 
                 pagination -= modcent
@@ -164,7 +161,6 @@
 
             If modcent = 0 Then
                 pagination += twenty
-
             Else
                 pagination -= modcent
 

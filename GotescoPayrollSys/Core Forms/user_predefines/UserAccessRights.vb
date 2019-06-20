@@ -1,5 +1,4 @@
-﻿
-Public Enum AccessRightName
+﻿Public Enum AccessRightName
     HasReadOnly = 0
     HasUpdate = 1
     HasCreate = 2

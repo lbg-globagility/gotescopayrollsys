@@ -1,6 +1,4 @@
-﻿Imports Microsoft.Win32
-
-Public Class DataGridViewNumberColumn
+﻿Public Class DataGridViewNumberColumn
 
     Inherits DataGridViewTextBoxColumn
 
@@ -69,7 +67,6 @@ Public Class DataGridViewNumberCell
                 MyBase.Value = ValNoComma(MyBase.Value)
 
                 MyBase.ErrorText = Nothing
-
             Catch ex As Exception
 
                 MyBase.Value = Nothing

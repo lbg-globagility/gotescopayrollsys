@@ -1,5 +1,4 @@
-﻿
-Public Interface IMySQLCommander
+﻿Public Interface IMySQLCommander
 
     Property ParameterValueCollection() As Object()
 

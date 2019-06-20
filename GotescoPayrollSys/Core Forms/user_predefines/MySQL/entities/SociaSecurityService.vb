@@ -5,6 +5,7 @@ Imports System.ComponentModel.DataAnnotations.Schema
 
 <Table("socialsecurityservice")>
 Public Class SocialSecurityService
+
     <Key>
     <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property RowID As Integer

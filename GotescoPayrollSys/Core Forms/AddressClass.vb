@@ -124,8 +124,8 @@
 
     End Sub
 
-    Private Sub txtCountry_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtCity.KeyPress, _
-                                                                                        txtState.KeyPress, _
+    Private Sub txtCountry_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtCity.KeyPress,
+                                                                                        txtState.KeyPress,
                                                                                         txtCountry.KeyPress
         Dim e_asc = Asc(e.KeyChar)
 
@@ -162,8 +162,8 @@
 
         If tsbtnNewAddress.Enabled = False Then
 
-            Dim addre_RowID = _
-            INSUPD_address(,txtStreet.Text.Trim,
+            Dim addre_RowID =
+            INSUPD_address(, txtStreet.Text.Trim,
                     txtStreet2.Text.Trim,
                     txtBrgy.Text.Trim,
                     txtCity.Text.Trim,
@@ -181,7 +181,6 @@
                     txtZip.Text.Trim)
 
             tsbtnNewAddress.Enabled = True
-
         Else
 
             INSUPD_address(
@@ -253,7 +252,7 @@
         params(7, 1) = ad_Country
         params(8, 1) = ad_ZipCode
 
-        returnvalue = _
+        returnvalue =
         EXEC_INSUPD_PROCEDURE(params,
                               "INSUPD_address",
                               "returnvalue")
@@ -342,7 +341,6 @@
             ad_Country = Nothing
 
             ad_ZipCode = Nothing
-
         Else
             With dgvAddress.CurrentRow
 
@@ -410,7 +408,7 @@
             '.Width = 375
 
             '.Height += 30
-            
+
             '.Size = New Size(841, 398)
             .Size = New Size(339, 398)
             dgvAddress.Anchor = AnchorStyles.None
@@ -440,13 +438,11 @@
                 Close()
 
                 Return True
-
             Else
 
                 Return MyBase.ProcessCmdKey(msg, keyData)
 
             End If
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -454,7 +450,7 @@
         End If
 
     End Function
-    
+
     Private Sub lnklblleave_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnklblleave.LinkClicked
 
         If lnklblleave.Tag = 0 Then

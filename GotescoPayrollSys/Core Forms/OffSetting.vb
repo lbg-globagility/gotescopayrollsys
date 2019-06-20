@@ -59,7 +59,6 @@ Public Class OffSetting
         dgvempoffset.EndEdit(True)
 
         If publicEmpRowID = Nothing Then
-
         Else
 
             For Each dgvrow As DataGridViewRow In dgvempoffset.Rows
@@ -72,7 +71,7 @@ Public Class OffSetting
 
                         If .Cells("eosRowID").Value = Nothing Then
 
-                            .Cells("eosRowID").Value = _
+                            .Cells("eosRowID").Value =
                                 INSUPD_employeeoffset(,
                                                     publicEmpRowID, .Cells("eosRowID").Value,
                                                     .Cells("eosStartTime").Value,
@@ -82,7 +81,6 @@ Public Class OffSetting
                                                     .Cells("eosStatus").Value,
                                                     .Cells("eosReason").Value,
                                                     .Cells("eosComment").Value)
-
                         Else
 
                             If listofEditRow.Contains(.Cells("eosRowID").Value) Then
@@ -116,7 +114,7 @@ Public Class OffSetting
 
         tsbtnSave.Enabled = True
 
-        InfoBalloon("Successfully saved.", _
+        InfoBalloon("Successfully saved.",
                   "Successfully saved.", lblforballoon, 0, -69)
 
     End Sub
@@ -171,9 +169,8 @@ Public Class OffSetting
                 ElseIf eosStartTime.ToString.Trim = String.Empty Then
 
                     .Parameters.AddWithValue("eosStartTime", DBNull.Value)
-
                 Else
-                    Dim last_time = _
+                    Dim last_time =
                               Format(CDate(eosStartTime), "HH:mm")
 
                     .Parameters.AddWithValue("eosStartTime", last_time)
@@ -191,9 +188,8 @@ Public Class OffSetting
                 ElseIf eosEndTime.ToString.Trim = String.Empty Then
 
                     .Parameters.AddWithValue("eosEndTime", DBNull.Value)
-
                 Else
-                    Dim last_time = _
+                    Dim last_time =
                               Format(CDate(eosEndTime), "HH:mm")
 
                     .Parameters.AddWithValue("eosEndTime", last_time)
@@ -204,42 +200,35 @@ Public Class OffSetting
 
                 .Parameters.AddWithValue("eosEndDate", If(eosEndDate = Nothing, DBNull.Value, Format(CDate(eosEndDate), "yyyy-MM-dd")))
 
-
                 If eosStatus Is Nothing Then
                     .Parameters.AddWithValue("eosStatus", String.Empty)
 
                 ElseIf IsDBNull(eosStatus) Then
                     .Parameters.AddWithValue("eosStatus", String.Empty)
-
                 Else
                     .Parameters.AddWithValue("eosStatus", eosStatus.ToString.Trim)
 
                 End If
-
 
                 If eosReason Is Nothing Then
                     .Parameters.AddWithValue("eosReason", String.Empty)
 
                 ElseIf IsDBNull(eosReason) Then
                     .Parameters.AddWithValue("eosReason", String.Empty)
-
                 Else
                     .Parameters.AddWithValue("eosReason", eosReason.ToString.Trim)
 
                 End If
-
 
                 If eosComments Is Nothing Then
                     .Parameters.AddWithValue("eosComments", String.Empty)
 
                 ElseIf IsDBNull(eosComments) Then
                     .Parameters.AddWithValue("eosComments", String.Empty)
-
                 Else
                     .Parameters.AddWithValue("eosComments", eosComments.ToString.Trim)
 
                 End If
-
 
                 .Parameters("returnvalue").Direction = ParameterDirection.ReturnValue
 
@@ -253,7 +242,6 @@ Public Class OffSetting
                 End If
 
             End With
-
         Catch ex As Exception
             MsgBox(ex.Message, , "Error : INSUPD_employeeoffset")
 
@@ -293,11 +281,9 @@ Public Class OffSetting
 
                 lblOffSetBal.Text = .Cells("eOffsetBal").Value & " hour(s)"
 
-
                 VIEW_employeeoffset(.Cells("eRowID").Value)
 
             End With
-
         Else
 
             publicEmpRowID = Nothing
@@ -363,8 +349,8 @@ Public Class OffSetting
         Dim colName As String = dgvempoffset.Columns(e.ColumnIndex).Name
         Dim rowindx = e.RowIndex
 
-        Static num As Integer = If(reset_static = -1, _
-                                   -1, _
+        Static num As Integer = If(reset_static = -1,
+                                   -1,
                                    num)
 
         If dgvempoffset.RowCount <> 0 Then
@@ -373,7 +359,6 @@ Public Class OffSetting
                 If Val(dgvempoffset.Item("eosRowID", e.RowIndex).Value) <> 0 Then
 
                     listofEditRow.Add(dgvempoffset.Item("eosRowID", e.RowIndex).Value)
-
                 Else
 
                 End If
@@ -393,7 +378,6 @@ Public Class OffSetting
                             dgvempoffset.Item(colName, rowindx).ErrorText = "     Invalid date value"
 
                         End Try
-
                     Else
                         haserrinput = 0
 
@@ -409,8 +393,8 @@ Public Class OffSetting
                         Dim ampm As String = Nothing
 
                         Try
-                            If dateobj.ToString.Contains("A") Or _
-                        dateobj.ToString.Contains("P") Or _
+                            If dateobj.ToString.Contains("A") Or
+                        dateobj.ToString.Contains("P") Or
                         dateobj.ToString.Contains("M") Then
 
                                 ampm = " " & StrReverse(getStrBetween(StrReverse(dateobj.ToString), "", ":"))
@@ -430,7 +414,6 @@ Public Class OffSetting
                             haserrinput = 0
 
                             dgvempoffset.Item(colName, rowindx).ErrorText = Nothing
-
                         Catch ex As Exception
                             Try
                                 dateobj = dateobj.ToString.Replace(":", " ")
@@ -451,7 +434,6 @@ Public Class OffSetting
                             End Try
 
                         End Try
-
                     Else
                         haserrinput = 0
 
@@ -549,7 +531,6 @@ Public Class OffSetting
             If modcent = 0 Then
 
                 pagination -= 20
-
             Else
 
                 pagination -= modcent
@@ -568,7 +549,6 @@ Public Class OffSetting
 
             If modcent = 0 Then
                 pagination += 20
-
             Else
                 pagination -= modcent
 
@@ -625,7 +605,6 @@ Public Class OffSetting
             If modcent = 0 Then
 
                 pagenumber -= 20
-
             Else
 
                 pagenumber -= modcent
@@ -644,7 +623,6 @@ Public Class OffSetting
 
             If modcent = 0 Then
                 pagenumber += 20
-
             Else
                 pagenumber -= modcent
 
@@ -687,7 +665,7 @@ Public Class OffSetting
 
                 dgvempoffset.EndEdit(True)
 
-                EXECQUER("DELETE FROM employeeoffset WHERE RowID = '" & dgvempoffset.CurrentRow.Cells("eosRowID").Value & "';" & _
+                EXECQUER("DELETE FROM employeeoffset WHERE RowID = '" & dgvempoffset.CurrentRow.Cells("eosRowID").Value & "';" &
                          "ALTER TABLE employeeoffset AUTO_INCREMENT = 0;")
 
                 'c_RowIDLoan
@@ -700,7 +678,6 @@ Public Class OffSetting
 
         'InfoBalloon("Successfully saved.", _
         '          "Successfully saved.", lblforballoon, 0, -69)
-
 
         tsbtnDelete.Enabled = True
 

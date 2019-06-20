@@ -55,8 +55,8 @@ Public Class DataGridViewTimeCell
 
             Try
 
-                If dateobj.ToString.Contains("A") Or _
-                    dateobj.ToString.Contains("P") Or _
+                If dateobj.ToString.Contains("A") Or
+                    dateobj.ToString.Contains("P") Or
                     dateobj.ToString.Contains("M") Then
 
                     ampm = " " & StrReverse(getStrBetween(StrReverse(dateobj.ToString), "", ":"))
@@ -82,9 +82,8 @@ Public Class DataGridViewTimeCell
                 If ampm = Nothing Then
 
                     MyBase.Value = valtime.ToLongTimeString
-
                 Else
-                    
+
                     'MyBase.Value = Trim(valtime.ToLongTimeString.Substring(0, (dateobj_len - 1))) & ampm
                     MyBase.Value = Trim(valtime.ToLongTimeString.Substring(0, dateobj_len)) & ampm
 
@@ -97,7 +96,6 @@ Public Class DataGridViewTimeCell
                 MyBase.ErrorText = Nothing
 
                 MyBase.Tag = valtime.ToString("HH:mm:ss")
-
             Catch ex As Exception
 
                 Try
@@ -117,7 +115,6 @@ Public Class DataGridViewTimeCell
                     MyBase.ErrorText = Nothing
 
                     MyBase.Tag = valtime.ToString("HH:mm:ss")
-
                 Catch exx As Exception
 
                     MyBase.ErrorText = "     Invalid" & vbNewLine &

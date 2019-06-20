@@ -14,7 +14,7 @@
 
         Try
             Dim dt As New DataTable
-            dt = getDataTableForSQL("Select u.RowID, u.UserID, p.PositionName, u.LastName, u.Firstname, u.MiddleName, u.RowID, u.EmailAddress, u.DeptMngrID from User u " & _
+            dt = getDataTableForSQL("Select u.RowID, u.UserID, p.PositionName, u.LastName, u.Firstname, u.MiddleName, u.RowID, u.EmailAddress, u.DeptMngrID from User u " &
                                     " inner join Position p on u.PositionID = p.RowID AND u.RowID > 0 ORDER BY u.Rowid ASC;")
 
             'Where u.OrganizationID = '" & Z_OrganizationID & "' And Status = 'Active'
@@ -159,7 +159,7 @@
 
             If txtLastName.Text = "" Or txtFirstName.Text = "" Or txtUserName.Text = "" Or txtPassword.Text = "" _
                 Or txtConfirmPassword.Text = "" Or cmbPosition.Text = "" Then
-                If Not SetWarningIfEmpty(txtLastName) And SetWarningIfEmpty(txtFirstName) And SetWarningIfEmpty(txtUserName) And _
+                If Not SetWarningIfEmpty(txtLastName) And SetWarningIfEmpty(txtFirstName) And SetWarningIfEmpty(txtUserName) And
                     SetWarningIfEmpty(txtPassword) And SetWarningIfEmpty(txtConfirmPassword) And SetWarningIfEmpty(cmbPosition) Then
 
                 End If
@@ -175,18 +175,18 @@
                     myBalloonWarn("User ID Already exist.", "Duplicate", txtUserName, , -65)
                 Else
                     If txtPassword.Text = txtConfirmPassword.Text Then
-                        I_UsersProc(txtLastName.Text, _
-                                    txtFirstName.Text, _
-                                    txtMiddleName.Text, _
-                               EncrypedData(txtUserName.Text), _
-                                    EncrypedData(txtConfirmPassword.Text), _
-                               z_OrganizationID, _
-                                    getposition, _
-                                    Date.Now.ToString("yyyy-MM-dd HH:mm:ss"), _
-                               user_row_id, _
-                                    user_row_id, _
-                                    Date.Now.ToString("yyyy-MM-dd HH:mm:ss"), _
-                                    status, _
+                        I_UsersProc(txtLastName.Text,
+                                    txtFirstName.Text,
+                                    txtMiddleName.Text,
+                               EncrypedData(txtUserName.Text),
+                                    EncrypedData(txtConfirmPassword.Text),
+                               z_OrganizationID,
+                                    getposition,
+                                    Date.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                               user_row_id,
+                                    user_row_id,
+                                    Date.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                                    status,
                                     txtEmailAdd.Text,
                                     dept_mngr_id)
 
@@ -246,16 +246,16 @@
                 End If
 
                 Dim status As String = "Active"
-                U_UsersProc(Val(dgvUserList.CurrentRow.Cells(c_rowid.Index).Value), _
-                                        txtLastName.Text, _
-                                        txtFirstName.Text, _
-                                        txtMiddleName.Text, _
-                                        getposition, _
-                                        Today.Date, _
-                                        user_row_id, _
-                                        user_row_id, _
-                                        Today.Date, _
-                                        status, _
+                U_UsersProc(Val(dgvUserList.CurrentRow.Cells(c_rowid.Index).Value),
+                                        txtLastName.Text,
+                                        txtFirstName.Text,
+                                        txtMiddleName.Text,
+                                        getposition,
+                                        Today.Date,
+                                        user_row_id,
+                                        user_row_id,
+                                        Today.Date,
+                                        status,
                                         txtEmailAdd.Text,
                                         enc_userid,
                                         enc_pword,

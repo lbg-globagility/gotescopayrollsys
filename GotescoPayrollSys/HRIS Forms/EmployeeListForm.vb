@@ -1,4 +1,5 @@
 ﻿Public Class EmployeeListForm
+
     Private Sub fillemplist()
         Dim dt As New DataTable
         dt = getDataTableForSQL("Select * From employee")
@@ -26,6 +27,7 @@
         Next
 
     End Sub
+
     Private Sub EmployeeListForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         fillemplist()
     End Sub
@@ -37,7 +39,7 @@
         'Catch ex As Exception
 
         'End Try
-      
+
     End Sub
 
     Private Sub dgvemplist_DoubleClick(sender As Object, e As EventArgs) Handles dgvemplist.DoubleClick
@@ -49,4 +51,5 @@
         'End Try
 
     End Sub
+
 End Class

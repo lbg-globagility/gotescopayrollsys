@@ -168,6 +168,7 @@ Namespace Global.AccuPay.Entity
                 Return Fixed = "1"
             End Get
         End Property
+
     End Class
 
 End Namespace

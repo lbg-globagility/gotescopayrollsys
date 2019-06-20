@@ -23,7 +23,6 @@ Public Class ExecuteQuery
 
             priv_conn.ConnectionString = mysql_conn_text &
                 "default command timeout=" & cmd_time_out & ";"
-
         Else
 
             priv_conn.ConnectionString = mysql_conn_text
@@ -53,7 +52,6 @@ Public Class ExecuteQuery
                 If FindingWordsInString(cmdsql, mysql_except_query) Then
 
                     .ExecuteNonQuery()
-
                 Else
 
                     dr = .ExecuteReader()
@@ -61,7 +59,7 @@ Public Class ExecuteQuery
                 End If
 
             End With
-            
+
             If FindingWordsInString(cmdsql, mysql_except_query) Then
                 getResult = Nothing
             Else
@@ -74,7 +72,6 @@ Public Class ExecuteQuery
                         getResult = dr(0)
 
                     End If
-
                 Else
                     getResult = Nothing
 
@@ -83,7 +80,6 @@ Public Class ExecuteQuery
             End If
 
             _error_message = String.Empty
-
         Catch ex As Exception
 
             _hasError = True
@@ -91,7 +87,6 @@ Public Class ExecuteQuery
             _error_message = getErrExcptn(ex, "ExecuteQuery")
 
             MsgBox(_error_message, , cmdsql)
-
         Finally
 
             priv_cmd.Connection.Close()
@@ -100,7 +95,7 @@ Public Class ExecuteQuery
                 dr.Close()
                 dr.Dispose()
             End If
-            
+
             priv_conn.Close()
 
             priv_conn.Dispose()

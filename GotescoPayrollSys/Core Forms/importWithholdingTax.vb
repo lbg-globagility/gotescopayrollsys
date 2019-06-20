@@ -61,7 +61,7 @@
 
         txtnumdepend.ContextMenu = New ContextMenu
 
-        enlistToCboBox("SELECT PayFrequencyType FROM payfrequency;", _
+        enlistToCboBox("SELECT PayFrequencyType FROM payfrequency;",
                         cbopayfreq)
 
         'orgPayFreqID = EXECQUER("SELECT PayFrequencyID FROM organization WHERE RowID='" & orgztnID & "';")
@@ -73,7 +73,7 @@
 
         'End If
 
-        enlistToCboBox("SELECT DisplayValue FROM listofval lov WHERE lov.Type='Marital Status' AND Active='Yes'", _
+        enlistToCboBox("SELECT DisplayValue FROM listofval lov WHERE lov.Type='Marital Status' AND Active='Yes'",
                         cbomaritstat)
 
         cbomaritstat.Items.Add("None of the above")
@@ -117,7 +117,7 @@
 
         m_PayFrequencyID = EXECQUER("SELECT RowID FROM payfrequency WHERE PayFrequencyType='" & cbopayfreq.Text & "' LIMIT 1;")
 
-        Dim str_maritstatus = If(cbomaritstat.SelectedIndex = (cbomaritstat.Items.Count - 1), "Zero", _
+        Dim str_maritstatus = If(cbomaritstat.SelectedIndex = (cbomaritstat.Items.Count - 1), "Zero",
                                 Trim(cbomaritstat.Text))
 
         If str_maritstatus = "Zero" Then
@@ -153,8 +153,8 @@
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
 
         Dim browsefile As OpenFileDialog = New OpenFileDialog()
-        
-        browsefile.Filter = "Microsoft Excel Workbook Documents 2007-13 (*.xlsx)|*.xlsx|" & _
+
+        browsefile.Filter = "Microsoft Excel Workbook Documents 2007-13 (*.xlsx)|*.xlsx|" &
                                   "Microsoft Excel Documents 97-2003 (*.xls)|*.xls"
 
         If browsefile.ShowDialog() = Windows.Forms.DialogResult.OK Then
@@ -162,7 +162,6 @@
             filepath = IO.Path.GetFullPath(browsefile.FileName)
 
             txtfilepath.Text = filepath
-
         Else
 
             txtfilepath.Text = ""
@@ -178,7 +177,6 @@
             Button2_Click(Button2, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

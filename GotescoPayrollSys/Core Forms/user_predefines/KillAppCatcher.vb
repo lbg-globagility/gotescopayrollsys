@@ -1,7 +1,4 @@
-﻿Imports System
-Imports System.Windows.Forms
-Imports System.Diagnostics
-Imports System.Threading
+﻿Imports System.Threading
 
 Namespace PayrollSystem
 
@@ -21,13 +18,11 @@ Namespace PayrollSystem
 
                 mainProcessID = mainn.Id
 
-
                 checker = New Process
 
                 checker.StartInfo.FileName = mainn.MainModule.FileName
 
                 checker.StartInfo.Arguments = mainProcessID.ToString()
-
 
                 checker.EnableRaisingEvents = True
 
@@ -36,7 +31,6 @@ Namespace PayrollSystem
                 checker.Start()
 
                 Application.Run(New MDIPrimaryForm())
-
             Else
 
                 mainn = Process.GetProcessById(Integer.Parse(args(0)))

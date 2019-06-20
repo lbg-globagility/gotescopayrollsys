@@ -5,7 +5,6 @@
 'Imports Tesseract.Interop
 Imports System.Data.Entity
 Imports System.IO
-Imports System.Threading.Tasks
 Imports MySql.Data.MySqlClient
 
 Public Class EmployeeForm
@@ -12436,7 +12435,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                             While Await reader.ReadAsync()
                                 sssContributionAmount = Convert.ToDecimal(reader(0))
                             End While
-
                         Catch ex As Exception
                             MessageBox.Show(String.Concat("Oops! something went wrong. See details :", vbNewLine, ex.Message), "Error SSS contribution", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         End Try
@@ -13420,7 +13418,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         <![CDATA[SELECT phh.EmployeeShare
                 FROM payphilhealth phh
                 INNER JOIN employee e ON e.RowID=@employeePrimaID
-                WHERE IF(LCASE(e.EmployeeType)='daily', @givenSalary * (e.WorkDaysPerYear / 12), @givenSalary) 
+                WHERE IF(LCASE(e.EmployeeType)='daily', @givenSalary * (e.WorkDaysPerYear / 12), @givenSalary)
                 BETWEEN phh.SalaryRangeFrom AND phh.SalaryRangeTo
                 ORDER BY phh.SalaryBase DESC
                 LIMIT 1;]]>.Value
@@ -13442,7 +13440,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     succeed = True
                 End While
             End Using
-
         Catch ex As Exception
             MessageBox.Show($"Oops! something went wrong. See details :{vbNewLine}{ex.Message}", "Auto-calculate PhilHealth contribution", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
@@ -13478,7 +13475,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         Dim sssContributionAmount As Decimal
         Dim query =
         <![CDATA[SELECT GetSSSContribution(
-                (SELECT EmployeeType FROM employee WHERE RowID=@employeePrimaID)                
+                (SELECT EmployeeType FROM employee WHERE RowID=@employeePrimaID)
                 , (SELECT WorkDaysPerYear FROM employee WHERE RowID=@employeePrimaID)
                 , (SELECT IF(LCASE(e.EmployeeType)='daily', @salaryAmount * (e.WorkDaysPerYear / 12), @salaryAmount) FROM employee e WHERE e.RowID=@employeePrimaID)
                 , @salaryEffectiveDateFrom
@@ -13500,7 +13497,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                 While Await reader.ReadAsync()
                     sssContributionAmount = Convert.ToDecimal(reader(0))
                 End While
-
             Catch ex As Exception
                 Dim row = dgvemployeesalary.CurrentRow
                 If row IsNot Nothing Then

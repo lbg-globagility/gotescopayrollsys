@@ -1,7 +1,6 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports Indigo.CollapsibleGroupBox
 Imports Microsoft.Win32
-Imports Indigo.CollapsibleGroupBox
-Imports System.Threading.Tasks
+Imports MySql.Data.MySqlClient
 
 Public Class EmployeeShiftControls
     Dim IsNew As Integer = 0
@@ -131,7 +130,6 @@ Public Class EmployeeShiftControls
                                     " LEFT JOIN (SELECT RowID AS esdRowID,EmployeeID FROM employeeshiftbyday WHERE OrganizationID='" & org_rowid & "' GROUP BY EmployeeID) esh ON esh.EmployeeID=e.RowID" &
                                     " where e.organizationID = '" & z_OrganizationID & "'" &
                                     " ORDER BY e.RowID DESC;")
-
         Else
 
             Dim emp_id_logic_operator As String = "="
@@ -344,7 +342,6 @@ Public Class EmployeeShiftControls
             btnNew.Visible = 0
             btnSave.Visible = 0
             btnDelete.Visible = 0
-
         Else
             For Each drow In formuserprivilege
                 If drow("ReadOnly").ToString = "Y" Then
@@ -458,7 +455,6 @@ Public Class EmployeeShiftControls
     Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click, ByDateToolStripMenuItem.Click
 
         If TypeOf CObj(sender) Is ToolStripDropDownButton Then
-
         Else
             CustomColoredTabControlActivateSelecting(True)
             CustomColoredTabControl1.SelectedIndex = 0
@@ -474,7 +470,6 @@ Public Class EmployeeShiftControls
 
             chkrestday.Checked = False
 
-
             If dgvEmpList.RowCount <> 0 Then
 
                 Dim empshiftmaxdate =
@@ -483,7 +478,6 @@ Public Class EmployeeShiftControls
                              " WHERE EmployeeID=" & dgvEmpList.CurrentRow.Cells("c_ID").Value &
                              " AND RestDay='0'" &
                              " LIMIT 1;")
-
 
                 If empshiftmaxdate = Nothing Then
                     empshiftmaxdate =
@@ -587,7 +581,6 @@ Public Class EmployeeShiftControls
                     '                                                                                                                                                                 'Val(lblShiftID.Text)
                     sp_employeeshiftentry(z_datetime, user_row_id, z_datetime, z_OrganizationID, user_row_id, dtpDateFrom.Value, dtpDateTo.Value, dgvEmpList.CurrentRow.Cells(c_ID.Index).Value, shiftRowID, nightshift, isrestday)
 
-
                     dtpDateFrom.MinDate = CDate("1/1/1753").ToShortDateString
 
                     dtpDateTo.MinDate = CDate("1/1/1753").ToShortDateString
@@ -597,7 +590,6 @@ Public Class EmployeeShiftControls
                     fillemployeeshiftSelected()
 
                     myBalloon("Successfully Save", "Saving...", lblSaveMsg, , -100)
-
                 Else
                     If dontUpdate = 1 Then
                         Exit Sub
@@ -733,7 +725,6 @@ Public Class EmployeeShiftControls
 
                     Dim n_ExecuteQuery As _
                         New ExecuteQuery("CALL AUTOMATICUPD_employeeshiftbyday('" & org_rowid & "','" & dgvEmpList.Tag & "');")
-
                 Else
 
                     If chkbxNewShiftByDay.Checked Then
@@ -763,8 +754,6 @@ Public Class EmployeeShiftControls
                 End If
 
         End Select
-
-
 
         IsNew = 0
         lblShiftID.Text = 0
@@ -945,7 +934,6 @@ Public Class EmployeeShiftControls
                                          Name)
 
         If catchDT Is Nothing Then
-
         Else
 
             'For Each dtbl As DataTable In catchDT.Tables
@@ -1124,7 +1112,6 @@ Public Class EmployeeShiftControls
                 .ExecuteNonQuery()
 
             End With
-
         Catch ex As Exception
 
             MsgBox(getErrExcptn(ex, Name))
@@ -1184,14 +1171,12 @@ Public Class EmployeeShiftControls
                                 amTime)
 
                     retrnObj = amTime
-
                 Else
                     retrnObj = endtime
 
                 End If
 
             End If
-
         Catch ex As Exception
             retrnObj = DBNull.Value
         End Try
@@ -1313,7 +1298,6 @@ Public Class EmployeeShiftControls
                                                  ptY)
 
                 n_ShiftList.BringToFront()
-
             Else
 
                 'For i = 0 To ii
@@ -1360,7 +1344,6 @@ Public Class EmployeeShiftControls
                                 .Tag = Nothing
 
                                 .Value = Nothing
-
                             Else
 
                                 .Tag = i1
@@ -1555,7 +1538,6 @@ Public Class EmployeeShiftControls
             If once = 0 Then
 
                 once = 1
-
             Else
 
                 divisionRowID = CInt(ValNoComma(e.Node.Tag))
@@ -1613,7 +1595,6 @@ Public Class EmployeeShiftControls
                 cmsDeleteShift.Show(MousePosition, ToolStripDropDownDirection.Default)
 
             End If
-
         Else
 
         End If

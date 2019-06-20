@@ -1,10 +1,5 @@
-﻿Imports System.Runtime.InteropServices
-
-Imports System
+﻿Imports System.IO.Ports
 Imports System.Threading
-Imports System.ComponentModel
-Imports System.IO.PortsPublic
-Imports System.IO.Ports
 
 Public Class SMSCOMMS
 
@@ -54,7 +49,9 @@ Public Class SMSCOMMS
     Shared _ContSMS As Boolean = False
     Private _Wait As Boolean = False
     Shared _ReadPort As Boolean = False
+
     Public Event Sending(ByVal Done As Boolean)
+
     Public Event DataReceived(ByVal Message As String)
 
     Public Sub New(ByRef COMMPORT As String)

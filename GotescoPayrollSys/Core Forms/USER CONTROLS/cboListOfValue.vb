@@ -69,7 +69,6 @@ Public Class cboListOfValue
         If n_ListOfValueType.Length = 0 Then 'Or n_OrderByColumn = -1
 
             Items.Clear()
-
         Else
 
             enlistingToCBoxItems()
@@ -124,7 +123,6 @@ Public Class cboListOfValue
             n_listofvalColumn.Clear()
 
             l_listofvalColumn.Clear()
-
         Else
             enlistingTheLists(n_listofvalColumn)
 
@@ -182,10 +180,10 @@ Public Class cboListOfValue
 
         Dim cboxwidth = DropDownWidth
 
-        Dim g As Graphics = CreateGraphics
+        Dim g As Graphics = CreateGraphics()
 
-        Dim vertScrollBarWidth As Integer = If(Items.Count > MaxDropDownItems, _
-                                               SystemInformation.VerticalScrollBarWidth, _
+        Dim vertScrollBarWidth As Integer = If(Items.Count > MaxDropDownItems,
+                                               SystemInformation.VerticalScrollBarWidth,
                                                0)
 
         Dim newWidth As Integer = 0

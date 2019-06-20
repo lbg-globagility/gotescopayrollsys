@@ -1,7 +1,7 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.Configuration
+﻿Imports System.Configuration
 Imports System.Text.RegularExpressions
 Imports System.Threading.Tasks
+Imports MySql.Data.MySqlClient
 
 Public Class MySQLExecuteCommand
 
@@ -77,12 +77,10 @@ Public Class MySQLExecuteCommand
                 dat_reader.Dispose()
 
                 mysql_transac.Commit()
-
             Catch ex As Exception
                 mysql_transac.Rollback()
 
                 AssignError(ex)
-
             Finally
 
                 DisposeCommand()
@@ -115,12 +113,10 @@ Public Class MySQLExecuteCommand
                 dat_adap.Fill(datset_result)
 
                 mysql_transac.Commit()
-
             Catch ex As Exception
                 mysql_transac.Rollback()
 
                 AssignError(ex)
-
             Finally
 
                 DisposeCommand()
@@ -153,12 +149,10 @@ Public Class MySQLExecuteCommand
             Await dat_adap.FillAsync(datset_result)
 
             mysql_transac.Commit()
-
         Catch ex As Exception
             mysql_transac.Rollback()
 
             AssignError(ex)
-
         Finally
 
             DisposeCommand()
@@ -231,7 +225,6 @@ Public Class MySQLExecuteCommand
                     '    .CommandType = CommandType.StoredProcedure
 
                     'End If
-
                 Catch ex As Exception
                     .CommandType = CommandType.StoredProcedure
 
@@ -279,7 +272,6 @@ Public Class MySQLExecuteCommand
                 End If
 
             End With
-
         Catch ex As Exception
 
             AssignError(ex)
@@ -321,12 +313,10 @@ Public Class MySQLExecuteCommand
             prepared_mysqlcmd.ExecuteNonQuery()
 
             mysql_transac.Commit()
-
         Catch ex As Exception
             mysql_transac.Rollback()
 
             AssignError(ex)
-
         Finally
 
             DisposeCommand()
@@ -349,12 +339,10 @@ Public Class MySQLExecuteCommand
             fdsfsd = Await prepared_mysqlcmd.ExecuteNonQueryAsync()
 
             mysql_transac.Commit()
-
         Catch ex As Exception
             mysql_transac.Rollback()
 
             AssignError(ex)
-
         Finally
 
             DisposeCommand()

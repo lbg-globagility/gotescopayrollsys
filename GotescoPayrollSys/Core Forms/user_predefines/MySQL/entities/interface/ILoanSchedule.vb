@@ -1,5 +1,4 @@
-﻿
-Interface ILoanSchedule
+﻿Interface ILoanSchedule
     Property RowID As Integer
     Property OrganizationID As Integer
     Property Created As DateTime

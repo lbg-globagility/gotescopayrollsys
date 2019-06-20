@@ -16,14 +16,13 @@
                 userid = " And usr.UserID = '" & EncrypedData(cbUserID.Text) & "' "
             End If
             Dim dt As New DataTable
-            dt = getDataTableForSQL("Select * From AuditTrail aud inner join user usr on aud.LastUpdBy = usr.RowID " & _
-                                    "inner join view vw on aud.ViewID = vw.RowID Where aud.OrganizationID = '" & z_OrganizationID & "' " & _
-                                    "And aud.LastUpd Between '" & dtpFrom.Value.ToString("yyyy-MM-dd") & " 00:00:00' " & _
+            dt = getDataTableForSQL("Select * From AuditTrail aud inner join user usr on aud.LastUpdBy = usr.RowID " &
+                                    "inner join view vw on aud.ViewID = vw.RowID Where aud.OrganizationID = '" & z_OrganizationID & "' " &
+                                    "And aud.LastUpd Between '" & dtpFrom.Value.ToString("yyyy-MM-dd") & " 00:00:00' " &
                                     "And '" & dtpTo.Value.ToString("yyyy-MM-dd") & " 23:59:00'" & userid & action & " order by aud.RowID desc")
             If dt.Rows.Count = 0 Then
 
                 MsgBox("No Record found", MsgBoxStyle.Information, "No Record")
-
             Else
                 dgvAuditList.Rows.Clear()
 
@@ -57,4 +56,5 @@
         Close()
 
     End Sub
+
 End Class

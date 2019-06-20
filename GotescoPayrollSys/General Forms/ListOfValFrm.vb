@@ -1,18 +1,12 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
+﻿Imports System.IO
+Imports MySql.Data.MySqlClient
+
 'Imports System.DirectoryServices
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
 Public Class ListOfValFrm
+
     'Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(db_connectinstring) 'Manager.GetConnString
+
     Dim sqlquery As String
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
@@ -31,6 +25,7 @@ Public Class ListOfValFrm
     Dim listofvaltype, listofvaldisplayvalue As Integer
     Dim nowDate = Date.Now.ToString("yyyy/MM/dd HH:mm:ss")
     Dim listofvalsystemaccntflg, listofvaldisplayaccntflg As Char
+
     Private Sub ListOfValueForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Cursor = Cursors.WaitCursor
         Try
@@ -53,6 +48,7 @@ Public Class ListOfValFrm
         End Try
         Cursor = Cursors.Default
     End Sub
+
     Private Sub ListOfValueForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         'Me.Cursor = Cursors.WaitCursor
         'Try
@@ -64,17 +60,22 @@ Public Class ListOfValFrm
         'End Try
         'Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoCompleteFunctions()
         SearchCompleteLOVType()
         SearchCompleteParentValue()
     End Sub
+
     Sub callAutoPopulateFunctions()
         populateLOVType()
         populateParentValue()
         'populateStatus()
     End Sub
+
 #Region "Clear/Enable/Visible Functions"
+
     Sub clearfields()
         Try
             clearListOfValueInformation()
@@ -87,6 +88,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Sub clearListOfValueInformation()
         Try
             txtDisplayValue.Text = ""
@@ -102,6 +104,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbListOfValList.Enabled = enable1
@@ -113,6 +116,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -130,6 +134,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Sub datagridReadOnlySetup(ByVal readonly1 As Boolean, ByVal readonly2 As Boolean)
         Try
             dgUnknown.CommitEdit(True)
@@ -147,8 +152,11 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click Functions"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -163,13 +171,17 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display Functions"
+
 #Region "AutoComplete Functions"
+
     Sub SearchCompleteLOVType()
         Try
             Dim lovtype As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT type FROM listofval GROUP BY type ", conn) 'WHERE displayaccountFlg = 'Y' 
+            Dim cmd As New MySqlCommand("SELECT type FROM listofval GROUP BY type ", conn) 'WHERE displayaccountFlg = 'Y'
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
@@ -184,10 +196,11 @@ Public Class ListOfValFrm
         End Try
         conn.Close()
     End Sub
+
     Sub SearchCompleteParentValue()
         Try
             Dim parentvalue As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT displayvalue FROM listofval GROUP BY displayvalue ", conn) 'WHERE displayaccountFlg = 'Y' AND status = 'Active' 
+            Dim cmd As New MySqlCommand("SELECT displayvalue FROM listofval GROUP BY displayvalue ", conn) 'WHERE displayaccountFlg = 'Y' AND status = 'Active'
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
@@ -202,13 +215,16 @@ Public Class ListOfValFrm
         End Try
         conn.Close()
     End Sub
+
 #End Region
+
 #Region "AutoPopulate Functions"
+
     Sub populateLOVType()
         Try
             cboLOVType.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT type FROM listofval GROUP BY type ORDER BY type " 'WHERE displayaccountFlg = 'Y' 
+            Dim sql1 As String = "SELECT type FROM listofval GROUP BY type ORDER BY type " 'WHERE displayaccountFlg = 'Y'
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -224,11 +240,12 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Sub populateParentValue()
         Try
             cboParentValue.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT displayvalue FROM listofval GROUP BY displayvalue ORDER BY displayvalue " 'WHERE displayaccountFlg = 'Y' AND status = 'Active' 
+            Dim sql1 As String = "SELECT displayvalue FROM listofval GROUP BY displayvalue ORDER BY displayvalue " 'WHERE displayaccountFlg = 'Y' AND status = 'Active'
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -244,11 +261,12 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Sub populateStatus()
         Try
             cboStatus.Items.Clear() : lv_status.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT displayvalue FROM listofval ORDER BY displayvalue" 'WHERE type = 'Status' AND status = 'Active' 
+            Dim sql1 As String = "SELECT displayvalue FROM listofval ORDER BY displayvalue" 'WHERE type = 'Status' AND status = 'Active'
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -264,11 +282,14 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display Datagrids"
+
     Public Function displayListOfValueDetails()
         If conn.State = ConnectionState.Open Then conn.Close()
-        sqlquery = "SELECT type FROM listofval GROUP BY type ORDER BY type " 'WHERE displayaccountFlg = 'Y' 
+        sqlquery = "SELECT type FROM listofval GROUP BY type ORDER BY type " 'WHERE displayaccountFlg = 'Y'
         dgListOfVal.Rows.Clear()
         Dim sqlcmd As New MySqlCommand(sqlquery, conn)
         conn.Open()
@@ -303,6 +324,7 @@ Public Class ListOfValFrm
         conn.Close()
         Return Nothing
     End Function
+
     Public Function displayListOfValueItems(ByVal slovtype As String)
         If conn.State = ConnectionState.Open Then conn.Close()
         sqlquery = "SELECT lv.rowid,lv.displayvalue,lv.parentlic,lv.description,lv.type,lv.Active FROM listofval lv WHERE lv.type = '" & slovtype & "' ORDER BY lv.displayvalue "
@@ -311,7 +333,7 @@ Public Class ListOfValFrm
 
         'lv.status,
 
-        'lv.displayaccountFlg = 'Y' AND 
+        'lv.displayaccountFlg = 'Y' AND
 
         dgUnknown.Rows.Clear()
         Dim sqlcmd As New MySqlCommand(sqlquery, conn)
@@ -359,9 +381,13 @@ Public Class ListOfValFrm
         conn.Close()
         Return Nothing
     End Function
+
 #End Region
+
 #End Region
+
 #Region "Saving Functions"
+
     Sub getListOfValTypeID(ByVal lovType As String)
         Try
             listofvaltype = 0
@@ -379,6 +405,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Sub getListOfValDetails(ByVal lovLIC As String, ByVal lovType As String)
         Try
             listofvaldisplayvalue = 0 : listofvalsystemaccntflg = "" : listofvaldisplayaccntflg = ""
@@ -398,8 +425,11 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -409,6 +439,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgUnknown_EditingControlShowing(sender As Object, e As DataGridViewEditingControlShowingEventArgs) Handles dgUnknown.EditingControlShowing
         Try
             Dim dgvColName = dgUnknown.Columns(dgUnknown.CurrentCell.ColumnIndex).Name
@@ -425,6 +456,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgUnknown_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnknown.CellClick
         Try
             If dgUnknown.CurrentRow.Cells("lv_systemaccountflg").Value = "Y" Then
@@ -440,6 +472,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgUnknown_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnknown.CellEndEdit
         Cursor = Cursors.WaitCursor
         Try
@@ -461,6 +494,7 @@ Public Class ListOfValFrm
         End Try
         Cursor = Cursors.Default
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         'Me.Cursor = Cursors.WaitCursor
         'Try
@@ -473,6 +507,7 @@ Public Class ListOfValFrm
         'End Try
         'Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboStatus_Leave(sender As Object, e As EventArgs) Handles cboStatus.Leave
         Try
             cboLOVType.Focus()
@@ -482,6 +517,7 @@ Public Class ListOfValFrm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Cursor = Cursors.WaitCursor
         Try
@@ -494,6 +530,7 @@ Public Class ListOfValFrm
         End Try
         Cursor = Cursors.Default
     End Sub
+
     Private Sub msClear_Click(sender As Object, e As EventArgs) Handles msClear.Click
         Cursor = Cursors.WaitCursor
         Try
@@ -511,6 +548,7 @@ Public Class ListOfValFrm
         End Try
         Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Cursor = Cursors.WaitCursor
         Try
@@ -532,6 +570,7 @@ Public Class ListOfValFrm
         End Try
         Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Cursor = Cursors.WaitCursor
         Try
@@ -582,6 +621,7 @@ Public Class ListOfValFrm
         End Try
         Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Try
             errProvider.Clear()
@@ -607,7 +647,6 @@ Public Class ListOfValFrm
                         getListOfValTypeID(cboLOVType.Text)
                         If listofvaltype = 0 Then
                             I_ListOfVal(nowDate, user_row_id, nowDate, user_row_id, txtDisplayValue.Text, txtDisplayValue.Text, cboLOVType.Text, cboParentValue.Text, cboStatus.Text, txtComments.Text, "N", "Y", DBNull.Value)
-
                         Else
                             getListOfValDetails(txtDisplayValue.Text, cboLOVType.Text)
                             If listofvaldisplayvalue = 0 Then
@@ -675,6 +714,7 @@ Public Class ListOfValFrm
         End Try
         Cursor = Cursors.Default
     End Sub
+
     Private Sub dgListOfVal_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgListOfVal.DataError
         Cursor = Cursors.WaitCursor
         Try
@@ -715,6 +755,7 @@ Public Class ListOfValFrm
         End Try
         Cursor = Cursors.Default
     End Sub
+
     Private Sub dgUnknown_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgUnknown.DataError
         Cursor = Cursors.WaitCursor
         Try

@@ -30,7 +30,6 @@
 
     End Property
 
-
     Dim m_MonthLastDate = Nothing
 
     Property MonthLastDate As Object
@@ -46,14 +45,13 @@
 
     End Property
 
-
     Dim yearnow = CDate(dbnow).Year
 
     Private Sub selectMonth_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Dim listofmonth As New AutoCompleteStringCollection
 
-        enlistTheLists("SELECT DisplayValue FROM listofval WHERE Type='Month' ORDER BY OrderBy;", _
+        enlistTheLists("SELECT DisplayValue FROM listofval WHERE Type='Month' ORDER BY OrderBy;",
                         listofmonth)
 
         For Each strval In listofmonth
@@ -74,17 +72,13 @@
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
-
-
         If lbMonth.Items.Count <> 0 Then
 
             m_MonthFirstDate = CDate(paypFrom)
 
             m_MonthLastDate = CDate(paypTo)
 
-
             DialogResult = Windows.Forms.DialogResult.OK
-
         Else
 
             DialogResult = Windows.Forms.DialogResult.Cancel
@@ -145,7 +139,6 @@
             If lbMonth.SelectedItem = Nothing Then
 
                 Label1.Text = ""
-
             Else
 
                 Label1.Text = lbMonth.SelectedItem & " " & yearnow
@@ -159,7 +152,6 @@
             paypTo = EXECQUER("SELECT LAST_DAY('" & Format(CDate(m_MonthValue), "yyyy-MM-dd") & "');")
 
             paypTo = Format(CDate(paypTo), "yyyy-MM-dd")
-
         Else
             Label1.Text = ""
 
@@ -174,7 +166,6 @@
             Button2_Click(Button2, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

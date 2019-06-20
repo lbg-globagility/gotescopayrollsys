@@ -1,5 +1,4 @@
-﻿
-Public Class TextBoxDateTime
+﻿Public Class TextBoxDateTime
 
     Private n_ValueFormat As New DateTimeValueFormat
 
@@ -90,7 +89,6 @@ Public Class TextBoxDateTime
                     End If
 
                 End If
-
             Else
 
                 Dim ii = TextBox1.SelectionStart
@@ -100,7 +98,6 @@ Public Class TextBoxDateTime
                     e.Handled = True
 
                     addDelimiter(e.KeyChar)
-
                 Else
 
                     e.Handled = isAlright

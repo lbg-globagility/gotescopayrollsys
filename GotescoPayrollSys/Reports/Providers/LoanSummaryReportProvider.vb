@@ -252,7 +252,6 @@ Public Class LoanSummaryReportProvider
                                 reader.GetValue(Of String)(columns(4).ColumnName),
                                 reader.GetValue(Of Decimal)(columns.Last.ColumnName)})
                 End While
-
             Catch ex As Exception
                 MessageBox.Show($"Failed generating the Loan Payment report.{vbNewLine}{vbNewLine}{ex.Message}",
                                 "Failed Loan Payment report", MessageBoxButtons.OK, MessageBoxIcon.Error)

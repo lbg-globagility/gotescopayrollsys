@@ -1,6 +1,4 @@
-﻿Imports System.Threading
-
-Public Class BalloonToolTipShower
+﻿Public Class BalloonToolTipShower
 
     Private Timer1 As New System.Windows.Forms.Timer
 

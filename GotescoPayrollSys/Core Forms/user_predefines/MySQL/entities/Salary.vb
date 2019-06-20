@@ -5,6 +5,7 @@ Imports System.ComponentModel.DataAnnotations.Schema
 
 <Table("employeesalary")>
 Public Class Salary
+
     <Key>
     <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property RowID As Integer

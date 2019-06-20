@@ -1,5 +1,5 @@
-﻿Imports Femiani.Forms.UI.Input
-Imports CrystalDecisions.CrystalReports.Engine
+﻿Imports CrystalDecisions.CrystalReports.Engine
+Imports Femiani.Forms.UI.Input
 
 Public Class AlphaListRptVwr
 
@@ -17,7 +17,7 @@ Public Class AlphaListRptVwr
 
 #End Region
 
-    Sub New(Optional date_From As Object = Nothing, _
+    Sub New(Optional date_From As Object = Nothing,
             Optional date_To As Object = Nothing)
 
         ' This call is required by the designer.
@@ -61,24 +61,21 @@ Public Class AlphaListRptVwr
             And date_To Is Nothing Then
 
             Text = orgNam & " - BIR Form No. 2316"
-
         Else
 
             TaxDateFrom = date_From
 
             TaxDateTo = date_To
 
-            Text = orgNam & " - BIR Form No. 2316 for period of " & _
-                Format(CDate(TaxDateFrom), "MMM dd, yyyy") & _
+            Text = orgNam & " - BIR Form No. 2316 for period of " &
+                Format(CDate(TaxDateFrom), "MMM dd, yyyy") &
                 " to " & Format(CDate(TaxDateTo), "MMM dd, yyyy")
 
             txtForTheYear.Text = CDate(TaxDateTo).Year
 
-
             TextBox1.Text = Format(CDate(TaxDateFrom), "MM")
 
             TextBox2.Text = Format(CDate(TaxDateFrom), "dd")
-
 
             TextBox3.Text = Format(CDate(TaxDateTo), "MM")
 
@@ -102,10 +99,9 @@ Public Class AlphaListRptVwr
         params(2, 1) = Format(CDate(TaxDateTo), "yyyy-MM-dd")
         params(3, 1) = "0"
 
-        AnnualizedWithholdingTax = _
-            callProcAsDatTab(params, _
+        AnnualizedWithholdingTax =
+            callProcAsDatTab(params,
                              "RPT_AnnualizedWithholdingTax")
-
 
         Dim paramet(2, 1) As Object
 
@@ -121,19 +117,17 @@ Public Class AlphaListRptVwr
         'paramet(1, 1) = Format(CDate(the_lastdate), "yyyy-MM-dd")
         'paramet(2, 1) = Format(CDate(the_lastdate), "yyyy-MM-dd")
 
-        getGrossCompensation = _
-            callProcAsDatTab(paramet, _
+        getGrossCompensation =
+            callProcAsDatTab(paramet,
                              "RPT_getGrossCompensation")
-
 
         Dim employee_RowID As New AutoCompleteStringCollection
 
-        enlistTheLists("SELECT e.RowID FROM" & _
-                        " employee e" & _
-                        " WHERE e.OrganizationID='" & org_rowid & "'" & _
-                        " ORDER BY e.LastName DESC;", _
+        enlistTheLists("SELECT e.RowID FROM" &
+                        " employee e" &
+                        " WHERE e.OrganizationID='" & org_rowid & "'" &
+                        " ORDER BY e.LastName DESC;",
                         employee_RowID) 'RowID
-
 
         For Each strval In employee_RowID
 
@@ -153,21 +147,17 @@ Public Class AlphaListRptVwr
 
             Dim netTaxableCompensation = Val(0)
 
-
             Dim sel_AnnualizedWithholdingTax = AnnualizedWithholdingTax.Compute("SUM(AllowanceYesTax)", "EmployeeID=" & strval)
 
             Dim sel_AnnualizedWithholdingTax1 = AnnualizedWithholdingTax.Select("EmployeeID=" & strval)
 
-
             Dim sel_getGrossCompensation = getGrossCompensation.Select("EmployeeID=" & strval)
-
 
             Dim first_tax = Val(0)
 
             Dim plusOverExcess = Val(0)
 
             Dim taxdueValue = Val(0)
-
 
             For Each drow In sel_getGrossCompensation
 
@@ -207,14 +197,13 @@ Public Class AlphaListRptVwr
 
                 total_GrossCompen = total_GrossCompen - less_DeMinimisExemption
 
-
                 netTaxableCompensation = total_GrossCompen
 
                 Dim tax_due As New DataTable
 
-                tax_due = retAsDatTbl("SELECT *" & _
-                                      " FROM taxdue " & _
-                                      " WHERE " & netTaxableCompensation & "" & _
+                tax_due = retAsDatTbl("SELECT *" &
+                                      " FROM taxdue " &
+                                      " WHERE " & netTaxableCompensation & "" &
                                       " BETWEEN Over AND NotOver;")
 
                 For Each d_row As DataRow In tax_due.Rows
@@ -252,7 +241,6 @@ Public Class AlphaListRptVwr
                 crvAlphaList.ReportSource.Dispose()
 
             End If
-
         Else
 
             e.Cancel = True
@@ -327,18 +315,18 @@ Public Class AlphaListRptVwr
 
         If dt_catchtable IsNot Nothing Then
 
-            Dim emp_RowID = _
-                EXECQUER("SELECT" & _
-                         " CONCAT(" & _
-                         "e.RowID" & _
-                         ",';',e.FirstName" & _
-                         ",';',INITIALS(e.MiddleName,'.','1')" & _
-                         ",';',e.LastName" & _
-                         ",';',po.PositionName" & _
-                         ",';',CONCAT(e.EmployeeType,' salary'))" & _
-                         " FROM employee e" & _
-                         " LEFT JOIN position po ON po.RowID=e.PositionID" & _
-                         " WHERE e.EmployeeID='" & AutoCompleteTextBox1.Text.Trim & "'" & _
+            Dim emp_RowID =
+                EXECQUER("SELECT" &
+                         " CONCAT(" &
+                         "e.RowID" &
+                         ",';',e.FirstName" &
+                         ",';',INITIALS(e.MiddleName,'.','1')" &
+                         ",';',e.LastName" &
+                         ",';',po.PositionName" &
+                         ",';',CONCAT(e.EmployeeType,' salary'))" &
+                         " FROM employee e" &
+                         " LEFT JOIN position po ON po.RowID=e.PositionID" &
+                         " WHERE e.EmployeeID='" & AutoCompleteTextBox1.Text.Trim & "'" &
                          " AND e.OrganizationID='" & org_rowid & "';")
 
             If emp_RowID = String.Empty Then
@@ -348,7 +336,6 @@ Public Class AlphaListRptVwr
                 txtFName.Text = Nothing
 
                 txtEmpID.Text = Nothing
-
             Else
 
                 pnlEmployee.AutoScrollPosition = New Point(0, 0)
@@ -368,7 +355,6 @@ Public Class AlphaListRptVwr
                 txtEmpID.Text = "ID# " & AutoCompleteTextBox1.Text.Trim & ", " & empDataRow(4) & ", " & empDataRow(5)
 
             End If
-
         Else
 
             emp_RowIDValue = String.Empty
@@ -395,13 +381,11 @@ Public Class AlphaListRptVwr
 
         rptdoc = New Alphalist
 
-
         Dim objText As CrystalDecisions.CrystalReports.Engine.TextObject = Nothing
 
         objText = rptdoc.ReportDefinition.Sections(1).ReportObjects("Text1")
 
         objText.Text = CDate(TaxDateTo).Year
-
 
         objText = rptdoc.ReportDefinition.Sections(1).ReportObjects("Text2")
 
@@ -409,15 +393,11 @@ Public Class AlphaListRptVwr
 
         objText.Text = MMDD_From
 
-
         objText = rptdoc.ReportDefinition.Sections(1).ReportObjects("Text3")
 
         Dim MMDD_To = Format(CDate(TaxDateTo), "MMdd")
 
         objText.Text = MMDD_To
-
-
-
 
         Dim all_employee As New DataTable
 
@@ -427,31 +407,28 @@ Public Class AlphaListRptVwr
 
         Dim emp_dependent As New DataTable
 
-
         all_employee = retAsDatTbl("CALL `RPT_AlphaListemployee`('" & org_rowid & "');")
 
         emp_dependent = retAsDatTbl("CALL `RPT_AlphaListempdependents`('" & org_rowid & "');")
 
         emp_prevEmployer = retAsDatTbl("CALL `RPT_AlphaListemppreviousemployer`('" & org_rowid & "');")
 
-        org_details = retAsDatTbl("SELECT IFNULL(og.TINNo,'') TINNo" & _
-                                  ",og.Name" & _
-                                  ",'ü' AS MainEmployer" & _
-                                  ",ad.StreetAddress1" & _
-                                  ",ad.StreetAddress2" & _
-                                  ",ad.Barangay" & _
-                                  ",ad.CityTown" & _
-                                  ",ad.State" & _
-                                  ",ad.Country" & _
-                                  ",ad.ZipCode" & _
-                                  ",og.RDOCode AS oRDOCode" & _
-                                  ",og.ZIPCode AS oZIPCode" & _
-                                  ",SUM(1)" & _
-                                  " FROM organization og" & _
-                                  " LEFT JOIN address ad ON ad.RowID=og.PrimaryAddressID" & _
+        org_details = retAsDatTbl("SELECT IFNULL(og.TINNo,'') TINNo" &
+                                  ",og.Name" &
+                                  ",'ü' AS MainEmployer" &
+                                  ",ad.StreetAddress1" &
+                                  ",ad.StreetAddress2" &
+                                  ",ad.Barangay" &
+                                  ",ad.CityTown" &
+                                  ",ad.State" &
+                                  ",ad.Country" &
+                                  ",ad.ZipCode" &
+                                  ",og.RDOCode AS oRDOCode" &
+                                  ",og.ZIPCode AS oZIPCode" &
+                                  ",SUM(1)" &
+                                  " FROM organization og" &
+                                  " LEFT JOIN address ad ON ad.RowID=og.PrimaryAddressID" &
                                   " WHERE og.RowID='" & org_rowid & "';")
-
-
 
         If dt_catchtable.Columns.Count = 0 Then
 
@@ -462,16 +439,13 @@ Public Class AlphaListRptVwr
                 dt_catchChanges.Columns.Add("COL" & i) 'this the table that catches the changes applied by the user and will be use to implement changes to the main table
 
             Next
-
         Else
 
             dt_catchtable.Rows.Clear()
 
         End If
 
-
         Dim n_row As DataRow
-
 
         For Each e_row As DataRow In all_employee.Rows
 
@@ -503,8 +477,6 @@ Public Class AlphaListRptVwr
 
             n_row("COL16") = e_row("ExemptionStatus")
 
-
-
             Dim sel_emp_dependent = emp_dependent.Select("ParentEmployeeID = " & e_row("RowID"))
 
             Dim collect_dependent = String.Empty
@@ -523,15 +495,7 @@ Public Class AlphaListRptVwr
 
             n_row("COL19") = collect_dependentBDate
 
-
-
-
-
-
             'this is the be the BASIS for numeric values
-
-
-
 
             Dim Seldt_catchChanges = dt_catchChanges.Select("COL1 = '" & e_row("RowID") & "'")
 
@@ -540,7 +504,6 @@ Public Class AlphaListRptVwr
                 n_row("COL17") = Seldt_catchChanges(0)("COL17")
 
                 n_row("COL22") = Seldt_catchChanges(0)("COL22")
-
             Else
 
                 n_row("COL17") = "ü        ü"
@@ -548,7 +511,6 @@ Public Class AlphaListRptVwr
                 n_row("COL22") = "ü"
 
             End If
-
 
             '************PART IV-B*************START
 
@@ -561,7 +523,6 @@ Public Class AlphaListRptVwr
                 'AnnualizedWithholdingTax'getGrossCompensation
 
                 If e_row("EmployeeType").ToString = "Daily" Then
-
 
                     'A. NON-TAXABLE/EXEMPT COMPENSATION INCOME
 
@@ -613,7 +574,6 @@ Public Class AlphaListRptVwr
                 ElseIf e_row("EmployeeType").ToString = "Fixed" _
                     Or e_row("EmployeeType").ToString = "Monthly" Then
 
-
                     'A. NON-TAXABLE/EXEMPT COMPENSATION INCOME
 
                     Dim val_tmpay = If(sel_getGrossCompensation.Count = 0, 0, sel_getGrossCompensation(0)("ThirteenthMonthPay"))
@@ -659,13 +619,10 @@ Public Class AlphaListRptVwr
 
                     n_row("COL54") = Nothing 'Basic Salary
 
-
                     'B. TAXABLE COMPENSATION INCOME REGULAR
 
                 End If
-
             Else '                              'Employee is a ABOVE minimum wage earner
-
 
                 'A. NON-TAXABLE/EXEMPT COMPENSATION INCOME
 
@@ -712,7 +669,6 @@ Public Class AlphaListRptVwr
 
                 n_row("COL54") = Nothing 'Basic Salary
 
-
                 'B. TAXABLE COMPENSATION INCOME REGULAR
 
             End If
@@ -721,29 +677,20 @@ Public Class AlphaListRptVwr
 
             '************PART IV-B*************FINISH
 
-
-
-
-
-
-
-
-
             n_row("COL23") = org_details.Rows(0)("TINNo")
 
             n_row("COL24") = org_details.Rows(0)("Name")
 
-            n_row("COL25") = org_details.Rows(0)("StreetAddress1") & _
-                org_details.Rows(0)("StreetAddress2") & _
-                org_details.Rows(0)("Barangay") & _
-                org_details.Rows(0)("CityTown") & _
-                org_details.Rows(0)("State") & _
+            n_row("COL25") = org_details.Rows(0)("StreetAddress1") &
+                org_details.Rows(0)("StreetAddress2") &
+                org_details.Rows(0)("Barangay") &
+                org_details.Rows(0)("CityTown") &
+                org_details.Rows(0)("State") &
                 org_details.Rows(0)("Country")
 
             n_row("COL26") = org_details.Rows(0)("oZIPCode")
 
             n_row("COL27") = org_details.Rows(0)("MainEmployer")
-
 
             Dim sel_emp_prevEmployer = emp_prevEmployer.Select("EmployeeID = " & e_row("RowID"))
 
@@ -758,20 +705,9 @@ Public Class AlphaListRptVwr
                 'n_row("COL31") = org_details.Rows(0)("MainEmployer")
             Next
 
-
             dt_catchtable.Rows.Add(n_row)
 
         Next
-
-
-
-
-
-
-
-
-
-
 
         'If dt_catchChanges Is Nothing Then
 
@@ -785,7 +721,6 @@ Public Class AlphaListRptVwr
 
         'End If
 
-
     End Sub
 
     Private Sub bgReport_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgReport.ProgressChanged
@@ -798,7 +733,7 @@ Public Class AlphaListRptVwr
             MsgBox("Error: " & vbNewLine & e.Error.Message)
 
         ElseIf e.Cancelled Then
-            MsgBox("Background work cancelled.", _
+            MsgBox("Background work cancelled.",
                    MsgBoxStyle.Exclamation)
         Else
 
@@ -812,11 +747,11 @@ Public Class AlphaListRptVwr
 
     End Sub
 
-    Private Sub txtForTheYear_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtForTheYear.KeyPress, _
-                                                                                            TextBox1.KeyPress, _
-                                                                                            TextBox2.KeyPress, _
-                                                                                            TextBox3.KeyPress, _
-                                                                                            TextBox4.KeyPress, _
+    Private Sub txtForTheYear_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtForTheYear.KeyPress,
+                                                                                            TextBox1.KeyPress,
+                                                                                            TextBox2.KeyPress,
+                                                                                            TextBox3.KeyPress,
+                                                                                            TextBox4.KeyPress,
                                                                                             txtPrevEmployerZipCode.KeyPress
 
         e.Handled = TrapNumKey(Asc(e.KeyChar))
@@ -855,7 +790,6 @@ Public Class AlphaListRptVwr
             Else
                 e.Handled = False
             End If
-
         Else
             e.Handled = True
         End If
@@ -894,7 +828,6 @@ Public Class AlphaListRptVwr
             Else
                 e.Handled = False
             End If
-
         Else
             e.Handled = True
         End If
@@ -933,7 +866,6 @@ Public Class AlphaListRptVwr
             Else
                 e.Handled = False
             End If
-
         Else
             e.Handled = True
         End If
@@ -972,7 +904,6 @@ Public Class AlphaListRptVwr
             Else
                 e.Handled = False
             End If
-
         Else
             e.Handled = True
         End If
@@ -991,12 +922,10 @@ Public Class AlphaListRptVwr
         If dt_catchChanges IsNot Nothing _
             And emp_RowIDValue <> String.Empty Then
 
-
             Dim sel_dt_catchtable = dt_catchChanges.Select("COL1 = '" & emp_RowIDValue & "'")
 
-
             If sel_dt_catchtable.Count <> 0 Then
-                
+
                 If rdbYes.Checked Then
 
                     sel_dt_catchtable(0)("COL17") = "ü"
@@ -1004,11 +933,10 @@ Public Class AlphaListRptVwr
                 End If
 
                 If rdbNo.Checked Then
-                    
+
                     sel_dt_catchtable(0)("COL17") = "         ü"
 
                 End If
-
 
                 If rdbYesMinimum.Checked Then
 
@@ -1021,7 +949,6 @@ Public Class AlphaListRptVwr
                     sel_dt_catchtable(0)("COL22") = String.Empty
 
                 End If
-
             Else
 
                 Dim Newdt_catchChanges As DataRow
@@ -1042,7 +969,6 @@ Public Class AlphaListRptVwr
 
                 End If
 
-
                 If rdbYesMinimum.Checked Then
 
                     Newdt_catchChanges("COL22") = "ü"
@@ -1054,7 +980,6 @@ Public Class AlphaListRptVwr
                     Newdt_catchChanges("COL22") = String.Empty
 
                 End If
-
 
                 dt_catchChanges.Rows.Add(Newdt_catchChanges)
 
@@ -1087,7 +1012,6 @@ Public Class AlphaListRptVwr
             tsbtnReload_Click(tsbtnReload, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

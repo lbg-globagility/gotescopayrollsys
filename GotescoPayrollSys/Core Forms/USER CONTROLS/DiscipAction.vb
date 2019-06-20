@@ -1,5 +1,4 @@
-﻿
-Public Class DiscipAction
+﻿Public Class DiscipAction
 
     Dim IsNew As Integer
     Dim rowid As Integer
@@ -12,7 +11,6 @@ Public Class DiscipAction
             Close()
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -95,14 +93,13 @@ Public Class DiscipAction
             EXECQUER("SELECT INSUPD_listofval('" & txtname.Text & "','" & txtname.Text & "','Employee Disciplinary Penalty','','Yes','" & txtname.Text & "','" & user_row_id & "',1);")
 
             btnCancel_Click(sender, e)
-
         Else
 
-            EXECQUER("UPDATE listofval" & _
-                     " SET DisplayValue='" & txtname.Text & "'" & _
-                     ",LastUpd=CURRENT_TIMESTAMP()" & _
-                     ",LastUpdBy='" & user_row_id & "'" & _
-                     " WHERE RowID='" & dgvFindingsList.CurrentRow.Cells("c_rowid").Value & "'" & _
+            EXECQUER("UPDATE listofval" &
+                     " SET DisplayValue='" & txtname.Text & "'" &
+                     ",LastUpd=CURRENT_TIMESTAMP()" &
+                     ",LastUpdBy='" & user_row_id & "'" &
+                     " WHERE RowID='" & dgvFindingsList.CurrentRow.Cells("c_rowid").Value & "'" &
                      ";")
 
         End If
@@ -122,7 +119,6 @@ Public Class DiscipAction
         If isthereanupdate = "1" Then
 
             DialogResult = Windows.Forms.DialogResult.OK
-
         Else
 
             DialogResult = Windows.Forms.DialogResult.Cancel
@@ -149,7 +145,6 @@ Public Class DiscipAction
                 txtdesc.Text = .Cells("c_findingdesc").Value
 
             End With
-
         Else
             txtname.Text = String.Empty
             txtdesc.Text = String.Empty

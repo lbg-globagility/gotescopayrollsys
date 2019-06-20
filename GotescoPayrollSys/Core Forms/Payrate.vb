@@ -1,5 +1,4 @@
-﻿
-Public Class Payrate
+﻿Public Class Payrate
     Dim view_ID As Integer = Nothing
 
     Dim _now
@@ -75,7 +74,6 @@ Public Class Payrate
 
             tsbtnsavepayrate.Visible = 0
             dontUpdate = 1
-
         Else
             For Each drow In formuserprivilege
                 If drow("ReadOnly").ToString = "Y" Then
@@ -132,21 +130,21 @@ Public Class Payrate
 
             Label1.Text = defaultViewDate
 
-            dattab = retAsDatTbl("SELECT prate.RowID,DAY(prate.Date) 'dateday'" & _
-                                 ", DAYOFWEEK(prate.Date) 'dayofwk'" & _
-                                 ", DAY(LAST_DAY(prate.Date)) 'maxday'" & _
-                                 ",COALESCE(prate.PayType,'') 'PayType'" & _
-                                 ",COALESCE(prate.Description,'') 'Description'" & _
-                                 ",COALESCE(prate.PayRate,1) 'PayRate'" & _
-                                 ",COALESCE(prate.OvertimeRate,1) 'OvertimeRate'" & _
-                                 ",COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate'" & _
-                                 ",COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate'" & _
-                                 ",DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date'" & _
-                                 ",COALESCE(RestDayRate,1) 'RestDayRate'" & _
-                                 ",COALESCE(RestDayOvertimeRate,1) 'RestDayOvertimeRate'" & _
-                                 " FROM payrate prate" & _
-                                 " WHERE DATE_FORMAT(prate.Date,'%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')" & _
-                                 " AND prate.OrganizationID='" & org_rowid & "'" & _
+            dattab = retAsDatTbl("SELECT prate.RowID,DAY(prate.Date) 'dateday'" &
+                                 ", DAYOFWEEK(prate.Date) 'dayofwk'" &
+                                 ", DAY(LAST_DAY(prate.Date)) 'maxday'" &
+                                 ",COALESCE(prate.PayType,'') 'PayType'" &
+                                 ",COALESCE(prate.Description,'') 'Description'" &
+                                 ",COALESCE(prate.PayRate,1) 'PayRate'" &
+                                 ",COALESCE(prate.OvertimeRate,1) 'OvertimeRate'" &
+                                 ",COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate'" &
+                                 ",COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate'" &
+                                 ",DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date'" &
+                                 ",COALESCE(RestDayRate,1) 'RestDayRate'" &
+                                 ",COALESCE(RestDayOvertimeRate,1) 'RestDayOvertimeRate'" &
+                                 " FROM payrate prate" &
+                                 " WHERE DATE_FORMAT(prate.Date,'%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')" &
+                                 " AND prate.OrganizationID='" & org_rowid & "'" &
                                  " ORDER BY prate.Date;")
             'MONTH(prate.Date)=MONTH(NOW()) AND YEAR(prate.Date)=YEAR(NOW());
             'DISTINCT(DATE_FORMAT(DATE,'%m-%d-%Y')),
@@ -179,7 +177,6 @@ Public Class Payrate
                     End If
                 Next
             Next
-
         Else
 
             Dim querdate As Object = Format(CDate(prate_date), "yyyy-MM-dd")
@@ -187,22 +184,22 @@ Public Class Payrate
             defaultViewDate = Format(CDate(prate_date), "MMMM, yyyy")
             'Label1.Text = Format(CDate(prate_date), "MMMM dd, yyyy")
 
-            dattab = retAsDatTbl("SELECT prate.RowID" & _
-                                 ", DAY(prate.Date) 'dateday'" & _
-                                 ", DAYOFWEEK(prate.Date) 'dayofwk'" & _
-                                 ", DAY(LAST_DAY(prate.Date)) 'maxday'" & _
-                                 ", COALESCE(prate.PayType,'') 'PayType'" & _
-                                 ", COALESCE(prate.Description,'') 'Description'" & _
-                                 ", COALESCE(prate.PayRate,1) 'PayRate'" & _
-                                 ", COALESCE(prate.OvertimeRate,1) 'OvertimeRate'" & _
-                                 ", COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate'" & _
-                                 ", COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate'" & _
-                                 ", DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date'" & _
-                                 ", COALESCE(RestDayRate,1) 'RestDayRate'" & _
-                                 ", COALESCE(RestDayOvertimeRate,1) 'RestDayOvertimeRate'" & _
-                                 " FROM payrate prate" & _
-                                 " WHERE DATE_FORMAT(prate.Date,'%Y-%m')=DATE_FORMAT('" & querdate & "','%Y-%m')" & _
-                                 " AND prate.OrganizationID='" & org_rowid & "'" & _
+            dattab = retAsDatTbl("SELECT prate.RowID" &
+                                 ", DAY(prate.Date) 'dateday'" &
+                                 ", DAYOFWEEK(prate.Date) 'dayofwk'" &
+                                 ", DAY(LAST_DAY(prate.Date)) 'maxday'" &
+                                 ", COALESCE(prate.PayType,'') 'PayType'" &
+                                 ", COALESCE(prate.Description,'') 'Description'" &
+                                 ", COALESCE(prate.PayRate,1) 'PayRate'" &
+                                 ", COALESCE(prate.OvertimeRate,1) 'OvertimeRate'" &
+                                 ", COALESCE(prate.NightDifferentialRate,1) 'NightDifferentialRate'" &
+                                 ", COALESCE(prate.NightDifferentialOTRate,1) 'NightDifferentialOTRate'" &
+                                 ", DATE_FORMAT(prate.Date,'%m-%d-%Y') 'Date'" &
+                                 ", COALESCE(RestDayRate,1) 'RestDayRate'" &
+                                 ", COALESCE(RestDayOvertimeRate,1) 'RestDayOvertimeRate'" &
+                                 " FROM payrate prate" &
+                                 " WHERE DATE_FORMAT(prate.Date,'%Y-%m')=DATE_FORMAT('" & querdate & "','%Y-%m')" &
+                                 " AND prate.OrganizationID='" & org_rowid & "'" &
                                  " ORDER BY prate.Date;")
             'MONTH(prate.Date)=MONTH('" & querdate & "') AND YEAR(prate.Date)=YEAR('" & querdate & "');
             'DISTINCT(DATE_FORMAT(DATE,'%m-%d-%Y')),
@@ -251,7 +248,6 @@ Public Class Payrate
 
                 Dim currColName As String = dgvpayrate.Columns(dgvpayrate.CurrentCell.ColumnIndex).Name
                 ObjectFields(dgvpayrate, currColName)
-
             Else
 
                 dgvpayrate.Rows.Clear()
@@ -331,16 +327,17 @@ Public Class Payrate
     '            End If
     '        Next
     '    End If
+
 #End Region
 
-    Dim currPayrateID, _
-        currPayrate, _
-        Dscrptn, _
-        PayType, _
-        OTRate, _
-        NightDiffRate, _
-        NightDiffOTRate, _
-        RestRate, _
+    Dim currPayrateID,
+        currPayrate,
+        Dscrptn,
+        PayType,
+        OTRate,
+        NightDiffRate,
+        NightDiffOTRate,
+        RestRate,
         RestOTRate As String
 
     Sub addhandlr(ByVal sendr As Object, ByVal e As EventArgs)
@@ -352,6 +349,7 @@ Public Class Payrate
         DataGridView1_CurrentCellChanged(sendr, e)
         DataGridView1_SelectionChanged(sendr, e)
     End Sub
+
     Sub rmvhandlr()
         RemoveHandler dgvpayrate.CurrentCellChanged, AddressOf DataGridView1_CurrentCellChanged
         RemoveHandler dgvpayrate.RowLeave, AddressOf DataGridView1_RowLeave
@@ -393,8 +391,8 @@ Public Class Payrate
                 txtrestotrate.Text = ""
 
                 If dgvpayrate.CurrentRow.Cells(currColName).Value <> Nothing Then
-                    Dim indx_day As String = If(dgvpayrate.CurrentRow.Cells(currColName).Value.ToString.Length = 1, _
-                                                "0" & dgvpayrate.CurrentRow.Cells(currColName).Value, _
+                    Dim indx_day As String = If(dgvpayrate.CurrentRow.Cells(currColName).Value.ToString.Length = 1,
+                                                "0" & dgvpayrate.CurrentRow.Cells(currColName).Value,
                                                 dgvpayrate.CurrentRow.Cells(currColName).Value)
 
                     Dim selrow() As DataRow = dattab.Select("Date='" & monthindx & "-" & indx_day & "-" & TextBox5.Text & "'")
@@ -432,7 +430,6 @@ Public Class Payrate
                 End If
 
             End If
-
         Else
             dgvisLlostfocus = 0
 
@@ -506,7 +503,6 @@ Public Class Payrate
                     dgvpayrate.FirstDisplayedScrollingRowIndex = dgvpayrate.CurrentRow.Index - 1
 
                 End If
-
             Else
 
                 once = -1
@@ -514,7 +510,6 @@ Public Class Payrate
             End If
 
             'End If
-
         Else
             dgvisLlostfocus = 0
 
@@ -543,8 +538,8 @@ Public Class Payrate
 
     End Sub
 
-    Sub ObjectFields(ByVal dgv As DataGridView, _
-                        ByVal colName As String, _
+    Sub ObjectFields(ByVal dgv As DataGridView,
+                        ByVal colName As String,
                         Optional isVisb As SByte = 0)
         'cbopaytype, _
         '                       txtdescrptn, _
@@ -643,6 +638,7 @@ Public Class Payrate
     End Sub
 
 #Region "INSUPD_payrate"
+
     'Sub INSUPD_payrate(Optional prate_Date As Object = Nothing)
     '    'prate_RowID()
     '    'prate_OrganizationID()
@@ -687,6 +683,7 @@ Public Class Payrate
     '                          "payrateID")
 
     'End Sub
+
 #End Region
 
     Sub hideObjFields()
@@ -734,7 +731,6 @@ Public Class Payrate
             If dgvisLlostfocus = 0 Then
                 ObjectFields(dgvpayrate, currColName)
             End If
-
         Else
             hideObjFields()
         End If
@@ -870,15 +866,15 @@ Public Class Payrate
 
             'USUALLY UPDATE FUNCTION
 
-            INSUPD_payrate(drow("currPayrateID"), _
-                           drow("pratedate"), _
-                           drow("PayType"), _
-                           drow("Dscrptn"), _
-                           drow("currPayrate"), _
-                           drow("OTRate"), _
-                           drow("NightDiffRate"), _
-                           drow("NightDiffOTRate"), _
-                           drow("RestDayRate"), _
+            INSUPD_payrate(drow("currPayrateID"),
+                           drow("pratedate"),
+                           drow("PayType"),
+                           drow("Dscrptn"),
+                           drow("currPayrate"),
+                           drow("OTRate"),
+                           drow("NightDiffRate"),
+                           drow("NightDiffOTRate"),
+                           drow("RestDayRate"),
                            drow("RestDayOTRate")) 'drow("RestDayRate")
 
         Next
@@ -898,15 +894,15 @@ Public Class Payrate
 
     End Sub
 
-    Sub INSUPD_payrate(Optional prate_RowID As Object = Nothing, _
-                       Optional prate_Date As Object = Nothing, _
-                       Optional prate_PayType As Object = Nothing, _
-                       Optional prate_Description As Object = Nothing, _
-                       Optional prate_PayRate As Object = Nothing, _
-                       Optional prate_OvertimeRate As Object = Nothing, _
-                       Optional prate_NightDifferentialRate As Object = Nothing, _
-                       Optional prate_NightDifferentialOTRate As Object = Nothing, _
-                       Optional RestDayRate As Object = Nothing, _
+    Sub INSUPD_payrate(Optional prate_RowID As Object = Nothing,
+                       Optional prate_Date As Object = Nothing,
+                       Optional prate_PayType As Object = Nothing,
+                       Optional prate_Description As Object = Nothing,
+                       Optional prate_PayRate As Object = Nothing,
+                       Optional prate_OvertimeRate As Object = Nothing,
+                       Optional prate_NightDifferentialRate As Object = Nothing,
+                       Optional prate_NightDifferentialOTRate As Object = Nothing,
+                       Optional RestDayRate As Object = Nothing,
                        Optional prate_RestDayOvertimeRate As Object = Nothing)
 
         Dim params(12, 2) As Object
@@ -939,8 +935,8 @@ Public Class Payrate
         params(11, 1) = If(RestDayRate = Nothing, 1.3, RestDayRate)
         params(12, 1) = If(prate_RestDayOvertimeRate = Nothing, 1.69, prate_RestDayOvertimeRate)
 
-        EXEC_INSUPD_PROCEDURE(params, _
-                              "INSUPD_payrate", _
+        EXEC_INSUPD_PROCEDURE(params,
+                              "INSUPD_payrate",
                               "payrateID") 'voyager, face to face
 
     End Sub
@@ -987,6 +983,7 @@ Public Class Payrate
     Dim editedpayrate As New AutoCompleteStringCollection
 
     Dim tbleditedpayrate As New DataTable
+
     'Dim currPayrateID, _
     '    currPayrate, _
     '    Dscrptn, _
@@ -1028,8 +1025,8 @@ Public Class Payrate
                 Dim nRow As DataRow
                 nRow = tbleditedpayrate.NewRow
 
-                Dim indx_day As String = If(dgvpayrate.CurrentRow.Cells(currColName).Value.ToString.Length = 1, _
-                                            "0" & dgvpayrate.CurrentRow.Cells(currColName).Value, _
+                Dim indx_day As String = If(dgvpayrate.CurrentRow.Cells(currColName).Value.ToString.Length = 1,
+                                            "0" & dgvpayrate.CurrentRow.Cells(currColName).Value,
                                             dgvpayrate.CurrentRow.Cells(currColName).Value)
 
                 Dim selrow() As DataRow = dattab.Select("Date='" & monthindx & "-" & indx_day & "-" & TextBox5.Text & "'")
@@ -1064,16 +1061,14 @@ Public Class Payrate
                 'editedpayrate.Add(1)
 
             End If
-
         Else
-
 
         End If
 
     End Sub
 
-    Private Sub txtpayrate_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtpayrate.KeyPress, txtotrate.KeyPress, _
-                                                                                      txtnightdiffrate.KeyPress, txtnightdiffotrate.KeyPress, _
+    Private Sub txtpayrate_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtpayrate.KeyPress, txtotrate.KeyPress,
+                                                                                      txtnightdiffrate.KeyPress, txtnightdiffotrate.KeyPress,
                                                                                       txtrestrate.KeyPress, txtrestotrate.KeyPress
 
         Dim e_KChar As String = Asc(e.KeyChar)
@@ -1136,7 +1131,6 @@ Public Class Payrate
             txtrestrate.Text = 100
 
             txtrestotrate.Text = 100
-
         Else
 
             Try
@@ -1220,44 +1214,44 @@ Public Class Payrate
     Private Sub dgvpayrate_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvpayrate.CellPainting
 
         If e.RowIndex = -1 Then
-            GridDrawCustomHeaderColumns(dgvpayrate, e, _
-             My.Resources.ColumnBGStyle005, _
+            GridDrawCustomHeaderColumns(dgvpayrate, e,
+             My.Resources.ColumnBGStyle005,
              DGVHeaderImageAlignments.FillCell)
 
         End If
 
     End Sub
 
-    Private Sub GridDrawCustomHeaderColumns(ByVal dgv As DataGridView, _
-     ByVal e As DataGridViewCellPaintingEventArgs, ByVal img As Image, _
+    Private Sub GridDrawCustomHeaderColumns(ByVal dgv As DataGridView,
+     ByVal e As DataGridViewCellPaintingEventArgs, ByVal img As Image,
      ByVal Style As DGVHeaderImageAlignments)
         ' All of the graphical Processing is done here.
         Dim gr As Graphics = e.Graphics
-        ' Fill the BackGround with the BackGroud Color of Headers. 
+        ' Fill the BackGround with the BackGroud Color of Headers.
         ' This step is necessary, for transparent images, or what's behind
         ' would be painted instead.
-        gr.FillRectangle( _
-         New SolidBrush(dgv.ColumnHeadersDefaultCellStyle.BackColor), _
+        gr.FillRectangle(
+         New SolidBrush(dgv.ColumnHeadersDefaultCellStyle.BackColor),
          e.CellBounds)
         If img IsNot Nothing Then
             Select Case Style
                 Case DGVHeaderImageAlignments.FillCell
-                    gr.DrawImage( _
-                     img, e.CellBounds.X, e.CellBounds.Y, _
+                    gr.DrawImage(
+                     img, e.CellBounds.X, e.CellBounds.Y,
                      e.CellBounds.Width, e.CellBounds.Height)
                 Case DGVHeaderImageAlignments.SingleCentered
-                    gr.DrawImage(img, _
-                     ((e.CellBounds.Width - img.Width) \ 2) + e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img,
+                     ((e.CellBounds.Width - img.Width) \ 2) + e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.SingleLeft
-                    gr.DrawImage(img, e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img, e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.SingleRight
-                    gr.DrawImage(img, _
-                     (e.CellBounds.Width - img.Width) + e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img,
+                     (e.CellBounds.Width - img.Width) + e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.Tile
                     ' ********************************************************
@@ -1278,8 +1272,8 @@ Public Class Payrate
                     Dim br As New TextureBrush(img, Drawing2D.WrapMode.Tile)
                     gr.FillRectangle(br, e.ClipBounds)
                 Case Else
-                    gr.DrawImage( _
-                     img, e.CellBounds.X, e.CellBounds.Y, _
+                    gr.DrawImage(
+                     img, e.CellBounds.X, e.CellBounds.Y,
                      e.ClipBounds.Width, e.CellBounds.Height)
             End Select
         End If
@@ -1339,7 +1333,7 @@ Public Class Payrate
             Dim newForeColor = Color.FromArgb(0, 0, 0)
 
             With dgv.ColumnHeadersDefaultCellStyle
-                gr.DrawString(e.Value.ToString, newFont, _
+                gr.DrawString(e.Value.ToString, newFont,
                  New SolidBrush(newForeColor), e.CellBounds, sf)
             End With
         End Using
@@ -1359,29 +1353,25 @@ Public Class Payrate
             If dgvisLlostfocus = 1 Then
 
                 If CellIndexLeave = -1 Then
-
                 Else
                     dgvpayrate.Columns(CellIndexLeave).Width = 230
 
                 End If
 
                 If RowIndexLeave = -1 Then
-
                 Else
                     dgvpayrate.Rows(RowIndexLeave).Height = 295
 
                 End If
-
             Else
 
-                Dim dgvcellargs As New DataGridViewCellEventArgs(dgvpayrate.CurrentCell.ColumnIndex, _
+                Dim dgvcellargs As New DataGridViewCellEventArgs(dgvpayrate.CurrentCell.ColumnIndex,
                                                                  dgvpayrate.CurrentRow.Index)
 
                 DataGridView1_RowLeave(sender, dgvcellargs)
                 DataGridView1_CellLeave(sender, dgvcellargs)
 
             End If
-
         Else
             dgvisLlostfocus = 0
 
@@ -1442,7 +1432,7 @@ Public Class Payrate
             once = 1
 
             For Each objctrl As Control In Panel2.Controls
-                If TypeOf objctrl Is TextBox Or _
+                If TypeOf objctrl Is TextBox Or
                     TypeOf objctrl Is ComboBox Then
                     OjbAssignNoContextMenu(objctrl)
                 Else

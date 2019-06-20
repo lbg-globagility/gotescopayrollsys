@@ -86,12 +86,12 @@
 
     Private Sub fillDivision()
         Dim dt As New DataTable
-        dt = getDataTableForSQL("SELECT d.*" & _
-                                ",IFNULL(pf.PayFrequencyType,'') AS PayFrequencyType" & _
-                                ",IFNULL(pf.RowID,'') AS pfRowID" & _
-                                " FROM `division` d" & _
-                                " LEFT JOIN payfrequency pf ON pf.RowID=d.PayFrequencyID" & _
-                                " WHERE d.OrganizationID = '" & z_OrganizationID & "'" & _
+        dt = getDataTableForSQL("SELECT d.*" &
+                                ",IFNULL(pf.PayFrequencyType,'') AS PayFrequencyType" &
+                                ",IFNULL(pf.RowID,'') AS pfRowID" &
+                                " FROM `division` d" &
+                                " LEFT JOIN payfrequency pf ON pf.RowID=d.PayFrequencyID" &
+                                " WHERE d.OrganizationID = '" & z_OrganizationID & "'" &
                                 " LIMIT " & pagination & ", 20;")
 
         dgvDivisionList.Rows.Clear()
@@ -163,13 +163,13 @@
             Dim dt As New DataTable
             'dt = getDataTableForSQL("Select * From Division Where OrganizationID = '" & z_OrganizationID & "' And RowID = '" & dgvDivisionList.CurrentRow.Cells(c_rowID.Index).Value & "'")
 
-            dt = getDataTableForSQL("SELECT d.*" & _
-                                    ",IFNULL(pf.PayFrequencyType,'') AS PayFrequencyType" & _
-                                    ",IFNULL(pf.RowID,'') AS pfRowID" & _
-                                    " FROM `division` d" & _
-                                    " LEFT JOIN payfrequency pf ON pf.RowID=d.PayFrequencyID" & _
-                                    " WHERE d.OrganizationID = '" & z_OrganizationID & "'" & _
-                                    " AND d.RowID = '" & dgvDivisionList.CurrentRow.Cells(c_rowID.Index).Value & "'" & _
+            dt = getDataTableForSQL("SELECT d.*" &
+                                    ",IFNULL(pf.PayFrequencyType,'') AS PayFrequencyType" &
+                                    ",IFNULL(pf.RowID,'') AS pfRowID" &
+                                    " FROM `division` d" &
+                                    " LEFT JOIN payfrequency pf ON pf.RowID=d.PayFrequencyID" &
+                                    " WHERE d.OrganizationID = '" & z_OrganizationID & "'" &
+                                    " AND d.RowID = '" & dgvDivisionList.CurrentRow.Cells(c_rowID.Index).Value & "'" &
                                     " LIMIT " & pagination & ", 20;")
 
             For Each row As DataRow In dt.Rows
@@ -320,8 +320,8 @@
 
         If IsNew = 1 Then
 
-            SP_Division(Trim(txtname.Text), Trim(txtmainphone.Text), Trim(txtfaxno.Text), Trim(txtemailaddr.Text), Trim(txtaltemailaddr.Text), _
-                        Trim(txtaltphone.Text), Trim(txturl.Text), z_datetime, user_row_id, z_datetime, user_row_id, Trim(txttinno.Text), _
+            SP_Division(Trim(txtname.Text), Trim(txtmainphone.Text), Trim(txtfaxno.Text), Trim(txtemailaddr.Text), Trim(txtaltemailaddr.Text),
+                        Trim(txtaltphone.Text), Trim(txturl.Text), z_datetime, user_row_id, z_datetime, user_row_id, Trim(txttinno.Text),
                         Trim(txttradename.Text), Trim(cmbDivisionType.Text), Trim(txtbusinessaddr.Text), Trim(txtcontantname.Text),
                         z_OrganizationID,
                         FormatNumber(ValNoComma(txtgraceperiod.Text), 2).Replace(",", ""),
@@ -361,8 +361,8 @@
                 Exit Sub
             End If
 
-            SP_DivisionUpdate(txtname.Text, txtmainphone.Text, txtfaxno.Text, txtemailaddr.Text, txtaltemailaddr.Text, _
-                       txtaltphone.Text, txturl.Text, z_datetime, user_row_id, txttinno.Text, _
+            SP_DivisionUpdate(txtname.Text, txtmainphone.Text, txtfaxno.Text, txtemailaddr.Text, txtaltemailaddr.Text,
+                       txtaltphone.Text, txturl.Text, z_datetime, user_row_id, txttinno.Text,
                        txttradename.Text, cmbDivisionType.Text, txtbusinessaddr.Text, txtcontantname.Text, dgvDivisionList.CurrentRow.Cells(c_rowID.Index).Value,
                         FormatNumber(ValNoComma(txtgraceperiod.Text), 2).Replace(",", ""),
                         ValNoComma(txtmindayperyear.Text),
@@ -490,8 +490,8 @@
 
     Dim alphadivision As New DataTable
 
-    Sub Divisiontreeviewfiller(Optional primkey As Object = Nothing, _
-                       Optional strval As Object = Nothing, _
+    Sub Divisiontreeviewfiller(Optional primkey As Object = Nothing,
+                       Optional strval As Object = Nothing,
                        Optional trnod As TreeNode = Nothing)
 
         Dim n_nod As TreeNode = Nothing
@@ -626,9 +626,9 @@
 
     End Sub
 
-    Private Sub Leaves_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtslallow.KeyPress, _
-                                                                                    txtvlallow.KeyPress, _
-                                                                                    txtmlallow.KeyPress, _
+    Private Sub Leaves_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtslallow.KeyPress,
+                                                                                    txtvlallow.KeyPress,
+                                                                                    txtmlallow.KeyPress,
                                                                                     txtpatlallow.KeyPress
 
         Dim e_asc = Asc(e.KeyChar)

@@ -9,7 +9,7 @@
 
     End Sub
 
-    Private Sub ListBox1_Button1_Event(sender As Object, e As EventArgs) Handles lstbxleavtyp.DoubleClick, _
+    Private Sub ListBox1_Button1_Event(sender As Object, e As EventArgs) Handles lstbxleavtyp.DoubleClick,
                                                                                  Button1.Click
         If lstbxleavtyp.Items.Count <> 0 Then
 
@@ -40,7 +40,7 @@
 
     End Sub
 
-    Private Sub ListBox1_Button1_KeyDown(sender As Object, e As KeyEventArgs) Handles Button1.KeyDown, Me.KeyDown, _
+    Private Sub ListBox1_Button1_KeyDown(sender As Object, e As KeyEventArgs) Handles Button1.KeyDown, Me.KeyDown,
                                                                                       lstbxleavtyp.KeyDown
         If e.KeyCode = Keys.Escape Then
             Hide()

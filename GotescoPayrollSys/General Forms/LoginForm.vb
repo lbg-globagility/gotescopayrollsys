@@ -17,7 +17,6 @@ Public Class LoginForm
 
         'End Try
 
-
         'n_FileObserver.Detect()
 
         'Dim nt_CountDownExpiration = New Thread(AddressOf CountDownExpiration)
@@ -55,7 +54,6 @@ Public Class LoginForm
                     End Try
                 End With
             Next
-
         Else
             PhotoImages.Image = Nothing
 
@@ -64,14 +62,15 @@ Public Class LoginForm
         Return True
 
     End Function
+
     Private Function SecurityFormAllow(ByVal Menuname As String) As Boolean
 
         Dim postid As String = getStringItem("Select PositionID From user where userid = '" & EncrypedData(UsernameTextBox.Text) & "' And Password = '" & EncrypedData(PasswordTextBox.Text) & "'")
         Dim getpostid As Integer = Val(postid)
         Dim dt As New DataTable
-        dt = getDataTableForSQL("Select * from position_view pv inner join position p on pv.PositionID = p.RowID " & _
-                                "inner join `view` v on pv.ViewID = v.RowID " & _
-                                "Where  pv.OrganizationID = " & z_OrganizationID & " " & _
+        dt = getDataTableForSQL("Select * from position_view pv inner join position p on pv.PositionID = p.RowID " &
+                                "inner join `view` v on pv.ViewID = v.RowID " &
+                                "Where  pv.OrganizationID = " & z_OrganizationID & " " &
                                 "And p.RowID = '" & getpostid & "' And v.ViewName = '" & Menuname & "'")
 
         For Each drow As DataRow In dt.Rows
@@ -86,6 +85,7 @@ Public Class LoginForm
         Next
         Return True
     End Function
+
     Public Sub allowforms()
         'With MDImain
         '    If SecurityFormAllow(.UserPrivilege.Text) Then
@@ -214,7 +214,6 @@ Public Class LoginForm
         '        .ListOfDeliveryToolStripMenuItem.Visible = z_read
         '    End If
         '    If SecurityFormAllow(.NewDeliveryToolStripMenuItem.Text) Then
-
 
         '        .lblDRequestText.Visible = z_read
         '        .lblDeliveryRequest.Visible = z_read
@@ -382,10 +381,8 @@ Public Class LoginForm
         '    End If
         'End With
 
-
-
-
     End Sub
+
     Dim ctr As Integer = 0
 
     Private Sub OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK.Click
@@ -464,7 +461,6 @@ Public Class LoginForm
                     If passn2 = passn And usname = usname1 Then
 
                         If Val(user_row_id) = 0 Then
-
                         Else
 
                             Dim userFNameLName = EXECQUER("SELECT CONCAT(COALESCE(FirstName,'.'),',',COALESCE(LastName,'.')) FROM user WHERE RowID=" & user_row_id & ";")
@@ -487,11 +483,9 @@ Public Class LoginForm
 
                         End If
 
-
                         If dbnow = Nothing Then
                             dbnow = EXECQUER(CURDATE_MDY)
                         End If
-
 
                         Static freq As Integer = -1
                         If cmbBranchName.SelectedIndex <> -1 Then
@@ -506,9 +500,9 @@ Public Class LoginForm
 
                             End If
 
-                            position_view_table = retAsDatTbl("SELECT *" & _
-                                                              " FROM position_view" & _
-                                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" & _
+                            position_view_table = retAsDatTbl("SELECT *" &
+                                                              " FROM position_view" &
+                                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" &
                                                               " AND OrganizationID='" & org_rowid & "';")
 
                             Dim i = position_view_table.Rows.Count
@@ -553,7 +547,6 @@ Public Class LoginForm
 
         End If
 
-
         'Dim org As String = getStringItem("Select RowID from Organization where name = '" & cmbBranchName.Text & "'")
         'Z_OrganizationID = Val(org)
 
@@ -563,7 +556,6 @@ Public Class LoginForm
         'Dim pName As String = getStringItem("select p.PositionName from position p inner join user u on p.RowID = u.PositionID where u.OrganizationID = '" & Z_OrganizationID & "' and u.UserID = '" & EncrypedData(UsernameTextBox.Text) & "' and u.Password = '" & EncrypedData(PasswordTextBox.Text) & "'")
         'Z_postName = pName
         'z_CompanyName = cmbBranchName.Text
-
 
         'Dim dtA As DataTable = execute("Select * From Organization o inner join Address a on o.PrimaryAddressID = a.RowID Where o.Name = '" & cmbBranchName.Text & "'")
         'If dtA.Rows.Count > 0 Then
@@ -578,7 +570,6 @@ Public Class LoginForm
 
         '    z_CompanyAddr = st1 + " " + st2 + " " + city + " " + country + " " + state
         'End If
-
 
         'Dim dt As New DataTable
         'dt = getDataTableForSQL("Select * From User u Inner join Organization o on u.OrganizationID = o.RowID Where u.UserID = '" & EncrypedData(UsernameTextBox.Text).ToString.ToUpper.Trim & "' And u.Password = '" & EncrypedData(PasswordTextBox.Text).ToString.ToUpper.Trim & "' And o.Name = '" & cmbBranchName.Text & "'")
@@ -676,7 +667,6 @@ Public Class LoginForm
             Close()
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

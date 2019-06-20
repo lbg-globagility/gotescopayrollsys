@@ -13,6 +13,7 @@ Public Class CustomPictureBox
         RaiseEvent AfterImageChanged(Me, e)
 
     End Sub
+
     Sub OnBeforeImageChanged(ByVal e As EventArgs)
 
         RaiseEvent BeforeImageChanged(Me, e)
@@ -32,11 +33,10 @@ Public Class CustomPictureBox
             OnBeforeImageChanged(EventArgs.Empty)
 
             If MyBase.Image IsNot value Then
-                
+
                 MyBase.Image = value
 
                 MyBase.Tag = imgToByteArray(value)
-
             Else
 
                 MyBase.Image = Nothing

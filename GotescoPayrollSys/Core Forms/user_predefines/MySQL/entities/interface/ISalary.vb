@@ -1,5 +1,4 @@
-﻿
-Public Interface ISalary
+﻿Public Interface ISalary
     Property RowID As Integer
     Property EmployeeID As Integer
     Property Created As DateTime

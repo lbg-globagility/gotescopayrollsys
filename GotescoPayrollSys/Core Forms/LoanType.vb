@@ -16,8 +16,8 @@
         dgvproduct.EndEdit()
         If Trim(TextBox1.Text) <> "" Then
             'TextBox1.Text = StrConv(TextBox1.Text, VbStrConv.ProperCase)
-            Dim new_ID = EmployeeForm.INS_product(Trim(TextBox1.Text), _
-                             Trim(TextBox1.Text), _
+            Dim new_ID = EmployeeForm.INS_product(Trim(TextBox1.Text),
+                             Trim(TextBox1.Text),
                              "Loan Type", ,
                              chknondeductible.Tag)
 
@@ -56,7 +56,6 @@
             Size = New Size(346, 435)
 
             LoadLoanNames()
-
         Else
             once = 2
             lnklblleave.Text = "Vi&ew others"
@@ -93,7 +92,6 @@
 
     End Sub
 
-
     Private Sub dgvproduct_CellBeginEdit(sender As Object, e As DataGridViewCellCancelEventArgs) Handles dgvproduct.CellBeginEdit
 
     End Sub
@@ -112,19 +110,16 @@
 
             If TypeOf dgvproduct.Item(e.ColumnIndex, e.RowIndex).Value Is Boolean Then
                 dgvproduct.Item(e.ColumnIndex, e.RowIndex).Tag = Convert.ToInt32(dgvproduct.Item(e.ColumnIndex, e.RowIndex).Value)
-
             Else
                 dgvproduct.Item(e.ColumnIndex, e.RowIndex).Tag = dgvproduct.Item(e.ColumnIndex, e.RowIndex).Value.ToString.Trim
 
             End If
 
             dgcolname = dgvproduct.Columns(e.ColumnIndex).Name
-
         Catch ex As Exception
             hasNoError = 1
 
             MsgBox(getErrExcptn(ex, Name))
-
         Finally
 
             If hasNoError = 0 Then

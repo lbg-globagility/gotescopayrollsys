@@ -277,18 +277,18 @@
 
     Sub reloadViewPrivilege()
 
-        Dim hasPositionViewUpdate = EXECQUER("SELECT EXISTS(SELECT" & _
-                                             " RowID" & _
-                                             " FROM position_view" & _
-                                             " WHERE OrganizationID='" & org_rowid & "'" & _
-                                             " AND (DATE_FORMAT(Created,'%Y-%m-%d') = CURDATE()" & _
+        Dim hasPositionViewUpdate = EXECQUER("SELECT EXISTS(SELECT" &
+                                             " RowID" &
+                                             " FROM position_view" &
+                                             " WHERE OrganizationID='" & org_rowid & "'" &
+                                             " AND (DATE_FORMAT(Created,'%Y-%m-%d') = CURDATE()" &
                                              " OR DATE_FORMAT(LastUpd,'%Y-%m-%d') = CURDATE()));")
 
         If hasPositionViewUpdate = "1" Then
 
-            position_view_table = retAsDatTbl("SELECT *" & _
-                                              " FROM position_view" & _
-                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" & _
+            position_view_table = retAsDatTbl("SELECT *" &
+                                              " FROM position_view" &
+                                              " WHERE PositionID=(SELECT PositionID FROM user WHERE RowID=" & user_row_id & ")" &
                                               " AND OrganizationID='" & org_rowid & "';")
 
         End If

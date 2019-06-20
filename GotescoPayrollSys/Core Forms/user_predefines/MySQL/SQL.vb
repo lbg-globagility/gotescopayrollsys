@@ -18,7 +18,7 @@ Public Class SQL
 
     ReadOnly Property GetFoundRow As Object
         Get
-            Dim my_exec_cmd As New  _
+            Dim my_exec_cmd As New _
                 MySQLExecuteCommand(mysql_cmd)
 
             Return my_exec_cmd.GetFoundRow
@@ -31,7 +31,7 @@ Public Class SQL
 
     ReadOnly Property GetFoundRows As DataSet
         Get
-            Dim my_exec_cmd As New  _
+            Dim my_exec_cmd As New _
                 MySQLExecuteCommand(mysql_cmd)
 
             Return my_exec_cmd.GetFoundRows
@@ -69,7 +69,7 @@ Public Class SQL
 #Region "Functions"
 
     Async Function GetFoundRowsAsync() As Task(Of DataSet)
-        Dim my_exec_cmd As New  _
+        Dim my_exec_cmd As New _
                 MySQLExecuteCommand(mysql_cmd)
 
         Return Await my_exec_cmd.GetFoundRowsAsync
@@ -94,7 +94,7 @@ Public Class SQL
     End Sub
 
     Sub ExecuteQuery()
-        Dim my_exec_cmd As New  _
+        Dim my_exec_cmd As New _
                 MySQLExecuteCommand(mysql_cmd)
 
         'Dim obj As Object = my_exec_cmd.GetFoundRow

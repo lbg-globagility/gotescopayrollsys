@@ -1,13 +1,14 @@
 ﻿Public Class EmployeePrevEmployerForm
     Dim isNew As Integer = 0
+
     Private Sub fillemplist()
         Dim dt As New DataTable
         dt = getDataTableForSQL("Select * From employee where OrganizationID = '" & z_OrganizationID & "'")
 
-        dgvEmpList.Rows.Clear()
+        dgvEmplist.Rows.Clear()
 
         For Each drow As DataRow In dt.Rows
-            Dim n As Integer = dgvEmpList.Rows.Add()
+            Dim n As Integer = dgvEmplist.Rows.Add()
             With drow
                 Dim ln, fn, mn, name As String
                 ln = .Item("Lastname").ToString
@@ -15,20 +16,19 @@
                 mn = .Item("Middlename").ToString
                 name = fn + " " + mn + " " + ln
 
-
-                dgvEmpList.Rows.Item(n).Cells(c_EmpID.Index).Value = .Item("EmployeeID").ToString
-                dgvEmpList.Rows.Item(n).Cells(c_EmpName.Index).Value = name
-                dgvEmpList.Rows.Item(n).Cells(c_LRowID.Index).Value = .Item("RowID").ToString
+                dgvEmplist.Rows.Item(n).Cells(c_EmpID.Index).Value = .Item("EmployeeID").ToString
+                dgvEmplist.Rows.Item(n).Cells(c_empname.Index).Value = name
+                dgvEmplist.Rows.Item(n).Cells(c_LrowID.Index).Value = .Item("RowID").ToString
             End With
         Next
 
     End Sub
 
     Private Sub fillemployerlist()
-        If dgvEmpList.Rows.Count = 0 Then
+        If dgvEmplist.Rows.Count = 0 Then
         Else
             Dim dt As New DataTable
-            dt = getDataTableForSQL("Select * From employeepreviousemployer where EmployeeID = '" & dgvEmpList.CurrentRow.Cells(c_EmpID.Index).Value & "' " & _
+            dt = getDataTableForSQL("Select * From employeepreviousemployer where EmployeeID = '" & dgvEmplist.CurrentRow.Cells(c_EmpID.Index).Value & "' " &
                                     "And OrganizationID = '" & z_OrganizationID & "' ")
 
             dgvListCompany.Rows.Clear()
@@ -52,20 +52,19 @@
                     dgvListCompany.Rows.Item(n).Cells(c_orgtype.Index).Value = .Item("OrganizationType").ToString
                     dgvListCompany.Rows.Item(n).Cells(c_experience.Index).Value = .Item("ExperienceFromTo").ToString
                     dgvListCompany.Rows.Item(n).Cells(c_compaddr.Index).Value = .Item("BusinessAddress").ToString
-                    dgvListCompany.Rows.Item(n).Cells(c_rowID.Index).Value = .Item("RowID").ToString
+                    dgvListCompany.Rows.Item(n).Cells(c_rowid.Index).Value = .Item("RowID").ToString
 
                 End With
             Next
         End If
-        
-    End Sub
 
+    End Sub
 
     Private Sub fillemployerOneByone()
         If dgvListCompany.Rows.Count = 0 Then
         Else
             Dim dt As New DataTable
-            dt = getDataTableForSQL("Select * From employeepreviousemployer where RowID = '" & dgvListCompany.CurrentRow.Cells(c_rowID.Index).Value & "' " & _
+            dt = getDataTableForSQL("Select * From employeepreviousemployer where RowID = '" & dgvListCompany.CurrentRow.Cells(c_rowid.Index).Value & "' " &
                                     "And OrganizationID = '" & z_OrganizationID & "'")
             If dt.Rows.Count > 0 Then
                 cleartextbox()
@@ -93,10 +92,11 @@
                 cleartextbox()
             End If
             'dgvListCompany.Rows.Clear()
-            
+
         End If
-        
+
     End Sub
+
     Private Sub cleartextbox()
         txtAltEmailAdd.Clear()
         txtAltPhone.Clear()
@@ -114,7 +114,6 @@
         txtUrl.Clear()
         txtExfromto.Clear()
 
-
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
@@ -130,12 +129,11 @@
         grpDetails.Enabled = True
         dgvListCompany.Enabled = False
 
-
     End Sub
 
     Private Sub EmployeePrevEmployerForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         fillemplist()
-        dgvEmpList.Focus()
+        dgvEmplist.Focus()
 
         fillemployerlist()
         fillemployerOneByone()
@@ -153,10 +151,10 @@
 
                 End If
             Else
-                SP_employeepreviousemployer(txtCompanyName.Text, txtTradeName.Text, z_OrganizationID, txtMainPhone.Text, txtFaxNo.Text, txtJobTitle.Text, _
-                                       txtExfromto.Text, txtCompAddr.Text, txtContactName.Text, txtEmailAdd.Text, txtAltEmailAdd.Text, txtAltPhone.Text, _
-                                      txtUrl.Text, txtTinNo.Text, txtJobFunction.Text, z_datetime, user_row_id, z_datetime, user_row_id, txtOrganizationType.Text, _
-                                      dgvEmpList.CurrentRow.Cells(c_LRowID.Index).Value)
+                SP_employeepreviousemployer(txtCompanyName.Text, txtTradeName.Text, z_OrganizationID, txtMainPhone.Text, txtFaxNo.Text, txtJobTitle.Text,
+                                       txtExfromto.Text, txtCompAddr.Text, txtContactName.Text, txtEmailAdd.Text, txtAltEmailAdd.Text, txtAltPhone.Text,
+                                      txtUrl.Text, txtTinNo.Text, txtJobFunction.Text, z_datetime, user_row_id, z_datetime, user_row_id, txtOrganizationType.Text,
+                                      dgvEmplist.CurrentRow.Cells(c_LrowID.Index).Value)
                 fillemployerlist()
 
                 myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
@@ -174,28 +172,22 @@
 
                 End If
             Else
-                SP_EmployeePreviousEmployerUpdate(txtCompanyName.Text, txtTradeName.Text, txtMainPhone.Text, txtFaxNo.Text, txtJobTitle.Text, _
-                                txtExfromto.Text, txtCompAddr.Text, txtContactName.Text, txtEmailAdd.Text, txtAltEmailAdd.Text, txtAltPhone.Text, _
-                               txtUrl.Text, txtTinNo.Text, txtJobFunction.Text, txtOrganizationType.Text, _
-                               dgvListCompany.CurrentRow.Cells(c_rowID.Index).Value)
+                SP_EmployeePreviousEmployerUpdate(txtCompanyName.Text, txtTradeName.Text, txtMainPhone.Text, txtFaxNo.Text, txtJobTitle.Text,
+                                txtExfromto.Text, txtCompAddr.Text, txtContactName.Text, txtEmailAdd.Text, txtAltEmailAdd.Text, txtAltPhone.Text,
+                               txtUrl.Text, txtTinNo.Text, txtJobFunction.Text, txtOrganizationType.Text,
+                               dgvListCompany.CurrentRow.Cells(c_rowid.Index).Value)
                 fillemployerlist()
                 btnNew.Enabled = True
                 btnSave.Enabled = False
                 myBalloon("Successfully Save", "Saved", lblSaveMsg, , -100)
             End If
 
-
-
         End If
     End Sub
 
-
-
-
-
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         If MsgBox("Are you sure you want to remove this employer " & txtCompanyName.Text & "?", MsgBoxStyle.YesNo, "Removing...") = MsgBoxResult.Yes Then
-            DirectCommand("Delete From employeepreviousemployer where RowID = '" & dgvListCompany.CurrentRow.Cells(c_rowID.Index).Value & "'")
+            DirectCommand("Delete From employeepreviousemployer where RowID = '" & dgvListCompany.CurrentRow.Cells(c_rowid.Index).Value & "'")
             fillemployerlist()
             btnDelete.Enabled = False
             btnNew.Enabled = True
@@ -209,7 +201,7 @@
         btnDelete.Enabled = False
         dgvListCompany.Enabled = True
         btnNew.Enabled = True
-        dgvEmpList.Focus()
+        dgvEmplist.Focus()
 
     End Sub
 

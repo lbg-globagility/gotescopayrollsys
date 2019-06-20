@@ -1,5 +1,4 @@
-﻿
-Public Class TrialForm
+﻿Public Class TrialForm
 
     Private Sub TextBox1_OnUserStopTyping(sender As Object, e As EventArgs) Handles TextBox1.OnUserStopTyping
 
@@ -85,7 +84,6 @@ Public Class TrialForm
                 'Next
 
             End If
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         Finally
@@ -109,7 +107,6 @@ Public Class TrialForm
         Try
 
             Label1.Text = CustomDatePicker1.Tag
-
         Catch ex As Exception
 
             Label1.Text = "Nothing"

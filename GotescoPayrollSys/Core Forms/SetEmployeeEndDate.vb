@@ -1,5 +1,4 @@
-﻿
-Public Class SetEmployeeEndDate
+﻿Public Class SetEmployeeEndDate
 
     Dim n_EmployementStatus As String = String.Empty
 
@@ -52,7 +51,6 @@ Public Class SetEmployeeEndDate
         Return Me.ShowDialog
 
     End Function
-
 
     '                MessageBoxManager.OK = "Actual"
 
@@ -110,7 +108,6 @@ Public Class SetEmployeeEndDate
             btnCancel_Click(btnCancel, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

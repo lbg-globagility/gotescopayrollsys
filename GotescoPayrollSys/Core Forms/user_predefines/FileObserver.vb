@@ -40,7 +40,6 @@ Public Class FileObserver
                 .EnableRaisingEvents = True
 
             End With
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, "FileObserver"))
 

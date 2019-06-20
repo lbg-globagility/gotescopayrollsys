@@ -5,8 +5,8 @@
 
     Private Sub fillfinding()
         Dim dt As New DataTable
-        dt = getDataTableForSQL("Select * From product Where OrganizationID = '" & z_OrganizationID & _
-                                "' AND CategoryID='" & EmployeeForm.categDiscipID & "'" & _
+        dt = getDataTableForSQL("Select * From product Where OrganizationID = '" & z_OrganizationID &
+                                "' AND CategoryID='" & EmployeeForm.categDiscipID & "'" &
                                 " Order By RowID DESC")
         dgvFindingsList.Rows.Clear()
         For Each drow As DataRow In dt.Rows
@@ -39,6 +39,7 @@
         End Try
 
     End Sub
+
     Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click
         IsNew = 1
         txtdesc.Clear()
@@ -63,7 +64,6 @@
             dgvFindingsList.Enabled = True
             EmpDisciplinaryActionForm.cmbFinding.Text = txtname.Text
             Hide()
-
         Else
             DirectCommand("UPDATE product SET PartNo = '" & txtname.Text & "', Description = '" & txtdesc.Text & "', lastupd = '" & z_datetime & "', lastupdby = '" & user_row_id & "' where RowID = '" & pID & "'")
             fillfinding()
@@ -94,7 +94,6 @@
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         Try
             fillfindingselected()
-
         Catch ex As Exception
 
         End Try
@@ -107,4 +106,5 @@
     Private Sub btnAudittrail_Click(sender As Object, e As EventArgs) Handles btnAudittrail.Click
 
     End Sub
+
 End Class

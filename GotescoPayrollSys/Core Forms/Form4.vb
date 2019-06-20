@@ -1,46 +1,47 @@
 ﻿Imports MySql.Data.MySqlClient
 
 Public Class Form4
-    Public q_employee As String = "SELECT e.RowID," & _
-        "COALESCE(CAST(e.EmployeeID AS CHAR),'') 'Employee ID'," & _
-        "COALESCE(e.FirstName,'') 'First Name'," & _
-        "COALESCE(e.MiddleName,'') 'Middle Name'," & _
-        "COALESCE(e.LastName,'') 'Last Name'," & _
-        "COALESCE(e.Surname,'') 'Surname'," & _
-        "COALESCE(e.Nickname,'') 'Nickname'," & _
-        "COALESCE(e.MaritalStatus,'') 'Marital Status'," & _
-        "COALESCE(e.NoOfDependents,0) 'No Of Dependents'," & _
-        "COALESCE(DATE_FORMAT(e.Birthdate,'%m-%d-%Y'),'') 'Birthdate'," & _
-        "COALESCE(e.JobTitle,'') 'Job Title'," & _
-        "COALESCE(pos.PositionName,'') 'Position Name'," & _
-        "COALESCE(e.Salutation,'') 'Salutation'," & _
-        "COALESCE(e.TINNo,'') 'TIN'," & _
-        "COALESCE(e.SSSNo,'') 'SSS No'," & _
-        "COALESCE(e.HDMFNo,'') 'PAGIBIG No'," & _
-        "COALESCE(e.PhilHealthNo,'') 'PhilHealth No'," & _
-        "COALESCE(e.WorkPhone,'') 'Work Phone'," & _
-        "COALESCE(e.HomePhone,'') 'Home Phone'," & _
-        "COALESCE(e.MobilePhone,'') 'Mobile Phone'," & _
-        "COALESCE(e.HomeAddress,'') 'Home Address'," & _
-        "COALESCE(e.EmailAddress,'') 'Email Address'," & _
-        "COALESCE(IF(e.Gender='M','Male','Female'),'') 'Gender'," & _
-        "COALESCE(e.EmploymentStatus,'') 'Employment Status'," & _
-        "COALESCE(pf.PayFrequencyType,'') 'Pay Frequency'," & _
-        "COALESCE(e.UndertimeOverride,'') 'UndertimeOverride'," & _
-        "COALESCE(e.OvertimeOverride,'') 'OvertimeOverride'," & _
-        "DATE_FORMAT(e.Created,'%m-%d-%Y') 'Creation Date'," & _
-        "CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2))) 'Created by'," & _
-        "COALESCE(DATE_FORMAT(e.LastUpd,'%m-%d-%Y'),'') 'Last Update'," & _
-        "(SELECT CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2)))  FROM user WHERE RowID=e.LastUpdBy) 'LastUpdate by'" & _
-        ",COALESCE(pos.RowID,'') 'pos_RowID'" & _
-        ",COALESCE(e.PayFrequencyID,'') 'PayFrequencyID'" & _
-        ",COALESCE(e.LeavePerPayPeriod,'') 'LeavePerPayPeriod'" & _
-        ",COALESCE(e.EmployeeType,'') 'EmployeeType'" & _
-        " " & _
-        "FROM employee e " & _
-        "INNER JOIN user u ON e.CreatedBy=u.RowID " & _
-        "LEFT JOIN position pos ON e.PositionID=pos.RowID " & _
-        "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " & _
+
+    Public q_employee As String = "SELECT e.RowID," &
+        "COALESCE(CAST(e.EmployeeID AS CHAR),'') 'Employee ID'," &
+        "COALESCE(e.FirstName,'') 'First Name'," &
+        "COALESCE(e.MiddleName,'') 'Middle Name'," &
+        "COALESCE(e.LastName,'') 'Last Name'," &
+        "COALESCE(e.Surname,'') 'Surname'," &
+        "COALESCE(e.Nickname,'') 'Nickname'," &
+        "COALESCE(e.MaritalStatus,'') 'Marital Status'," &
+        "COALESCE(e.NoOfDependents,0) 'No Of Dependents'," &
+        "COALESCE(DATE_FORMAT(e.Birthdate,'%m-%d-%Y'),'') 'Birthdate'," &
+        "COALESCE(e.JobTitle,'') 'Job Title'," &
+        "COALESCE(pos.PositionName,'') 'Position Name'," &
+        "COALESCE(e.Salutation,'') 'Salutation'," &
+        "COALESCE(e.TINNo,'') 'TIN'," &
+        "COALESCE(e.SSSNo,'') 'SSS No'," &
+        "COALESCE(e.HDMFNo,'') 'PAGIBIG No'," &
+        "COALESCE(e.PhilHealthNo,'') 'PhilHealth No'," &
+        "COALESCE(e.WorkPhone,'') 'Work Phone'," &
+        "COALESCE(e.HomePhone,'') 'Home Phone'," &
+        "COALESCE(e.MobilePhone,'') 'Mobile Phone'," &
+        "COALESCE(e.HomeAddress,'') 'Home Address'," &
+        "COALESCE(e.EmailAddress,'') 'Email Address'," &
+        "COALESCE(IF(e.Gender='M','Male','Female'),'') 'Gender'," &
+        "COALESCE(e.EmploymentStatus,'') 'Employment Status'," &
+        "COALESCE(pf.PayFrequencyType,'') 'Pay Frequency'," &
+        "COALESCE(e.UndertimeOverride,'') 'UndertimeOverride'," &
+        "COALESCE(e.OvertimeOverride,'') 'OvertimeOverride'," &
+        "DATE_FORMAT(e.Created,'%m-%d-%Y') 'Creation Date'," &
+        "CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2))) 'Created by'," &
+        "COALESCE(DATE_FORMAT(e.LastUpd,'%m-%d-%Y'),'') 'Last Update'," &
+        "(SELECT CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2)))  FROM user WHERE RowID=e.LastUpdBy) 'LastUpdate by'" &
+        ",COALESCE(pos.RowID,'') 'pos_RowID'" &
+        ",COALESCE(e.PayFrequencyID,'') 'PayFrequencyID'" &
+        ",COALESCE(e.LeavePerPayPeriod,'') 'LeavePerPayPeriod'" &
+        ",COALESCE(e.EmployeeType,'') 'EmployeeType'" &
+        " " &
+        "FROM employee e " &
+        "INNER JOIN user u ON e.CreatedBy=u.RowID " &
+        "LEFT JOIN position pos ON e.PositionID=pos.RowID " &
+        "LEFT JOIN payfrequency pf ON e.PayFrequencyID=pf.RowID " &
         "WHERE e.OrganizationID=" & org_rowid
 
     Dim allproduct As New DataTable
@@ -51,16 +52,16 @@ Public Class Form4
         loadDivis()
         'loadEmployees()
 
-        Dim custompostbl As New MySqlDataAdapter("SELECT * FROM position WHERE OrganizationID=" & org_rowid, _
+        Dim custompostbl As New MySqlDataAdapter("SELECT * FROM position WHERE OrganizationID=" & org_rowid,
                                              conn) 'ParentDivisionID
 
         'Dim customdivtblParent As New MySqlDataAdapter("SELECT * FROM division WHERE ParentDivisionID IS NULL AND OrganizationID=" & orgztnID, _
         '                                     conn)
 
-        Dim customdivtbl As New MySqlDataAdapter("SELECT * FROM division WHERE OrganizationID=" & org_rowid, _
+        Dim customdivtbl As New MySqlDataAdapter("SELECT * FROM division WHERE OrganizationID=" & org_rowid,
                                              conn)
 
-        Dim customemptbl As New MySqlDataAdapter("SELECT * FROM employee WHERE OrganizationID=" & org_rowid, _
+        Dim customemptbl As New MySqlDataAdapter("SELECT * FROM employee WHERE OrganizationID=" & org_rowid,
                                              conn)
 
         customTbl = fillDattbl("SELECT pos.RowID 'pos_RowID',pos.PositionName,pos.ParentPositionID,pos.DivisionId,divis.RowID 'divis_RowID' ,divis.Name ,COALESCE(CONCAT(emp.FirstName,' ',IF(emp.MiddleName IS NULL,'',CONCAT(emp.MiddleName,' ')),emp.LastName,' ',IF(emp.Surname IS NULL,'',emp.Surname)),'Open') 'Emp Full name' FROM position pos LEFT JOIN division divis ON divis.RowID=pos.DivisionId LEFT JOIN employee emp ON emp.PositionID=pos.RowID WHERE pos.OrganizationID=" & org_rowid & ";")
@@ -91,12 +92,12 @@ Public Class Form4
         Try
 
             filltable(DataGridViewX1, q_employee)
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
 
     End Sub
+
     Private Sub DataGridViewX1_Scroll(sender As Object, e As ScrollEventArgs) Handles DataGridViewX1.Scroll
         Label1.Text = e.NewValue
 
@@ -127,9 +128,6 @@ Public Class Form4
 
         'AddHandler DataGridViewX2.CellValidating, AddressOf DataGridViewX2_CellValidating
     End Sub
-
-
-
 
     Private Sub DataGridViewX2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewX2.CellContentClick
 
@@ -174,12 +172,12 @@ Public Class Form4
         DataGridViewX2.CurrentRow.Height = 35
     End Sub
 
-    Private Shared Sub CheckTrack(ByVal newValue As DataGridViewCellValidatingEventArgs, _
+    Private Shared Sub CheckTrack(ByVal newValue As DataGridViewCellValidatingEventArgs,
                                   Optional dgvobj As Object = Nothing)
 
         If String.IsNullOrEmpty(newValue.FormattedValue.ToString()) Then
             NotifyUserAndForceRedo("Please enter a track", newValue)
-        ElseIf Not Integer.TryParse( _
+        ElseIf Not Integer.TryParse(
             newValue.FormattedValue.ToString(), New Integer()) Then
             NotifyUserAndForceRedo("A Track must be a number", newValue)
         ElseIf Integer.Parse(newValue.FormattedValue.ToString()) < 1 Then
@@ -188,8 +186,8 @@ Public Class Form4
 
     End Sub
 
-    Private Shared Sub NotifyUserAndForceRedo(ByVal errorMessage As String, _
-                                              ByVal newValue As DataGridViewCellValidatingEventArgs, _
+    Private Shared Sub NotifyUserAndForceRedo(ByVal errorMessage As String,
+                                              ByVal newValue As DataGridViewCellValidatingEventArgs,
                                               Optional dgvobj As Object = Nothing)
         'MessageBox.Show(errorMessage)
 
@@ -203,9 +201,10 @@ Public Class Form4
 
         'newValue.Cancel = True
     End Sub
+
     'DataGridViewCellValidatingEventArgs
     'DataGridViewCellEventArgs
-    Private Sub CheckDate(ByVal newValue As DataGridViewCellValidatingEventArgs, _
+    Private Sub CheckDate(ByVal newValue As DataGridViewCellValidatingEventArgs,
                           Optional dgvobj As Object = Nothing)
 
         Try
@@ -219,16 +218,16 @@ Public Class Form4
             'Date.Parse(newValue.FormattedValue.ToString()).ToShortDateString()
 
             AnnotateCell_ERR(String.Empty, newValue, dgvobj)
-
         Catch ex As FormatException
             'MsgBox(ex.Message)
             AnnotateCell_ERR(ex.Message, newValue, dgvobj)
 
         End Try
     End Sub
+
     'DataGridViewCellValidatingEventArgs
-    Sub AnnotateCell_ERR(ByVal errorMessage As String, _
-                         ByVal dgvCellValidatingEArgs As DataGridViewCellValidatingEventArgs, _
+    Sub AnnotateCell_ERR(ByVal errorMessage As String,
+                         ByVal dgvCellValidatingEArgs As DataGridViewCellValidatingEventArgs,
                          Optional dgvobj As Object = Nothing)
 
         Dim cell As DataGridViewCell
@@ -243,16 +242,16 @@ Public Class Form4
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) 'Handles Button1.Click
 
-        Dim custompostbl As New MySqlDataAdapter("SELECT * FROM position WHERE OrganizationID=" & org_rowid, _
+        Dim custompostbl As New MySqlDataAdapter("SELECT * FROM position WHERE OrganizationID=" & org_rowid,
                                              conn) 'ParentDivisionID
 
         'Dim customdivtblParent As New MySqlDataAdapter("SELECT * FROM division WHERE ParentDivisionID IS NULL AND OrganizationID=" & orgztnID, _
         '                                     conn)
 
-        Dim customdivtbl As New MySqlDataAdapter("SELECT * FROM division WHERE OrganizationID=" & org_rowid, _
+        Dim customdivtbl As New MySqlDataAdapter("SELECT * FROM division WHERE OrganizationID=" & org_rowid,
                                              conn)
 
-        Dim customemptbl As New MySqlDataAdapter("SELECT * FROM employee WHERE OrganizationID=" & org_rowid, _
+        Dim customemptbl As New MySqlDataAdapter("SELECT * FROM employee WHERE OrganizationID=" & org_rowid,
                                              conn)
 
         customTbl = fillDattbl("SELECT pos.RowID 'pos_RowID',pos.PositionName,pos.ParentPositionID,pos.DivisionId,divis.RowID 'divis_RowID' ,divis.Name ,COALESCE(CONCAT(emp.FirstName,' ',IF(emp.MiddleName IS NULL,'',CONCAT(emp.MiddleName,' ')),emp.LastName,' ',IF(emp.Surname IS NULL,'',emp.Surname)),'Open') 'Emp Full name' FROM position pos LEFT JOIN division divis ON divis.RowID=pos.DivisionId LEFT JOIN employee emp ON emp.PositionID=pos.RowID WHERE pos.OrganizationID=" & org_rowid & ";")
@@ -309,7 +308,6 @@ Public Class Form4
 
             For Each divchildrow In divrow.GetChildRows("Div")
                 divchildnode = divnode.Nodes.Add(divchildrow(1)) ' & "(" & childrow(0) & ")")
-
 
             Next
 
@@ -421,9 +419,9 @@ Public Class Form4
         Next
     End Sub
 
-    Sub nodeAddr(ByVal tblRow As DataRow, _
-                 ByVal tvnod As TreeNode, _
-                 ByVal childsrc As String, _
+    Sub nodeAddr(ByVal tblRow As DataRow,
+                 ByVal tvnod As TreeNode,
+                 ByVal childsrc As String,
                  ByVal drowCol As String)
 
         Dim childrow As DataRow
@@ -436,9 +434,9 @@ Public Class Form4
 
             childnod = tvnod.Nodes.Add(childrow(drowCol)) ' & "(" & childrow(0) & ")")
 
-            nodeAddr(tblRow, _
-                     childnod, _
-                     childsrc, _
+            nodeAddr(tblRow,
+                     childnod,
+                     childsrc,
                      drowCol)
         Next
 
@@ -468,7 +466,7 @@ Public Class Form4
                         Dim rowselect() As DataRow = customTbl.Select("ParentPositionID=" & posID)
 
                         For i = 0 To rowselect.Count - 1
-                            tnod.Nodes.Add("p" & rowselect(i).Item("pos_RowID").ToString, _
+                            tnod.Nodes.Add("p" & rowselect(i).Item("pos_RowID").ToString,
                                            rowselect(i).Item("PositionName").ToString)
 
                             treeVAddr(tvPosit)
@@ -479,7 +477,7 @@ Public Class Form4
                     Dim rowselect() As DataRow = customTbl.Select("DivisionID=" & divisRowID)
 
                     For i = 0 To rowselect.Count - 1
-                        tnod.Nodes.Add("p" & rowselect(i).Item("pos_RowID").ToString, _
+                        tnod.Nodes.Add("p" & rowselect(i).Item("pos_RowID").ToString,
                                        rowselect(i).Item("PositionName").ToString)
 
                         treeVAddr(tvPosit)
@@ -487,7 +485,6 @@ Public Class Form4
                 End If
 
             Next
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
             'Finally
@@ -514,6 +511,7 @@ Public Class Form4
             End If
         Next
     End Sub
+
     Private Sub TabControl1_DrawItem(sender As Object, e As DrawItemEventArgs) Handles TabControl1.DrawItem
 
         Dim g As Graphics = e.Graphics
@@ -542,7 +540,6 @@ Public Class Form4
             Dim ff As Font
             ff = New Font(TabControl1.Font, FontStyle.Bold)
             g.DrawString(strTitle, ff, br, r, sf)
-
         Else
 
             br = New SolidBrush(Color.FromArgb(54, 78, 111))
@@ -559,18 +556,18 @@ Public Class Form4
 #Region "searched tabcontrol coloring doesn't work"
 
     '    Try
-    ''This line of code will help you to 
+    ''This line of code will help you to
     ''change the apperance like size,name,style.
     'Dim f As Font
     ''For background color
     'Dim backBrush As Brush
     ''For forground color
     'Dim foreBrush As Brush
-    ''This construct will hell you to decide 
+    ''This construct will hell you to decide
     ''which tab page have current focus
     ''to change the style.
     '        If e.Index = Me.TabControl1.SelectedIndex Then
-    ''This line of code will help you to 
+    ''This line of code will help you to
     ''change the apperance like size,name,style.
     '            f = New Font(e.Font, FontStyle.Bold Or FontStyle.Bold)
     '            f = New Font(e.Font, FontStyle.Bold)
@@ -605,8 +602,10 @@ Public Class Form4
         CreateTree()
 
     End Sub
+
     '=========================================================================================
     Dim dattabDivis As New DataTable
+
     Private Sub loadDivis()
         Try
             dattabDivis.Columns.Clear()
@@ -626,7 +625,7 @@ Public Class Form4
             'End If
             Dim dt As New DataTable
             'position
-            dt = retAsDatTbl("SELECT * FROM division WHERE OrganizationID=" & org_rowid & ";") 'categoryId='" & CatID & "' and 
+            dt = retAsDatTbl("SELECT * FROM division WHERE OrganizationID=" & org_rowid & ";") 'categoryId='" & CatID & "' and
             dattabDivis.Columns.Add("RowID", GetType(Integer))
             'dattabDivis.Columns.Add("PositionName", GetType(String))
             dattabDivis.Columns.Add("Name", GetType(String)) 'PositionName
@@ -646,6 +645,7 @@ Public Class Form4
             MsgBox(getErrExcptn(ex, Name), , "Unexpected Message")
         End Try
     End Sub
+
     Private Function FindLevel(ByVal ID As String, ByRef Level As Integer) As Integer
         Dim i As Integer
         For i = 0 To dattabDivis.Rows.Count - 1
@@ -653,8 +653,8 @@ Public Class Form4
             'Dim Parent1 As String = If(IsDBNull(dattabDivis.Rows(i).Item("ParentPositionID")), _
             '                           "", _
             '                           dattabDivis.Rows(i).Item("ParentPositionID").ToString)
-            Dim Parent1 As String = If(IsDBNull(dattabDivis.Rows(i).Item("ParentDivisionID")), _
-                                       "", _
+            Dim Parent1 As String = If(IsDBNull(dattabDivis.Rows(i).Item("ParentDivisionID")),
+                                       "",
                                        dattabDivis.Rows(i).Item("ParentDivisionID").ToString)
             If ID = ID1 Then
                 If Parent1 = "" Then
@@ -777,7 +777,6 @@ Public Class Form4
             If Trim(txtcombo.Text) = "" Then
 
                 ListBox1.Items.Clear()
-
             Else
 
                 Dim selproduct = allproduct.Select("PartNo LIKE '%" & Trim(txtcombo.Text) & "%'", "PartNo ASC")
@@ -809,4 +808,5 @@ Public Class Form4
         'End If
 
     End Sub
+
 End Class

@@ -1,7 +1,7 @@
-﻿
-Public Class MySQLCommander
+﻿Public Class MySQLCommander
 
 #Region "Implementation"
+
     Implements IMySQLCommander
 
 #End Region
@@ -110,10 +110,6 @@ Public Class MySQLCommander
         End If
 
     End Sub
-
-#End Region
-
-#Region "Functions"
 
 #End Region
 

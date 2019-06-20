@@ -1,11 +1,6 @@
-﻿Imports System.Configuration
-Imports System.IO
-Imports MySql.Data.MySqlClient
-Imports Indigo.CollapsibleGroupBox
-Imports Indigo
-Imports System.Threading
-Imports Microsoft.Win32
+﻿Imports System.Threading
 Imports log4net
+Imports MySql.Data.MySqlClient
 
 Public Class MDIPrimaryForm
     Private Shared logger As ILog = LogManager.GetLogger("LoggerWork")

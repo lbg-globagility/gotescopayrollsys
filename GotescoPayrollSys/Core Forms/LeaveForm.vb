@@ -48,7 +48,6 @@ Public Class LeaveForm
         If Panel1.Enabled = True Then
 
             e.Cancel = False
-
         Else
 
             e.Cancel = True
@@ -323,7 +322,6 @@ Public Class LeaveForm
     Private Sub TxtEmployeeNumber1_GotFocus(sender As Object, e As EventArgs) Handles TxtEmployeeNumber1.GotFocus
 
         If TxtEmployeeFullName1.RowIDValue.Length = 0 Then
-
         Else
 
             'Dim selectEmpID = EXECQUER("SELECT EmployeeID FROM employee WHERE RowID='" & TxtEmployeeFullName1.RowIDValue & "' LIMIT 1;")
@@ -407,7 +405,6 @@ Public Class LeaveForm
         LeaveTypeValue = ""
 
         If ogleavetype Is Nothing Then
-
         Else
 
             If ogleavetype.Columns.Count > 0 Then
@@ -497,7 +494,6 @@ Public Class LeaveForm
         ElseIf e.Cancelled Then
 
             MessageBox.Show("Background work cancelled.")
-
         Else
 
             TxtEmployeeFullName1.Enabled = True
@@ -550,7 +546,6 @@ Public Class LeaveForm
         If TxtEmployeeFullName1.Text.Trim.Length = 0 Then
 
             cboxEmployees.Text = String.Empty
-
         Else
 
             cboxEmployees.Text = TxtEmployeeFullName1.Text

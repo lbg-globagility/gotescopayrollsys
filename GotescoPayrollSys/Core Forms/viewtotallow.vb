@@ -2,6 +2,7 @@
     Dim categallowID As Object = Nothing
 
     Dim allowance_type As New AutoCompleteStringCollection
+
     Private Sub viewtotallow_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         categallowID = EXECQUER("SELECT RowID FROM category WHERE OrganizationID=" & org_rowid & " AND CategoryName='" & "Allowance Type" & "' LIMIT 1;")
@@ -10,7 +11,7 @@
             categallowID = INSUPD_category(, "Allowance Type")
         End If
 
-        enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categallowID & "' AND OrganizationID=" & org_rowid & ";", _
+        enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categallowID & "' AND OrganizationID=" & org_rowid & ";",
                        allowance_type) 'cboallowtype
 
         'For Each strval In allowance_type
@@ -20,10 +21,10 @@
 
     End Sub
 
-    Sub VIEW_employeeallowance_indate(Optional eallow_EmployeeID As Object = Nothing, _
-                               Optional datefrom As Object = Nothing, _
-                               Optional dateto As Object = Nothing, _
-                               Optional num_weekdays As Object = Nothing, _
+    Sub VIEW_employeeallowance_indate(Optional eallow_EmployeeID As Object = Nothing,
+                               Optional datefrom As Object = Nothing,
+                               Optional dateto As Object = Nothing,
+                               Optional num_weekdays As Object = Nothing,
                                Optional AllowanceExcept As String = Nothing)
 
         Dim param(4, 2) As Object
@@ -48,8 +49,8 @@
 
         'param(4, 1) = Val(num_weekdays)
 
-        EXEC_VIEW_PROCEDURE(param, _
-                           "VIEW_employeeallowances", _
+        EXEC_VIEW_PROCEDURE(param,
+                           "VIEW_employeeallowances",
                            dgvempallowance, , 1) 'VIEW_employeeallowance_indate
 
     End Sub

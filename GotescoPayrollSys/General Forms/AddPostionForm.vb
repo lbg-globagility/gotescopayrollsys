@@ -1,6 +1,5 @@
 ﻿Public Class AddPostionForm
 
-
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If txtPosition.Text = "" Then
             MsgBox("Please enter position name.", MsgBoxStyle.Exclamation, "No entry.")
@@ -34,4 +33,5 @@
         Close()
 
     End Sub
+
 End Class

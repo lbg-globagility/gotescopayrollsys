@@ -1,8 +1,4 @@
-﻿Imports System.Drawing
-Imports System.Text
-Imports System.Windows.Forms
-
-Public Class CustomBalloonToolTip
+﻿Public Class CustomBalloonToolTip
     Inherits ToolTip
 
     Private ui_caller As Control

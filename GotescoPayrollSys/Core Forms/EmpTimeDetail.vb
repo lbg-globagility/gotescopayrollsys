@@ -155,8 +155,8 @@ Public Class EmpTimeDetail
         param(1, 1) = org_rowid
         param(2, 1) = EmployeeNumber
 
-        EXEC_VIEW_PROCEDURE(param, _
-                           "VIEW_employeetimeentrydetails", _
+        EXEC_VIEW_PROCEDURE(param,
+                           "VIEW_employeetimeentrydetails",
                            dgvetentdet)
 
     End Sub
@@ -166,7 +166,7 @@ Public Class EmpTimeDetail
 
         Try
             Dim browsefile As OpenFileDialog = New OpenFileDialog()
-            browsefile.Filter = "Text Documents (*.txt)|*.txt" & _
+            browsefile.Filter = "Text Documents (*.txt)|*.txt" &
                                 "|All files (*.*)|*.*"
 
             If browsefile.ShowDialog() = Windows.Forms.DialogResult.OK Then
@@ -179,7 +179,7 @@ Public Class EmpTimeDetail
 
                 lblforballoon.Location = New Point(TabControl1.Location.X, lblforballoon.Location.Y)
 
-                InfoBalloon("Please wait a few moments.", _
+                InfoBalloon("Please wait a few moments.",
                           "Importing file...", lblforballoon, 0, -69)
 
                 lblforballoon.Location = New Point(balloon_x, lblforballoon.Location.Y)
@@ -189,10 +189,9 @@ Public Class EmpTimeDetail
                 Panel1.Enabled = False
 
                 ToolStripProgressBar1.Visible = True
-                
+
                 'bgworkImport.RunWorkerAsync()
                 bgworkTypicalImport.RunWorkerAsync()
-
             Else
 
             End If
@@ -203,10 +202,10 @@ Public Class EmpTimeDetail
         End Try
     End Sub
 
-    Dim pre_empnum, _
-        pre_timin, _
-        pre_timout, _
-        pre_datelog, _
+    Dim pre_empnum,
+        pre_timin,
+        pre_timout,
+        pre_datelog,
         pre_schedtyp As String
 
     Sub filldattab(ByVal thefilepath As String)
@@ -215,10 +214,10 @@ Public Class EmpTimeDetail
 
         Dim objReader As New System.IO.StreamReader(thefilepath)
 
-        Dim empnum, _
-            timin, _
-            timout, _
-            datelog, _
+        Dim empnum,
+            timin,
+            timout,
+            datelog,
             schedtyp As String
 
         Dim rowindx As Integer = 0
@@ -230,18 +229,18 @@ Public Class EmpTimeDetail
 
             'With insRow
             If Trim(logval) <> "" Then
-                empnum = getStrBetween(Trim(logval), _
-                                           "", _
+                empnum = getStrBetween(Trim(logval),
+                                           "",
                                            ":")
 
                 empnum = Trim(empnum.Substring(0, empnum.Length - 2))
 
-                Dim prevlength = getStrBetween(Trim(logval), _
-                                           "", _
+                Dim prevlength = getStrBetween(Trim(logval),
+                                           "",
                                            ":").Length
 
-                datelog = StrReverse(getStrBetween(StrReverse(logval), _
-                                                       "", _
+                datelog = StrReverse(getStrBetween(StrReverse(logval),
+                                                       "",
                                                        "M"))
                 datelog = datelog.Substring(0, 8)
 
@@ -254,22 +253,21 @@ Public Class EmpTimeDetail
 
                 datelog = CObj(Y & "-" & MM & "-" & dd)
 
-                schedtyp = getStrBetween(StrReverse(logval), _
-                                             "", _
+                schedtyp = getStrBetween(StrReverse(logval),
+                                             "",
                                              " ")
                 'MsgBox(logval)
 
                 If logval.Contains("I") Then
-                    timin = logval.Substring(prevlength - 2, _
+                    timin = logval.Substring(prevlength - 2,
                                                                 logval.Length - prevlength)
                     timin = MilitTime(timin)
 
                     timout = ""
-
                 Else
                     timin = ""
 
-                    timout = logval.Substring(prevlength - 2, _
+                    timout = logval.Substring(prevlength - 2,
                                                                 logval.Length - prevlength)
                     timout = MilitTime(timout)
 
@@ -300,11 +298,11 @@ Public Class EmpTimeDetail
                     '                                    schedtyp) 'drow("EmpNum")
 
                     'logval'etentRowID
-                    dattabLogs.Rows.Add(logval, _
-                                        empnum, _
-                                        timin, _
-                                        timout, _
-                                        datelog, _
+                    dattabLogs.Rows.Add(logval,
+                                        empnum,
+                                        timin,
+                                        timout,
+                                        datelog,
                                         schedtyp)
 
                     'dgvetentdet.Rows.Add(Nothing, _
@@ -324,7 +322,6 @@ Public Class EmpTimeDetail
                     '                                    drow("Type")) 'drow("EmpNum")
 
                     'Next
-
                 Else
 
                     If pre_empnum = empnum _
@@ -363,7 +360,6 @@ Public Class EmpTimeDetail
 
                 'rowindx += 1
                 ''*******************************************
-
             Else
                 '.Item("EmpNum") = Nothing
                 '.Item("TI") = Nothing
@@ -402,19 +398,19 @@ Public Class EmpTimeDetail
 
                 Dim redline = objReader.ReadLine()
 
-                redline = Trim(redline).Replace(vbTab, _
+                redline = Trim(redline).Replace(vbTab,
                                                 " ")
 
-                Dim strings = Split(redline, _
+                Dim strings = Split(redline,
                                     " ") 'vbTab
 
                 Dim ii = containCollection(strings)
 
                 Dim Employee_ID = ii.Item(0)
 
-                dtTimeLogs.Rows.Add(Employee_ID, _
-                                    getDataInList(ii, "date"), _
-                                    getDataInList(ii, "time"), _
+                dtTimeLogs.Rows.Add(Employee_ID,
+                                    getDataInList(ii, "date"),
+                                    getDataInList(ii, "time"),
                                     String.Empty)
 
                 ''For Each strval As String In ii
@@ -432,7 +428,7 @@ Public Class EmpTimeDetail
 
     End Sub
 
-    Function containCollection(ByVal lists() As String, _
+    Function containCollection(ByVal lists() As String,
                                Optional SplitDelimiter As String = " ") As List(Of String)
 
         Dim listContainer As New List(Of String)
@@ -461,7 +457,7 @@ Public Class EmpTimeDetail
 
     End Function
 
-    Function getDataInList(ByVal listofstr As List(Of String), _
+    Function getDataInList(ByVal listofstr As List(Of String),
                            ByVal NameOfDataType As String) As Object
 
         Dim returnval = Nothing
@@ -485,7 +481,6 @@ Public Class EmpTimeDetail
                         End If
 
                     End If
-
                 Catch ex As Exception
                     returnval = Nothing
                     Continue For
@@ -507,7 +502,6 @@ Public Class EmpTimeDetail
                     Else
                         Continue For
                     End If
-
                 Catch ex As Exception
                     returnval = Nothing
                     Continue For
@@ -554,6 +548,7 @@ Public Class EmpTimeDetail
         'End If
 
     End Sub
+
     Function MilitTime(ByVal timeval As Object) As Object
 
         Dim retrnObj As Object
@@ -588,13 +583,13 @@ Public Class EmpTimeDetail
 
                 'MsgBox(Trim(StrReverse(StrReverse("3:15 AM").ToString.Substring(i, ("3:15 AM").ToString.Length - i))).Length)
 
-                Dim amTime As String = Trim(StrReverse(StrReverse(endtime.ToString).Substring(i, _
+                Dim amTime As String = Trim(StrReverse(StrReverse(endtime.ToString).Substring(i,
                                                                                   endtime.ToString.Length - i)
                                           )
                                )
 
-                amTime = If(getStrBetween(amTime, "", ":") = "12", _
-                            24 & ":" & StrReverse(getStrBetween(StrReverse(amTime), "", ":")), _
+                amTime = If(getStrBetween(amTime, "", ":") = "12",
+                            24 & ":" & StrReverse(getStrBetween(StrReverse(amTime), "", ":")),
                             amTime)
 
                 retrnObj = amTime
@@ -607,10 +602,10 @@ Public Class EmpTimeDetail
 
     End Function
 
-    Dim emp_num, _
-        t_in, _
-        t_out, _
-        logdate, _
+    Dim emp_num,
+        t_in,
+        t_out,
+        logdate,
         typ As Object
 
     Dim emp_numb As String
@@ -699,13 +694,13 @@ Public Class EmpTimeDetail
         'Next
     End Sub
 
-    Function INSUPD_employeetimeentrydetails(Optional etentd_RowID As Object = Nothing, _
-                                             Optional etentd_EmployeeID As Object = Nothing, _
-                                             Optional etentd_TimeIn As Object = Nothing, _
-                                             Optional etentd_TimeOut As Object = Nothing, _
-                                             Optional etentd_Date As Object = Nothing, _
-                                             Optional etentd_TimeScheduleType As Object = Nothing, _
-                                             Optional etentd_Created As Object = Nothing, _
+    Function INSUPD_employeetimeentrydetails(Optional etentd_RowID As Object = Nothing,
+                                             Optional etentd_EmployeeID As Object = Nothing,
+                                             Optional etentd_TimeIn As Object = Nothing,
+                                             Optional etentd_TimeOut As Object = Nothing,
+                                             Optional etentd_Date As Object = Nothing,
+                                             Optional etentd_TimeScheduleType As Object = Nothing,
+                                             Optional etentd_Created As Object = Nothing,
                                              Optional etentd_TimeEntryStatus As Object = Nothing,
                                              Optional EditAsUnique As String = "0") As Object
         Dim params(9, 2) As Object
@@ -849,7 +844,6 @@ Public Class EmpTimeDetail
             If drow(0).ToString = String.Empty Then
 
                 Continue For
-
             Else
 
                 For Each d_row As DataRow In distinctDateLog.Rows
@@ -862,9 +856,9 @@ Public Class EmpTimeDetail
 
                         timeOne = If(IsDBNull(empsel_dtTimeLogs(0)("TimeLog")), "", empsel_dtTimeLogs(0)("TimeLog"))
 
-                        dtImport.Rows.Add(drow(0), _
-                                          empsel_dtTimeLogs(0)("TimeLog"), _
-                                          Nothing, _
+                        dtImport.Rows.Add(drow(0),
+                                          empsel_dtTimeLogs(0)("TimeLog"),
+                                          Nothing,
                                           d_row(0))
 
                     ElseIf empsel_dtTimeLogs.Count > 1 Then
@@ -875,9 +869,9 @@ Public Class EmpTimeDetail
 
                         timeTwo = If(IsDBNull(empsel_dtTimeLogs(lastrow_indx)("TimeLog")), "", empsel_dtTimeLogs(lastrow_indx)("TimeLog"))
 
-                        dtImport.Rows.Add(drow(0), _
-                                          timeOne, _
-                                          timeTwo, _
+                        dtImport.Rows.Add(drow(0),
+                                          timeOne,
+                                          timeTwo,
                                           d_row(0))
 
                     End If
@@ -1001,7 +995,7 @@ Public Class EmpTimeDetail
         ''For Each strval In names.ToList
         'MsgBox(names.ToList.Count)
 
-        ''Next  
+        ''Next
 
         '**************************************************
 
@@ -1046,7 +1040,6 @@ Public Class EmpTimeDetail
             MessageBox.Show("Background work cancelled.")
 
             tsbtnNew.Enabled = True
-
         Else
 
             lblforballoon.Location = New Point(TabControl1.Location.X, lblforballoon.Location.Y)
@@ -1091,7 +1084,6 @@ Public Class EmpTimeDetail
 
         Dim currtimestamp = Format(CDate(EXECQUER("SELECT CURRENT_TIMESTAMP();")), "yyyy-MM-dd HH:mm:ss")
 
-
         'With dtImport.Columns
 
         '    .Add("EmploID", Type.GetType("System.String"))
@@ -1119,12 +1111,12 @@ Public Class EmpTimeDetail
             '        drow("TOut") & vbNewLine & _
             '        drow("LogDate"))
 
-            INSUPD_employeetimeentrydetails(, _
-                                            drow("EmploID"), _
-                                            drow("TIn"), _
-                                            drow("TOut"), _
-                                            drow("LogDate"), _
-                                            "", _
+            INSUPD_employeetimeentrydetails(,
+                                            drow("EmploID"),
+                                            drow("TIn"),
+                                            drow("TOut"),
+                                            drow("LogDate"),
+                                            "",
                                             currtimestamp, , "1")
 
             'IO.File.AppendAllText(IO.Path.GetTempPath() & "aaa.txt", _
@@ -1182,14 +1174,13 @@ Public Class EmpTimeDetail
             MessageBox.Show("Background work cancelled.")
 
             tsbtnNew.Enabled = True
-
         Else
 
             loademployeetimeentrydetails(0)
 
             InfoBalloon(, , lblforballoon, , , 1)
 
-            InfoBalloon(IO.Path.GetFileName(thefilepath) & " imported successfully.", _
+            InfoBalloon(IO.Path.GetFileName(thefilepath) & " imported successfully.",
                       "Importing file finished", lblforballoon, 0, -69)
 
         End If
@@ -1231,8 +1222,8 @@ Public Class EmpTimeDetail
         Dim colName As String = dgvetentdet.Columns(e.ColumnIndex).Name
         Dim rowindx = e.RowIndex
 
-        Static num As Integer = If(reset_static = -1, _
-                                   -1, _
+        Static num As Integer = If(reset_static = -1,
+                                   -1,
                                    num)
 
         If dgvetentdet.RowCount <> 0 Then
@@ -1279,8 +1270,8 @@ Public Class EmpTimeDetail
                         Dim ampm As String = Nothing
 
                         Try
-                            If dateobj.ToString.Contains("A") Or _
-                        dateobj.ToString.Contains("P") Or _
+                            If dateobj.ToString.Contains("A") Or
+                        dateobj.ToString.Contains("P") Or
                         dateobj.ToString.Contains("M") Then
 
                                 ampm = " " & StrReverse(getStrBetween(StrReverse(dateobj.ToString), "", ":"))
@@ -1357,8 +1348,8 @@ Public Class EmpTimeDetail
         Dim colName As String = dgvetentdet.Columns(e.ColumnIndex).Name
         Dim rowindx = e.RowIndex
 
-        Static num As Integer = If(reset_static = -1, _
-                                   -1, _
+        Static num As Integer = If(reset_static = -1,
+                                   -1,
                                    num)
 
         If dgvetentdet.RowCount <> 0 Then
@@ -1403,8 +1394,8 @@ Public Class EmpTimeDetail
                         Dim ampm As String = Nothing
 
                         Try
-                            If dateobj.ToString.Contains("A") Or _
-                        dateobj.ToString.Contains("P") Or _
+                            If dateobj.ToString.Contains("A") Or
+                        dateobj.ToString.Contains("P") Or
                         dateobj.ToString.Contains("M") Then
 
                                 ampm = " " & StrReverse(getStrBetween(StrReverse(dateobj.ToString), "", ":"))
@@ -1471,7 +1462,7 @@ Public Class EmpTimeDetail
 
     Dim pagination As Integer
 
-    Private Sub First_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles First.LinkClicked, Prev.LinkClicked, _
+    Private Sub First_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles First.LinkClicked, Prev.LinkClicked,
                                                                                                 Nxt.LinkClicked, Last.LinkClicked
 
         RemoveHandler dgvetentd.SelectionChanged, AddressOf dgvetentd_SelectionChanged
@@ -1557,7 +1548,6 @@ Public Class EmpTimeDetail
             '    e.Cancel = True
 
             'End If
-
         Else
 
             InfoBalloon(, , lblforballoon, , , 1)
@@ -1602,7 +1592,6 @@ Public Class EmpTimeDetail
         If dgvetentd.RowCount <> 0 Then
 
             currtimestamp = Format(CDate(dgvetentd.CurrentRow.Cells("createdmilit").Value), "yyyy-MM-dd HH:mm:ss")
-
         Else
 
             currtimestamp = Format(CDate(EXECQUER("SELECT CURRENT_TIMESTAMP();")), "yyyy-MM-dd HH:mm:ss")
@@ -1615,33 +1604,33 @@ Public Class EmpTimeDetail
                 If .IsNewRow = False Then
                     Dim RowID = Nothing
 
-                    Dim time_i = If(.Cells("Column3").Value = Nothing, _
-                                    Nothing, _
+                    Dim time_i = If(.Cells("Column3").Value = Nothing,
+                                    Nothing,
                                     Format(CDate(Trim(.Cells("Column3").Value)), "HH:mm:ss"))
 
-                    Dim time_o = If(.Cells("Column4").Value = Nothing, _
-                                    Nothing, _
+                    Dim time_o = If(.Cells("Column4").Value = Nothing,
+                                    Nothing,
                                     Format(CDate(Trim(.Cells("Column4").Value)), "HH:mm:ss"))
 
                     If listofEditRow.Contains(.Cells("Column1").Value) Then
                         Dim etent_date = Format(CDate(.Cells("Column5").Value), "yyyy-MM-dd")
 
                         RowID = .Cells("Column1").Value
-                        INSUPD_employeetimeentrydetails(RowID, _
-                                                        .Cells("Column2").Value, _
-                                                        time_i, _
-                                                        time_o, _
-                                                        Trim(etent_date), _
+                        INSUPD_employeetimeentrydetails(RowID,
+                                                        .Cells("Column2").Value,
+                                                        time_i,
+                                                        time_o,
+                                                        Trim(etent_date),
                                                         .Cells("Column6").Value)
                     Else
                         If .Cells("Column1").Value = Nothing Then
-                            newRowID = _
-                            INSUPD_employeetimeentrydetails(, _
-                                                            .Cells("Column2").Value, _
-                                                            time_i, _
-                                                            time_o, _
-                                                            Format(CDate(.Cells("Column5").Value), "yyyy-MM-dd"), _
-                                                            .Cells("Column6").Value, _
+                            newRowID =
+                            INSUPD_employeetimeentrydetails(,
+                                                            .Cells("Column2").Value,
+                                                            time_i,
+                                                            time_o,
+                                                            Format(CDate(.Cells("Column5").Value), "yyyy-MM-dd"),
+                                                            .Cells("Column6").Value,
                                                             currtimestamp)
 
                             .Cells("Column1").Value = newRowID
@@ -1664,7 +1653,7 @@ Public Class EmpTimeDetail
 
         reset_static = -1
 
-        InfoBalloon("Successfully saved.", _
+        InfoBalloon("Successfully saved.",
                   "Successfully saved.", lblforballoon, 0, -69)
 
         tsbtnCancel_Click(sender, e)
@@ -1687,7 +1676,7 @@ Public Class EmpTimeDetail
         With dgvetentd
             If .RowCount > 0 Then
                 'If backgroundworking = 1 Then
-                If backgroundworking = 0 Then 'ToolStripProgressBar1.Visible = False 
+                If backgroundworking = 0 Then 'ToolStripProgressBar1.Visible = False
 
                     VIEWemployeetimeentrydetails(.CurrentRow.Cells("createdmilit").Value,
                                                  TextBox1.Text.Trim)
@@ -1695,7 +1684,6 @@ Public Class EmpTimeDetail
                     originalTimeEntryCount = dgvetentdet.RowCount - 1
 
                 End If
-
             Else
                 originalTimeEntryCount = 0
 
@@ -1767,7 +1755,6 @@ Public Class EmpTimeDetail
                 tsbtndel.Enabled = True
 
             End If
-
         Else
 
             tsbtndel.Enabled = False
@@ -1777,7 +1764,7 @@ Public Class EmpTimeDetail
     End Sub
 
     Private Sub dgvetentd_LostFocus(sender As Object, e As EventArgs) Handles dgvetentd.LostFocus
-        
+
         tsbtndel.Enabled = False
     End Sub
 
@@ -1789,7 +1776,7 @@ Public Class EmpTimeDetail
 
                 If result = DialogResult.Yes Then
 
-                    EXECQUER("DELETE FROM employeetimeentrydetails WHERE Created='" & .CurrentRow.Cells("createdmilit").Value & "';" & _
+                    EXECQUER("DELETE FROM employeetimeentrydetails WHERE Created='" & .CurrentRow.Cells("createdmilit").Value & "';" &
                              "ALTER TABLE employeetimeentrydetails AUTO_INCREMENT = 0;")
 
                     dgvetentd.Rows.Remove(.CurrentRow)
@@ -1808,15 +1795,14 @@ Public Class EmpTimeDetail
 
     Private Sub dgvetentdet_Scroll(sender As Object, e As ScrollEventArgs) Handles dgvetentdet.Scroll
 
-        myEllipseButton(dgvetentdet, _
-                        "Column2", _
+        myEllipseButton(dgvetentdet,
+                        "Column2",
                         btnEmpID)
 
     End Sub
 
     Private Sub dgvetentdet_SelectionChanged(sender As Object, e As EventArgs) Handles dgvetentdet.SelectionChanged
         If dgvetentdet.RowCount = 1 Then
-
         Else
             With dgvetentdet.CurrentRow
                 .Cells("Column2").ReadOnly = True
@@ -1832,8 +1818,8 @@ Public Class EmpTimeDetail
 
         End If
 
-        myEllipseButton(dgvetentdet, _
-                        "Column2", _
+        myEllipseButton(dgvetentdet,
+                        "Column2",
                         btnEmpID)
 
     End Sub
@@ -1891,7 +1877,6 @@ Public Class EmpTimeDetail
 
         Dim boolVisib = Not ToolStripProgressBar1.Visible
 
-
         tsbtnSave.Enabled = boolVisib
 
         tsbtndel.Enabled = boolVisib
@@ -1915,7 +1900,6 @@ Public Class EmpTimeDetail
         Last.Enabled = boolVisib
 
         btnEmpID.Enabled = boolVisib
-        
 
     End Sub
 
@@ -1930,7 +1914,6 @@ Public Class EmpTimeDetail
         ElseIf dgvetentdet.CurrentRow.IsNewRow Then
 
             DeleteRowToolStripMenuItem.Enabled = False
-
         Else
             DeleteRowToolStripMenuItem.Enabled = True
 
@@ -1950,7 +1933,7 @@ Public Class EmpTimeDetail
 
                 .EndEdit(True)
 
-                EXECQUER("DELETE FROM employeetimeentrydetails WHERE RowID='" & .CurrentRow.Cells("Column1").Value & "';" & _
+                EXECQUER("DELETE FROM employeetimeentrydetails WHERE RowID='" & .CurrentRow.Cells("Column1").Value & "';" &
                           "ALTER TABLE employeetimeentrydetails AUTO_INCREMENT = 0;")
 
                 .Rows.Remove(.CurrentRow)
@@ -2097,14 +2080,13 @@ Public Class EmpTimeDetail
             MessageBox.Show("Background work cancelled.")
 
             tsbtnNew.Enabled = True
-
         Else
 
             loademployeetimeentrydetails(0)
 
             InfoBalloon(, , lblforballoon, , , 1)
 
-            InfoBalloon(IO.Path.GetFileName(thefilepath) & " imported successfully.", _
+            InfoBalloon(IO.Path.GetFileName(thefilepath) & " imported successfully.",
                       "Importing file finished", lblforballoon, 0, -69)
 
         End If

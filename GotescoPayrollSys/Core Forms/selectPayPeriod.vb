@@ -1,6 +1,4 @@
-﻿Imports MySql.Data.MySqlClient
-
-Public Class selectPayPeriod
+﻿Public Class selectPayPeriod
 
     Dim m_PayFreqType = ""
 

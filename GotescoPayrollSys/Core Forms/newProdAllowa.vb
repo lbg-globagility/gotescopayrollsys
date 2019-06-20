@@ -13,9 +13,9 @@
 
             TextBox1.Text = StrConv(TextBox1.Text, VbStrConv.ProperCase)
 
-            Dim new_ID = EmployeeForm.INS_product(Trim(TextBox1.Text), _
-                             Trim(TextBox1.Text), _
-                             "Allowance Type", _
+            Dim new_ID = EmployeeForm.INS_product(Trim(TextBox1.Text),
+                             Trim(TextBox1.Text),
+                             "Allowance Type",
                              istaxab)
 
             EmployeeForm.cboallowtype.Items.Add(Trim(TextBox1.Text))
@@ -48,7 +48,6 @@
             Button2_Click(Button2, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

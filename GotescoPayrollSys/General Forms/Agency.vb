@@ -54,7 +54,6 @@ Public Class Agency
             tsbtnSaveAgency.Visible = 0
 
             dontUpdateAgency = 1
-
         Else
 
             For Each drow In formuserprivilege
@@ -70,14 +69,12 @@ Public Class Agency
                     dontUpdateAgency = 1
 
                     Exit For
-
                 Else
 
                     If drow("Creates").ToString = "N" Then
                         tsbtnNewAgency.Visible = 0
 
                         tsbtnNewAgency.Visible = 0
-
                     Else
                         tsbtnNewAgency.Visible = 1
 
@@ -93,7 +90,6 @@ Public Class Agency
 
                     If drow("Updates").ToString = "N" Then
                         dontUpdateAgency = 1
-
                     Else
                         dontUpdateAgency = 0
 
@@ -108,8 +104,6 @@ Public Class Agency
         bgworksearchbox.RunWorkerAsync()
 
     End Sub
-
-
 
     Private Sub dgvemployee_CellBeginEdit(sender As Object, e As DataGridViewCellCancelEventArgs) Handles dgvemployee.CellBeginEdit
 
@@ -161,8 +155,8 @@ Public Class Agency
 
     Private Sub dgvemployee_Scroll(sender As Object, e As ScrollEventArgs) Handles dgvemployee.Scroll
 
-        myEllipseButton(dgvemployee, _
-                        "EmployeeID", _
+        myEllipseButton(dgvemployee,
+                        "EmployeeID",
                         btnEmpID)
 
     End Sub
@@ -170,7 +164,6 @@ Public Class Agency
     Private Sub dgvemployee_SelectionChanged(sender As Object, e As EventArgs) Handles dgvemployee.SelectionChanged
 
         If dgvemployee.RowCount = 1 Then
-
         Else
             With dgvemployee.CurrentRow
                 .Cells("EmployeeID").ReadOnly = True
@@ -186,8 +179,8 @@ Public Class Agency
 
         End If
 
-        myEllipseButton(dgvemployee, _
-                        "EmployeeID", _
+        myEllipseButton(dgvemployee,
+                        "EmployeeID",
                         btnEmpID)
 
     End Sub
@@ -205,10 +198,10 @@ Public Class Agency
 
                 Dim div_and_pos_name As New DataTable
 
-                Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT ps.PositionName AS psName" & _
-                                               ",dv.Name AS dvName" & _
-                                               " FROM position ps" & _
-                                               " LEFT JOIN `division` dv ON dv.RowID='" & .EmpDivisionIDValue & "'" & _
+                Dim n_SQLQueryToDatatable As New SQLQueryToDatatable("SELECT ps.PositionName AS psName" &
+                                               ",dv.Name AS dvName" &
+                                               " FROM position ps" &
+                                               " LEFT JOIN `division` dv ON dv.RowID='" & .EmpDivisionIDValue & "'" &
                                                " WHERE ps.RowID='" & .EmpPositionIDValue & "';")
 
                 div_and_pos_name = n_SQLQueryToDatatable.ResultTable
@@ -289,7 +282,6 @@ Public Class Agency
 
             End If
 
-
             Dim positionnames As New DataTable
 
             'n_SQLQueryToDatatable = New SQLQueryToDatatable("SELECT '' AS RowID,'' AS PositionName" & _
@@ -320,7 +312,6 @@ Public Class Agency
             If formuserprivilege.Count = 0 Then
 
                 tsbtnSaveEmp.Visible = False
-
             Else
 
                 For Each drow In formuserprivilege
@@ -331,7 +322,6 @@ Public Class Agency
                         tsbtnSaveEmp.Visible = False
 
                         Exit For
-
                     Else
                         'If drow("Creates").ToString = "N" Then
                         '    tsbtnNewEmp.Visible = 0
@@ -349,7 +339,6 @@ Public Class Agency
 
                         If drow("Updates").ToString = "N" Then
                             tsbtnSaveEmp.Visible = False
-
                         Else
                             tsbtnSaveEmp.Visible = True
 
@@ -369,7 +358,7 @@ Public Class Agency
 
     End Sub
 
-    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click, _
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click,
                                                                                 tsbtnClose.Click
         Close()
     End Sub
@@ -389,7 +378,6 @@ Public Class Agency
             ElseIf dgvrow.IsNewRow Then
 
                 Continue For
-
             Else
 
                 list_total_query.Add("," & CStr(dgvrow.Cells("eRowID").Value))
@@ -439,7 +427,6 @@ Public Class Agency
                     clearObjControl(Panel2)
 
                     address_RowID = Nothing
-
                 Else
 
                     With dgvagency.CurrentRow
@@ -461,7 +448,6 @@ Public Class Agency
                 If dgvagency.RowCount = 0 Then
 
                     clearObjControl(Panel3)
-
                 Else
 
                     With dgvagency.CurrentRow
@@ -488,12 +474,10 @@ Public Class Agency
 
     Sub VIEW_employeewiththisagency(ByVal Agency_row_id As Object)
 
-
         'DivisionID.ValueMember = ""
         'DivisionID.DisplayMember = ""
 
         'DivisionID.DataSource = Nothing
-
 
         'PositionID.ValueMember = ""
         'PositionID.DisplayMember = ""
@@ -514,7 +498,7 @@ Public Class Agency
 
             Dim rowarray = drow.ItemArray
 
-            Dim newrowindex = _
+            Dim newrowindex =
             dgvemployee.Rows.Add(rowarray)
 
             'dgvemployee.Item("DivisionID", newrowindex).Value = drow("Name").ToString
@@ -656,7 +640,7 @@ Public Class Agency
 
         If tsbtnNewAgency.Enabled = False Then
 
-            Dim ag_rowID = _
+            Dim ag_rowID =
                 INSUPD_agency(, txtagencyname.Text,
                     txtagencyfee.Text,
                     address_RowID)
@@ -669,7 +653,6 @@ Public Class Agency
                                address_RowID)
 
             tsbtnNewAgency.Enabled = True
-
         Else
             With dgvagency.CurrentRow
 
@@ -712,7 +695,7 @@ Public Class Agency
         params(4, 1) = ValNoComma(ag_AgencyFee)
         params(5, 1) = If(ag_AddressID = Nothing, DBNull.Value, ag_AddressID)
 
-        returnvalue = _
+        returnvalue =
             EXEC_INSUPD_PROCEDURE(params,
                                   "INSUPD_agency",
                                   "returnvalue")
@@ -738,29 +721,29 @@ Public Class Agency
             With n_AddressClass
 
                 address_RowID = .AddresRowID
-                
+
                 If .StreetAddress1 = Nothing Then
                     full_address = Nothing
                 Else
                     full_address = .StreetAddress1 & ","
                 End If
-                
+
                 If .StreetAddress2 <> Nothing Then
                     full_address &= .StreetAddress2 & ","
                 End If
-                
+
                 If .Barangay <> Nothing Then
                     full_address &= .Barangay & ","
                 End If
-                
+
                 If .City <> Nothing Then
                     full_address &= .City & ","
                 End If
-                
+
                 If .State <> Nothing Then
                     full_address &= "," & .State & ","
                 End If
-                
+
                 If .Country <> Nothing Then
                     full_address &= .Country & ","
                 End If
@@ -776,7 +759,7 @@ Public Class Agency
             Dim LastCharIsComma = String.Empty
 
             Try
-                LastCharIsComma = _
+                LastCharIsComma =
                 full_address.Substring((addressstringlength - 1), 1)
             Catch ex As Exception
                 LastCharIsComma = String.Empty

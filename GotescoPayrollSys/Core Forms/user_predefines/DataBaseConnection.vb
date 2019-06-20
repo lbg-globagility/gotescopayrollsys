@@ -117,10 +117,8 @@ Public Class DataBaseConnection
                 String.Join(";", {$"server={sys_servername}", $"user id={sys_userid}", $"password={sys_password}", $"database={sys_db}", String.Empty})
 
             db_connectinstring = connstringresult
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, "DataBaseConnection"))
-
         Finally
             regKey.Close()
 

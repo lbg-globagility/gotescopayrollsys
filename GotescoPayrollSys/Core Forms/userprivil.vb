@@ -141,7 +141,6 @@ Public Class userprivil
 
                 Next
             End If
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Name))
         End Try
@@ -243,7 +242,6 @@ Public Class userprivil
 
                 CheckBox4.Checked = If(dgvpositview.RowCount - 1 <> read_only, False, True)
             End If
-
         Else
 
             CheckBox1.Checked = False
@@ -257,7 +255,6 @@ Public Class userprivil
 
             CheckBox4.Checked = False
             CheckBox4_CheckedChanged(sender, e)
-
 
         End If
 
@@ -289,7 +286,6 @@ Public Class userprivil
             If modcent = 0 Then
 
                 pagination -= 100
-
             Else
 
                 pagination -= modcent
@@ -308,7 +304,6 @@ Public Class userprivil
 
             If modcent = 0 Then
                 pagination += 100
-
             Else
                 pagination -= modcent
 
@@ -586,7 +581,6 @@ Public Class userprivil
         For Each dgvrow As DataGridViewRow In dgvpositview.Rows
             With dgvrow
                 If .IsNewRow Then
-
                 Else
                     .Cells("Column11").Value = boolval
                     If .Cells("Column9").Value = Nothing Then
@@ -608,7 +602,6 @@ Public Class userprivil
         For Each dgvrow As DataGridViewRow In dgvpositview.Rows
             With dgvrow
                 If .IsNewRow Then
-
                 Else
                     .Cells("Column12").Value = boolval
                     If .Cells("Column9").Value = Nothing Then
@@ -630,7 +623,6 @@ Public Class userprivil
         For Each dgvrow As DataGridViewRow In dgvpositview.Rows
             With dgvrow
                 If .IsNewRow Then
-
                 Else
                     .Cells("Column13").Value = boolval
                     If .Cells("Column9").Value = Nothing Then
@@ -652,7 +644,6 @@ Public Class userprivil
         For Each dgvrow As DataGridViewRow In dgvpositview.Rows
             With dgvrow
                 If .IsNewRow Then
-
                 Else
                     .Cells("Column14").Value = boolval
                     If .Cells("Column9").Value = Nothing Then
@@ -677,7 +668,6 @@ Public Class userprivil
 
     Private Sub dgvpositview_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgvpositview.CellEndEdit
         If dgvpositview.Item("Column9", e.RowIndex).Value = Nothing Then
-
         Else '17352
 
             Dim theRowID = dgvpositview.Item("Column9", e.RowIndex).Value
@@ -736,7 +726,6 @@ Public Class userprivil
 
             'dgvposit.Item("Column2", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 158, 0)
             dgvposit.Item("Column2", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 174, 0)
-
         Else
 
             dgvposit.Item("Column2", e.RowIndex).Style.BackColor = Color.White
@@ -781,7 +770,6 @@ Public Class userprivil
             'dgvposit.Item("Column2", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 158, 0)
             'dgvpositview.Item("Column10", e.RowIndex).Style.SelectionBackColor = Color.FromArgb(255, 174, 0)
             sel_dgvrow.DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight
-
         Else
 
             sel_dgvrow.DefaultCellStyle.BackColor = Color.White

@@ -37,8 +37,6 @@
 
     End Property
 
-
-
     Protected Overrides Sub OnTextChanged(e As EventArgs)
         MyBase.OnTextChanged(e)
     End Sub
@@ -46,9 +44,9 @@
     Protected Overrides Sub OnLeave(e As EventArgs)
         If DesignMode Then Return
 
-        Dim strQuery = $"SELECT COUNT(e.RowID) 
-FROM employee e 
-INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose=FALSE 
+        Dim strQuery = $"SELECT COUNT(e.RowID)
+FROM employee e
+INNER JOIN organization og ON og.RowID=e.OrganizationID AND og.NoPurpose=FALSE
 WHERE e.EmployeeID='{Text}'
 AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
 
@@ -69,7 +67,6 @@ AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
 
                 n_OrganizationPrompt.OrganizationTableColumnName = "e.EmployeeID"
 
-
                 If n_OrganizationPrompt.ShowDialog = DialogResult.OK Then
 
                     organization_RowID = n_OrganizationPrompt.RowIDValue
@@ -79,11 +76,9 @@ AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
                         Focus()
 
                     End If
-
                 Else
 
                 End If
-
             Else
 
                 organization_RowID =
@@ -113,7 +108,6 @@ AND e.EmploymentStatus NOT IN ('Resigned','Terminated');"
                                         " WHERE EmployeeID='" & MyBase.Text & "'" &
                                         " AND OrganizationID='" & organization_RowID & "'" &
                                         " AND EmploymentStatus NOT IN ('Resigned','Terminated');")
-
             Else
                 n_RowIDValue = String.Empty
 

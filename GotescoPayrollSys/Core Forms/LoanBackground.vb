@@ -1,10 +1,10 @@
-﻿
-Imports MySql.Data.MySqlClient
+﻿Imports MySql.Data.MySqlClient
 
 Public Class LoanBackground
     Private _list As List(Of LoanPrediction)
 
     Private _loanID As Integer
+
     Public Property LoanID() As Integer
         Get
             Return _loanID
@@ -15,6 +15,7 @@ Public Class LoanBackground
     End Property
 
     Private _predictedLoan As LoanPrediction
+
     Public ReadOnly Property LoanPrediction() As LoanPrediction
         Get
             Return _predictedLoan
@@ -152,6 +153,7 @@ Public Class LoanBackground
             Next
         End If
     End Sub
+
 End Class
 
 Public Class LoanPrediction
@@ -190,6 +192,7 @@ Public Class LoanPrediction
     Public Property PayAmount As Decimal?
 
     Private UNPAID_TEXT As String = "Unpaid"
+
     Public ReadOnly Property PaidStatus As String
         Get
 
@@ -199,4 +202,5 @@ Public Class LoanPrediction
             Return UNPAID_TEXT
         End Get
     End Property
+
 End Class

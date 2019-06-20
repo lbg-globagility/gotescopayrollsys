@@ -1,7 +1,5 @@
 ﻿Option Strict On
 
-Imports CrystalDecisions.CrystalReports.Engine
-
 Public Class SalaryIncreaseHistoryReportProvider
     Implements IReportProvider
 

@@ -1,5 +1,4 @@
-﻿
-Public Class DataGridViewMySQLTable
+﻿Public Class DataGridViewMySQLTable
 
     'Inherits DevComponents.DotNetBar.Controls.DataGridViewX
 
@@ -47,7 +46,7 @@ Public Class DataGridViewMySQLTable
         End Get
         Set(value As Boolean)
             n_AllowPagination = value
-            
+
             Panel1.Visible = n_AllowPagination
 
         End Set
@@ -178,7 +177,6 @@ Public Class DataGridViewMySQLTable
                     n_dgvColumn.CellTemplate = New DataGridViewDateCell
 
                     dgv.Columns.Add(n_dgvColumn)
-
                 Else
                     Continue For
 
@@ -293,7 +291,7 @@ Public Class DataGridViewMySQLTable
         If IsWorkingInRunTime Then
             Pagination_HandlerControl(n_linklabel.Visible)
         End If
-        
+
     End Sub
 
 End Class

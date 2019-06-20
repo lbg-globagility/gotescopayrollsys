@@ -174,7 +174,6 @@ Public Class DataGridViewDateCell
                 ValueBefore = Format(CDate(MyBase.Value), machineShortDate)
 
             End If
-
         Catch ex As Exception
 
             ValueBefore = n_MinimumDate
@@ -224,7 +223,6 @@ Public Class DataGridViewDateCell
                     MyBase.Tag = MYSQLDateFormat(CDate(MyBase.Value))
 
                     MyBase.Value = Format(CDate(MyBase.Value), machineShortDate)
-
                 Catch ex As Exception
 
                     MyBase.ErrorText = "     Invalid" & vbNewLine &
@@ -234,7 +232,6 @@ Public Class DataGridViewDateCell
                     MyBase.Tag = MYSQLDateFormat(CDate(n_MinimumDate))
 
                     MyBase.Value = Format(CDate(n_MinimumDate), machineShortDate)
-
                 Finally
 
                     ValueBefore = MyBase.Value
@@ -242,7 +239,6 @@ Public Class DataGridViewDateCell
                 End Try
 
             End If
-
         Catch ex As Exception
 
             MyBase.ErrorText = "     Invalid" & vbNewLine &
@@ -252,7 +248,6 @@ Public Class DataGridViewDateCell
             MyBase.Tag = MYSQLDateFormat(CDate(n_MinimumDate))
 
             MyBase.Value = Format(CDate(n_MinimumDate), machineShortDate)
-
         Finally
 
             n_Tag = MyBase.Tag

@@ -4,8 +4,8 @@
 
     End Sub
 
-    Sub VIEW_employeeloan_indate(Optional eloan_EmployeeID As Object = Nothing, _
-                               Optional datefrom As Object = Nothing, _
+    Sub VIEW_employeeloan_indate(Optional eloan_EmployeeID As Object = Nothing,
+                               Optional datefrom As Object = Nothing,
                                Optional dateto As Object = Nothing)
 
         Dim params(3, 2) As Object
@@ -20,8 +20,8 @@
         params(2, 1) = datefrom
         params(3, 1) = dateto
 
-        EXEC_VIEW_PROCEDURE(params, _
-                             "VIEW_employeeloan_indate", _
+        EXEC_VIEW_PROCEDURE(params,
+                             "VIEW_employeeloan_indate",
                              dgvLoanList)
 
     End Sub
@@ -35,4 +35,5 @@
             Close()
         End If
     End Sub
+
 End Class

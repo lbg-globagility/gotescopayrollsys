@@ -20,7 +20,7 @@
         Select Case rpt_index
 
             Case 4 'Employee Loan Report
-                
+
                 cboStringParameter.Visible = True
 
                 TextBox1.Visible = True
@@ -29,11 +29,10 @@
 
                 Label5.Visible = True
 
-
-                enlistToCboBox("SELECT p.PartNo" & _
-                               " FROM product p" & _
-                               " INNER JOIN category c ON c.OrganizationID='" & org_rowid & "' AND c.CategoryName='Loan Type'" & _
-                               " WHERE p.CategoryID=c.RowID" & _
+                enlistToCboBox("SELECT p.PartNo" &
+                               " FROM product p" &
+                               " INNER JOIN category c ON c.OrganizationID='" & org_rowid & "' AND c.CategoryName='Loan Type'" &
+                               " WHERE p.CategoryID=c.RowID" &
                                " AND p.OrganizationID=" & org_rowid & ";",
                                cboStringParameter)
 
@@ -48,7 +47,6 @@
                 Label360.Visible = True
 
                 Label5.Visible = True
-
 
                 With cboStringParameter
 
@@ -136,12 +134,6 @@
 
     End Property
 
-
-
-
-
-
-
     Dim me_DateFromstr = Nothing
 
     Public Property DateFromstr As Object
@@ -218,9 +210,6 @@
 
     End Sub
 
-
-
-
     Dim yearnow = CDate(dbnow).Year
 
     Private Sub PayrollSummaDateSelection_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -256,7 +245,7 @@
 
     End Sub
 
-    Sub VIEW_payp(Optional param_Date As Object = Nothing, _
+    Sub VIEW_payp(Optional param_Date As Object = Nothing,
                   Optional PayFreqType As Object = Nothing)
 
         Dim params(3, 2) As Object
@@ -271,8 +260,8 @@
         params(2, 1) = "1"
         params(3, 1) = PayFreqType
 
-        EXEC_VIEW_PROCEDURE(params, _
-                            "VIEW_payp", _
+        EXEC_VIEW_PROCEDURE(params,
+                            "VIEW_payp",
                             dgvpayperiod)
 
     End Sub
@@ -303,7 +292,6 @@
         '            dgvrow.Cells("Column1").Value = False
 
         '        Next
-
 
         '    End If
 
@@ -395,24 +383,20 @@
 
                             me_DateToID = dgvpayperiod.Item("Column4", rowindx).Value
 
-
                             me_DateFromstr = dgvpayperiod.Item("Column2", previousindex).Value
 
                             me_DateTostr = dgvpayperiod.Item("Column3", rowindx).Value
-
                         Else
 
                             me_DateFromID = dgvpayperiod.Item("Column4", rowindx).Value
 
                             me_DateToID = dgvpayperiod.Item("Column4", previousindex).Value
 
-
                             me_DateFromstr = dgvpayperiod.Item("Column2", rowindx).Value
 
                             me_DateTostr = dgvpayperiod.Item("Column3", previousindex).Value
 
                         End If
-
                     Else
 
                         If limittwo = 1 Then
@@ -420,7 +404,6 @@
                             me_DateFromID = dgvpayperiod.Item("Column4", rowindx).Value
 
                             me_DateToID = dgvpayperiod.Item("Column4", rowindx).Value
-
 
                             me_DateFromstr = dgvpayperiod.Item("Column2", rowindx).Value
 
@@ -431,7 +414,6 @@
                         previousindex = rowindx
 
                     End If
-
                 Else
 
                     If limittwo >= 2 Then
@@ -443,7 +425,6 @@
                                 me_DateFromID = dgvrow.Cells("Column4").Value
 
                                 me_DateToID = dgvrow.Cells("Column4").Value
-
 
                                 me_DateFromstr = dgvrow.Cells("Column2").Value
 
@@ -469,7 +450,6 @@
                 'Label3.Text = ""
 
                 'Label4.Text = ""
-
             Else
 
                 Label3.Text = Format(CDate(me_DateFromstr), "MMMM d, yyyy")
@@ -477,8 +457,6 @@
                 Label4.Text = Format(CDate(me_DateTostr), "MMMM d, yyyy")
 
             End If
-
-
         Else
 
             limittwo = 0
@@ -488,7 +466,6 @@
             me_DateFromID = Nothing
 
             me_DateToID = Nothing
-
 
             me_DateFromstr = Nothing
 
@@ -527,14 +504,12 @@
 
                 ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
                     numofweekends += 1
-
                 Else
                     numofweekdays += 1
 
                 End If
 
             Next
-
         Else
 
             paypFrom = Nothing
@@ -560,7 +535,6 @@
         dgvpayperiod.EndEdit(True)
 
         If dgvpayperiod.RowCount <> 0 Then
-
         Else
 
             me_DateFromID = Nothing
@@ -586,7 +560,6 @@
         dgvpayperiod.EndEdit(True)
 
         If dgvpayperiod.RowCount <> 0 Then
-
         Else
 
             me_DateFromID = Nothing
@@ -624,7 +597,6 @@
         If dgvpayperiod.RowCount <> 0 Then
 
             DialogResult = Windows.Forms.DialogResult.OK
-
         Else
 
             DialogResult = Windows.Forms.DialogResult.Cancel
@@ -648,7 +620,6 @@
             btnClose_Click(btnClose, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)

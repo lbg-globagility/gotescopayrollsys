@@ -1,13 +1,10 @@
-﻿Imports System.IO
-Imports MySql.Data.MySqlClient
-Imports System.Threading.Tasks
-Imports System.Threading
-Imports System.Text
-Imports System.ComponentModel
-Imports log4net
-Imports OfficeOpenXml
+﻿Imports System.ComponentModel
 Imports System.Configuration
 Imports System.Data.Entity
+Imports System.Threading
+Imports System.Threading.Tasks
+Imports log4net
+Imports MySql.Data.MySqlClient
 
 Public Class PayStub
 
@@ -2421,7 +2418,6 @@ Public Class PayStub
             End If
 
             sssBrackets = Await LoadSssBracketsAsync()
-
         Catch ex As Exception
             Dim err_msg As String = getErrExcptn(ex, Name)
             erro_msg_length = err_msg.Length

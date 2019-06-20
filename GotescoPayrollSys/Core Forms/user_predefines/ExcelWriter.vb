@@ -5,7 +5,6 @@
     Private clBegin As UShort() = {&H809, 8, 0, &H10, 0, 0}
     Private clEnd As UShort() = {&HA, 0}
 
-
     Private Sub WriteUshortArray(value As UShort())
         For i As Integer = 0 To value.Length - 1
             writer.Write(value(i))

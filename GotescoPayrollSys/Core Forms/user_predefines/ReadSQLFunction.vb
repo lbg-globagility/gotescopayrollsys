@@ -102,7 +102,7 @@ Public Class ReadSQLFunction
             priv_cmd.Connection.Close()
 
             priv_da.Dispose()
-            
+
             priv_conn.Close()
 
             priv_conn.Dispose()

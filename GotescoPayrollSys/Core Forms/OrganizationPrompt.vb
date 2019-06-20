@@ -1,5 +1,4 @@
-﻿
-Public Class OrganizationPrompt
+﻿Public Class OrganizationPrompt
 
     Sub New()
 
@@ -64,11 +63,11 @@ Public Class OrganizationPrompt
 
     Private Sub OrganizationPrompt_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        enlistToCboBox("SELECT og.Name" & _
-                       " FROM employee e" & _
-                       " INNER JOIN organization og ON og.RowID=e.OrganizationID" & _
-                       " WHERE " & dbcol_organization & "='" & n_EmployeeRowID & "'" & _
-                       " GROUP BY e.OrganizationID;", _
+        enlistToCboBox("SELECT og.Name" &
+                       " FROM employee e" &
+                       " INNER JOIN organization og ON og.RowID=e.OrganizationID" &
+                       " WHERE " & dbcol_organization & "='" & n_EmployeeRowID & "'" &
+                       " GROUP BY e.OrganizationID;",
                         cboOrganiz)
 
     End Sub
@@ -80,7 +79,6 @@ Public Class OrganizationPrompt
             btnCancel_Click(btnCancel, New EventArgs)
 
             Return True
-
         Else
 
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -100,13 +98,11 @@ Public Class OrganizationPrompt
             If n_RowIDValue = 0 Then
 
                 DialogResult = Windows.Forms.DialogResult.Cancel
-
             Else
 
                 DialogResult = Windows.Forms.DialogResult.OK
 
             End If
-
         Else
 
             DialogResult = Windows.Forms.DialogResult.Cancel

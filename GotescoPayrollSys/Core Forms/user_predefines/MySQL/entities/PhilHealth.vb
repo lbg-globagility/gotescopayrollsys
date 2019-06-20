@@ -5,6 +5,7 @@ Imports System.ComponentModel.DataAnnotations.Schema
 
 <Table("payphilhealth")>
 Public Class PhilHealth
+
     <Key>
     <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property RowID As Integer
@@ -32,4 +33,5 @@ Public Class PhilHealth
             Return HiddenData.Value = "0"
         End Get
     End Property
+
 End Class

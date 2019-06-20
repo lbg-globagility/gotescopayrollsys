@@ -1,8 +1,6 @@
 ﻿Option Strict On
 
 Imports System.Data.Entity
-Imports AccuPay.Entity
-Imports Microsoft.EntityFrameworkCore
 
 Public Class DateRangePickerDialog
 

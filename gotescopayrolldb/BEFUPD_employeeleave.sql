@@ -5,12 +5,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TRIGGER IF EXISTS `BEFUPD_employeeleave`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `BEFUPD_employeeleave` BEFORE UPDATE ON `employeeleave` FOR EACH ROW BEGIN
 
 DECLARE selected_leavebal DECIMAL(11,2) DEFAULT 0;
-
 DECLARE secondsPerHour INT(11) DEFAULT 3600;
 
 /*********************************************************
@@ -132,18 +131,25 @@ IF NEW.`Status` = 'Approved' THEN
 		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * -1;
 		
 	ELSE
-		/*SET @leaveStartTime=CONCAT_DATETIME(NEW.LeaveStartDate, NEW.LeaveStartTime);
+		
+		SET @leaveStartTime=CONCAT_DATETIME(NEW.LeaveStartDate, NEW.LeaveStartTime);
 		SET @breakStartTime=GetNextStartDateTime(@leaveStartTime, @breakStart);
 		SET @breakEndTime=GetNextStartDateTime(@breakStartTime, @breakEnd);
-		SET @leaveEndTime=GetNextStartDateTime(@breakEndTime, NEW.LeaveEndTime);
+		SET @leaveEndTime=GetNextStartDateTime(@leaveStartTime, NEW.LeaveEndTime);
 		
 		IF (@breakStartTime BETWEEN @leaveStartTime AND @leaveEndTime)
 			AND (@breakEndTime BETWEEN @leaveStartTime AND @leaveEndTime) THEN
 			
-			SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0));
+			SET NEW.OfficialValidHours = (IFNULL((TIMESTAMPDIFF(SECOND, @leaveStartTime, @leaveEndTime)/secondsPerHour), 0) - IFNULL(@break_hrs, 0));
+		ELSEIF (@breakStartTime BETWEEN @leaveStartTime AND @leaveEndTime) THEN
+		
+			SET NEW.OfficialValidHours = IFNULL((TIMESTAMPDIFF(SECOND, @leaveStartTime, LEAST(@breakStartTime, @leaveEndTime))/secondsPerHour), 0);
+		ELSEIF (@breakEndTime BETWEEN @leaveStartTime AND @leaveEndTime) THEN
+		
+			SET NEW.OfficialValidHours = IFNULL((TIMESTAMPDIFF(SECOND, GREATEST(@leaveStartTime, @breakEndTime), @leaveEndTime)/secondsPerHour), 0);
 		ELSE
-		END IF;*/
-		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0));
+			SET NEW.OfficialValidHours = IFNULL((TIMESTAMPDIFF(SECOND, @leaveStartTime, @leaveEndTime)/secondsPerHour), 0);
+		END IF;
 	END IF;
 	
 ELSE

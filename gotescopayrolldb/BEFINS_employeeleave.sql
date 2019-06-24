@@ -223,10 +223,25 @@ IF NEW.`Status` = 'Approved' THEN
 			# SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
 			SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * -1;
 		ELSE
-		
-			# SET NEW.OfficialValidHours = @validhrs_multip_validdays;
-			# SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * IFNULL(@offcl_validdays, 0);
-			SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0));
+			
+			SET @leaveStartTime=CONCAT_DATETIME(NEW.LeaveStartDate, NEW.LeaveStartTime);
+			SET @breakStartTime=GetNextStartDateTime(@leaveStartTime, @breakStart);
+			SET @breakEndTime=GetNextStartDateTime(@breakStartTime, @breakEnd);
+			SET @leaveEndTime=GetNextStartDateTime(@leaveStartTime, NEW.LeaveEndTime);
+			
+			IF (@breakStartTime BETWEEN @leaveStartTime AND @leaveEndTime)
+				AND (@breakEndTime BETWEEN @leaveStartTime AND @leaveEndTime) THEN
+				
+				SET NEW.OfficialValidHours = (IFNULL((TIMESTAMPDIFF(SECOND, @leaveStartTime, @leaveEndTime)/secondsPerHour), 0) - IFNULL(@break_hrs, 0));
+			ELSEIF (@breakStartTime BETWEEN @leaveStartTime AND @leaveEndTime) THEN
+			
+				SET NEW.OfficialValidHours = IFNULL((TIMESTAMPDIFF(SECOND, @leaveStartTime, LEAST(@breakStartTime, @leaveEndTime))/secondsPerHour), 0);
+			ELSEIF (@breakEndTime BETWEEN @leaveStartTime AND @leaveEndTime) THEN
+			
+				SET NEW.OfficialValidHours = IFNULL((TIMESTAMPDIFF(SECOND, GREATEST(@leaveStartTime, @breakEndTime), @leaveEndTime)/secondsPerHour), 0);
+			ELSE
+				SET NEW.OfficialValidHours = IFNULL((TIMESTAMPDIFF(SECOND, @leaveStartTime, @leaveEndTime)/secondsPerHour), 0);
+			END IF;
 		END IF;
 		
 	ELSE

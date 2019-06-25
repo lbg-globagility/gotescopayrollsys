@@ -1,0 +1,3 @@
+ALTER TABLE `employeetimeentry` ADD COLUMN `AddedHolidayPayAmount` DECIMAL(11,6) NULL DEFAULT '0' AFTER `HolidayPayAmount`;
+
+ALTER TABLE `employeetimeentryactual` ADD COLUMN `AddedHolidayPayAmount` DECIMAL(11,6) NULL DEFAULT '0' AFTER `HolidayPayAmount`;

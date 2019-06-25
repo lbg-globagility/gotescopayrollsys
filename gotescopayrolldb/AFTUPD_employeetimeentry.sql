@@ -5,7 +5,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TRIGGER IF EXISTS `AFTUPD_employeetimeentry`;
-SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION';
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `AFTUPD_employeetimeentry` AFTER UPDATE ON `employeetimeentry` FOR EACH ROW BEGIN
 
@@ -132,6 +132,7 @@ INSERT INTO employeetimeentryactual
 	,TaxableDailyBonus
 	,NonTaxableDailyBonus
 	,AdditionalVLHours
+	,AddedHolidayPayAmount
 ) VALUES(
 	NEW.RowID
 	,NEW.OrganizationID
@@ -166,6 +167,7 @@ INSERT INTO employeetimeentryactual
 	,NEW.TaxableDailyBonus
 	,NEW.NonTaxableDailyBonus
 	,NEW.AdditionalVLHours
+	,(NEW.AddedHolidayPayAmount * actualrate)
 ) ON
 DUPLICATE
 KEY
@@ -201,7 +203,8 @@ UPDATE
 	,HolidayPayAmount=NEW.HolidayPayAmount + (NEW.HolidayPayAmount * actualrate)
 	,TaxableDailyBonus=NEW.TaxableDailyBonus
 	,NonTaxableDailyBonus=NEW.NonTaxableDailyBonus
-	,AdditionalVLHours=NEW.AdditionalVLHours;
+	,AdditionalVLHours=NEW.AdditionalVLHours
+	,AddedHolidayPayAmount=(NEW.AddedHolidayPayAmount * actualrate);
 	
 SELECT RowID FROM `view` WHERE ViewName='Employee Time Entry' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO viewID;
 

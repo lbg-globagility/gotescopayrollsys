@@ -637,7 +637,7 @@ ELSE
 		
 		SET otendingtime = '12:00:00'; 
 
-		SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
+		SELECT CalculateOvertimeHours(shifttimefrom, shifttimeto, ete_Date, ete_EmpRowID)
 		INTO ete_OvertimeHrs;
 			
 	ELSE

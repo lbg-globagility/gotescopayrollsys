@@ -345,9 +345,10 @@ IF LCASE(@employee_type)='monthly' THEN
 		SET NEW.HolidayPayAmount = rate_this_date;
 		
 		SET @additional=((NEW.RegularHoursWorked * (rate_this_date / default_working_hrs)) * (payrate_this_date-1));
-		IF IFNULL(@additional, 0) > 0 THEN
-			SET NEW.HolidayPayAmount = NEW.HolidayPayAmount + @additional;
-		END IF;
+		SET @additional=IFNULL(@additional,0);
+		
+		SET NEW.HolidayPayAmount = NEW.HolidayPayAmount + @additional;
+		SET NEW.AddedHolidayPayAmount=@additional;
 		
 		SET NEW.TotalDayPay=(
 		+ NEW.OvertimeHoursAmount

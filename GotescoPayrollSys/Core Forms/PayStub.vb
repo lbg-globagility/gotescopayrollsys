@@ -3041,6 +3041,7 @@ Public Class PayStub
             result_tbl = sql.GetFoundRows.Tables(0)
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Name))
+            errlogger.Error($"PrintPayslip ({param_values.First}, {param_values(1)}, {param_values.Last})", ex)
         Finally
 
             If sql.HasError = False Then

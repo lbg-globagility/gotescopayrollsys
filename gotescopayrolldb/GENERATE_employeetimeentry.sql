@@ -800,8 +800,8 @@ ELSEIF IFNULL(rateperhour,0) = 0 THEN
 	SET rateperhour = 8;
 	
 END IF;
-SET rateperhour = IFNULL((SELECT DivisorToDailyRate FROM shift WHERE RowID=sh_rowID),8);
-SET rateperhourforOT = rateperhour;SET rateperhour = dailypay / rateperhour;
+SET rateperhour = IFNULL((SELECT DivisorToDailyRate FROM shift WHERE RowID=sh_rowID), default_work_hrs);
+SET rateperhourforOT = rateperhour; SET rateperhour = dailypay / default_work_hrs;
 
 SET rateperhourforOT =  dailypay / (SELECT DivisorToDailyRate FROM shift WHERE RowID=sh_rowID AND DivisorToDailyRate != rateperhourforOT);
 IF IFNULL(rateperhourforOT,0) <= 0 THEN
@@ -960,7 +960,7 @@ IF pr_DayBefore IS NULL THEN
 
 				
 		SET ete_TotalDayPay = 0.0;
-									 
+
 		SELECT INSUPD_employeetimeentries(
 				anyINT
 				, ete_OrganizID
@@ -1004,7 +1004,7 @@ IF pr_DayBefore IS NULL THEN
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
 										 + @leavePayment;
-										 
+
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID
@@ -1167,7 +1167,7 @@ IF pr_DayBefore IS NULL THEN
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
 										 + @leavePayment;
-			
+
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID
@@ -1271,7 +1271,7 @@ ELSE
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * ((commonrate + restday_rate) - 1))
 										 + ((ete_OvertimeHrs * rateperhourforOT) * ((commonrate + restdayot_rate) - 1))
 										 + (@availed_leave_hrs * rateperhour);
-			
+
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID
@@ -1354,7 +1354,7 @@ ELSE
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
 										 + (@availed_leave_hrs * rateperhour);
-										 
+
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID
@@ -1400,7 +1400,7 @@ ELSE
 				SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 											 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
 											 + (@availed_leave_hrs * rateperhour);
-				IF hasLeave THEN SET ete_TotalDayPay = ete_TotalDayPay + (IFNULL((SELECT VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours FROM employeetimeentry WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date),0) * rateperhour); END IF;				 
+				IF hasLeave THEN SET ete_TotalDayPay = ete_TotalDayPay + (IFNULL((SELECT VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours FROM employeetimeentry WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date),0) * rateperhour); END IF;
 				SELECT INSUPD_employeetimeentries(
 						anyINT
 						, ete_OrganizID
@@ -1432,7 +1432,7 @@ ELSE
 			ELSE
 	
 				SET ete_TotalDayPay = 0.0;
-											 
+
 				SELECT INSUPD_employeetimeentries(
 						anyINT
 						, ete_OrganizID

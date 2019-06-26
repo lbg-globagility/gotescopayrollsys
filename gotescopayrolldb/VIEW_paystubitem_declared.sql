@@ -11,6 +11,7 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_paystubitem_declared`(
 	IN `EmpRowID` INT,
 	IN `pay_date_from` DATE,
 	IN `pay_date_to` DATE
+
 )
     DETERMINISTIC
 BEGIN
@@ -23,7 +24,11 @@ DECLARE startdate_ofpreviousmonth DATE;
 
 DECLARE enddate_ofpreviousmonth DATE;
 
-SELECT pp.`Month`,pp.`Year`
+DECLARE workingDaysPerYear DECIMAL(11, 6);
+
+DECLARE monthCount INT(11) DEFAULT 12;
+
+SELECT pp.`Month`,pp.`Year`, e.WorkDaysPerYear
 FROM payperiod pp
 INNER JOIN employee e ON e.RowID=EmpRowID AND e.OrganizationID=OrganizID
 WHERE pp.OrganizationID=OrganizID
@@ -31,7 +36,19 @@ AND pp.TotalGrossSalary=e.PayFrequencyID
 AND pp.PayFromDate=pay_date_from
 AND pp.PayToDate=pay_date_to
 INTO themonth
-		,theyear;
+		,theyear
+		,workingDaysPerYear;
+
+DROP TEMPORARY TABLE IF EXISTS timeentrywithdailyrate; DROP TABLE IF EXISTS timeentrywithdailyrate; CREATE TEMPORARY TABLE timeentrywithdailyrate SELECT et.*
+, @dRate := IFNULL((NULLIF(es.Salary, 0) / (workingDaysPerYear / monthCount)), 0) `DailyRate`
+, TRIM( (@dRate / 8) )+0 `HourlyRate`
+, (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) `TotalLeaveHours`
+FROM employeetimeentry et
+LEFT JOIN employeesalary es ON es.RowID=et.EmployeeSalaryID
+WHERE et.EmployeeID=EmpRowID
+AND et.OrganizationID=OrganizID
+AND et.`Date` BETWEEN pay_date_from AND pay_date_to
+;
 
 SELECT pp.PayFromDate
 ,pp.PayToDate
@@ -94,6 +111,8 @@ SELECT psa.RowID
 ,psa.TotalTaxableSalary
 
 ,IFNULL(psi_rest.PayAmount, 0) `RestDayPayment`
+, ete.`TotalDefaultHolidayPay`
+, ete.`AddedHolidayPayAmount`
 
 FROM paystub psa
 # LEFT JOIN paystub ps2 ON ps2.EmployeeID=EmpRowID AND ps2.OrganizationID=OrganizID AND ps2.PayFromDate=startdate_ofpreviousmonth AND ps2.PayToDate=enddate_ofpreviousmonth
@@ -133,7 +152,9 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.TotalDayPay) AS TotalDayPay
 				, SUM(etea.Absent) AS Absent, SUM(etea.HolidayPayAmount) AS HolidayPayAmount
 				, SUM(et.AbsentHours) `AbsentHours`
-				FROM employeetimeentry etea
+				, SUM(IF(etea.IsValidForHolidayPayment, etea.DailyRate, 0)) `TotalDefaultHolidayPay`
+				, SUM(etea.AddedHolidayPayAmount) `AddedHolidayPayAmount`
+				FROM timeentrywithdailyrate etea
 				INNER JOIN proper_time_entry et ON et.RowID=etea.RowID AND et.AsActual=FALSE
 				INNER JOIN payrate pr ON pr.RowID=etea.PayRateID
 				WHERE etea.EmployeeID=EmpRowID
@@ -142,7 +163,13 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				
 INNER JOIN organization og ON og.RowID=psa.OrganizationID
 
-LEFT JOIN (SELECT RowID,SUM(TotalDayPay - (RegularHoursAmount + OvertimeHoursAmount + HolidayPayAmount)) AS PaidLeaveAmount,SUM((VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours + AdditionalVLHours)) AS PaidLeaveHours FROM employeetimeentry WHERE (VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours + AdditionalVLHours) > 0 AND EmployeeID=EmpRowID AND OrganizationID=OrganizID AND `Date` BETWEEN pay_date_from AND pay_date_to) paidleave ON paidleave.RowID IS NOT NULL
+LEFT JOIN (SELECT RowID
+				, SUM(TotalLeaveHours * HourlyRate) `PaidLeaveAmount`
+				, SUM(TotalLeaveHours) `PaidLeaveHours`
+				FROM timeentrywithdailyrate
+				WHERE TotalLeaveHours > 0
+				) paidleave
+				ON paidleave.RowID IS NOT NULL
 
 INNER JOIN product p_rest ON p_rest.OrganizationID=psa.OrganizationID AND p_rest.PartNo='Restday pay'
 LEFT JOIN paystubitem psi_rest ON psi_rest.ProductID=p_rest.RowID AND psi_rest.PayStubID=psa.RowID AND psi_rest.Undeclared=FALSE

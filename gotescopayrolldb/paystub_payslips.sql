@@ -133,10 +133,10 @@ ps.RowID
 , IFNULL((LENGTH(psiloan.`Column33`) - LENGTH(REPLACE(psiloan.`Column33`, ',', ''))) + 1, 0) `Column10`
 
 , FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `Column17`
-    
+
 ,IF(e.EmployeeType = 'Daily'
     , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)
-    , FORMAT(@basic_payment - (IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.Absent, 0) + IFNULL(et.Leavepayment, 0) + IFNULL(et.HolidayPayAmount, 0)), 2)
+    , FORMAT(@basic_payment - (IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.Absent, 0) + IFNULL(et.Leavepayment, 0) + IFNULL(et.DefaultHolidayPay, 0)), 2)
     /*, IF(e.EmployeeType = 'Monthly'
          , FORMAT(@basic_payment - IFNULL((et.UndertimeHoursAmount + et.HoursLateAmount + et.Absent + et.Leavepayment + et.HolidayPayAmount), 0), 2)
 			, @basic_payment
@@ -273,10 +273,15 @@ LEFT JOIN (SELECT
 			           # , GREATEST(et.RegularHoursWorked, et.WorkHours)
 			           , et.RegularHoursWorked
 						  , 0)) `HolidayHours`
+			  , SUM(IFNULL(et.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`
+			  , SUM(IF(et.IsValidForHolidayPayment=TRUE
+			           , es.DailyRate
+						  , 0)) `DefaultHolidayPay`
+			  
 			  FROM proper_time_entry et
 			  
 			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
-			  
+			  LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
 			  WHERE et.OrganizationID=og_rowid
 			  AND et.AsActual=is_actual
 			  AND et.`Date` BETWEEN paydate_from AND paydat_to

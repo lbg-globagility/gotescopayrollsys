@@ -871,7 +871,7 @@ Public Class PayrollGeneration
                                 grossincome -= (ValNoComma(drowtotdaypay("HoursLateAmount")) _
                                                 + ValNoComma(drowtotdaypay("UndertimeHoursAmount")) _
                                                 + ValNoComma(drowtotdaypay("Absent")))
-                                grossincome += (ValNoComma(drowtotdaypay("OvertimeHoursAmount")) + NightDiffAmount + NightDiffOTAmount)
+                                grossincome += (ValNoComma(drowtotdaypay("OvertimeHoursAmount")) + NightDiffAmount + NightDiffOTAmount + Convert.ToDecimal(drowtotdaypay("AddedHolidayPayAmount")))
                                 'n_PayrollRecordID
                                 grossincome_firsthalf = ValNoComma(drowsal("BasicPay")) '+ _
                                 'ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = " & drow("RowID").ToString)) + _
@@ -884,7 +884,8 @@ Public Class PayrollGeneration
                                     + ValNoComma(prev_empTimeEntry.Compute("SUM(Absent)", "EmployeeID = '" & drow("RowID") & "'")))
                                 grossincome_firsthalf += (ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) +
                                                           ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) +
-                                                          ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffOTHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")))
+                                                          ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffOTHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) +
+                                                          ValNoComma(prev_empTimeEntry.Compute("SUM(AddedHolidayPayAmount)", "EmployeeID = '" & drow("RowID") & "'")))
                             End If
 
                             monthly_computed_salary = ((grossincome + grossincome_firsthalf) - overall_overtime)

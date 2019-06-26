@@ -1262,6 +1262,7 @@ Public Class PayStub
                                                                 ",SUM(ete.HolidayPayAmount) AS HolidayPayAmount",
                                                                 ",SUM(ete.TaxableDailyBonus) AS TaxableDailyBonus",
                                                                 ",SUM(ete.NonTaxableDailyBonus) AS NonTaxableDailyBonus",
+                                                                ",SUM(IFNULL(ete.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`",
                                                                 " FROM employeetimeentry ete",
                                                                 " LEFT JOIN employee e ON e.RowID=ete.EmployeeID",
                                                                 " WHERE ete.OrganizationID=", org_rowid,

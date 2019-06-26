@@ -166,7 +166,7 @@ INSERT INTO employeetimeentryactual
 	,NEW.HolidayPayAmount + (NEW.HolidayPayAmount * actualrate)
 	,NEW.TaxableDailyBonus
 	,NEW.NonTaxableDailyBonus
-	,(NEW.AddedHolidayPayAmount * actualrate)
+	,(NEW.AddedHolidayPayAmount + (NEW.AddedHolidayPayAmount * actualrate))
 ) ON
 DUPLICATE
 KEY
@@ -203,7 +203,7 @@ UPDATE
 	,HolidayPayAmount=NEW.HolidayPayAmount + (NEW.HolidayPayAmount * actualrate)
 	,TaxableDailyBonus=NEW.TaxableDailyBonus
 	,NonTaxableDailyBonus=NEW.NonTaxableDailyBonus
-	,AddedHolidayPayAmount=(NEW.AddedHolidayPayAmount * actualrate);
+	,AddedHolidayPayAmount=(NEW.AddedHolidayPayAmount + (NEW.AddedHolidayPayAmount * actualrate));
 
 SELECT RowID FROM `view` WHERE ViewName='Employee Time Entry' AND OrganizationID=NEW.OrganizationID LIMIT 1 INTO viewID;
 

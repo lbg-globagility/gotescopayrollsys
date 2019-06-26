@@ -6,7 +6,11 @@
 
 DROP PROCEDURE IF EXISTS `GETVIEW_previousemployeetimeentry`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GETVIEW_previousemployeetimeentry`(IN `OrganizID` INT, IN `prev_payperiodID` INT, IN `WeeklySSSSchedPayPeriodID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GETVIEW_previousemployeetimeentry`(
+	IN `OrganizID` INT,
+	IN `prev_payperiodID` INT,
+	IN `WeeklySSSSchedPayPeriodID` INT
+)
     DETERMINISTIC
 BEGIN
 
@@ -88,6 +92,7 @@ IF payfreqID = 1 THEN
 	,SUM(ete.Absent) `Absent`
 	,SUM(ete.TaxableDailyAllowance) `TaxableDailyAllowance`
 	,SUM(ete.HolidayPayAmount) `HolidayPayAmount`
+	,SUM(IFNULL(ete.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`
 	,SUM(ete.TaxableDailyBonus) `TaxableDailyBonus`
 	,SUM(ete.NonTaxableDailyBonus) `NonTaxableDailyBonus`
 	,IFNULL(ps.TotalGrossSalary

@@ -34,6 +34,10 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
 
 
 
+
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -110,11 +114,11 @@ ps.RowID
 ,FORMAT(ps.TotalEmpWithholdingTax, 2) `Column7`
 ,FORMAT(ps.TotalAdjustments, 2) `Column32`
 
-, NEWLINECHARTRIMMER(REPLACE(psiallw.`Column34`, ',', '\r\n')) `Column34`
-, NEWLINECHARTRIMMER(REPLACE(psiallw.`Column37`, ',', '\r\n')) `Column37`
+, NEWLINECHARTRIMMER(REPLACE(REPLACE(psiallw.`Column34`, ',', '\r\n'), '|', ',')) `Column34`
+, NEWLINECHARTRIMMER(REPLACE(REPLACE(psiallw.`Column37`, ',', '\r\n'), '|', ',')) `Column37`
 
-, RidCharacater(REPLACE(psibon.`Column36`, ',', '\r\n'), '\r\n') `Column36`
-, RidCharacater(REPLACE(psibon.`Column39`, ',', '\r\n'), '\r\n') `Column39`
+, RidCharacater(REPLACE(REPLACE(psibon.`Column36`, ',', '\r\n'), '|', ','), '\r\n') `Column36`
+, RidCharacater(REPLACE(REPLACE(psibon.`Column39`, ',', '\r\n'), '|', ','), '\r\n') `Column39`
 
 /**/ , REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column35`, ',', '\n'))
           , '|', ',')  `Column35`
@@ -162,7 +166,7 @@ ps.RowID
 ,NEWLINECHARTRIMMER(REPLACE(psilv.`Column30`, ',', '\n')) `Column30`
 ,NEWLINECHARTRIMMER(REPLACE(psilv.`Column31`, ',', '\n')) `Column31`
 
-# , IFNULL(rd.`RestDayAmount`, 0) `Column16`
+, ROUND(IFNULL(et.`RestDayHours`, 0), 2) `Column25`
 , IFNULL(ROUND(et.`RestDayAmount`, 2), 0) `Column16`
 
 , FORMAT(IFNULL(et.`HolidayHours`, 0), 2) `Column44`
@@ -175,10 +179,10 @@ ps.RowID
 ,NEWLINECHARTRIMMER(REPLACE(adj.`AdjustmentAmount`, ',', '\n')) `Column47`
 
 ,NEWLINECHARTRIMMER(REPLACE(adj_positive.`AdjustmentName`, ',', '\n')) `Column50`
-,NEWLINECHARTRIMMER(REPLACE(adj_positive.`AdjustmentAmount`, ',', '\n')) `Column51`
+,NEWLINECHARTRIMMER(REPLACE(REPLACE(adj_positive.`AdjustmentAmount`, ',', '\n'), '|', ',')) `Column51`
 
 ,NEWLINECHARTRIMMER(REPLACE(adj_negative.`AdjustmentName`, ',', '\n')) `Column52`
-,NEWLINECHARTRIMMER(REPLACE(adj_negative.`AdjustmentAmount`, ',', '\n')) `Column53`
+,NEWLINECHARTRIMMER(REPLACE(REPLACE(adj_negative.`AdjustmentAmount`, ',', '\n'), '|', ',')) `Column53`
 
 ,NEWLINECHARTRIMMER(REPLACE(eapp.`AllowanceName`, ',', '\n')) `Column48`
 ,REPLACE(NEWLINECHARTRIMMER(REPLACE(eapp.`AmountPresentation`, ',', '\n')), '|', ',') `Column49`
@@ -260,6 +264,7 @@ LEFT JOIN (SELECT
 			  ,SUM(et.NonTaxableDailyBonus) `NonTaxableDailyBonus`
 			  ,SUM(et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) `LeaveHours`
 			  ,SUM(et.Leavepayment * et.ActualSalaryRate) `Leavepayment`
+			  , SUM(IFNULL(i.RegularHoursWorked, 0)) `RestDayHours`
 			  , IF(is_actual = 1
 			       , SUM(i.RestDayActualPay)
 					 , SUM(i.RestDayAmount)) `RestDayAmount`
@@ -282,7 +287,7 @@ LEFT JOIN (SELECT
 LEFT JOIN (SELECT
            PayStubID
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column34`
-           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column37`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', REPLACE(FORMAT(psi.PayAmount, 2), ',', '|'))) `Column37`
            FROM paystubitem psi
 			  INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Allowance Type' AND p.ActiveData=1
 			  WHERE psi.OrganizationID = og_rowid
@@ -295,7 +300,7 @@ LEFT JOIN (SELECT
 LEFT JOIN (SELECT
            PayStubID
            ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', p.PartNo)) `Column36`
-           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column39`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', REPLACE(FORMAT(psi.PayAmount, 2), ',', '|'))) `Column39`
            FROM paystubitem psi
 			  INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Bonus' AND p.ActiveData=1
 			  WHERE psi.OrganizationID = og_rowid

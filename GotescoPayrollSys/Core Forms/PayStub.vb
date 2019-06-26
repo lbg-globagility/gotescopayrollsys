@@ -8449,6 +8449,8 @@ Public Class PayStub
 
             Dim strdouble = ValNoComma(drow("TrueSalary")) / ValNoComma(drow("PAYFREQUENCYDIVISOR")) 'BasicPay
             Dim holidaybayad = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Holiday pay'")) 'Holiday pay
+            Dim totalDefaultHolidayPay = Convert.ToDecimal(drow("TotalDefaultHolidayPay"))
+            Dim addedHolidayPayAmount = Convert.ToDecimal(drow("AddedHolidayPayAmount"))
             'Basic Pay
             txtempbasicpay.Text = FormatNumber((strdouble), 2)
             'Regular
@@ -8470,7 +8472,7 @@ Public Class PayStub
                     thebasicpay = ValNoComma(drow("TotalDayPay")) 'RegularHoursAmount
                 Else
                     thebasicpay = ValNoComma(drow("BasicPay"))
-                    thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) + holidaybayad + ValNoComma(drow("PaidLeaveAmount")) 'ValNoComma(drow("HolidayPayAmount"))
+                    thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) + totalDefaultHolidayPay + ValNoComma(drow("PaidLeaveAmount")) 'ValNoComma(drow("HolidayPayAmount"))
                 End If
 
                 txthrsworkamt.Text = FormatNumber((thebasicpay - thelessamounts), 2)
@@ -8517,8 +8519,9 @@ Public Class PayStub
                     thebasicpay = ValNoComma(drow("BasicPay")) +
                         ValNoComma(drow("OvertimeHoursAmount")) +
                         ValNoComma(drow("NightDiffHoursAmount")) +
-                        ValNoComma(drow("NightDiffOTHoursAmount"))
-                    thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) ' + ValNoComma(drow("HolidayPayAmount"))
+                        ValNoComma(drow("NightDiffOTHoursAmount")) +
+                        addedHolidayPayAmount
+                    thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent"))
                 End If
 
                 lblsubtot.Text = FormatNumber((thebasicpay - thelessamounts), 2)
@@ -8683,6 +8686,8 @@ Public Class PayStub
 
             Dim strdouble = ValNoComma(drow("TrueSalary")) / ValNoComma(drow("PAYFREQUENCYDIVISOR")) 'BasicPay
             Dim holidaybayad = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Holiday pay'")) 'Holiday pay
+            Dim totalDefaultHolidayPay = Convert.ToDecimal(drow("TotalDefaultHolidayPay"))
+            Dim addedHolidayPayAmount = Convert.ToDecimal(drow("AddedHolidayPayAmount"))
             'Basic Pay
             txtempbasicpay_U.Text = FormatNumber((strdouble), 2)
             'Regular
@@ -8704,7 +8709,7 @@ Public Class PayStub
                     thebasicpay = ValNoComma(drow("TotalDayPay")) 'RegularHoursAmount
                 Else
                     thebasicpay = ValNoComma(drow("BasicPay"))
-                    thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) + holidaybayad + ValNoComma(drow("PaidLeaveAmount")) 'ValNoComma(drow("HolidayPayAmount"))
+                    thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) + totalDefaultHolidayPay + ValNoComma(drow("PaidLeaveAmount")) 'ValNoComma(drow("HolidayPayAmount"))
                 End If
 
                 txthrsworkamt_U.Text = FormatNumber((thebasicpay - thelessamounts), 2)
@@ -8751,7 +8756,8 @@ Public Class PayStub
                     thebasicpay = ValNoComma(drow("BasicPay")) +
                         ValNoComma(drow("OvertimeHoursAmount")) +
                         ValNoComma(drow("NightDiffHoursAmount")) +
-                        ValNoComma(drow("NightDiffOTHoursAmount"))
+                        ValNoComma(drow("NightDiffOTHoursAmount")) +
+                        addedHolidayPayAmount
                     thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) ' + ValNoComma(drow("HolidayPayAmount"))
                 End If
 

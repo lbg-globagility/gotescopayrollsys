@@ -19,6 +19,8 @@ DECLARE startBreakDateTime, endBreakDateTime DATETIME DEFAULT NULL;
 
 DECLARE hourBreak INT(11) DEFAULT 1;
 
+DECLARE secondsPerHour INT(11) DEFAULT 3600;
+
 /*********************************************************
 START METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
 *********************************************************/

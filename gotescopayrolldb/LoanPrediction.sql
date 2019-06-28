@@ -30,6 +30,7 @@ SET @ordinalIndex = 0;
 SET @propDeductAmt = 0.00;
 SET @progInterval = 0;
 SET @progAmt = 0.00;
+SET @isLast = FALSE;
 
 SET @loanBalans = 0.00;
 
@@ -50,21 +51,23 @@ SELECT i.*
 , IF(@isAnotherID
 		, @ordinalIndex := 1
 		, @ordinalIndex := @ordinalIndex + 1) `OrdinalIndex`
-, (@totalLoan <= 0 AND @ordinalIndex = i.NoOfPayPeriod) `IsLast`
+, @isLast := (@totalLoan <= 0 AND @ordinalIndex = i.NoOfPayPeriod) `IsLast`
 
 , @progAmt := @ordinalIndex / i.NoOfPayPeriod `Progress`
 
 , TRIM(
-  IF(@isAnotherID
-     , @progInterval := @progAmt
-	  , @progInterval := @progAmt - ((@ordinalIndex - 1) / i.NoOfPayPeriod)
-	  ))+0 `ProgressInterval`
+		IF(@isAnotherID
+	      , @progInterval := @progAmt
+		   , @progInterval := @progAmt - ((@ordinalIndex - 1) / i.NoOfPayPeriod)
+		   ))+0 `ProgressInterval`
 
-, TRIM(
-  IF(@loanBalans < 0
-     , ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2)
-     , ROUND(@progInterval * i.TotalLoanAmount, 2)
-	  ))+0 `ProperDeductAmount`
+, IF(@isLast=FALSE
+		, i.DeductionAmount
+		, TRIM(
+			  IF(@loanBalans < 0
+			     , ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2)
+			     , ROUND(@progInterval * i.TotalLoanAmount, 2)
+				  ))+0) `ProperDeductAmount`
 
 FROM (SELECT els.*
 		, pp.RowID `PayperiodID`, pp.PayFromDate, pp.PayToDate

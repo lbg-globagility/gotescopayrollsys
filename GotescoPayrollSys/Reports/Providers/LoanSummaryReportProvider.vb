@@ -195,7 +195,8 @@ Public Class LoanSummaryReportProvider
             , p.PartNo `DatCol3`
             , i.ProperDeductAmount `DatCol4`
             , i.PayFromDate
-            , REPLACE(TRIM(TRAILING 0 FROM i.LoanBalance), ',', '')*1 `DatCol6`
+            #, REPLACE(TRIM(TRAILING 0 FROM i.LoanBalance), ',', '')*1 `DatCol6`
+            , i.LoanBalance `DatCol6`
             ,DATE_FORMAT(i.`PayToDate`, '%c/%e/%Y') `DatCol5`
             FROM (SELECT lp.*
                   FROM loanpredict lp
@@ -211,9 +212,11 @@ Public Class LoanSummaryReportProvider
             INNER JOIN product p ON p.RowID=i.LoanTypeID AND p.RowID=IFNULL(@loanTypeID, p.RowID)
             INNER JOIN paystub ps ON ps.EmployeeID=e.RowID AND ps.PayPeriodID=i.PayperiodID
             INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.ProductID=p.RowID
-            WHERE i.PayFromDate>=@dateFrom
-            AND i.PayToDate<=@dateTo
-            ORDER BY CONCAT(e.LastName, e.FirstName), i.PayFromDate, i.PayToDate
+            /*WHERE i.PayFromDate>=@dateFrom
+            AND i.PayToDate<=@dateTo*/
+            AND ((i.PayFromDate BETWEEN @dateFrom AND @dateTo)
+                 AND (i.PayToDate BETWEEN @dateFrom AND @dateTo))
+            ORDER BY CONCAT(e.LastName, e.FirstName), i.RowID, i.PayFromDate, i.PayToDate
             ;]]>.Value
 
         Dim columns =

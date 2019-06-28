@@ -8,7 +8,7 @@ DROP TRIGGER IF EXISTS `BEFINS_employeetimeentry`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `BEFINS_employeetimeentry` BEFORE INSERT ON `employeetimeentry` FOR EACH ROW BEGIN
-# BEFINS_employeetimeentry
+
 DECLARE isRest_day CHAR(1);
 
 DECLARE has_shift CHAR(1);
@@ -344,7 +344,7 @@ IF LCASE(@employee_type)='monthly' THEN
 	IF NEW.IsValidForHolidayPayment = 1 THEN
 		SET NEW.HolidayPayAmount = rate_this_date;
 		
-		SET @additional=((NEW.RegularHoursWorked * (rate_this_date / default_working_hrs)) * (payrate_this_date-1));
+		SET @additional=((NEW.RegularHoursWorked * (NULLIF(rate_this_date, 0) / default_working_hrs)) * (payrate_this_date-1));
 		SET @additional=IFNULL(@additional,0);
 		
 		SET NEW.HolidayPayAmount = NEW.HolidayPayAmount + @additional;

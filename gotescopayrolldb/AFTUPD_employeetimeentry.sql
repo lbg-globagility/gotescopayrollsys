@@ -9,7 +9,6 @@ SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISIO
 DELIMITER //
 CREATE TRIGGER `AFTUPD_employeetimeentry` AFTER UPDATE ON `employeetimeentry` FOR EACH ROW BEGIN
 
-
 DECLARE auditRowID INT(11);
 
 DECLARE viewID INT(11);
@@ -83,7 +82,7 @@ END IF;
 
 
 
-SELECT (es.UndeclaredSalary / es.Salary) AS UndeclaredPercent
+SELECT (NULLIF(es.UndeclaredSalary, 0) / es.Salary) AS UndeclaredPercent
 FROM employeesalary es
 WHERE es.EmployeeID=NEW.EmployeeID
 AND es.OrganizationID=NEW.OrganizationID

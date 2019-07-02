@@ -82,7 +82,7 @@ END IF;
 
 
 
-SELECT (es.UndeclaredSalary / es.Salary) AS UndeclaredPercent
+SELECT (NULLIF(es.UndeclaredSalary, 0) / es.Salary) AS UndeclaredPercent
 FROM employeesalary es
 WHERE es.EmployeeID=NEW.EmployeeID
 AND es.OrganizationID=NEW.OrganizationID

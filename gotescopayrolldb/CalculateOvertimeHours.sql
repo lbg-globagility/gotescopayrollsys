@@ -61,6 +61,8 @@ LEFT JOIN (SELECT *
 
 WHERE esh.EmployeeID = employeeRowID
 AND etDate BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
+ORDER BY IFNULL(esh.LastUpd, esh.Created) DESC
+LIMIT 1
 INTO preOtHours
      , postOtHours
 ;

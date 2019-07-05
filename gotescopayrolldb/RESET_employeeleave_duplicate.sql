@@ -123,7 +123,18 @@ IF atleast_one = TRUE THEN
 	AND (elv.LeaveStartDate >= FromPayDate OR elv.LeaveEndDate >= FromPayDate)
 	AND (elv.LeaveStartDate <= ToPayDate OR elv.LeaveEndDate <= ToPayDate);
 
-	UPDATE employeetimeentry et
+	UPDATE employeeleave elv
+	INNER JOIN employee e ON e.OrganizationID=elv.OrganizationID AND e.RowID=elv.EmployeeID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+	INNER JOIN `position` pos ON pos.RowID=e.PositionID
+	INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID)	
+	INNER JOIN dates d ON d.DateValue BETWEEN FromPayDate AND ToPayDate
+	SET elv.LastUpd=IFNULL(ADDDATE(elv.LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP())
+	WHERE elv.OrganizationID=OrganizID
+	AND d.DateValue BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
+	AND elv.`Status`='Approved'
+	;
+	
+	/*UPDATE employeetimeentry et
 	INNER JOIN employee e ON e.OrganizationID=OrganizID AND et.EmployeeID=e.RowID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
 	INNER JOIN `position` pos ON pos.RowID=e.PositionID
 	INNER JOIN division dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(DivisionRowID, dv.RowID)
@@ -136,7 +147,7 @@ IF atleast_one = TRUE THEN
 	WHERE et.OrganizationID=OrganizID
 	AND et.EmployeeID=e.RowID
 	AND et.`Date` BETWEEN FromPayDate AND ToPayDate
-	;
+	;*/
 	
 END IF;
 

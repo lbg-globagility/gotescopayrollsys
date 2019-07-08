@@ -343,6 +343,7 @@ IF isRest_day = '1' AND NEW.EmployeeShiftID IS NOT NULL THEN
 END IF;
 
 SELECT e_rateperday INTO rate_this_date;
+SET NEW.HolidayPayAmount = 0;
 IF LCASE(@employee_type)='monthly' THEN
 	IF NEW.IsValidForHolidayPayment = 1 THEN
 		SET NEW.HolidayPayAmount = rate_this_date;
@@ -361,7 +362,7 @@ IF LCASE(@employee_type)='monthly' THEN
 	ELSE
 		SET NEW.HolidayPayAmount = 0;
 	END IF;
-ELSE
+ELSEIF LCASE(@employee_type)='daily' THEN
 	SET NEW.HolidayPayAmount = (SELECT IF(NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount = 0 AND e.CalcHoliday='1' AND LOCATE('Regular Holi',pr.PayType) > 0 AND isPresentInWorkingDaysPriorToThisDate='1'
 														, rate_this_date
 	#													, IF(e.CalcSpecialHoliday = '1' AND LOCATE('Special',pr.PayType) > 0 AND e.EmployeeType IN ('Fixed','Monthly') AND isSpecialHoliday = '1' AND isPresentInWorkingDaysPriorToThisDate = '1' AND NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount = 0

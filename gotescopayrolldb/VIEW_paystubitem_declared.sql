@@ -12,6 +12,7 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_paystubitem_declared`(
 	IN `pay_date_from` DATE,
 	IN `pay_date_to` DATE
 
+
 )
     DETERMINISTIC
 BEGIN
@@ -62,6 +63,8 @@ ORDER BY pp.PayFromDate DESC,pp.PayToDate DESC
 LIMIT 1
 INTO startdate_ofpreviousmonth
 		,enddate_ofpreviousmonth;
+
+CALL GetAttendancePeriod(OrganizID, pay_date_from, pay_date_to, FALSE);
 
 SELECT psa.RowID
 ,psa.OrganizationID
@@ -155,7 +158,8 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(IF(etea.IsValidForHolidayPayment, etea.DailyRate, 0)) `TotalDefaultHolidayPay`
 				, SUM(etea.AddedHolidayPayAmount) `AddedHolidayPayAmount`
 				FROM timeentrywithdailyrate etea
-				INNER JOIN proper_time_entry et ON et.RowID=etea.RowID AND et.AsActual=FALSE
+#				INNER JOIN proper_time_entry et ON et.RowID=etea.RowID AND et.AsActual=FALSE
+				INNER JOIN attendanceperiod et ON et.RowID=etea.RowID
 				INNER JOIN payrate pr ON pr.RowID=etea.PayRateID
 				WHERE etea.EmployeeID=EmpRowID
 				AND etea.OrganizationID=OrganizID

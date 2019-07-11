@@ -38,6 +38,16 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
 
 
 
+
+
+
+
+
+
+
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -70,6 +80,7 @@ INTO paydate_from
 
 CALL GetUnearnedAllowance(og_rowid, paydate_from, paydat_to);
 
+CALL GetAttendancePeriod(og_rowid, paydate_from, paydat_to, is_actual);
 
 SELECT MAX(pp.PayToDate)
 FROM payperiod pp
@@ -136,7 +147,7 @@ ps.RowID
 
 ,IF(e.EmployeeType = 'Daily'
     , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)
-    , FORMAT(@basic_payment - (IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.Absent, 0) + IFNULL(et.Leavepayment, 0) + IFNULL(et.DefaultHolidayPay, 0)), 2)
+    , FORMAT(@basic_payment - (IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(et.Absent, 0) + IF(LCASE(e.EmployeeType)='monthly', IFNULL(et.DefaultHolidayPay, 0), 0) + IFNULL(et.Leavepayment, 0)), 2)
     /*, IF(e.EmployeeType = 'Monthly'
          , FORMAT(@basic_payment - IFNULL((et.UndertimeHoursAmount + et.HoursLateAmount + et.Absent + et.Leavepayment + et.HolidayPayAmount), 0), 2)
 			, @basic_payment
@@ -263,7 +274,7 @@ LEFT JOIN (SELECT
 			  ,SUM(et.TaxableDailyBonus) `TaxableDailyBonus`
 			  ,SUM(et.NonTaxableDailyBonus) `NonTaxableDailyBonus`
 			  ,SUM(et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) `LeaveHours`
-			  ,SUM(et.Leavepayment * et.ActualSalaryRate) `Leavepayment`
+			  ,SUM(et.Leavepayment) `Leavepayment`
 			  , SUM(IFNULL(i.RegularHoursWorked, 0)) `RestDayHours`
 			  , IF(is_actual = 1
 			       , SUM(i.RestDayActualPay)
@@ -274,14 +285,13 @@ LEFT JOIN (SELECT
 			           , et.RegularHoursWorked
 						  , 0)) `HolidayHours`
 			  , SUM(IFNULL(et.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`
-			  , SUM(IF(et.IsValidForHolidayPayment=TRUE
-			           , es.DailyRate
-						  , 0)) `DefaultHolidayPay`
+			  , SUM(IF(et.IsValidForHolidayPayment, et.DailyRate, 0)) `DefaultHolidayPay`
 			  
-			  FROM proper_time_entry et
+#			  FROM proper_time_entry et
+			  FROM attendanceperiod et
 			  
 			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
-			  LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
+#			  LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
 			  WHERE et.OrganizationID=og_rowid
 			  AND et.AsActual=is_actual
 			  AND et.`Date` BETWEEN paydate_from AND paydat_to

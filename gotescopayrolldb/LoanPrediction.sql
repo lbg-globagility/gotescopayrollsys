@@ -65,10 +65,8 @@ SELECT i.*
 		, i.DeductionAmount
 		, TRIM(
 			  IF(@loanBalans < 0
-/*			     , ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2)
-			     , ROUND(@progInterval * i.TotalLoanAmount, 2)*/
-			     , ROUND(i.DeductionAmount + (@loanBalans), 2)
-			     , i.DeductionAmount
+			     , ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2)
+			     , ROUND(@progInterval * i.TotalLoanAmount, 2)
 				  ))+0) `ProperDeductAmount`
 
 FROM (SELECT els.*

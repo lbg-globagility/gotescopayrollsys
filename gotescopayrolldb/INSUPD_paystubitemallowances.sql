@@ -6,7 +6,12 @@
 
 DROP PROCEDURE IF EXISTS `INSUPD_paystubitemallowances`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystubitemallowances`(IN `og_rowid` INT, IN `e_rowid` INT, IN `pp_rowid` INT, IN `user_rowid` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystubitemallowances`(
+	IN `og_rowid` INT,
+	IN `e_rowid` INT,
+	IN `pp_rowid` INT,
+	IN `user_rowid` INT
+)
     DETERMINISTIC
 BEGIN
 
@@ -111,7 +116,7 @@ INSERT INTO paystubitem(`ProductID`,`OrganizationID`,`Created`,`CreatedBy`,`PayS
 	FROM (SELECT i.ProductID
 	      ,i.EmployeeID
 	      # ,( i.AllowanceAmount - (SUM(i.HoursToLess) * ((i.AllowanceAmount / (i.WorkDaysPerYear / (i.PAYFREQDIV * 12))) / 8)) ) `AllowanceAmount`
-			,i.AllowanceAmount - (SUM(i.HoursToLess) * (i.DailyAllowance / default_min_hrswork)) `AllowanceAmount`
+			,i.AllowanceAmount - TRIM(SUM(i.HoursToLess * (i.DailyAllowance / default_min_hrswork)))+0 `AllowanceAmount`
 	      FROM paystubitem_sum_semimon_allowance_group_prodid i
 			WHERE i.OrganizationID=og_rowid
 			AND i.EmployeeID=e_rowid

@@ -1,4 +1,5 @@
-﻿Imports System.Text.RegularExpressions
+﻿Imports System.Configuration
+Imports System.Text.RegularExpressions
 Imports System.Threading.Tasks
 Imports log4net
 Imports MySql.Data.MySqlClient
@@ -133,6 +134,11 @@ Public Class PayrollGeneration
 
     Const year2018 As Integer = 2018
 
+    Private config As Specialized.NameValueCollection = ConfigurationManager.AppSettings
+
+    Private ReadOnly configCommandTimeOut As Integer
+    Private ReadOnly mySqlConnectionText As String
+
     Sub New(ByVal _employee_dattab As DataTable,
                   ByVal _isEndOfMonth As String,
                   ByVal _esal_dattab As DataTable,
@@ -165,6 +171,9 @@ Public Class PayrollGeneration
                   ByVal _VeryFirstPayPeriodIDOfThisYear As Object,
                   ByVal _withthirteenthmonthpay As SByte,
                   Optional pay_stub_frm As PayStub = Nothing)
+
+        configCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
+        mySqlConnectionText = $"{mysql_conn_text} default command timeout={configCommandTimeOut};"
 
         form_caller = pay_stub_frm
 
@@ -1341,7 +1350,7 @@ Public Class PayrollGeneration
                 '    Concat(array_paystubitemallowance).
                 '    Concat(array_leavegainbalance).ToArray()
 
-                Using my_sqlconn As New MySqlConnection(mysql_conn_text),
+                Using my_sqlconn As New MySqlConnection(mySqlConnectionText),
                     my_sqlcmd As New MySqlCommand(
 String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstub_CreatedBy,?pstub_LastUpdBy,?pstub_PayPeriodID,?pstub_EmployeeID,?pstub_TimeEntryID,?pstub_PayFromDate,?pstub_PayToDate,?pstub_TotalGrossSalary,?pstub_TotalNetSalary,?pstub_TotalTaxableSalary,?pstub_TotalEmpSSS,?pstub_TotalEmpWithholdingTax,?pstub_TotalCompSSS,?pstub_TotalEmpPhilhealth,?pstub_TotalCompPhilhealth,?pstub_TotalEmpHDMF,?pstub_TotalCompHDMF,?pstub_TotalVacationDaysLeft,?pstub_TotalLoans,?pstub_TotalBonus,?pstub_TotalAllowance,?pstub_NondeductibleTotalLoans);",
               ""

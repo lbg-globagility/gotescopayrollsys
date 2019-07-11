@@ -1954,7 +1954,7 @@ Public Class PayStub
 
                                       Dim str_quer_semimon_allowance =
                                           String.Concat("SELECT i.*",
-                                                        ",i.AllowanceAmount - (SUM(i.HoursToLess) * (i.DailyAllowance / 8)) `TotalAllowanceAmount`",
+                                                        ",i.AllowanceAmount - TRIM(SUM(i.HoursToLess * (i.DailyAllowance / 8)))+0 `TotalAllowanceAmount`",
                                                         " FROM paystubitem_sum_semimon_allowance_group_prodid i",
                                                         " WHERE i.OrganizationID = ?og_rowid",
                                                         " AND i.TaxableFlag = ?is_taxable",
@@ -8710,6 +8710,7 @@ Public Class PayStub
                 Else
                     thebasicpay = ValNoComma(drow("BasicPay"))
                     thelessamounts = ValNoComma(drow("HoursLateAmount")) + ValNoComma(drow("UndertimeHoursAmount")) + ValNoComma(drow("Absent")) + totalDefaultHolidayPay + ValNoComma(drow("PaidLeaveAmount")) 'ValNoComma(drow("HolidayPayAmount"))
+                    Dim fdsfd = {ValNoComma(drow("HoursLateAmount")), ValNoComma(drow("UndertimeHoursAmount")), ValNoComma(drow("Absent")), totalDefaultHolidayPay, ValNoComma(drow("PaidLeaveAmount"))}
                 End If
 
                 txthrsworkamt_U.Text = FormatNumber((thebasicpay - thelessamounts), 2)

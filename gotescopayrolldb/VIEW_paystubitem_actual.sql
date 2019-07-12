@@ -139,13 +139,13 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.TotalHoursWorked) AS TotalHoursWorked
 				, SUM(etea.OvertimeHoursWorked) AS OvertimeHoursWorked
 				, SUM(etea.OvertimeHoursAmount) AS OvertimeHoursAmount
-				, SUM(etea.UndertimeHours) AS UndertimeHours
+				, ROUND(SUM(et.UndertimeHours), 2) AS UndertimeHours
 				, SUM(etea.UndertimeHoursAmount) AS UndertimeHoursAmount
 				, SUM(etea.NightDifferentialHours) AS NightDifferentialHours
 				, SUM(etea.NightDiffHoursAmount) AS NightDiffHoursAmount
 				, SUM(etea.NightDifferentialOTHours) AS NightDifferentialOTHours
 				, SUM(etea.NightDiffOTHoursAmount) AS NightDiffOTHoursAmount
-				, SUM(etea.HoursLate) AS HoursLate
+				, ROUND(SUM(et.HoursLate), 2) AS HoursLate
 				, SUM(etea.HoursLateAmount) AS HoursLateAmount
 				, SUM(etea.VacationLeaveHours) AS VacationLeaveHours
 				, SUM(etea.SickLeaveHours) AS SickLeaveHours

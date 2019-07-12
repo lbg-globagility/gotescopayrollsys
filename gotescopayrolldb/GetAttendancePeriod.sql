@@ -46,13 +46,13 @@ IF NOT isActual THEN
 	, et.`TotalHoursWorked`
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`
-	, et.`UndertimeHours`
+	, et.HoursUndertime `UndertimeHours`
 	, TRIM(et.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
 	, et.`NightDifferentialHours`
 	, et.`NightDiffHoursAmount`
 	, et.`NightDifferentialOTHours`
 	, et.`NightDiffOTHoursAmount`
-	, et.`HoursLate`
+	, et.HoursTardy `HoursLate`
 	, TRIM(et.HoursTardy * @hourlyRate)+0 `HoursLateAmount`
 	, et.`LateFlag`
 	, et.`PayRateID`
@@ -102,13 +102,13 @@ ELSE
 	, et.`TotalHoursWorked`
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`
-	, et.`UndertimeHours`
+	, ett.HoursUndertime `UndertimeHours`
 	, TRIM(ett.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
 	, et.`NightDifferentialHours`
 	, et.`NightDiffHoursAmount`
 	, et.`NightDifferentialOTHours`
 	, et.`NightDiffOTHoursAmount`
-	, et.`HoursLate`
+	, ett.HoursTardy `HoursLate`
 	, TRIM(ett.HoursTardy * @hourlyRate)+0 `HoursLateAmount`
 	, et.`LateFlag`
 	, et.`PayRateID`

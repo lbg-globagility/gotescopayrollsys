@@ -8455,9 +8455,9 @@ Public Class PayStub
             txtempbasicpay.Text = FormatNumber((strdouble), 2)
             'Regular
             txthrswork.Text = ValNoComma(drow("RegularHoursWorked"))
-            If drow("EmployeeType").ToString = "Fixer" Then
+            If drow("EmployeeType").ToString = "Fixed" Then
 
-                txthrsworkamt.Text = FormatNumber((strdouble), 2)
+                txthrsworkamt.Text = txtempbasicpay.Text
 
             ElseIf drow("EmployeeType").ToString = "Monthly" Then
                 'Dim thebasicpay = ValNoComma(drow("BasicPay"))
@@ -8692,9 +8692,9 @@ Public Class PayStub
             txtempbasicpay_U.Text = FormatNumber((strdouble), 2)
             'Regular
             txthrswork_U.Text = ValNoComma(drow("RegularHoursWorked"))
-            If drow("EmployeeType").ToString = "Fixer" Then
+            If drow("EmployeeType").ToString = "Fixed" Then
 
-                txthrsworkamt_U.Text = FormatNumber((strdouble), 2)
+                txthrsworkamt_U.Text = txtempbasicpay_U.Text
 
             ElseIf drow("EmployeeType").ToString = "Monthly" Then
                 'Dim thebasicpay = ValNoComma(drow("BasicPay"))

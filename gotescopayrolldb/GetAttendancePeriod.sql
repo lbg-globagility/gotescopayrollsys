@@ -92,7 +92,8 @@ ELSE
 	et.`RowID`
 	, et.`OrganizationID`
 	, et.`Date`
-	, @hourlyRate := TRIM(es.DailyRate / @defaultWorkHours)+0 `HourlyRate`
+	, @dailyRate := TRIM(es.DailyRate * es.Percentage)+0 `DailyRate`
+	, @hourlyRate := TRIM(@dailyRate / @defaultWorkHours)+0 `HourlyRate`
 	, et.`EmployeeShiftID`
 	, et.`EmployeeID`
 	, et.`EmployeeSalaryID`
@@ -103,13 +104,15 @@ ELSE
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`
 	, ett.HoursUndertime `UndertimeHours`
-	, TRIM(ett.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
+#	, TRIM(ett.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
+	, et.UndertimeHoursAmount
 	, et.`NightDifferentialHours`
 	, et.`NightDiffHoursAmount`
 	, et.`NightDifferentialOTHours`
 	, et.`NightDiffOTHoursAmount`
 	, ett.HoursTardy `HoursLate`
-	, TRIM(ett.HoursTardy * @hourlyRate)+0 `HoursLateAmount`
+#	, TRIM(ett.HoursTardy * @hourlyRate)+0 `HoursLateAmount`
+	, et.HoursLateAmount
 	, et.`LateFlag`
 	, et.`PayRateID`
 	, et.`VacationLeaveHours`
@@ -131,7 +134,6 @@ ELSE
 	, IFNULL(sh.WorkHours, 0) `WorkHours`
 	, et.`AddedHolidayPayAmount`
 	, es.Percentage `ActualSalaryRate`
-	, TRIM(es.DailyRate * es.Percentage)+0 `DailyRate`
 	FROM employeetimeentryactual et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
 	INNER JOIN employeetimeentry ett ON ett.EmployeeID=e.RowID AND ett.`Date`=et.`Date` AND ett.OrganizationID=et.OrganizationID

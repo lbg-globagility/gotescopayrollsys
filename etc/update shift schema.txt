@@ -1,0 +1,3 @@
+ALTER TABLE `gotescopayrolldb`.`shift`
+	CHANGE COLUMN `ShiftHours` `ShiftHours` DECIMAL(10,2) NULL DEFAULT '0' AFTER `DivisorToDailyRate`,
+	CHANGE COLUMN `WorkHours` `WorkHours` DECIMAL(10,2) NULL DEFAULT '0' AFTER `ShiftHours`;

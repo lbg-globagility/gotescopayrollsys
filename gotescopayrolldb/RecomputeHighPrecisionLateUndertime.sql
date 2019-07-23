@@ -20,6 +20,8 @@ SET @dateFrom=payDateFrom;
 SET @dateTo=payDateTo;
 
 SET @startTime=TIMESTAMP(CURDATE());
+SET @breakStartTimeStamp=TIMESTAMP(CURDATE());
+SET @breakEndTimeStamp=TIMESTAMP(CURDATE());
 
 DROP TEMPORARY TABLE IF EXISTS shiftschedwithtimestamp;
 DROP TABLE IF EXISTS shiftschedwithtimestamp;
@@ -28,7 +30,11 @@ SELECT esh.RowID
 , d.DateValue `Date`
 , esh.ShiftID
 , TIMESTAMP(@startTime := CONCAT_DATETIME(d.DateValue, sh.TimeFrom)) `StartTimeStamp`
-, GetNextStartDateTime(@startTime, sh.TimeTo)`EndTimeStamp`
+
+, TIMESTAMP(@breakStartTimeStamp := GetNextStartDateTime(@startTime, sh.BreakTimeFrom)) `BreakStartTimeStamp`
+, TIMESTAMP(@breakEndTimeStamp := GetNextStartDateTime(@breakStartTimeStamp, sh.BreakTimeTo)) `BreakEndTimeStamp`
+
+, GetNextStartDateTime(@breakEndTimeStamp, sh.TimeTo)`EndTimeStamp`
 FROM employeeshift esh
 INNER JOIN dates d ON (d.DateValue BETWEEN esh.EffectiveFrom AND esh.EffectiveTo) AND d.DateValue BETWEEN @dateFrom AND @dateTo
 INNER JOIN shift sh ON sh.RowID=esh.ShiftID
@@ -70,6 +76,11 @@ AND et.OrganizationID=@orgID
 
 
 
+SET @breakHours1=0.00;
+SET @logInIsEarlyThanBreak=FALSE;
+SET @logInIsBetweenBreak=FALSE;
+SET @officialLogIn=TIMESTAMP(CURDATE());
+
 SET @secondsPerMinute=60*60;
 
 DROP TEMPORARY TABLE IF EXISTS tardiness;
@@ -77,7 +88,22 @@ DROP TABLE IF EXISTS tardiness;
 CREATE TEMPORARY TABLE tardiness
 SELECT et.RowID, et.`Date`, et.EmployeeID
 , et.HoursLate
-, TRIM(FORMAT(TIMESTAMPDIFF(SECOND, shst.StartTimeStamp, LateTimeLog(etd.TimeStampIn, obtl.`ObStartTimeStamp`, ltl.`LeaveStartTimeStamp`)) / @secondsPerMinute, 6))+0 `LateHighPrecision`
+
+, shst.StartTimeStamp, shst.BreakStartTimeStamp, shst.BreakEndTimeStamp, shst.EndTimeStamp
+
+, @breakHours1 := TRIM(TIMESTAMPDIFF(SECOND, shst.BreakStartTimeStamp, shst.BreakEndTimeStamp) / @secondsPerMinute)+0 `BreakHours`
+, TIMESTAMP(@officialLogIn := LateTimeLog(etd.TimeStampIn, obtl.`ObStartTimeStamp`, ltl.`LeaveStartTimeStamp`)) `OfficialLogIn`
+, @logInIsEarlyThanBreak := (@officialLogIn < shst.BreakStartTimeStamp) `LogInIsEarlyThanBreak`
+, @logInIsBetweenBreak := (@officialLogIn BETWEEN shst.BreakStartTimeStamp AND shst.BreakEndTimeStamp) `LogInIsBetweenBreak`
+, TRIM(FORMAT(TIMESTAMPDIFF(SECOND, shst.StartTimeStamp
+									 , IF(@logInIsBetweenBreak
+									 		, shst.BreakStartTimeStamp
+											, IF(@logInIsEarlyThanBreak
+													, @officialLogIn
+													, SUBDATE(@officialLogIn, INTERVAL TIMESTAMPDIFF(SECOND, shst.BreakStartTimeStamp, shst.BreakEndTimeStamp) SECOND)
+													)
+											)
+) / @secondsPerMinute, 6))+0 `LateHighPrecision`
 , et.HoursTardy
 FROM employeetimeentry et
 INNER JOIN shiftschedwithtimestamp shst ON shst.RowID=et.EmployeeShiftID AND et.`Date`=shst.`Date`
@@ -93,12 +119,32 @@ AND et.`Date` BETWEEN @dateFrom AND @dateTo
 AND et.HoursLate > 0
 ;
 
+SET @breakHours2=0.00;
+SET @logOutIsLaterThanBreak=FALSE;
+SET @logOutIsBetweenBreak=FALSE;
+SET @officialLogOut=TIMESTAMP(CURDATE());
+
 DROP TEMPORARY TABLE IF EXISTS earlyout;
 DROP TABLE IF EXISTS earlyout;
 CREATE TEMPORARY TABLE earlyout
 SELECT et.RowID, et.`Date`, et.EmployeeID
 , et.UndertimeHours
-, TRIM(FORMAT(TIMESTAMPDIFF(SECOND, UndertimeLog(etd.TimeStampOut, obtl.`ObEndTimeStamp`, ltl.`LeaveEndTimeStamp`), shst.`EndTimeStamp`) / @secondsPerMinute, 6))+0 `TardyHighPrecision`
+, @breakHours2 := TRIM(TIMESTAMPDIFF(SECOND, shst.BreakStartTimeStamp, shst.BreakEndTimeStamp) / @secondsPerMinute)+0 `BreakHours`
+, TIMESTAMP(@officialLogOut := UndertimeLog(etd.TimeStampOut, obtl.`ObEndTimeStamp`, ltl.`LeaveEndTimeStamp`)) `OfficialLogOut`
+, @logOutIsLaterThanBreak := (@officialLogOut >= shst.BreakEndTimeStamp) `LogOutIsLaterThanBreak`
+, @logOutIsBetweenBreak := (@officialLogOut BETWEEN shst.BreakStartTimeStamp AND shst.BreakEndTimeStamp) `LogOutIsBetweenBreak`
+, TRIM(FORMAT(TIMESTAMPDIFF(SECOND
+                            , IF(@logOutIsBetweenBreak
+									 		, shst.BreakEndTimeStamp
+											 , IF(@logOutIsLaterThanBreak
+											 		, @officialLogOut
+													 , ADDDATE(@officialLogOut, INTERVAL TIMESTAMPDIFF(SECOND, shst.BreakStartTimeStamp, shst.BreakEndTimeStamp) SECOND)
+													 )
+											)
+									 , shst.`EndTimeStamp`
+									 ) / @secondsPerMinute
+				  , 6)
+		 )+0 `TardyHighPrecision`
 , et.HoursUndertime
 FROM employeetimeentry et
 INNER JOIN shiftschedwithtimestamp shst ON shst.RowID=et.EmployeeShiftID AND et.`Date`=shst.`Date`
@@ -132,12 +178,12 @@ SET @existsHoursUnderColumn=EXISTS(SELECT i.ORDINAL_POSITION
 												AND i.`COLUMN_NAME`=@columnName);
 
 #IF @existsHoursTardy THEN  END IF;
-UPDATE employeetimeentry et INNER JOIN tardiness t ON t.RowID=et.RowID SET et.HoursTardy=t.`LateHighPrecision`
-;
+/*UPDATE employeetimeentry et INNER JOIN tardiness t ON t.RowID=et.RowID SET et.HoursTardy=t.`LateHighPrecision`
+;*/
 
 #IF @existsHoursUnderColumn THEN  END IF;
-UPDATE employeetimeentry et INNER JOIN earlyout eo ON eo.RowID=et.RowID SET et.HoursUndertime=eo.`TardyHighPrecision`
-;
+/*UPDATE employeetimeentry et INNER JOIN earlyout eo ON eo.RowID=et.RowID SET et.HoursUndertime=eo.`TardyHighPrecision`
+;*/
 
 END//
 DELIMITER ;

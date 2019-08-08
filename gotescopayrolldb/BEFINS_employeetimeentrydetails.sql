@@ -40,7 +40,8 @@ SET @is_start_time_reachedtomorrow = (SUBDATE(TIMESTAMP(TIME(0)), INTERVAL 1 SEC
 
 SET @is_start_time_reachedtomorrow = IFNULL(@is_start_time_reachedtomorrow, FALSE);
 
-SET NEW.TimeStampIn = CONCAT_DATETIME(ADDDATE(NEW.`Date`, INTERVAL @is_start_time_reachedtomorrow DAY), TIME_FORMAT(NEW.TimeIn, @time_in_format));
+#SET NEW.TimeStampIn = CONCAT_DATETIME(ADDDATE(NEW.`Date`, INTERVAL @is_start_time_reachedtomorrow DAY), TIME_FORMAT(NEW.TimeIn, @time_in_format));
+SET NEW.TimeStampIn = CONCAT_DATETIME(NEW.`Date`, TIME_FORMAT(NEW.TimeIn, @time_in_format));
 SET NEW.TimeStampOut = CONCAT_DATETIME(ADDDATE(NEW.`Date`, INTERVAL IS_TIMERANGE_REACHTOMORROW(NEW.TimeIn, NEW.TimeOut) DAY), TIME_FORMAT(NEW.TimeOut, @time_out_format));
 
 END//

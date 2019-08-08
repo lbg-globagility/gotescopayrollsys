@@ -22,9 +22,9 @@ IF is_deptmngr = TRUE THEN
 	SET
 	ob.LastUpd=CURRENT_TIMESTAMP()
 	,ob.LastUpdBy=obf_LastUpdBy
-	,ob.OffBusStartTime=obf_StartTime
+	,ob.OffBusStartTime=TIMESTAMP(obf_StartTime)
 	,ob.OffBusType=obf_Type
-	,ob.OffBusEndTime=obf_EndTime
+	,ob.OffBusEndTime=TIMESTAMP(obf_EndTime)
 	,ob.OffBusStartDate=obf_StartDate
 	,ob.OffBusEndDate=obf_EndDate
 	,ob.Reason=IFNULL(obf_Reason, '')
@@ -74,9 +74,9 @@ ELSE
 	UPDATE 
 		LastUpd=CURRENT_TIMESTAMP()
 		,LastUpdBy=obf_LastUpdBy
-		,OffBusStartTime=obf_StartTime
+		,OffBusStartTime=TIMESTAMP(obf_StartTime)
 		,OffBusType=obf_Type
-		,OffBusEndTime=obf_EndTime
+		,OffBusEndTime=TIMESTAMP(obf_EndTime)
 		,OffBusStartDate=obf_StartDate
 		,OffBusEndDate=obf_EndDate
 		,Reason=IFNULL(obf_Reason, '')

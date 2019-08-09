@@ -1247,6 +1247,8 @@ Public Class PayStub
                                       '                                  " GROUP BY EmployeeID" & _
                                       '                                  " ORDER BY EmployeeID;")
 
+                                      RecomputeHighPrecisionLateUndertimeAsync()
+
                                       'employeetimeentry - EXPERIMENT
                                       etent_totdaypay = New SQL(String.Concat("SELECT SUM(COALESCE(ete.TotalDayPay,0)) 'TotalDayPay'",
                                                                 ",ete.EmployeeID",
@@ -1949,8 +1951,6 @@ Public Class PayStub
                                       '                                                 "0",
                                       '                                                 paypFrom,
                                       '                                                 paypTo}).GetFoundRows.Tables(0)
-
-                                      RecomputeHighPrecisionLateUndertimeAsync()
 
                                       Dim str_quer_semimon_allowance =
                                           String.Concat("SELECT i.*",

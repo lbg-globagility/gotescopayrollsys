@@ -31,8 +31,8 @@ IF is_deptmngr = TRUE THEN
 	ot.LastUpd=CURRENT_TIMESTAMP()
 	,ot.LastUpdBy=eot_LastUpdBy
 	,ot.OTType=eot_OTType
-	,ot.OTStartTime=eot_OTStartTime
-	,ot.OTEndTime=endovertime
+	,ot.OTStartTime=TIMESTAMP(eot_OTStartTime)
+	,ot.OTEndTime=TIMESTAMP(endovertime)
 	,ot.OTStartDate=eot_OTStartDate
 	,ot.OTEndDate=eot_OTEndDate
 	,ot.Reason=eot_Reason
@@ -67,8 +67,8 @@ ELSE
 		,eot_CreatedBy
 		,eot_EmployeeID
 		,eot_OTType
-		,eot_OTStartTime
-		,endovertime
+		,TIMESTAMP(eot_OTStartTime)
+		,TIMESTAMP(endovertime)
 		,eot_OTStartDate
 		,eot_OTEndDate
 		,eot_OTStatus
@@ -83,8 +83,8 @@ ELSE
 		LastUpd=CURRENT_TIMESTAMP()
 		,LastUpdBy=eot_LastUpdBy
 		,OTType=eot_OTType
-		,OTStartTime=eot_OTStartTime
-		,OTEndTime=endovertime
+		,OTStartTime=TIMESTAMP(eot_OTStartTime)
+		,OTEndTime=TIMESTAMP(endovertime)
 		,OTStartDate=eot_OTStartDate
 		,OTEndDate=eot_OTEndDate
 		,OTStatus=eot_OTStatus

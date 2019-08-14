@@ -145,7 +145,7 @@ ps.RowID
 
 , FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `Column17`
 
-,IF(e.EmployeeType = 'Daily'
+,IF(e.EmployeeType = 'Daily' OR (LCASE(e.EmployeeType)='monthly' AND e.StartDate BETWEEN paydate_from AND paydat_to)
     , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)
     , FORMAT(@basic_payment - (IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(et.Absent, 0) + IF(LCASE(e.EmployeeType)='monthly', IFNULL(et.DefaultHolidayPay, 0), 0) + IFNULL(et.Leavepayment, 0)), 2)
     /*, IF(e.EmployeeType = 'Monthly'

@@ -25,6 +25,7 @@ BEGIN
 
 SET @monthCount=12;
 SET @defaultWorkHours=8;
+SET @isRestDay=FALSE;
 
 DROP TEMPORARY TABLE IF EXISTS attendanceperiod;
 DROP TABLE IF EXISTS attendanceperiod;
@@ -41,11 +42,18 @@ IF NOT isActual THEN
 	, et.`EmployeeID`
 	, et.`EmployeeSalaryID`
 	, et.`EmployeeFixedSalaryFlag`
-	, et.`RegularHoursWorked`
-	, et.`RegularHoursAmount`
+	
+	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
+	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
+	, IF(@isRestDay, et.RegularHoursAmount, 0) `RestDayPay`
+	, IF(@isRestDay, et.OvertimeHoursWorked, 0) `RestDayOvertimeHours`
+	, IF(@isRestDay, et.OvertimeHoursAmount, 0) `RestDayOvertimePay`
+	
+	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
+	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
 	, et.`TotalHoursWorked`
-	, et.`OvertimeHoursWorked`
-	, et.`OvertimeHoursAmount`
+	, IF(@isRestDay, 0, et.`OvertimeHoursWorked`) `OvertimeHoursWorked`
+	, IF(@isRestDay, 0, et.`OvertimeHoursAmount`) `OvertimeHoursAmount`
 	, et.HoursUndertime `UndertimeHours`
 	, TRIM(et.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
 	, et.`NightDifferentialHours`
@@ -76,10 +84,12 @@ IF NOT isActual THEN
 	, et.`AddedHolidayPayAmount`
 	, es.Percentage `ActualSalaryRate`
 	, es.DailyRate
+	
 	FROM employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
 	LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
-	LEFT JOIN employeeshift esh ON esh.RowID=et.EmployeeShiftID
+#	LEFT JOIN employeeshift esh ON esh.RowID=et.EmployeeShiftID
+	LEFT JOIN employeeshift esh ON esh.EmployeeID=e.RowID AND esh.OrganizationID=et.OrganizationID AND et.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
 	WHERE et.OrganizationID=orgId
 	AND et.`Date` BETWEEN dateFrom AND dateTo
@@ -98,11 +108,18 @@ ELSE
 	, et.`EmployeeID`
 	, et.`EmployeeSalaryID`
 	, et.`EmployeeFixedSalaryFlag`
-	, et.`RegularHoursWorked`
-	, et.`RegularHoursAmount`
+	
+	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
+	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
+	, IF(@isRestDay, et.RegularHoursAmount, 0) `RestDayPay`
+	, IF(@isRestDay, et.OvertimeHoursWorked, 0) `RestDayOvertimeHours`
+	, IF(@isRestDay, et.OvertimeHoursAmount, 0) `RestDayOvertimePay`
+	
+	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
+	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
 	, et.`TotalHoursWorked`
-	, et.`OvertimeHoursWorked`
-	, et.`OvertimeHoursAmount`
+	, IF(@isRestDay, 0, et.`OvertimeHoursWorked`) `OvertimeHoursWorked`
+	, IF(@isRestDay, 0, et.`OvertimeHoursAmount`) `OvertimeHoursAmount`
 	, ett.HoursUndertime `UndertimeHours`
 #	, TRIM(ett.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
 	, et.UndertimeHoursAmount
@@ -134,11 +151,12 @@ ELSE
 	, IFNULL(sh.WorkHours, 0) `WorkHours`
 	, et.`AddedHolidayPayAmount`
 	, es.Percentage `ActualSalaryRate`
+	
 	FROM employeetimeentryactual et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
 	INNER JOIN employeetimeentry ett ON ett.EmployeeID=e.RowID AND ett.`Date`=et.`Date` AND ett.OrganizationID=et.OrganizationID
 	LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
-	LEFT JOIN employeeshift esh ON esh.RowID=et.EmployeeShiftID
+	LEFT JOIN employeeshift esh ON esh.EmployeeID=e.RowID AND esh.OrganizationID=et.OrganizationID AND et.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
 	WHERE et.OrganizationID=orgId
 	AND et.`Date` BETWEEN dateFrom AND dateTo

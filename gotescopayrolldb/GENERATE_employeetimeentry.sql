@@ -387,123 +387,7 @@ SET hasLeave = leaveId IS NOT NULL;
 SET @timeStampLogIn = NULL;
 SET @timeStampLogOut = NULL;
 
-IF isRestDay = '1' THEN 
-	
-	SET ndiffotrate = ndiffotrate * restday_rate;
-	
-	SET @var_is_timelogs_betweenbreaktime = FALSE;
-	
-	SET @is_timelogs_betweenbreaktime = FALSE;
-	
-	SET @break_hours = 0.00;
-	
-	SELECT
-	etd.TimeIn
-	,etd.TimeOut
-	,(@var_is_timelogs_betweenbreaktime := ( (CONCAT_DATETIME(etd.`Date`, etd.TimeIn)
-												BETWEEN CONCAT_DATETIME(etd.`Date`, sh.BreakTimeFrom) AND CONCAT_DATETIME(etd.`Date`, sh.BreakTimeTo))
-											OR (CONCAT_DATETIME(etd.`Date`, etd.TimeOut)
-												BETWEEN CONCAT_DATETIME(etd.`Date`, sh.BreakTimeFrom) AND CONCAT_DATETIME(etd.`Date`, sh.BreakTimeTo)) ))
-	,IF(sh.RowID IS NULL
-		, COMPUTE_TimeDifference(etd.TimeIn, etd.TimeOut)
-		, COMPUTE_TimeDifference(IF(CONCAT_DATETIME(etd.`Date`, etd.TimeIn)
-											BETWEEN CONCAT_DATETIME(etd.`Date`, sh.BreakTimeFrom) AND CONCAT_DATETIME(etd.`Date`, sh.BreakTimeTo)
-											,	sh.BreakTimeTo
-											,	IF(CONCAT_DATETIME(etd.`Date`, etd.TimeIn) < CONCAT_DATETIME(etd.`Date`, sh.TimeFrom)
-													,	sh.TimeFrom
-													,	etd.TimeIn)
-											)
-		
-										,IF(CONCAT_DATETIME(etd.`Date`, etd.TimeOut)
-											BETWEEN
-											CONCAT_DATETIME(etd.`Date`, sh.BreakTimeFrom) AND CONCAT_DATETIME(etd.`Date`, sh.BreakTimeTo)
-											,	sh.BreakTimeFrom
-											,	IF(CONCAT_DATETIME(etd.`Date`, etd.TimeOut) > CONCAT_DATETIME(etd.`Date`, sh.TimeTo)
-													,	sh.TimeTo
-													,	etd.TimeOut)
-											)
-										)
-									- IF(@var_is_timelogs_betweenbreaktime = TRUE, 0, COMPUTE_TimeDifference(sh.BreakTimeFrom, sh.BreakTimeTo))
-		) `Result`
-	
-	, IFNULL(TIMEDIFF(GREATEST(sh.TimeFrom, sh.TimeTo), LEAST(sh.TimeFrom, sh.TimeTo)), 0) `BreakHours`
-	
-	FROM employeetimeentrydetails etd
-	LEFT JOIN employeeshift esh ON esh.EmployeeID=etd.EmployeeID AND esh.OrganizationID=etd.OrganizationID AND etd.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
-	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
-	INNER JOIN organization og ON og.RowID=etd.OrganizationID
-	WHERE etd.EmployeeID=ete_EmpRowID
-	AND etd.OrganizationID=ete_OrganizID
-	AND etd.`Date`=ete_Date
-	ORDER BY etd.LastUpd DESC
-	LIMIT 1
-	INTO etd_TimeIn
-	     ,etd_TimeOut
-		  ,@is_timelogs_betweenbreaktime
-		  ,ete_RegHrsWorkd
-		  ,@break_hours;
-	
-	IF default_work_hrs < ete_RegHrsWorkd THEN SET ete_RegHrsWorkd = default_work_hrs; END IF;
-	
-	# SELECT COMPUTE_TimeDifference(etd_TimeIn,etd_TimeOut)
-	# INTO ete_RegHrsWorkd;
-	
-	SET ete_HrsLate = 0.0;
-	
-	SET ete_HrsUnder = 0.0;
-
-	SET ete_NDiffHrs = 0.0;
-	
-	SET ete_NDiffOTHrs = 0.0;
-
-	IF otstartingtime IS NOT NULL
-		AND otendingtime IS NOT NULL THEN
-		
-		SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
-		INTO ete_OvertimeHrs;
-		
-		SET @is_otEndTimeReachedTomorrow = IF(otstartingtime BETWEEN TIME('12:00') AND TIME('23:59:59')
-															AND
-															otendingtime BETWEEN TIME('00:00') AND TIME('11:59:59')
-															,	TRUE
-															,	FALSE);
-		SET @mins_perhour = 60;
-		SET @secs_perminute = 60;
-		/*SELECT COMPUTE_TimeDifference(IF(CONCAT_DATETIME(ete_Date, og_ndtimefrom)
-													BETWEEN CONCAT_DATETIME(ete_Date, otstartingtime) AND CONCAT_DATETIME(IF(@is_otEndTimeReachedTomorrow = 0, ete_Date, ADDDATE(ete_Date, INTERVAL 1 DAY)), otendingtime)
-													,	og_ndtimefrom
-													,	NULL
-													)
-												
-												,	otendingtime) `Result`*/
-		SET @ot_endtime = IF(@is_otEndTimeReachedTomorrow = TRUE
-									, CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL 1 DAY), otendingtime)
-									, CONCAT_DATETIME(ete_Date, otendingtime));
-		
-		SELECT
-		IF(CONCAT_DATETIME(ete_Date, otstartingtime) <= CONCAT_DATETIME(ete_Date, og_ndtimefrom)
-			AND @ot_endtime
-					BETWEEN	CONCAT_DATETIME(ete_Date, og_ndtimefrom)
-					AND 		CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL 1 DAY), og_ndtimeto)
-			, (TIMESTAMPDIFF(SECOND, CONCAT_DATETIME(ete_Date, og_ndtimefrom), @ot_endtime) / (@mins_perhour * @secs_perminute))
-			
-			,IF(@ot_endtime >= CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL 1 DAY), og_ndtimeto)
-				 AND CONCAT_DATETIME(ete_Date, otstartingtime)
-				 		BETWEEN	CONCAT_DATETIME(ete_Date, og_ndtimefrom)
-						AND 		CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL 1 DAY), og_ndtimeto)
-				, (TIMESTAMPDIFF(SECOND, CONCAT_DATETIME(ete_Date, otstartingtime), CONCAT_DATETIME(ADDDATE(ete_Date, INTERVAL 1 DAY), og_ndtimeto)) / (@mins_perhour * @secs_perminute))
-				
-				, (TIMESTAMPDIFF(SECOND, CONCAT_DATETIME(ete_Date, otstartingtime), @ot_endtime) / (@mins_perhour * @secs_perminute)))
-			) `Result`
-		INTO @ete_NDiffHrs; # 
-		# og_ndtimefrom, og_ndtimeto
-	ELSE
-		
-		SET ete_OvertimeHrs = 0.0;
-		
-	END IF;
-	
-ELSE 
+/*overtime here..............................*/
 
 	SET @breakStarts=NULL;
 	SET @breakEnds=NULL;
@@ -778,7 +662,46 @@ ELSE
 	
 	SET ete_NDiffHrs = 0;
 	
-END IF;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	SET ete_NDiffOTHrs = IFNULL((SELECT SUM(ot.OfficialValidNightDiffHours) FROM employeeovertime ot WHERE ot.EmployeeID=ete_EmpRowID AND ot.OrganizationID=ete_OrganizID AND ete_Date BETWEEN ot.OTStartDate AND ot.OTEndDate AND ot.OTStatus='Approved'), 0);
 

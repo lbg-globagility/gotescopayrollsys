@@ -276,9 +276,10 @@ LEFT JOIN (SELECT
 			  ,SUM(et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) `LeaveHours`
 			  ,SUM(et.Leavepayment) `Leavepayment`
 			  , SUM(IFNULL(i.RegularHoursWorked, 0)) `RestDayHours`
-			  , IF(is_actual = 1
+/*			  , IF(is_actual = 1
 			       , SUM(i.RestDayActualPay)
-					 , SUM(i.RestDayAmount)) `RestDayAmount`
+					 , SUM(i.RestDayAmount)) `RestDayAmount`*/
+			  , SUM(et.RestDayPay) `RestDayAmount`
 			  , SUM(et.`AbsentHours`) `AbsentHours`
 			  , SUM(IF(et.IsValidForHolidayPayment = 1
 			           # , GREATEST(et.RegularHoursWorked, et.WorkHours)

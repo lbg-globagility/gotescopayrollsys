@@ -8590,11 +8590,15 @@ Public Class PayStub
             txtPaidLeave.Text = FormatNumber(ValNoComma(drow("PaidLeaveAmount")), 2)
             txtPaidLeaveHrs.Text = FormatNumber(ValNoComma(drow("PaidLeaveHours")), 2)
 
-            'txtRestDayHrs.Text = FormatNumber(ValNoComma(drow("RestDayPayment")), 2)
+            txtRestDayHrs.Text = FormatNumber(ValNoComma(drow("RestDayHours")), 2)
             txtRestDayPay.Text = FormatNumber(ValNoComma(drow("RestDayPayment")), 2)
-            Dim add_restday_pay_formonthly =
-                (ValNoComma(lblsubtot.Text) + ValNoComma(drow("RestDayPayment")))
-            lblsubtot.Text = FormatNumber(add_restday_pay_formonthly, 2)
+
+            If drow("EmployeeType").ToString = "Monthly" Then
+                Dim add_restday_pay_formonthly =
+                    ValNoComma(lblsubtot.Text) + ValNoComma(drow("RestDayPayment"))
+
+                lblsubtot.Text = FormatNumber(add_restday_pay_formonthly, 2)
+            End If
 
         Next
 
@@ -8829,12 +8833,15 @@ Public Class PayStub
             txtPaidLeave.Text = FormatNumber(ValNoComma(drow("PaidLeaveAmount")), 2)
             txtPaidLeaveHrs.Text = FormatNumber(ValNoComma(drow("PaidLeaveHours")), 2)
 
-            'txtRestDayHrs.Text = FormatNumber(ValNoComma(drow("RestDayPayment")), 2)
+            txtRestDayHrs.Text = FormatNumber(ValNoComma(drow("RestDayHours")), 2)
             txtRestDayPay.Text = FormatNumber(ValNoComma(drow("RestDayPayment")), 2)
-            Dim add_restday_pay_formonthly =
-                (ValNoComma(lblsubtot.Text) + ValNoComma(drow("RestDayPayment")))
-            lblsubtot.Text = FormatNumber(add_restday_pay_formonthly, 2)
 
+            If drow("EmployeeType").ToString = "Monthly" Then
+                Dim add_restday_pay_formonthly =
+                    ValNoComma(lblsubtot.Text) + ValNoComma(drow("RestDayPayment"))
+
+                lblsubtot.Text = FormatNumber(add_restday_pay_formonthly, 2)
+            End If
         Next
 
         paystubactual.Dispose()

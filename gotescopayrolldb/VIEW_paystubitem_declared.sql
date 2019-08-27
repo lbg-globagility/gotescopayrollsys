@@ -113,7 +113,8 @@ SELECT psa.RowID
 # ,IF(@is_mwe = TRUE, 0, psa.TotalTaxableSalary) `TotalTaxableSalary`
 ,psa.TotalTaxableSalary
 
-,IFNULL(psi_rest.PayAmount, 0) `RestDayPayment`
+#,IFNULL(psi_rest.PayAmount, 0) `RestDayPayment`
+, ete.`RestDayPay` `RestDayPayment`
 , ete.`TotalDefaultHolidayPay`
 , ete.`AddedHolidayPayAmount`
 
@@ -139,13 +140,13 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.TotalHoursWorked) AS TotalHoursWorked
 				, SUM(etea.OvertimeHoursWorked) AS OvertimeHoursWorked
 				, SUM(etea.OvertimeHoursAmount) AS OvertimeHoursAmount
-				, ROUND(SUM(et.UndertimeHours), 2) AS UndertimeHours
+				, ROUND(SUM(etea.UndertimeHours), 2) AS UndertimeHours
 				, SUM(etea.UndertimeHoursAmount) AS UndertimeHoursAmount
 				, SUM(etea.NightDifferentialHours) AS NightDifferentialHours
 				, SUM(etea.NightDiffHoursAmount) AS NightDiffHoursAmount
 				, SUM(etea.NightDifferentialOTHours) AS NightDifferentialOTHours
 				, SUM(etea.NightDiffOTHoursAmount) AS NightDiffOTHoursAmount
-				, ROUND(SUM(et.HoursLate), 2) AS HoursLate
+				, ROUND(SUM(etea.HoursLate), 2) AS HoursLate
 				, SUM(etea.HoursLateAmount) AS HoursLateAmount
 				, SUM(etea.VacationLeaveHours) AS VacationLeaveHours
 				, SUM(etea.SickLeaveHours) AS SickLeaveHours
@@ -154,12 +155,14 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.AdditionalVLHours) AS AdditionalVLHours
 				, SUM(etea.TotalDayPay) AS TotalDayPay
 				, SUM(etea.Absent) AS Absent, SUM(etea.HolidayPayAmount) AS HolidayPayAmount
-				, SUM(et.AbsentHours) `AbsentHours`
+				, SUM(etea.AbsentHours) `AbsentHours`
 				, SUM(IF(etea.IsValidForHolidayPayment, etea.DailyRate, 0)) `TotalDefaultHolidayPay`
 				, SUM(etea.AddedHolidayPayAmount) `AddedHolidayPayAmount`
-				FROM timeentrywithdailyrate etea
+				, SUM(etea.RestDayHours) `RestDayHours`
+				, SUM(etea.RestDayPay) `RestDayPay`
+				FROM timeentrywithdailyrate et
 #				INNER JOIN proper_time_entry et ON et.RowID=etea.RowID AND et.AsActual=FALSE
-				INNER JOIN attendanceperiod et ON et.RowID=etea.RowID
+				INNER JOIN attendanceperiod etea ON et.RowID=etea.RowID
 				INNER JOIN payrate pr ON pr.RowID=etea.PayRateID
 				WHERE etea.EmployeeID=EmpRowID
 				AND etea.OrganizationID=OrganizID

@@ -19,6 +19,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAttendancePeriod`(
 
 
 
+
+
+
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -38,7 +44,7 @@ IF NOT isActual THEN
 	, et.`OrganizationID`
 	, et.`Date`
 	, @hourlyRate := TRIM(es.DailyRate / @defaultWorkHours)+0 `HourlyRate`
-	, et.`EmployeeShiftID`
+	, esh.RowID `EmployeeShiftID`
 	, et.`EmployeeID`
 	, et.`EmployeeSalaryID`
 	, et.`EmployeeFixedSalaryFlag`
@@ -46,14 +52,12 @@ IF NOT isActual THEN
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
 	, IF(@isRestDay, et.RegularHoursAmount, 0) `RestDayPay`
-	, IF(@isRestDay, et.OvertimeHoursWorked, 0) `RestDayOvertimeHours`
-	, IF(@isRestDay, et.OvertimeHoursAmount, 0) `RestDayOvertimePay`
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
 	, et.`TotalHoursWorked`
-	, IF(@isRestDay, 0, et.`OvertimeHoursWorked`) `OvertimeHoursWorked`
-	, IF(@isRestDay, 0, et.`OvertimeHoursAmount`) `OvertimeHoursAmount`
+	, et.`OvertimeHoursWorked`
+	, et.`OvertimeHoursAmount`
 	, et.HoursUndertime `UndertimeHours`
 	, TRIM(et.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
 	, et.`NightDifferentialHours`
@@ -104,7 +108,7 @@ ELSE
 	, et.`Date`
 	, @dailyRate := TRIM(es.DailyRate * es.Percentage)+0 `DailyRate`
 	, @hourlyRate := TRIM(@dailyRate / @defaultWorkHours)+0 `HourlyRate`
-	, et.`EmployeeShiftID`
+	, esh.RowID `EmployeeShiftID`
 	, et.`EmployeeID`
 	, et.`EmployeeSalaryID`
 	, et.`EmployeeFixedSalaryFlag`
@@ -112,14 +116,12 @@ ELSE
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
 	, IF(@isRestDay, et.RegularHoursAmount, 0) `RestDayPay`
-	, IF(@isRestDay, et.OvertimeHoursWorked, 0) `RestDayOvertimeHours`
-	, IF(@isRestDay, et.OvertimeHoursAmount, 0) `RestDayOvertimePay`
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
 	, et.`TotalHoursWorked`
-	, IF(@isRestDay, 0, et.`OvertimeHoursWorked`) `OvertimeHoursWorked`
-	, IF(@isRestDay, 0, et.`OvertimeHoursAmount`) `OvertimeHoursAmount`
+	, et.`OvertimeHoursWorked`
+	, et.`OvertimeHoursAmount`
 	, ett.HoursUndertime `UndertimeHours`
 #	, TRIM(ett.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
 	, et.UndertimeHoursAmount

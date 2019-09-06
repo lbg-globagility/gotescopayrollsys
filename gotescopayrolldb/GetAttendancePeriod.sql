@@ -25,9 +25,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAttendancePeriod`(
 
 
 
+
 )
     DETERMINISTIC
 BEGIN
+
+SET @monthlyType='monthly';
 
 SET @monthCount=12;
 SET @defaultWorkHours=8;
@@ -51,7 +54,9 @@ IF NOT isActual THEN
 	
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
-	, IF(@isRestDay, et.RegularHoursAmount, 0) `RestDayPay`
+	, IF(@isRestDay
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (pr.RestDayRate-pr.`PayRate` / pr.RestDayRate), 2), et.RegularHoursAmount)
+			, 0) `RestDayPay`
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
@@ -91,6 +96,7 @@ IF NOT isActual THEN
 	
 	FROM employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
+	INNER JOIN payrate pr ON pr.RowID=et.PayRateID
 	LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
 #	LEFT JOIN employeeshift esh ON esh.RowID=et.EmployeeShiftID
 	LEFT JOIN employeeshift esh ON esh.EmployeeID=e.RowID AND esh.OrganizationID=et.OrganizationID AND et.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
@@ -115,8 +121,10 @@ ELSE
 	
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
-	, IF(@isRestDay, et.RegularHoursAmount, 0) `RestDayPay`
-	
+	, IF(@isRestDay
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (pr.RestDayRate-pr.`PayRate` / pr.RestDayRate), 2), et.RegularHoursAmount)
+			, 0) `RestDayPay`
+
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
 	, et.`TotalHoursWorked`
@@ -157,6 +165,7 @@ ELSE
 	FROM employeetimeentryactual et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
 	INNER JOIN employeetimeentry ett ON ett.EmployeeID=e.RowID AND ett.`Date`=et.`Date` AND ett.OrganizationID=et.OrganizationID
+	INNER JOIN payrate pr ON pr.RowID=ett.PayRateID
 	LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
 	LEFT JOIN employeeshift esh ON esh.EmployeeID=e.RowID AND esh.OrganizationID=et.OrganizationID AND et.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID

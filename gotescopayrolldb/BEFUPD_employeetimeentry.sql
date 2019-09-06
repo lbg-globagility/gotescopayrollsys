@@ -199,7 +199,7 @@ IF isRest_day = '0' THEN
 			ELSEIF has_shift = TRUE AND (NEW.VacationLeaveHours + NEW.SickLeaveHours + NEW.MaternityLeaveHours + NEW.OtherLeaveHours) = 0
 					AND NEW.TotalDayPay = 0 THEN
 #					AND (@calclegalholi = 0 AND @calcspecholi = 0) THEN
-					
+
 					IF isSpecialHoliday = TRUE THEN
 						IF NEW.IsValidForHolidayPayment = TRUE
 							AND @calcspecholi = TRUE THEN
@@ -270,18 +270,20 @@ IF isRest_day = '0' THEN
 				ELSE
 					SET NEW.Absent = 0.0;
 				END IF;*/
-				IF NEW.IsValidForHolidayPayment = 1 THEN
+				IF NEW.IsValidForHolidayPayment = TRUE THEN
 					
 					IF NEW.TotalDayPay = 0 THEN
 						SET NEW.TotalDayPay = @daily_pay;
 					END IF;
 					SET NEW.Absent = 0.0;
 					
-				ELSE
+				ELSEIF LCASE(emp_type)='daily' THEN
 				
 					SET NEW.TotalDayPay = 0.0;
 					SET NEW.Absent = IF(isRest_day = 0, @daily_pay, 0);
 					
+				ELSEIF LCASE(emp_type)='monthly' AND NEW.TotalDayPay > 0 THEN
+					SET NEW.Absent = 0;
 				END IF;
 
 			END IF;

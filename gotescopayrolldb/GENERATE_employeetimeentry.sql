@@ -31,6 +31,17 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -585,7 +596,7 @@ ELSE
 			SET ete_RegHrsWorkd = ete_RegHrsWorkd - IFNULL(@lessBreak, 0);
 			
 			SET etd_TimeOut = shifttimeto;
-			
+
 		ELSE
 
 			SET @dutyStart=CONCAT_DATETIME(ete_Date, shifttimefrom);
@@ -1202,16 +1213,34 @@ IF pr_DayBefore IS NULL THEN
 
 ELSE
 
-	SELECT
-	(IS_WORKINGDAY_PRESENT_DURINGHOLI(ete_OrganizID, ete_EmpRowID, ete_Date, TRUE) # checks the attendance prior to holiday
-	 # AND IS_WORKINGDAY_PRESENT_DURINGHOLI(ete_OrganizID, ete_EmpRowID, ete_Date, FALSE) # checks the attendance after the holiday
-	 ) `Result`
-	FROM payrate pr
-	WHERE pr.RowID=payrateRowID AND pr.`PayRate` > 1
+	SET @specialNonWorkingHoliday = 'Special Non-Working Holiday';
+	SET @legalHoliday = 'Regular Holiday';
+	
+	SELECT EXISTS(SELECT pr.RowID
+						FROM payrate pr
+						INNER JOIN employee e ON e.RowID = ete_EmpRowID AND e.CalcSpecialHoliday = TRUE AND e.EmployeeType='Daily'
+						WHERE pr.RowID = payrateRowID
+						AND pr.PayType = @specialNonWorkingHoliday
+						AND IS_WORKINGDAY_PRESENT_DURINGHOLI(pr.OrganizationID, e.RowID, pr.`Date`, TRUE) = TRUE
+						
+					UNION
+						SELECT pr.RowID
+						FROM payrate pr
+						INNER JOIN employee e ON e.RowID = ete_EmpRowID AND e.CalcSpecialHoliday = TRUE AND e.EmployeeType='Monthly'
+						WHERE pr.RowID = payrateRowID
+						AND pr.PayType = @specialNonWorkingHoliday
+						
+					UNION
+						SELECT pr.RowID
+						FROM payrate pr
+						INNER JOIN employee e ON e.RowID = ete_EmpRowID AND e.CalcHoliday = TRUE
+						WHERE pr.RowID = payrateRowID
+						AND pr.PayType = @legalHoliday
+						AND IS_WORKINGDAY_PRESENT_DURINGHOLI(pr.OrganizationID, e.RowID, pr.`Date`, TRUE) = TRUE
+						)
 	INTO is_valid_for_holipayment;
 	
 	SET is_valid_for_holipayment = IFNULL(is_valid_for_holipayment, FALSE);
-	
 	IF is_valid_for_holipayment = TRUE THEN
 		SET @zero = 0;
 
@@ -1261,13 +1290,13 @@ ELSE
 		
 	IF yester_TotDayPay != 0 THEN # employee was present yester date
 
-		SELECT (DAYOFWEEK(SUBDATE(ete_Date, INTERVAL 1 DAY)) = e.DayOfRest)
+		/*SELECT (DAYOFWEEK(SUBDATE(ete_Date, INTERVAL 1 DAY)) = e.DayOfRest)
 		FROM employee e
 		WHERE e.RowID=ete_EmpRowID
-		INTO isRestDay;
-
+		INTO isRestDay;*/
+		
 		IF isRestDay = '1' THEN # it's his/her rest day yester date
-			
+
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * ((commonrate + restday_rate) - 1))
 										 + ((ete_OvertimeHrs * rateperhourforOT) * ((commonrate + restdayot_rate) - 1))
 										 + (@availed_leave_hrs * rateperhour);
@@ -1316,6 +1345,7 @@ ELSE
 				
 			END IF;
 			IF hasLeave THEN SET ete_TotalDayPay = ete_TotalDayPay + (IFNULL((SELECT VacationLeaveHours + SickLeaveHours + MaternityLeaveHours + OtherLeaveHours FROM employeetimeentry WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date),0) * rateperhour); END IF;
+
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID
@@ -1347,7 +1377,7 @@ ELSE
 		END IF;
 			
 	ELSE
-	
+
 		IF isRestDay = '1' THEN
 		
 				
@@ -1387,7 +1417,7 @@ ELSE
 
 
 		ELSEIF isRestDay = '0' THEN
-		
+
 			SELECT (IF(CHAR_TO_DAYOFWEEK(e.DayOfRest) = DAYNAME(pr_DayBefore), DAYOFWEEK(SUBDATE(pr_DayBefore, INTERVAL 1 DAY)), DAYOFWEEK(pr_DayBefore)) = e.DayOfRest)
 			FROM employee e
 			WHERE e.RowID=ete_EmpRowID

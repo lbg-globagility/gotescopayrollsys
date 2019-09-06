@@ -1250,29 +1250,26 @@ Public Class PayStub
                                       RecomputeHighPrecisionLateUndertimeAsync()
 
                                       'employeetimeentry - EXPERIMENT
-                                      etent_totdaypay = New SQL(String.Concat("SELECT SUM(COALESCE(ete.TotalDayPay,0)) 'TotalDayPay'",
-                                                                ",ete.EmployeeID",
-                                                                ",ete.Date",
-                                                                ",SUM(COALESCE(ete.RegularHoursAmount,0)) 'RegularHoursAmount'",
-                                                                ",SUM(COALESCE(ete.OvertimeHoursAmount,0)) 'OvertimeHoursAmount'",
-                                                                ",SUM(COALESCE(ete.UndertimeHoursAmount,0)) 'UndertimeHoursAmount'",
-                                                                ",SUM(COALESCE(ete.NightDiffHoursAmount,0)) 'NightDiffHoursAmount'",
-                                                                ",SUM(COALESCE(ete.NightDiffOTHoursAmount,0)) 'NightDiffOTHoursAmount'",
-                                                                ",SUM(COALESCE(ete.HoursLateAmount,0)) 'HoursLateAmount'",
-                                                                ",SUM(ete.Absent) AS Absent",
-                                                                ",SUM(ete.TaxableDailyAllowance) AS TaxableDailyAllowance",
-                                                                ",SUM(ete.HolidayPayAmount) AS HolidayPayAmount",
-                                                                ",SUM(ete.TaxableDailyBonus) AS TaxableDailyBonus",
-                                                                ",SUM(ete.NonTaxableDailyBonus) AS NonTaxableDailyBonus",
-                                                                ",SUM(IFNULL(ete.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`",
-                                                                " FROM employeetimeentry ete",
-                                                                " LEFT JOIN employee e ON e.RowID=ete.EmployeeID",
-                                                                " WHERE ete.OrganizationID=", org_rowid,
-                                                                " AND ete.Date",
-                                                                " BETWEEN IF('", paypFrom, "' < e.StartDate, e.StartDate, '", paypFrom, "')",
-                                                                " AND '", paypTo, "'",
-                                                                " GROUP BY ete.EmployeeID",
-                                                                " ORDER BY ete.EmployeeID;")).GetFoundRows.Tables(0)
+                                      etent_totdaypay =
+                                      New SQL($"CALL GetAttendancePeriod({org_rowid}, '{paypFrom}', '{paypTo}', FALSE);
+                                                SELECT SUM(TotalDayPay) `TotalDayPay`
+                                                , EmployeeID
+                                                , `Date`
+                                                , SUM(RegularHoursAmount) `RegularHoursAmount`
+                                                , SUM(OvertimeHoursAmount) `OvertimeHoursAmount`
+                                                , SUM(UndertimeHoursAmount) `UndertimeHoursAmount`
+                                                , SUM(NightDiffHoursAmount) `NightDiffHoursAmount`
+                                                , SUM(NightDiffOTHoursAmount) `NightDiffOTHoursAmount`
+                                                , SUM(HoursLateAmount) `HoursLateAmount`
+                                                , SUM(Absent) `Absent`
+                                                , SUM(TaxableDailyAllowance) `TaxableDailyAllowance`
+                                                , SUM(HolidayPayAmount) `HolidayPayAmount`
+                                                , SUM(TaxableDailyBonus) `TaxableDailyBonus`
+                                                , SUM(NonTaxableDailyBonus) `NonTaxableDailyBonus`
+                                                , SUM(AddedHolidayPayAmount) `AddedHolidayPayAmount`
+                                                , SUM(RestDayPay) `RestDayPay`
+                                                FROM attendanceperiod
+                                                GROUP BY EmployeeID;").GetFoundRows.Tables(0)
 
                                       ''SELECT SUM(COALESCE(ete.TotalDayPay,0)) 'TotalDayPay',ete.EmployeeID , ete.DATE, SUM(COALESCE(ete.RegularHoursAmount,0)) 'RegularHoursAmount', SUM(COALESCE(ete.OvertimeHoursAmount,0)) 'OvertimeHoursAmount', SUM(COALESCE(ete.UndertimeHoursAmount,0)) 'UndertimeHoursAmount', SUM(COALESCE(ete.NightDiffHoursAmount,0)) 'NightDiffHoursAmount', SUM(COALESCE(ete.NightDiffOTHoursAmount,0)) 'NightDiffOTHoursAmount', SUM(COALESCE(ete.HoursLateAmount,0)) 'HoursLateAmount' FROM employeetimeentry ete LEFT JOIN employee e ON e.RowID=ete.EmployeeID WHERE ete.OrganizationID=2 AND ete.DATE BETWEEN IF('2015-06-01' < e.StartDate, e.StartDate, '2015-06-01') AND '2015-06-15' GROUP BY ete.EmployeeID ORDER BY ete.EmployeeID;
 

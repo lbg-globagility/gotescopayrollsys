@@ -866,7 +866,8 @@ Public Class PayrollGeneration
                         ElseIf employment_type = "Monthly" Then
 
                             restday_pay_formonthlyemployee =
-                                ValNoComma(monthlyemployee_restday_payment.Compute("SUM(AddtlRestDayPayment)", String.Concat("EmployeeID = ", drow("RowID"))))
+                                Convert.ToDecimal(drowtotdaypay("RestDayPay"))
+                            'ValNoComma(monthlyemployee_restday_payment.Compute("SUM(AddtlRestDayPayment)", String.Concat("EmployeeID = ", drow("RowID"))))
 
                             If skipgovtdeduct And employment_type = "Monthly" Then
                                 grossincome = ValNoComma(drowtotdaypay("TotalDayPay"))
@@ -881,7 +882,9 @@ Public Class PayrollGeneration
                                                 + ValNoComma(drowtotdaypay("UndertimeHoursAmount")) _
                                                 + ValNoComma(drowtotdaypay("Absent")))
                                 grossincome += (ValNoComma(drowtotdaypay("OvertimeHoursAmount")) + NightDiffAmount + NightDiffOTAmount + Convert.ToDecimal(drowtotdaypay("AddedHolidayPayAmount")))
-                                'n_PayrollRecordID
+
+                                If employee_ID = "276" Then Console.WriteLine("grossincome: {0}", grossincome)
+
                                 grossincome_firsthalf = ValNoComma(drowsal("BasicPay")) '+ _
                                 'ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = " & drow("RowID").ToString)) + _
                                 'ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffOTHoursAmount)", "EmployeeID = " & drow("RowID").ToString)) + _

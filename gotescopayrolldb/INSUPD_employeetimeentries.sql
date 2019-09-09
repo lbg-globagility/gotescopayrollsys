@@ -36,6 +36,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeetimeentries`(
 
 
 
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -51,17 +52,17 @@ SET @legalHoliday = 'Regular Holiday';
 
 SELECT EXISTS(SELECT pr.RowID
 					FROM payrate pr
-					INNER JOIN employee e ON e.RowID = etent_EmployeeID AND e.CalcSpecialHoliday = TRUE AND e.EmployeeType='Daily'
+					INNER JOIN employee e ON e.RowID = etent_EmployeeID AND e.CalcSpecialHoliday = TRUE AND e.EmployeeType IN ('Daily', 'Monthly')
 					WHERE pr.RowID = etent_PayRateID
 					AND pr.PayType = @specialNonWorkingHoliday
 					AND IS_WORKINGDAY_PRESENT_DURINGHOLI(pr.OrganizationID, e.RowID, pr.`Date`, TRUE) = TRUE
 					
-				UNION
+				/*UNION
 					SELECT pr.RowID
 					FROM payrate pr
 					INNER JOIN employee e ON e.RowID = etent_EmployeeID AND e.CalcSpecialHoliday = TRUE AND e.EmployeeType='Monthly'
 					WHERE pr.RowID = etent_PayRateID
-					AND pr.PayType = @specialNonWorkingHoliday
+					AND pr.PayType = @specialNonWorkingHoliday*/
 					
 				UNION
 					SELECT pr.RowID

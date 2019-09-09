@@ -8445,9 +8445,9 @@ Public Class PayStub
             psaItems = New SQL(String.Concat("CALL VIEW_paystubitem('", drow("RowID"), "');")).GetFoundRows.Tables.OfType(Of DataTable).First
 
             Dim strdouble = ValNoComma(drow("TrueSalary")) / ValNoComma(drow("PAYFREQUENCYDIVISOR")) 'BasicPay
-            Dim holidaybayad = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Holiday pay'")) 'Holiday pay
             Dim totalDefaultHolidayPay = Convert.ToDecimal(drow("TotalDefaultHolidayPay"))
             Dim addedHolidayPayAmount = Convert.ToDecimal(drow("AddedHolidayPayAmount"))
+            Dim holidaybayad = totalDefaultHolidayPay + addedHolidayPayAmount 'Holiday pay
             'Basic Pay
             txtempbasicpay.Text = FormatNumber((strdouble), 2)
             'Regular
@@ -8485,10 +8485,17 @@ Public Class PayStub
             'Night differential Overtime
             txttotnightdiffothrs.Text = ValNoComma(drow("NightDifferentialOTHours"))
             txttotnightdiffotamt.Text = FormatNumber((ValNoComma(drow("NightDiffOTHoursAmount"))), 2)
-            'Holiday pay
-            txttotholidayhrs.Text = 0.0
 
+            'Holiday pay
             txttotholidayamt.Text = FormatNumber(holidaybayad, 2)
+
+            txttotholidayhrs.Text = 0.0
+            Dim holidayHours As Decimal = Convert.ToDecimal(drow("HolidayHours"))
+            txttotholidayhrs.Text = FormatNumber(holidayHours, 2)
+            If holidayHours > 0 Then
+                txthrswork.Text -= txttotholidayhrs.Text
+                'txthrsworkamt.Text = FormatNumber(Convert.ToDecimal(txthrsworkamt.Text) - Convert.ToDecimal(drow("HolidayPay")), 2)
+            End If
 
             Dim sumallbasic = ValNoComma(txthrsworkamt.Text) _
                               + ValNoComma(drow("OvertimeHoursAmount")) _
@@ -8686,9 +8693,10 @@ Public Class PayStub
             psaItems = New SQL(String.Concat("CALL VIEW_paystubitemundeclared('", drow("RowID"), "');")).GetFoundRows.Tables.OfType(Of DataTable).First
 
             Dim strdouble = ValNoComma(drow("TrueSalary")) / ValNoComma(drow("PAYFREQUENCYDIVISOR")) 'BasicPay
-            Dim holidaybayad = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Holiday pay'")) 'Holiday pay
             Dim totalDefaultHolidayPay = Convert.ToDecimal(drow("TotalDefaultHolidayPay"))
             Dim addedHolidayPayAmount = Convert.ToDecimal(drow("AddedHolidayPayAmount"))
+            Dim holidaybayad = totalDefaultHolidayPay + addedHolidayPayAmount 'Holiday pay
+
             'Basic Pay
             txtempbasicpay_U.Text = FormatNumber((strdouble), 2)
             'Regular
@@ -8727,9 +8735,14 @@ Public Class PayStub
             'Night differential Overtime
             txttotnightdiffothrs_U.Text = ValNoComma(drow("NightDifferentialOTHours"))
             txttotnightdiffotamt_U.Text = FormatNumber((ValNoComma(drow("NightDiffOTHoursAmount"))), 2)
-            'Holiday pay
-            txttotholidayhrs_U.Text = 0.0
 
+            Dim holidayHours As Decimal = Convert.ToDecimal(drow("HolidayHours"))
+            txttotholidayhrs_U.Text = FormatNumber(holidayHours, 2)
+            If holidayHours > 0 Then
+                txthrswork_U.Text -= txttotholidayhrs_U.Text
+                'txthrsworkamt_U.Text = FormatNumber(Convert.ToDecimal(txthrsworkamt_U.Text) - Convert.ToDecimal(drow("HolidayPay")), 2)
+            End If
+            'Holiday pay
             txttotholidayamt_U.Text = FormatNumber(holidaybayad, 2)
 
             Dim sumallbasic = ValNoComma(txthrsworkamt_U.Text) _

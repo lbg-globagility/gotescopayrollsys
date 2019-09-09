@@ -42,6 +42,9 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(
 
 
 
+
+
+
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -1218,17 +1221,17 @@ ELSE
 	
 	SELECT EXISTS(SELECT pr.RowID
 						FROM payrate pr
-						INNER JOIN employee e ON e.RowID = ete_EmpRowID AND e.CalcSpecialHoliday = TRUE AND e.EmployeeType='Daily'
+						INNER JOIN employee e ON e.RowID = ete_EmpRowID AND e.CalcSpecialHoliday = TRUE AND e.EmployeeType IN ('Daily', 'Monthly')
 						WHERE pr.RowID = payrateRowID
 						AND pr.PayType = @specialNonWorkingHoliday
 						AND IS_WORKINGDAY_PRESENT_DURINGHOLI(pr.OrganizationID, e.RowID, pr.`Date`, TRUE) = TRUE
 						
-					UNION
+					/*UNION
 						SELECT pr.RowID
 						FROM payrate pr
 						INNER JOIN employee e ON e.RowID = ete_EmpRowID AND e.CalcSpecialHoliday = TRUE AND e.EmployeeType='Monthly'
 						WHERE pr.RowID = payrateRowID
-						AND pr.PayType = @specialNonWorkingHoliday
+						AND pr.PayType = @specialNonWorkingHoliday*/
 						
 					UNION
 						SELECT pr.RowID
@@ -1239,7 +1242,7 @@ ELSE
 						AND IS_WORKINGDAY_PRESENT_DURINGHOLI(pr.OrganizationID, e.RowID, pr.`Date`, TRUE) = TRUE
 						)
 	INTO is_valid_for_holipayment;
-	
+
 	SET is_valid_for_holipayment = IFNULL(is_valid_for_holipayment, FALSE);
 	IF is_valid_for_holipayment = TRUE THEN
 		SET @zero = 0;

@@ -26,15 +26,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAttendancePeriod`(
 
 
 
+
 )
     DETERMINISTIC
 BEGIN
+
+SET @legalHoliday='Regular Holiday';
+SET @specialHoliday='Special Non-Working Holiday';
 
 SET @monthlyType='monthly';
 
 SET @monthCount=12;
 SET @defaultWorkHours=8;
 SET @isRestDay=FALSE;
+SET @isHoliday=FALSE;
 
 DROP TEMPORARY TABLE IF EXISTS attendanceperiod;
 DROP TABLE IF EXISTS attendanceperiod;
@@ -60,6 +65,12 @@ IF NOT isActual THEN
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
+	
+	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
+	
+	, IF(@isHoliday, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
+	
 	, et.`TotalHoursWorked`
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`
@@ -127,6 +138,12 @@ ELSE
 
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
+	
+	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
+	
+	, IF(@isHoliday, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
+	
 	, et.`TotalHoursWorked`
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`

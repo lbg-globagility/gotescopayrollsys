@@ -69,7 +69,7 @@ IF NOT isActual THEN
 	
 	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
 	
-	, IF(@isHoliday, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, IF(@isHoliday AND et.IsValidForHolidayPayment, et.`RegularHoursWorked`, 0) `HolidayHours`
 	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
 	
 	, et.`TotalHoursWorked`
@@ -142,7 +142,7 @@ ELSE
 	
 	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
 	
-	, IF(@isHoliday, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, IF(@isHoliday AND ett.IsValidForHolidayPayment, et.`RegularHoursWorked`, 0) `HolidayHours`
 	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
 	
 	, et.`TotalHoursWorked`

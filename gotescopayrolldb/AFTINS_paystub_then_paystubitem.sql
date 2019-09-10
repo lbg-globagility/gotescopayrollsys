@@ -748,11 +748,100 @@ SELECT e.StartDate,e.EmployeeType,pf.PayFrequencyType FROM employee e INNER JOIN
 
 SELECT (e_startdate BETWEEN NEW.PayFromDate AND NEW.PayToDate) INTO IsFirstTimeSalary;
 
+SET @monthlyType='monthly';
+
+SET @monthCount=12;
+SET @defaultWorkHours=8;
+SET @isRestDay=FALSE;
+
+	DROP TEMPORARY TABLE IF EXISTS attendanceperiodofemployee;
+	CREATE TEMPORARY TABLE attendanceperiodofemployee
+	SELECT
+	et.`RowID`
+	, et.`OrganizationID`
+	, et.`Date`
+	, @dailyRate := TRIM(es.DailyRate * es.Percentage)+0 `DailyRate`
+	, @hourlyRate := TRIM(@dailyRate / @defaultWorkHours)+0 `HourlyRate`
+	, esh.RowID `EmployeeShiftID`
+	, et.`EmployeeID`
+	, et.`EmployeeSalaryID`
+	, et.`EmployeeFixedSalaryFlag`
+	
+	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
+	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
+	, IF(@isRestDay
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * ((pr.RestDayRate-pr.`PayRate`) / pr.RestDayRate), 2), et.RegularHoursAmount)
+			, 0) `RestDayPay`
+
+	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
+	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
+	, et.`TotalHoursWorked`
+	, et.`OvertimeHoursWorked`
+	, et.`OvertimeHoursAmount`
+	, ett.HoursUndertime `UndertimeHours`
+#	, TRIM(ett.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
+	, et.UndertimeHoursAmount
+	, et.`NightDifferentialHours`
+	, et.`NightDiffHoursAmount`
+	, et.`NightDifferentialOTHours`
+	, et.`NightDiffOTHoursAmount`
+	, ett.HoursTardy `HoursLate`
+#	, TRIM(ett.HoursTardy * @hourlyRate)+0 `HoursLateAmount`
+	, et.HoursLateAmount
+	, et.`LateFlag`
+	, et.`PayRateID`
+	, et.`VacationLeaveHours`
+	, et.`SickLeaveHours`
+	, et.`MaternityLeaveHours`
+	, et.`OtherLeaveHours`
+	, et.`AdditionalVLHours`
+	, et.`TotalDayPay`
+	, et.`Absent`
+	, IF(et.Absent > 0, sh.WorkHours, 0) `AbsentHours`
+	, et.`TaxableDailyAllowance`
+	, et.`HolidayPayAmount`
+	, et.`TaxableDailyBonus`
+	, et.`NonTaxableDailyBonus`
+	, ett.`IsValidForHolidayPayment`
+#	, @trueSalary := TRIM(es.Percentage * es.Salary)+0 `ActualSalary`
+	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`TrueSalary` / @defaultWorkHours), ((`es`.`TrueSalary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
+	, IFNULL(sh.WorkHours, 0) `WorkHours`
+	, et.`AddedHolidayPayAmount`
+	, es.Percentage `ActualSalaryRate`
+	
+	FROM employeetimeentryactual et
+	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.RowID=NEW.EmployeeID
+	INNER JOIN employeetimeentry ett ON ett.EmployeeID=e.RowID AND ett.`Date`=et.`Date` AND ett.OrganizationID=et.OrganizationID
+	INNER JOIN payrate pr ON pr.RowID=ett.PayRateID
+	LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
+	LEFT JOIN employeeshift esh ON esh.EmployeeID=e.RowID AND esh.OrganizationID=et.OrganizationID AND et.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
+	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
+	WHERE et.OrganizationID=NEW.OrganizationID
+	AND et.`Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate
+	;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 IF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '1' THEN
 	
 	IF e_type = 'Monthly' THEN
 	
-		SELECT SUM(TotalDayPay),EmployeeSalaryID FROM employeetimeentryactual WHERE OrganizationID=NEW.OrganizationID AND EmployeeID=NEW.EmployeeID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO totalworkamount,empsalRowID;
+		SELECT SUM(TotalDayPay),EmployeeSalaryID FROM attendanceperiodofemployee INTO totalworkamount,empsalRowID;
 		
 		IF totalworkamount IS NULL THEN
 			
@@ -779,9 +868,9 @@ ELSEIF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '0' THEN
 	IF e_type IN ('Fixed','Monthly') THEN
 	
 		SELECT (TrueSalary / PAYFREQUENCY_DIVISOR(pftype)) FROM employeesalary es WHERE es.EmployeeID=NEW.EmployeeID AND es.OrganizationID=NEW.OrganizationID AND (es.EffectiveDateFrom >= NEW.PayFromDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) >= NEW.PayFromDate) AND (es.EffectiveDateFrom <= NEW.PayToDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) <= NEW.PayToDate) ORDER BY es.EffectiveDateFrom DESC LIMIT 1 INTO totalworkamount;
-		
-		SELECT ( (totalworkamount - (SUM(et.HoursLateAmount) + SUM(et.UndertimeHoursAmount) + SUM(et.Absent))) + SUM(et.OvertimeHoursAmount) + SUM(IFNULL(rd.RestDayActualPay, 0)) + SUM(IFNULL(et.NightDiffHoursAmount, 0)) + SUM(IFNULL(et.NightDiffOTHoursAmount, 0)) + SUM(IFNULL(et.AddedHolidayPayAmount,0)) ) FROM employeetimeentryactual et LEFT JOIN restdaytimeentry rd ON rd.RowID = et.RowID WHERE et.OrganizationID=NEW.OrganizationID AND et.EmployeeID=NEW.EmployeeID AND et.`Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO totalworkamount;
-		
+
+		SELECT ( (totalworkamount - (SUM(et.HoursLateAmount) + SUM(et.UndertimeHoursAmount) + SUM(et.Absent))) + SUM(et.OvertimeHoursAmount) + SUM(IFNULL(et.RestDayPay, 0)) + SUM(IFNULL(et.NightDiffHoursAmount, 0)) + SUM(IFNULL(et.NightDiffOTHoursAmount, 0)) + SUM(IFNULL(et.AddedHolidayPayAmount,0)) ) FROM attendanceperiodofemployee et INTO totalworkamount;
+
 		IF totalworkamount IS NULL THEN
 			
 			SELECT SUM(HoursLateAmount + UndertimeHoursAmount + Absent) FROM employeetimeentry WHERE OrganizationID=NEW.OrganizationID AND EmployeeID=NEW.EmployeeID AND `Date` BETWEEN NEW.PayFromDate AND NEW.PayToDate INTO totalworkamount;
@@ -793,7 +882,7 @@ ELSEIF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '0' THEN
 		END IF;
 		
 		SET totalworkamount = IFNULL(totalworkamount,0);
-
+		
 	ELSEIF e_type = 'Fixed employee' THEN
 	
 		SELECT es.BasicPay FROM employeesalary es WHERE es.EmployeeID=NEW.EmployeeID AND es.OrganizationID=NEW.OrganizationID AND (es.EffectiveDateFrom >= NEW.PayFromDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) >= NEW.PayFromDate) AND (es.EffectiveDateFrom <= NEW.PayToDate OR IFNULL(es.EffectiveDateTo,NEW.PayToDate) <= NEW.PayToDate) ORDER BY es.EffectiveDateFrom DESC LIMIT 1 INTO totalworkamount;

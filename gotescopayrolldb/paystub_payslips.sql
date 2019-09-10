@@ -250,6 +250,7 @@ LEFT JOIN (SELECT
 			  ,et.EmployeeSalaryID
 			  ,SUM(et.RegularHoursWorked) `RegularHoursWorked`
 #			  ,SUM(et.RegularHoursAmount - IF(et.RegularHoursAmount = 0 AND et.TotalDayPay > 0, 0, et.HolidayPayAmount)) `RegularHoursAmount`
+			  ,SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, et.RegularHoursAmount)) `RegularHoursAmount`
 			  ,SUM(et.RegularHoursAmount) `RegularHoursAmount`
 			  ,SUM(et.TotalHoursWorked) `TotalHoursWorked`
 			  ,SUM(et.OvertimeHoursWorked) `OvertimeHoursWorked`

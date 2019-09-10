@@ -27,6 +27,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAttendancePeriod`(
 
 
 
+
 )
     DETERMINISTIC
 BEGIN
@@ -60,7 +61,7 @@ IF NOT isActual THEN
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
 	, IF(@isRestDay
-			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (pr.RestDayRate-pr.`PayRate` / pr.RestDayRate), 2), et.RegularHoursAmount)
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * ((pr.RestDayRate-pr.`PayRate`) / pr.RestDayRate), 2), et.RegularHoursAmount)
 			, 0) `RestDayPay`
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
@@ -133,9 +134,9 @@ ELSE
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
 	, IF(@isRestDay
-			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (pr.RestDayRate-pr.`PayRate` / pr.RestDayRate), 2), et.RegularHoursAmount)
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * ((pr.RestDayRate-pr.`PayRate`) / pr.RestDayRate), 2), et.RegularHoursAmount)
 			, 0) `RestDayPay`
-
+	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
 	

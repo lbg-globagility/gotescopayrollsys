@@ -191,6 +191,10 @@ DECLARE timeLogId INT(11);
 
 UPDATE employeeovertime ot SET ot.LastUpd=IFNULL(ADDDATE(ot.LastUpd, INTERVAL 1 SECOND), CURRENT_TIMESTAMP()) WHERE ot.EmployeeID=ete_EmpRowID AND ot.OrganizationID=ete_OrganizID AND ete_Date BETWEEN ot.OTStartDate AND ot.OTEndDate AND ot.OTStatus='Approved';
 
+DROP TEMPORARY TABLE IF EXISTS employeelogtime;
+CREATE TEMPORARY TABLE IF NOT EXISTS employeelogtime
+SELECT * FROM employeetimeentrydetails WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND `Date`=ete_Date AND TimeStampIn IS NOT NULL AND TimeStampOut IS NOT NULL ORDER BY IFNULL(LastUpd, Created) DESC LIMIT 1;
+
 SELECT
 e.EmploymentStatus
 ,e.EmployeeType
@@ -304,7 +308,7 @@ END IF;
 
 SELECT i.RowID
 FROM (SELECT RowID
-		FROM employeetimeentrydetails
+		FROM employeelogtime
 		WHERE EmployeeID=ete_EmpRowID
 		AND `Date`=ete_Date
 		AND OrganizationID=ete_OrganizID
@@ -351,7 +355,7 @@ IF OTCount = 1 THEN
 	IF(eot.OTStartTime = shifttimeto, ADDTIME(shifttimeto,'00:00:01'), eot.OTStartTime)
 	,IF(eot.OTEndTime > IF(empIn.TimeOut > empIn.TimeIn, empIn.TimeOut, ADDTIME(empIn.TimeOut, '24:00:00')), empIn.TimeOut, eot.OTEndTime)
 	,eot.RowID
-	FROM employeeovertime eot INNER JOIN (SELECT etd.TimeOut, etd.TimeIn FROM employeetimeentrydetails etd WHERE etd.EmployeeID=ete_EmpRowID AND etd.OrganizationID=ete_OrganizID AND etd.`Date`=ete_Date LIMIT 1) empIn ON empIn.TimeOut IS NULL OR empIn.TimeOut IS NOT NULL
+	FROM employeeovertime eot INNER JOIN (SELECT etd.TimeOut, etd.TimeIn FROM employeelogtime etd WHERE etd.EmployeeID=ete_EmpRowID AND etd.OrganizationID=ete_OrganizID AND etd.`Date`=ete_Date LIMIT 1) empIn ON empIn.TimeOut IS NULL OR empIn.TimeOut IS NOT NULL
 	WHERE eot.EmployeeID=ete_EmpRowID
 	AND eot.OrganizationID=ete_OrganizID
 #	AND eot.OTStartTime >= shifttimeto
@@ -442,7 +446,7 @@ IF isRestDay = '1' THEN
 	
 	, IFNULL(TIMEDIFF(GREATEST(sh.TimeFrom, sh.TimeTo), LEAST(sh.TimeFrom, sh.TimeTo)), 0) `BreakHours`
 	
-	FROM employeetimeentrydetails etd
+	FROM employeelogtime etd
 	LEFT JOIN employeeshift esh ON esh.EmployeeID=etd.EmployeeID AND esh.OrganizationID=etd.OrganizationID AND etd.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
 	INNER JOIN organization og ON og.RowID=etd.OrganizationID
@@ -535,7 +539,7 @@ ELSE
 			) `TimeStampOut`
 	, sh.BreakTimeFrom
 	, sh.BreakTimeTo
-	FROM employeetimeentrydetails etd
+	FROM employeelogtime etd
 	INNER JOIN employee e ON e.RowID=etd.EmployeeID
 	LEFT JOIN employeeshift esh ON esh.OrganizationID=etd.OrganizationID AND esh.EmployeeID=etd.EmployeeID AND etd.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
@@ -713,7 +717,7 @@ ELSE
 		FROM employeeleave elv
 		INNER JOIN employee e ON e.RowID=elv.EmployeeID
 		INNER JOIN shift sh ON sh.RowID = sh_rowID
-		LEFT JOIN employeetimeentrydetails etd ON etd.RowID = timeLogId
+		LEFT JOIN employeelogtime etd ON etd.RowID = timeLogId
 		WHERE elv.RowID = leaveId
 		INTO @leaveStartTime
 		     , @leaveEndTime
@@ -925,7 +929,7 @@ END IF;
 	SELECT
 	etd.TimeIn
 	,IF(e_UTOverride = 1, etd.TimeOut, IFNULL(sh.TimeTo,etd.TimeOut))
-	FROM employeetimeentrydetails etd
+	FROM employeelogtime etd
 	LEFT JOIN employeeshift esh ON esh.OrganizationID=etd.OrganizationID AND esh.EmployeeID=etd.EmployeeID AND etd.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
 	WHERE etd.EmployeeID=ete_EmpRowID

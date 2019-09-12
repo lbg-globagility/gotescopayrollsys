@@ -43,18 +43,28 @@ IF LoanDeductSched = 'Per pay period' THEN
 	SET LoanDeductSched = 'Per pay period';
 		
 #	SELECT PayToDate FROM (SELECT RowID,PayToDate,(SELECT @i := @i + 1) `Rank` FROM payperiod WHERE RowID >= paypFrom_RowID AND TotalGrossSalary=payfreqID LIMIT EmpLoanNoOfPayPeriod) AS `DateRank` WHERE IF(EmpLoanNoOfPayPeriod > `DateRank`.`Rank`, `DateRank`.`Rank`=@i, `DateRank`.`Rank`=EmpLoanNoOfPayPeriod) INTO ReturnDate;
+	IF EmpLoanNoOfPayPeriod = 1 THEN
+		SELECT pp.PayToDate
+		FROM payperiod pp
+		WHERE pp.OrganizationID = OrganizID
+		AND pp.TotalGrossSalary = payfreqID
+		AND EmpLoanEffectiveDateFrom BETWEEN pp.PayFromDate AND pp.PayToDate
+		ORDER BY pp.`Year`, pp.OrdinalValue
+		LIMIT 1
+		INTO ReturnDate;
+	ELSE
+		SELECT MAX(i.PayToDate) `Result`
+		FROM (SELECT pp.*
+				FROM payperiod pp
+				WHERE pp.OrganizationID = OrganizID
+				AND pp.TotalGrossSalary = payfreqID
+				AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
+				ORDER BY pp.`Year`, pp.OrdinalValue
+				LIMIT EmpLoanNoOfPayPeriod
+				) i
+		INTO ReturnDate;
+	END IF;
 	
-	SELECT MAX(i.PayToDate) `Result`
-	FROM (SELECT pp.*
-			FROM payperiod pp
-			WHERE pp.OrganizationID = OrganizID
-			AND pp.TotalGrossSalary = payfreqID
-			AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
-			ORDER BY pp.`Year`, pp.OrdinalValue
-			LIMIT EmpLoanNoOfPayPeriod
-			) i
-	INTO ReturnDate;
-
 ELSEIF LoanDeductSched = 'End of the month' THEN
 	SET LoanDeductSched = 'End of the month';
 
@@ -88,11 +98,19 @@ ELSEIF LoanDeductSched = 'First half' THEN
 
 	SELECT MAX(i.PayToDate) `Result`
 	FROM (SELECT pp.*
-			FROM payperiod pp
-			WHERE pp.OrganizationID = OrganizID
-			AND pp.TotalGrossSalary = payfreqID
-			AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
-			AND pp.Half = '1'
+			FROM (SELECT pp.*
+					FROM payperiod pp
+					WHERE pp.OrganizationID = OrganizID
+					AND pp.TotalGrossSalary = payfreqID
+					AND EmpLoanEffectiveDateFrom BETWEEN pp.PayFromDate AND pp.PayToDate
+					AND pp.Half = '1'
+				UNION
+					SELECT pp.*
+					FROM payperiod pp
+					WHERE pp.OrganizationID = OrganizID
+					AND pp.TotalGrossSalary = payfreqID
+					AND pp.PayFromDate >= EmpLoanEffectiveDateFrom
+					AND pp.Half = '1') pp
 			ORDER BY pp.`Year`, pp.OrdinalValue
 			LIMIT EmpLoanNoOfPayPeriod
 			) i

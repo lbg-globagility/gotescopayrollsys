@@ -75,7 +75,7 @@ IF NEW.OTStatus = 'Approved' THEN
 	INTO @sh_timestamp_start
 	     ,@sh_timestamp_end
 		  ,is_whole_shift_ndiff;
-
+	
 	SET @min_per_hour = 60; SET @sec_per_min = 60;
 	
 	SET @valid_ot_hrs = 0.0;
@@ -101,7 +101,7 @@ IF NEW.OTStatus = 'Approved' THEN
 	                                , @ot_timestamp_start
 											  , @ot_timestamp_end)
 							/ (@min_per_hour * @sec_per_min));
-
+	
 	IF TIME_FORMAT(@sh_timestamp_end, @@time_format) <= TIME_FORMAT(@ot_timestamp_start, @@time_format)
 	   AND TIME_FORMAT(@sh_timestamp_end, @@time_format) <= TIME_FORMAT(@ot_timestamp_end, @@time_format)
 		AND DATE(@sh_timestamp_start) < DATE(@sh_timestamp_end)
@@ -109,7 +109,7 @@ IF NEW.OTStatus = 'Approved' THEN
 		     OR TIME(@sh_timestamp_end) < TIME(@ot_timestamp_end)
 		     )*/
 		THEN
-
+		
 		SET @ot_timestamp_start = ADDDATE(@ot_timestamp_start, INTERVAL 1 DAY);
 		SET @ot_timestamp_end = ADDDATE(@ot_timestamp_end, INTERVAL 1 DAY);
 	END IF;
@@ -121,7 +121,7 @@ IF NEW.OTStatus = 'Approved' THEN
 	
 	IF @sh_timestamp_end <= @ot_timestamp_start
 	   AND @sh_timestamp_end <= @ot_timestamp_end THEN # satisfies an overtime after shift
-
+	   
 		SET @valid_ot_hrs = (TIMESTAMPDIFF(SECOND
 	                                      , GREATEST(@ot_timestamp_start, @sh_timestamp_end)
 	                                      , LEAST(@ot_timestamp_end, @etd_timelog_out)
@@ -131,7 +131,7 @@ IF NEW.OTStatus = 'Approved' THEN
 		# SELECT @ot_timestamp_start, @ot_timestamp_end, @etd_timelog_in, @etd_timelog_out, @sh_timestamp_start, @sh_timestamp_end, @valid_ot_hrs, GREATEST(@ot_timestamp_start, @sh_timestamp_end), LEAST(@ot_timestamp_end, @etd_timelog_out) INTO OUTFILE 'D:/New Downloads/result.txt';
 	ELSEIF @sh_timestamp_start >= @ot_timestamp_start
 	       AND @sh_timestamp_start >= @ot_timestamp_end THEN # satisfies an overtime before shift
-
+	
 		SET @valid_ot_hrs = (TIMESTAMPDIFF(SECOND
 	                                      , GREATEST(@ot_timestamp_start, @etd_timelog_in)
 	                                      , LEAST(@ot_timestamp_end, @sh_timestamp_start)
@@ -139,9 +139,9 @@ IF NEW.OTStatus = 'Approved' THEN
 													  , @ot_timestamp_end*/
 													  )
 									/ (@min_per_hour * @sec_per_min));
-
+									
 	END IF;
-#SELECT @sh_timestamp_end, @ot_timestamp_start, @sh_timestamp_end, @ot_timestamp_end INTO OUTFILE 'D:/TEST.txt';
+	
 	# SET NEW.Reason = @valid_ot_hrs;
 	
 	SET NEW.OfficialValidHours = IFNULL(@valid_ot_hrs, @raw_value);
@@ -163,18 +163,27 @@ IF NEW.OTStatus = 'Approved' THEN
 	AND is_whole_shift_ndiff = FALSE
 	INTO @og_ndiff_timefrom
 			,@og_ndiff_timeto;
-			
+	
 	SET @valid_ndiff_hrs = 0;
 	   
 	IF @sh_timestamp_start >= @ot_timestamp_start
 	   AND @sh_timestamp_start >= @ot_timestamp_end THEN
-	   
-	   SET @valid_ndiff_hrs = (TIMESTAMPDIFF(SECOND
-	                                      , GREATEST(@ot_timestamp_end, @etd_timelog_in)
-	                                      , SUBDATE(@og_ndiff_timeto, INTERVAL 1 DAY)
-													  )
-									/ (@min_per_hour * @sec_per_min));
+		
+		IF SUBDATE(@og_ndiff_timeto, INTERVAL 1 DAY) BETWEEN @ot_timestamp_start AND @ot_timestamp_end THEN
+	   	SET @valid_ndiff_hrs = (TIMESTAMPDIFF(SECOND
+	      		                                , GREATEST(@ot_timestamp_start, @etd_timelog_in)
+	            		                          , SUBDATE(@og_ndiff_timeto, INTERVAL 1 DAY)
+															  )
+											/ (@min_per_hour * @sec_per_min));
+		ELSE
+	   	SET @valid_ndiff_hrs = (TIMESTAMPDIFF(SECOND
+	      		                                , GREATEST(@ot_timestamp_end, @etd_timelog_in)
+	            		                          , SUBDATE(@og_ndiff_timeto, INTERVAL 1 DAY)
+															  )
+											/ (@min_per_hour * @sec_per_min));
 	
+		END IF;
+		
 	ELSEIF @sh_timestamp_end <= @ot_timestamp_start
 	       AND @sh_timestamp_end <= @ot_timestamp_end THEN
 	       

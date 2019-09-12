@@ -144,7 +144,7 @@ IF isRest_day = '0' THEN
 		
 		SET absent_amount = (@fullshifthrs - IFNULL(@breakhrs,0)) * (e_rateperday / perfect_hrs);
 		
-		IF absent_amount < NEW.Absent AND EXISTS(SELECT RowID FROM employeetimeentrydetails WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date`=NEW.`Date` LIMIT 1) = TRUE THEN
+		IF absent_amount < NEW.Absent AND EXISTS(SELECT RowID FROM employeetimeentrydetails WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date`=NEW.`Date` AND TimeStampIn IS NOT NULL AND TimeStampOut IS NOT NULL LIMIT 1) = TRUE THEN
 			SET NEW.Absent = 0.0;# over here
 		
 			

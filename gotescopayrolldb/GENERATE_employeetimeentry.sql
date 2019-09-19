@@ -477,7 +477,7 @@ IF isRestDay = '1' THEN
 	IF otstartingtime IS NOT NULL
 		AND otendingtime IS NOT NULL THEN
 		
-		SELECT COMPUTE_TimeDifference(otstartingtime, otendingtime)
+		SELECT CalculateOvertimeHours(shifttimefrom, shifttimeto, ete_Date, ete_EmpRowID)
 		INTO ete_OvertimeHrs;
 		
 		SET @is_otEndTimeReachedTomorrow = IF(otstartingtime BETWEEN TIME('12:00') AND TIME('23:59:59')

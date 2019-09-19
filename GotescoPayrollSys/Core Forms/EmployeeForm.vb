@@ -10566,8 +10566,23 @@ Public Class EmployeeForm
                 cmbdedsched.Text = .Item("DeductionSchedule").ToString
                 txtnoofpayper.Text = .Item("Noofpayperiod").ToString
                 TextBox6.Text = .Item("Comments").ToString
-                datefrom.Value = CDate(.Item("DedEffectiveDateFrom")).ToString(machineShortDateFormat)
-                dateto.Value = CDate(.Item("DedEffectiveDateTo")).ToString(machineShortDateFormat)
+
+                Dim isNullDateFrom = IsDBNull(.Item("DedEffectiveDateFrom"))
+                If isNullDateFrom Then
+                    datefrom.Value = datefrom.MinDate
+                    datefrom.Checked = False
+                Else
+                    datefrom.Value = CDate(.Item("DedEffectiveDateFrom")).ToString(machineShortDateFormat)
+                End If
+
+                Dim isNullDateTo = IsDBNull(.Item("DedEffectiveDateTo"))
+                If isNullDateTo Then
+                    dateto.Value = dateto.MinDate
+                    dateto.Checked = False
+                Else
+                    dateto.Value = CDate(.Item("DedEffectiveDateTo")).ToString(machineShortDateFormat)
+                End If
+
                 cmbStatus.Text = .Item("Status").ToString
                 cboloantype.Text = .Item("Loan Type").ToString
                 txtnoofpayperleft.Text = If(IsDBNull(.Item("LoanPayPeriodLeft")), 0, .Item("LoanPayPeriodLeft").ToString)

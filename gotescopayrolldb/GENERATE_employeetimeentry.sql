@@ -474,8 +474,9 @@ IF isRestDay = '1' THEN
 	
 	SET ete_NDiffOTHrs = 0.0;
 
-	IF otstartingtime IS NOT NULL
-		AND otendingtime IS NOT NULL THEN
+	SET @hasValidOvertime=EXISTS(SELECT RowID FROM employeeovertime WHERE EmployeeID=ete_EmpRowID AND OrganizationID=ete_OrganizID AND ete_Date BETWEEN OTStartDate AND OTEndDate AND OTStatus='Approved' AND has_timelogs_onthisdate = TRUE LIMIT 1);
+	
+	IF @hasValidOvertime=TRUE THEN
 		
 		SELECT CalculateOvertimeHours(shifttimefrom, shifttimeto, ete_Date, ete_EmpRowID)
 		INTO ete_OvertimeHrs;

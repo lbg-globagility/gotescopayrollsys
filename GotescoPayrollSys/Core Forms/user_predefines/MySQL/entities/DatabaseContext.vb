@@ -41,6 +41,10 @@ Public Class DatabaseContext
 
     Public Overridable Property NewWithholdingTax() As DbSet(Of WithholdingTaxBracket)
 
+    Public Overridable Property Adjustments() As DbSet(Of Adjustment)
+
+    Public Overridable Property ActualAdjustments As DbSet(Of ActualAdjustment)
+
     Public Overridable Property AuditTrail() As DbSet(Of AuditTrail)
 
     Public Overridable Property ProperDisplayAuditTrail() As DbSet(Of ProperDisplayAuditTrail)

@@ -412,6 +412,8 @@
     <Compile Include="Core Forms\user_predefines\Custom\LeaveLedger.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\LeaveTransaction.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\RenewLeaveBalancePolicy.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\ActualAdjustment.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Adjustment.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Bonus.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Category.vb" />
@@ -419,6 +421,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Employee.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeEntity.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeTimeEntryDetails.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAdjustment.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\ILoanSchedule.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\ISalary.vb" />
@@ -426,6 +429,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Organization.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PayPeriod.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PayStub.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PhilHealth.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Position.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PositionPrivilege.vb" />

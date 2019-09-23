@@ -1,6 +1,8 @@
 ﻿Option Strict On
 
+Imports System.Data.Entity
 Imports System.IO
+Imports AccuPay.Entity
 Imports log4net
 Imports OfficeOpenXml
 Imports OfficeOpenXml.Style
@@ -14,78 +16,8 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     Private errlogger As ILog = LogManager.GetLogger("LoggerWork")
 
-    Private basic_alphabet() As String =
-        New String() {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-                      "AA", "AB", "AC"}
-
-    Private column_headers() As String =
-        New String() {"Code",
-                      "Full name",
-                      "Rate",
-                      "Hrs",
-                      "BasicPay",
-                      "OTHrs",
-                      "OT",
-                      "Holiday",
-                      "NDiff",
-                      "NDiff OT",
-                      "R.dayPay",
-                      "UT",
-                      "Late",
-                      "Absent",
-                      "Allowance",
-                      "Bonus",
-                      "Gross",
-                      "SSS",
-                      "Ph.Health",
-                      "HDMF",
-                      "Taxable",
-                      "W.Tax",
-                      "Loan",
-                      "A.fee",
-                      "Adj.",
-                      "Net",
-                      "13th",
-                      "Total"}
-
-    Private cell_mapped_text_value() As String =
-        New String() {"DatCol2",
-                      "DatCol3"}
-
-    Private cell_mapped_decim_value() As String =
-        New String() {"DatCol43",
-                      "DatCol41",
-                      "DatCol21",
-                      "DatCol44",
-                      "DatCol37",
-                      "DatCol36",
-                      "DatCol35",
-                      "DatCol38",
-                      "DatCol46",
-                      "DatCol34",
-                      "DatCol33",
-                      "DatCol32",
-                      "DatCol31",
-                      "DatCol30",
-                      "DatCol22",
-                      "DatCol25",
-                      "DatCol27",
-                      "DatCol28",
-                      "DatCol24",
-                      "DatCol26",
-                      "DatCol29",
-                      "DatCol39",
-                      "DatCol45",
-                      "DatCol23",
-                      "DatCol40",
-                      "DatCol42"}
-
-    Private preferred_font As Font =
-        New System.Drawing.Font("Source Sans Pro", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-
-    Private preferred_excel_font As ExcelFont
-
-    Private font_size As Single = 8
+    Private Const adjustmentColumnName As String = "(Adj.)"
+    Private Const totalAdjustmentColumnName As String = "Adj."
 
     Dim margin_size() As Decimal = New Decimal() {0.25D, 0.75D, 0.3D}
 
@@ -97,6 +29,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
     Private sal_distrib As String = "Cash"
 
     Private returnvalue() As Object
+
+    Private Const EmployeeRowIDColumnName As String = "EmployeeRowID"
+    Private Const PaystubIdColumnName As String = "PaystubId"
 
 #End Region
 
@@ -248,6 +183,8 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                               " FROM payperiod pp WHERE pp.RowID = ?p_rowid LIMIT 1;"),
                             New Object() {n_PayrollSummaDateSelection.DateFromID}).GetFoundRow)
 
+                InitializeCurrentAdjustmentList(n_PayrollSummaDateSelection, dt.Rows.OfType(Of DataRow).ToList())
+
                 Dim nfile As New FileInfo(fullpathfile)
 
                 If nfile.Exists Then
@@ -265,7 +202,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         wsheet = xcl.Workbook.Worksheets.Add(division_name)
 
-                        Dim dataColumns = dt.Columns.OfType(Of DataColumn).Where(Function(d) Not d.ColumnName = "RowID")
+                        Dim hiddenColumns = {"RowID", EmployeeRowIDColumnName, PaystubIdColumnName}
+                        Dim dataColumns = dt.Columns.OfType(Of DataColumn).Where(Function(d) Not hiddenColumns.Contains(d.ColumnName))
+                        Dim adjustedDataColumns = AddAdjustmentsColumnHeaders(New List(Of DataColumn)(dataColumns))
 
                         Dim rowindex = ONEVALUE
                         wsheet.Row(rowindex).Style.Font.Bold = True
@@ -278,7 +217,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
                         rowindex += ONEVALUE
 
                         Dim dtcolindx = ONEVALUE
-                        For Each dcol In dataColumns
+                        For Each dcol In adjustedDataColumns
 
                             wsheet.Cells(rowindex, dtcolindx).Value = dcol.ColumnName
                             dtcolindx += ONEVALUE
@@ -293,9 +232,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         For Each drow As DataRow In emp_payroll
                             Dim dataColumnIndex = ONEVALUE
-                            For Each dataColumn In dataColumns
+                            For Each dataColumn In adjustedDataColumns
                                 wsheet.Cells(rowindex, dataColumnIndex).Value =
-                                    drow(dataColumn.ColumnName)
+                                    GetCellValue(drow, dataColumn)
                                 dataColumnIndex += ONEVALUE
                             Next
                             rowindex += ONEVALUE
@@ -303,9 +242,12 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         'wsheet.DeleteColumn(oneValue)
 
+
+                        Dim lastColumnLetter = GetExcelColumnName(adjustedDataColumns.Count - 1) '-1 to avoid using sum on DivisionName column
+
                         Dim sum_cell_range = String.Join(":",
                                                          String.Concat("C", rowindex),
-                                                         String.Concat("W", rowindex))
+                                                         String.Concat(lastColumnLetter, rowindex))
                         ''FromRow, FromColumn, ToRow, ToColumn
                         'wsheet.Cells(sum_cell_range).Formula = String.Format("SUBTOTAL(9,{0})") ', New ExcelAddress(2, 3, 4, 3).Address)
 
@@ -347,6 +289,182 @@ Public Class PayrollSummaryExcelFormatReportProvider
         End If
 
     End Sub
+
+    Private Function GetExcelColumnName(columnNumber As Integer) As String
+        Dim dividend As Integer = columnNumber
+        Dim columnName As String = String.Empty
+        Dim modulo As Integer
+
+        While dividend > 0
+            modulo = (dividend - 1) Mod 26
+            columnName = Convert.ToChar(65 + modulo).ToString() & columnName
+            dividend = CInt((dividend - modulo) / 26)
+        End While
+
+        Return columnName
+    End Function
+
+    Private Function GetCellValue(drow As DataRow, dataColumn As DataColumn) As Object
+
+        Dim sourceName = dataColumn.ColumnName
+
+        If sourceName.EndsWith(adjustmentColumnName) Then
+
+            If _adjustments Is Nothing Then Return 0
+
+            Dim productName = GetAdjustmentColumnFromName(sourceName)
+            Dim employeeId = Convert.ToInt32(drow(EmployeeRowIDColumnName))
+            Dim paystubId = Convert.ToInt32(drow(PaystubIdColumnName))
+
+            Dim adj = _adjustments.
+                    Where(Function(a) a.Product.PartNo = productName).
+                    Where(Function(a) a.Paystub.EmployeeID.Value = employeeId).
+                    Where(Function(a) a.Paystub.RowID.Value = paystubId).
+                    ToList
+
+            Dim adjustment = _adjustments.
+                    Where(Function(a) a.Product.PartNo = productName).
+                    Where(Function(a) a.Paystub.EmployeeID.Value = employeeId).
+                    Where(Function(a) a.Paystub.RowID.Value = paystubId).
+                    Sum(Function(a) a.PayAmount)
+
+            Return adjustment
+
+        End If
+
+        Return drow(dataColumn.ColumnName)
+    End Function
+
+#End Region
+
+#Region "Adjustment Breakdown"
+
+    Private _adjustments As List(Of IAdjustment)
+
+    Public Sub InitializeCurrentAdjustmentList(
+                            payrollSummaDateSelection As PayrollSummaDateSelection,
+                            Optional allEmployees As ICollection(Of DataRow) = Nothing)
+
+        Using context As New DatabaseContext
+
+            Dim payPeriodFrom As New PayPeriod
+            Dim payPeriodTo As New PayPeriod
+
+            If payrollSummaDateSelection.PayPeriodFromID IsNot Nothing Then
+
+                Dim payPeriodFromId = Convert.ToInt32(payrollSummaDateSelection.PayPeriodFromID)
+
+                payPeriodFrom = context.PayPeriods.
+                                Where(Function(p) p.RowID = payPeriodFromId).
+                                FirstOrDefault
+            End If
+
+            If payrollSummaDateSelection.PayPeriodToID IsNot Nothing Then
+
+                Dim payPeriodToId = Convert.ToInt32(payrollSummaDateSelection.PayPeriodToID)
+
+                payPeriodTo = context.PayPeriods.
+                                Where(Function(p) p.RowID = payPeriodToId).
+                                FirstOrDefault
+            End If
+
+            If payPeriodFrom?.PayFromDate Is Nothing OrElse payPeriodTo?.PayToDate Is Nothing Then
+
+                Throw New ArgumentException("Cannot fetch pay period data.")
+
+            End If
+
+            Dim employeeIds = GetEmployeeIds(allEmployees)
+
+            Dim adjustmentQuery = GetBaseAdjustmentQuery(context.Adjustments.Where(Function(a) a.OrganizationID.Value = z_OrganizationID), payPeriodFrom.PayFromDate.Value, payPeriodTo.PayToDate.Value, employeeIds)
+            Dim actualAdjustmentQuery = GetBaseAdjustmentQuery(context.ActualAdjustments.Where(Function(a) a.OrganizationID.Value = z_OrganizationID), payPeriodFrom.PayFromDate.Value, payPeriodTo.PayToDate.Value, employeeIds)
+
+            If allEmployees Is Nothing Then
+
+                adjustmentQuery.Where(Function(p) employeeIds.Contains(p.Paystub.EmployeeID.Value))
+                actualAdjustmentQuery.Where(Function(p) employeeIds.Contains(p.Paystub.EmployeeID.Value))
+
+            End If
+
+            If IsActual Then
+
+                _adjustments = New List(Of IAdjustment)(actualAdjustmentQuery.ToList)
+
+            Else
+                _adjustments = New List(Of IAdjustment)(adjustmentQuery.ToList)
+
+            End If
+
+        End Using
+    End Sub
+
+    Private Function GetBaseAdjustmentQuery(query As IQueryable(Of IAdjustment), PayFromDate As Date, PayToDate As Date, employeeIds As Integer()) As IQueryable(Of IAdjustment)
+
+        Return query.Include(Function(p) p.Product).
+                    Include(Function(p) p.Paystub).
+                    Include(Function(p) p.Paystub.PayPeriod).
+                    Where(Function(p) p.Paystub.PayPeriod.PayFromDate.Value >= PayFromDate).
+                    Where(Function(p) p.Paystub.PayPeriod.PayToDate.Value <= PayToDate).
+                    Where(Function(p) employeeIds.Contains(p.Paystub.EmployeeID.Value))
+
+    End Function
+
+    Private Function GetEmployeeIds(allEmployees As ICollection(Of DataRow)) As Integer()
+
+        Dim employeeIdsArray(allEmployees.Count - 1) As Integer
+
+        For index = 0 To employeeIdsArray.Count - 1
+            employeeIdsArray(index) = CInt(allEmployees(index)(EmployeeRowIDColumnName))
+        Next
+
+        Return employeeIdsArray
+    End Function
+
+    Private Function AddAdjustmentsColumnHeaders(dataColumns As IList(Of DataColumn)) _
+        As IList(Of DataColumn)
+
+        If _adjustments Is Nothing OrElse _adjustments.Count = 0 Then Return dataColumns
+
+        Dim totalAdjustmentColumn = dataColumns.
+                                        Where(Function(p) p.ColumnName = totalAdjustmentColumnName).
+                                        FirstOrDefault
+
+        If totalAdjustmentColumn Is Nothing Then Return dataColumns
+
+        Dim groupedAdjustments = _adjustments.GroupBy(Function(a) a.ProductID).ToList
+
+        Dim totalAdjustmentColumnIndex = dataColumns.IndexOf(totalAdjustmentColumn)
+
+        dataColumns.Remove(totalAdjustmentColumn)
+
+        'add the adjustment columns
+        Dim index = totalAdjustmentColumnIndex
+        For Each adjustment In groupedAdjustments
+
+            Dim adjustmentName = GetAdjustmentName(adjustment(0).Product?.Name)
+
+            dataColumns.Insert(index, New DataColumn(adjustmentName))
+
+            index += 1
+        Next
+
+        Return dataColumns
+
+    End Function
+
+    Private Shared Function GetAdjustmentName(name As String) As String
+
+        If String.IsNullOrWhiteSpace(name) Then Return Nothing
+
+        Return $"{name} {adjustmentColumnName}"
+
+    End Function
+
+    Private Shared Function GetAdjustmentColumnFromName(column As String) As String
+
+        Return column.Replace($" {adjustmentColumnName}", "")
+
+    End Function
 
 #End Region
 

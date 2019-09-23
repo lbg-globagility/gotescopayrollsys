@@ -26,15 +26,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAttendancePeriod`(
 
 
 
+
+
 )
     DETERMINISTIC
 BEGIN
+
+SET @legalHoliday='Regular Holiday';
+SET @specialHoliday='Special Non-Working Holiday';
 
 SET @monthlyType='monthly';
 
 SET @monthCount=12;
 SET @defaultWorkHours=8;
 SET @isRestDay=FALSE;
+SET @isHoliday=FALSE;
 
 DROP TEMPORARY TABLE IF EXISTS attendanceperiod;
 DROP TABLE IF EXISTS attendanceperiod;
@@ -55,11 +61,17 @@ IF NOT isActual THEN
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
 	, IF(@isRestDay
-			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (pr.RestDayRate-pr.`PayRate` / pr.RestDayRate), 2), et.RegularHoursAmount)
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * ((pr.RestDayRate-pr.`PayRate`) / pr.RestDayRate), 2), et.RegularHoursAmount)
 			, 0) `RestDayPay`
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
+	
+	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
+	
+	, IF(@isHoliday AND et.IsValidForHolidayPayment, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
+	
 	, et.`TotalHoursWorked`
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`
@@ -122,11 +134,17 @@ ELSE
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
 	, IF(@isRestDay
-			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (pr.RestDayRate-pr.`PayRate` / pr.RestDayRate), 2), et.RegularHoursAmount)
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * ((pr.RestDayRate-pr.`PayRate`) / pr.RestDayRate), 2), et.RegularHoursAmount)
 			, 0) `RestDayPay`
-
+	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
+	
+	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
+	
+	, IF(@isHoliday AND ett.IsValidForHolidayPayment, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
+	
 	, et.`TotalHoursWorked`
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`

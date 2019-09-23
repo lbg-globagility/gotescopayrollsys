@@ -13,6 +13,9 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_paystubitem_declared`(
 	IN `pay_date_to` DATE
 
 
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -136,7 +139,9 @@ INNER JOIN payperiod pp ON pp.RowID=psa.PayPeriodID
 INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.RegularHoursWorked) AS RegularHoursWorked
 				
-				, SUM(etea.RegularHoursAmount - IF(etea.RegularHoursAmount = 0 AND etea.TotalDayPay > 0, 0, etea.HolidayPayAmount)) AS RegularHoursAmount
+#				, SUM(etea.RegularHoursAmount - IF(etea.RegularHoursAmount = 0 AND etea.TotalDayPay > 0, 0, etea.HolidayPayAmount)) AS RegularHoursAmount
+				, SUM(IF(etea.RegularHoursAmount > 0 AND etea.DailyRate = etea.HolidayPayAmount, 0, etea.RegularHoursAmount)) `RegularHoursAmount`
+#				, SUM(etea.RegularHoursAmount) AS RegularHoursAmount
 				, SUM(etea.TotalHoursWorked) AS TotalHoursWorked
 				, SUM(etea.OvertimeHoursWorked) AS OvertimeHoursWorked
 				, SUM(etea.OvertimeHoursAmount) AS OvertimeHoursAmount
@@ -160,6 +165,8 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.AddedHolidayPayAmount) `AddedHolidayPayAmount`
 				, SUM(etea.RestDayHours) `RestDayHours`
 				, SUM(etea.RestDayPay) `RestDayPay`
+				, SUM(etea.HolidayHours) `HolidayHours`
+				, SUM(etea.HolidayPay) `HolidayPay`
 				FROM timeentrywithdailyrate et
 #				INNER JOIN proper_time_entry et ON et.RowID=etea.RowID AND et.AsActual=FALSE
 				INNER JOIN attendanceperiod etea ON et.RowID=etea.RowID

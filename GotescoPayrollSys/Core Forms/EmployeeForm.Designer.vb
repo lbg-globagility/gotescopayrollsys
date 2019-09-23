@@ -9048,6 +9048,7 @@ Partial Class EmployeeForm
         Me.datefrom.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.datefrom.Location = New System.Drawing.Point(32, 260)
         Me.datefrom.Name = "datefrom"
+        Me.datefrom.ShowCheckBox = True
         Me.datefrom.Size = New System.Drawing.Size(203, 20)
         Me.datefrom.TabIndex = 357
         '
@@ -9183,6 +9184,7 @@ Partial Class EmployeeForm
         Me.dateto.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.dateto.Location = New System.Drawing.Point(761, 158)
         Me.dateto.Name = "dateto"
+        Me.dateto.ShowCheckBox = True
         Me.dateto.Size = New System.Drawing.Size(203, 20)
         Me.dateto.TabIndex = 365
         Me.dateto.Visible = False
@@ -16725,7 +16727,6 @@ Partial Class EmployeeForm
     Friend WithEvents txtbal As System.Windows.Forms.TextBox
     Friend WithEvents Label98 As System.Windows.Forms.Label
     Friend WithEvents txtloanamt As System.Windows.Forms.TextBox
-    Friend WithEvents datefrom As System.Windows.Forms.DateTimePicker
     Friend WithEvents Label99 As System.Windows.Forms.Label
     Friend WithEvents Label100 As System.Windows.Forms.Label
     Friend WithEvents TextBox7 As System.Windows.Forms.TextBox
@@ -17799,4 +17800,5 @@ Partial Class EmployeeForm
     Friend WithEvents btnAutoCalcSSS As Button
     Friend WithEvents btnSetNonePhilHealth As Button
     Friend WithEvents btnAutoCalcPhilHealth As Button
+    Friend WithEvents datefrom As DateTimePicker
 End Class

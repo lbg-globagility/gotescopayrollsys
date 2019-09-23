@@ -21,6 +21,11 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_paystubitem_actual`(
 
 
 
+
+
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -121,7 +126,6 @@ SELECT psa.RowID
 #,IFNULL(psi_rest.PayAmount, 0) `RestDayPayment`
 , ete.`RestDayPay` `RestDayPayment`
 , ete.`TotalDefaultHolidayPay`
-, ete.`AddedHolidayPayAmount`
 
 FROM paystubactual psa
 LEFT JOIN paystubactual ps2 ON ps2.EmployeeID=EmpRowID AND ps2.OrganizationID=OrganizID AND ps2.PayFromDate=startdate_ofpreviousmonth AND ps2.PayToDate=enddate_ofpreviousmonth
@@ -141,7 +145,9 @@ INNER JOIN payperiod pp ON pp.RowID=psa.PayPeriodID
 INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(et.RegularHoursWorked) AS RegularHoursWorked
 				
-				, SUM(et.RegularHoursAmount - IF(et.RegularHoursAmount = 0 AND et.TotalDayPay > 0, 0, et.HolidayPayAmount)) AS RegularHoursAmount
+#				, SUM(et.RegularHoursAmount - IF(et.RegularHoursAmount = 0 AND et.TotalDayPay > 0, 0, et.HolidayPayAmount)) AS RegularHoursAmount
+				, SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, et.RegularHoursAmount)) `RegularHoursAmount`
+#				, SUM(et.RegularHoursAmount) AS RegularHoursAmount
 				, SUM(etea.TotalHoursWorked) AS TotalHoursWorked
 				, SUM(etea.OvertimeHoursWorked) AS OvertimeHoursWorked
 				, SUM(etea.OvertimeHoursAmount) AS OvertimeHoursAmount
@@ -165,6 +171,8 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.AddedHolidayPayAmount) `AddedHolidayPayAmount`
 				, SUM(et.RestDayHours) `RestDayHours`
 				, SUM(et.RestDayPay) `RestDayPay`
+				, SUM(et.HolidayHours) `HolidayHours`
+				, SUM(et.HolidayPay) `HolidayPay`
 				FROM timeentrywithdailyrate etea
 #				INNER JOIN proper_time_entry et ON et.RowID=etea.RowID AND et.AsActual=TRUE
 				INNER JOIN attendanceperiod et ON et.RowID=etea.RowID

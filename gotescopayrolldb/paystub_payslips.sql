@@ -48,6 +48,8 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
 
 
 
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -143,7 +145,7 @@ ps.RowID
 
 , IFNULL((LENGTH(psiloan.`Column33`) - LENGTH(REPLACE(psiloan.`Column33`, ',', ''))) + 1, 0) `Column10`
 
-, FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `Column17`
+, FORMAT(IFNULL(et.RegularHoursWorked - et.`AttendedHolidayHours`,0), 2) `Column17`
 
 ,IF(e.EmployeeType = 'Daily' OR (LCASE(e.EmployeeType)='monthly' AND e.StartDate BETWEEN paydate_from AND paydat_to)
     , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)
@@ -180,8 +182,8 @@ ps.RowID
 , ROUND(IFNULL(et.`RestDayHours`, 0), 2) `Column25`
 , IFNULL(ROUND(et.`RestDayAmount`, 2), 0) `Column16`
 
-, FORMAT(IFNULL(et.`HolidayHours`, 0), 2) `Column44`
-, IFNULL(FORMAT(et.HolidayPayAmount, 2), 0) `Column1`
+, FORMAT(IFNULL(et.`AttendedHolidayHours`, 0), 2) `Column44`
+, IFNULL(FORMAT( (et.HolidayPayAmount + et.`AddedHolidayPayAmount`), 2), 0) `Column1`
 
 , FORMAT(IFNULL(et.`LeaveHours`, 0), 2) `Column45`
 , IFNULL(ROUND(et.`Leavepayment`, 2), 0) `Column15`
@@ -247,8 +249,9 @@ LEFT JOIN (SELECT
 			  ,et.EmployeeID
 			  ,et.EmployeeSalaryID
 			  ,SUM(et.RegularHoursWorked) `RegularHoursWorked`
-#			  ,SUM(IF(et.IsValidForHolidayPayment, et.RegularHoursAmount - et.HolidayPayAmount, et.RegularHoursAmount)) `RegularHoursAmount`
-			  ,SUM(et.RegularHoursAmount - IF(et.RegularHoursAmount = 0 AND et.TotalDayPay > 0, 0, et.HolidayPayAmount)) `RegularHoursAmount`
+#			  ,SUM(et.RegularHoursAmount - IF(et.RegularHoursAmount = 0 AND et.TotalDayPay > 0, 0, et.HolidayPayAmount)) `RegularHoursAmount`
+			  ,SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, et.RegularHoursAmount)) `RegularHoursAmount`
+#			  ,SUM(et.RegularHoursAmount) `RegularHoursAmount`
 			  ,SUM(et.TotalHoursWorked) `TotalHoursWorked`
 			  ,SUM(et.OvertimeHoursWorked) `OvertimeHoursWorked`
 			  ,SUM(et.OvertimeHoursAmount) `OvertimeHoursAmount`
@@ -287,6 +290,7 @@ LEFT JOIN (SELECT
 						  , 0)) `HolidayHours`
 			  , SUM(IFNULL(et.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`
 			  , SUM(IF(et.IsValidForHolidayPayment, et.DailyRate, 0)) `DefaultHolidayPay`
+			  , SUM(et.HolidayHours) `AttendedHolidayHours`
 			  
 #			  FROM proper_time_entry et
 			  FROM attendanceperiod et

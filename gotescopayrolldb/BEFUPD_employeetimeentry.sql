@@ -147,7 +147,7 @@ IF isRest_day = '0' THEN
 		
 		SET absent_amount = (@fullshifthrs - IFNULL(@breakhrs,0)) * (e_rateperday / perfect_hrs);
 		
-		IF absent_amount < NEW.Absent AND EXISTS(SELECT RowID FROM employeetimeentrydetails WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date`=NEW.`Date` LIMIT 1) = TRUE THEN
+		IF absent_amount < NEW.Absent AND EXISTS(SELECT RowID FROM employeetimeentrydetails WHERE EmployeeID=NEW.EmployeeID AND OrganizationID=NEW.OrganizationID AND `Date`=NEW.`Date` AND TimeStampIn IS NOT NULL AND TimeStampOut IS NOT NULL LIMIT 1) = TRUE THEN
 			SET NEW.Absent = 0.0;# over here
 		
 			
@@ -349,13 +349,13 @@ SET NEW.HolidayPayAmount = 0;
 IF LCASE(@employee_type)='monthly' THEN
 	IF NEW.IsValidForHolidayPayment = 1 THEN
 		SET NEW.HolidayPayAmount = rate_this_date;
-		
-		SET @additional=((NEW.RegularHoursWorked * (NULLIF(rate_this_date, 0) / default_working_hrs)) * (payrate_this_date-1));
+
+		SET @additional=((NEW.RegularHoursWorked * (NULLIF(rate_this_date, 0) / default_working_hrs)) * NULLIF((payrate_this_date-1),0));
 		SET @additional=IFNULL(@additional,0);
 		
-		SET NEW.HolidayPayAmount = NEW.HolidayPayAmount + @additional;
+#		SET NEW.HolidayPayAmount = NEW.HolidayPayAmount + @additional;
 		SET NEW.AddedHolidayPayAmount=@additional;
-		
+
 		SET NEW.TotalDayPay=(
 		+ NEW.OvertimeHoursAmount
 		+ NEW.NightDiffHoursAmount
@@ -380,6 +380,27 @@ ELSEIF LCASE(@employee_type)='daily' THEN
 													INNER JOIN payrate pr ON pr.RowID=NEW.PayRateID AND pr.PayType!='Regular Day'
 													WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID);
 
+	SET @isSatisfied=EXISTS(SELECT e.RowID
+									FROM employee e
+									WHERE e.RowID=NEW.EmployeeID
+									AND isSpecialHoliday=TRUE AND e.CalcSpecialHoliday=TRUE
+									AND NEW.IsValidForHolidayPayment=TRUE
+								UNION
+									SELECT e.RowID
+									FROM employee e
+									WHERE e.RowID=NEW.EmployeeID
+									AND isLegalHoliday=TRUE AND e.CalcHoliday=TRUE
+									AND NEW.IsValidForHolidayPayment=TRUE
+									);
+	IF @isSatisfied=TRUE THEN
+		SET @additional=((NEW.RegularHoursWorked * (NULLIF(rate_this_date, 0) / default_working_hrs)) * NULLIF((payrate_this_date-1),0));
+		SET @additional=IFNULL(@additional,0);
+	
+		SET NEW.AddedHolidayPayAmount=@additional;
+	ELSE
+		SET NEW.AddedHolidayPayAmount=0;
+	END IF;
+	
 END IF;
 
 IF NEW.HolidayPayAmount IS NULL THEN

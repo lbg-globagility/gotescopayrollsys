@@ -76,12 +76,23 @@ FROM (SELECT els.*
 		FROM employeeloanschedule els
 		INNER JOIN employee e ON e.RowID=els.EmployeeID
 		INNER JOIN payperiod pp ON pp.OrganizationID=els.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID
-		AND (pp.PayFromDate >= els.DedEffectiveDateFrom AND pp.PayToDate <= IFNULL(els.DiscontinuedDate, els.DedEffectiveDateTo))
+#		AND (pp.PayFromDate >= els.DedEffectiveDateFrom AND pp.PayToDate <= IFNULL(els.DiscontinuedDate, els.DedEffectiveDateTo))
+		AND ((pp.PayFromDate >= els.DedEffectiveDateFrom AND pp.PayToDate <= IFNULL(els.DiscontinuedDate, els.DedEffectiveDateTo))
+				OR (els.NoOfPayPeriod = 1 AND IFNULL(els.DiscontinuedDate, els.DedEffectiveDateTo) BETWEEN pp.PayFromDate AND pp.PayToDate))
+		/*AND IF(els.NoOfPayPeriod = 1 AND els.DeductionSchedule = 'Per pay period'
+				, (els.DedEffectiveDateFrom BETWEEN pp.PayFromDate AND pp.PayToDate)
+				, (pp.PayFromDate >= els.DedEffectiveDateFrom AND pp.PayToDate <= IFNULL(els.DiscontinuedDate, els.DedEffectiveDateTo))
+				)*/
+				
 		WHERE els.OrganizationID = organizID
 		ORDER BY els.RowID, pp.`Year`, pp.OrdinalValue
 		) i
 ;
 /*
+Per pay period
+End of the month
+First half
+
 UPDATE loanpredict i
 INNER JOIN employeeloanschedulebacktrack ii ON ii.EmployeeID=i.EmployeeID AND ii.OrganizationID=i.OrganizationID AND ii.LoanschedID=i.RowID
 INNER JOIN paystub ps ON ps.RowID=ii.PayStubID

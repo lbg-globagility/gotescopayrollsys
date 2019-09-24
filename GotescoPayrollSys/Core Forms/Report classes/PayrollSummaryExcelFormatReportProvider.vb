@@ -183,7 +183,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                               " FROM payperiod pp WHERE pp.RowID = ?p_rowid LIMIT 1;"),
                             New Object() {n_PayrollSummaDateSelection.DateFromID}).GetFoundRow)
 
-                InitializeCurrentAdjustmentList(n_PayrollSummaDateSelection, dt.Rows.OfType(Of DataRow).ToList())
+
+                Dim employeeIds = GetEmployeeIds(dt.Rows.OfType(Of DataRow).ToList())
+                InitializeCurrentAdjustmentList(n_PayrollSummaDateSelection, employeeIds)
 
                 Dim nfile As New FileInfo(fullpathfile)
 
@@ -343,7 +345,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     Public Sub InitializeCurrentAdjustmentList(
                             payrollSummaDateSelection As PayrollSummaDateSelection,
-                            Optional allEmployees As ICollection(Of DataRow) = Nothing)
+                            employeeIds As Integer())
 
         Using context As New DatabaseContext
 
@@ -374,17 +376,8 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
             End If
 
-            Dim employeeIds = GetEmployeeIds(allEmployees)
-
             Dim adjustmentQuery = GetBaseAdjustmentQuery(context.Adjustments.Where(Function(a) a.OrganizationID.Value = z_OrganizationID), payPeriodFrom.PayFromDate.Value, payPeriodTo.PayToDate.Value, employeeIds)
             Dim actualAdjustmentQuery = GetBaseAdjustmentQuery(context.ActualAdjustments.Where(Function(a) a.OrganizationID.Value = z_OrganizationID), payPeriodFrom.PayFromDate.Value, payPeriodTo.PayToDate.Value, employeeIds)
-
-            If allEmployees Is Nothing Then
-
-                adjustmentQuery.Where(Function(p) employeeIds.Contains(p.Paystub.EmployeeID.Value))
-                actualAdjustmentQuery.Where(Function(p) employeeIds.Contains(p.Paystub.EmployeeID.Value))
-
-            End If
 
             If IsActual Then
 

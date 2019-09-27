@@ -47,6 +47,8 @@ Public Class DatabaseContext
 
     Public Overridable Property AuditTrail() As DbSet(Of AuditTrail)
 
+    Public Overridable Property Categories() As DbSet(Of Category)
+
     Public Overridable Property ProperDisplayAuditTrail() As DbSet(Of ProperDisplayAuditTrail)
 
     Public Overridable Property TimeEntryLogsPerCutOff() As DbSet(Of TimeEntryLogsPerCutOff)
@@ -59,7 +61,7 @@ Public Class DatabaseContext
 
     Public Overridable Property PayPeriods() As DbSet(Of PayPeriod)
 
-    Public Overridable Property Categories() As DbSet(Of Category)
+    Public Overridable Property PayStubItems() As DbSet(Of PaystubItem)
 
     Public Overridable Property Products() As DbSet(Of Product)
 

@@ -16,8 +16,17 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     Private errlogger As ILog = LogManager.GetLogger("LoggerWork")
 
-    Private Const adjustmentColumnName As String = "(Adj.)"
-    Private Const totalAdjustmentColumnName As String = "Adj."
+    Private Const BonusColumnSuffix As String = "(Bonus)"
+    Private Const TotalBonusColumnName As String = "Bonus"
+
+    Private Const AllowanceColumnSuffix As String = "(Alw.)"
+    Private Const TotalAllowanceColumnName As String = "Allowance"
+
+    Private Const LoanColumnSuffix As String = "(Loan)"
+    Private Const TotalLoanColumnName As String = "Loan"
+
+    Private Const AdjustmentColumnSuffix As String = "(Adj.)"
+    Private Const TotalAdjustmentColumnName As String = "Adj."
 
     Dim margin_size() As Decimal = New Decimal() {0.25D, 0.75D, 0.3D}
 
@@ -183,9 +192,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                               " FROM payperiod pp WHERE pp.RowID = ?p_rowid LIMIT 1;"),
                             New Object() {n_PayrollSummaDateSelection.DateFromID}).GetFoundRow)
 
-
-                Dim employeeIds = GetEmployeeIds(dt.Rows.OfType(Of DataRow).ToList())
-                InitializeCurrentAdjustmentList(n_PayrollSummaDateSelection, employeeIds)
+                InitializeBreakdowns(n_PayrollSummaDateSelection, dt)
 
                 Dim nfile As New FileInfo(fullpathfile)
 
@@ -206,7 +213,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                         Dim hiddenColumns = {"RowID", EmployeeRowIDColumnName, PaystubIdColumnName}
                         Dim dataColumns = dt.Columns.OfType(Of DataColumn).Where(Function(d) Not hiddenColumns.Contains(d.ColumnName))
-                        Dim adjustedDataColumns = AddAdjustmentsColumnHeaders(New List(Of DataColumn)(dataColumns))
+                        Dim adjustedDataColumns = AddBreakdownColumnHeaders(New List(Of DataColumn)(dataColumns))
 
                         Dim rowindex = ONEVALUE
                         wsheet.Row(rowindex).Style.Font.Bold = True
@@ -235,8 +242,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
                         For Each drow As DataRow In emp_payroll
                             Dim dataColumnIndex = ONEVALUE
                             For Each dataColumn In adjustedDataColumns
-                                wsheet.Cells(rowindex, dataColumnIndex).Value =
-                                    GetCellValue(drow, dataColumn)
+
+                                wsheet.
+                                    Cells(rowindex, dataColumnIndex).
+                                    Value = GetCellValue(drow, dataColumn)
+
                                 dataColumnIndex += ONEVALUE
                             Next
                             rowindex += ONEVALUE
@@ -309,28 +319,62 @@ Public Class PayrollSummaryExcelFormatReportProvider
     Private Function GetCellValue(drow As DataRow, dataColumn As DataColumn) As Object
 
         Dim sourceName = dataColumn.ColumnName
+        Dim employeeId = Convert.ToInt32(drow(EmployeeRowIDColumnName))
+        Dim paystubId = Convert.ToInt32(drow(PaystubIdColumnName))
 
-        If sourceName.EndsWith(adjustmentColumnName) Then
+        If sourceName.EndsWith(BonusColumnSuffix) OrElse
+            sourceName.EndsWith(AllowanceColumnSuffix) Then
+
+            Dim productName = String.Empty
+            Dim paystubItems As New List(Of PaystubItem)
+
+            If sourceName.EndsWith(BonusColumnSuffix) Then
+
+                productName = GetPaystubItemColumnFromName(sourceName, BonusColumnSuffix)
+                paystubItems = _bonuses
+
+            ElseIf sourceName.EndsWith(AllowanceColumnSuffix) Then
+
+                productName = GetPaystubItemColumnFromName(sourceName, AllowanceColumnSuffix)
+                paystubItems = _allowances
+
+            End If
+
+            Return paystubItems.
+                        Where(Function(a) a.Product.PartNo.ToUpper = productName.ToUpper).
+                        Where(Function(a) a.Paystub.EmployeeID.Value = employeeId).
+                        Where(Function(a) a.Paystub.RowID.Value = paystubId).
+                        Sum(Function(a) a.PayAmount)
+
+        ElseIf sourceName.EndsWith(LoanColumnSuffix) Then
+
+            If _loans Is Nothing Then Return 0
+
+            Dim productName = GetPaystubItemColumnFromName(sourceName, LoanColumnSuffix)
+
+            'Dim lean = _loans.
+            '        Where(Function(l) l.EmployeeId = employeeId).
+            '        Where(Function(l) l.PaystubId = paystubId).
+            '        ToList
+
+            Return _loans.
+                    Where(Function(l) l.LoanName.ToUpper = productName.ToUpper).
+                    Where(Function(l) l.EmployeeId = employeeId).
+                    Where(Function(l) l.PaystubId = paystubId).
+                    Sum(Function(l) l.DeductionAmount)
+
+
+        ElseIf sourceName.EndsWith(AdjustmentColumnSuffix) Then
 
             If _adjustments Is Nothing Then Return 0
 
-            Dim productName = GetAdjustmentColumnFromName(sourceName)
-            Dim employeeId = Convert.ToInt32(drow(EmployeeRowIDColumnName))
-            Dim paystubId = Convert.ToInt32(drow(PaystubIdColumnName))
+            Dim productName = GetPaystubItemColumnFromName(sourceName, AdjustmentColumnSuffix)
 
-            Dim adj = _adjustments.
-                    Where(Function(a) a.Product.PartNo = productName).
-                    Where(Function(a) a.Paystub.EmployeeID.Value = employeeId).
-                    Where(Function(a) a.Paystub.RowID.Value = paystubId).
-                    ToList
-
-            Dim adjustment = _adjustments.
-                    Where(Function(a) a.Product.PartNo = productName).
+            Return _adjustments.
+                    Where(Function(a) a.Product.PartNo.ToUpper = productName.ToUpper).
                     Where(Function(a) a.Paystub.EmployeeID.Value = employeeId).
                     Where(Function(a) a.Paystub.RowID.Value = paystubId).
                     Sum(Function(a) a.PayAmount)
-
-            Return adjustment
 
         End If
 
@@ -339,67 +383,113 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
 #End Region
 
-#Region "Adjustment Breakdown"
+#Region "Breakdowns Helper"
 
-    Private _adjustments As List(Of IAdjustment)
+    Private _allowances As List(Of PaystubItem)
 
-    Public Sub InitializeCurrentAdjustmentList(
-                            payrollSummaDateSelection As PayrollSummaDateSelection,
-                            employeeIds As Integer())
+    Private _bonuses As List(Of PaystubItem)
+
+    Public Function GetStartingPayPeriod(
+                        payrollSummaDateSelection As PayrollSummaDateSelection) _
+                        As PayPeriod
 
         Using context As New DatabaseContext
-
-            Dim payPeriodFrom As New PayPeriod
-            Dim payPeriodTo As New PayPeriod
 
             If payrollSummaDateSelection.PayPeriodFromID IsNot Nothing Then
 
                 Dim payPeriodFromId = Convert.ToInt32(payrollSummaDateSelection.PayPeriodFromID)
 
-                payPeriodFrom = context.PayPeriods.
+                Return context.PayPeriods.
                                 Where(Function(p) p.RowID = payPeriodFromId).
                                 FirstOrDefault
             End If
+
+            Return Nothing
+
+        End Using
+    End Function
+
+    Public Function GetEndingPayPeriod(
+                        payrollSummaDateSelection As PayrollSummaDateSelection) _
+                        As PayPeriod
+
+        Using context As New DatabaseContext
 
             If payrollSummaDateSelection.PayPeriodToID IsNot Nothing Then
 
                 Dim payPeriodToId = Convert.ToInt32(payrollSummaDateSelection.PayPeriodToID)
 
-                payPeriodTo = context.PayPeriods.
+                Return context.PayPeriods.
                                 Where(Function(p) p.RowID = payPeriodToId).
                                 FirstOrDefault
             End If
 
-            If payPeriodFrom?.PayFromDate Is Nothing OrElse payPeriodTo?.PayToDate Is Nothing Then
-
-                Throw New ArgumentException("Cannot fetch pay period data.")
-
-            End If
-
-            Dim adjustmentQuery = GetBaseAdjustmentQuery(context.Adjustments.Where(Function(a) a.OrganizationID.Value = z_OrganizationID), payPeriodFrom.PayFromDate.Value, payPeriodTo.PayToDate.Value, employeeIds)
-            Dim actualAdjustmentQuery = GetBaseAdjustmentQuery(context.ActualAdjustments.Where(Function(a) a.OrganizationID.Value = z_OrganizationID), payPeriodFrom.PayFromDate.Value, payPeriodTo.PayToDate.Value, employeeIds)
-
-            If IsActual Then
-
-                _adjustments = New List(Of IAdjustment)(actualAdjustmentQuery.ToList)
-
-            Else
-                _adjustments = New List(Of IAdjustment)(adjustmentQuery.ToList)
-
-            End If
+            Return Nothing
 
         End Using
-    End Sub
+    End Function
 
-    Private Function GetBaseAdjustmentQuery(query As IQueryable(Of IAdjustment), PayFromDate As Date, PayToDate As Date, employeeIds As Integer()) As IQueryable(Of IAdjustment)
+    Private Sub InitializeBreakdowns(n_PayrollSummaDateSelection As PayrollSummaDateSelection, dt As DataTable)
+
+        Dim employeeIds = GetEmployeeIds(dt.Rows.OfType(Of DataRow).ToList())
+        Dim startingPayPeriod = GetStartingPayPeriod(n_PayrollSummaDateSelection)
+        Dim endingPayPeriod = GetEndingPayPeriod(n_PayrollSummaDateSelection)
+
+        If startingPayPeriod?.PayFromDate Is Nothing OrElse endingPayPeriod?.PayToDate Is Nothing Then
+
+            Throw New ArgumentException("Cannot fetch pay period data.")
+
+        End If
+
+        '_loans = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.LoanTypeCategory)
+
+        '_loans = GetLoans(startingPayPeriod.RowID)
+
+        _allowances = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.AllowanceTypeCategory)
+
+        _bonuses = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.BonusCategory)
+
+        _adjustments = GetPaystubAdjustments(startingPayPeriod, endingPayPeriod, employeeIds)
+    End Sub
+    Private Function GetBasePaystubItemQuery(query As IQueryable(Of PaystubItem), PayFromDate As Date, PayToDate As Date, employeeIds As Integer(), productCategory As String) As IQueryable(Of PaystubItem)
 
         Return query.Include(Function(p) p.Product).
                     Include(Function(p) p.Paystub).
                     Include(Function(p) p.Paystub.PayPeriod).
                     Where(Function(p) p.Paystub.PayPeriod.PayFromDate.Value >= PayFromDate).
                     Where(Function(p) p.Paystub.PayPeriod.PayToDate.Value <= PayToDate).
-                    Where(Function(p) employeeIds.Contains(p.Paystub.EmployeeID.Value))
+                    Where(Function(p) employeeIds.Contains(p.Paystub.EmployeeID.Value)).
+                    Where(Function(p) p.OrganizationID.Value = z_OrganizationID).
+                    Where(Function(p) p.Product.CategoryText = productCategory).
+                    Where(Function(p) p.PayAmount <> 0)
 
+    End Function
+
+    Public Function GetPayStubItems(
+                            startingPayPeriod As PayPeriod,
+                            endingPayPeriod As PayPeriod,
+                            employeeIds As Integer(),
+                            productCategory As String) _
+                            As List(Of PaystubItem)
+
+        Using context As New DatabaseContext
+
+            If startingPayPeriod?.PayFromDate Is Nothing OrElse endingPayPeriod?.PayToDate Is Nothing Then
+
+                Throw New ArgumentException("Cannot fetch pay period data.")
+
+            End If
+
+            Dim paystubItemQuery = GetBasePaystubItemQuery(
+                                        context.PayStubItems,
+                                        startingPayPeriod.PayFromDate.Value,
+                                        endingPayPeriod.PayToDate.Value,
+                                        employeeIds,
+                                        productCategory)
+
+            Return paystubItemQuery.ToList
+
+        End Using
     End Function
 
     Private Function GetEmployeeIds(allEmployees As ICollection(Of DataRow)) As Integer()
@@ -413,13 +503,208 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Return employeeIdsArray
     End Function
 
+    Private Function AddBreakdownColumnHeaders(dataColumns As IList(Of DataColumn)) _
+        As IList(Of DataColumn)
+
+        'bonuses
+        dataColumns = AddPaystubColumnHeaders(
+                            dataColumns,
+                            _bonuses,
+                            TotalBonusColumnName,
+                            BonusColumnSuffix)
+
+        'allowances
+        dataColumns = AddPaystubColumnHeaders(
+                            dataColumns,
+                            _allowances,
+                            TotalAllowanceColumnName,
+                            AllowanceColumnSuffix)
+
+        'loans
+        dataColumns = AddLoansColumnHeaders(dataColumns)
+
+        'adjustments
+        dataColumns = AddAdjustmentsColumnHeaders(dataColumns)
+
+        Return dataColumns
+    End Function
+
+    Private Function AddPaystubColumnHeaders(
+                        dataColumns As IList(Of DataColumn),
+                        paystubItems As List(Of PaystubItem),
+                        totalPaystubItemColumnName As String,
+                        paystubItemColumnSuffix As String) _
+                        As IList(Of DataColumn)
+
+        If paystubItems Is Nothing OrElse paystubItems.Count = 0 Then Return dataColumns
+
+        Dim totalPaystubColumn = dataColumns.
+                                        Where(Function(p) p.ColumnName = totalPaystubItemColumnName).
+                                        FirstOrDefault
+
+        If totalPaystubColumn Is Nothing Then Return dataColumns
+
+        Dim groupedPaystubItems = paystubItems.GroupBy(Function(a) a.ProductID).ToList
+
+        Dim totalPaystubItemColumnIndex = dataColumns.IndexOf(totalPaystubColumn)
+
+        dataColumns.Remove(totalPaystubColumn)
+
+        'add the paystub item columns
+        Dim index = totalPaystubItemColumnIndex
+        For Each paystubItem In groupedPaystubItems
+
+            Dim paystubItemName = GetPaystubItemName(paystubItem(0).Product?.Name, paystubItemColumnSuffix)
+
+            dataColumns.Insert(index, New DataColumn(paystubItemName))
+
+            index += 1
+        Next
+
+        Return dataColumns
+
+    End Function
+
+    Private Shared Function GetPaystubItemName(name As String, paystubItemColumnSuffix As String) As String
+
+        If String.IsNullOrWhiteSpace(name) Then Return Nothing
+
+        Return $"{name} {paystubItemColumnSuffix}"
+
+    End Function
+
+    Private Shared Function GetPaystubItemColumnFromName(column As String, columnSuffix As String) As String
+
+        Return column.Replace($" {columnSuffix}", "")
+
+    End Function
+
+#End Region
+
+#Region "Loan Breakdown"
+
+    Private _loans As List(Of LoanModel)
+
+    Private Class LoanModel
+
+        Public Property ProductId As Integer
+        Public Property LoanName As String
+        Public Property LoanNumber As String
+
+        Public Property DeductionAmount As Decimal
+
+        Public Property EmployeeId As Integer
+        Public Property PaystubId As Integer
+
+    End Class
+
+    Private Function GetLoans(payPeriodId As Integer) As List(Of LoanModel)
+
+        Dim loans = New SQL("CALL GET_employeeloanschedules_ofthisperiod_not_summed(?og_rowid, ?pp_rowid);",
+                        New Object() {org_rowid, payPeriodId}).GetFoundRows.Tables.OfType(Of DataTable).First
+
+        Dim loanModels As New List(Of LoanModel)
+
+        For Each loan As DataRow In loans.Rows
+            loanModels.Add(New LoanModel() With {
+            .ProductId = CInt(loan("LoanTypeID")),
+            .LoanName = loan("ProductName").ToString,
+            .LoanNumber = loan("LoanNumber").ToString,
+            .DeductionAmount = CDec(loan("ProperDeductAmount")),
+            .EmployeeId = CInt(loan("EmployeeID")),
+            .PaystubId = CInt(loan("PaystubID"))
+            })
+
+        Next
+
+        Return loanModels
+
+    End Function
+
+    Private Function AddLoansColumnHeaders(dataColumns As IList(Of DataColumn)) _
+        As IList(Of DataColumn)
+
+        If _loans Is Nothing OrElse _loans.Count = 0 Then Return dataColumns
+
+        Dim totalLoanColumn = dataColumns.
+                                        Where(Function(p) p.ColumnName = TotalLoanColumnName).
+                                        FirstOrDefault
+
+        If totalLoanColumn Is Nothing Then Return dataColumns
+
+        Dim groupedLoans = _loans.GroupBy(Function(a) a.ProductId).ToList
+
+        Dim totalLoanColumnIndex = dataColumns.IndexOf(totalLoanColumn)
+
+        dataColumns.Remove(totalLoanColumn)
+
+        'add the loan columns
+        Dim index = totalLoanColumnIndex
+        For Each loan In groupedLoans
+
+            Dim loanName = GetPaystubItemName(loan(0).LoanName, LoanColumnSuffix)
+
+            dataColumns.Insert(index, New DataColumn(loanName))
+
+            index += 1
+        Next
+
+        Return dataColumns
+
+    End Function
+#End Region
+
+#Region "Adjustment Breakdown"
+
+    Private _adjustments As List(Of IAdjustment)
+
+    Public Function GetPaystubAdjustments(
+                            startingPayPeriod As PayPeriod,
+                            endingPayPeriod As PayPeriod,
+                            employeeIds As Integer()) _
+                            As List(Of IAdjustment)
+
+        Using context As New DatabaseContext
+
+            If startingPayPeriod?.PayFromDate Is Nothing OrElse endingPayPeriod?.PayToDate Is Nothing Then
+
+                Throw New ArgumentException("Cannot fetch pay period data.")
+
+            End If
+
+            Dim adjustmentQuery = GetBaseAdjustmentQuery(context.Adjustments.Where(Function(a) a.OrganizationID.Value = z_OrganizationID), startingPayPeriod.PayFromDate.Value, endingPayPeriod.PayToDate.Value, employeeIds)
+            Dim actualAdjustmentQuery = GetBaseAdjustmentQuery(context.ActualAdjustments.Where(Function(a) a.OrganizationID.Value = z_OrganizationID), startingPayPeriod.PayFromDate.Value, endingPayPeriod.PayToDate.Value, employeeIds)
+
+            If IsActual Then
+
+                Return New List(Of IAdjustment)(actualAdjustmentQuery.ToList)
+
+            Else
+                Return New List(Of IAdjustment)(adjustmentQuery.ToList)
+
+            End If
+
+        End Using
+    End Function
+
+    Private Function GetBaseAdjustmentQuery(query As IQueryable(Of IAdjustment), PayFromDate As Date, PayToDate As Date, employeeIds As Integer()) As IQueryable(Of IAdjustment)
+
+        Return query.Include(Function(p) p.Product).
+                    Include(Function(p) p.Paystub).
+                    Include(Function(p) p.Paystub.PayPeriod).
+                    Where(Function(p) p.Paystub.PayPeriod.PayFromDate.Value >= PayFromDate).
+                    Where(Function(p) p.Paystub.PayPeriod.PayToDate.Value <= PayToDate).
+                    Where(Function(p) employeeIds.Contains(p.Paystub.EmployeeID.Value))
+
+    End Function
+
     Private Function AddAdjustmentsColumnHeaders(dataColumns As IList(Of DataColumn)) _
         As IList(Of DataColumn)
 
         If _adjustments Is Nothing OrElse _adjustments.Count = 0 Then Return dataColumns
 
         Dim totalAdjustmentColumn = dataColumns.
-                                        Where(Function(p) p.ColumnName = totalAdjustmentColumnName).
+                                        Where(Function(p) p.ColumnName = TotalAdjustmentColumnName).
                                         FirstOrDefault
 
         If totalAdjustmentColumn Is Nothing Then Return dataColumns
@@ -434,7 +719,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Dim index = totalAdjustmentColumnIndex
         For Each adjustment In groupedAdjustments
 
-            Dim adjustmentName = GetAdjustmentName(adjustment(0).Product?.Name)
+            Dim adjustmentName = GetPaystubItemName(
+                                    adjustment(0).Product?.Name,
+                                    AdjustmentColumnSuffix)
 
             dataColumns.Insert(index, New DataColumn(adjustmentName))
 
@@ -442,20 +729,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Next
 
         Return dataColumns
-
-    End Function
-
-    Private Shared Function GetAdjustmentName(name As String) As String
-
-        If String.IsNullOrWhiteSpace(name) Then Return Nothing
-
-        Return $"{name} {adjustmentColumnName}"
-
-    End Function
-
-    Private Shared Function GetAdjustmentColumnFromName(column As String) As String
-
-        Return column.Replace($" {adjustmentColumnName}", "")
 
     End Function
 

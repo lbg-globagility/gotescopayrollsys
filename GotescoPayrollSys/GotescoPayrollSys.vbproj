@@ -430,6 +430,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Organization.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PayPeriod.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PayStub.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PaystubItem.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PhilHealth.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Position.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PositionPrivilege.vb" />
@@ -443,6 +444,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\SssBracket.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\TimeEntryLogsPerCutOff.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\ProductConstant.vb" />
     <Compile Include="Core Forms\user_predefines\OutputText.vb" />
     <Compile Include="Core Forms\user_predefines\TimeInTimeOutParser.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\EmployeeCollection.vb" />

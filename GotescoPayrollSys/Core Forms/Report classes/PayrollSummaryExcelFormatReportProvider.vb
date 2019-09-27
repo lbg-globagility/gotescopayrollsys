@@ -352,16 +352,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
             Dim productName = GetPaystubItemColumnFromName(sourceName, LoanColumnSuffix)
 
-            'Dim lean = _loans.
-            '        Where(Function(l) l.EmployeeId = employeeId).
-            '        Where(Function(l) l.PaystubId = paystubId).
-            '        ToList
-
             Return _loans.
                     Where(Function(l) l.LoanName.ToUpper = productName.ToUpper).
                     Where(Function(l) l.EmployeeId = employeeId).
-                    Where(Function(l) l.PaystubId = paystubId).
                     Sum(Function(l) l.DeductionAmount)
+            'Where(Function(l) l.PaystubId = paystubId).
 
 
         ElseIf sourceName.EndsWith(AdjustmentColumnSuffix) Then
@@ -443,7 +438,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
         '_loans = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.LoanTypeCategory)
 
-        '_loans = GetLoans(startingPayPeriod.RowID)
+        _loans = GetLoans(startingPayPeriod.RowID)
 
         _allowances = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.AllowanceTypeCategory)
 

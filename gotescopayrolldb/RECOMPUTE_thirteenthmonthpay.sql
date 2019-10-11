@@ -10,43 +10,76 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `RECOMPUTE_thirteenthmonthpay`(IN `O
     DETERMINISTIC
 BEGIN
 
-DECLARE ispayperiodendofmonth TEXT;
+DECLARE dateFrom, dateTo DATE;
+DECLARE monthNumber, yearNumber, periodID INT;
+DECLARE thirteenthMonthDivisor INT DEFAULT 12;
 
-DECLARE newvalue DECIMAL(11,6);
+SELECT pp.`Month`, pp.`Year`
+FROM payperiod pp
+WHERE pp.RowID=PayPRowID
+INTO monthNumber, yearNumber;
 
-DECLARE payp_month TEXT;
+/**********First Half**********/
+SELECT pp.PayFromDate, pp.PayToDate, pp.RowID
+FROM payperiod pp
+WHERE pp.OrganizationID=OrganizID
+AND pp.`Month`=monthNumber
+AND pp.`Year`=yearNumber
+AND pp.Half=1
+AND pp.TotalGrossSalary=1
+INTO dateFrom, dateTo, periodID;
 
-DECLARE payp_year INT;
+CALL GetAttendancePeriod(OrganizID, dateFrom, dateTo, FALSE);
 
-DECLARE emppayfreqID INT(11);
+DROP TEMPORARY TABLE IF EXISTS firsthalf;
+CREATE TEMPORARY TABLE firsthalf
+SELECT i.EmployeeID
+, SUM(i.RegularHoursAmount - i.HolidayPayAmount) `BasicAmount`
+, periodID `PayPeriodID`
+FROM attendanceperiod i
+INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.EmployeeType='Daily'
+GROUP BY i.EmployeeID
+;
 
-DECLARE paypmonthlyID VARCHAR(50);
+/**********Second Half**********/
+SELECT pp.PayFromDate, pp.PayToDate, pp.RowID
+FROM payperiod pp
+WHERE pp.OrganizationID=OrganizID
+AND pp.`Month`=monthNumber
+AND pp.`Year`=yearNumber
+AND pp.Half=0
+AND pp.TotalGrossSalary=1
+INTO dateFrom, dateTo, periodID;
 
-DECLARE last_date DATE;
+CALL GetAttendancePeriod(OrganizID, dateFrom, dateTo, TRUE);
 
-DECLARE month_firstdate DATE;
-
-
-SELECT pyp.`Half`, pyp.`Month`, pyp.`Year`, pyp.TotalGrossSalary
-,pyp.PayToDate
-FROM payperiod pyp
-WHERE pyp.RowID=PayPRowID INTO ispayperiodendofmonth, payp_month, payp_year, emppayfreqID
-,last_date;
-
-SELECT pp.PayFromDate FROM payperiod pp WHERE pp.OrganizationID=OrganizID AND pp.`Year`=payp_year AND pp.`Month`=payp_month AND pp.TotalGrossSalary=emppayfreqID ORDER BY pp.PayFromDate,pp.PayToDate LIMIT 1 INTO month_firstdate;
-
-SELECT pp.PayToDate FROM payperiod pp WHERE pp.OrganizationID=OrganizID AND pp.`Year`=payp_year AND pp.`Month`=payp_month AND pp.TotalGrossSalary=emppayfreqID ORDER BY pp.PayFromDate DESC,pp.PayToDate DESC LIMIT 1 INTO last_date;
-
-SELECT GROUP_CONCAT(RowID) FROM payperiod pp WHERE pp.OrganizationID=OrganizID AND pp.TotalGrossSalary=1 AND pp.`Year`=payp_year AND pp.`Month`=payp_month ORDER BY pp.PayFromDate DESC, pp.PayToDate DESC INTO paypmonthlyID;
+DROP TEMPORARY TABLE IF EXISTS secondhalf;
+CREATE TEMPORARY TABLE secondhalf
+SELECT i.EmployeeID
+, SUM(i.RegularHoursAmount - i.HolidayPayAmount) `BasicAmount`
+, periodID `PayPeriodID`
+FROM attendanceperiod i
+INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.EmployeeType='Daily'
+GROUP BY i.EmployeeID
+;
 
 
 
-IF ispayperiodendofmonth = '0' THEN
+
+
+
+
+
+
+
+
+
+IF EXISTS(SELECT * FROM firsthalf LIMIT 1)
+	AND EXISTS(SELECT * FROM secondhalf LIMIT 1) THEN
 
 	INSERT INTO thirteenthmonthpay
 	(
-		RowID
-		,OrganizationID
+		OrganizationID
 		,Created
 		,CreatedBy
 		,PaystubID
@@ -54,52 +87,206 @@ IF ispayperiodendofmonth = '0' THEN
 		,Amount14
 		,Amount15
 		,Amount16
-	) SELECT 
-		GET_prev13monthRowID(OrganizID, PayPRowID, ii.EmployeeID)
-		,OrganizID
-		,CURRENT_TIMESTAMP()
-		,UserRowID
-		,ps.RowID
-		,ii.BasicAmount / 12.0
-		,0
-		,0
-		,0
-		FROM
-		(
-			SELECT
-			ete.EmployeeID
-			,SUM(ete.RegularHoursAmount) AS BasicAmount
-			FROM employeetimeentry ete
-			INNER JOIN (SELECT * FROM employee WHERE OrganizationID=OrganizID AND EmployeeType='Daily' AND PayFrequencyID=emppayfreqID) e ON e.RowID=ete.EmployeeID
-			WHERE ete.OrganizationID=OrganizID
-			AND ete.`Date` BETWEEN month_firstdate AND last_date
-			GROUP BY ete.EmployeeID
-		UNION
-			SELECT
-			e.RowID AS EmployeeID
-			,SUM(es.Salary) AS BasicAmount
-			FROM employee e
-			INNER JOIN employeesalary es ON es.EmployeeID=e.RowID AND last_date BETWEEN es.EffectiveDateFrom AND IFNULL(es.EffectiveDateTo,last_date)
-			WHERE e.PayFrequencyID=emppayfreqID
-			AND e.OrganizationID=OrganizID
-			AND e.EmployeeType IN ('Monthly','Fixed')
-		) ii
-		INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=PayPRowID AND ps.EmployeeID=ii.EmployeeID
-	ON
-	DUPLICATE
-	KEY
-	UPDATE
-		LastUpd=CURRENT_TIMESTAMP()
-		,LastUpdBy=UserRowID
-		,Amount=ii.BasicAmount / 12.0
-		,Amount14=0
-		,Amount15=0
-		,Amount16=0;
-		
-	
-		
+	) SELECT ps.OrganizationID
+	, CURRENT_TIMESTAMP()
+	, UserRowID
+	, ps.RowID
+	, (i.BasicAmount / thirteenthMonthDivisor)
+	, 0
+	, 0
+	, 0
+	FROM firsthalf i
+	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	ON DUPLICATE KEY UPDATE
+	LastUpd=CURRENT_TIMESTAMP()
+	, LastUpdBy=UserRowID
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
+	, Amount14=0
+	, Amount15=0
+	, Amount16=0
+	;
+
+	INSERT INTO thirteenthmonthpay
+	(
+		OrganizationID
+		,Created
+		,CreatedBy
+		,PaystubID
+		,Amount
+		,Amount14
+		,Amount15
+		,Amount16
+	) SELECT ps.OrganizationID
+	, CURRENT_TIMESTAMP()
+	, UserRowID
+	, ps.RowID
+	, (i.BasicAmount / thirteenthMonthDivisor)
+	, 0
+	, 0
+	, 0
+	FROM secondhalf i
+	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	ON DUPLICATE KEY UPDATE
+	LastUpd=CURRENT_TIMESTAMP()
+	, LastUpdBy=UserRowID
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
+	, Amount14=0
+	, Amount15=0
+	, Amount16=0
+	;
+
+ELSEIF NOT EXISTS(SELECT * FROM secondhalf LIMIT 1)
+	AND EXISTS(SELECT * FROM firsthalf LIMIT 1) THEN
+
+	INSERT INTO thirteenthmonthpay
+	(
+		OrganizationID
+		,Created
+		,CreatedBy
+		,PaystubID
+		,Amount
+		,Amount14
+		,Amount15
+		,Amount16
+	) SELECT ps.OrganizationID
+	, CURRENT_TIMESTAMP()
+	, UserRowID
+	, ps.RowID
+	, (i.BasicAmount / thirteenthMonthDivisor)
+	, 0
+	, 0
+	, 0
+	FROM firsthalf i
+	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	ON DUPLICATE KEY UPDATE
+	LastUpd=CURRENT_TIMESTAMP()
+	, LastUpdBy=UserRowID
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
+	, Amount14=0
+	, Amount15=0
+	, Amount16=0
+	;
+
+ELSEIF NOT EXISTS(SELECT * FROM firsthalf LIMIT 1)
+	AND EXISTS(SELECT * FROM secondhalf LIMIT 1) THEN
+
+	INSERT INTO thirteenthmonthpay
+	(
+		OrganizationID
+		,Created
+		,CreatedBy
+		,PaystubID
+		,Amount
+		,Amount14
+		,Amount15
+		,Amount16
+	) SELECT ps.OrganizationID
+	, CURRENT_TIMESTAMP()
+	, UserRowID
+	, ps.RowID
+	, (i.BasicAmount / thirteenthMonthDivisor)
+	, 0
+	, 0
+	, 0
+	FROM secondhalf i
+	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	ON DUPLICATE KEY UPDATE
+	LastUpd=CURRENT_TIMESTAMP()
+	, LastUpdBy=UserRowID
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
+	, Amount14=0
+	, Amount15=0
+	, Amount16=0
+	;
 
 END IF;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**********For Fixed/Monthly employees**********/
+
+SET @dateOne=CURDATE();
+SET @dateTwo=CURDATE();
+
+SELECT MIN(pp.PayFromDate) `PayFromDate`
+, MAX(pp.PayToDate) `PayToDate`
+FROM payperiod pp
+WHERE pp.`Year`=yearNumber
+AND pp.OrganizationID=OrganizID
+AND pp.TotalGrossSalary=1
+INTO @dateOne, @dateTwo
+;
+
+DROP TEMPORARY TABLE IF EXISTS salariesperperiod;
+CREATE TEMPORARY TABLE salariesperperiod
+SELECT i.*
+, pp.RowID `PayPeriodID`, pp.PayFromDate, pp.PayToDate
+, pp.Half
+FROM (SELECT d.*
+		, es.RowID `SalaryID`
+		, es.Salary, es.TrueSalary
+		, es.BasicPay, (es.TrueSalary / 2) `ActualBasicPay`
+		, es.OrganizationID
+		, es.EffectiveDateFrom
+		, es.EffectiveDateTo
+		, e.EmployeeID `EmployeeNo`
+		, es.EmployeeID
+		FROM dates d
+		INNER JOIN employeesalary es ON es.OrganizationID=@orgId AND d.DateValue BETWEEN es.EffectiveDateFrom AND IFNULL(es.EffectiveDateTo, @dateTwo)
+		INNER JOIN employee e ON e.RowID=es.EmployeeID AND e.OrganizationID=es.OrganizationID AND e.EmployeeType IN ('Fixed', 'Monthly')
+		AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+
+		WHERE d.DateValue BETWEEN @dateOne AND @dateTwo
+		) i
+INNER JOIN payperiod pp ON pp.OrganizationID=i.OrganizationID AND pp.TotalGrossSalary=1 AND i.DateValue BETWEEN pp.PayFromDate AND pp.PayToDate
+GROUP BY pp.RowID, i.EmployeeID
+ORDER BY i.EmployeeID, pp.OrdinalValue
+;
+
+	INSERT INTO thirteenthmonthpay
+	(
+		OrganizationID
+		,Created
+		,CreatedBy
+		,PaystubID
+		,Amount
+		,Amount14
+		,Amount15
+		,Amount16
+	) SELECT ps.OrganizationID
+	, CURRENT_TIMESTAMP()
+	, UserRowID
+	, ps.RowID
+	, (i.BasicPay / thirteenthMonthDivisor)
+	, 0
+	, 0
+	, 0
+	FROM salariesperperiod i
+	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	WHERE i.PayPeriodID=PayPRowID
+	ON DUPLICATE KEY UPDATE
+	LastUpd=CURRENT_TIMESTAMP()
+	, LastUpdBy=UserRowID
+	, Amount=(i.BasicPay / thirteenthMonthDivisor)
+	, Amount14=0
+	, Amount15=0
+	, Amount16=0
+	;
+
 
 END//
 DELIMITER ;

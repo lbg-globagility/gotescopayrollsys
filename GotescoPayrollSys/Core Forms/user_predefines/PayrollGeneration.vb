@@ -824,7 +824,7 @@ Public Class PayrollGeneration
 
                     For Each drowsal In rowempsal
 
-                        Dim skipgovtdeduct As Boolean = Convert.ToInt16(drow("IsFirstTimeSalary"))
+                        Dim isFirstTimeGetPaid As Boolean = Convert.ToInt16(drow("IsFirstTimeSalary"))
 
                         emptaxabsal = 0
                         empnetsal = 0
@@ -869,7 +869,7 @@ Public Class PayrollGeneration
                                 Convert.ToDecimal(drowtotdaypay("RestDayPay"))
                             'ValNoComma(monthlyemployee_restday_payment.Compute("SUM(AddtlRestDayPayment)", String.Concat("EmployeeID = ", drow("RowID"))))
 
-                            If skipgovtdeduct And employment_type = "Monthly" Then
+                            If isFirstTimeGetPaid And employment_type = "Monthly" Then
                                 grossincome = ValNoComma(drowtotdaypay("TotalDayPay"))
 
                                 grossincome_firsthalf = ValNoComma(prev_empTimeEntry.Compute("SUM(TotalDayPay)", "EmployeeID = '" & drow("RowID") & "'"))
@@ -883,7 +883,7 @@ Public Class PayrollGeneration
                                                 + ValNoComma(drowtotdaypay("Absent")))
                                 grossincome += (ValNoComma(drowtotdaypay("OvertimeHoursAmount")) + NightDiffAmount + NightDiffOTAmount + Convert.ToDecimal(drowtotdaypay("AddedHolidayPayAmount")))
 
-                                If employee_ID = "276" Then Console.WriteLine("grossincome: {0}", grossincome)
+                                If employee_ID = "441" Then Console.WriteLine("grossincome: {0}", grossincome)
 
                                 grossincome_firsthalf = ValNoComma(drowsal("BasicPay")) '+ _
                                 'ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = " & drow("RowID").ToString)) + _
@@ -1049,7 +1049,7 @@ Public Class PayrollGeneration
 
                         Dim sel_dtemployeefirsttimesalary = dtemployeefirsttimesalary.Select("EmployeeID = '" & drow("RowID") & "'")
 
-                        If skipgovtdeduct _
+                        If isFirstTimeGetPaid _
                             And sel_dtemployeefirsttimesalary.Count <> 0 Then
 
                             pstub_TotalEmpSSS = 0

@@ -1,0 +1,5 @@
+ALTER TABLE `paystub`
+	ADD COLUMN IF NOT EXISTS `ThirteenthMonthPay` DECIMAL(10,2) NULL DEFAULT 0.00 AFTER `ThirteenthMonthInclusion`;
+
+ALTER TABLE `paystubactual`
+	ADD COLUMN IF NOT EXISTS `ThirteenthMonthPay` DECIMAL(10,2) NULL DEFAULT 0.00 AFTER `ThirteenthMonthInclusion`;

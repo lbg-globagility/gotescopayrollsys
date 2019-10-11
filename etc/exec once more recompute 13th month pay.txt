@@ -1,0 +1,17 @@
+
+SELECT GROUP_CONCAT(og.RowID) `Result`
+FROM organization og
+WHERE og.NoPurpose=FALSE
+;
+
+SET @orgId=0;# 4 5 6 7 8 10 11 13 14 15 16 18 19
+
+SELECT
+#pp.*,
+CONCAT('CALL RECOMPUTE_thirteenthmonthpay(', pp.OrganizationID, ', ', pp.RowID, ', 2)') `Result`
+FROM payperiod pp
+WHERE pp.OrganizationID=@orgId
+AND pp.`Year`=2019
+AND pp.TotalGrossSalary=1
+ORDER BY pp.OrdinalValue
+;

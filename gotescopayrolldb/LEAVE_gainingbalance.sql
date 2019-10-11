@@ -42,6 +42,12 @@ SET payDateFrom = minimum_date;
 SET payDateTo = custom_maximum_date;
 
 UPDATE employee e
+SET e.AdditionalVLAllowance=0
+WHERE e.OrganizationID = OrganizID
+AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+;
+
+UPDATE employee e
 INNER JOIN payfrequency pf
         ON pf.RowID=e.PayFrequencyID
 /*INNER JOIN paystub ps

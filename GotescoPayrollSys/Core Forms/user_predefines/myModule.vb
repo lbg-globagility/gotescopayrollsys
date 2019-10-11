@@ -808,7 +808,12 @@ Module myModule
                     DirectCast(r, PictureBox).Image = Nothing
                 ElseIf TypeOf r Is System.Windows.Forms.DataGridView Then
                     DirectCast(r, DataGridView).Rows.Clear()
-
+                ElseIf TypeOf r Is DateTimePicker Then
+                    Dim objDatePicker = DirectCast(r, DateTimePicker)
+                    If objDatePicker.ShowCheckBox Then
+                        objDatePicker.Value = objDatePicker.MinDate
+                        objDatePicker.Checked = False
+                    End If
                 End If
             Next
             hasERR = 0

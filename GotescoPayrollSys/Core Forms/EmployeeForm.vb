@@ -623,7 +623,7 @@ Public Class EmployeeForm
         ",IFNULL(e.OffsetBalance,0) AS OffsetBalance" &
         ",IFNULL(ag.AgencyName,'') AS AgencyName" &
         ",IFNULL(ag.RowID,'') AS ag_RowID" &
-        ",DATE_FORMAT(IFNULL(e.DateR1A,'1900-01-01'),'%c/%e/%Y') AS DateR1A" &
+        ",IFNULL(e.DateR1A,'') AS DateR1A" &
         ",IFNULL(e.DateEvaluated,'') AS DateEvaluated" &
         ",IFNULL(e.DateRegularized,'') AS DateRegularized" &
         " " &
@@ -761,8 +761,6 @@ Public Class EmployeeForm
         MaskedTextBox1.Focus()
 
         pbemppic.Focus()
-
-        txtRegularizationDate.Focus()
 
         pbemppic.Focus()
 
@@ -936,13 +934,13 @@ Public Class EmployeeForm
                            If(chkcalcNightDiffOT.Checked, 1, 0),
                            If(chkcalcRestDay.Checked, 1, 0),
                            If(chkcalcRestDayOT.Checked, 1, 0),
-                           If(txtRegularizationDate.Tag = Nothing, DBNull.Value, txtRegularizationDate.Tag),
+                           If(Not dtpRegularizationDate.Checked, DBNull.Value, String.Join("-", dtpRegularizationDate.Value.Year, dtpRegularizationDate.Value.Month, dtpRegularizationDate.Value.Day)),
                            If(MaskedTextBox1.Tag = Nothing, DBNull.Value, MaskedTextBox1.Tag),
                            "1",
                            ValNoComma(txtUTgrace.Text),
                            agensi_rowid,
                            0,
-                           dtpR1A.Tag,
+                           If(Not dtpR1A.Checked, DBNull.Value, String.Join("-", dtpR1A.Value.Year, dtpR1A.Value.Month, dtpR1A.Value.Day)),
                            txtboxDeptMngr.Tag)
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Name))
@@ -1084,8 +1082,17 @@ Public Class EmployeeForm
             .Cells("LateGracePeriod").Value = txtUTgrace.Text
             .Cells("AgencyName").Value = cboAgency.Text
 
-            .Cells("DateR1A").Value = dtpR1A.Tag
-            .Cells("DateReg").Value = txtRegularizationDate.Tag
+            If dtpR1A.Checked Then
+                .Cells("DateR1A").Value = dtpR1A.Value.Date
+            Else
+                .Cells("DateR1A").Value = DBNull.Value
+            End If
+
+            If dtpRegularizationDate.Checked Then
+                .Cells("DateReg").Value = dtpRegularizationDate.Value.Date
+            Else
+                .Cells("DateReg").Value = DBNull.Value
+            End If
         End With
 
         tsbtnNewEmp.Enabled = True
@@ -2477,18 +2484,24 @@ Public Class EmployeeForm
 
                         cboAgency.Text = .Cells("LateGracePeriod").Value
 
-                        dtpR1A.Value = .Cells("DateR1A").Value
-                        'DateEvaluated,DateRegularized
-                        'DateEva,DateReg
                         MaskedTextBox1.Text = .Cells("DateEva").Value
 
-                        Try
-                            txtRegularizationDate.Text = CDate(.Cells("DateReg").Value).ToShortDateString
-                        Catch ex As Exception
-                            txtRegularizationDate.Clear()
-                        Finally
-                            ShowEmpLeaveBalance()
-                        End Try
+                        If String.IsNullOrEmpty(.Cells("DateReg").Value) Then
+                            dtpRegularizationDate.Value = dtpRegularizationDate.MinDate
+                            dtpRegularizationDate.Checked = False
+                        Else
+                            dtpRegularizationDate.Value = CDate(.Cells("DateReg").Value).ToShortDateString
+                        End If
+
+                        If String.IsNullOrEmpty(.Cells("DateR1A").Value) Then
+                            dtpR1A.Value = dtpR1A.MinDate
+                            dtpR1A.Checked = False
+                            ModifUiRegularizationDateAndR1ADate()
+                        Else
+                            dtpR1A.Value = CDate(.Cells("DateR1A").Value).ToShortDateString
+                        End If
+
+                        ShowEmpLeaveBalance()
 
                         Dim dt_dptmngr As New DataTable
                         Static str_quer As String =
@@ -22178,6 +22191,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     End Sub
 
+    Private Sub DateTimePicker3_ValueChanged(sender As Object, e As EventArgs) Handles dtpRegularizationDate.ValueChanged
+
+    End Sub
+
     Private Sub rdbCash_CheckedChanged(sender As Object, e As EventArgs) Handles rdbCash.CheckedChanged
 
         'Static once As SByte = 0
@@ -22239,18 +22256,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             MaskedTextBox1.Focus()
         Else
             MaskedTextBox1.ReadOnly = True
-        End If
-
-    End Sub
-
-    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
-        'RemoveHandler txtRegularizationDate.Leave, AddressOf MaskedTextBox2_Leave
-        If CheckBox2.Checked Then
-            'AddHandler txtRegularizationDate.Leave, AddressOf MaskedTextBox2_Leave
-            txtRegularizationDate.ReadOnly = False
-            'txtRegularizationDate.Focus()
-        Else
-            txtRegularizationDate.ReadOnly = True
         End If
 
     End Sub
@@ -22385,8 +22390,20 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     End Sub
 
     Private Sub dtpR1A_ValueChanged(sender As Object, e As EventArgs) Handles dtpR1A.ValueChanged
-        'dtpR1A.Tag = Format(CDate(dtpR1A.Value), "yyyy-MM-dd")
-        dtpR1A.Tag = MYSQLDateFormat(CDate(dtpR1A.Value))
+        ModifUiRegularizationDateAndR1ADate()
+    End Sub
+
+    Private Sub dtpR1A_MouseUp(sender As Object, e As MouseEventArgs) Handles dtpR1A.MouseUp
+        ModifUiRegularizationDateAndR1ADate()
+    End Sub
+
+    Private Sub ModifUiRegularizationDateAndR1ADate()
+        Dim checked = dtpR1A.Checked
+
+        If Not checked Then dtpRegularizationDate.Value = dtpRegularizationDate.MinDate
+
+        dtpRegularizationDate.Checked = checked
+        dtpRegularizationDate.Enabled = checked
     End Sub
 
     Private Sub datefrom_ValueChanged(sender As Object, e As EventArgs) Handles datefrom.ValueChanged
@@ -22624,24 +22641,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             MaskedTextBox1.Tag = MYSQLDateFormat(CDate(MaskedTextBox1.Text))
         Catch ex As Exception
             MaskedTextBox1.Tag = String.Empty
-        Finally
-            If CheckBox2.Checked = False Then
-                CheckBox1.Checked = (MaskedTextBox1.Tag.ToString.Length > 0)
-            End If
-        End Try
-    End Sub
-
-    Private Sub MaskedTextBox2_TextChanged(sender As Object, e As EventArgs) Handles txtRegularizationDate.TextChanged
-        'Handles txtRegularizationDate.TextChanged
-        Try
-            'txtRegularizationDate.Text = CDate(txtRegularizationDate.Text).ToShortDateString
-            txtRegularizationDate.Tag = MYSQLDateFormat(CDate(txtRegularizationDate.Text))
-        Catch ex As Exception
-            txtRegularizationDate.Tag = String.Empty
-        Finally
-            If CheckBox2.Checked = False Then
-                CheckBox2.Checked = (txtRegularizationDate.Tag.ToString.Length > 0)
-            End If
         End Try
     End Sub
 
@@ -22649,16 +22648,6 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         Try
             If MaskedTextBox1.Text.Trim.Length > 0 Then
                 MaskedTextBox1.Text = CDate(MaskedTextBox1.Text).ToShortDateString
-            End If
-        Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Name))
-        End Try
-    End Sub
-
-    Private Sub MaskedTextBox2_Leave(sender As Object, e As EventArgs) 'Handles txtRegularizationDate.Leave
-        Try
-            If txtRegularizationDate.Text.Trim.Length > 0 Then
-                txtRegularizationDate.Text = CDate(txtRegularizationDate.Text).ToShortDateString
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Name))

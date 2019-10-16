@@ -883,8 +883,6 @@ Public Class PayrollGeneration
                                                 + ValNoComma(drowtotdaypay("Absent")))
                                 grossincome += (ValNoComma(drowtotdaypay("OvertimeHoursAmount")) + NightDiffAmount + NightDiffOTAmount + Convert.ToDecimal(drowtotdaypay("AddedHolidayPayAmount")))
 
-                                If employee_ID = "441" Then Console.WriteLine("grossincome: {0}", grossincome)
-
                                 grossincome_firsthalf = ValNoComma(drowsal("BasicPay")) '+ _
                                 'ValNoComma(prev_empTimeEntry.Compute("SUM(OvertimeHoursAmount)", "EmployeeID = " & drow("RowID").ToString)) + _
                                 'ValNoComma(prev_empTimeEntry.Compute("SUM(NightDiffOTHoursAmount)", "EmployeeID = " & drow("RowID").ToString)) + _
@@ -1448,31 +1446,23 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
 
         Next
 
-        'EXECQUER("CALL `RECOMPUTE_thirteenthmonthpay`('" & orgztnID & "','" & n_PayrollRecordID & "','" & z_User & "');")
+        'Dim employeeRowIDs = employee_dattab.Rows.OfType(Of DataRow).Select(Function(row) row("RowID")).ToList()
+        'Dim employeeRowIDList = String.Join(",", employeeRowIDs.ToArray())
 
-        'Dim str_query_recompute_13thmonthpay As String =
-        '    SBConcat.ConcatResult("CALL RECOMPUTE_thirteenthmonthpay(?og_rowid, ?pp_rowid, ?u_rowid);")
+        'Dim para_meters =
+        '    New Object() {org_rowid, n_PayrollRecordID, user_row_id, employeeRowIDList}
 
-        Dim para_meters =
-            New Object() {org_rowid, n_PayrollRecordID, user_row_id}
+        'If withthirteenthmonthpay = 1 Then
 
-        'Dim exec_str_query_recompute_13thmonthpay As New SQL(str_query_recompute_13thmonthpay, para_meters)
+        '    Dim str_query_release_13thmonthpay As String =
+        '        SBConcat.ConcatResult("CALL RELEASE_thirteenthmonthpay(?og_rowid, ?pp_rowid, ?u_rowid, ?eRowIDs);")
 
-        'exec_str_query_recompute_13thmonthpay.ExecuteQuery()
+        '    Dim exec_str_query_release_13thmonthpay As New SQL(str_query_release_13thmonthpay,
+        '                                                       para_meters)
 
-        If withthirteenthmonthpay = 1 Then
+        '    exec_str_query_release_13thmonthpay.ExecuteQuery()
 
-            'EXECQUER("CALL `RELEASE_thirteenthmonthpay`('" & orgztnID & "','" & n_PayrollRecordID & "','" & z_User & "');")
-
-            Dim str_query_release_13thmonthpay As String =
-                SBConcat.ConcatResult("CALL RELEASE_thirteenthmonthpay(?og_rowid, ?pp_rowid, ?u_rowid);")
-
-            Dim exec_str_query_release_13thmonthpay As New SQL(str_query_release_13thmonthpay,
-                                                               para_meters)
-
-            exec_str_query_release_13thmonthpay.ExecuteQuery()
-
-        End If
+        'End If
 
         payWTax.Dispose()
 

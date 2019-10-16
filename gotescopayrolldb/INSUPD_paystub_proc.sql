@@ -145,7 +145,7 @@ UPDATE
 	,TimeEntryID=pstub_TimeEntryID
 	,PayFromDate=pstub_PayFromDate
 	,PayToDate=pstub_PayToDate
-	,TotalGrossSalary=pstub_TotalGrossSalary
+	,TotalGrossSalary=pstub_TotalGrossSalary-`ThirteenthMonthPay`
 	,TotalNetSalary=pstub_TotalNetSalary + (SumPayStubAdjustments)
 	,TotalTaxableSalary=pstub_TotalTaxableSalary
 	,TotalEmpSSS=pstub_TotalEmpSSS
@@ -160,7 +160,8 @@ UPDATE
 	,TotalAllowance=pstub_TotalAllowance
 	,TotalAdjustments=(SumPayStubAdjustments)
 	,TotalUndeclaredSalary=ps_TotalUndeclaredSalary
-	,NondeductibleTotalLoans=pstub_NondeductibleTotalLoans;
+	,NondeductibleTotalLoans=pstub_NondeductibleTotalLoans
+	,`ThirteenthMonthPay`=0;
 	SELECT @@identity `Id` INTO pstub_RowID;
 
 

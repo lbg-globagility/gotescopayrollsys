@@ -2636,37 +2636,44 @@ Public Class PayStub
                                              " AND pp.OrganizationID=", org_rowid,
                                              " ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));")
 
-        Using command = New MySqlCommand(String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
-                                                       "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);",
-                                                       updateLeaveItems),
-                                         New MySqlConnection(connectionText))
-            With command.Parameters
-                .AddWithValue("@orgId", org_rowid)
-                .AddWithValue("@userId", user_row_id)
-                .AddWithValue("@dateFrom", paypFrom)
-                .AddWithValue("@dateTo", paypTo)
-                .AddWithValue("@periodId", paypRowID)
+        Dim strQuery = String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
+                                     "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);",
+                                     updateLeaveItems)
 
-            End With
+        If withthirteenthmonthpay = 1 Then
+            strQuery = String.Concat(strQuery, "CALL `RELEASE_thirteenthmonthpay`(@orgId, @periodId, @userId);")
+            withthirteenthmonthpay = 0
+        End If
 
-            Await command.Connection.OpenAsync
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
 
-            Dim transaction = Await command.Connection.BeginTransactionAsync
+                With command.Parameters
+                    .AddWithValue("@orgId", org_rowid)
+                    .AddWithValue("@userId", user_row_id)
+                    .AddWithValue("@dateFrom", paypFrom)
+                    .AddWithValue("@dateTo", paypTo)
+                    .AddWithValue("@periodId", paypRowID)
 
-            Try
-                Await command.ExecuteNonQueryAsync()
-                transaction.Commit()
-            Catch ex As Exception
-                _logger.Error("LEAVE_gainingbalance & MASSUPD_employeeloanschedulebacktrack_ofthisperiod", ex)
-                transaction.Rollback()
+                End With
 
-                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
-                                "",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Exclamation)
-            End Try
+                Await command.Connection.OpenAsync
 
-        End Using
+                Dim transaction = Await command.Connection.BeginTransactionAsync
+
+                Try
+                    Await command.ExecuteNonQueryAsync()
+                    transaction.Commit()
+                Catch ex As Exception
+                    _logger.Error("LEAVE_gainingbalance & MASSUPD_employeeloanschedulebacktrack_ofthisperiod", ex)
+                    transaction.Rollback()
+
+                    MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                                    "",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation)
+                End Try
+
+            End Using
     End Sub
 
 #End Region

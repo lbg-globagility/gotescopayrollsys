@@ -1,4 +1,6 @@
-﻿Public Class selectPayPeriod
+﻿Imports MySql.Data.MySqlClient
+
+Public Class selectPayPeriod
 
     Dim m_PayFreqType = ""
 
@@ -535,35 +537,39 @@
 
                 Next
 
-                If _year <> yearnow Then
+                'If _year <> yearnow Then
 
-                    _year = yearnow
+                '    _year = yearnow
 
-                    Dim n_ExecuteQuery As _
-                            New ExecuteQuery("SELECT EXISTS(SELECT RowID" &
-                                            " FROM paystub" &
-                                            " WHERE OrganizationID='" & org_rowid & "'" &
-                                            " AND ThirteenthMonthInclusion='1'" &
-                                            " AND (YEAR(PayFromDate)='" & yearnow & "' OR YEAR(PayToDate)='" & yearnow & "')" &
-                                            " LIMIT 1);")
+                '    Dim n_ExecuteQuery As _
+                '            New ExecuteQuery("SELECT EXISTS(SELECT RowID" &
+                '                            " FROM paystub" &
+                '                            " WHERE OrganizationID='" & org_rowid & "'" &
+                '                            " AND ThirteenthMonthInclusion='1'" &
+                '                            " AND (YEAR(PayFromDate)='" & yearnow & "' OR YEAR(PayToDate)='" & yearnow & "')" &
+                '                            " LIMIT 1);")
 
-                    Dim bool_decision = Not Convert.ToBoolean(CInt(n_ExecuteQuery.Result))
+                '    Dim bool_decision = Not Convert.ToBoolean(CInt(n_ExecuteQuery.Result))
 
-                    'If n_ExecuteQuery.Result = "1" Then
+                '    If n_ExecuteQuery.Result = "1" Then
 
-                    '    bool_decision = Convert.ToBoolean(CInt(n_ExecuteQuery.Result))
+                '        bool_decision = Convert.ToBoolean(CInt(n_ExecuteQuery.Result))
 
-                    'Else
+                '    Else
 
-                    '    bool_decision = Convert.ToBoolean(CInt(n_ExecuteQuery.Result))
+                '        bool_decision = Convert.ToBoolean(CInt(n_ExecuteQuery.Result))
 
-                    'End If
+                '    End If
 
-                    CheckBox1.Checked = False
+                '    CheckBox1.Checked = False
 
-                    CheckBox1.Enabled = bool_decision
+                '    CheckBox1.Enabled = bool_decision
 
-                End If
+                'End If
+
+                Dim periodId = Convert.ToInt32(.Cells(Column1.Name).Value)
+
+                ThirteenthMonthInclusionFlag(periodId) '3815
 
             End With
         Else
@@ -582,6 +588,40 @@
 
         End If
 
+    End Sub
+
+    Private Async Sub ThirteenthMonthInclusionFlag(periodId As Integer)
+        CheckBox1.Checked = False
+
+        If periodId = 0 Then Return
+
+        Dim query As String =
+            "SELECT
+            pp.RowID
+            FROM payperiod pp
+            INNER JOIN paystub ps ON ps.PayPeriodID=pp.RowID AND ps.ThirteenthMonthInclusion=TRUE
+            WHERE pp.RowID=@periodId
+            GROUP BY pp.RowID
+            HAVING FIND_IN_SET('1', GROUP_CONCAT(ps.`ThirteenthMonthInclusion`)) > 0;"
+
+        Using connection As New MySqlConnection(connectionString),
+                command As New MySqlCommand(query, connection)
+
+            With command.Parameters
+                .AddWithValue("@periodId", periodId)
+            End With
+
+            Await connection.OpenAsync()
+            Try
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                While Await reader.ReadAsync()
+                    CheckBox1.Checked = reader.GetBoolean(0)
+                End While
+            Catch ex As Exception
+                MessageBox.Show(String.Concat("Oops! something went wrong. See details :", vbNewLine, ex.Message), "Error on ThirteenthMonthInclusionFlag", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
     End Sub
 
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean

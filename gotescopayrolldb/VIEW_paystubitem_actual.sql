@@ -26,6 +26,8 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_paystubitem_actual`(
 
 
 
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -110,7 +112,8 @@ SELECT psa.RowID
 ,IF(e.EmployeeType='Daily',PAYFREQUENCY_DIVISOR(e.EmployeeType),PAYFREQUENCY_DIVISOR(pf.PayFrequencyType)) AS PAYFREQUENCYDIVISOR
 ,ete.*
 ,e.EmployeeType
-,(e.StartDate BETWEEN pay_date_from AND pay_date_to) AS FirstTimeSalary
+#,(e.StartDate BETWEEN pay_date_from AND pay_date_to) AS FirstTimeSalary
+, FALSE `FirstTimeSalary`
 ,IFNULL(paidleave.PaidLeaveAmount,0) AS PaidLeaveAmount
 ,IFNULL(paidleave.PaidLeaveHours,0) AS PaidLeaveHours
 
@@ -173,6 +176,7 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(et.RestDayPay) `RestDayPay`
 				, SUM(et.HolidayHours) `HolidayHours`
 				, SUM(et.HolidayPay) `HolidayPay`
+				, SUM(et.LeavePayment) `LeavePayment`
 				FROM timeentrywithdailyrate etea
 #				INNER JOIN proper_time_entry et ON et.RowID=etea.RowID AND et.AsActual=TRUE
 				INNER JOIN attendanceperiod et ON et.RowID=etea.RowID

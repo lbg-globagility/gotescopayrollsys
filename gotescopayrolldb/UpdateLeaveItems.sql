@@ -12,6 +12,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateLeaveItems`(
 
 
 
+
+
+
+
+
+
 )
 BEGIN
 
@@ -88,10 +94,9 @@ SET @mBal = 0;
 
 
 
-#SELECT ii.* FROM paystub ps
-
-UPDATE paystub ps
-INNER JOIN (SELECT
+DROP TEMPORARY TABLE IF EXISTS serviceperiods;
+CREATE TEMPORARY TABLE serviceperiods
+SELECT
 		i.PayPeriodID
 		, (@isSame := (@eId = i.EmployeeId)) `IsAnother`
 		, IF(@isSame, @eId, @eId := i.EmployeeId) `EmployeeID`
@@ -124,18 +129,26 @@ INNER JOIN (SELECT
 				, SUM(et.AdditionalVLHours) `AdditionalVLHours`
 				, SUM(et.MaternityLeaveHours) `MaternityLeaveHours`
 				
-				FROM employeetimeentry et
+				FROM payperiod pp
+				LEFT JOIN employeetimeentry et
+							ON et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
+								AND (pp.PayFromDate >= thisYearPayDateFrom AND pp.PayToDate <= thisYearPayDateTo)
+								AND et.OrganizationID=pp.OrganizationID
 				INNER JOIN employee e ON e.RowID=et.EmployeeID
-				INNER JOIN payperiod pp
-                    ON et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
-                       AND (pp.PayFromDate >= thisYearPayDateFrom AND pp.PayToDate <= thisYearPayDateTo)
-							  AND pp.TotalGrossSalary=e.PayFrequencyID
-							  AND pp.OrganizationID=et.OrganizationID
-				WHERE et.OrganizationID = orgId
+								AND pp.TotalGrossSalary=e.PayFrequencyID
+				
+				WHERE pp.OrganizationID = orgId
 #				AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours + et.MaternityLeaveHours) > 0
 				GROUP BY pp.RowID, e.RowID
+#				HAVING SUM(et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours + et.MaternityLeaveHours) > 0
 				ORDER BY e.RowID, pp.`Year`, pp.OrdinalValue) i
-				) ii ON ps.EmployeeID = ii.EmployeeID AND ps.PayPeriodID = ii.PayPeriodID
+;
+
+
+SELECT * FROM serviceperiods INTO OUTFILE 'D:/TEST.txt';
+
+UPDATE paystub ps
+INNER JOIN serviceperiods ii ON ps.EmployeeID = ii.EmployeeID AND ps.PayPeriodID = ii.PayPeriodID
 
 INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.Undeclared=TRUE AND psi.ProductID = vacationId
 INNER JOIN paystubitem psii ON psii.PayStubID=ps.RowID AND psii.Undeclared=TRUE AND psii.ProductID = sickId
@@ -155,6 +168,31 @@ SET psi.PayAmount = ii.VacationBalanceDecrement
 , psiv.LastUpd = CURRENT_TIMESTAMP()
 , psv.LastUpd = CURRENT_TIMESTAMP()
 ;
+
+/************
+UPDATE paystub ps
+INNER JOIN serviceperiods ii ON ps.EmployeeID = ii.EmployeeID AND ps.PayPeriodID = ii.PayPeriodID
+
+INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.Undeclared=FALSE AND psi.ProductID = vacationId
+INNER JOIN paystubitem psii ON psii.PayStubID=ps.RowID AND psii.Undeclared=FALSE AND psii.ProductID = sickId
+INNER JOIN paystubitem psiii ON psiii.PayStubID=ps.RowID AND psiii.Undeclared=FALSE AND psiii.ProductID = otherId
+INNER JOIN paystubitem psiv ON psiv.PayStubID=ps.RowID AND psiv.Undeclared=FALSE AND psiv.ProductID = addtlId
+INNER JOIN paystubitem psv ON psv.PayStubID=ps.RowID AND psv.Undeclared=FALSE AND psv.ProductID = maternityId
+
+SET psi.PayAmount = ii.VacationBalanceDecrement
+, psii.PayAmount = ii.SickBalanceDecrement
+, psiii.PayAmount = ii.OtherBalanceDecrement
+, psiv.PayAmount = ii.AdditionalBalanceDecrement
+, psv.PayAmount = ii.MaternityBalanceDecrement
+
+, psi.LastUpd = CURRENT_TIMESTAMP()
+, psii.LastUpd = CURRENT_TIMESTAMP()
+, psiii.LastUpd = CURRENT_TIMESTAMP()
+, psiv.LastUpd = CURRENT_TIMESTAMP()
+, psv.LastUpd = CURRENT_TIMESTAMP()
+;
+*************/
+
 
 END//
 DELIMITER ;

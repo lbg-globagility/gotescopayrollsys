@@ -18,6 +18,13 @@ CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `LEAVE_gainingbalance`(
 
 
 
+
+
+
+
+
+
+
 )
     DETERMINISTIC
 BEGIN
@@ -47,6 +54,47 @@ WHERE e.OrganizationID = OrganizID
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 ;
 
+
+
+
+
+
+									
+									UPDATE employee e
+									INNER JOIN payfrequency pf
+									        ON pf.RowID=e.PayFrequencyID
+									INNER JOIN payperiod pp
+									        ON pp.TotalGrossSalary = e.PayFrequencyID
+											     AND pp.OrganizationID = e.OrganizationID
+												  AND pp.PayFromDate = payDateFrom
+												  AND pp.PayToDate = payDateTo
+									SET
+									e.LeavePerPayPeriod =				( e.LeaveAllowance / count_semi_monthly_period_peryear )
+									, e.SickLeavePerPayPeriod =			( e.SickLeaveAllowance / count_semi_monthly_period_peryear )
+									, e.MaternityLeavePerPayPeriod =	( e.MaternityLeaveAllowance / count_semi_monthly_period_peryear )
+									, e.OtherLeavePerPayPeriod =		( e.OtherLeaveAllowance / count_semi_monthly_period_peryear )
+									
+									, e.LeaveBalance =				e.LeaveAllowance
+									, e.SickLeaveBalance =		e.SickLeaveAllowance
+									, e.MaternityLeaveBalance =	e.MaternityLeaveAllowance
+									, e.OtherLeaveBalance =		e.OtherLeaveAllowance
+									
+									, e.LastUpd=CURRENT_TIMESTAMP()
+									, e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
+									WHERE e.OrganizationID = OrganizID
+									AND e.DateRegularized NOT BETWEEN payDateFrom AND payDateTo
+									AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+									AND e.EmploymentStatus = regularEmplymentStatus
+									;
+
+
+
+
+
+
+
+
+/* ORIGINAL */
 UPDATE employee e
 INNER JOIN payfrequency pf
         ON pf.RowID=e.PayFrequencyID

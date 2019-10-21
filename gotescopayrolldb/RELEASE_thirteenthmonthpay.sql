@@ -6,7 +6,18 @@
 
 DROP PROCEDURE IF EXISTS `RELEASE_thirteenthmonthpay`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RELEASE_thirteenthmonthpay`(IN `OrganizID` INT, IN `PayPeriodRowID` INT, IN `UserRowID` INT)
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RELEASE_thirteenthmonthpay`(
+	IN `OrganizID` INT,
+	IN `PayPeriodRowID` INT,
+	IN `UserRowID` INT
+
+
+
+
+
+
+
+)
     DETERMINISTIC
 BEGIN
 
@@ -66,6 +77,7 @@ INTO annual_first_date
 ;
 
 /***********
+***********/
 UPDATE paystub ps
 INNER JOIN payperiod pp
 	ON pp.`Year`=final_year
@@ -84,7 +96,6 @@ SET ps.ThirteenthMonthInclusion=FALSE
 WHERE ps.OrganizationID=OrganizID
 AND ps.ThirteenthMonthInclusion=TRUE
 ;
-***********/
 
 DROP TEMPORARY TABLE IF EXISTS thirteenthmonthofdaily;
 CREATE TEMPORARY TABLE thirteenthmonthofdaily
@@ -105,7 +116,7 @@ WHERE tmp.OrganizationID=OrganizID
 GROUP BY ps.EmployeeID
 ;
 
-/**/UPDATE paystub ps
+/**/ UPDATE paystub ps
 INNER JOIN thirteenthmonthofdaily ii ON ii.EmployeeID=ps.EmployeeID
 SET ps.`ThirteenthMonthPay` = ii.tmpAmount
 , ps.ThirteenthMonthInclusion = TRUE
@@ -172,7 +183,7 @@ INNER JOIN annualcompletion ii ON ii.EmployeeID=i.EmployeeID
 WHERE @dateTwo BETWEEN i.PayFromDate AND i.PayToDate
 ;
 
-/**/UPDATE paystub ps
+/**/ UPDATE paystub ps
 INNER JOIN thirteenthmonthpayment ii ON ii.EmployeeID=ps.EmployeeID
 SET ps.`ThirteenthMonthPay` = ii.DeclaredThirteenthMonthPayment
 , ps.ThirteenthMonthInclusion = TRUE

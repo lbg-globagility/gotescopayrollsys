@@ -2647,33 +2647,33 @@ Public Class PayStub
 
         Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
 
-                With command.Parameters
-                    .AddWithValue("@orgId", org_rowid)
-                    .AddWithValue("@userId", user_row_id)
-                    .AddWithValue("@dateFrom", paypFrom)
-                    .AddWithValue("@dateTo", paypTo)
-                    .AddWithValue("@periodId", paypRowID)
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", paypFrom)
+                .AddWithValue("@dateTo", paypTo)
+                .AddWithValue("@periodId", paypRowID)
 
-                End With
+            End With
 
-                Await command.Connection.OpenAsync
+            Await command.Connection.OpenAsync
 
-                Dim transaction = Await command.Connection.BeginTransactionAsync
+            Dim transaction = Await command.Connection.BeginTransactionAsync
 
-                Try
-                    Await command.ExecuteNonQueryAsync()
-                    transaction.Commit()
-                Catch ex As Exception
-                    _logger.Error("LEAVE_gainingbalance & MASSUPD_employeeloanschedulebacktrack_ofthisperiod", ex)
-                    transaction.Rollback()
+            Try
+                Await command.ExecuteNonQueryAsync()
+                transaction.Commit()
+            Catch ex As Exception
+                _logger.Error("LEAVE_gainingbalance & MASSUPD_employeeloanschedulebacktrack_ofthisperiod", ex)
+                transaction.Rollback()
 
-                    MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
                                     "",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Exclamation)
-                End Try
+            End Try
 
-            End Using
+        End Using
     End Sub
 
 #End Region

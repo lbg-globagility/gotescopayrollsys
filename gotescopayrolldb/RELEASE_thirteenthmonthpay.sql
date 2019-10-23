@@ -120,6 +120,7 @@ GROUP BY ps.EmployeeID
 INNER JOIN thirteenthmonthofdaily ii ON ii.EmployeeID=ps.EmployeeID
 SET ps.`ThirteenthMonthPay` = ii.tmpAmount
 , ps.ThirteenthMonthInclusion = TRUE
+, ps.TotalGrossSalary = (ps.TotalGrossSalary + ii.tmpAmount)
 , ps.LastUpd = CURRENT_TIMESTAMP()
 , ps.LastUpdBy = UserRowID
 WHERE ps.OrganizationID=OrganizID
@@ -130,6 +131,7 @@ UPDATE paystubactual ps
 INNER JOIN thirteenthmonthofdaily ii ON ii.EmployeeID=ps.EmployeeID
 SET ps.`ThirteenthMonthPay` = ii.tmpAmount
 , ps.ThirteenthMonthInclusion = TRUE
+, ps.TotalGrossSalary = (ps.TotalGrossSalary + ii.tmpAmount)
 WHERE ps.OrganizationID=OrganizID
 AND ps.PayPeriodID=PayPeriodRowID
 ;
@@ -187,6 +189,7 @@ WHERE @dateTwo BETWEEN i.PayFromDate AND i.PayToDate
 INNER JOIN thirteenthmonthpayment ii ON ii.EmployeeID=ps.EmployeeID
 SET ps.`ThirteenthMonthPay` = ii.DeclaredThirteenthMonthPayment
 , ps.ThirteenthMonthInclusion = TRUE
+, ps.TotalGrossSalary = (ps.TotalGrossSalary + ii.tmpAmount)
 , ps.LastUpd = CURRENT_TIMESTAMP()
 , ps.LastUpdBy = UserRowID
 WHERE ps.OrganizationID=OrganizID
@@ -197,6 +200,7 @@ UPDATE paystubactual ps
 INNER JOIN thirteenthmonthpayment ii ON ii.EmployeeID=ps.EmployeeID
 SET ps.`ThirteenthMonthPay` = ii.ActualThirteenthMonthPayment
 , ps.ThirteenthMonthInclusion = TRUE
+, ps.TotalGrossSalary = (ps.TotalGrossSalary + ii.tmpAmount)
 WHERE ps.OrganizationID=OrganizID
 AND ps.PayPeriodID=PayPeriodRowID
 ;

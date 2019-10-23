@@ -964,6 +964,9 @@ Public Class PayrollGeneration
                         If Not dontContribSss Then
                             sss_ee = SssCalculator(amount_used_to_get_sss_contrib, EmployeeEmployer.Employee)
                             sss_er = SssCalculator(amount_used_to_get_sss_contrib, EmployeeEmployer.Employer)
+                        Else
+                            sss_ee = 0
+                            sss_er = 0
                         End If
                         'Next
 

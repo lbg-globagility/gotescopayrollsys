@@ -289,7 +289,8 @@ WHERE e.OrganizationID = OrganizID
 AND (ADDDATE(e.DateRegularized, INTERVAL 11 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 12 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 13 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
-     OR ADDDATE(e.DateRegularized, INTERVAL 14 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo)
+     OR ADDDATE(e.DateRegularized, INTERVAL 14 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
+     OR ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo)
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus = regularEmplymentStatus
 ;

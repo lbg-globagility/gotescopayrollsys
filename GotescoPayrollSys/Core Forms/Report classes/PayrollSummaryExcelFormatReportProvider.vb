@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.Collections.ObjectModel
 Imports System.Data.Entity
 Imports System.IO
 Imports AccuPay.Entity
@@ -28,6 +29,41 @@ Public Class PayrollSummaryExcelFormatReportProvider
     Private Const AdjustmentColumnSuffix As String = "(Adj.)"
     Private Const TotalAdjustmentColumnName As String = "Adj."
 
+    Private Const EmployeeRowIDColumnName As String = "EmployeeRowID"
+    Private Const PaystubIdColumnName As String = "PaystubId"
+
+    Private ReadOnly _reportColumns As IReadOnlyCollection(Of ReportColumn) = GetReportColumns()
+
+    Private Shared Function GetReportColumns() As ReadOnlyCollection(Of ReportColumn)
+
+        Dim reportColumns = New List(Of ReportColumn)({
+                New ReportColumn("", "LastName", ColumnType.Text),
+                New ReportColumn("", "FirstName", ColumnType.Text),
+                New ReportColumn("HRS", "LateHours"),
+                New ReportColumn("TARDINESS", "LateAmount"),
+                New ReportColumn("HRS", "AbsentHours"),
+                New ReportColumn("ABSENT", "AbsentAmount"),
+                New ReportColumn("HRS", "LeaveHours"),
+                New ReportColumn("LEAVE BASIC", "LeaveAmount"),
+                New ReportColumn("OT HRS", "OvertimeHours"),
+                New ReportColumn("AMOUNT OT", "OvertimeAmount"),
+                New ReportColumn("ND Pay", "NightDiffPay"),
+                New ReportColumn(TotalBonusColumnName, TotalBonusColumnName),
+                New ReportColumn("SALARIES BASIC", "GrossWithoutAllowance"),
+                New ReportColumn(TotalAllowanceColumnName, TotalAllowanceColumnName),
+                New ReportColumn("SSS", "SSS"),
+                New ReportColumn("NHIP", "PhilHealth"),
+                New ReportColumn("PAG", "HDMF"),
+                New ReportColumn("WTAX", "WithholdingTax"),
+                New ReportColumn(TotalLoanColumnName, TotalLoanColumnName),
+                New ReportColumn(TotalAdjustmentColumnName, TotalAdjustmentColumnName),
+                New ReportColumn("NET", "Net")
+            })
+
+        Return New ReadOnlyCollection(Of ReportColumn)(reportColumns)
+    End Function
+
+
     Dim margin_size() As Decimal = New Decimal() {0.25D, 0.75D, 0.3D}
 
     Private pp_rowid_from,
@@ -38,9 +74,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
     Private sal_distrib As String = "Cash"
 
     Private returnvalue() As Object
-
-    Private Const EmployeeRowIDColumnName As String = "EmployeeRowID"
-    Private Const PaystubIdColumnName As String = "PaystubId"
 
 #End Region
 
@@ -104,39 +137,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
 #Region "Methods"
 
-    Private Function ProcedureParameters() As Object()
-
-        If pp_rowid_from Is Nothing Then
-
-            returnvalue =
-                New Object() {org_rowid,
-                              pp_rowid_from,
-                              pp_rowid_to,
-                              is_actual,
-                              sal_distrib}
-        Else
-
-            Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
-
-            n_PayrollSummaDateSelection.ReportIndex = 6
-
-            If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
-
-                returnvalue =
-                    New Object() {org_rowid,
-                                  n_PayrollSummaDateSelection.PayPeriodFromID,
-                                  n_PayrollSummaDateSelection.PayPeriodToID,
-                                  is_actual,
-                                  n_PayrollSummaDateSelection.cboStringParameter.Text}
-
-            End If
-
-        End If
-
-        Return returnvalue
-
-    End Function
-
     Public Sub Run() Implements IReportProvider.Run
 
         Dim n_PayrollSummaDateSelection As New PayrollSummaDateSelection
@@ -161,13 +161,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
                 Dim dt As New DataTable
                 'dt = sql.GetFoundRows.Tables(0)
                 dt = sql.GetFoundRows.Tables.OfType(Of DataTable).FirstOrDefault
-
-                Dim ndt =
-                    (From row In dt.AsEnumerable
-                     Group By val = Convert.ToString(row("DivisionName"))
-                     Into Group
-                     Where val.Length > 0
-                     Select val)
 
                 'Dim rpt As New PayrollSumma
                 'rpt.SetDataSource(dt)
@@ -202,92 +195,87 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                 Using xcl As New ExcelPackage(nfile)
 
-                    For Each division_name In ndt
-                        Dim wsheet = xcl.Workbook.Worksheets(division_name)
+                    Dim workSheetName = "Sheet1"
 
-                        If wsheet IsNot Nothing Then
-                            xcl.Workbook.Worksheets.Delete(wsheet)
-                        End If
+                    Dim wsheet = xcl.Workbook.Worksheets(workSheetName)
 
-                        wsheet = xcl.Workbook.Worksheets.Add(division_name)
+                    If wsheet IsNot Nothing Then
+                        xcl.Workbook.Worksheets.Delete(wsheet)
+                    End If
 
-                        Dim hiddenColumns = {"RowID", EmployeeRowIDColumnName, PaystubIdColumnName}
-                        Dim dataColumns = dt.Columns.OfType(Of DataColumn).Where(Function(d) Not hiddenColumns.Contains(d.ColumnName))
-                        Dim adjustedDataColumns = AddBreakdownColumnHeaders(New List(Of DataColumn)(dataColumns))
+                    wsheet = xcl.Workbook.Worksheets.Add(workSheetName)
 
-                        Dim rowindex = ONEVALUE
+                    Dim adjustedDataColumns = AddBreakdownColumnHeaders(New List(Of ReportColumn)(_reportColumns))
+
+                    Dim rowindex = ONEVALUE
+                    wsheet.Row(rowindex).Style.Font.Bold = True
+                    wsheet.Cells(rowindex, ONEVALUE).Value = report_header
+
+                    rowindex += ONEVALUE
+                    wsheet.Row(rowindex).Style.Font.Bold = True
+                    wsheet.Cells(rowindex, ONEVALUE).Value = report_cutoff
+
+                    rowindex += ONEVALUE
+
+                    Dim dtcolindx = ONEVALUE
+                    'Headers
+                    For Each dcol In adjustedDataColumns
+
+                        wsheet.Cells(rowindex, dtcolindx).Value = dcol.Name
+                        dtcolindx += ONEVALUE
                         wsheet.Row(rowindex).Style.Font.Bold = True
-                        wsheet.Cells(rowindex, ONEVALUE).Value = report_header
+                    Next
 
-                        rowindex += ONEVALUE
-                        wsheet.Row(rowindex).Style.Font.Bold = True
-                        wsheet.Cells(rowindex, ONEVALUE).Value = report_cutoff
+                    rowindex += ONEVALUE
+                    Dim details_start_rowindex = rowindex
 
-                        rowindex += ONEVALUE
+                    'Details
+                    For Each drow As DataRow In dt.Rows
+                        Dim dataColumnIndex = ONEVALUE
+                        For Each dataColumn In adjustedDataColumns
 
-                        Dim dtcolindx = ONEVALUE
-                        For Each dcol In adjustedDataColumns
+                            Dim cell = wsheet.Cells(rowindex, dataColumnIndex)
+                            cell.Value = GetCellValue(drow, dataColumn, dt.Columns.OfType(Of DataColumn))
 
-                            wsheet.Cells(rowindex, dtcolindx).Value = dcol.ColumnName
-                            dtcolindx += ONEVALUE
-                            wsheet.Row(rowindex).Style.Font.Bold = True
+                            dataColumnIndex += ONEVALUE
+
+                            If dataColumn.Type = ColumnType.Numeric Then
+                                cell.Style.Numberformat.Format = "_(* #,##0.00_);_(* (#,##0.00);_(* ??_);_(@_)"
+                                cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right
+                            End If
                         Next
-
                         rowindex += ONEVALUE
-                        Dim details_start_rowindex = rowindex
-
-                        Dim emp_payroll =
-                            dt.Select(String.Concat("DivisionName='", division_name, "'"))
-
-                        For Each drow As DataRow In emp_payroll
-                            Dim dataColumnIndex = ONEVALUE
-                            For Each dataColumn In adjustedDataColumns
-
-                                wsheet.
-                                    Cells(rowindex, dataColumnIndex).
-                                    Value = GetCellValue(drow, dataColumn)
-
-                                dataColumnIndex += ONEVALUE
-                            Next
-                            rowindex += ONEVALUE
-                        Next
-
-                        'wsheet.DeleteColumn(oneValue)
+                    Next
 
 
-                        Dim lastColumnLetter = GetExcelColumnName(adjustedDataColumns.Count - 1) '-1 to avoid using sum on DivisionName column
+                    Dim lastColumnLetter = GetExcelColumnName(adjustedDataColumns.Count)
 
-                        Dim sum_cell_range = String.Join(":",
+                    Dim sum_cell_range = String.Join(":",
                                                          String.Concat("C", rowindex),
                                                          String.Concat(lastColumnLetter, rowindex))
-                        ''FromRow, FromColumn, ToRow, ToColumn
-                        'wsheet.Cells(sum_cell_range).Formula = String.Format("SUBTOTAL(9,{0})") ', New ExcelAddress(2, 3, 4, 3).Address)
-
-                        wsheet.Cells(sum_cell_range).Formula =
+                    wsheet.Cells(sum_cell_range).Formula =
                                 String.Format("SUM({0})",
                                               New ExcelAddress(details_start_rowindex,
                                                                3,
                                                                (rowindex - ONEVALUE),
                                                                3).Address) 'column_headers.Count
 
-                        wsheet.Cells(sum_cell_range).Style.Font.Bold = True
+                    wsheet.Cells(sum_cell_range).Style.Font.Bold = True
 
-                        wsheet.PrinterSettings.Orientation = eOrientation.Landscape
+                    wsheet.PrinterSettings.Orientation = eOrientation.Landscape
 
-                        wsheet.PrinterSettings.PaperSize = ePaperSize.Legal
+                    wsheet.PrinterSettings.PaperSize = ePaperSize.Legal
 
-                        wsheet.PrinterSettings.TopMargin = margin_size(ONEVALUE)
-                        wsheet.PrinterSettings.BottomMargin = margin_size(ONEVALUE)
-                        wsheet.PrinterSettings.LeftMargin = margin_size(0)
-                        wsheet.PrinterSettings.RightMargin = margin_size(0)
+                    wsheet.PrinterSettings.TopMargin = margin_size(ONEVALUE)
+                    wsheet.PrinterSettings.BottomMargin = margin_size(ONEVALUE)
+                    wsheet.PrinterSettings.LeftMargin = margin_size(0)
+                    wsheet.PrinterSettings.RightMargin = margin_size(0)
 
-                        wsheet.Cells.AutoFitColumns(2, 22.71)
+                    wsheet.Cells.AutoFitColumns(2, 22.71)
 
-                        wsheet.Cells("A1").AutoFitColumns(4.9, 5.3)
+                    wsheet.Cells("A1").AutoFitColumns(4.9, 5.3)
 
-                        'wsheet.DeleteColumn(23)
-
-                    Next
+                    'wsheet.DeleteColumn(23)
 
                     xcl.Save()
                 End Using
@@ -316,9 +304,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Return columnName
     End Function
 
-    Private Function GetCellValue(drow As DataRow, dataColumn As DataColumn) As Object
+    Private Function GetCellValue(drow As DataRow,
+                                  reportColumn As ReportColumn,
+                                  dataColumns As IEnumerable(Of DataColumn)) As Object
 
-        Dim sourceName = dataColumn.ColumnName
+        Dim sourceName = reportColumn.Source
         Dim employeeId = Convert.ToInt32(drow(EmployeeRowIDColumnName))
         Dim paystubId = Convert.ToInt32(drow(PaystubIdColumnName))
 
@@ -373,7 +363,14 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
         End If
 
-        Return drow(dataColumn.ColumnName)
+
+        If dataColumns.Where(Function(c) c.ColumnName = reportColumn.Source).Any Then
+            Return drow(reportColumn.Source)
+
+        End If
+
+        Return String.Empty
+
     End Function
 
 #End Region
@@ -498,8 +495,8 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Return employeeIdsArray
     End Function
 
-    Private Function AddBreakdownColumnHeaders(dataColumns As IList(Of DataColumn)) _
-        As IList(Of DataColumn)
+    Private Function AddBreakdownColumnHeaders(dataColumns As IList(Of ReportColumn)) _
+        As IList(Of ReportColumn)
 
         'bonuses
         dataColumns = AddPaystubColumnHeaders(
@@ -525,16 +522,16 @@ Public Class PayrollSummaryExcelFormatReportProvider
     End Function
 
     Private Function AddPaystubColumnHeaders(
-                        dataColumns As IList(Of DataColumn),
+                        dataColumns As IList(Of ReportColumn),
                         paystubItems As List(Of PaystubItem),
                         totalPaystubItemColumnName As String,
                         paystubItemColumnSuffix As String) _
-                        As IList(Of DataColumn)
+                        As IList(Of ReportColumn)
 
         If paystubItems Is Nothing OrElse paystubItems.Count = 0 Then Return dataColumns
 
         Dim totalPaystubColumn = dataColumns.
-                                        Where(Function(p) p.ColumnName = totalPaystubItemColumnName).
+                                        Where(Function(p) p.Name = totalPaystubItemColumnName).
                                         FirstOrDefault
 
         If totalPaystubColumn Is Nothing Then Return dataColumns
@@ -551,7 +548,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
             Dim paystubItemName = GetPaystubItemName(paystubItem(0).Product?.Name, paystubItemColumnSuffix)
 
-            dataColumns.Insert(index, New DataColumn(paystubItemName))
+            dataColumns.Insert(index, New ReportColumn(paystubItemName))
 
             index += 1
         Next
@@ -616,13 +613,13 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     End Function
 
-    Private Function AddLoansColumnHeaders(dataColumns As IList(Of DataColumn)) _
-        As IList(Of DataColumn)
+    Private Function AddLoansColumnHeaders(dataColumns As IList(Of ReportColumn)) _
+        As IList(Of ReportColumn)
 
         If _loans Is Nothing OrElse _loans.Count = 0 Then Return dataColumns
 
         Dim totalLoanColumn = dataColumns.
-                                        Where(Function(p) p.ColumnName = TotalLoanColumnName).
+                                        Where(Function(p) p.Name = TotalLoanColumnName).
                                         FirstOrDefault
 
         If totalLoanColumn Is Nothing Then Return dataColumns
@@ -639,7 +636,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
             Dim loanName = GetPaystubItemName(loan(0).LoanName, LoanColumnSuffix)
 
-            dataColumns.Insert(index, New DataColumn(loanName))
+            dataColumns.Insert(index, New ReportColumn(loanName))
 
             index += 1
         Next
@@ -693,13 +690,13 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     End Function
 
-    Private Function AddAdjustmentsColumnHeaders(dataColumns As IList(Of DataColumn)) _
-        As IList(Of DataColumn)
+    Private Function AddAdjustmentsColumnHeaders(dataColumns As IList(Of ReportColumn)) _
+        As IList(Of ReportColumn)
 
         If _adjustments Is Nothing OrElse _adjustments.Count = 0 Then Return dataColumns
 
         Dim totalAdjustmentColumn = dataColumns.
-                                        Where(Function(p) p.ColumnName = TotalAdjustmentColumnName).
+                                        Where(Function(p) p.Name = TotalAdjustmentColumnName).
                                         FirstOrDefault
 
         If totalAdjustmentColumn Is Nothing Then Return dataColumns
@@ -718,7 +715,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                     adjustment(0).Product?.Name,
                                     AdjustmentColumnSuffix)
 
-            dataColumns.Insert(index, New DataColumn(adjustmentName))
+            dataColumns.Insert(index, New ReportColumn(adjustmentName))
 
             index += 1
         Next
@@ -727,6 +724,32 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     End Function
 
+#End Region
+
+#Region "Private Classes"
+    Private Class ReportColumn
+
+        Public Property Name As String
+        Public Property Type As ColumnType
+        Public Property Source As String
+        Public Property [Optional] As Boolean
+
+        Public Sub New(name As String,
+                       Optional source As String = "",
+                       Optional type As ColumnType = ColumnType.Numeric,
+                       Optional [optional] As Boolean = False)
+            Me.Name = name
+            Me.Source = source
+            Me.Type = type
+            Me.Optional = [optional]
+        End Sub
+
+    End Class
+
+    Private Enum ColumnType
+        Text
+        Numeric
+    End Enum
 #End Region
 
 End Class

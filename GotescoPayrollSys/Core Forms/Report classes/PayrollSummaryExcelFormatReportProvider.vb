@@ -39,6 +39,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Dim reportColumns = New List(Of ReportColumn)({
                 New ReportColumn("", "LastName", ColumnType.Text),
                 New ReportColumn("", "FirstName", ColumnType.Text),
+                New ReportColumn("", ""),
                 New ReportColumn("HRS", "LateHours"),
                 New ReportColumn("TARDINESS", "LateAmount"),
                 New ReportColumn("HRS", "AbsentHours"),
@@ -47,7 +48,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
                 New ReportColumn("LEAVE BASIC", "LeaveAmount"),
                 New ReportColumn("OT HRS", "OvertimeHours"),
                 New ReportColumn("AMOUNT OT", "OvertimeAmount"),
-                New ReportColumn("ND Pay", "NightDiffPay"),
                 New ReportColumn(TotalBonusColumnName, TotalBonusColumnName),
                 New ReportColumn("SALARIES BASIC", "GrossWithoutAllowance"),
                 New ReportColumn(TotalAllowanceColumnName, TotalAllowanceColumnName),
@@ -174,14 +174,11 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                   "payrollsummary_", cash_or_depo.Replace(" ", "").ToLower,
                                   ".xlsx")
 
-                Dim report_header As String =
-                    Convert.ToString(New SQL(String.Concat("SELECT CONCAT('PAYROLL SUMMARY REPORT - ', og.Name) `Result`",
-                                          " FROM organization og WHERE og.RowID = ", org_rowid, ";")).GetFoundRow)
+                Dim report_header As String = orgNam
 
                 Dim report_cutoff As String =
-                        Convert.ToString(New SQL(String.Concat("SELECT CONCAT('for the period of '",
-                                              ", CONCAT_WS(' to ', DATE_FORMAT(pp.PayFromDate, '%c/%e/%Y'), DATE_FORMAT(pp.PayToDate, '%c/%e/%Y')))",
-                                              " `Cutoff`",
+                        Convert.ToString(New SQL(String.Concat("SELECT CONCAT('PAYROLL PERIOD '",
+                                              ", CONCAT_WS(' ',UPPER(DATE_FORMAT(pp.PayFromDate, '%b')), DATE_FORMAT(pp.PayFromDate, '%e'), 'TO', CONCAT(DATE_FORMAT(pp.PayToDate, '%e'), ','), DATE_FORMAT(pp.PayToDate, '%Y') ))",
                                               " FROM payperiod pp WHERE pp.RowID = ?p_rowid LIMIT 1;"),
                             New Object() {n_PayrollSummaDateSelection.DateFromID}).GetFoundRow)
 
@@ -206,76 +203,34 @@ Public Class PayrollSummaryExcelFormatReportProvider
                     wsheet = xcl.Workbook.Worksheets.Add(workSheetName)
 
                     Dim adjustedDataColumns = AddBreakdownColumnHeaders(New List(Of ReportColumn)(_reportColumns))
-
-                    Dim rowindex = ONEVALUE
-                    wsheet.Row(rowindex).Style.Font.Bold = True
-                    wsheet.Cells(rowindex, ONEVALUE).Value = report_header
-
-                    rowindex += ONEVALUE
-                    wsheet.Row(rowindex).Style.Font.Bold = True
-                    wsheet.Cells(rowindex, ONEVALUE).Value = report_cutoff
-
-                    rowindex += ONEVALUE
-
-                    Dim dtcolindx = ONEVALUE
-                    'Headers
-                    For Each dcol In adjustedDataColumns
-
-                        wsheet.Cells(rowindex, dtcolindx).Value = dcol.Name
-                        dtcolindx += ONEVALUE
-                        wsheet.Row(rowindex).Style.Font.Bold = True
-                    Next
-
-                    rowindex += ONEVALUE
-                    Dim details_start_rowindex = rowindex
-
-                    'Details
-                    For Each drow As DataRow In dt.Rows
-                        Dim dataColumnIndex = ONEVALUE
-                        For Each dataColumn In adjustedDataColumns
-
-                            Dim cell = wsheet.Cells(rowindex, dataColumnIndex)
-                            cell.Value = GetCellValue(drow, dataColumn, dt.Columns.OfType(Of DataColumn))
-
-                            dataColumnIndex += ONEVALUE
-
-                            If dataColumn.Type = ColumnType.Numeric Then
-                                cell.Style.Numberformat.Format = "_(* #,##0.00_);_(* (#,##0.00);_(* ??_);_(@_)"
-                                cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right
-                            End If
-                        Next
-                        rowindex += ONEVALUE
-                    Next
-
-
                     Dim lastColumnLetter = GetExcelColumnName(adjustedDataColumns.Count)
 
-                    Dim sum_cell_range = String.Join(":",
-                                                         String.Concat("C", rowindex),
-                                                         String.Concat(lastColumnLetter, rowindex))
-                    wsheet.Cells(sum_cell_range).Formula =
-                                String.Format("SUM({0})",
-                                              New ExcelAddress(details_start_rowindex,
-                                                               3,
-                                                               (rowindex - ONEVALUE),
-                                                               3).Address) 'column_headers.Count
+                    Dim rowindex = ONEVALUE
+                    rowindex = CreateHeaders(report_header, report_cutoff, wsheet, adjustedDataColumns, rowindex)
+                    rowindex = CreateDetails(dt, wsheet, adjustedDataColumns, rowindex)
 
-                    wsheet.Cells(sum_cell_range).Style.Font.Bold = True
+                    Dim details_start_column_index As Integer = Nothing
+                    CreateTotals(wsheet, lastColumnLetter, rowindex, details_start_column_index)
+
+                    'add border
+                    Dim border_cell_range_formula = String.Join(":",
+                                                         String.Concat("A", details_start_column_index),
+                                                         String.Concat(lastColumnLetter, rowindex))
+
+                    Dim border_cell_range = wsheet.Cells(border_cell_range_formula)
+                    border_cell_range.Style.Border.Top.Style = ExcelBorderStyle.Thin
+                    border_cell_range.Style.Border.Left.Style = ExcelBorderStyle.Thin
+                    border_cell_range.Style.Border.Right.Style = ExcelBorderStyle.Thin
+                    border_cell_range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin
 
                     wsheet.PrinterSettings.Orientation = eOrientation.Landscape
-
                     wsheet.PrinterSettings.PaperSize = ePaperSize.Legal
-
                     wsheet.PrinterSettings.TopMargin = margin_size(ONEVALUE)
                     wsheet.PrinterSettings.BottomMargin = margin_size(ONEVALUE)
                     wsheet.PrinterSettings.LeftMargin = margin_size(0)
                     wsheet.PrinterSettings.RightMargin = margin_size(0)
 
                     wsheet.Cells.AutoFitColumns(2, 22.71)
-
-                    wsheet.Cells("A1").AutoFitColumns(4.9, 5.3)
-
-                    'wsheet.DeleteColumn(23)
 
                     xcl.Save()
                 End Using
@@ -289,6 +244,76 @@ Public Class PayrollSummaryExcelFormatReportProvider
         End If
 
     End Sub
+
+    Private Shared Sub CreateTotals(ByRef wsheet As ExcelWorksheet, lastColumnLetter As String, rowindex As Integer, ByRef details_start_column_index As Integer)
+        'add TOTAL label
+        wsheet.Cells(rowindex, 2).Value = "TOTAL"
+        'Add the sums
+        Dim sum_cell_range = String.Join(":",
+                                             String.Concat("D", rowindex),
+                                             String.Concat(lastColumnLetter, rowindex))
+        details_start_column_index = 4
+        wsheet.Cells(sum_cell_range).Formula =
+                    String.Format("SUM({0})",
+                                  New ExcelAddress(details_start_column_index,
+                                                   details_start_column_index,
+                                                   (rowindex - ONEVALUE),
+                                                   details_start_column_index).Address) 'column_headers.Count
+        wsheet.Cells(sum_cell_range).Style.Numberformat.Format = "#,##0.00_);(#,##0.00)"
+    End Sub
+
+    Private Function CreateDetails(dt As DataTable, wsheet As ExcelWorksheet, adjustedDataColumns As IList(Of ReportColumn), rowindex As Integer) As Integer
+        For Each drow As DataRow In dt.Rows
+            Dim dataColumnIndex = ONEVALUE
+            For Each dataColumn In adjustedDataColumns
+
+                Dim cell = wsheet.Cells(rowindex, dataColumnIndex)
+                cell.Value = GetCellValue(drow, dataColumn, dt.Columns.OfType(Of DataColumn))
+
+                dataColumnIndex += ONEVALUE
+
+                If dataColumn.Type = ColumnType.Numeric Then
+                    cell.Style.Numberformat.Format = "_(* #,##0.00_);_(* (#,##0.00);_(* ??_);_(@_)"
+                    cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right
+                End If
+            Next
+            rowindex += ONEVALUE
+        Next
+
+        Return rowindex
+    End Function
+
+    Private Shared Function CreateHeaders(report_header As String,
+                                          report_cutoff As String,
+                                          ByRef wsheet As ExcelWorksheet,
+                                          adjustedDataColumns As IList(Of ReportColumn),
+                                          rowindex As Integer) As Integer
+        Dim column_start_header = 10
+        wsheet.Row(rowindex).Style.Font.Bold = True
+        wsheet.Cells(rowindex, column_start_header).Value = report_header
+
+        rowindex += ONEVALUE
+        wsheet.Row(rowindex).Style.Font.Bold = True
+        wsheet.Cells(rowindex, column_start_header).Value = "SALARIES AND WAGES FOR ISSUANCE OF VOUCHER"
+
+        rowindex += ONEVALUE
+        wsheet.Row(rowindex).Style.Font.Bold = True
+        wsheet.Cells(rowindex, column_start_header).Value = report_cutoff
+
+        rowindex += ONEVALUE
+
+        Dim dtcolindx = ONEVALUE
+        'Headers
+        For Each dcol In adjustedDataColumns
+
+            wsheet.Cells(rowindex, dtcolindx).Value = dcol.Name
+            dtcolindx += ONEVALUE
+        Next
+
+        rowindex += ONEVALUE
+
+        Return rowindex
+    End Function
 
     Private Function GetExcelColumnName(columnNumber As Integer) As String
         Dim dividend As Integer = columnNumber
@@ -548,7 +573,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
             Dim paystubItemName = GetPaystubItemName(paystubItem(0).Product?.Name, paystubItemColumnSuffix)
 
-            dataColumns.Insert(index, New ReportColumn(paystubItemName))
+            dataColumns.Insert(index, New ReportColumn(paystubItemName, paystubItemName))
 
             index += 1
         Next
@@ -636,7 +661,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
             Dim loanName = GetPaystubItemName(loan(0).LoanName, LoanColumnSuffix)
 
-            dataColumns.Insert(index, New ReportColumn(loanName))
+            dataColumns.Insert(index, New ReportColumn(loanName, loanName))
 
             index += 1
         Next
@@ -715,7 +740,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
                                     adjustment(0).Product?.Name,
                                     AdjustmentColumnSuffix)
 
-            dataColumns.Insert(index, New ReportColumn(adjustmentName))
+            dataColumns.Insert(index, New ReportColumn(adjustmentName, adjustmentName))
 
             index += 1
         Next
@@ -735,7 +760,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
         Public Property [Optional] As Boolean
 
         Public Sub New(name As String,
-                       Optional source As String = "",
+                       source As String,
                        Optional type As ColumnType = ColumnType.Numeric,
                        Optional [optional] As Boolean = False)
             Me.Name = name

@@ -34,7 +34,7 @@ Public Class PayPeriod
     Public Property HDMFContribSched As String
     Public Property OrdinalValue As Integer?
     Public Property MinimumWageValue As Decimal?
-
+    Public Property BeginLeaveReset As Boolean
     Public ReadOnly Property IsMonthly As Boolean
         Get
             Return PayFrequencyID.Value = 1

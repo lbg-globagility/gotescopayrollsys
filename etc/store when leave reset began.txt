@@ -1,0 +1,3 @@
+
+ALTER TABLE `payperiod`
+	ADD COLUMN IF NOT EXISTS `BeginLeaveReset` TINYINT(1) NULL DEFAULT '0' AFTER `MinimumWageValue`;

@@ -49,6 +49,8 @@ Public Class PreviewLeaveBalanceForm
                 periodDateTo = dialog.End
                 periodYear = dialog.Year
                 isOk = True
+
+                dialog.UpdateWhenLeaveResetBegan(payPeriodId)
             End If
         End Using
 

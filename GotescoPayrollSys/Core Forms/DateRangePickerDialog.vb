@@ -82,6 +82,27 @@ Public Class DateRangePickerDialog
         _year = payperiod.Year
     End Sub
 
+    Public Async Sub UpdateWhenLeaveResetBegan(periodId As Integer)
+        Using context = New DatabaseContext()
+            Dim selectedPeriod = Await context.PayPeriods.FirstOrDefaultAsync(Function(pp) pp.RowID = periodId)
+            If selectedPeriod Is Nothing Then Return
+
+            Dim otherPeriods = Await context.PayPeriods.
+                Where(Function(pp) pp.OrganizationID.Value = selectedPeriod.OrganizationID.Value).
+                Where(Function(pp) pp.Year.Value = selectedPeriod.Year.Value).
+                Where(Function(pp) pp.PayFrequencyID.Value = selectedPeriod.PayFrequencyID.Value).
+                ToListAsync()
+
+            otherPeriods.ForEach(Sub(pp)
+                                     pp.BeginLeaveReset = False
+                                 End Sub)
+
+            selectedPeriod.BeginLeaveReset = True
+
+            Await context.SaveChangesAsync()
+        End Using
+    End Sub
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         DialogResult = DialogResult.OK
     End Sub

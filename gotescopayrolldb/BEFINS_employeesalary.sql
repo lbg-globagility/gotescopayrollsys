@@ -11,7 +11,7 @@ CREATE TRIGGER `BEFINS_employeesalary` BEFORE INSERT ON `employeesalary` FOR EAC
 
 DECLARE e_type VARCHAR(50);
 
-DECLARE month_count INT(11) DEFAULT 11;
+DECLARE month_count INT(11) DEFAULT 12;
 
 DECLARE e_workdays_peryear DECIMAL(15, 4);
 

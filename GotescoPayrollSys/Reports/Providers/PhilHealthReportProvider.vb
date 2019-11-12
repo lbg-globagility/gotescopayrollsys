@@ -29,6 +29,7 @@ Public Class PhilHealthReportProvider
         Dim philHealthReport = New Phil_Health_Monthly_Report
         Dim objText As TextObject = DirectCast(philHealthReport.ReportDefinition.Sections(1).ReportObjects("Text2"), TextObject)
         objText.Text = "For the month of " & date_from
+        'Dim philHealthReport = New New_PhilHealth_Monthly_Report
         philHealthReport.SetDataSource(data)
 
         Dim crvwr As New CrysRepForm

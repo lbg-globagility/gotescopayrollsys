@@ -202,7 +202,7 @@ UPDATE paystubactual ps
 INNER JOIN thirteenthmonthpayment ii ON ii.EmployeeID=ps.EmployeeID
 SET ps.`ThirteenthMonthPay` = ii.ActualThirteenthMonthPayment
 , ps.ThirteenthMonthInclusion = TRUE
-, ps.TotalGrossSalary = (ps.TotalGrossSalary + ii.ActualThirteenthMonthPayment)
+, ps.TotalGrossSalary = (ps.TotalGrossSalary + ii.DeclaredThirteenthMonthPayment)
 WHERE ps.OrganizationID=OrganizID
 AND ps.PayPeriodID=PayPeriodRowID
 ;

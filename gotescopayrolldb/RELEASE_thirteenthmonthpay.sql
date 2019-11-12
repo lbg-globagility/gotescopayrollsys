@@ -27,6 +27,8 @@ DECLARE annual_first_date, annual_last_date DATE;
 
 DECLARE final_year, payFrequencyID INT(11);
 
+SET @orgId=OrganizID;
+
 SELECT
 pp.`Year`
 , pp.TotalGrossSalary

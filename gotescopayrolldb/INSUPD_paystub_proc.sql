@@ -145,7 +145,7 @@ UPDATE
 	,TimeEntryID=pstub_TimeEntryID
 	,PayFromDate=pstub_PayFromDate
 	,PayToDate=pstub_PayToDate
-	,TotalGrossSalary=pstub_TotalGrossSalary-`ThirteenthMonthPay`
+	,TotalGrossSalary=pstub_TotalGrossSalary
 	,TotalNetSalary=pstub_TotalNetSalary + (SumPayStubAdjustments)
 	,TotalTaxableSalary=pstub_TotalTaxableSalary
 	,TotalEmpSSS=pstub_TotalEmpSSS

@@ -28,6 +28,8 @@ DECLARE month_date TEXT;
 
 DECLARE dedcutioncategID
         ,new_phh_effectyear INT(11);
+        
+DECLARE v_month_count INT(2) DEFAULT 12;
 
 SELECT i.YearOfEffect FROM newphilhealthimplement i LIMIT 1 INTO new_phh_effectyear;
 
@@ -76,9 +78,11 @@ IF new_phh_effectyear <= YEAR(paramDate) THEN
 	, ps.TotalEmpPhilhealth `DatCol3`
 	, ps.TotalCompPhilhealth `DatCol4`
 	, (ps.TotalEmpPhilhealth + ps.TotalCompPhilhealth) `DatCol5`
+	, IF(e.EmployeeType = 'Daily', ((s.Salary * e.WorkDaysPerYear) / v_month_count), s.Salary) `DatCol6`
 	FROM paystub ps
 	INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.OrganizationID=ps.OrganizationID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 	INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.`Year`=YEAR(paramDate) AND pp.`Month`=MONTH(paramDate)
+	INNER JOIN employeesalary s ON s.EmployeeID = e.RowID AND paramDate BETWEEN s.EffectiveDateFrom AND s.EffectiveDateTo
 	WHERE ps.OrganizationID=OrganizID
 	AND (ps.TotalEmpPhilhealth + ps.TotalCompPhilhealth) > 0
 	ORDER BY CONCAT(e.LastName, e.FirstName)

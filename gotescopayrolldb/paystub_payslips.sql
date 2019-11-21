@@ -82,6 +82,8 @@ INTO paydate_from
 
 CALL GetUnearnedAllowance(og_rowid, paydate_from, paydat_to);
 
+CALL GetUnearnedDailyAllowance(og_rowid, paydate_from, paydat_to);
+
 CALL GetAttendancePeriod(og_rowid, paydate_from, paydat_to, is_actual);
 
 SELECT MAX(pp.PayToDate)
@@ -166,13 +168,13 @@ ps.RowID
 ,IFNULL(FORMAT(et.NightDiffOTHoursAmount, 2), 0) `Column24`
 
 ,FORMAT(IFNULL(et.`AbsentHours`, 0),2) `Column41`
-,FORMAT(IFNULL(et.Absent, 0) + IFNULL(ua.AbsentAllowance, 0), 2) `Column26`
+,FORMAT(IFNULL(et.Absent, 0) + IFNULL(ua.AbsentAllowance, 0) + IFNULL(uda.AbsentAllowance, 0), 2) `Column26`
 
 ,FORMAT(IFNULL(et.HoursLate,0), 2) `Column42`
-,FORMAT(IFNULL(et.HoursLateAmount, 0) + IFNULL(ua.LateAllowance, 0), 2) `Column27`
+,FORMAT(IFNULL(et.HoursLateAmount, 0) + IFNULL(ua.LateAllowance, 0) + IFNULL(uda.LateAllowance, 0), 2) `Column27`
 
 ,FORMAT(IFNULL(et.UndertimeHours,0), 2) `Column43`
-,FORMAT(IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(ua.UndertimeAllowance, 0), 2) `Column28`
+,FORMAT(IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(ua.UndertimeAllowance, 0) + IFNULL(uda.UndertimeAllowance, 0), 2) `Column28`
 
 ,logo `Column40`
 
@@ -562,6 +564,8 @@ LEFT JOIN (SELECT GROUP_CONCAT(eapp.AllowanceAmount) `AllowanceAmount`
 			  GROUP BY eapp.EmployeeID) eapp ON eapp.EmployeeID=ps.EmployeeID
 
 LEFT JOIN unearnedallowance ua ON ua.EmployeeID=ps.EmployeeID
+
+LEFT JOIN unearneddailyallowance uda ON uda.EmployeeID=ps.EmployeeID
 
 WHERE ps.OrganizationID=og_rowid
 AND ps.PayPeriodID=pp_rowid

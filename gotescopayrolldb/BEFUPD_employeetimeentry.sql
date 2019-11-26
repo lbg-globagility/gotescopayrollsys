@@ -279,8 +279,12 @@ IF isRest_day = '0' THEN
 					
 				ELSEIF LCASE(emp_type)='daily' THEN
 				
-					SET NEW.TotalDayPay = 0.0;
-					SET NEW.Absent = IF(isRest_day = 0, @daily_pay, 0);
+					IF NEW.TotalDayPay=0 THEN
+						SET NEW.TotalDayPay = 0.0;
+						SET NEW.Absent = IF(isRest_day = 0, @daily_pay, 0);
+					ELSEIF NEW.TotalDayPay>0 THEN
+						SET NEW.Absent = 0.0;
+					END IF;
 					
 				ELSEIF LCASE(emp_type)='monthly' AND NEW.TotalDayPay > 0 THEN
 					SET NEW.Absent = 0;

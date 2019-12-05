@@ -901,7 +901,7 @@ Public Class PayrollGeneration
                             monthly_computed_salary = ((grossincome + grossincome_firsthalf) - overall_overtime)
 
                         ElseIf employment_type = "Daily" Then
-                            grossincome = ValNoComma(drowtotdaypay("TotalDayPay"))
+                            grossincome = ValNoComma(drowtotdaypay("TotalDayPay")) + ValNoComma(drowtotdaypay("AddedHolidayPayAmount"))
                             grossincome_firsthalf = ValNoComma(prev_empTimeEntry.Compute("SUM(TotalDayPay)", "EmployeeID = '" & drow("RowID") & "'"))
                             monthly_computed_salary = ((grossincome + grossincome_firsthalf) - overall_overtime) '_
                             'monthly_computed_salary = ValNoComma(prev_empTimeEntry.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) + ValNoComma(etent_totdaypay.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) _

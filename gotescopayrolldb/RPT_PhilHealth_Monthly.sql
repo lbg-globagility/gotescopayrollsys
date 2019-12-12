@@ -6,8 +6,22 @@
 
 DROP PROCEDURE IF EXISTS `RPT_PhilHealth_Monthly`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_PhilHealth_Monthly`(IN `OrganizID` INT, IN `paramDate` DATE)
-    DETERMINISTIC
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_PhilHealth_Monthly`(
+	IN `OrganizID` INT,
+	IN `paramDate` DATE
+
+
+
+
+
+
+
+)
+LANGUAGE SQL
+DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
 BEGIN
 
 DECLARE deduc_sched VARCHAR(50);
@@ -28,6 +42,8 @@ DECLARE month_date TEXT;
 
 DECLARE dedcutioncategID
         ,new_phh_effectyear INT(11);
+        
+DECLARE v_month_count INT(2) DEFAULT 12;
 
 SELECT i.YearOfEffect FROM newphilhealthimplement i LIMIT 1 INTO new_phh_effectyear;
 
@@ -72,13 +88,16 @@ IF new_phh_effectyear <= YEAR(paramDate) THEN
 
 	SELECT
 	e.PhilHealthNo `DatCol1`
-	, CONCAT_WS(', ', e.LastName, e.FirstName) `DatCol2`
+	, CONCAT_WS(', ', e.LastName, e.FirstName, e.MiddleName) `DatCol2`
 	, ps.TotalEmpPhilhealth `DatCol3`
 	, ps.TotalCompPhilhealth `DatCol4`
 	, (ps.TotalEmpPhilhealth + ps.TotalCompPhilhealth) `DatCol5`
+	, IF(e.EmployeeType = 'Daily', ((s.Salary * e.WorkDaysPerYear) / v_month_count), s.Salary) `DatCol6`
+	, DATE_FORMAT(e.StartDate,'%m/%d/%Y') `DatCol7`
 	FROM paystub ps
 	INNER JOIN employee e ON e.RowID=ps.EmployeeID AND e.OrganizationID=ps.OrganizationID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 	INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.`Year`=YEAR(paramDate) AND pp.`Month`=MONTH(paramDate)
+	INNER JOIN employeesalary s ON s.EmployeeID = e.RowID AND paramDate BETWEEN s.EffectiveDateFrom AND s.EffectiveDateTo
 	WHERE ps.OrganizationID=OrganizID
 	AND (ps.TotalEmpPhilhealth + ps.TotalCompPhilhealth) > 0
 	ORDER BY CONCAT(e.LastName, e.FirstName)
@@ -90,10 +109,11 @@ ELSE
 	FROM (
 			SELECT
 			e.PhilHealthNo `DatCol1`
-			,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
+			,CONCAT_WS(', ', e.LastName, e.FirstName, e.MiddleName) `DatCol2`
 			,psi.PayAmount `DatCol3`
 			,phh.EmployerShare `DatCol4`
 			,psi.PayAmount + phh.EmployerShare `DatCol5`
+			,DATE_FORMAT(e.StartDate,'%m/%d/%Y') `DatCol7`
 			FROM paystubitem psi
 			INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=1 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 			INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=semi_payfrom OR ps.PayToDate>=semi_payfrom) AND (ps.PayFromDate<=semi_payto OR ps.PayToDate<=semi_payto)
@@ -105,10 +125,11 @@ ELSE
 		UNION
 			SELECT
 			e.PhilHealthNo `DatCol1`
-			,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
+			,CONCAT_WS(', ', e.LastName, e.FirstName, e.MiddleName) `DatCol2`
 			,psi.PayAmount `DatCol3`
 			,phh.EmployerShare `DatCol4`
 			,psi.PayAmount + phh.EmployerShare `DatCol5`
+			,DATE_FORMAT(e.StartDate,'%m/%d/%Y') `DatCol7`
 			FROM paystubitem psi
 			INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=4 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 			INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=weekly_payfrom OR ps.PayToDate>=weekly_payfrom) AND (ps.PayFromDate<=weekly_payto OR ps.PayToDate<=weekly_payto)

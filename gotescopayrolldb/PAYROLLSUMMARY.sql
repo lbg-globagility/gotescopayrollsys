@@ -45,41 +45,25 @@ SELECT ii.* FROM (
 			SELECT
 			
 			ps.RowID
-			, e.EmployeeID `Code` 
 			, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `Full Name` 
-			
-			
-			, SUM(et.RegularHoursAmount) `Basic rate` 
-			, SUM(et.OvertimeHoursAmount) `OT` 
-			
-			, ROUND(SUM(et.HolidayPayAmount), 2) `Holiday` 
-			, SUM(et.NightDiffHoursAmount) `N.Diff` 
-			
-			, IFNULL(rd.`SumRestDay`, 0) `Restday` 
-			, IFNULL(elv.`SumLeavePay`, 0) `Leave` 
-			, SUM(et.HoursLateAmount) `Tardiness` 
-			, SUM(et.UndertimeHoursAmount) `Undertime` 
-			, ROUND(SUM(et.Absent), 2) `Absent` 
-			, ps.TotalBonus `Bonus` 
-			, ps.TotalAllowance `Allowance` 
-			, ps.TotalGrossSalary `Gross` 
+			, e.LastName
+			, e.FirstName
+			, SUM(et.HoursLate + et.UndertimeHours) `LateHours`
+			, SUM(et.HoursLateAmount + et.UndertimeHoursAmount) `LateAmount`
+			, ROUND(SUM(et.Absent) / GET_employeerateperday(e.RowID, e.OrganizationID, paypdatefrom)) * 8 `AbsentHours`
+			, SUM(et.Absent) `AbsentAmount`
+			, SUM(et.VacationLeaveHours + et.SickLeaveHours) `LeaveHours`
+			, IFNULL(elv.`SumLeavePay`, 0) `LeaveAmount`
+			, SUM(et.OvertimeHoursWorked) `OvertimeHours`
+			, SUM(et.OvertimeHoursAmount) `OvertimeAmount`
+			, ps.TotalGrossSalary - ps.TotalAllowance `GrossWithoutAllowance`
 			, ps.TotalEmpSSS `SSS` 
-			, ps.TotalEmpPhilhealth `Ph.Health` 
+			, ps.TotalEmpPhilhealth `PhilHealth` 
 			, ps.TotalEmpHDMF `HDMF` 
-			, ps.TotalTaxableSalary `Taxable` 
-			, ps.TotalEmpWithholdingTax `W.Tax` 
-			, ps.TotalLoans `Loan` 
-			, ps.TotalAdjustments `Adj.`
+			, ps.TotalEmpWithholdingTax `WithholdingTax` 
 			, ps.TotalNetSalary `Net` 
-			
-			
-			, IF(dv.RowID IS NULL, '', dv.Name) `DivisionName`
-			
 			,e.RowID 'EmployeeRowID'
 			,ps.RowID AS 'PaystubId'
-			
-			
-			
 			
 			FROM paystub ps
 			
@@ -128,45 +112,27 @@ UNION
 	SELECT i.*
 	FROM (
 			SELECT
+		
 			ps.RowID
-			, e.EmployeeID `Code` 
 			, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `Full Name` 
-			, IFNULL(esa.BasicPay, 0) `Basic rate` 
-			, SUM(et.OvertimeHoursAmount) `OT` 
-			
-			
-			, ROUND(SUM(IF(IFNULL(ROUND(et.TotalDayPay,2), 0) = IFNULL(ROUND(et.HolidayPayAmount,2), 0)
-			               , 0, et.HolidayPayAmount)
-			            )
-			        , 2) `Holiday` 
-			        
-			, SUM(et.NightDiffHoursAmount) `N.Diff` 
-			
-			, IFNULL(rd.`SumRestDay`, 0) `Restday` 
-			, IFNULL(elv.`SumLeavePay`, 0) `Leave` 
-			, SUM(et.HoursLateAmount) `Tardiness` 
-			, SUM(et.UndertimeHoursAmount) `Undertime` 
-			, ROUND(SUM(et.Absent), 2) `Absent` 
-			, ps.TotalBonus `Bonus` 
-			, ps.TotalAllowance `Allowance` 
-			, ps.TotalGrossSalary `Gross` 
+			, e.LastName
+			, e.FirstName
+			, SUM(et.HoursLate + et.UndertimeHours) `LateHours`
+			, SUM(et.HoursLateAmount + et.UndertimeHoursAmount) `LateAmount` 
+			, ROUND(SUM(et.Absent) / GET_employeerateperday(e.RowID, e.OrganizationID, paypdatefrom)) * 8 `AbsentHours`
+			, SUM(et.Absent) `AbsentAmount`
+			, SUM(et.VacationLeaveHours + et.SickLeaveHours) `LeaveHours`
+			, IFNULL(elv.`SumLeavePay`, 0) `LeaveAmount`
+			, SUM(et.OvertimeHoursWorked) `OvertimeHours`
+			, SUM(et.OvertimeHoursAmount) `OvertimeAmount`
+			, ps.TotalGrossSalary - ps.TotalAllowance `GrossWithoutAllowance`
 			, ps.TotalEmpSSS `SSS` 
-			, ps.TotalEmpPhilhealth `Ph.Health` 
+			, ps.TotalEmpPhilhealth `PhilHealth` 
 			, ps.TotalEmpHDMF `HDMF` 
-			, ps.TotalTaxableSalary `Taxable` 
-			, ps.TotalEmpWithholdingTax `W.Tax` 
-			, ps.TotalLoans `Loan` 
-			, ps.TotalAdjustments `Adj.`
+			, ps.TotalEmpWithholdingTax `WithholdingTax` 
 			, ps.TotalNetSalary `Net` 
-			
-			
-			, IF(dv.RowID IS NULL, '', dv.Name) `DivisionName` 
-			
 			,e.RowID 'EmployeeRowID'
 			,ps.RowID AS 'PaystubId'
-			
-			
-			
 			
 			FROM paystub ps
 			
@@ -217,42 +183,27 @@ SELECT ii.* FROM (
 	SELECT i.*
 	FROM (
 			SELECT
+			
 			ps.RowID
-			, e.EmployeeID `Code` 
 			, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `Full Name` 
-			
-			
-			, SUM(et.RegularHoursAmount) `Basic rate` 
-			, 0 `Regular`
-			, SUM(et.OvertimeHoursAmount) `OT` 
-			
-			, ROUND(SUM(et.HolidayPayAmount), 2) `Holiday` 
-			, SUM(et.NightDiffHoursAmount) `N.Diff` 
-			
-			, IFNULL(rd.`SumRestDay`, 0) `Restday` 
-			, IFNULL(elv.`SumLeavePay`, 0) `Leave` 
-			, SUM(et.HoursLateAmount) `Tardiness` 
-			, SUM(et.UndertimeHoursAmount) `Undertime` 
-			, ROUND(SUM(et.Absent), 2) `Absent` 
-			, ps.TotalBonus `Bonus` 
-			, ps.TotalAllowance `Allowance` 
-			, ps.TotalGrossSalary `Gross` 
+			, e.LastName
+			, e.FirstName
+			, SUM(et.HoursLate + et.UndertimeHours) `LateHours`
+			, SUM(et.HoursLateAmount + et.UndertimeHoursAmount) `LateAmount` 
+			, ROUND(SUM(et.Absent) / GET_employeerateperday(e.RowID, e.OrganizationID, paypdatefrom)) * 8 `AbsentHours`
+			, SUM(et.Absent) `AbsentAmount`
+			, SUM(et.VacationLeaveHours + et.SickLeaveHours) `LeaveHours`
+			, IFNULL(elv.`SumLeavePay`, 0) `LeaveAmount`
+			, SUM(et.OvertimeHoursWorked) `OvertimeHours`
+			, SUM(et.OvertimeHoursAmount) `OvertimeAmount`
+			, ps.TotalGrossSalary - ps.TotalAllowance `GrossWithoutAllowance`
 			, ps.TotalEmpSSS `SSS` 
-			, ps.TotalEmpPhilhealth `Ph.Health` 
+			, ps.TotalEmpPhilhealth `PhilHealth` 
 			, ps.TotalEmpHDMF `HDMF` 
-			, ps.TotalTaxableSalary `Taxable` 
-			, ps.TotalEmpWithholdingTax `W.Tax` 
-			, ps.TotalLoans `Loan` 
-			, ps.TotalAdjustments `Adj.`
+			, ps.TotalEmpWithholdingTax `WithholdingTax` 
 			, ps.TotalNetSalary `Net` 
-			
-			
-			, IF(dv.RowID IS NULL, '', dv.Name) `DivisionName` 
-			
 			,e.RowID 'EmployeeRowID'
 			,ps.RowID AS 'PaystubId'
-			
-			
 			
 			
 			FROM paystubactual ps
@@ -300,42 +251,25 @@ UNION
 	SELECT i.*
 	FROM (
 			SELECT
+			
 			ps.RowID
-			, e.EmployeeID `Code` 
 			, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `Full Name` 
-			
-			
-
-			, ROUND((IF(isActual, esa.TrueSalary, esa.Salary) / 2), 2) `Basic rate` 
-			, ROUND((IF(isActual, esa.TrueSalary, esa.Salary) / 2), 2) `Regular`
-			, SUM(et.OvertimeHoursAmount) `OT` 
-			
-			
-			, ROUND(SUM(IF(IFNULL(ROUND(et.TotalDayPay,2), 0) = IFNULL(ROUND(et.HolidayPayAmount,2), 0)
-			               , 0, et.HolidayPayAmount)
-			            )
-			        , 2) `Holiday` 
-			
-			, SUM(et.NightDiffHoursAmount) `N.Diff` 
-			
-			, IFNULL(rd.`SumRestDay`, 0) `Restday` 
-			, IFNULL(elv.`SumLeavePay`, 0) `Leave` 
-			, SUM(et.HoursLateAmount) `Tardiness` 
-			, SUM(et.UndertimeHoursAmount) `Undertime` 
-			, ROUND(SUM(et.Absent), 2) `Absent` 
-			, ps.TotalBonus `Bonus` 
-			, ps.TotalAllowance `Allowance` 
-			, ps.TotalGrossSalary `Gross` 
+			, e.LastName
+			, e.FirstName
+			, SUM(et.HoursLate + et.UndertimeHours) `LateHours`
+			, SUM(et.HoursLateAmount + et.UndertimeHoursAmount) `LateAmount`
+			, ROUND(SUM(et.Absent) / GET_employeerateperday(e.RowID, e.OrganizationID, paypdatefrom)) * 8 `AbsentHours` 
+			, SUM(et.Absent) `AbsentAmount`
+			, SUM(et.VacationLeaveHours + et.SickLeaveHours) `LeaveHours`
+			, IFNULL(elv.`SumLeavePay`, 0) `LeaveAmount`
+			, SUM(et.OvertimeHoursWorked) `OvertimeHours`
+			, SUM(et.OvertimeHoursAmount) `OvertimeAmount`
+			, ps.TotalGrossSalary - ps.TotalAllowance `GrossWithoutAllowance`
 			, ps.TotalEmpSSS `SSS` 
-			, ps.TotalEmpPhilhealth `Ph.Health` 
+			, ps.TotalEmpPhilhealth `PhilHealth` 
 			, ps.TotalEmpHDMF `HDMF` 
-			, ps.TotalTaxableSalary `Taxable` 
-			, ps.TotalEmpWithholdingTax `W.Tax` 
-			, ps.TotalLoans `Loan` 
-			, ps.TotalAdjustments `Adj.`
+			, ps.TotalEmpWithholdingTax `WithholdingTax` 
 			, ps.TotalNetSalary `Net` 
-			, IF(dv.RowID IS NULL, '', dv.Name) `DivisionName` 
-			
 			,e.RowID 'EmployeeRowID'
 			,ps.RowID AS 'PaystubId'
 			
@@ -384,51 +318,23 @@ UNION
 	FROM (
 			SELECT
 			ps.RowID
-			, e.EmployeeID `Code` 
 			, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `Full Name` 
-			
-			
-
-
-			, ( @basicPay := ROUND((IF(isActual, esa.TrueSalary, esa.Salary) / 2), 2) ) `Basic rate`
-			
-			, ( ROUND((IF(isActual, esa.TrueSalary, esa.Salary) / 2), 2)
-			    - (SUM(IFNULL(et.HoursLateAmount,0))
-				    + SUM(IFNULL(et.UndertimeHoursAmount,0))
-					 + SUM(IFNULL(et.Absent,0))
-					 + ROUND(SUM(IF(IFNULL(ROUND(et.TotalDayPay,2), 0) = IFNULL(ROUND(et.HolidayPayAmount,2), 0)
-			                      , 0, et.HolidayPayAmount)), 2)
-					 + IFNULL(elv.`SumLeavePay`, 0)
-				    )
-			   ) `Regular`
-			, SUM(et.OvertimeHoursAmount) `OT` 
-			
-			
-			, ROUND(SUM(IF(IFNULL(ROUND(et.TotalDayPay,2), 0) = IFNULL(ROUND(et.HolidayPayAmount,2), 0)
-			               , 0, et.HolidayPayAmount)
-			            )
-			        , 2) `Holiday` 
-
-			, SUM(et.NightDiffHoursAmount) `N.Diff` 
-			
-			, IFNULL(rd.`SumRestDay`, 0) `Restday` 
-			, IFNULL(elv.`SumLeavePay`, 0) `Leave` 
-			, SUM(et.HoursLateAmount) `Tardiness` 
-			, SUM(et.UndertimeHoursAmount) `Undertime` 
-			, ROUND(SUM(et.Absent), 2) `Absent` 
-			, ps.TotalBonus `Bonus` 
-			, ps.TotalAllowance `Allowance` 
-			, ps.TotalGrossSalary `Gross` 
+			, e.LastName
+			, e.FirstName
+			, SUM(et.HoursLate + et.UndertimeHours) `LateHours`
+			, SUM(et.HoursLateAmount + et.UndertimeHoursAmount) `LateAmount`
+			, ROUND(SUM(et.Absent) / GET_employeerateperday(e.RowID, e.OrganizationID, paypdatefrom)) * 8 `AbsentHours`
+			, SUM(et.Absent) `AbsentAmount`
+			, SUM(et.VacationLeaveHours + et.SickLeaveHours) `LeaveHours`
+			, IFNULL(elv.`SumLeavePay`, 0) `LeaveAmount`
+			, SUM(et.OvertimeHoursWorked) `OvertimeHours`
+			, SUM(et.OvertimeHoursAmount) `OvertimeAmount`
+			, ps.TotalGrossSalary - ps.TotalAllowance `GrossWithoutAllowance`
 			, ps.TotalEmpSSS `SSS` 
-			, ps.TotalEmpPhilhealth `Ph.Health` 
+			, ps.TotalEmpPhilhealth `PhilHealth` 
 			, ps.TotalEmpHDMF `HDMF` 
-			, ps.TotalTaxableSalary `Taxable` 
-			, ps.TotalEmpWithholdingTax `W.Tax` 
-			, ps.TotalLoans `Loan` 
-			, ps.TotalAdjustments `Adj.`
+			, ps.TotalEmpWithholdingTax `WithholdingTax` 
 			, ps.TotalNetSalary `Net` 
-			, IF(dv.RowID IS NULL, '', dv.Name) `DivisionName` 
-			
 			,e.RowID 'EmployeeRowID'
 			,ps.RowID AS 'PaystubId'
 			

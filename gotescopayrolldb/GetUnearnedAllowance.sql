@@ -43,7 +43,7 @@ INNER JOIN employee e ON e.RowID=i.EmployeeID
 WHERE i.OrganizationID=@orgID
 AND i.`Date` BETWEEN @dateFrom AND @dateTo
 GROUP BY i.EmployeeID
-#HAVING SUM(i.LateHours + i.UndertimeHours + i.AbsentHours) > 0
+
 HAVING SUM(i.HoursToLess) > 0
 ;
 

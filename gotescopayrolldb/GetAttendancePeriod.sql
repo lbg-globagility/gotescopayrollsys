@@ -28,8 +28,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAttendancePeriod`(
 
 
 
+
 )
-    DETERMINISTIC
+LANGUAGE SQL
+DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
 BEGIN
 
 SET @legalHoliday='Regular Holiday';
@@ -98,7 +103,7 @@ IF NOT isActual THEN
 	, et.`TaxableDailyBonus`
 	, et.`NonTaxableDailyBonus`
 	, et.`IsValidForHolidayPayment`
-#	, @trueSalary := TRIM(es.Percentage * es.Salary)+0 `ActualSalary`
+
 	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`Salary` / @defaultWorkHours), ((`es`.`Salary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
 	, isActual `AsActual`
 	, IFNULL(sh.WorkHours, 0) `WorkHours`
@@ -110,7 +115,7 @@ IF NOT isActual THEN
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
 	INNER JOIN payrate pr ON pr.RowID=et.PayRateID
 	LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
-#	LEFT JOIN employeeshift esh ON esh.RowID=et.EmployeeShiftID
+
 	LEFT JOIN employeeshift esh ON esh.EmployeeID=e.RowID AND esh.OrganizationID=et.OrganizationID AND et.`Date` BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 	LEFT JOIN shift sh ON sh.RowID=esh.ShiftID
 	WHERE et.OrganizationID=orgId
@@ -149,14 +154,14 @@ ELSE
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`
 	, ett.HoursUndertime `UndertimeHours`
-#	, TRIM(ett.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
+
 	, et.UndertimeHoursAmount
 	, et.`NightDifferentialHours`
 	, et.`NightDiffHoursAmount`
 	, et.`NightDifferentialOTHours`
 	, et.`NightDiffOTHoursAmount`
 	, ett.HoursTardy `HoursLate`
-#	, TRIM(ett.HoursTardy * @hourlyRate)+0 `HoursLateAmount`
+
 	, et.HoursLateAmount
 	, et.`LateFlag`
 	, et.`PayRateID`
@@ -173,7 +178,7 @@ ELSE
 	, et.`TaxableDailyBonus`
 	, et.`NonTaxableDailyBonus`
 	, ett.`IsValidForHolidayPayment`
-#	, @trueSalary := TRIM(es.Percentage * es.Salary)+0 `ActualSalary`
+
 	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`TrueSalary` / @defaultWorkHours), ((`es`.`TrueSalary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
 	, isActual `AsActual`
 	, IFNULL(sh.WorkHours, 0) `WorkHours`

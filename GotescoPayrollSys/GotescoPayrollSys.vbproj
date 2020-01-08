@@ -186,9 +186,8 @@
       <HintPath>bin\Debug\MetroFramework.Fonts.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>bin\Debug\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.11.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.9.11\lib\net45\MySql.Data.dll</HintPath>
@@ -329,6 +328,18 @@
       <DependentUpon>LoanReportByType.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\REPORTS\New PhilHealth Monthly Report.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>New PhilHealth Monthly Report.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core Forms\REPORTS\New SSS Monthly Report.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>New SSS Monthly Report.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core Forms\REPORTS\ThirteenthMonthSummary.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -413,6 +424,8 @@
     <Compile Include="Core Forms\user_predefines\Custom\LeaveLedger.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\LeaveTransaction.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\RenewLeaveBalancePolicy.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\ActualAdjustment.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\Adjustment.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\AuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Bonus.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Category.vb" />
@@ -420,6 +433,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Employee.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeEntity.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\EmployeeTimeEntryDetails.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAdjustment.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\ILoanSchedule.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\ISalary.vb" />
@@ -427,6 +441,8 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Organization.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PayPeriod.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PayStub.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PaystubItem.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PhilHealth.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Position.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\PositionPrivilege.vb" />
@@ -440,6 +456,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\SssBracket.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\TimeEntryLogsPerCutOff.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\WithholdingTaxBracket.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\ProductConstant.vb" />
     <Compile Include="Core Forms\user_predefines\OutputText.vb" />
     <Compile Include="Core Forms\user_predefines\TimeInTimeOutParser.vb" />
     <Compile Include="Core Forms\user_predefines\_employee\EmployeeCollection.vb" />
@@ -1410,6 +1427,14 @@
     <EmbeddedResource Include="Core Forms\REPORTS\Employee Leave Ledger.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Employee Leave Ledger.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\REPORTS\New PhilHealth Monthly Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>New PhilHealth Monthly Report.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\REPORTS\New SSS Monthly Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>New SSS Monthly Report.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\rpt\FiledLeaves.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

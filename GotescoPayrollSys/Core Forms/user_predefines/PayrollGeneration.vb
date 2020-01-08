@@ -88,34 +88,6 @@ Public Class PayrollGeneration
 
     Private monthlyemployee_restday_payment As New DataTable
 
-    Private str_quer As String =
-        String.Concat("CALL INSUPD_paystub_proc(",
-                "?pstub_RowID",
-                ",?pstub_OrganizationID",
-                ",?pstub_CreatedBy",
-                ",?pstub_LastUpdBy",
-                ",?pstub_PayPeriodID",
-                ",?pstub_EmployeeID",
-                ",?pstub_TimeEntryID",
-                ",?pstub_PayFromDate",
-                ",?pstub_PayToDate",
-                ",?pstub_TotalGrossSalary",
-                ",?pstub_TotalNetSalary",
-                ",?pstub_TotalTaxableSalary",
-                ",?pstub_TotalEmpSSS",
-                ",?pstub_TotalEmpWithholdingTax",
-                ",?pstub_TotalCompSSS",
-                ",?pstub_TotalEmpPhilhealth",
-                ",?pstub_TotalCompPhilhealth",
-                ",?pstub_TotalEmpHDMF",
-                ",?pstub_TotalCompHDMF",
-                ",?pstub_TotalVacationDaysLeft",
-                ",?pstub_TotalLoans",
-                ",?pstub_TotalBonus",
-                ",?pstub_TotalAllowance",
-                ",?pstub_NondeductibleTotalLoans",
-                ");")
-
     Dim wtax_sqlquery As String =
         String.Concat("SELECT ptx.*",
                       " FROM paywithholdingtax ptx",

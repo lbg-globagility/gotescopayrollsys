@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Gotesco Payroll System"
-#define MyAppVersion "1.4.6"
+#define MyAppVersion "1.4.7"
 #define MyAppPublisher "Globagility, Inc."
 #define MyAppURL "http://www.globagilityinc.com/"
 #define MyAppExeName "GotescoPayrollSys.exe"
@@ -80,7 +80,6 @@ Source: ".\GotescoPayrollSys\bin\Debug\MessageBoxManager.dll"; DestDir: "{app}";
 Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.Design.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\MetroFramework.Fonts.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
-Source: ".\GotescoPayrollSys\bin\Debug\Microsoft.Office.Interop.Excel.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\MySql.Data.Entity.EF6.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 ; Source: ".\GotescoPayrollSys\bin\Debug\MySqlBackup.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full

@@ -18,7 +18,7 @@ Imports System
 Imports System.ComponentModel
 
 
-Public Class SSS_Monthly_Report
+Public Class New_PhilHealth_Monthly_Report
     Inherits ReportClass
     
     Public Sub New()
@@ -27,7 +27,7 @@ Public Class SSS_Monthly_Report
     
     Public Overrides Property ResourceName() As String
         Get
-            Return "SSS Monthly Report.rpt"
+            Return "New PhilHealth Monthly Report.rpt"
         End Get
         Set
             'Do nothing
@@ -45,7 +45,7 @@ Public Class SSS_Monthly_Report
     
     Public Overrides Property FullResourceName() As String
         Get
-            Return "GotescoPayrollSys.SSS Monthly Report.rpt"
+            Return "GotescoPayrollSys.New PhilHealth Monthly Report.rpt"
         End Get
         Set
             'Do nothing
@@ -62,7 +62,7 @@ Public Class SSS_Monthly_Report
     
     <Browsable(false),  _
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
-    Public ReadOnly Property Section2() As CrystalDecisions.CrystalReports.Engine.Section
+    Public ReadOnly Property ReportHeaderSection2() As CrystalDecisions.CrystalReports.Engine.Section
         Get
             Return Me.ReportDefinition.Sections(1)
         End Get
@@ -70,7 +70,7 @@ Public Class SSS_Monthly_Report
     
     <Browsable(false),  _
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
-    Public ReadOnly Property Section3() As CrystalDecisions.CrystalReports.Engine.Section
+    Public ReadOnly Property ReportHeaderSection3() As CrystalDecisions.CrystalReports.Engine.Section
         Get
             Return Me.ReportDefinition.Sections(2)
         End Get
@@ -78,7 +78,7 @@ Public Class SSS_Monthly_Report
     
     <Browsable(false),  _
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
-    Public ReadOnly Property Section4() As CrystalDecisions.CrystalReports.Engine.Section
+    Public ReadOnly Property ReportHeaderSection4() As CrystalDecisions.CrystalReports.Engine.Section
         Get
             Return Me.ReportDefinition.Sections(3)
         End Get
@@ -86,15 +86,39 @@ Public Class SSS_Monthly_Report
     
     <Browsable(false),  _
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
-    Public ReadOnly Property Section5() As CrystalDecisions.CrystalReports.Engine.Section
+    Public ReadOnly Property Section2() As CrystalDecisions.CrystalReports.Engine.Section
         Get
             Return Me.ReportDefinition.Sections(4)
+        End Get
+    End Property
+    
+    <Browsable(false),  _
+     DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
+    Public ReadOnly Property Section3() As CrystalDecisions.CrystalReports.Engine.Section
+        Get
+            Return Me.ReportDefinition.Sections(5)
+        End Get
+    End Property
+    
+    <Browsable(false),  _
+     DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
+    Public ReadOnly Property Section4() As CrystalDecisions.CrystalReports.Engine.Section
+        Get
+            Return Me.ReportDefinition.Sections(6)
+        End Get
+    End Property
+    
+    <Browsable(false),  _
+     DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
+    Public ReadOnly Property Section5() As CrystalDecisions.CrystalReports.Engine.Section
+        Get
+            Return Me.ReportDefinition.Sections(7)
         End Get
     End Property
 End Class
 
 <System.Drawing.ToolboxBitmapAttribute(GetType(CrystalDecisions.[Shared].ExportOptions), "report.bmp")>  _
-Public Class CachedSSS_Monthly_Report
+Public Class CachedNew_PhilHealth_Monthly_Report
     Inherits Component
     Implements ICachedReport
     
@@ -136,7 +160,7 @@ Public Class CachedSSS_Monthly_Report
     End Property
     
     Public Overridable Function CreateReport() As CrystalDecisions.CrystalReports.Engine.ReportDocument Implements CrystalDecisions.ReportSource.ICachedReport.CreateReport
-        Dim rpt As SSS_Monthly_Report = New SSS_Monthly_Report()
+        Dim rpt As New_PhilHealth_Monthly_Report = New New_PhilHealth_Monthly_Report()
         rpt.Site = Me.Site
         Return rpt
     End Function

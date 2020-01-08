@@ -6,8 +6,19 @@
 
 DROP PROCEDURE IF EXISTS `RPT_PAGIBIG_Monthly`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_PAGIBIG_Monthly`(IN `OrganizID` INT, IN `paramDate` DATE)
-    DETERMINISTIC
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_PAGIBIG_Monthly`(
+	IN `OrganizID` INT,
+	IN `paramDate` DATE
+
+
+
+
+)
+LANGUAGE SQL
+DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
 BEGIN
 
 DECLARE deduc_sched VARCHAR(50);
@@ -77,37 +88,42 @@ SELECT pyp.PayFromDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND
 SELECT pyp.PayToDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND pyp.`Year`=YEAR(paramDate) AND pyp.`Month`=(MONTH(paramDate) * 1) AND pyp.TotalGrossSalary=4 ORDER BY pyp.PayFromDate DESC, pyp.PayToDate DESC LIMIT 1 INTO weekly_payto;
 	
 
-
-SELECT
-	e.HDMFNo `DatCol1`
-	,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
-	,psi.PayAmount `DatCol3`
-	,ps.TotalCompHDMF `DatCol4`
-	,psi.PayAmount + ps.TotalCompHDMF `DatCol5`
-	FROM paystubitem psi
-	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=1 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=semi_payfrom OR ps.PayToDate>=semi_payfrom) AND (ps.PayFromDate<=semi_payto OR ps.PayToDate<=semi_payto)
-	JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
-	JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PAGIBIG'
-	WHERE psi.ProductID=p.RowID
-	AND psi.PayStubID=ps.RowID
-	AND IFNULL(psi.PayAmount,0)!=0
-UNION
+SELECT i.*
+	FROM (
 	SELECT
-	e.HDMFNo `DatCol1`
-	,CONCAT(e.LastName,',',e.FirstName, IF(e.MiddleName='','',','),INITIALS(e.MiddleName,'. ','1')) `DatCol2`
-	,psi.PayAmount `DatCol3`
-	,ps.TotalCompHDMF `DatCol4`
-	,psi.PayAmount + ps.TotalCompHDMF `DatCol5`
-	FROM paystubitem psi
-	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=4 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=weekly_payfrom OR ps.PayToDate>=weekly_payfrom) AND (ps.PayFromDate<=weekly_payto OR ps.PayToDate<=weekly_payto)
-	JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
-	JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PAGIBIG'
-	WHERE psi.ProductID=p.RowID
-	AND psi.PayStubID=ps.RowID
-	AND IFNULL(psi.PayAmount,0)!=0;
-	
+		e.HDMFNo `DatCol1`
+		,CONCAT_WS(', ', e.LastName, e.FirstName, e.MiddleName) `DatCol2`
+		,psi.PayAmount `DatCol3`
+		,ps.TotalCompHDMF `DatCol4`
+		,psi.PayAmount + ps.TotalCompHDMF `DatCol5`
+		,DATE_FORMAT(e.StartDate,'%m/%d/%Y') `DatCol6`
+		FROM paystubitem psi
+		INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=1 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+		INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=semi_payfrom OR ps.PayToDate>=semi_payfrom) AND (ps.PayFromDate<=semi_payto OR ps.PayToDate<=semi_payto)
+		JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
+		JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PAGIBIG'
+		WHERE psi.ProductID=p.RowID
+		AND psi.PayStubID=ps.RowID
+		AND IFNULL(psi.PayAmount,0)!=0
+	UNION
+		SELECT
+		e.HDMFNo `DatCol1`
+		,CONCAT_WS(', ', e.LastName, e.FirstName, e.MiddleName) `DatCol2`
+		,psi.PayAmount `DatCol3`
+		,ps.TotalCompHDMF `DatCol4`
+		,psi.PayAmount + ps.TotalCompHDMF `DatCol5`
+		,DATE_FORMAT(e.StartDate,'%m/%d/%Y') `DatCol6`
+		FROM paystubitem psi
+		INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.PayFrequencyID=4 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+		INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.EmployeeID=e.RowID AND (ps.PayFromDate>=weekly_payfrom OR ps.PayToDate>=weekly_payfrom) AND (ps.PayFromDate<=weekly_payto OR ps.PayToDate<=weekly_payto)
+		JOIN category c ON c.OrganizationID=OrganizID AND c.CategoryName='Deductions'
+		JOIN product p ON p.CategoryID=c.RowID AND p.OrganizationID=OrganizID AND p.PartNo = '.PAGIBIG'
+		WHERE psi.ProductID=p.RowID
+		AND psi.PayStubID=ps.RowID
+		AND IFNULL(psi.PayAmount,0)!=0
+	) i
+ORDER BY i.`DatCol2`
+;
 
 
 END//

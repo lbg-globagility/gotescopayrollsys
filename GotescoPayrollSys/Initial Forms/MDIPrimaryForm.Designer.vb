@@ -166,7 +166,6 @@ Partial Class MDIPrimaryForm
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.bgDashBoardReloader = New System.ComponentModel.BackgroundWorker()
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
-        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.Panel1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -1546,9 +1545,6 @@ Partial Class MDIPrimaryForm
         Me.Timer2.Enabled = True
         Me.Timer2.Interval = 60000
         '
-        'BackgroundWorker1
-        '
-        '
         'MDIPrimaryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1745,7 +1741,6 @@ Partial Class MDIPrimaryForm
     Friend WithEvents empcheckEmployeeID As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents empcheckFullName As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents empcheckLackRequirement As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents maintslabel As System.Windows.Forms.ToolStripLabel
     Friend WithEvents tslblVersion As System.Windows.Forms.ToolStripLabel
 End Class

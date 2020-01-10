@@ -80,8 +80,6 @@ Public Class MDIPrimaryForm
 
         CreateSalaryForSeniorCitizensAsync()
 
-        BackgroundWorker1.RunWorkerAsync()
-
         LoadVersionNo()
 
         MyBase.OnLoad(e)
@@ -1751,39 +1749,6 @@ Public Class MDIPrimaryForm
     End Sub
 
     Dim bgwork_errormsg As String = String.Empty
-
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
-        If e.Cancel = False Then
-            Dim param_array = New String() {org_rowid, user_row_id}
-
-            Dim n_ExecuteQuery As New ExecSQLProcedure("EXEC_userupdateleavebalancelog", 192,
-                                                       param_array)
-
-            bgwork_errormsg = n_ExecuteQuery.ErrorMessage
-
-        End If
-
-    End Sub
-
-    Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
-
-    End Sub
-
-    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
-
-        If e.Error IsNot Nothing Then
-            'MsgBox(getErrExcptn(e.Error, Me.Name))
-            MsgBox(bgwork_errormsg)
-        ElseIf e.Cancelled Then
-            MsgBox("Background work cancelled.",
-                   MsgBoxStyle.Information)
-        Else
-
-        End If
-
-        bgwork_errormsg = String.Empty
-
-    End Sub
 
     Private Sub maintslabel_TextChanged(sender As Object, e As EventArgs) Handles maintslabel.TextChanged
 

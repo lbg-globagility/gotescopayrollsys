@@ -25,7 +25,7 @@ SELECT COUNT(e.RowID)
 FROM employee e
 WHERE e.OrganizationID=og_rowid
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.RowID=81
+#AND e.RowID=81
 INTO emp_count
 ;
 
@@ -42,7 +42,7 @@ WHILE _index < emp_count DO
 	FROM employee e
 	WHERE e.OrganizationID=og_rowid
 	AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-	AND e.RowID=81
+#	AND e.RowID=81
 	ORDER BY CONCAT(e.LastName, e.FirstName)
 	LIMIT _index, 1
 	INTO e_rowid

@@ -18,6 +18,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `LeavePrediction`(
 
 
 
+
+,
+	IN `startDate` DATE,
+	IN `endDate` DATE
 )
 BEGIN
 
@@ -60,7 +64,9 @@ SELECT elv.OrganizationID, elv.Created, elv.LeaveStartTime, elv.LeaveType, elv.C
 FROM employeeleave elv
 INNER JOIN employee e ON e.RowID=elv.EmployeeID
 INNER JOIN employeetimeentry et ON et.EmployeeID=e.RowID AND et.`Date` BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
-INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate AND pp.`Year`=@thisYear
+INNER JOIN payperiod pp ON pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
+#AND pp.`Year`=@thisYear
+AND pp.PayFromDate >= startDate AND pp.PayToDate <= endDate
 WHERE elv.OrganizationID=@orgID
 #AND elv.`Status` = 'Approved'
 AND elv.LeaveType = typeOfLeave
@@ -111,6 +117,8 @@ IF isVacation THEN
 	
 	FROM leavepredict i
 	;
+
+#SELECT * FROM leavepredict INTO OUTFILE 'D:/TEST.txt';
 
 ELSEIF isSick THEN
 

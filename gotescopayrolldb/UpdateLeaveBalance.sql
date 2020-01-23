@@ -13,13 +13,68 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateLeaveBalance`(
 
 
 
+,
+	IN `startDate` DATE
+
+
+
+
 )
 BEGIN
 
 DECLARE eIndex INT(11) DEFAULT 0;
 
+DECLARE endDate DATE;
 
-CALL `LeavePrediction`(OrganizID, 'Additional VL', yearPeriod);
+SELECT i.PayToDate
+FROM (SELECT
+		pp.`Year`, pp.OrdinalValue, pp.PayFromDate, pp.PayToDate
+		FROM payperiod pp
+		WHERE pp.OrganizationID=OrganizID
+		AND pp.TotalGrossSalary=1
+		AND pp.PayFromDate >= startDate
+		ORDER BY pp.`Year`, pp.OrdinalValue
+		LIMIT 24) i
+ORDER BY i.PayFromDate DESC, i.PayToDate DESC
+LIMIT 1
+INTO endDate;
+
+UPDATE employee e
+SET e.LeaveBalance=e.LeaveAllowance
+WHERE e.OrganizationID=OrganizID
+AND e.LeaveAllowance=0
+AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+;
+
+UPDATE employee e
+SET e.SickLeaveBalance=e.SickLeaveAllowance
+WHERE e.OrganizationID=OrganizID
+AND e.SickLeaveAllowance=0
+AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+;
+
+UPDATE employee e
+SET e.MaternityLeaveBalance=e.MaternityLeaveAllowance
+WHERE e.OrganizationID=OrganizID
+AND e.MaternityLeaveAllowance=0
+AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+;
+
+UPDATE employee e
+SET e.OtherLeaveBalance=e.OtherLeaveAllowance
+WHERE e.OrganizationID=OrganizID
+AND e.OtherLeaveAllowance=0
+AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+;
+
+UPDATE employee e
+SET e.AdditionalVLBalance=e.AdditionalVLAllowance
+WHERE e.OrganizationID=OrganizID
+AND e.AdditionalVLAllowance=0
+AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+;
+
+CALL `LeavePrediction`(OrganizID, 'Additional VL', yearPeriod, startDate, endDate);
 UPDATE employee e
 INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.AdditionalVLBalance = i.CurrentLeaveBalance
@@ -60,7 +115,7 @@ WHILE eIndex < @eIDCount DO
 END WHILE;
 
 
-CALL `LeavePrediction`(OrganizID, 'Maternity/paternity leave', yearPeriod);
+CALL `LeavePrediction`(OrganizID, 'Maternity/paternity leave', yearPeriod, startDate, endDate);
 UPDATE employee e
 INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.MaternityLeaveBalance = i.CurrentLeaveBalance
@@ -101,7 +156,7 @@ WHILE eIndex < @eIDCount DO
 END WHILE;
 
 
-CALL `LeavePrediction`(OrganizID, 'Others', yearPeriod);
+CALL `LeavePrediction`(OrganizID, 'Others', yearPeriod, startDate, endDate);
 UPDATE employee e
 INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.OtherLeaveBalance = i.CurrentLeaveBalance
@@ -142,7 +197,7 @@ WHILE eIndex < @eIDCount DO
 END WHILE;
 
 
-CALL `LeavePrediction`(OrganizID, 'Sick leave', yearPeriod);
+CALL `LeavePrediction`(OrganizID, 'Sick leave', yearPeriod, startDate, endDate);
 UPDATE employee e
 INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.SickLeaveBalance = i.CurrentLeaveBalance
@@ -183,7 +238,7 @@ WHILE eIndex < @eIDCount DO
 END WHILE;
 
 
-CALL `LeavePrediction`(OrganizID, 'Vacation leave', yearPeriod);
+CALL `LeavePrediction`(OrganizID, 'Vacation leave', yearPeriod, startDate, endDate);
 UPDATE employee e
 INNER JOIN currentleavebalancepredict i ON i.EmployeeID=e.RowID
 SET e.LeaveBalance = i.CurrentLeaveBalance

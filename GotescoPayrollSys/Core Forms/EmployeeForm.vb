@@ -5,6 +5,7 @@
 'Imports Tesseract.Interop
 Imports System.Data.Entity
 Imports System.IO
+Imports System.Threading.Tasks
 Imports MySql.Data.MySqlClient
 
 Public Class EmployeeForm
@@ -22658,30 +22659,85 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     End Sub
 
-    Private Sub tbpleavebal_Enter(sender As Object, e As EventArgs) Handles tbpleavebal.Enter, TabPage7.Enter
-        Dim psRowID = ValNoComma(New ExecuteQuery("SELECT ps.RowID" &
-                                                  " FROM paystub ps" &
-                                                  " INNER JOIN product p ON p.PartNo='Additional VL' AND p.OrganizationID=ps.OrganizationID" &
-                                                  " INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.ProductID=p.RowID" &
-                                                  " WHERE ps.EmployeeID='" & publicEmpRowID & "'" &
-                                                  " AND ps.OrganizationID='" & org_rowid & "'" &
-                                                  " ORDER BY ps.PayFromDate DESC,ps.PayToDate DESC" &
-                                                  " LIMIT 1;").Result)
-        Dim n_SQLQueryToDatatable As _
-            New SQLQueryToDatatable("CALL VIEW_paystubitem('" & psRowID & "');")
-        Dim psaItems As New DataTable
-        psaItems = n_SQLQueryToDatatable.ResultTable
-        txtvlbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Vacation leave'"))
-        txtslbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Sick leave'"))
-        txtmlbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Maternity/paternity leave'"))
-        txtaddvlbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Additional VL'"))
-        txtothrbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Others'"))
+    Private Async Sub tbpleavebal_Enter(sender As Object, e As EventArgs) Handles tbpleavebal.Enter, TabPage7.Enter
+        txtvlbal.Text = 0
+        txtslbal.Text = 0
+        txtmlbal.Text = 0
+        txtaddvlbal.Text = 0
+        txtothrbal.Text = 0
 
-        txtvlbalLeave.Text = txtvlbal.Text
-        txtslbalLeave.Text = txtslbal.Text
-        txtmlbalLeave.Text = txtmlbal.Text
-        txtaddvlbal2.Text = txtaddvlbal.Text
+        txtvlbalLeave.Text = 0
+        txtslbalLeave.Text = 0
+        txtmlbalLeave.Text = 0
+        txtaddvlbal2.Text = 0
+
+        If publicEmpRowID = Nothing Then Return
+
+        'Check if Leave reset were performed
+        Dim leavePerformed =
+            ValNoComma(New ExecuteQuery($"SELECT EXISTS(SELECT
+                                        ps.RowID
+                                        FROM paystub ps
+                                        INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND pp.`Year`=YEAR(CURDATE())
+                                        AND pp.BeginLeaveReset=TRUE
+                                        WHERE ps.OrganizationID={org_rowid}
+                                        LIMIT 1);").Result)
+
+        If CBool(leavePerformed) Then
+            'if so, check if there is at least a paystubitem that stores leave balance
+            Dim psRowID = ValNoComma(New ExecuteQuery("SELECT ps.RowID" &
+                                                      " FROM paystub ps" &
+                                                      " INNER JOIN product p ON p.PartNo='Additional VL' AND p.OrganizationID=ps.OrganizationID" &
+                                                      " INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.ProductID=p.RowID" &
+                                                      " WHERE ps.EmployeeID='" & publicEmpRowID & "'" &
+                                                      " AND ps.OrganizationID='" & org_rowid & "'" &
+                                                      " ORDER BY ps.PayFromDate DESC,ps.PayToDate DESC" &
+                                                      " LIMIT 1;").Result)
+            Dim n_SQLQueryToDatatable As _
+                New SQLQueryToDatatable("CALL VIEW_paystubitem('" & psRowID & "');")
+            Dim psaItems As New DataTable
+            psaItems = n_SQLQueryToDatatable.ResultTable
+            txtvlbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Vacation leave'"))
+            txtslbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Sick leave'"))
+            txtmlbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Maternity/paternity leave'"))
+            txtaddvlbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Additional VL'"))
+            txtothrbal.Text = ValNoComma(psaItems.Compute("SUM(PayAmount)", "Item = 'Others'"))
+
+            txtvlbalLeave.Text = txtvlbal.Text
+            txtslbalLeave.Text = txtslbal.Text
+            txtmlbalLeave.Text = txtmlbal.Text
+            txtaddvlbal2.Text = txtaddvlbal.Text
+        Else
+            'if doesn't exists, then refer to the leave balance of employee table
+            Await GetEmployeeLeaveBalances()
+
+        End If
+
     End Sub
+
+    Private Async Function GetEmployeeLeaveBalances() As Task
+        Dim connectionText = mysql_conn_text
+
+        Using command = New MySqlCommand($"SELECT e.LeaveAllowance, e.LeaveBalance
+                                            ,e.SickLeaveAllowance, e.SickLeaveBalance
+                                            ,e.MaternityLeaveAllowance, e.MaternityLeaveBalance
+                                            ,e.AdditionalVLAllowance, e.AdditionalVLBalance FROM employee e WHERE e.RowID={publicEmpRowID};",
+                                         New MySqlConnection(connectionText))
+
+            Await command.Connection.OpenAsync
+
+            txtvlbal.Text = 0
+            txtslbal.Text = 0
+            txtmlbal.Text = 0
+            txtaddvlbal.Text = 0
+            txtothrbal.Text = 0
+
+            txtvlbalLeave.Text = 0
+            txtslbalLeave.Text = 0
+            txtmlbalLeave.Text = 0
+            txtaddvlbal2.Text = 0
+        End Using
+    End Function
 
     Private Sub ShowEmpLeaveBalance()
 

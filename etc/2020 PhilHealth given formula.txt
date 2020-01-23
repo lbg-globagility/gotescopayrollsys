@@ -2,3 +2,5 @@
 UPDATE `gotescopayrolldb`.`listofval` SET `DisplayValue`='3', `Description`='3' WHERE  `RowID`=498;
 UPDATE `gotescopayrolldb`.`listofval` SET `DisplayValue`='300', `Description`='300' WHERE  `RowID`=499;
 UPDATE `gotescopayrolldb`.`listofval` SET `DisplayValue`='1800', `Description`='1800' WHERE  `RowID`=500;
+
+UPDATE employeesalary es SET es.LastUpd=ADDDATE(es.LastUpd, INTERVAL 1 SECOND) WHERE es.OrganizationID=0;

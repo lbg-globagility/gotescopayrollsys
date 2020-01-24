@@ -2164,7 +2164,7 @@ Public Class EmployeeForm
 
     Dim publicEmpRowID = Nothing
 
-    Sub dgvEmp_SelectionChanged(sender As Object, e As EventArgs) 'Handles dgvEmp.SelectionChanged
+    Async Sub dgvEmp_SelectionChanged(sender As Object, e As EventArgs) 'Handles dgvEmp.SelectionChanged
 
         RemoveHandler cboPosit.SelectedIndexChanged, AddressOf cboPosit_SelectedIndexChanged
 
@@ -2386,7 +2386,7 @@ Public Class EmployeeForm
                         txtLName.Text = .Cells("Column4").Value
                         txtSName.Text = .Cells("Column21").Value
 
-                        Static case_one As Integer = -1
+                        Dim case_one As Integer = -1
 
                         If case_one <> sameEmpID Then
                             case_one = sameEmpID
@@ -2505,7 +2505,7 @@ Public Class EmployeeForm
                         ShowEmpLeaveBalance()
 
                         Dim dt_dptmngr As New DataTable
-                        Static str_quer As String =
+                        Dim str_quer As String =
                             String.Concat("SELECT pos.RowID",
                                           ", CONCAT_WS('', pos.PositionName) `FullName`",
                                           " FROM employee e",
@@ -2621,40 +2621,7 @@ Public Class EmployeeForm
                             '    rdMale.Checked = False
                         End If
 
-                        Dim n_ReadSQLProcedureToDatatable As New _
-                            ReadSQLProcedureToDatatable("GET_emp_leaveamounts", .Cells("RowID").Value)
-                        Dim catchdt As New DataTable : catchdt = n_ReadSQLProcedureToDatatable.ResultTable
-
-                        txtvlallowLeave.Text = .Cells("Column36").Value
-                        txtslallowLeave.Text = .Cells("slallowance").Value
-                        txtmlallowleave.Text = .Cells("mlallowance").Value
-
-                        txtvlbalLeave.Text = .Cells("Column35").Value
-                        txtslbalLeave.Text = .Cells("slbalance").Value
-                        txtmlbalLeave.Text = .Cells("mlbalance").Value
-
-                        txtvlpaypLeave.Text = .Cells("Column33").Value
-                        txtslpaypLeave.Text = .Cells("slpayp").Value
-                        txtmlpaypLeave.Text = .Cells("mlpayp").Value
-
-                        txtaddvlallow2.Text = 0
-                        txtaddvlbal2.Text = 0
-                        txtaddvlpayp2.Text = 0
-
-                        txtlvotherallow.Text = 0
-                        txtlvotherbal.Text = 0
-                        txtlvotherpayp.Text = 0
-
-                        For Each rowlv As DataRow In catchdt.Rows
-                            txtaddvlallow2.Text = ValNoComma(rowlv("AdditionalVLAllowance"))
-                            txtaddvlbal2.Text = ValNoComma(rowlv("AdditionalVLBalance"))
-                            txtaddvlpayp2.Text = ValNoComma(rowlv("AdditionalVLPerPayPeriod"))
-
-                            txtlvotherallow.Text = ValNoComma(rowlv("OtherLeaveBalance"))
-                            txtlvotherbal.Text = ValNoComma(rowlv("OtherLeaveAllowance"))
-                            txtlvotherpayp.Text = ValNoComma(rowlv("OtherLeavePerPayPeriod"))
-
-                        Next
+                        Await GetEmployeeLeaveBalances()
 
                         pbEmpPicLeave.Image = Nothing
 

@@ -346,6 +346,8 @@
       <DependentUpon>ThirteenthMonthSummary.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\Repositories\ListOfValueCollection.vb" />
+    <Compile Include="Core Forms\Repositories\PhilHealthPolicy.vb" />
     <Compile Include="Core Forms\rpt\FiledLeaves.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -421,6 +423,7 @@
     <Compile Include="Core Forms\USER CONTROLS\CustomBalloonToolTip.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\user_predefines\Custom\Enums.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\LeaveLedger.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\LeaveTransaction.vb" />
     <Compile Include="Core Forms\user_predefines\Custom\RenewLeaveBalancePolicy.vb" />
@@ -437,6 +440,7 @@
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\IAuditTrail.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\ILoanSchedule.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\interface\ISalary.vb" />
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\ListOfValue.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\LoanScheduleWithPayPeriod.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\newphilhealthimplement.vb" />
     <Compile Include="Core Forms\user_predefines\MySQL\entities\Organization.vb" />

@@ -75,4 +75,6 @@ Public Class DatabaseContext
 
     Public Overridable Property Bonuses() As DbSet(Of Bonus)
 
+    Public Overridable Property ListOfValues As DbSet(Of ListOfValue)
+
 End Class

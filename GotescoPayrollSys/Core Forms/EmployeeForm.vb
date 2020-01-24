@@ -2535,7 +2535,7 @@ Public Class EmployeeForm
 
                         'dgvemployeesalary.Focus()
 
-                        fillSelectedEmpSalaryList(.Cells("RowID").Value)
+                        fillSelectedEmpSalaryListAsync(.Cells("RowID").Value)
 
                         If dgvemployeesalary.RowCount <> 0 Then
                             dgvemployeesalary.Item("c_maritalStatus", 0).Selected = True
@@ -11578,6 +11578,8 @@ Public Class EmployeeForm
 
 #Region "Salary"
 
+    Private ReadOnly philHealthPolicy As New PhilHealthPolicy
+
     Dim noofdepd, view_IDSal As Integer
     Dim mStat As String
     Dim payid, filingid, sssid, philID As Integer
@@ -12016,7 +12018,7 @@ Public Class EmployeeForm
             Dim dgv_sal_currrow = dgvEmp.CurrentRow
 
             If dgv_sal_currrow IsNot Nothing Then
-                fillSelectedEmpSalaryList(dgv_sal_currrow.Cells("RowID").Value)
+                fillSelectedEmpSalaryListAsync(dgv_sal_currrow.Cells("RowID").Value)
 
                 dgvemployeesalary.CurrentCell = dgvemployeesalary.Item(c_maritalStatus.Index, index_dgvrow)
 
@@ -12388,9 +12390,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     End If
 
                     'govdeducsched
-                    Dim obj_val = EXECQUER("SELECT COALESCE(EmployeeShare,0) FROM payphilhealth WHERE COALESCE(" & the_salary &
-                                                     ",0) BETWEEN SalaryRangeFrom AND IF(COALESCE(COALESCE(" & the_salary & "),0) > SalaryRangeTo, COALESCE(" & the_salary &
-                                                     ") + 1, SalaryRangeTo) ORDER BY SalaryBase DESC LIMIT 1;")
+                    'Dim obj_val = EXECQUER("SELECT COALESCE(EmployeeShare,0) FROM payphilhealth WHERE COALESCE(" & the_salary &
+                    '                                 ",0) BETWEEN SalaryRangeFrom AND IF(COALESCE(COALESCE(" & the_salary & "),0) > SalaryRangeTo, COALESCE(" & the_salary &
+                    '                                 ") + 1, SalaryRangeTo) ORDER BY SalaryBase DESC LIMIT 1;")
+                    Dim obj_val = Await CalculatePhileHealthContributionAsync(sameEmpID, the_salary)
 
                     If btnNewSal.Enabled = False Then
 
@@ -12906,8 +12909,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     End Sub
 
-    Private Function fillSelectedEmpSalaryList(ByVal EmpID As Integer) As Boolean
-
+    Private Async Function fillSelectedEmpSalaryListAsync(ByVal EmpID As Integer) As Task(Of Boolean)
         Try
             Dim dt As New DataTable
             dt = getDataTableForSQL("select * from employeesalary es inner join employee ee on es.EmployeeID = ee.RowID Where es.EmployeeID = '" & EmpID & "' And ee.OrganizationID = '" & z_OrganizationID & "' Order By es.RowID DESC;")
@@ -12968,9 +12970,11 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                         txtToComputeSal.Text = Convert.ToDecimal(dgvemployeesalary.CurrentRow.Cells("c_ToComputeSal").Value)
 
                         txtPagibig.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_pagibig").Value)
-                        txtPhilHealthSal.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_philhealth").Value)
+
+                        Dim declaredSalary = Val(.Item("Salary"))
+                        txtPhilHealthSal.Text = Val(.Item("PhilHealthDeduction"))
                         txtSSSSal.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_sss").Value)
-                        txtEmpDeclaSal.Text = Val(dgvemployeesalary.CurrentRow.Cells("c_EmpSal").Value)
+                        txtEmpDeclaSal.Text = declaredSalary
                     Else
                         txtBasicrateSal.Text = ""
                         txtTrueSal.Text = ""
@@ -13013,7 +13017,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                     dgvemployeesalary.Rows.Item(n).Cells(c_BasicHourlyPaySal.Index).Value = .Item("BasicHourlyPay").ToString
 
                     dgvemployeesalary.Rows.Item(n).Cells(c_pagibig.Index).Value = .Item("HDMFAmount").ToString
-                    dgvemployeesalary.Rows.Item(n).Cells(c_philhealth.Index).Value = getphID
+                    dgvemployeesalary.Rows.Item(n).Cells(c_philhealth.Index).Value = Val(.Item("PhilHealthDeduction"))
                     dgvemployeesalary.Rows.Item(n).Cells(c_sss.Index).Value = getpsID
 
                     dgvemployeesalary.Rows.Item(n).Cells(c_fromdate.Index).Value = datefrom
@@ -13406,54 +13410,102 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     Private Async Sub btnAutoCalcPhilHealth_ClickAsync(sender As Object, e As EventArgs) Handles btnAutoCalcPhilHealth.Click
         If Not HasSelectedSalary() Then Return
 
-        is_user_override_phh = False
-        btnAutoCalcPhilHealth.Enabled = False
+        If philHealthPolicy.IsFormulaBased Then
+            Dim salary = Convert.ToDecimal(txtEmpDeclaSal.Text.Trim.Replace(",", ""))
+            txtPhilHealthSal.Text = Math.Round(salary * (philHealthPolicy.Rate * 0.01D), 2)
 
-        Dim phHContribAmount As Decimal
-        Dim query =
-        <![CDATA[SELECT phh.EmployeeShare
+        ElseIf philHealthPolicy.IsBracketBased Then
+            is_user_override_phh = False
+            btnAutoCalcPhilHealth.Enabled = False
+
+            Dim phHContribAmount As Decimal
+            Dim query =
+            <![CDATA[SELECT phh.EmployeeShare
                 FROM payphilhealth phh
                 INNER JOIN employee e ON e.RowID=@employeePrimaID
                 WHERE IF(LCASE(e.EmployeeType)='daily', @givenSalary * (e.WorkDaysPerYear / 12), @givenSalary)
                 BETWEEN phh.SalaryRangeFrom AND phh.SalaryRangeTo
                 ORDER BY phh.SalaryBase DESC
                 LIMIT 1;]]>.Value
-        Dim succeed = False
-        Try
-            Using connection As New MySqlConnection(connectionString),
-                        command As New MySqlCommand(query, connection)
+            Dim succeed = False
+            Try
+                Using connection As New MySqlConnection(connectionString),
+                            command As New MySqlCommand(query, connection)
 
-                With command.Parameters
-                    .AddWithValue("@employeePrimaID", sameEmpID)
-                    .AddWithValue("@givenSalary", Convert.ToDecimal(txtEmpDeclaSal.Text.Trim.Replace(",", "")))
-                End With
+                    With command.Parameters
+                        .AddWithValue("@employeePrimaID", sameEmpID)
+                        .AddWithValue("@givenSalary", Convert.ToDecimal(txtEmpDeclaSal.Text.Trim.Replace(",", "")))
+                    End With
 
-                Await connection.OpenAsync()
-                Dim reader = Await command.ExecuteReaderAsync()
+                    Await connection.OpenAsync()
+                    Dim reader = Await command.ExecuteReaderAsync()
 
-                While Await reader.ReadAsync()
-                    phHContribAmount = Convert.ToDecimal(reader(0))
-                    succeed = True
-                End While
-            End Using
-        Catch ex As Exception
-            MessageBox.Show($"Oops! something went wrong. See details :{vbNewLine}{ex.Message}", "Auto-calculate PhilHealth contribution", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            btnAutoCalcPhilHealth.Enabled = True
+                    While Await reader.ReadAsync()
+                        phHContribAmount = Convert.ToDecimal(reader(0))
+                        succeed = True
+                    End While
+                End Using
+            Catch ex As Exception
+                MessageBox.Show($"Oops! something went wrong. See details :{vbNewLine}{ex.Message}", "Auto-calculate PhilHealth contribution", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                btnAutoCalcPhilHealth.Enabled = True
 
-            If succeed Then
-                txtPhilHealthSal.Text = phHContribAmount
-            Else
-                Dim row = dgvemployeesalary.CurrentRow
-                If row IsNot Nothing Then
-                    Dim salaryID = Convert.ToString(row.Cells(c_RowIDSal.Name).Value)
-                    Dim inList = listofEditEmpSal.Any(Function(i) i = salaryID)
-                    If inList Then listofEditEmpSal.Remove(salaryID)
+                If succeed Then
+                    txtPhilHealthSal.Text = phHContribAmount
+                Else
+                    Dim row = dgvemployeesalary.CurrentRow
+                    If row IsNot Nothing Then
+                        Dim salaryID = Convert.ToString(row.Cells(c_RowIDSal.Name).Value)
+                        Dim inList = listofEditEmpSal.Any(Function(i) i = salaryID)
+                        If inList Then listofEditEmpSal.Remove(salaryID)
+                    End If
                 End If
-            End If
-        End Try
+            End Try
+
+        End If
 
     End Sub
+
+    Private Async Function CalculatePhileHealthContributionAsync(employeeRowId As Integer, salary As Decimal) As Task(Of Decimal)
+        If philHealthPolicy.IsFormulaBased Then
+            Return Math.Round(salary * (philHealthPolicy.Rate * 0.01D), 2)
+        ElseIf philHealthPolicy.IsBracketBased Then
+            Dim phHContribAmount As Decimal
+            Dim query =
+            <![CDATA[SELECT phh.EmployeeShare
+                FROM payphilhealth phh
+                INNER JOIN employee e ON e.RowID=@employeePrimaID
+                WHERE IF(LCASE(e.EmployeeType)='daily', @givenSalary * (e.WorkDaysPerYear / 12), @givenSalary)
+                BETWEEN phh.SalaryRangeFrom AND phh.SalaryRangeTo
+                ORDER BY phh.SalaryBase DESC
+                LIMIT 1;]]>.Value
+            Dim succeed = False
+            Try
+                Using connection As New MySqlConnection(connectionString),
+                            command As New MySqlCommand(query, connection)
+
+                    With command.Parameters
+                        .AddWithValue("@employeePrimaID", employeeRowId)
+                        .AddWithValue("@givenSalary", salary)
+                    End With
+
+                    Await connection.OpenAsync()
+                    Dim reader = Await command.ExecuteReaderAsync()
+
+                    While Await reader.ReadAsync()
+                        phHContribAmount = Convert.ToDecimal(reader(0))
+                        succeed = True
+                    End While
+                End Using
+
+                Return phHContribAmount
+            Catch ex As Exception
+                MessageBox.Show($"Oops! something went wrong. See details :{vbNewLine}{ex.Message}", "Auto-calculate PhilHealth contribution", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+
+        Return 0
+    End Function
 
     Private Sub btnSetNonePhilHealth_Click(sender As Object, e As EventArgs) Handles btnSetNonePhilHealth.Click
         If Not HasSelectedSalary() Then Return

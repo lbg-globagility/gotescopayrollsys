@@ -22484,6 +22484,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
         If dgvLoanList.RowCount = 0 Or loanID = 0 Then Return
 
+        Dim askConsent = MessageBox.Show("Are you sure you want to cancel the loan?", "Cancel out loan", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If askConsent = DialogResult.No Then Return
+
         Dim query As String =
                     String.Concat("UPDATE employeeloanschedule",
                                   " SET `Status`='Cancelled'",
@@ -22511,7 +22514,10 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             _logger.Error("Error cancelling loan", ex)
             MessageBox.Show($"Cancelling loan failed, please report this issue to {My.Resources.SystemDeveloper}.", "Cancel loan failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            If succeed Then dgvEmp_SelectionChanged(dgvEmp, New EventArgs)
+            If succeed Then
+                MessageBox.Show("Loan successfully canceled out.", "Cancel loan succeed", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+                dgvEmp_SelectionChanged(dgvEmp, New EventArgs)
+            End If
         End Try
 
     End Sub

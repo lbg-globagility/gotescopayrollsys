@@ -21,9 +21,7 @@ DECLARE hourBreak INT(11) DEFAULT 1;
 
 DECLARE secondsPerHour INT(11) DEFAULT 3600;
 
-/*********************************************************
-START METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
-*********************************************************/
+
 IF NEW.Status2 = 'Pending' AND NEW.`Status` = 'Approved' THEN
 	
 	SET NEW.Status2 = NEW.`Status`;
@@ -83,7 +81,7 @@ IF NEW.`Status` = 'Approved' THEN
 			UNION
 				SELECT e.RowID,e.AdditionalVLAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Additional VL'
 			UNION
-				SELECT e.RowID,e.OtherLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
+				SELECT e.RowID,e.OtherLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others'
 			UNION
 				SELECT e.RowID,e.MaternityLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
 				) i
@@ -98,26 +96,12 @@ IF NEW.`Status` = 'Approved' THEN
 			UNION
 				SELECT e.RowID,e.AdditionalVLAllowance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Additional VL'
 			UNION
-				SELECT e.RowID,e.OtherLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
+				SELECT e.RowID,e.OtherLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others'
 			UNION
 				SELECT e.RowID,e.MaternityLeaveBalance `LeaveBalance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
 				) i
 		INTO selected_leavebal;
-/*		SELECT psi.PayAmount
-		FROM paystub ps
-		INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND NEW.LeaveStartDate BETWEEN pp.PayFromDate AND pp.PayToDate
-		
-		INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` AND ppd.OrganizationID=pp.OrganizationID AND ppd.TotalGrossSalary=pp.TotalGrossSalary AND ppd.OrdinalValue = (pp.OrdinalValue - 1)
-		INNER JOIN paystub pstub ON pstub.EmployeeID=ps.EmployeeID AND pstub.OrganizationID=ps.OrganizationID AND pstub.PayPeriodID=ppd.RowID
-		
-		INNER JOIN paystubitem psi ON psi.PayStubID=pstub.RowID AND psi.Undeclared = '1'
-		INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo = NEW.LeaveType
-		INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave Type'
-		
-		WHERE ps.EmployeeID=NEW.EmployeeID
-		AND ps.OrganizationID=NEW.OrganizationID
-		LIMIT 1
-		INTO selected_leavebal;*/
+
 		
 		IF selected_leavebal IS NULL THEN SET selected_leavebal = 0; END IF;
 		
@@ -197,8 +181,8 @@ IF NEW.`Status` = 'Approved' THEN
 	
 	SET startBreakDateTime = GetNextStartDateTime(@leaveStartDateTime, startBreakTime);
 	SET endBreakDateTime = ADDDATE(startBreakDateTime, INTERVAL hourBreak HOUR);
-	#@leaveStartDateTime
-	#@leaveEndDateTime
+	
+	
 	
 	SET isCoversBreak = IFNULL(isCoversBreak, FALSE);
 	
@@ -206,12 +190,12 @@ IF NEW.`Status` = 'Approved' THEN
 		
 		SET @break_hrs = @break_hrs;
 		
-		# files leave at 1st half of shift schedule
+		
 		IF @leaveStartDateTime <= startBreakDateTime AND @leaveEndDateTime <= endBreakDateTime THEN
 			SET @break_hrs = TIMESTAMPDIFF(SECOND, startBreakDateTime, @leaveEndDateTime);
 			SET @break_hrs = @break_hrs / (@min_perhour * @sec_permin);
 		
-		# files leave at 2nd half of shift schedule
+		
 		ELSEIF startBreakDateTime <= @leaveStartDateTime AND endBreakDateTime <= @leaveEndDateTime THEN
 			SET @break_hrs = TIMESTAMPDIFF(SECOND, @leaveStartDateTime, endBreakDateTime);
 			SET @break_hrs = @break_hrs / (@min_perhour * @sec_permin);
@@ -221,8 +205,8 @@ IF NEW.`Status` = 'Approved' THEN
 		SET @validhrs_multip_validdays = (@offcl_validhrs - @break_hrs) * @offcl_validdays;
 
 		IF (selected_leavebal - @validhrs_multip_validdays) < 0 THEN
-			# SET @validhrs_multip_validdays = @validhrs_multip_validdays + (selected_leavebal - @validhrs_multip_validdays);
-			# SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
+			
+			
 			SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * -1;
 		ELSE
 			
@@ -269,9 +253,7 @@ ELSE
 	SET NEW.OfficialValidDays = 0;
 	
 END IF;
-/*********************************************************
-END METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
-*********************************************************/
+
 
 END//
 DELIMITER ;

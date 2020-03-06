@@ -12,11 +12,9 @@ CREATE TRIGGER `BEFUPD_employeeleave` BEFORE UPDATE ON `employeeleave` FOR EACH 
 DECLARE selected_leavebal DECIMAL(11,2) DEFAULT 0;
 DECLARE secondsPerHour INT(11) DEFAULT 3600;
 
-/*********************************************************
-START METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
-*********************************************************/
+
 IF NEW.Status2 = 'Pending' AND NEW.`Status` = 'Approved' THEN
-	# UPDATE employeeleave SET lastUpd=CURRENT_TIMESTAMP() WHERE Status2 = 'Pending' AND `Status` = 'Approved';
+	
 	SET NEW.Status2 = NEW.`Status`;
 
 END IF;
@@ -39,7 +37,7 @@ IF NEW.`Status` = 'Approved' THEN
 		UNION
 			SELECT e.RowID,e.AdditionalVLAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Additional VL'
 		UNION
-			SELECT e.RowID,e.OtherLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others leave'
+			SELECT e.RowID,e.OtherLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND NEW.LeaveType='Others'
 		UNION
 			SELECT e.RowID,e.MaternityLeaveAllowance `LeaveAllowance` FROM employee e WHERE e.RowID=NEW.EmployeeID AND LOCATE('aternity', NEW.LeaveType) > 0
 			) i
@@ -93,17 +91,7 @@ IF NEW.`Status` = 'Approved' THEN
 	
 	SET @break_hrs = NULL;
 	
-	/*SELECT IF(IS_TIMERANGE_REACHTOMORROW(sh.BreakTimeFrom, sh.BreakTimeTo)
-				, (TIMESTAMPDIFF(SECOND
-										,CONCAT_DATETIME(CURDATE(), sh.BreakTimeFrom)
-										,CONCAT_DATETIME(ADDDATE(CURDATE(), INTERVAL 1 DAY), sh.BreakTimeTo))
-					/ (@min_perhour * @sec_permin))
-				, COMPUTE_TimeDifference(sh.BreakTimeFrom, sh.BreakTimeTo)) `Result`
-	, sh.BreakTimeFrom, sh.BreakTimeTo
-	FROM shift sh
-	WHERE sh.RowID=@shift_rowid
-	AND sh.TimeFrom=NEW.LeaveStartTime
-	AND sh.TimeTo	=NEW.LeaveEndTime*/
+	
 	SELECT
 	TIMESTAMPDIFF(SECOND
 					, CONCAT_DATETIME(d.DateValue, sh.BreakTimeFrom)
@@ -126,8 +114,8 @@ IF NEW.`Status` = 'Approved' THEN
 	SET @validhrs_multip_validdays = (@offcl_validhrs - @break_hrs) * @offcl_validdays;
 	
 	IF (selected_leavebal - @validhrs_multip_validdays) < 0 THEN
-		# SET @validhrs_multip_validdays = @validhrs_multip_validdays + (selected_leavebal - @validhrs_multip_validdays);
-		# SET NEW.OfficialValidHours = (selected_leavebal - @validhrs_multip_validdays);
+		
+		
 		SET NEW.OfficialValidHours = (IFNULL(@offcl_validhrs, 0) - IFNULL(@break_hrs, 0)) * -1;
 		
 	ELSE
@@ -160,9 +148,7 @@ ELSE
 
 END IF;
 
-/*********************************************************
-END METHOD `SET_OfficialValidHours_AND_OfficialValidDays`
-*********************************************************/
+
 
 END//
 DELIMITER ;

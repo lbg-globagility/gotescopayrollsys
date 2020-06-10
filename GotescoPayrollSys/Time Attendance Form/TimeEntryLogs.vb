@@ -664,7 +664,7 @@ Public Class TimeEntryLogs
                                       .Full_Name = employeeinfo.FullName,
                                       .EPrimaryKey = employeeinfo.RowID}
                      ).
-                 OrderBy(Function(e) String.Concat(e.Full_Name, e.Employee_ID)).
+                 OrderBy(Function(e) e.Full_Name).
                  Skip(_page).Take(twenty)
 
                 'DataGridViewX2.AutoGenerateColumns = False

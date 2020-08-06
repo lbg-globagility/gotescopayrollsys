@@ -25,7 +25,7 @@ DECLARE anyamount DECIMAL(14,6);
 
 DECLARE allowancetype_IDs VARCHAR(150);
 
-DECLARE loantype_IDs VARCHAR(150);
+DECLARE loantype_IDs TEXT;
 
 DECLARE payperiod_type VARCHAR(50);
 

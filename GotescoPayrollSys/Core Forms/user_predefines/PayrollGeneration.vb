@@ -873,24 +873,14 @@ Public Class PayrollGeneration
                             monthly_computed_salary = ((grossincome + grossincome_firsthalf) - overall_overtime)
 
                         ElseIf employment_type = "Daily" Then
-                            grossincome = ValNoComma(drowtotdaypay("TotalDayPay")) + ValNoComma(drowtotdaypay("AddedHolidayPayAmount"))
+                            grossincome = ValNoComma(drowtotdaypay("TotalDayPay"))
                             grossincome_firsthalf = ValNoComma(prev_empTimeEntry.Compute("SUM(TotalDayPay)", "EmployeeID = '" & drow("RowID") & "'"))
                             monthly_computed_salary = ((grossincome + grossincome_firsthalf) - overall_overtime) '_
-                            'monthly_computed_salary = ValNoComma(prev_empTimeEntry.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) + ValNoComma(etent_totdaypay.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) _
-                            '    + ValNoComma(emptimeentryOfHoliday.Compute("SUM(HolidayPayAmount)", "EmployeeID = '" & drow("RowID") & "'")) + If(ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")) < 0, 0, ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")))
-                            'monthly_computed_salary = ValNoComma(prev_empTimeEntry.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) _
-                            '                      + ValNoComma(etent_totdaypay.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'"))
                         End If
 
                         'grossincome = Math.Round(grossincome, 2)
                         Dim addtl_taxable_daily_allowance = ValNoComma(prev_empTimeEntry.Compute("SUM(TaxableDailyAllowance)", "EmployeeID = '" & drow("RowID") & "'")) _
                                                             + ValNoComma(etent_totdaypay.Compute("SUM(TaxableDailyAllowance)", "EmployeeID = '" & drow("RowID") & "'"))
-                        'monthly_computed_salary = ValNoComma(prev_empTimeEntry.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'")) _
-                        '                          + ValNoComma(etent_totdaypay.Compute("SUM(RegularHoursAmount)", "EmployeeID = '" & drow("RowID") & "'"))
-
-                        If employee_ID = 73 Then
-                            Console.WriteLine("Over here")
-                        End If
 
                         Dim str_allow_quer As String =
                             SBConcat.ConcatResult("EmployeeID=", drow("RowID"), "")

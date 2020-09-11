@@ -914,7 +914,7 @@ ELSEIF e_type IN ('Fixed','Monthly') AND IsFirstTimeSalary = '0' THEN
 		
 ELSE
 
-	SELECT (SUM(TotalDayPay) + SUM(AddedHolidayPayAmount)) `Result`, EmployeeSalaryID FROM attendanceperiodofemployee INTO totalworkamount,empsalRowID;
+	SELECT SUM(TotalDayPay) `Result`, EmployeeSalaryID FROM attendanceperiodofemployee INTO totalworkamount,empsalRowID;
 	
 	IF totalworkamount IS NULL THEN
 		

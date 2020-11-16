@@ -179,11 +179,11 @@ SET @existsHoursUnderColumn=EXISTS(SELECT i.ORDINAL_POSITION
 												AND i.`COLUMN_NAME`=@columnName);
 
 #IF @existsHoursTardy THEN  END IF;
-UPDATE employeetimeentry et INNER JOIN tardiness t ON t.RowID=et.RowID SET et.HoursTardy=t.`LateHighPrecision`
+UPDATE employeetimeentry et INNER JOIN tardiness t ON t.RowID=et.RowID AND t.`LateHighPrecision` > 0 SET et.HoursTardy=t.`LateHighPrecision`
 ;
 
 #IF @existsHoursUnderColumn THEN  END IF;
-UPDATE employeetimeentry et INNER JOIN earlyout eo ON eo.RowID=et.RowID SET et.HoursUndertime=eo.`TardyHighPrecision`
+UPDATE employeetimeentry et INNER JOIN earlyout eo ON eo.RowID=et.RowID AND eo.`TardyHighPrecision` > 0 SET et.HoursUndertime=eo.`TardyHighPrecision`
 ;
 
 END//

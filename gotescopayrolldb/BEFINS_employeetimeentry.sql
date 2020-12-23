@@ -360,20 +360,7 @@ IF LCASE(@employee_type)='monthly' THEN
 		SET NEW.HolidayPayAmount = 0;
 	END IF;
 ELSEIF LCASE(@employee_type)='daily' THEN
-	SET NEW.HolidayPayAmount = (SELECT IF(NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount = 0 AND e.CalcHoliday='1' AND LOCATE('Regular Holi',pr.PayType) > 0 AND isPresentInWorkingDaysPriorToThisDate='1'
-														, rate_this_date
-	#													, IF(e.CalcSpecialHoliday = '1' AND LOCATE('Special',pr.PayType) > 0 AND e.EmployeeType IN ('Fixed','Monthly') AND isSpecialHoliday = '1' AND isPresentInWorkingDaysPriorToThisDate = '1' AND NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount = 0
-														, IF(e.CalcSpecialHoliday = TRUE AND isSpecialHoliday = TRUE AND e.EmployeeType IN ('Fixed','Monthly') AND NEW.IsValidForHolidayPayment=TRUE AND NEW.RegularHoursAmount = 0
-																, rate_this_date
-																, IF(e.CalcSpecialHoliday='1' AND LOCATE('Special',pr.PayType) > 0
-																		, NEW.RegularHoursAmount * ((payrate_this_date MOD 1) / payrate_this_date)
-																		, IF(e.CalcHoliday='1' AND pr.PayType='Regular Holiday' AND NEW.TotalDayPay > 0 AND NEW.RegularHoursAmount > 0 AND NEW.RegularHoursAmount > rate_this_date
-																			, IF(NEW.TotalDayPay > NEW.RegularHoursAmount
-																			, NEW.RegularHoursAmount, NEW.TotalDayPay) / payrate_this_date, 0)
-																		)))
-													FROM employee e
-													INNER JOIN payrate pr ON pr.RowID=NEW.PayRateID AND pr.PayType!='Regular Day'
-													WHERE e.RowID=NEW.EmployeeID AND e.OrganizationID=NEW.OrganizationID);
+	SET NEW.HolidayPayAmount = 0;
 
 	SET @isSatisfied=EXISTS(SELECT e.RowID
 									FROM employee e

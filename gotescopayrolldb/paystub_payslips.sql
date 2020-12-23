@@ -147,7 +147,7 @@ ps.RowID
 
 , IFNULL((LENGTH(psiloan.`Column33`) - LENGTH(REPLACE(psiloan.`Column33`, ',', ''))) + 1, 0) `Column10`
 
-, FORMAT(IFNULL(et.RegularHoursWorked - et.`AttendedHolidayHours`,0), 2) `Column17`
+, FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `Column17`
 
 ,IF(e.EmployeeType = 'Daily' OR (LCASE(e.EmployeeType)='monthly' AND e.StartDate BETWEEN paydate_from AND paydat_to)
     , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)

@@ -85,7 +85,7 @@ ps.RowID
 
 , CONCAT_WS(' ', DATE_FORMAT(paydate_from, '%M'), DAY(paydate_from), '-', CONCAT(DAY(paydat_to), ','), YEAR(paydate_from) ) `PayperiodDescription`
 
-, FORMAT(IFNULL(et.RegularHoursWorked - et.`AttendedHolidayHours`,0), 2) `RegularHours`
+, FORMAT(IFNULL(et.RegularHoursWorked,0), 2) `RegularHours`
 ,IF(e.EmployeeType = 'Daily' OR (LCASE(e.EmployeeType)='monthly' AND e.StartDate BETWEEN paydate_from AND paydat_to)
 	 , FORMAT(IFNULL(et.RegularHoursAmount, 0), 2)
 	 , FORMAT(@basic_payment - (IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(et.Absent, 0) + IF(LCASE(e.EmployeeType)='monthly', IFNULL(et.DefaultHolidayPay, 0), 0) + IFNULL(et.Leavepayment, 0)), 2)
@@ -102,7 +102,7 @@ ps.RowID
 , et.`RestDayAmount` `RestDayAmount`
 
 , et.`AttendedHolidayHours` `HolidayHours`
-, et.HolidayPayAmount + et.`AddedHolidayPayAmount` `HolidayAmount`
+, IFNULL(FORMAT( IF(e.EmployeeType='Daily', et.`AddedHolidayPayAmount`, et.`DefaultHolidayPay` + et.`AddedHolidayPayAmount`), 2), 0) `HolidayAmount`
 
 , et.`LeaveHours` `LeaveHours`
 , et.VacationLeaveHours * if(`e`.`EmployeeType` = 'Daily', (IF(ps.AsActual = 1, esa.TrueSalary, esa.Salary) / @defaultWorkHours), ((IF(ps.AsActual = 1, esa.TrueSalary, esa.Salary) / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) `VacationLeaveAmount`
@@ -145,7 +145,7 @@ LEFT JOIN (SELECT
 			  ,et.EmployeeSalaryID
 			  ,SUM(et.RegularHoursWorked) `RegularHoursWorked`
 
-			  ,SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, et.RegularHoursAmount)) `RegularHoursAmount`
+			  ,SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, IF(e.EmployeeType='Daily' AND et.IsValidForHolidayPayment, (et.RegularHoursAmount - et.AddedHolidayPayAmount), et.RegularHoursAmount))) `RegularHoursAmount`
 
 			  ,SUM(et.TotalHoursWorked) `TotalHoursWorked`
 			  ,SUM(et.OvertimeHoursWorked) `OvertimeHoursWorked`
@@ -190,7 +190,8 @@ LEFT JOIN (SELECT
 			  FROM attendanceperiod et
 			  
 			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
-
+			  
+			  INNER JOIN (SELECT RowID, EmployeeType FROM employee WHERE OrganizationID=og_rowid) e ON e.RowID=et.EmployeeID
 			  WHERE et.OrganizationID=og_rowid
 			  AND et.AsActual=is_actual
 			  AND et.`Date` BETWEEN paydate_from AND paydat_to

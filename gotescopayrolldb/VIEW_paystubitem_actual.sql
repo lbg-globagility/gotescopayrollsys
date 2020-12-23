@@ -44,6 +44,8 @@ DECLARE workingDaysPerYear DECIMAL(11, 6);
 
 DECLARE monthCount INT(11) DEFAULT 12;
 
+DECLARE isDaily BOOLEAN DEFAULT FALSE;
+
 SELECT pp.`Month`,pp.`Year`, e.WorkDaysPerYear
 FROM payperiod pp
 INNER JOIN employee e ON e.RowID=EmpRowID AND e.OrganizationID=OrganizID
@@ -68,6 +70,7 @@ AND et.`Date` BETWEEN pay_date_from AND pay_date_to
 
 SELECT pp.PayFromDate
 ,pp.PayToDate
+,e.EmployeeType='Daily' `IsDaily`
 FROM payperiod pp
 INNER JOIN employee e ON e.RowID=EmpRowID AND e.OrganizationID=OrganizID
 WHERE pp.OrganizationID=OrganizID
@@ -77,7 +80,8 @@ AND pp.`Year`=theyear
 ORDER BY pp.PayFromDate DESC,pp.PayToDate DESC
 LIMIT 1
 INTO startdate_ofpreviousmonth
-		,enddate_ofpreviousmonth;
+		,enddate_ofpreviousmonth
+		,isDaily;
 
 CALL GetAttendancePeriod(OrganizID, pay_date_from, pay_date_to, TRUE);
 
@@ -149,7 +153,7 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(et.RegularHoursWorked) AS RegularHoursWorked
 				
 #				, SUM(et.RegularHoursAmount - IF(et.RegularHoursAmount = 0 AND et.TotalDayPay > 0, 0, et.HolidayPayAmount)) AS RegularHoursAmount
-				, SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, et.RegularHoursAmount)) `RegularHoursAmount`
+				, SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, IF(isDaily AND et.IsValidForHolidayPayment, (et.RegularHoursAmount - et.AddedHolidayPayAmount), et.RegularHoursAmount))) `RegularHoursAmount`
 #				, SUM(et.RegularHoursAmount) AS RegularHoursAmount
 				, SUM(etea.TotalHoursWorked) AS TotalHoursWorked
 				, SUM(etea.OvertimeHoursWorked) AS OvertimeHoursWorked

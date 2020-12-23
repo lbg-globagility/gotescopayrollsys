@@ -252,7 +252,7 @@ LEFT JOIN (SELECT
 			  ,et.EmployeeSalaryID
 			  ,SUM(et.RegularHoursWorked) `RegularHoursWorked`
 #			  ,SUM(et.RegularHoursAmount - IF(et.RegularHoursAmount = 0 AND et.TotalDayPay > 0, 0, et.HolidayPayAmount)) `RegularHoursAmount`
-			  ,SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, et.RegularHoursAmount)) `RegularHoursAmount`
+			  ,SUM(IF(et.RegularHoursAmount > 0 AND et.DailyRate = et.HolidayPayAmount, 0, IF(e.EmployeeType='Daily' AND et.IsValidForHolidayPayment, (et.RegularHoursAmount - et.AddedHolidayPayAmount), et.RegularHoursAmount))) `RegularHoursAmount`
 #			  ,SUM(et.RegularHoursAmount) `RegularHoursAmount`
 			  ,SUM(et.TotalHoursWorked) `TotalHoursWorked`
 			  ,SUM(et.OvertimeHoursWorked) `OvertimeHoursWorked`
@@ -299,6 +299,7 @@ LEFT JOIN (SELECT
 			  
 			  LEFT JOIN restdaytimeentry i ON i.RowID = et.RowID
 #			  LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
+			  INNER JOIN (SELECT RowID, EmployeeType FROM employee WHERE OrganizationID=og_rowid) e ON e.RowID=et.EmployeeID
 			  WHERE et.OrganizationID=og_rowid
 			  AND et.AsActual=is_actual
 			  AND et.`Date` BETWEEN paydate_from AND paydat_to

@@ -369,8 +369,13 @@ IF LCASE(@employee_type)='monthly' THEN
 		SET NEW.HolidayPayAmount = 0;
 	END IF;
 ELSEIF LCASE(@employee_type)='daily' THEN
-	SET NEW.HolidayPayAmount = 0;
 
+	IF NEW.IsValidForHolidayPayment=TRUE AND isLegalHoliday=TRUE AND NEW.RegularHoursAmount=0 AND NEW.TotalDayPay=rate_this_date THEN
+		SET NEW.HolidayPayAmount = rate_this_date;
+	ELSE
+		SET NEW.HolidayPayAmount = 0;
+	END IF;
+	
 	SET @isSatisfied=EXISTS(SELECT e.RowID
 									FROM employee e
 									WHERE e.RowID=NEW.EmployeeID

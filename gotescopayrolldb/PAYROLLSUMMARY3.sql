@@ -6,28 +6,13 @@
 
 DROP PROCEDURE IF EXISTS `PAYROLLSUMMARY3`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `PAYROLLSUMMARY3`(
+CREATE PROCEDURE `PAYROLLSUMMARY3`(
 	IN `og_rowid` INT,
 	IN `pp_rowid` INT,
-	IN `is_actual` CHAR(1)
-
-
-
-
-
-
-
-
-,
+	IN `is_actual` CHAR(1),
 	IN `strSalaryDistrib` VARCHAR(50)
-
-
 )
-LANGUAGE SQL
-DETERMINISTIC
-CONTAINS SQL
-SQL SECURITY DEFINER
-COMMENT ''
+    DETERMINISTIC
 BEGIN
 
 DECLARE paydate_from
@@ -102,7 +87,7 @@ ps.RowID
 , et.`RestDayAmount` `RestDayAmount`
 
 , et.`AttendedHolidayHours` `HolidayHours`
-, IFNULL(FORMAT( IF(e.EmployeeType='Daily', et.`AddedHolidayPayAmount`, et.`DefaultHolidayPay` + et.`AddedHolidayPayAmount`), 2), 0) `HolidayAmount`
+, IFNULL(FORMAT( IF(e.EmployeeType='Daily', et.`HolidayPayAmount` + et.`AddedHolidayPayAmount`, et.`DefaultHolidayPay` + et.`AddedHolidayPayAmount`), 2), 0) `HolidayAmount`
 
 , et.`LeaveHours` `LeaveHours`
 , et.VacationLeaveHours * if(`e`.`EmployeeType` = 'Daily', (IF(ps.AsActual = 1, esa.TrueSalary, esa.Salary) / @defaultWorkHours), ((IF(ps.AsActual = 1, esa.TrueSalary, esa.Salary) / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) `VacationLeaveAmount`

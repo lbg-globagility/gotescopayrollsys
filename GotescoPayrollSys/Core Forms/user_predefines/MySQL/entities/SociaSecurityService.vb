@@ -24,7 +24,7 @@ Public Class SocialSecurityService
     Public Property MonthlySalaryCredit As Decimal
     Public Property EmployeeContributionAmount As Decimal
     Public Property EmployerContributionAmount As Decimal
-    Public Property EmployeeECAmount As Decimal
+    Public Property EmployerECAmount As Decimal
     Public Property HiddenData As Char
     Public Property EffectiveDateFrom As Date
     Public Property EffectiveDateTo As Date

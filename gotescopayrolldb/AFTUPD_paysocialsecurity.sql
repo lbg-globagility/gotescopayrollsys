@@ -47,9 +47,9 @@ INSERT INTO audittrail (Created,CreatedBy,LastUpdBy,OrganizationID,ViewID,FieldC
 
 END IF;
 
-IF OLD.EmployeeECAmount != NEW.EmployeeECAmount THEN
+IF OLD.EmployerECAmount != NEW.EmployerECAmount THEN
 
-INSERT INTO audittrail (Created,CreatedBy,LastUpdBy,OrganizationID,ViewID,FieldChanged,ChangedRowID,OldValue,NewValue,ActionPerformed) VALUES (CURRENT_TIMESTAMP(),NEW.LastUpdBy,NEW.LastUpdBy,OrgRowID,viewID,'EmployeeECAmount',NEW.RowID,OLD.EmployeeECAmount,NEW.EmployeeECAmount,'Update');
+INSERT INTO audittrail (Created,CreatedBy,LastUpdBy,OrganizationID,ViewID,FieldChanged,ChangedRowID,OldValue,NewValue,ActionPerformed) VALUES (CURRENT_TIMESTAMP(),NEW.LastUpdBy,NEW.LastUpdBy,OrgRowID,viewID,'EmployerECAmount',NEW.RowID,OLD.EmployerECAmount,NEW.EmployerECAmount,'Update');
 
 END IF;
 

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_SSS_Monthly`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_SSS_Monthly`(IN `OrganizID` INT, IN `paramDate` DATE)
+CREATE PROCEDURE `RPT_SSS_Monthly`(IN `OrganizID` INT, IN `paramDate` DATE)
     DETERMINISTIC
 BEGIN
 
@@ -61,8 +61,8 @@ FROM (
 		
 		
 		, ps.TotalCompSSS `DatCol4`
-		, pss.EmployeeECAmount `DatCol5`
-		, (pss.EmployeeECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
+		, pss.EmployerECAmount `DatCol5`
+		, (pss.EmployerECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
 		
 		, (CASE ee.EmployeeType
 			WHEN 'Fixed' THEN IFNULL((SELECT Salary FROM employeesalary
@@ -127,8 +127,8 @@ FROM (
 		
 		
 		, ps.TotalCompSSS `DatCol4`
-		, pss.EmployeeECAmount `DatCol5`
-		, (pss.EmployeeECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
+		, pss.EmployerECAmount `DatCol5`
+		, (pss.EmployerECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
 		
 		, (CASE ee.EmployeeType
 			WHEN 'Fixed' THEN IFNULL((SELECT Salary FROM employeesalary

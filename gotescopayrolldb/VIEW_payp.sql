@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_payp`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_payp`(IN `payp_OrganizationID` INT, IN `param_Date` DATE, IN `isotherformat` CHAR(1), IN `PayFreqType` TEXT)
+CREATE PROCEDURE `VIEW_payp`(IN `payp_OrganizationID` INT, IN `param_Date` DATE, IN `isotherformat` CHAR(1), IN `PayFreqType` TEXT)
     DETERMINISTIC
 BEGIN
 
@@ -42,6 +42,7 @@ IF isotherformat = '0' THEN
 		,PhHContribSched
 		,HDMFContribSched
 		,payp.MinimumWageValue AS PayPeriodMinWageValue
+		,IF(payp.Half=1, STR_TO_DATE(CONCAT_WS('-',payp.`Year`,payp.`Month`,1),'%Y-%c-%e'), LAST_DAY(STR_TO_DATE(CONCAT_WS('-',payp.`Year`,payp.`Month`,1),'%Y-%c-%e'))) `DateRepresentation`
 		FROM payperiod payp
 		WHERE payp.OrganizationID=payp_OrganizationID
 		AND TotalGrossSalary=1

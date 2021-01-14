@@ -1460,17 +1460,17 @@ Module myModule
                 Optional MonthlySalaryCredit As Object = Nothing,
                 Optional EmployeeContributionAmount As Object = Nothing,
                 Optional EmployerContributionAmount As Object = Nothing,
-                Optional EmployeeECAmount As Object = Nothing) As String
+                Optional EmployerECAmount As Object = Nothing) As String
 
         'RangeFromAmount = If(RangeFromAmount = Nothing, "NULL", RangeFromAmount)
         'RangeToAmount = If(RangeToAmount = Nothing, "NULL", RangeToAmount)
         MonthlySalaryCredit = If(MonthlySalaryCredit = Nothing, "NULL", MonthlySalaryCredit)
         EmployeeContributionAmount = If(EmployeeContributionAmount = Nothing, "NULL", EmployeeContributionAmount)
         EmployerContributionAmount = If(EmployerContributionAmount = Nothing, "NULL", EmployerContributionAmount)
-        EmployeeECAmount = If(EmployeeECAmount = Nothing, "NULL", EmployeeECAmount)
+        EmployerECAmount = If(EmployerECAmount = Nothing, "NULL", EmployerECAmount)
 
         Dim getpaysocialsecurity = EXECQUER("INSERT INTO paysocialsecurity (CreatedBy,LastUpdBy,RangeFromAmount,RangeToAmount,MonthlySalaryCredit,EmployeeContributionAmount," &
-        "EmployerContributionAmount,EmployeeECAmount) VALUES (" &
+        "EmployerContributionAmount,EmployerECAmount) VALUES (" &
         "" & user_row_id &
         "," & user_row_id &
         "," & RangeFromAmount &
@@ -1478,7 +1478,7 @@ Module myModule
         "," & MonthlySalaryCredit &
         "," & EmployeeContributionAmount &
         "," & EmployerContributionAmount &
-        "," & EmployeeECAmount &
+        "," & EmployerECAmount &
         ");") ' & _
         '"SELECT COALESCE(RowID,'') FROM paysocialsecurity " & _
         '"WHERE Createdby=" & 1 & _

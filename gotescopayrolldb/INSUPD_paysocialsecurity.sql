@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_paysocialsecurity`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_paysocialsecurity`(`sss_RowID` INT, `sss_CreatedBy` INT, `sss_LastUpdBy` INT, `sss_RangeFromAmount` DECIMAL(10,2), `sss_RangeToAmount` DECIMAL(10,2), `sss_MonthlySalaryCredit` DECIMAL(10,2), `sss_EmployeeContributionAmount` DECIMAL(10,2), `sss_EmployerContributionAmount` DECIMAL(10,2), `sss_EmployeeECAmount` DECIMAL(10,2)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_paysocialsecurity`(`sss_RowID` INT, `sss_CreatedBy` INT, `sss_LastUpdBy` INT, `sss_RangeFromAmount` DECIMAL(10,2), `sss_RangeToAmount` DECIMAL(10,2), `sss_MonthlySalaryCredit` DECIMAL(10,2), `sss_EmployeeContributionAmount` DECIMAL(10,2), `sss_EmployerContributionAmount` DECIMAL(10,2), `sss_EmployeeECAmount` DECIMAL(10,2)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 
@@ -22,7 +22,7 @@ INSERT INTO paysocialsecurity
 	,MonthlySalaryCredit
 	,EmployeeContributionAmount
 	,EmployerContributionAmount
-	,EmployeeECAmount
+	,EmployerECAmount
 ) VALUES (
 	RowID
 	,CURRENT_TIMESTAMP()
@@ -32,7 +32,7 @@ INSERT INTO paysocialsecurity
 	,sss_MonthlySalaryCredit
 	,sss_EmployeeContributionAmount
 	,sss_EmployerContributionAmount
-	,sss_EmployeeECAmount
+	,sss_EmployerECAmount
 ) ON
 DUPLICATE
 KEY
@@ -44,7 +44,7 @@ UPDATE
 	,MonthlySalaryCredit=sss_MonthlySalaryCredit
 	,EmployeeContributionAmount=sss_EmployeeContributionAmount
 	,EmployerContributionAmount=sss_EmployerContributionAmount
-	,EmployeeECAmount=sss_EmployeeECAmount;SELECT @@Identity AS id INTO returnval;
+	,EmployerECAmount=sss_EmployerECAmount;SELECT @@Identity AS id INTO returnval;
 
 IF returnval = 0 THEN
 

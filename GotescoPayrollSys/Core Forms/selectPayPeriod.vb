@@ -341,6 +341,8 @@ Public Class selectPayPeriod
 
                 PayStub.numofweekends = 0
 
+                PayStub.periodRepresentation = CDate(.Cells(colDateRepresentation.Name).Value)
+
                 Dim date_diff = DateDiff(DateInterval.Day, CDate(PayStub.paypFrom), CDate(PayStub.paypTo))
 
                 For i = 0 To date_diff

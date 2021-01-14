@@ -81,6 +81,8 @@ Public Class PayStub
 
     End Property
 
+    Public Shared Property periodRepresentation As Date
+
     Protected Overrides Sub OnLoad(e As EventArgs)
         CurrLinkPage = First
         SplitContainer1.SplitterWidth = 6
@@ -2529,15 +2531,9 @@ Public Class PayStub
     Private Async Function LoadSssBracketsAsync() As Task(Of IList(Of SssBracket))
         Dim list As New List(Of SssBracket)
 
-        Dim dateFromYmd = Split(paypFrom, "-")
-        Dim dateToYmd = Split(paypTo, "-")
-
-        Dim dateFrom = New Date(dateFromYmd.First, dateFromYmd(1), dateFromYmd.Last)
-        Dim dateTo = New Date(dateToYmd.First, dateToYmd(1), dateToYmd.Last)
-
         Using context = New DatabaseContext
             list = Await context.SssBrackets.
-                Where(Function(sss) sss.EffectiveDateFrom <= dateFrom AndAlso sss.EffectiveDateTo >= dateTo).
+                Where(Function(sss) sss.EffectiveDateFrom <= periodRepresentation AndAlso sss.EffectiveDateTo >= periodRepresentation).
                 ToListAsync()
         End Using
 
@@ -4873,7 +4869,7 @@ Public Class PayStub
                                                                " WHERE " & fullmonthSalary & " BETWEEN SalaryRangeFrom AND SalaryRangeTo" &
                                                                " UNION" &
                                                                " SELECT SUM(EmployeeContributionAmount) AS EmployeeShare" &
-                                                               ",SUM(EmployerContributionAmount + EmployeeECAmount) AS EmployerShare" &
+                                                               ",SUM(EmployerContributionAmount + EmployerECAmount) AS EmployerShare" &
                                                                " FROM paysocialsecurity" &
                                                                " WHERE " & fullmonthSalary & " BETWEEN RangeFromAmount AND RangeToAmount;")
 
@@ -4952,7 +4948,7 @@ Public Class PayStub
                                                                " WHERE " & fullmonthSalary & " BETWEEN SalaryRangeFrom AND SalaryRangeTo" &
                                                                " UNION" &
                                                                " SELECT SUM(EmployeeContributionAmount) AS EmployeeShare" &
-                                                               ",SUM(EmployerContributionAmount + EmployeeECAmount) AS EmployerShare" &
+                                                               ",SUM(EmployerContributionAmount + EmployerECAmount) AS EmployerShare" &
                                                                " FROM paysocialsecurity" &
                                                                " WHERE " & fullmonthSalary & " BETWEEN RangeFromAmount AND RangeToAmount;")
 

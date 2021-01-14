@@ -11,10 +11,10 @@ Public Class SSSCntrib
     "COALESCE(sss.MonthlySalaryCredit,0) 'Monthly Salary Credit'," &
     "COALESCE(sss.EmployerContributionAmount,0) 'Employer Contribution Amount'," &
     "COALESCE(sss.EmployeeContributionAmount,0) 'Employee Contribution Amount'," &
-    "COALESCE(sss.EmployeeECAmount,0) 'EC\/ER Amount'," &
-    "COALESCE(sss.EmployerContributionAmount,0) + COALESCE(sss.EmployeeECAmount,0) 'Employer Total Contribution'," &
+    "COALESCE(sss.EmployerECAmount,0) 'EC\/ER Amount'," &
+    "COALESCE(sss.EmployerContributionAmount,0) + COALESCE(sss.EmployerECAmount,0) 'Employer Total Contribution'," &
     "COALESCE(sss.EmployeeContributionAmount,0) 'Employee Total Contribution'," &
-    "COALESCE(sss.EmployerContributionAmount,0) + COALESCE(sss.EmployeeContributionAmount,0) + COALESCE(sss.EmployeeECAmount,0) 'EC\/ER Total'," &
+    "COALESCE(sss.EmployerContributionAmount,0) + COALESCE(sss.EmployeeContributionAmount,0) + COALESCE(sss.EmployerECAmount,0) 'EC\/ER Total'," &
     "DATE_FORMAT(sss.Created,'%m-%d-%Y') 'Creation Date'," &
     "CONCAT(CONCAT(UCASE(LEFT(u.FirstName, 1)), SUBSTRING(u.FirstName, 2)),' ',CONCAT(UCASE(LEFT(u.LastName, 1)), SUBSTRING(u.LastName, 2))) 'Created by'," &
     "COALESCE(DATE_FORMAT(sss.LastUpd,'%m-%d-%Y'),'') 'Last Update'," &
@@ -273,7 +273,7 @@ Public Class SSSCntrib
                     ",MonthlySalaryCredit=" & Val(.Cells("Column3").Value) &
                     ",EmployeeContributionAmount=" & Val(.Cells("Column5").Value) &
                     ",EmployerContributionAmount=" & Val(.Cells("Column4").Value) &
-                    ",EmployeeECAmount=" & Val(.Cells("Column6").Value) &
+                    ",EmployerECAmount=" & Val(.Cells("Column6").Value) &
                     ",LastUpd=CURRENT_TIMESTAMP()" &
                     ",LastUpdBy=" & user_row_id &
                     " WHERE RowID='" & _rID & "';")
@@ -363,8 +363,8 @@ Public Class SSSCntrib
 
             min_range = ValNoComma(min_range)
 
-            EXECQUER("INSERT INTO paysocialsecurity (Created,CreatedBy,LastUpdBy,RangeFromAmount,RangeToAmount,MonthlySalaryCredit,EmployeeContributionAmount,EmployerContributionAmount,EmployeeECAmount) VALUES " &
-                                                "(CURRENT_TIMESTAMP(),'" & user_row_id & "','" & user_row_id & "',0,(" & min_range & " - 1),0,0,0,0) ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP(),LastUpdBy='" & user_row_id & "',RangeFromAmount=0,RangeToAmount=(" & min_range & " - 1),MonthlySalaryCredit=0,EmployeeContributionAmount=0,EmployerContributionAmount=0,EmployeeECAmount=0;")
+            EXECQUER("INSERT INTO paysocialsecurity (Created,CreatedBy,LastUpdBy,RangeFromAmount,RangeToAmount,MonthlySalaryCredit,EmployeeContributionAmount,EmployerContributionAmount,EmployerECAmount) VALUES " &
+                                                "(CURRENT_TIMESTAMP(),'" & user_row_id & "','" & user_row_id & "',0,(" & min_range & " - 1),0,0,0,0) ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP(),LastUpdBy='" & user_row_id & "',RangeFromAmount=0,RangeToAmount=(" & min_range & " - 1),MonthlySalaryCredit=0,EmployeeContributionAmount=0,EmployerContributionAmount=0,EmployerECAmount=0;")
 
         End If
 
@@ -430,7 +430,7 @@ Public Class SSSCntrib
                                        "",
                                        "Delete")
 
-                        INS_audittrail("EmployeeECAmount",
+                        INS_audittrail("EmployerECAmount",
                                        .Cells("Column1").Value,
                                        .Cells("Column6").Value,
                                        "",
@@ -519,7 +519,7 @@ Public Class SSSCntrib
                                       Optional sss_MonthlySalaryCredit = Nothing,
                                       Optional sss_EmployeeContributionAmount = Nothing,
                                       Optional sss_EmployerContributionAmount = Nothing,
-                                      Optional sss_EmployeeECAmount = Nothing) As Object
+                                      Optional sss_EmployerECAmount = Nothing) As Object
 
         Dim returnval = Nothing
 
@@ -533,7 +533,7 @@ Public Class SSSCntrib
         params(5, 0) = "sss_MonthlySalaryCredit"
         params(6, 0) = "sss_EmployeeContributionAmount"
         params(7, 0) = "sss_EmployerContributionAmount"
-        params(8, 0) = "sss_EmployeeECAmount"
+        params(8, 0) = "sss_EmployerECAmount"
 
         params(0, 1) = If(sss_RowID = Nothing, DBNull.Value, sss_RowID)
         params(1, 1) = user_row_id
@@ -543,7 +543,7 @@ Public Class SSSCntrib
         params(5, 1) = Val(sss_MonthlySalaryCredit)
         params(6, 1) = Val(sss_EmployeeContributionAmount)
         params(7, 1) = Val(sss_EmployerContributionAmount)
-        params(8, 1) = Val(sss_EmployeeECAmount)
+        params(8, 1) = Val(sss_EmployerECAmount)
 
         returnval =
         EXEC_INSUPD_PROCEDURE(params,

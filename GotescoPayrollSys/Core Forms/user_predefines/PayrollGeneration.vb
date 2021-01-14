@@ -245,6 +245,30 @@ Public Class PayrollGeneration
 
     End Property
 
+    Private ReadOnly Property PayDateFrom As Date?
+        Get
+            Return ToDate(n_PayrollDateFrom)
+        End Get
+    End Property
+
+    Private ReadOnly Property PayDateTo As Date?
+        Get
+            Return ToDate(n_PayrollDateTo)
+        End Get
+    End Property
+
+    Private Function ToDate(stringDate As String) As Date?
+        If String.IsNullOrWhiteSpace(stringDate) Then Return New Date?()
+
+        Dim dateParts = Split(stringDate, "-")
+
+        Dim year = CType(dateParts.FirstOrDefault, Int32)
+        Dim month = CType(dateParts(1), Int32)
+        Dim day = CType(dateParts.LastOrDefault, Int32)
+
+        Return New Date(year, month, day)
+    End Function
+
     Private n_PayrollRecordID As Object = Nothing
 
     Property PayrollRecordID As Object
@@ -1443,6 +1467,7 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
     Private Function SssCalculator(amount As Decimal, employeeEmployer As EmployeeEmployer) As Decimal
         Dim sssBracket = _sssBrackets.
             Where(Function(sss) sss.RangeFromAmount <= amount AndAlso sss.RangeToAmount >= amount).
+            Where(Function(sss) sss.EffectiveDateFrom >= PayDateFrom).
             FirstOrDefault
 
         If sssBracket Is Nothing Then Return 0

@@ -43,6 +43,7 @@ Partial Class selectPayPeriod
         Me.PhHContribSched = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.HDMFContribSched = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.PayPeriodMinWageValue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colDateRepresentation = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.linkNxt = New System.Windows.Forms.LinkLabel()
         Me.linkPrev = New System.Windows.Forms.LinkLabel()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -65,7 +66,7 @@ Partial Class selectPayPeriod
         Me.dgvpaypers.BackgroundColor = System.Drawing.Color.White
         Me.dgvpaypers.ColumnHeadersHeight = 38
         Me.dgvpaypers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvpaypers.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column15, Me.Column16, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column9, Me.Column10, Me.Column11, Me.Column12, Me.Column13, Me.Column14, Me.SSSContribSched, Me.PhHContribSched, Me.HDMFContribSched, Me.PayPeriodMinWageValue})
+        Me.dgvpaypers.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column15, Me.Column16, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column9, Me.Column10, Me.Column11, Me.Column12, Me.Column13, Me.Column14, Me.SSSContribSched, Me.PhHContribSched, Me.HDMFContribSched, Me.PayPeriodMinWageValue, Me.colDateRepresentation})
         Me.dgvpaypers.Location = New System.Drawing.Point(122, 43)
         Me.dgvpaypers.MultiSelect = False
         Me.dgvpaypers.Name = "dgvpaypers"
@@ -204,6 +205,13 @@ Partial Class selectPayPeriod
         Me.PayPeriodMinWageValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.PayPeriodMinWageValue.Width = 95
         '
+        'colDateRepresentation
+        '
+        Me.colDateRepresentation.HeaderText = "DateRepresentation"
+        Me.colDateRepresentation.Name = "colDateRepresentation"
+        Me.colDateRepresentation.ReadOnly = True
+        Me.colDateRepresentation.Visible = False
+        '
         'linkNxt
         '
         Me.linkNxt.AutoSize = True
@@ -339,24 +347,25 @@ Partial Class selectPayPeriod
     Friend WithEvents tstrip As System.Windows.Forms.ToolStrip
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
-    Friend WithEvents Column1 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column2 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column3 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column15 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column16 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column4 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column5 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column6 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column7 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column8 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column9 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column10 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column11 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column12 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column13 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Column14 As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents SSSContribSched As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents PhHContribSched As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents HDMFContribSched As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents PayPeriodMinWageValue As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Column1 As DataGridViewTextBoxColumn
+    Friend WithEvents Column2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents Column15 As DataGridViewTextBoxColumn
+    Friend WithEvents Column16 As DataGridViewTextBoxColumn
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column6 As DataGridViewTextBoxColumn
+    Friend WithEvents Column7 As DataGridViewTextBoxColumn
+    Friend WithEvents Column8 As DataGridViewTextBoxColumn
+    Friend WithEvents Column9 As DataGridViewTextBoxColumn
+    Friend WithEvents Column10 As DataGridViewTextBoxColumn
+    Friend WithEvents Column11 As DataGridViewTextBoxColumn
+    Friend WithEvents Column12 As DataGridViewTextBoxColumn
+    Friend WithEvents Column13 As DataGridViewTextBoxColumn
+    Friend WithEvents Column14 As DataGridViewTextBoxColumn
+    Friend WithEvents SSSContribSched As DataGridViewTextBoxColumn
+    Friend WithEvents PhHContribSched As DataGridViewTextBoxColumn
+    Friend WithEvents HDMFContribSched As DataGridViewTextBoxColumn
+    Friend WithEvents PayPeriodMinWageValue As DataGridViewTextBoxColumn
+    Friend WithEvents colDateRepresentation As DataGridViewTextBoxColumn
 End Class

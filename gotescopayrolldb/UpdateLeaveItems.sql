@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `UpdateLeaveItems`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateLeaveItems`(
+CREATE PROCEDURE `UpdateLeaveItems`(
 	IN `orgId` INT,
 	IN `startingPeriodId` INT
 

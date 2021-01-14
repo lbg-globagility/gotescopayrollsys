@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_view_of_organization`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_view_of_organization`(IN `vw_OrganizationID` INT)
+CREATE PROCEDURE `VIEW_view_of_organization`(IN `vw_OrganizationID` INT)
     DETERMINISTIC
 BEGIN
 

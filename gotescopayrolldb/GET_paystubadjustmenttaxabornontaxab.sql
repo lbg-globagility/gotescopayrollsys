@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_paystubadjustmenttaxabornontaxab`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `GET_paystubadjustmenttaxabornontaxab`(`PayStubRowID` INT, `IsTaxable` CHAR(50)) RETURNS decimal(11,6)
+CREATE FUNCTION `GET_paystubadjustmenttaxabornontaxab`(`PayStubRowID` INT, `IsTaxable` CHAR(50)) RETURNS decimal(11,6)
     DETERMINISTIC
 BEGIN
 

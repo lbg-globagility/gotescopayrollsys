@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_salary_increase_histo`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_salary_increase_histo`(IN `OrganizID` INT, IN `PayPerDate1` DATE, IN `PayPerDate2` DATE)
+CREATE PROCEDURE `RPT_salary_increase_histo`(IN `OrganizID` INT, IN `PayPerDate1` DATE, IN `PayPerDate2` DATE)
     DETERMINISTIC
 BEGIN
 

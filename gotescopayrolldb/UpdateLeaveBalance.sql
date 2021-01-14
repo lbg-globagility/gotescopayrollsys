@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `UpdateLeaveBalance`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateLeaveBalance`(
+CREATE PROCEDURE `UpdateLeaveBalance`(
 	IN `OrganizID` INT,
 	IN `yearPeriod` INT
 

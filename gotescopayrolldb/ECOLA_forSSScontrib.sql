@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `ECOLA_forSSScontrib`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `ECOLA_forSSScontrib`(IN `og_rowid` INT, IN `date_from` DATE, IN `date_to` DATE)
+CREATE PROCEDURE `ECOLA_forSSScontrib`(IN `og_rowid` INT, IN `date_from` DATE, IN `date_to` DATE)
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `SalariesWithSSSContrib`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SalariesWithSSSContrib`(
+CREATE PROCEDURE `SalariesWithSSSContrib`(
 	IN `organizationPrimaID` INT
 )
 BEGIN

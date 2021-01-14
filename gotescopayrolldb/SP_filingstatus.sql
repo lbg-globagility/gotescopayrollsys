@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `SP_filingstatus`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_filingstatus`(IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_FilingStatus` VARCHAR(50), IN `I_MaritalStatus` VARCHAR(50), IN `I_Dependent` INT(11))
+CREATE PROCEDURE `SP_filingstatus`(IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_FilingStatus` VARCHAR(50), IN `I_MaritalStatus` VARCHAR(50), IN `I_Dependent` INT(11))
     DETERMINISTIC
 BEGIN
 INSERT INTO filingstatus

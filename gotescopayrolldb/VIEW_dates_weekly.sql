@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_dates_weekly`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_dates_weekly`(IN `_year` INT)
+CREATE PROCEDURE `VIEW_dates_weekly`(IN `_year` INT)
     DETERMINISTIC
 BEGIN
 

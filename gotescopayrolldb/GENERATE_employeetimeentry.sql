@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GENERATE_employeetimeentry`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GENERATE_employeetimeentry`(
-	`ete_EmpRowID` INT,
+CREATE FUNCTION `GENERATE_employeetimeentry`(`ete_EmpRowID` INT,
 	`ete_OrganizID` INT,
 	`ete_Date` DATE,
 	`ete_UserRowID` INT

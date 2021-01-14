@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeeOT`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeeOT`(`eot_RowID` INT, `eot_OrganizationID` INT, `eot_CreatedBy` INT, `eot_LastUpdBy` INT, `eot_EmployeeID` INT, `eot_OTType` VARCHAR(50), `eot_OTStartTime` TIME, `eot_OTEndTime` TIME, `eot_OTStartDate` DATE, `eot_OTEndDate` DATE, `eot_OTStatus` VARCHAR(50), `eot_Reason` VARCHAR(500), `eot_Comments` VARCHAR(2000), `eot_Image` LONGBLOB) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeeOT`(`eot_RowID` INT, `eot_OrganizationID` INT, `eot_CreatedBy` INT, `eot_LastUpdBy` INT, `eot_EmployeeID` INT, `eot_OTType` VARCHAR(50), `eot_OTStartTime` TIME, `eot_OTEndTime` TIME, `eot_OTStartDate` DATE, `eot_OTEndDate` DATE, `eot_OTStatus` VARCHAR(50), `eot_Reason` VARCHAR(500), `eot_Comments` VARCHAR(2000), `eot_Image` LONGBLOB) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

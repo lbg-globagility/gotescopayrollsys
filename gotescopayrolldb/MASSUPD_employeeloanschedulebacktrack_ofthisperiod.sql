@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(
+CREATE PROCEDURE `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(
 	IN `og_rowid` INT,
 	IN `pp_rowid` INT,
 	IN `user_rowid` INT

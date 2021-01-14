@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `COUNT_pay_period`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `COUNT_pay_period`(`paramDateFrom` DATE, `paramDateTo` DATE) RETURNS int(11)
+CREATE FUNCTION `COUNT_pay_period`(`paramDateFrom` DATE, `paramDateTo` DATE) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

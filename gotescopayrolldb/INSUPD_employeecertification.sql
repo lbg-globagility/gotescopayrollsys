@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeecertification`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeecertification`(`ecer_RowID` INT, `ecer_OrganizationID` INT, `ecer_Created` TIMESTAMP, `ecer_CreatedBy` INT, `ecer_LastUpd` DATETIME, `ecer_LastUpdBy` INT, `ecer_EmployeeID` INT, `ecer_CertificationType` VARCHAR(50), `ecer_IssuingAuthority` VARCHAR(50), `ecer_CertificationNo` VARCHAR(50), `ecer_IssueDate` DATE, `ecer_ExpirationDate` DATE, `ecer_Comments` VARCHAR(2000)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeecertification`(`ecer_RowID` INT, `ecer_OrganizationID` INT, `ecer_Created` TIMESTAMP, `ecer_CreatedBy` INT, `ecer_LastUpd` DATETIME, `ecer_LastUpdBy` INT, `ecer_EmployeeID` INT, `ecer_CertificationType` VARCHAR(50), `ecer_IssuingAuthority` VARCHAR(50), `ecer_CertificationNo` VARCHAR(50), `ecer_IssueDate` DATE, `ecer_ExpirationDate` DATE, `ecer_Comments` VARCHAR(2000)) RETURNS int(11)
     DETERMINISTIC
     COMMENT 'will insert a row and return its RowID if ''ecer_int'' don''t exist in employeecertification table or else will update the table base on ''ecer_int'''
 BEGIN

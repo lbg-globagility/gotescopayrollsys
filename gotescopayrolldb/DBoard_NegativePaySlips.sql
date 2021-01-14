@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_NegativePaySlips`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_NegativePaySlips`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_NegativePaySlips`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

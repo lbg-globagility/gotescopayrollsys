@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `LoanPrediction`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `LoanPrediction`(
+CREATE PROCEDURE `LoanPrediction`(
 	IN `organizID` INT
 
 

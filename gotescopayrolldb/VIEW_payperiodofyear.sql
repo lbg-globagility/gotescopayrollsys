@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_payperiodofyear`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_payperiodofyear`(IN `payp_OrganizationID` INT, IN `param_Date` DATE)
+CREATE PROCEDURE `VIEW_payperiodofyear`(IN `payp_OrganizationID` INT, IN `param_Date` DATE)
     DETERMINISTIC
 BEGIN
 

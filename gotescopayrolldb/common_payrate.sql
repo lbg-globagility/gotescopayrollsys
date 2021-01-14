@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `common_payrate`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `common_payrate`()
+CREATE PROCEDURE `common_payrate`()
 BEGIN
 
 SET @i = 2017;

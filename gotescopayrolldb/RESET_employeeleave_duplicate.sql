@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RESET_employeeleave_duplicate`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RESET_employeeleave_duplicate`(
+CREATE PROCEDURE `RESET_employeeleave_duplicate`(
 	IN `OrganizID` INT,
 	IN `FromPayDate` DATE,
 	IN `ToPayDate` DATE,

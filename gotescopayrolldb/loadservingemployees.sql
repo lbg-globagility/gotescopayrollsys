@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `loadservingemployees`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `loadservingemployees`(
+CREATE PROCEDURE `loadservingemployees`(
 	IN `_orgRowId` INT,
 	IN `_payPeriodId` INT,
 	IN `_payFrequencyType` VARCHAR(50),

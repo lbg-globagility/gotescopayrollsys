@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_invoicepayment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_invoicepayment`(IN `I_CreatedBy` INT(10), IN `I_OrderID` INT(10), IN `I_LastUpdBy` INT(10), IN `I_InvoiceID` INT(10), IN `I_PaymentID` INT(10), IN `I_LastUpd` DATETIME, IN `I_Created` DATETIME, IN `I_AppliedAmount` DECIMAL(10,2)
+CREATE PROCEDURE `I_invoicepayment`(IN `I_CreatedBy` INT(10), IN `I_OrderID` INT(10), IN `I_LastUpdBy` INT(10), IN `I_InvoiceID` INT(10), IN `I_PaymentID` INT(10), IN `I_LastUpd` DATETIME, IN `I_Created` DATETIME, IN `I_AppliedAmount` DECIMAL(10,2)
 , IN `I_OrganizationID` INT(10))
     DETERMINISTIC
 BEGIN 

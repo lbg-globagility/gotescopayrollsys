@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `IS_WORKINGDAY_PRESENT_DURINGHOLI`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `IS_WORKINGDAY_PRESENT_DURINGHOLI`(`organiz_id` INT, `emp_rowid` INT, `et_date` DATE, `will_check_before_orelse_after` BOOL) RETURNS tinyint(4)
+CREATE FUNCTION `IS_WORKINGDAY_PRESENT_DURINGHOLI`(`organiz_id` INT, `emp_rowid` INT, `et_date` DATE, `will_check_before_orelse_after` BOOL) RETURNS tinyint(4)
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_AlphaListempdependents`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_AlphaListempdependents`(IN `OrganizID` INT)
+CREATE PROCEDURE `RPT_AlphaListempdependents`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

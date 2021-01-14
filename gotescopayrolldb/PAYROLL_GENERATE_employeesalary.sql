@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `PAYROLL_GENERATE_employeesalary`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `PAYROLL_GENERATE_employeesalary`(IN `OrganizID` INT, IN `PayFreqRowID` INT, IN `FromDateValue` DATE, IN `ToDateValue` DATE)
+CREATE PROCEDURE `PAYROLL_GENERATE_employeesalary`(IN `OrganizID` INT, IN `PayFreqRowID` INT, IN `FromDateValue` DATE, IN `ToDateValue` DATE)
     DETERMINISTIC
 BEGIN
 

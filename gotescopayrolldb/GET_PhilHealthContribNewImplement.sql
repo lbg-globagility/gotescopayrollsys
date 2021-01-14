@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_PhilHealthContribNewImplement`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_PhilHealthContribNewImplement`(
-	`amount_worked` DECIMAL(15,4),
+CREATE FUNCTION `GET_PhilHealthContribNewImplement`(`amount_worked` DECIMAL(15,4),
 	`is_employee_share` BOOL
 ) RETURNS decimal(15,4)
     DETERMINISTIC

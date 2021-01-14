@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_agency`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_agency`(`ag_RowID` INT, `ag_OrganizationID` INT, `ag_UserRowID` INT, `ag_AgencyName` VARCHAR(50), `ag_AgencyFee` DECIMAL(11,2), `ag_AddressID` INT) RETURNS int(11)
+CREATE FUNCTION `INSUPD_agency`(`ag_RowID` INT, `ag_OrganizationID` INT, `ag_UserRowID` INT, `ag_AgencyName` VARCHAR(50), `ag_AgencyFee` DECIMAL(11,2), `ag_AddressID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

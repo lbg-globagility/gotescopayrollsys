@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeesalary`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeesalary`(
-	`esal_RowID` INT,
+CREATE FUNCTION `INSUPD_employeesalary`(`esal_RowID` INT,
 	`esal_EmployeeID` INT,
 	`esal_CreatedBy` INT,
 	`esal_LastUpdBy` INT,

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_AnnualizedWithholdingTax`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_AnnualizedWithholdingTax`(IN `OrganizID` INT, IN `AnnualDateFrom` DATE, IN `AnnualDateTo` DATE, IN `IsActual` CHAR(1))
+CREATE PROCEDURE `RPT_AnnualizedWithholdingTax`(IN `OrganizID` INT, IN `AnnualDateFrom` DATE, IN `AnnualDateTo` DATE, IN `IsActual` CHAR(1))
     DETERMINISTIC
 BEGIN
 

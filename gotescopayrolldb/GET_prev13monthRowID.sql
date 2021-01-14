@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_prev13monthRowID`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_prev13monthRowID`(`OrganizID` INT, `EndOfMonthPayPeriodID` INT, `EmpRowID` INT) RETURNS int(11)
+CREATE FUNCTION `GET_prev13monthRowID`(`OrganizID` INT, `EndOfMonthPayPeriodID` INT, `EmpRowID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

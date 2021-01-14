@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `VIEW_employeemedrecordID`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `VIEW_employeemedrecordID`(`emedrecord_EmployeeID` INT, `emedrecord_DateFrom` DATE, `emedrecord_DateTo` DATE, `emedrecord_ProductID` INT, `emedrecord_OrganizationID` INT) RETURNS int(11)
+CREATE FUNCTION `VIEW_employeemedrecordID`(`emedrecord_EmployeeID` INT, `emedrecord_DateFrom` DATE, `emedrecord_DateTo` DATE, `emedrecord_ProductID` INT, `emedrecord_OrganizationID` INT) RETURNS int(11)
     DETERMINISTIC
     COMMENT 'return the RowID from employeemedicalrecord base on date from - to, ProductID, employeeID and organization'
 BEGIN

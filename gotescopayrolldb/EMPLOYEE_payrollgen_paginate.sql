@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `EMPLOYEE_payrollgen_paginate`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `EMPLOYEE_payrollgen_paginate`(IN `OrganizID` INT, IN `Pay_Date_From` DATE, IN `Pay_Date_To` DATE, IN `max_rec_perpage` INT
+CREATE PROCEDURE `EMPLOYEE_payrollgen_paginate`(IN `OrganizID` INT, IN `Pay_Date_From` DATE, IN `Pay_Date_To` DATE, IN `max_rec_perpage` INT
 
 
 

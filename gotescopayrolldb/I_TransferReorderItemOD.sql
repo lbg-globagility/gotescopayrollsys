@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_TransferReorderItemOD`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_TransferReorderItemOD`(IN `I_Created` DATETIME, IN `I_OrganizationID` INT(11), IN `I_OrderNumber` VARCHAR(10), IN `I_OrderDate` DATETIME, IN `I_Type` VARCHAR(50), IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` int(11), IN `I_Status` VARCHAR(50), IN `I_InventoryLocationID` INT(11))
+CREATE PROCEDURE `I_TransferReorderItemOD`(IN `I_Created` DATETIME, IN `I_OrganizationID` INT(11), IN `I_OrderNumber` VARCHAR(10), IN `I_OrderDate` DATETIME, IN `I_Type` VARCHAR(50), IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` int(11), IN `I_Status` VARCHAR(50), IN `I_InventoryLocationID` INT(11))
     DETERMINISTIC
 BEGIN
 	INSERT INTO `order`

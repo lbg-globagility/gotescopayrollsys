@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `LeavePrediction`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `LeavePrediction`(
+CREATE PROCEDURE `LeavePrediction`(
 	IN `organizationID` INT
 
 ,

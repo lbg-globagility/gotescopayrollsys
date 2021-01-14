@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GET_employee_bonusofthisperiod`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `GET_employee_bonusofthisperiod`(IN `OrganizID` INT, IN `AllowanceFrequenzy` VARCHAR(50), IN `IsTaxable` CHAR(1), IN `DatePayFrom` DATE, IN `DatePayTo` DATE)
+CREATE PROCEDURE `GET_employee_bonusofthisperiod`(IN `OrganizID` INT, IN `AllowanceFrequenzy` VARCHAR(50), IN `IsTaxable` CHAR(1), IN `DatePayFrom` DATE, IN `DatePayTo` DATE)
     DETERMINISTIC
 BEGIN
 

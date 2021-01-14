@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `COUNT_employeeabsent`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `COUNT_employeeabsent`(`EmpID` INT, `OrgID` INT, `EmpStartDate` DATE, `payperiodDateFrom` DATE, `payperiodDateTo` DATE) RETURNS decimal(11,2)
+CREATE FUNCTION `COUNT_employeeabsent`(`EmpID` INT, `OrgID` INT, `EmpStartDate` DATE, `payperiodDateFrom` DATE, `payperiodDateTo` DATE) RETURNS decimal(11,2)
     DETERMINISTIC
 BEGIN
 

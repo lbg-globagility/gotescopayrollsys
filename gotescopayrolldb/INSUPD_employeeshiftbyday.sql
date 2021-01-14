@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeeshiftbyday`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_employeeshiftbyday`(`OrganizID` INT, `UserRowID` INT, `EmployeeRowID` INT, `ShiftRowID` INT, `NameOfTheDay` VARCHAR(50), `IsNightShift` CHAR(1), `IsRestDay` CHAR(1), `ByOrderValue` INT, `AsNewRecord` CHAR(1)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeeshiftbyday`(`OrganizID` INT, `UserRowID` INT, `EmployeeRowID` INT, `ShiftRowID` INT, `NameOfTheDay` VARCHAR(50), `IsNightShift` CHAR(1), `IsRestDay` CHAR(1), `ByOrderValue` INT, `AsNewRecord` CHAR(1)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

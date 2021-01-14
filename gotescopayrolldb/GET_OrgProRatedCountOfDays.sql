@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_OrgProRatedCountOfDays`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_OrgProRatedCountOfDays`(`Org_WorkDays` INT, `Effective_DateFrom` DATE, `Effective_DateTo` DATE, `Frequency` TEXT) RETURNS int(11)
+CREATE FUNCTION `GET_OrgProRatedCountOfDays`(`Org_WorkDays` INT, `Effective_DateFrom` DATE, `Effective_DateTo` DATE, `Frequency` TEXT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

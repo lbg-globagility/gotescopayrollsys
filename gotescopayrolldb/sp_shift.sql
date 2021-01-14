@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `sp_shift`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_shift`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(10), IN `I_TimeFrom` TIME, IN `I_TimeTo` TIME, IN `divisor_to_dailyrate` INT)
+CREATE PROCEDURE `sp_shift`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(10), IN `I_TimeFrom` TIME, IN `I_TimeTo` TIME, IN `divisor_to_dailyrate` INT)
     DETERMINISTIC
 BEGIN
 INSERT INTO  `shift` 

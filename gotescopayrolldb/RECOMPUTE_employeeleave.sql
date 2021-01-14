@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RECOMPUTE_employeeleave`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RECOMPUTE_employeeleave`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE, IN `DivisionRowID` INT)
+CREATE PROCEDURE `RECOMPUTE_employeeleave`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE, IN `DivisionRowID` INT)
     DETERMINISTIC
 BEGIN
 #RECOMPUTE_employeeleave

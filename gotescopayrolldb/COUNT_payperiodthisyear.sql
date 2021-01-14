@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `COUNT_payperiodthisyear`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `COUNT_payperiodthisyear`(`organization_ID` INT, `PayFrequencyID` INT) RETURNS int(11)
+CREATE FUNCTION `COUNT_payperiodthisyear`(`organization_ID` INT, `PayFrequencyID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

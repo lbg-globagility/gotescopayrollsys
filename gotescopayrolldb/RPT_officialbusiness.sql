@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_officialbusiness`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_officialbusiness`(IN `OrganizID` INT, IN `OBDateFrom` DATE, IN `OBDateTo` DATE)
+CREATE PROCEDURE `RPT_officialbusiness`(IN `OrganizID` INT, IN `OBDateFrom` DATE, IN `OBDateTo` DATE)
     DETERMINISTIC
 BEGIN
 

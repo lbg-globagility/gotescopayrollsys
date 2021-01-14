@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `sp_finding`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_finding`(IN `I_OrganizationID` INT(10), IN `I_Description` VARCHAR(2000), IN `I_PartNo` VARCHAR(200), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_CategoryID` INT(10))
+CREATE PROCEDURE `sp_finding`(IN `I_OrganizationID` INT(10), IN `I_Description` VARCHAR(2000), IN `I_PartNo` VARCHAR(200), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_CategoryID` INT(10))
     DETERMINISTIC
 BEGIN 
 INSERT INTO product

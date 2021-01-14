@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GET_Attended_Months`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_Attended_Months`(IN `param_OrganizationID` INT, IN `param_year` DATE)
+CREATE PROCEDURE `GET_Attended_Months`(IN `param_OrganizationID` INT, IN `param_year` DATE)
     DETERMINISTIC
 BEGIN
 

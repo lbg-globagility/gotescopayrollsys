@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeechecklist`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeechecklist`(IN `echk_EmployeeID` INT, IN `echk_OrganizationID` INT)
+CREATE PROCEDURE `VIEW_employeechecklist`(IN `echk_EmployeeID` INT, IN `echk_OrganizationID` INT)
     DETERMINISTIC
 BEGIN
 

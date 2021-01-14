@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_timeentrydetails`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_timeentrydetails`(IN `OrganizID` INT, IN `Page_Number` INT)
+CREATE PROCEDURE `VIEW_timeentrydetails`(IN `OrganizID` INT, IN `Page_Number` INT)
     DETERMINISTIC
 BEGIN
 

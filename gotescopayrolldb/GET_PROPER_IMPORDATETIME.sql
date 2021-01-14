@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_PROPER_IMPORDATETIME`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_PROPER_IMPORDATETIME`(`og_rowid` INT, `e_rowid` INT, `date_from` DATE, `date_to` DATE) RETURNS datetime
+CREATE FUNCTION `GET_PROPER_IMPORDATETIME`(`og_rowid` INT, `e_rowid` INT, `date_from` DATE, `date_to` DATE) RETURNS datetime
     DETERMINISTIC
 BEGIN
 

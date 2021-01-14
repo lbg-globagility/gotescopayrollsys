@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeesalary`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeesalary`(IN `esal_OrganizationID` INT, IN `esal_EmployeeID` INT, IN `esal_Date` DATE)
+CREATE PROCEDURE `VIEW_employeesalary`(IN `esal_OrganizationID` INT, IN `esal_EmployeeID` INT, IN `esal_Date` DATE)
     DETERMINISTIC
 BEGIN
 

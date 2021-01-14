@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `CalculateOvertimeHours`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `CalculateOvertimeHours`(
-	`shiftTimeFrom` TIME,
+CREATE FUNCTION `CalculateOvertimeHours`(`shiftTimeFrom` TIME,
 	`shiftTimeTo` TIME,
 	`etDate` DATE,
 	`employeeRowID` INT

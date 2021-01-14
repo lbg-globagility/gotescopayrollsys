@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `SP_payfrequency`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_payfrequency`(IN `I_CreatedBy` INT(10), IN `I_LastupdBy` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_PayFrequencyType` VARCHAR(50), IN `I_PayFrequencyStartDate` DATE)
+CREATE PROCEDURE `SP_payfrequency`(IN `I_CreatedBy` INT(10), IN `I_LastupdBy` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_PayFrequencyType` VARCHAR(50), IN `I_PayFrequencyStartDate` DATE)
     DETERMINISTIC
 BEGIN
 INSERT INTO payfrequency

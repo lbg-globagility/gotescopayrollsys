@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_empPerfectDayCount`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_empPerfectDayCount`(`OrganizID` INT, `EmpRowID` INT, `FirstDate` DATE, `LastDate` DATE) RETURNS int(11)
+CREATE FUNCTION `GET_empPerfectDayCount`(`OrganizID` INT, `EmpRowID` INT, `FirstDate` DATE, `LastDate` DATE) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

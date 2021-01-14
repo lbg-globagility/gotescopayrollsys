@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeetimeentry_genpayroll`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeetimeentry_genpayroll`()
+CREATE PROCEDURE `VIEW_employeetimeentry_genpayroll`()
     DETERMINISTIC
 BEGIN
 

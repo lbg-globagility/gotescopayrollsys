@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_timeentrylogs`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_timeentrylogs`(`OrganizID` INT, `EmployeeIdentificationKey` VARCHAR(50), `DateTimeLogStamp` VARCHAR(50), `Import_ID` INT) RETURNS int(11)
+CREATE FUNCTION `INSUPD_timeentrylogs`(`OrganizID` INT, `EmployeeIdentificationKey` VARCHAR(50), `DateTimeLogStamp` VARCHAR(50), `Import_ID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 DECLARE returnvalue INT(11) DEFAULT 0;

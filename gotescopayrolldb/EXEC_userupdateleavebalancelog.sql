@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `EXEC_userupdateleavebalancelog`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `EXEC_userupdateleavebalancelog`(IN `OrganizID` INT, IN `UserRowID` INT)
+CREATE PROCEDURE `EXEC_userupdateleavebalancelog`(IN `OrganizID` INT, IN `UserRowID` INT)
     DETERMINISTIC
 BEGIN
 

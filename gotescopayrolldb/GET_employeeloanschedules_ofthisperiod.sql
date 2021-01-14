@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GET_employeeloanschedules_ofthisperiod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_employeeloanschedules_ofthisperiod`(
+CREATE PROCEDURE `GET_employeeloanschedules_ofthisperiod`(
 	IN `org_rowid` INT,
 	IN `payperiod_rowid` INT
 

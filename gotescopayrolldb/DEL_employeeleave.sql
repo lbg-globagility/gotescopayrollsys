@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DEL_employeeleave`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DEL_employeeleave`(IN `leave_rowid` INT)
+CREATE PROCEDURE `DEL_employeeleave`(IN `leave_rowid` INT)
     DETERMINISTIC
 BEGIN
 

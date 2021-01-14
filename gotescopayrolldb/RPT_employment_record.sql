@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_employment_record`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_employment_record`(IN `OrganizatID` INT)
+CREATE PROCEDURE `RPT_employment_record`(IN `OrganizatID` INT)
     DETERMINISTIC
 BEGIN
 

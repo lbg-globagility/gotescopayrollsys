@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `SET_govtcontribsched_payperiod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SET_govtcontribsched_payperiod`(IN `OrganizID` INT)
+CREATE PROCEDURE `SET_govtcontribsched_payperiod`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_employeetaxableincome`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeetaxableincome`(`ps_EmployeeID` INT, `ps_OrganizID` INT, `ps_Date` DATE, `addvalue` DECIMAL(12,2)) RETURNS text CHARSET latin1
+CREATE FUNCTION `GET_employeetaxableincome`(`ps_EmployeeID` INT, `ps_OrganizID` INT, `ps_Date` DATE, `addvalue` DECIMAL(12,2)) RETURNS text CHARSET latin1
     DETERMINISTIC
 BEGIN
 

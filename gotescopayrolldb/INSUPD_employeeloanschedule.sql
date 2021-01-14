@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeeloanschedule`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_employeeloanschedule`(`els_RowID` INT, `els_OrganizID` INT, `els_UserRowID` INT, `els_EmployeeID` INT, `els_LoanNumber` VARCHAR(50), `els_DedEffectiveDateFrom` DATE, `els_DedEffectiveDateTo` DATE, `els_TotalLoanAmount` DECIMAL(11,6), `els_DeductionSchedule` VARCHAR(50), `els_TotalBalanceLeft` DECIMAL(11,6), `els_DeductionAmount` DECIMAL(11,6), `els_Status` VARCHAR(50), `els_LoanTypeID` INT, `els_DeductionPercentage` DECIMAL(11,6), `els_NoOfPayPeriod` INT, `els_LoanPayPeriodLeft` INT, `els_Comments` VARCHAR(2000), `els_ReferenceLoanID` INT) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeeloanschedule`(`els_RowID` INT, `els_OrganizID` INT, `els_UserRowID` INT, `els_EmployeeID` INT, `els_LoanNumber` VARCHAR(50), `els_DedEffectiveDateFrom` DATE, `els_DedEffectiveDateTo` DATE, `els_TotalLoanAmount` DECIMAL(11,6), `els_DeductionSchedule` VARCHAR(50), `els_TotalBalanceLeft` DECIMAL(11,6), `els_DeductionAmount` DECIMAL(11,6), `els_Status` VARCHAR(50), `els_LoanTypeID` INT, `els_DeductionPercentage` DECIMAL(11,6), `els_NoOfPayPeriod` INT, `els_LoanPayPeriodLeft` INT, `els_Comments` VARCHAR(2000), `els_ReferenceLoanID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

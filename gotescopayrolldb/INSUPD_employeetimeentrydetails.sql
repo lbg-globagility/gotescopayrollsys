@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeetimeentrydetails`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeetimeentrydetails`(`etentd_RowID` INT, `etentd_OrganizationID` INT, `etentd_CreatedBy` INT, `etentd_Created` DATETIME, `etentd_LastUpdBy` INT, `etentd_EmployeeID` VARCHAR(50), `etentd_TimeIn` TIME, `etentd_TimeOut` TIME, `etentd_Date` DATE, `etentd_TimeScheduleType` VARCHAR(50), `etentd_TimeEntryStatus` VARCHAR(50), `EditAsUnique` CHAR(1)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeetimeentrydetails`(`etentd_RowID` INT, `etentd_OrganizationID` INT, `etentd_CreatedBy` INT, `etentd_Created` DATETIME, `etentd_LastUpdBy` INT, `etentd_EmployeeID` VARCHAR(50), `etentd_TimeIn` TIME, `etentd_TimeOut` TIME, `etentd_Date` DATE, `etentd_TimeScheduleType` VARCHAR(50), `etentd_TimeEntryStatus` VARCHAR(50), `EditAsUnique` CHAR(1)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

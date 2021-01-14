@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `I_paystubadjustment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `I_paystubadjustment`(`pa_OrganizationID` INT, `pa_CurrentUser` INT, `pa_ProductID` INT, `pa_PayAmount` DECIMAL(10,2), `pa_Comment` VARCHAR(200), `pa_EmployeeID` vARCHAR(50), `pa_PayPeriodID` INT, `psa_RowID` INT) RETURNS int(11)
+CREATE FUNCTION `I_paystubadjustment`(`pa_OrganizationID` INT, `pa_CurrentUser` INT, `pa_ProductID` INT, `pa_PayAmount` DECIMAL(10,2), `pa_Comment` VARCHAR(200), `pa_EmployeeID` vARCHAR(50), `pa_PayPeriodID` INT, `psa_RowID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

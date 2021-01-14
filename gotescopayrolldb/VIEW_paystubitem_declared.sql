@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_paystubitem_declared`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_paystubitem_declared`(
+CREATE PROCEDURE `VIEW_paystubitem_declared`(
 	IN `OrganizID` INT,
 	IN `EmpRowID` INT,
 	IN `pay_date_from` DATE,

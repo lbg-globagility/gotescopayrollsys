@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_organization_modules`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_organization_modules`()
+CREATE PROCEDURE `VIEW_organization_modules`()
     DETERMINISTIC
 BEGIN
 

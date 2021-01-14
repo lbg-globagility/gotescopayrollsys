@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `financialinstitution_proc`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `financialinstitution_proc`(IN `I_Name` VARCHAR(50), IN `I_Branch` VARCHAR(50), IN `I_Created` DATETIME, IN `I_Type` VARCHAR(50), IN `I_FaxNo` VARCHAR(50), IN `I_EmailAddress` VARCHAR(50), IN `I_OrganizationID` INT(11), IN `I_ContactID` INT(11), IN `I_CreatedBy` INT(11), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(11), IN `I_MainPhone` VARCHAR(50))
+CREATE PROCEDURE `financialinstitution_proc`(IN `I_Name` VARCHAR(50), IN `I_Branch` VARCHAR(50), IN `I_Created` DATETIME, IN `I_Type` VARCHAR(50), IN `I_FaxNo` VARCHAR(50), IN `I_EmailAddress` VARCHAR(50), IN `I_OrganizationID` INT(11), IN `I_ContactID` INT(11), IN `I_CreatedBy` INT(11), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(11), IN `I_MainPhone` VARCHAR(50))
     DETERMINISTIC
 BEGIN
 INSERT INTO financialinstitution

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GetAttendancePeriod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAttendancePeriod`(
+CREATE PROCEDURE `GetAttendancePeriod`(
 	IN `orgId` INT,
 	IN `dateFrom` DATE,
 	IN `dateTo` DATE
@@ -30,11 +30,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAttendancePeriod`(
 
 
 )
-LANGUAGE SQL
-DETERMINISTIC
-CONTAINS SQL
-SQL SECURITY DEFINER
-COMMENT ''
+    DETERMINISTIC
 BEGIN
 
 SET @legalHoliday='Regular Holiday';

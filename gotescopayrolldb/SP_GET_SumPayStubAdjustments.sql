@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `SP_GET_SumPayStubAdjustments`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GET_SumPayStubAdjustments`(IN `pa_EmployeeID` VARCHAR(50), IN `pa_PayPeriodID` INT)
+CREATE PROCEDURE `SP_GET_SumPayStubAdjustments`(IN `pa_EmployeeID` VARCHAR(50), IN `pa_PayPeriodID` INT)
     DETERMINISTIC
     COMMENT 'Josh'
 BEGIN

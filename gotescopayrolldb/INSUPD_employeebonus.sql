@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeebonus`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeebonus`(`bon_RowID` INT, `bon_OrganizationID` INT, `bon_CreatedBy` INT, `bon_LastUpdBy` INT, `bon_EmployeeID` INT, `bon_AllowanceFrequency` VARCHAR(50), `bon_EffectiveStartDate` DATE, `bon_EffectiveEndDate` DATE, `bon_ProductID` INT, `bon_BonusAmount` DECIMAL(11,6)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeebonus`(`bon_RowID` INT, `bon_OrganizationID` INT, `bon_CreatedBy` INT, `bon_LastUpdBy` INT, `bon_EmployeeID` INT, `bon_AllowanceFrequency` VARCHAR(50), `bon_EffectiveStartDate` DATE, `bon_EffectiveEndDate` DATE, `bon_ProductID` INT, `bon_BonusAmount` DECIMAL(11,6)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

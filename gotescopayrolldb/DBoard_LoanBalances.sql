@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_LoanBalances`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_LoanBalances`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_LoanBalances`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

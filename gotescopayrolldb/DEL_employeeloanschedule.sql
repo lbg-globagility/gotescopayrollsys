@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DEL_employeeloanschedule`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `DEL_employeeloanschedule`(IN `els_rowid` INT)
+CREATE PROCEDURE `DEL_employeeloanschedule`(IN `els_rowid` INT)
     DETERMINISTIC
 BEGIN
 

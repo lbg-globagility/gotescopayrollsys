@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_employeeallowancePerDay`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeeallowancePerDay`(`OrganizID` INT, `EmpRowID` INT, `IsTaxable` CHAR(1), `PayPeriod_To` DATE) RETURNS decimal(11,4)
+CREATE FUNCTION `GET_employeeallowancePerDay`(`OrganizID` INT, `EmpRowID` INT, `IsTaxable` CHAR(1), `PayPeriod_To` DATE) RETURNS decimal(11,4)
     DETERMINISTIC
 BEGIN
 

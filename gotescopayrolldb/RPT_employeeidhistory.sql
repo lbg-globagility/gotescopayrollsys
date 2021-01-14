@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_employeeidhistory`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_employeeidhistory`(IN `og_rowid` INT)
+CREATE PROCEDURE `RPT_employeeidhistory`(IN `og_rowid` INT)
 BEGIN
 
 SELECT i.EmployeeRowID `DatCol1`

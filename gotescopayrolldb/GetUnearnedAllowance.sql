@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GetUnearnedAllowance`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUnearnedAllowance`(
+CREATE PROCEDURE `GetUnearnedAllowance`(
 	IN `organizatID` INT,
 	IN `periodDateFrom` DATE,
 	IN `periodDateTo` DATE

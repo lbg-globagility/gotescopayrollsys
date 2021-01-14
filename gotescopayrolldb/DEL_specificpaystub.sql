@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DEL_specificpaystub`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DEL_specificpaystub`(IN `paystub_RowID` INT)
+CREATE PROCEDURE `DEL_specificpaystub`(IN `paystub_RowID` INT)
     DETERMINISTIC
 BEGIN
 

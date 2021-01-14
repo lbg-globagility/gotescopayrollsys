@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_paymentproc`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_paymentproc`(IN `I_OrganizationID` INT(10), IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_PaymentType` VARCHAR(50), IN `I_Amount` DECIMAL(10,2), IN `I_FinancialInstitutionID` INT(10), IN `I_BankAccountNumber` VARCHAR(10), IN `I_BankCheckNumber` VARCHAR(10), IN `I_BankRoutingNumber` VARCHAR(10), IN `I_CardHolder` VARCHAR(100), IN `I_CardNumber` VARCHAR(10), IN `I_CreditMemoNumber` VARCHAR(10), IN `I_RequestedAmount` DECIMAL(10,2), IN `I_RemainingBalance` DECIMAL(10,2), IN `I_PaymentNo` INT(10), IN `I_PaymentDate` DATE, IN `I_PaymentMethod` VARCHAR(50))
+CREATE PROCEDURE `I_paymentproc`(IN `I_OrganizationID` INT(10), IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_PaymentType` VARCHAR(50), IN `I_Amount` DECIMAL(10,2), IN `I_FinancialInstitutionID` INT(10), IN `I_BankAccountNumber` VARCHAR(10), IN `I_BankCheckNumber` VARCHAR(10), IN `I_BankRoutingNumber` VARCHAR(10), IN `I_CardHolder` VARCHAR(100), IN `I_CardNumber` VARCHAR(10), IN `I_CreditMemoNumber` VARCHAR(10), IN `I_RequestedAmount` DECIMAL(10,2), IN `I_RemainingBalance` DECIMAL(10,2), IN `I_PaymentNo` INT(10), IN `I_PaymentDate` DATE, IN `I_PaymentMethod` VARCHAR(50))
     DETERMINISTIC
 BEGIN 
 INSERT INTO payment

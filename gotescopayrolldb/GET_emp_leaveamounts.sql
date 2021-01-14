@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GET_emp_leaveamounts`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `GET_emp_leaveamounts`(IN `e_rowid` INT)
+CREATE PROCEDURE `GET_emp_leaveamounts`(IN `e_rowid` INT)
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `MASSUPD_NewPhilHealthDeduction`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `MASSUPD_NewPhilHealthDeduction`(IN `org_rowid` INT)
+CREATE PROCEDURE `MASSUPD_NewPhilHealthDeduction`(IN `org_rowid` INT)
     DETERMINISTIC
 BEGIN
 

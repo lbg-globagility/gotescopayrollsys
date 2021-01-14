@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `SETGET_thirteenthmonthpay`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `SETGET_thirteenthmonthpay`(`PayStubRowID` INT) RETURNS decimal(11,2)
+CREATE FUNCTION `SETGET_thirteenthmonthpay`(`PayStubRowID` INT) RETURNS decimal(11,2)
     DETERMINISTIC
 BEGIN
 

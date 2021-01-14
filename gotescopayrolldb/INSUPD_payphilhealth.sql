@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_payphilhealth`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_payphilhealth`(`phh_RowID` INT, `phh_CreatedBy` INT, `phh_LastUpdBy` INT, `phh_SalaryRangeFrom` DECIMAL(10,2), `phh_SalaryRangeTo` DECIMAL(10,2), `phh_SalaryBase` DECIMAL(10,2), `phh_TotalMonthlyPremium` DECIMAL(10,2), `phh_EmployeeShare` DECIMAL(10,2), `phh_EmployerShare` DECIMAL(10,2), `phh_SalaryBracket` DECIMAL(10,2)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_payphilhealth`(`phh_RowID` INT, `phh_CreatedBy` INT, `phh_LastUpdBy` INT, `phh_SalaryRangeFrom` DECIMAL(10,2), `phh_SalaryRangeTo` DECIMAL(10,2), `phh_SalaryBase` DECIMAL(10,2), `phh_TotalMonthlyPremium` DECIMAL(10,2), `phh_EmployeeShare` DECIMAL(10,2), `phh_EmployerShare` DECIMAL(10,2), `phh_SalaryBracket` DECIMAL(10,2)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

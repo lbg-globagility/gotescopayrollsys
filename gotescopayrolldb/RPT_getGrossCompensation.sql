@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_getGrossCompensation`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_getGrossCompensation`(IN `OrganizID` INT, IN `LastDateOfFinancialYear` DATE, IN `FirstDateOfFinancialYear` DATE)
+CREATE PROCEDURE `RPT_getGrossCompensation`(IN `OrganizID` INT, IN `LastDateOfFinancialYear` DATE, IN `FirstDateOfFinancialYear` DATE)
     DETERMINISTIC
 BEGIN
 

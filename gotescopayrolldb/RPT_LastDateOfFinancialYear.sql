@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `RPT_LastDateOfFinancialYear`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `RPT_LastDateOfFinancialYear`() RETURNS text CHARSET latin1
+CREATE FUNCTION `RPT_LastDateOfFinancialYear`() RETURNS text CHARSET latin1
     DETERMINISTIC
 BEGIN
 

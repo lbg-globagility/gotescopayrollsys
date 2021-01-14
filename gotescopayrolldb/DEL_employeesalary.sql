@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DEL_employeesalary`;
 DELIMITER //
-CREATE DEFINER=`root`@`%` PROCEDURE `DEL_employeesalary`(IN `es_rowid` INT)
+CREATE PROCEDURE `DEL_employeesalary`(IN `es_rowid` INT)
     DETERMINISTIC
 BEGIN
 # SET foreign_key_checks = OFF;

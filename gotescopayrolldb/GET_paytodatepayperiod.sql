@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_paytodatepayperiod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_paytodatepayperiod`(`OrganizID` INT, `anydate` DATE, `EmpPayFreqID` INT) RETURNS date
+CREATE FUNCTION `GET_paytodatepayperiod`(`OrganizID` INT, `anydate` DATE, `EmpPayFreqID` INT) RETURNS date
     DETERMINISTIC
 BEGIN
 

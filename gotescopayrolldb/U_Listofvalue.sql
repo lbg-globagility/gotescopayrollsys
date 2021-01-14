@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `U_Listofvalue`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `U_Listofvalue`(IN `U_RowID` INT, IN `U_DisplayValue` VARCHAR(50), IN `U_LIC` VARCHAR(50), IN `U_Type` VARCHAR(50), IN `U_ParentLIC` VARCHAR(50), IN `U_Active` VARCHAR(50), IN `U_Description` VARCHAR(500), IN `U_Created` DATETIME, IN `U_CreatedBy` VARCHAR(50), IN `U_LastUpd` DATETIME, IN `U_OrderBy` INT, IN `U_LastUpdBy` VARCHAR(50)
+CREATE PROCEDURE `U_Listofvalue`(IN `U_RowID` INT, IN `U_DisplayValue` VARCHAR(50), IN `U_LIC` VARCHAR(50), IN `U_Type` VARCHAR(50), IN `U_ParentLIC` VARCHAR(50), IN `U_Active` VARCHAR(50), IN `U_Description` VARCHAR(500), IN `U_Created` DATETIME, IN `U_CreatedBy` VARCHAR(50), IN `U_LastUpd` DATETIME, IN `U_OrderBy` INT, IN `U_LastUpdBy` VARCHAR(50)
 )
     DETERMINISTIC
 BEGIN

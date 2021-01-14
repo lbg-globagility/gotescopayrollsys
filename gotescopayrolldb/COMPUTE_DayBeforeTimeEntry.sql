@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `COMPUTE_DayBeforeTimeEntry`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `COMPUTE_DayBeforeTimeEntry`(`etent_EmployeeID` INT, `etent_OrganizationID` INT, `etent_Date` DATE, `etent_CreatedBy` INT, `etent_LastUpdBy` INT, `EmployeeStartDate` DATE, `AbsentThisTimeEntry` CHAR(1)) RETURNS int(11)
+CREATE FUNCTION `COMPUTE_DayBeforeTimeEntry`(`etent_EmployeeID` INT, `etent_OrganizationID` INT, `etent_Date` DATE, `etent_CreatedBy` INT, `etent_LastUpdBy` INT, `EmployeeStartDate` DATE, `AbsentThisTimeEntry` CHAR(1)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

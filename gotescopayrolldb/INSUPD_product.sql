@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_product`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_product`(
-	`p_RowID` INT(11),
+CREATE FUNCTION `INSUPD_product`(`p_RowID` INT(11),
 	`p_Name` VARCHAR(50),
 	`p_OrganizationID` INT,
 	`p_PartNo` VARCHAR(50),

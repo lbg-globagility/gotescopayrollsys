@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `paystub_payslips`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_payslips`(
+CREATE PROCEDURE `paystub_payslips`(
 	IN `og_rowid` INT,
 	IN `pp_rowid` INT,
 	IN `is_actual` CHAR(1)

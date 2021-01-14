@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `employeeloanfulldetails`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `employeeloanfulldetails`(IN `OrganizID` INT, IN `paypPayFreqID` INT, IN `pay_fromdate` DATE, IN `pay_todate` DATE)
+CREATE PROCEDURE `employeeloanfulldetails`(IN `OrganizID` INT, IN `paypPayFreqID` INT, IN `pay_fromdate` DATE, IN `pay_todate` DATE)
     DETERMINISTIC
 BEGIN
 

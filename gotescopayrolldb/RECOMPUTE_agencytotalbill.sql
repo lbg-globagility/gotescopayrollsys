@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RECOMPUTE_agencytotalbill`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RECOMPUTE_agencytotalbill`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE, IN `UserRowID` INT)
+CREATE PROCEDURE `RECOMPUTE_agencytotalbill`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE, IN `UserRowID` INT)
     DETERMINISTIC
 BEGIN
 

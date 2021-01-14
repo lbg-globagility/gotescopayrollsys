@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_employeeundeclaredsalarypercent`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeeundeclaredsalarypercent`(`EmpRowID` INT, `OrganizID` INT, `PayPFrom` DATE, `PayPTo` DATE) RETURNS decimal(11,6)
+CREATE FUNCTION `GET_employeeundeclaredsalarypercent`(`EmpRowID` INT, `OrganizID` INT, `PayPFrom` DATE, `PayPTo` DATE) RETURNS decimal(11,6)
     DETERMINISTIC
 BEGIN
 

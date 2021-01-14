@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_payperiod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_payperiod`(`payp_RowID` INT, `payp_OrganizationID` INT, `payp_CreatedBy` INT, `payp_LastUpdBy` INT, `payp_PayFromDate` DATE, `payp_PayToDate` DATE, `payp_TotalGrossSalary` DECIMAL(10,2), `payp_TotalNetSalary` DECIMAL(10,2), `payp_TotalEmpSSS` DECIMAL(10,2), `payp_TotalEmpWithholdingTax` DECIMAL(10,2), `payp_TotalCompSSS` DECIMAL(10,2), `payp_TotalEmpPhilhealth` DECIMAL(10,2), `payp_TotalCompPhilhealth` DECIMAL(10,2), `payp_TotalEmpHDMF` DECIMAL(10,2), `payp_TotalCompHDMF` DECIMAL(10,2)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_payperiod`(`payp_RowID` INT, `payp_OrganizationID` INT, `payp_CreatedBy` INT, `payp_LastUpdBy` INT, `payp_PayFromDate` DATE, `payp_PayToDate` DATE, `payp_TotalGrossSalary` DECIMAL(10,2), `payp_TotalNetSalary` DECIMAL(10,2), `payp_TotalEmpSSS` DECIMAL(10,2), `payp_TotalEmpWithholdingTax` DECIMAL(10,2), `payp_TotalCompSSS` DECIMAL(10,2), `payp_TotalEmpPhilhealth` DECIMAL(10,2), `payp_TotalCompPhilhealth` DECIMAL(10,2), `payp_TotalEmpHDMF` DECIMAL(10,2), `payp_TotalCompHDMF` DECIMAL(10,2)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

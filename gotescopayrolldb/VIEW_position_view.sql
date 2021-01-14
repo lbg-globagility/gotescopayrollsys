@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_position_view`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_position_view`(IN `pv_OrganizationID` INT, IN `pv_PositionID` INT)
+CREATE PROCEDURE `VIEW_position_view`(IN `pv_OrganizationID` INT, IN `pv_PositionID` INT)
     DETERMINISTIC
 BEGIN
 	

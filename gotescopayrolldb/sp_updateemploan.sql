@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `sp_updateemploan`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_updateemploan`(IN `I_Lastupd` DATETIME, IN `I_Lastupdby` INT(10), IN `I_LoanNumber` VARCHAR(50), IN `I_DedEffectiveDateFrom` DATE, IN `I_DedEffectiveDateTo` DATE, IN `I_TotalLoanAmount` DECIMAL(10,2), IN `I_DeductionSchedule` VARCHAR(50), IN `I_DeductionAmount` DECIMAL(10,2), IN `I_Status` VARCHAR(50), IN `I_DeductionPercentage` DECIMAL(10,2), IN `I_NoOfPayPeriod` DECIMAL(10,2), IN `I_Comments` VARCHAR(2000), IN `I_RowID` INT(10), IN `I_LoanTypeID` INT)
+CREATE PROCEDURE `sp_updateemploan`(IN `I_Lastupd` DATETIME, IN `I_Lastupdby` INT(10), IN `I_LoanNumber` VARCHAR(50), IN `I_DedEffectiveDateFrom` DATE, IN `I_DedEffectiveDateTo` DATE, IN `I_TotalLoanAmount` DECIMAL(10,2), IN `I_DeductionSchedule` VARCHAR(50), IN `I_DeductionAmount` DECIMAL(10,2), IN `I_Status` VARCHAR(50), IN `I_DeductionPercentage` DECIMAL(10,2), IN `I_NoOfPayPeriod` DECIMAL(10,2), IN `I_Comments` VARCHAR(2000), IN `I_RowID` INT(10), IN `I_LoanTypeID` INT)
     DETERMINISTIC
 BEGIN
 

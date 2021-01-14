@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_dateonly_in_datetime`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `GET_dateonly_in_datetime`(`ParamDateTime` DATETIME) RETURNS date
+CREATE FUNCTION `GET_dateonly_in_datetime`(`ParamDateTime` DATETIME) RETURNS date
     DETERMINISTIC
 BEGIN
 

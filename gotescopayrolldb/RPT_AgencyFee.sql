@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_AgencyFee`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RPT_AgencyFee`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE)
+CREATE PROCEDURE `RPT_AgencyFee`(IN `OrganizID` INT, IN `FromPayDate` DATE, IN `ToPayDate` DATE)
     DETERMINISTIC
 BEGIN
 

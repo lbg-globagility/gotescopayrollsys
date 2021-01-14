@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_BirthdayCelebrantThisMonth`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_BirthdayCelebrantThisMonth`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_BirthdayCelebrantThisMonth`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

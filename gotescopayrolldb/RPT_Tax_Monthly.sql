@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_Tax_Monthly`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_Tax_Monthly`(IN `OrganizID` INT, IN `paramDateFrom` DATE, IN `paramDateTo` DATE)
+CREATE PROCEDURE `RPT_Tax_Monthly`(IN `OrganizID` INT, IN `paramDateFrom` DATE, IN `paramDateTo` DATE)
     DETERMINISTIC
 BEGIN
 

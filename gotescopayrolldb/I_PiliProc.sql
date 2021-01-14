@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_PiliProc`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_PiliProc`(IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_OrganizationID` INT(11), IN `I_LastShippedToLocDate` DATE, IN `I_LastCycleCountDate` DATE, IN `I_LastUpdBy` INT(11), IN `I_ProdInvLocID` INT(10), IN `I_AvailableQty` INT(10), IN `I_DistributedQty` INT(10), IN `I_ReservedQty` INT(10), IN `I_SupplierProblemQty` INT(10), IN `I_DamagedQty` INT(10), IN `I_RackNo` INT(10), IN `I_ShelfNo` INT(10), IN `I_ColumnNo` INT(10)
+CREATE PROCEDURE `I_PiliProc`(IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_OrganizationID` INT(11), IN `I_LastShippedToLocDate` DATE, IN `I_LastCycleCountDate` DATE, IN `I_LastUpdBy` INT(11), IN `I_ProdInvLocID` INT(10), IN `I_AvailableQty` INT(10), IN `I_DistributedQty` INT(10), IN `I_ReservedQty` INT(10), IN `I_SupplierProblemQty` INT(10), IN `I_DamagedQty` INT(10), IN `I_RackNo` INT(10), IN `I_ShelfNo` INT(10), IN `I_ColumnNo` INT(10)
 )
     DETERMINISTIC
 BEGIN 

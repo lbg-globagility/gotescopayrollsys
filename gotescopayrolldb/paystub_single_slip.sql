@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `paystub_single_slip`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `paystub_single_slip`(IN `OrganizID` INT, IN `E_RowID` INT, IN `PayPeriodRowID` INT, IN `IsActualFlag` CHAR(1))
+CREATE PROCEDURE `paystub_single_slip`(IN `OrganizID` INT, IN `E_RowID` INT, IN `PayPeriodRowID` INT, IN `IsActualFlag` CHAR(1))
     DETERMINISTIC
 BEGIN
 DECLARE loan_typ_count INT(11) DEFAULT 0;

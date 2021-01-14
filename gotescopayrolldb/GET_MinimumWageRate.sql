@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_MinimumWageRate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_MinimumWageRate`() RETURNS decimal(11,2)
+CREATE FUNCTION `GET_MinimumWageRate`() RETURNS decimal(11,2)
     DETERMINISTIC
 BEGIN
 

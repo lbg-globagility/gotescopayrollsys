@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `COMPUTE_employeetimeentry_PREVIUS_BUILD`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `COMPUTE_employeetimeentry_PREVIUS_BUILD`(`etent_EmployeeID` INT, `etent_OrganizationID` INT, `etent_Date` DATE, `etent_CreatedBy` INT, `etent_LastUpdBy` INT, `EmployeeStartDate` DATE) RETURNS int(11)
+CREATE FUNCTION `COMPUTE_employeetimeentry_PREVIUS_BUILD`(`etent_EmployeeID` INT, `etent_OrganizationID` INT, `etent_Date` DATE, `etent_CreatedBy` INT, `etent_LastUpdBy` INT, `EmployeeStartDate` DATE) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

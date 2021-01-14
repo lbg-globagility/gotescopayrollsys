@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_esal_dattab`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_esal_dattab`(IN `OrganizID` INT, IN `PayPerFrom` DATE, IN `PayPerTo` DATE)
+CREATE PROCEDURE `VIEW_esal_dattab`(IN `OrganizID` INT, IN `PayPerFrom` DATE, IN `PayPerTo` DATE)
     DETERMINISTIC
 BEGIN
 

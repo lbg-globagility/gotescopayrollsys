@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GET_WeeklyDates`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_WeeklyDates`(IN `param_PayPeriodID` INT)
+CREATE PROCEDURE `GET_WeeklyDates`(IN `param_PayPeriodID` INT)
     DETERMINISTIC
 BEGIN
 

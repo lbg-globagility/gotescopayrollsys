@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INS_audittrail_RETRowID`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INS_audittrail_RETRowID`(`au_CreatedBy` INT, `au_LastUpdBy` INT, `au_OrganizationID` INT, `au_ViewID` INT, `au_FieldChanged` VARCHAR(200), `au_ChangedRowID` VARCHAR(50), `au_OldValue` VARCHAR(200), `au_NewValue` VARCHAR(200), `au_ActionPerformed` VARCHAR(50)) RETURNS int(11)
+CREATE FUNCTION `INS_audittrail_RETRowID`(`au_CreatedBy` INT, `au_LastUpdBy` INT, `au_OrganizationID` INT, `au_ViewID` INT, `au_FieldChanged` VARCHAR(200), `au_ChangedRowID` VARCHAR(50), `au_OldValue` VARCHAR(200), `au_NewValue` VARCHAR(200), `au_ActionPerformed` VARCHAR(50)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

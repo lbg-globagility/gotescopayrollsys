@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_paystubadjustment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_paystubadjustment`(IN `pa_EmployeeID` VARCHAR(50), IN `pa_PayPeriodID` INT, IN `pa_IsActual` TINYINT)
+CREATE PROCEDURE `VIEW_paystubadjustment`(IN `pa_EmployeeID` VARCHAR(50), IN `pa_PayPeriodID` INT, IN `pa_IsActual` TINYINT)
     DETERMINISTIC
 BEGIN
 

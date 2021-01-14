@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RECOMPUTE_thirteenthmonthpay`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RECOMPUTE_thirteenthmonthpay`(IN `OrganizID` INT, IN `PayPRowID` INT, IN `UserRowID` INT)
+CREATE PROCEDURE `RECOMPUTE_thirteenthmonthpay`(IN `OrganizID` INT, IN `PayPRowID` INT, IN `UserRowID` INT)
     DETERMINISTIC
 BEGIN
 

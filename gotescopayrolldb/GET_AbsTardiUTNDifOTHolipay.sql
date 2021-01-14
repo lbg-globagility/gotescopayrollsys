@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GET_AbsTardiUTNDifOTHolipay`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_AbsTardiUTNDifOTHolipay`(IN `param_OrganizationID` INT, IN `param_EmployeeRowID` INT, IN `param_PayPeriodID1` INT, IN `param_PayPeriodID2` INT)
+CREATE PROCEDURE `GET_AbsTardiUTNDifOTHolipay`(IN `param_OrganizationID` INT, IN `param_EmployeeRowID` INT, IN `param_PayPeriodID1` INT, IN `param_PayPeriodID2` INT)
     DETERMINISTIC
 BEGIN
 

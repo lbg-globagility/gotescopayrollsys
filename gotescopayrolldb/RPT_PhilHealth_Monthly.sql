@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_PhilHealth_Monthly`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_PhilHealth_Monthly`(
+CREATE PROCEDURE `RPT_PhilHealth_Monthly`(
 	IN `OrganizID` INT,
 	IN `paramDate` DATE
 
@@ -17,11 +17,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_PhilHealth_Monthly`(
 
 
 )
-LANGUAGE SQL
-DETERMINISTIC
-CONTAINS SQL
-SQL SECURITY DEFINER
-COMMENT ''
+    DETERMINISTIC
 BEGIN
 
 DECLARE deduc_sched VARCHAR(50);

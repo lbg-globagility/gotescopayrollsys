@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `U_ProdInvLocInventory`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `U_ProdInvLocInventory`(IN `U_RowID` INT(10), IN `U_AvailableQty` INT(10), IN `U_RackNo` INT(10), IN `U_ShelfNo` INT(10), IN `U_ColumnNo` INT(10)
+CREATE PROCEDURE `U_ProdInvLocInventory`(IN `U_RowID` INT(10), IN `U_AvailableQty` INT(10), IN `U_RackNo` INT(10), IN `U_ShelfNo` INT(10), IN `U_ColumnNo` INT(10)
 	
 )
     DETERMINISTIC

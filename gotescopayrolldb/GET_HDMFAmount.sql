@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_HDMFAmount`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_HDMFAmount`(`emp_MonthlyCompensation` DECIMAL(11,2)) RETURNS decimal(11,2)
+CREATE FUNCTION `GET_HDMFAmount`(`emp_MonthlyCompensation` DECIMAL(11,2)) RETURNS decimal(11,2)
     DETERMINISTIC
 BEGIN
 

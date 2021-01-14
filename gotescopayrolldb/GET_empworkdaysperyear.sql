@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_empworkdaysperyear`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_empworkdaysperyear`(`emp_RowID` INT) RETURNS int(11)
+CREATE FUNCTION `GET_empworkdaysperyear`(`emp_RowID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

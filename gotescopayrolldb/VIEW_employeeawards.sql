@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeawards`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeawards`(IN `eawar_EmployeeID` INT, IN `eawar_OrganizationID` INT)
+CREATE PROCEDURE `VIEW_employeeawards`(IN `eawar_EmployeeID` INT, IN `eawar_OrganizationID` INT)
     DETERMINISTIC
     COMMENT 'view all employee''s award(s) base on employee RowID and organiztion'
 BEGIN

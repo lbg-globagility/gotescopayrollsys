@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `mysqlmsgbox`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `mysqlmsgbox`(IN `PromptText` VARCHAR(500))
+CREATE PROCEDURE `mysqlmsgbox`(IN `PromptText` VARCHAR(500))
     DETERMINISTIC
 BEGIN
 

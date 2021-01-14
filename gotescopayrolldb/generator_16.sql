@@ -6,7 +6,7 @@
 
 DROP VIEW IF EXISTS `generator_16`;
 DROP TABLE IF EXISTS `generator_16`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `generator_16` AS select 0 AS `n` union select 1 AS `n` union select 2 AS `n` union select 3 AS `n` union select 4 AS `n` union select 5 AS `n` union select 6 AS `n` union select 7 AS `n` union select 8 AS `n` union select 9 AS `n` union select 10 AS `n` union select 11 AS `n` union select 12 AS `n` union select 13 AS `n` union select 14 AS `n` union select 15 AS `n` union select 16 AS `n` ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `generator_16` AS select 0 AS `n` union select 1 AS `n` union select 2 AS `n` union select 3 AS `n` union select 4 AS `n` union select 5 AS `n` union select 6 AS `n` union select 7 AS `n` union select 8 AS `n` union select 9 AS `n` union select 10 AS `n` union select 11 AS `n` union select 12 AS `n` union select 13 AS `n` union select 14 AS `n` union select 15 AS `n` union select 16 AS `n` ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

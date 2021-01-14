@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VEIW_ref_employeeloanschedule`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VEIW_ref_employeeloanschedule`(IN `ReferenceLoanRowID` INT, IN `OrganizID` INT)
+CREATE PROCEDURE `VEIW_ref_employeeloanschedule`(IN `ReferenceLoanRowID` INT, IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

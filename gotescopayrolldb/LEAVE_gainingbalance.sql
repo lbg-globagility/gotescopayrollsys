@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `LEAVE_gainingbalance`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `LEAVE_gainingbalance`(
+CREATE PROCEDURE `LEAVE_gainingbalance`(
 	IN `OrganizID` INT,
 	IN `EmpRowID` INT,
 	IN `UserRowID` INT,

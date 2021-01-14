@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeattachments`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeattachments`(IN `EmpID` INT)
+CREATE PROCEDURE `VIEW_employeeattachments`(IN `EmpID` INT)
     DETERMINISTIC
 BEGIN
 

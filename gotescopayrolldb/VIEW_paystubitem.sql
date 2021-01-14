@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_paystubitem`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_paystubitem`(
+CREATE PROCEDURE `VIEW_paystubitem`(
 	IN `paystitm_PayStubID` INT
 )
     DETERMINISTIC

@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_position_view`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_position_view`(`pv_RowID` INT, `pv_PositionID` INT, `pv_OrganizationID` INT, `pv_CreatedBy` INT, `pv_LastUpdBy` INT, `pv_ViewID` INT, `pv_Creates` CHAR(1), `pv_ReadOnly` CHAR(1), `pv_Updates` CHAR(1), `pv_Deleting` CHAR(1)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_position_view`(`pv_RowID` INT, `pv_PositionID` INT, `pv_OrganizationID` INT, `pv_CreatedBy` INT, `pv_LastUpdBy` INT, `pv_ViewID` INT, `pv_Creates` CHAR(1), `pv_ReadOnly` CHAR(1), `pv_Updates` CHAR(1), `pv_Deleting` CHAR(1)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

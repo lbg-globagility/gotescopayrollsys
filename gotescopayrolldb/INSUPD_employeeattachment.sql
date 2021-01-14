@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeeattachment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeeattachment`(`eatta_RowID` INT, `eatta_EmployeeID` INT, `eatta_CreatedBy` INT, `eatta_LastUpdBy` INT, `eatta_Type` VARCHAR(100), `eatta_FileName` VARCHAR(100), `eatta_FileType` VARCHAR(100), `eatta_AttachedFile` LONGBLOB) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeeattachment`(`eatta_RowID` INT, `eatta_EmployeeID` INT, `eatta_CreatedBy` INT, `eatta_LastUpdBy` INT, `eatta_Type` VARCHAR(100), `eatta_FileName` VARCHAR(100), `eatta_FileType` VARCHAR(100), `eatta_AttachedFile` LONGBLOB) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `MASSUPD_employee_agency`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `MASSUPD_employee_agency`(IN `OrganizID` INT, IN `AgencyRowID` INT, IN `UserRowID` INT, IN `EmployeeListRowID` VARCHAR(1000))
+CREATE PROCEDURE `MASSUPD_employee_agency`(IN `OrganizID` INT, IN `AgencyRowID` INT, IN `UserRowID` INT, IN `EmployeeListRowID` VARCHAR(1000))
     DETERMINISTIC
     COMMENT 'the comment'
 BEGIN

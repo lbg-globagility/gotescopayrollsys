@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GET_parameter_collection`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `GET_parameter_collection`(
+CREATE PROCEDURE `GET_parameter_collection`(
 	IN `data_base_name` VARCHAR(50),
 	IN `sql_object_name` VARCHAR(50)
 )

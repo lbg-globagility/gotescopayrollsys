@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `INS_employeeetimeentrygeneration`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `INS_employeeetimeentrygeneration`(IN `ogid` INT, IN `datefrom` DATE, IN `dateto` DATE, IN `u_rowid` INT, IN `div_rowid` INT)
+CREATE PROCEDURE `INS_employeeetimeentrygeneration`(IN `ogid` INT, IN `datefrom` DATE, IN `dateto` DATE, IN `u_rowid` INT, IN `div_rowid` INT)
     NO SQL
 BEGIN
 

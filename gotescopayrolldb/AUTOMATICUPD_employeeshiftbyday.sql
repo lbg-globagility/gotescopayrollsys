@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `AUTOMATICUPD_employeeshiftbyday`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `AUTOMATICUPD_employeeshiftbyday`(IN `OrganizID` INT, IN `EmployeeRowID` INT)
+CREATE PROCEDURE `AUTOMATICUPD_employeeshiftbyday`(IN `OrganizID` INT, IN `EmployeeRowID` INT)
     DETERMINISTIC
 BEGIN
 

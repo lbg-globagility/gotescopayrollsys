@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_attendance_sheet`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_attendance_sheet`(
+CREATE PROCEDURE `RPT_attendance_sheet`(
 	IN `OrganizationID` INT,
 	IN `FromDate` DATE,
 	IN `ToDate` DATE

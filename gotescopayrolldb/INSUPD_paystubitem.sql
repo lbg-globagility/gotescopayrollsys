@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_paystubitem`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_paystubitem`(`pstubitm_RowID` INT, `pstubitm_OrganizationID` INT, `pstubitm_CreatedBy` INT, `pstubitm_LastUpdBy` INT, `pstubitm_PayStubID` INT, `pstubitm_ProductID` INT, `pstubitm_PayAmount` DECIMAL(11,2)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_paystubitem`(`pstubitm_RowID` INT, `pstubitm_OrganizationID` INT, `pstubitm_CreatedBy` INT, `pstubitm_LastUpdBy` INT, `pstubitm_PayStubID` INT, `pstubitm_ProductID` INT, `pstubitm_PayAmount` DECIMAL(11,2)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

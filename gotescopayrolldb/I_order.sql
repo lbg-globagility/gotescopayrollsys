@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_order`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_order`(IN `I_Created` DATETIME, IN `I_OrganizationID` INT(11), IN `I_OrderDate` DATETIME, IN `I_Type` VARCHAR(50), IN `I_TotalAmount` DECIMAL(10,2), IN `I_TotalDownPayment` DECIMAL(10,2), IN `I_TotalPayment` DECIMAL(10,2), IN `I_TotalBalance` DECIMAL(10,2), IN `I_Status` VARCHAR(50), IN `I_StatusAsOf` VARCHAR(50), IN `I_InvoiceNo` INT(11), IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_InventoryLocationID` INT(11)
+CREATE PROCEDURE `I_order`(IN `I_Created` DATETIME, IN `I_OrganizationID` INT(11), IN `I_OrderDate` DATETIME, IN `I_Type` VARCHAR(50), IN `I_TotalAmount` DECIMAL(10,2), IN `I_TotalDownPayment` DECIMAL(10,2), IN `I_TotalPayment` DECIMAL(10,2), IN `I_TotalBalance` DECIMAL(10,2), IN `I_Status` VARCHAR(50), IN `I_StatusAsOf` VARCHAR(50), IN `I_InvoiceNo` INT(11), IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_InventoryLocationID` INT(11)
 	, IN `I_OrderNumber` VARCHAR(10), IN `I_Comments` VARCHAR(2000))
     DETERMINISTIC
 BEGIN

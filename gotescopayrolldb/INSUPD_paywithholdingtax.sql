@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_paywithholdingtax`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_paywithholdingtax`(`wtx_RowID` INT, `wtx_CreatedBy` INT, `wtx_LastUpdBy` INT, `wtx_PayFrequencyID` INT, `wtx_FilingStatusID` INT, `wtx_EffectiveDateFrom` DATE, `wtx_EffectiveDateTo` DATE, `wtx_ExemptionAmount` DECIMAL(10,2), `wtx_ExemptionInExcessAmount` DECIMAL(10,2), `wtx_TaxableIncomeFromAmount` DECIMAL(10,2), `wtx_TaxableIncomeToAmount` DECIMAL(10,2)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_paywithholdingtax`(`wtx_RowID` INT, `wtx_CreatedBy` INT, `wtx_LastUpdBy` INT, `wtx_PayFrequencyID` INT, `wtx_FilingStatusID` INT, `wtx_EffectiveDateFrom` DATE, `wtx_EffectiveDateTo` DATE, `wtx_ExemptionAmount` DECIMAL(10,2), `wtx_ExemptionInExcessAmount` DECIMAL(10,2), `wtx_TaxableIncomeFromAmount` DECIMAL(10,2), `wtx_TaxableIncomeToAmount` DECIMAL(10,2)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

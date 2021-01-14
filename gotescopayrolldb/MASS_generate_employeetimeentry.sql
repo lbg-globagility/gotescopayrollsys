@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `MASS_generate_employeetimeentry`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `MASS_generate_employeetimeentry`(IN `OrganizID` INT, IN `Pay_FrequencyType` TEXT, IN `UserRowID` INT, IN `periodDateFrom` DATE, IN `periodDateTo` DATE, IN `DivisionRowID` INT)
+CREATE PROCEDURE `MASS_generate_employeetimeentry`(IN `OrganizID` INT, IN `Pay_FrequencyType` TEXT, IN `UserRowID` INT, IN `periodDateFrom` DATE, IN `periodDateTo` DATE, IN `DivisionRowID` INT)
     NO SQL
     DETERMINISTIC
 BEGIN

@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_shift`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_shift`(`sh_RowID` INT, `sh_OrganizationID` INT, `sh_CreatedBy` INT, `sh_LastUpdBy` INT, `sh_TimeFrom` TIME, `sh_TimeTo` TIME) RETURNS int(11)
+CREATE FUNCTION `INSUPD_shift`(`sh_RowID` INT, `sh_OrganizationID` INT, `sh_CreatedBy` INT, `sh_LastUpdBy` INT, `sh_TimeFrom` TIME, `sh_TimeTo` TIME) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

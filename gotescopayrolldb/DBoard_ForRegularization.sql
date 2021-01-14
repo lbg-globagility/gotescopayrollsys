@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_ForRegularization`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_ForRegularization`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_ForRegularization`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

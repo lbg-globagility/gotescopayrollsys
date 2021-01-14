@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_employeerateperhour`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeerateperhour`(`EmpID` INT, `OrgID` INT, `paramDate` DATE) RETURNS decimal(12,2)
+CREATE FUNCTION `GET_employeerateperhour`(`EmpID` INT, `OrgID` INT, `paramDate` DATE) RETURNS decimal(12,2)
     DETERMINISTIC
 BEGIN
 

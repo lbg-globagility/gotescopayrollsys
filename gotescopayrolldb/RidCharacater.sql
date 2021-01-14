@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `RidCharacater`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `RidCharacater`(
-	`textValue` TEXT,
+CREATE FUNCTION `RidCharacater`(`textValue` TEXT,
 	`customCharacter` TEXT
 ) RETURNS text CHARSET latin1
     DETERMINISTIC

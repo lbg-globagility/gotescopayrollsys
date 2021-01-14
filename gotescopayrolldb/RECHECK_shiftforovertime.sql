@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RECHECK_shiftforovertime`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RECHECK_shiftforovertime`(IN `OrganizID` INT)
+CREATE PROCEDURE `RECHECK_shiftforovertime`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

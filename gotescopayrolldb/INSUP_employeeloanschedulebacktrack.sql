@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUP_employeeloanschedulebacktrack`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUP_employeeloanschedulebacktrack`(
-	`OrganizID` INT,
+CREATE FUNCTION `INSUP_employeeloanschedulebacktrack`(`OrganizID` INT,
 	`UserRowID` INT,
 	`EmpRowID` INT,
 	`PaystubRowID` INT,

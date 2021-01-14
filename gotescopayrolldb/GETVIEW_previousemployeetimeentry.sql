@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GETVIEW_previousemployeetimeentry`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GETVIEW_previousemployeetimeentry`(
+CREATE PROCEDURE `GETVIEW_previousemployeetimeentry`(
 	IN `OrganizID` INT,
 	IN `prev_payperiodID` INT,
 	IN `WeeklySSSSchedPayPeriodID` INT

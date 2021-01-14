@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `VIEW_privilege`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `VIEW_privilege`(`vw_ViewName` VARCHAR(150), `vw_OrganizationID` INT) RETURNS int(11)
+CREATE FUNCTION `VIEW_privilege`(`vw_ViewName` VARCHAR(150), `vw_OrganizationID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

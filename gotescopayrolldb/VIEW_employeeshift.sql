@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeshift`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeshift`(IN `OrganizID` INT, IN `EmpRowID` INT, IN `pagenumber` INT)
+CREATE PROCEDURE `VIEW_employeeshift`(IN `OrganizID` INT, IN `EmpRowID` INT, IN `pagenumber` INT)
     DETERMINISTIC
 BEGIN
 

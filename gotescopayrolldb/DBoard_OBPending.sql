@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_OBPending`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_OBPending`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_OBPending`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

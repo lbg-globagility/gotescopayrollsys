@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `SET_group_concat_max_len`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `SET_group_concat_max_len`()
+CREATE PROCEDURE `SET_group_concat_max_len`()
     DETERMINISTIC
 BEGIN
 

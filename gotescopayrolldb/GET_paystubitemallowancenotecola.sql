@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_paystubitemallowancenotecola`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_paystubitemallowancenotecola`(`OrganizID` INT, `EmpRowID` INT, `PayPeriodRowID` INT) RETURNS decimal(11,6)
+CREATE FUNCTION `GET_paystubitemallowancenotecola`(`OrganizID` INT, `EmpRowID` INT, `PayPeriodRowID` INT) RETURNS decimal(11,6)
     DETERMINISTIC
 BEGIN
 

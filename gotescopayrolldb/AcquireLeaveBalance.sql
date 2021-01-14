@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `AcquireLeaveBalance`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `AcquireLeaveBalance`(
+CREATE PROCEDURE `AcquireLeaveBalance`(
 	IN `OrganizID` INT,
 	IN `EmpRowID` INT,
 	IN `UserRowID` INT,

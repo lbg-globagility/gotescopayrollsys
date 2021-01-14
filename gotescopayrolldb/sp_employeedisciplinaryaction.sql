@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `sp_employeedisciplinaryaction`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_employeedisciplinaryaction`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(10), IN `I_EmployeeID` INT(10), IN `I_DateFrom` DATE, IN `I_DateTo` DATE, IN `I_FindingID` INT(10), IN `I_FindingDescription` VARCHAR(2000), IN `I_Action` VARCHAR(100), IN `I_Comments` VARCHAR(500))
+CREATE PROCEDURE `sp_employeedisciplinaryaction`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(10), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(10), IN `I_EmployeeID` INT(10), IN `I_DateFrom` DATE, IN `I_DateTo` DATE, IN `I_FindingID` INT(10), IN `I_FindingDescription` VARCHAR(2000), IN `I_Action` VARCHAR(100), IN `I_Comments` VARCHAR(500))
     DETERMINISTIC
 BEGIN
 INSERT INTO employeedisciplinaryaction

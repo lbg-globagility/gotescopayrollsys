@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeetimeentrydetails`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeetimeentrydetails`(IN `etentd_Created` DATETIME, IN `etentd_OrganizationID` INT, IN `etd_EmployeeNumber` VARCHAR(50))
+CREATE PROCEDURE `VIEW_employeetimeentrydetails`(IN `etentd_Created` DATETIME, IN `etentd_OrganizationID` INT, IN `etd_EmployeeNumber` VARCHAR(50))
     DETERMINISTIC
 BEGIN
 

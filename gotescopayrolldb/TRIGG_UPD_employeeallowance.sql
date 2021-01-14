@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `TRIGG_UPD_employeeallowance`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `TRIGG_UPD_employeeallowance`(`OrganizID` INT, `UserRowID` INT, `EmpRowID` INT, `es_datefrom` DATE, `es_dateto` DATE) RETURNS char(1) CHARSET latin1
+CREATE FUNCTION `TRIGG_UPD_employeeallowance`(`OrganizID` INT, `UserRowID` INT, `EmpRowID` INT, `es_datefrom` DATE, `es_dateto` DATE) RETURNS char(1) CHARSET latin1
     DETERMINISTIC
 BEGIN
 

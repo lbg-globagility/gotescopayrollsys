@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeallowances`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeallowances`(IN `eallow_EmployeeID` INT, IN `eallow_OrganizationID` INT, IN `effective_datefrom` DATE, IN `effective_dateto` DATE, IN `ExceptThisAllowance` TEXT)
+CREATE PROCEDURE `VIEW_employeeallowances`(IN `eallow_EmployeeID` INT, IN `eallow_OrganizationID` INT, IN `effective_datefrom` DATE, IN `effective_dateto` DATE, IN `ExceptThisAllowance` TEXT)
     DETERMINISTIC
 BEGIN
 

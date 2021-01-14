@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `U_InventoryLocation`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `U_InventoryLocation`(IN `I_RowID` INT(10), IN `I_Name` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_MainPhone` VARCHAR(50), IN `I_MobilePhone` VARCHAR(50), IN `I_FaxNumber` VARCHAR(50), IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_Type` VARCHAR(50), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_MainBranch` CHAR(1)
+CREATE PROCEDURE `U_InventoryLocation`(IN `I_RowID` INT(10), IN `I_Name` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_MainPhone` VARCHAR(50), IN `I_MobilePhone` VARCHAR(50), IN `I_FaxNumber` VARCHAR(50), IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_Type` VARCHAR(50), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_MainBranch` CHAR(1)
 )
     DETERMINISTIC
 BEGIN 

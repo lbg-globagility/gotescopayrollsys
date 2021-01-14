@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GET_employeeholidaypay`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GET_employeeholidaypay`(IN `OrganizID` INT, IN `etentDateFrom` DATE, IN `etentDateTo` DATE)
+CREATE PROCEDURE `GET_employeeholidaypay`(IN `OrganizID` INT, IN `etentDateFrom` DATE, IN `etentDateTo` DATE)
     DETERMINISTIC
 BEGIN
 

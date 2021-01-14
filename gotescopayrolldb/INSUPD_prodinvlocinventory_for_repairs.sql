@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_prodinvlocinventory_for_repairs`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_prodinvlocinventory_for_repairs`(`pili_RowID` INT, `pili_OrganizationID` INT, `pili_ProdInvLocID` INT, `pili_CreatedBy` INT, `pili_LastUpdBy` INT, `pili_AvailableQty` INT, `pili_RackNo` VARCHAR(50), `pili_ShelfNo` VARCHAR(50), `pili_ColumnNo` VARCHAR(50)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_prodinvlocinventory_for_repairs`(`pili_RowID` INT, `pili_OrganizationID` INT, `pili_ProdInvLocID` INT, `pili_CreatedBy` INT, `pili_LastUpdBy` INT, `pili_AvailableQty` INT, `pili_RackNo` VARCHAR(50), `pili_ShelfNo` VARCHAR(50), `pili_ColumnNo` VARCHAR(50)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

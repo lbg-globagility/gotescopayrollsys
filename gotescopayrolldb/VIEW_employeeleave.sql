@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeleave`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeleave`(
+CREATE PROCEDURE `VIEW_employeeleave`(
 	IN `elv_EmployeeID` INT,
 	IN `elv_OrganizationID` INT,
 	IN `user_rowid` INT

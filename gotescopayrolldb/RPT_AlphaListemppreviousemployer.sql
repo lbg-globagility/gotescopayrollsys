@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_AlphaListemppreviousemployer`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_AlphaListemppreviousemployer`(IN `OrganizID` INT)
+CREATE PROCEDURE `RPT_AlphaListemppreviousemployer`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

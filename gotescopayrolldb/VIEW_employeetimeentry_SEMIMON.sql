@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeetimeentry_SEMIMON`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeetimeentry_SEMIMON`(IN `etent_OrganizationID` INT, IN `etent_EmployeeID` INT, IN `etent_Date` DATE)
+CREATE PROCEDURE `VIEW_employeetimeentry_SEMIMON`(IN `etent_OrganizationID` INT, IN `etent_EmployeeID` INT, IN `etent_Date` DATE)
     DETERMINISTIC
 BEGIN
 

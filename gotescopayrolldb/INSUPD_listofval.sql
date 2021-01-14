@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_listofval`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_listofval`(`DispVal` VARCHAR(50), `paramLIC` VARCHAR(50), `paramType` VARCHAR(50), `Parent_LIC` VARCHAR(50), `paramActive` CHAR(5), `Descript` VARCHAR(500), `UserRowID` INT, `Order_By` INT) RETURNS int(11)
+CREATE FUNCTION `INSUPD_listofval`(`DispVal` VARCHAR(50), `paramLIC` VARCHAR(50), `paramType` VARCHAR(50), `Parent_LIC` VARCHAR(50), `paramActive` CHAR(5), `Descript` VARCHAR(500), `UserRowID` INT, `Order_By` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

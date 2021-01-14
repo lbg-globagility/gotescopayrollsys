@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_related_loan_cancelled`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_related_loan_cancelled`(IN `OrganizID` INT, IN `LoanCancelledRowID` INT)
+CREATE PROCEDURE `VIEW_related_loan_cancelled`(IN `OrganizID` INT, IN `LoanCancelledRowID` INT)
     DETERMINISTIC
 BEGIN
 

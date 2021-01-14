@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_SumPayStubAdjustments`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_SumPayStubAdjustments`(`p_PayStubID` INT) RETURNS decimal(10,2)
+CREATE FUNCTION `GET_SumPayStubAdjustments`(`p_PayStubID` INT) RETURNS decimal(10,2)
     DETERMINISTIC
 BEGIN
 

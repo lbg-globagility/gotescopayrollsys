@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `GETVIEW_employeeTardinessUndertime`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GETVIEW_employeeTardinessUndertime`(IN `OrganizID` INT, IN `payp_FromDate` DATE, IN `payp_ToDate` DATE)
+CREATE PROCEDURE `GETVIEW_employeeTardinessUndertime`(IN `OrganizID` INT, IN `payp_FromDate` DATE, IN `payp_ToDate` DATE)
     DETERMINISTIC
 BEGIN
 

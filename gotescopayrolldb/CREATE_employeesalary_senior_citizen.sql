@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `CREATE_employeesalary_senior_citizen`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `CREATE_employeesalary_senior_citizen`(IN `OrganizID` INT, IN `UserRowID` INT)
+CREATE PROCEDURE `CREATE_employeesalary_senior_citizen`(IN `OrganizID` INT, IN `UserRowID` INT)
     DETERMINISTIC
 BEGIN
 

@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `LateTimeLog`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `LateTimeLog`(
-	`timeStamp1` TIMESTAMP,
+CREATE FUNCTION `LateTimeLog`(`timeStamp1` TIMESTAMP,
 	`timeStamp2` TIMESTAMP,
 	`timeStamp3` TIMESTAMP
 ) RETURNS timestamp

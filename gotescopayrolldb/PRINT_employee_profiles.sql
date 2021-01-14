@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `PRINT_employee_profiles`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `PRINT_employee_profiles`(IN `og_rowid` INT)
+CREATE PROCEDURE `PRINT_employee_profiles`(IN `og_rowid` INT)
     DETERMINISTIC
 BEGIN
 

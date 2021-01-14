@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_position_organization_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_position_organization_user`(IN `pos_OrganizationID` INT, IN `pagination` INT, IN `current_userID` INT)
+CREATE PROCEDURE `VIEW_position_organization_user`(IN `pos_OrganizationID` INT, IN `pagination` INT, IN `current_userID` INT)
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_ListValue`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_ListValue`(IN `I_DisplayValue` VARCHAR(50), IN `I_LIC` VARCHAR(50), IN `I_Type` VARCHAR(50), IN `I_ParentLIC` VARCHAR(50), IN `I_Active` VARCHAR(50), IN `I_Description` VARCHAR(500), IN `I_Created` DATETIME, IN `I_CreatedBy` VARCHAR(50), IN `I_LastUpd` DATETIME, IN `I_OrderBy` INT, IN `I_LastUpdBy` VARCHAR(50)
+CREATE PROCEDURE `I_ListValue`(IN `I_DisplayValue` VARCHAR(50), IN `I_LIC` VARCHAR(50), IN `I_Type` VARCHAR(50), IN `I_ParentLIC` VARCHAR(50), IN `I_Active` VARCHAR(50), IN `I_Description` VARCHAR(500), IN `I_Created` DATETIME, IN `I_CreatedBy` VARCHAR(50), IN `I_LastUpd` DATETIME, IN `I_OrderBy` INT, IN `I_LastUpdBy` VARCHAR(50)
 )
     DETERMINISTIC
 BEGIN

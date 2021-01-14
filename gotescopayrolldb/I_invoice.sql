@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_invoice`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_invoice`(IN `I_InvoiceNo` INT(10), IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_OrganizationID` INT(10), IN `I_InvoiceDate` DATE, IN `I_Status` VARCHAR(50), IN `I_TotalInvoiceAmount` DECIMAL(10,2), IN `I_PaymentAmount` DECIMAL(10,2), IN `I_TotalDue` DECIMAL(10,2), IN `I_OrderID` INT(10), IN `I_InvoiceDueDate` DATE, IN `I_Comments` VARCHAR(2000), IN `I_BalanceDue` DECIMAL(10,2), IN `I_TotalTax` DECIMAL(10,2), IN `I_TotalVAT` DECIMAL(10,2)
+CREATE PROCEDURE `I_invoice`(IN `I_InvoiceNo` INT(10), IN `I_CreatedBy` INT(10), IN `I_LastUpdBy` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_OrganizationID` INT(10), IN `I_InvoiceDate` DATE, IN `I_Status` VARCHAR(50), IN `I_TotalInvoiceAmount` DECIMAL(10,2), IN `I_PaymentAmount` DECIMAL(10,2), IN `I_TotalDue` DECIMAL(10,2), IN `I_OrderID` INT(10), IN `I_InvoiceDueDate` DATE, IN `I_Comments` VARCHAR(2000), IN `I_BalanceDue` DECIMAL(10,2), IN `I_TotalTax` DECIMAL(10,2), IN `I_TotalVAT` DECIMAL(10,2)
 )
     DETERMINISTIC
 BEGIN 

@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_employeehoursworked_indate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeehoursworked_indate`(`employee_ID` INT, `d_from` DATE, `d_to` DATE, `organiz_ID` INT) RETURNS decimal(10,2)
+CREATE FUNCTION `GET_employeehoursworked_indate`(`employee_ID` INT, `d_from` DATE, `d_to` DATE, `organiz_ID` INT) RETURNS decimal(10,2)
     DETERMINISTIC
 BEGIN
 

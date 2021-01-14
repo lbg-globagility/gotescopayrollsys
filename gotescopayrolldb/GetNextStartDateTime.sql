@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GetNextStartDateTime`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GetNextStartDateTime`(
-	`shiftStartDateTime` DATETIME,
+CREATE FUNCTION `GetNextStartDateTime`(`shiftStartDateTime` DATETIME,
 	`breakStartTime` TIME
 
 

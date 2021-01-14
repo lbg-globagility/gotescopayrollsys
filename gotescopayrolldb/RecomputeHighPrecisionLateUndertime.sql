@@ -6,10 +6,11 @@
 
 DROP PROCEDURE IF EXISTS `RecomputeHighPrecisionLateUndertime`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RecomputeHighPrecisionLateUndertime`(
+CREATE PROCEDURE `RecomputeHighPrecisionLateUndertime`(
 	IN `organizationID` INT,
 	IN `payDateFrom` DATE,
 	IN `payDateTo` DATE
+
 
 
 )

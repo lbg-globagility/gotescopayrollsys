@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_paywithholdingtax`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_paywithholdingtax`(IN `Taxable_Income` DECIMAL(10,6), IN `e_EmployeeID` INT, IN `e_OrganizationID` INT)
+CREATE PROCEDURE `VIEW_paywithholdingtax`(IN `Taxable_Income` DECIMAL(10,6), IN `e_EmployeeID` INT, IN `e_OrganizationID` INT)
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_psimonthlysumitem`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_psimonthlysumitem`(`OrganizID` INT, `EmpRowID` INT, `ItemName` TEXT, `PayPMonth` INT, `PayPYear` INT, `EmpPayFrequencyID` INT) RETURNS decimal(11,6)
+CREATE FUNCTION `GET_psimonthlysumitem`(`OrganizID` INT, `EmpRowID` INT, `ItemName` TEXT, `PayPMonth` INT, `PayPYear` INT, `EmpPayFrequencyID` INT) RETURNS decimal(11,6)
     DETERMINISTIC
 BEGIN
 

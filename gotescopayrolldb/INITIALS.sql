@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INITIALS`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INITIALS`(`str` TEXT, `strtoadd` TEXT, `isuppercase` CHAR(1)) RETURNS text CHARSET latin1
+CREATE FUNCTION `INITIALS`(`str` TEXT, `strtoadd` TEXT, `isuppercase` CHAR(1)) RETURNS text CHARSET latin1
     DETERMINISTIC
 BEGIN
 

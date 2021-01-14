@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `COMPUTE_employeeovertimeofthisdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `COMPUTE_employeeovertimeofthisdate`(`ot_EmployeeID` INT, `ot_OrganizationID` INT, `ot_Date` DATE, `timelogout` TIME, `ValueAsNightDiff` CHAR(1)) RETURNS decimal(11,4)
+CREATE FUNCTION `COMPUTE_employeeovertimeofthisdate`(`ot_EmployeeID` INT, `ot_OrganizationID` INT, `ot_Date` DATE, `timelogout` TIME, `ValueAsNightDiff` CHAR(1)) RETURNS decimal(11,4)
     DETERMINISTIC
 BEGIN
 

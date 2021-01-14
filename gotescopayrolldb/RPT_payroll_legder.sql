@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_payroll_legder`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_payroll_legder`(IN `OrganizID` INT, IN `PayPerID1` INT, IN `PayPerID2` INT, IN `psi_undeclared` CHAR(1))
+CREATE PROCEDURE `RPT_payroll_legder`(IN `OrganizID` INT, IN `PayPerID1` INT, IN `PayPerID2` INT, IN `psi_undeclared` CHAR(1))
     DETERMINISTIC
 BEGIN
 

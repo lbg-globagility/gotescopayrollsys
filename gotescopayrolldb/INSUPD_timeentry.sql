@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_timeentry`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_timeentry`(`timent_RowID` INT, `timent_OrganizationID` INT, `timent_CreatedBy` INT, `timent_LastUpdBy` INT, `timent_PayPeriodID` INT, `timent_EmployeeID` INT, `timent_TotalPay` DECIMAL(10,2), `timent_TotalHoursWorked` DECIMAL(10,2), `timent_TotalVLConsumed` DECIMAL(10,2), `timent_TotalSLConsumed` DECIMAL(10,2)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_timeentry`(`timent_RowID` INT, `timent_OrganizationID` INT, `timent_CreatedBy` INT, `timent_LastUpdBy` INT, `timent_PayPeriodID` INT, `timent_EmployeeID` INT, `timent_TotalPay` DECIMAL(10,2), `timent_TotalHoursWorked` DECIMAL(10,2), `timent_TotalVLConsumed` DECIMAL(10,2), `timent_TotalSLConsumed` DECIMAL(10,2)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

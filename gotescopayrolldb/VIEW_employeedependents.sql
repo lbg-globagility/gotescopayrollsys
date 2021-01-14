@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeedependents`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeedependents`(IN `edep_ParentEmployeeID` INT, IN `edep_OrganizationID` INT)
+CREATE PROCEDURE `VIEW_employeedependents`(IN `edep_ParentEmployeeID` INT, IN `edep_OrganizationID` INT)
     DETERMINISTIC
     COMMENT 'view all employee''s dependent(s) base on emloyee RowID and organization'
 BEGIN

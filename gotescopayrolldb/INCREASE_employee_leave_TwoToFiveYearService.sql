@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `INCREASE_employee_leave_TwoToFiveYearService`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `INCREASE_employee_leave_TwoToFiveYearService`(IN `OrganizID` INT)
+CREATE PROCEDURE `INCREASE_employee_leave_TwoToFiveYearService`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

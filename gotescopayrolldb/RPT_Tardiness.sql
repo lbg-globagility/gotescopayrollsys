@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_Tardiness`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_Tardiness`(IN `OrganizID` INT, IN `DateLateFrom` DATE, IN `DateLateTo` DATE)
+CREATE PROCEDURE `RPT_Tardiness`(IN `OrganizID` INT, IN `DateLateFrom` DATE, IN `DateLateTo` DATE)
     DETERMINISTIC
 BEGIN
 

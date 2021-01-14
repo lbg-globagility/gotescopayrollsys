@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_LeavePending`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_LeavePending`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_LeavePending`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

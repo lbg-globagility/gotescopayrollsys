@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `PAYTODATE_OF_NoOfPayPeriod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `PAYTODATE_OF_NoOfPayPeriod`(
-	`EmpLoanEffectiveDateFrom` DATE,
+CREATE FUNCTION `PAYTODATE_OF_NoOfPayPeriod`(`EmpLoanEffectiveDateFrom` DATE,
 	`EmpLoanNoOfPayPeriod` INT,
 	`Employee_RowID` INT,
 	`LoanDeductSched` VARCHAR(100)

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `INSUPD_monthlyemployeerestdaypayment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_monthlyemployeerestdaypayment`(
+CREATE PROCEDURE `INSUPD_monthlyemployeerestdaypayment`(
 	IN `og_rowid` INT,
 	IN `e_rowid` INT,
 	IN `pp_rowid` INT,

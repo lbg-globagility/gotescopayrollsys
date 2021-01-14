@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `UndertimeLog`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `UndertimeLog`(
-	`timeStamp1` TIMESTAMP,
+CREATE FUNCTION `UndertimeLog`(`timeStamp1` TIMESTAMP,
 	`timeStamp2` TIMESTAMP,
 	`timeStamp3` TIMESTAMP
 

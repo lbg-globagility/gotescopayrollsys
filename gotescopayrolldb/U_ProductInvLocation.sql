@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `U_ProductInvLocation`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `U_ProductInvLocation`(IN `I_RowID` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_RunningTotalQty` INT(10), IN `I_TotalAvailbleItemQty` INT(10), IN `I_TotalReservedItemQty` INT(10)
+CREATE PROCEDURE `U_ProductInvLocation`(IN `I_RowID` INT(10), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_RunningTotalQty` INT(10), IN `I_TotalAvailbleItemQty` INT(10), IN `I_TotalReservedItemQty` INT(10)
 	)
     DETERMINISTIC
 BEGIN

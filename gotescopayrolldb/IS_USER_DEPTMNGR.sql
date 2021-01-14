@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `IS_USER_DEPTMNGR`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `IS_USER_DEPTMNGR`(`org_rowid` INT, `user_rowid` INT) RETURNS tinyint(1)
+CREATE FUNCTION `IS_USER_DEPTMNGR`(`org_rowid` INT, `user_rowid` INT) RETURNS tinyint(1)
     DETERMINISTIC
 BEGIN
 

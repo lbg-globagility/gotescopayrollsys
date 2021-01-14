@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_position`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_position`(`pos_RowID` INT, `pos_PositionName` VARCHAR(50), `pos_CreatedBy` INT, `pos_OrganizationID` INT, `pos_LastUpdBy` INT, `pos_ParentPositionID` INT, `pos_DivisionId` INT) RETURNS int(11)
+CREATE FUNCTION `INSUPD_position`(`pos_RowID` INT, `pos_PositionName` VARCHAR(50), `pos_CreatedBy` INT, `pos_OrganizationID` INT, `pos_LastUpdBy` INT, `pos_ParentPositionID` INT, `pos_DivisionId` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

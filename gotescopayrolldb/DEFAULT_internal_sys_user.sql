@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `DEFAULT_internal_sys_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `DEFAULT_internal_sys_user`() RETURNS int(11)
+CREATE FUNCTION `DEFAULT_internal_sys_user`() RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

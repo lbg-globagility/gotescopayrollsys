@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_productmovementhistory`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_productmovementhistory`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(11), IN `I_ProductID` INT(10), IN `I_Comments` VARCHAR(2000), IN `I_TransactionType` VARCHAR(50), IN `I_OriginatingInvLocationID` INT(11), IN `I_DestinationInvLocationID` INT(11), IN `I_CurrentQty` INT(11), IN `I_NewQty` INT(11), IN `I_OrigRackNo` INT(11), IN `I_OrigShelfNo` INT(11), IN `I_OrigColumnNo` INT(11), IN `I_DestinationRackNo` INT(11), IN `I_DestinationhelfNo` INT(11), IN `I_DestinationColumnNo` INT(11)
+CREATE PROCEDURE `I_productmovementhistory`(IN `I_OrganizationID` INT(10), IN `I_Created` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpd` DATETIME, IN `I_LastUpdBy` INT(11), IN `I_ProductID` INT(10), IN `I_Comments` VARCHAR(2000), IN `I_TransactionType` VARCHAR(50), IN `I_OriginatingInvLocationID` INT(11), IN `I_DestinationInvLocationID` INT(11), IN `I_CurrentQty` INT(11), IN `I_NewQty` INT(11), IN `I_OrigRackNo` INT(11), IN `I_OrigShelfNo` INT(11), IN `I_OrigColumnNo` INT(11), IN `I_DestinationRackNo` INT(11), IN `I_DestinationhelfNo` INT(11), IN `I_DestinationColumnNo` INT(11)
 )
     DETERMINISTIC
 BEGIN 

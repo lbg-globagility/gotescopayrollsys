@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `COMPUTE_TimeDifference`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `COMPUTE_TimeDifference`(`TimeOne` TIME, `TimeTwo` TIME) RETURNS decimal(11,6)
+CREATE FUNCTION `COMPUTE_TimeDifference`(`TimeOne` TIME, `TimeTwo` TIME) RETURNS decimal(11,6)
     DETERMINISTIC
 BEGIN
 

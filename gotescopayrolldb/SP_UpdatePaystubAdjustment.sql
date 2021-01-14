@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `SP_UpdatePaystubAdjustment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UpdatePaystubAdjustment`(IN `pa_EmployeeID` VARCHAR(50), IN `pa_PayPeriodID` INT, IN `User_RowID` INT)
+CREATE PROCEDURE `SP_UpdatePaystubAdjustment`(IN `pa_EmployeeID` VARCHAR(50), IN `pa_PayPeriodID` INT, IN `User_RowID` INT)
     DETERMINISTIC
 BEGIN
 

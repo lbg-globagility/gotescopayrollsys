@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_rawgrossincome`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_rawgrossincome`(`OrganizID` INT, `EmpID` INT, `PayPeriodF` DATE, `PayPeriodT` DATE) RETURNS text CHARSET latin1
+CREATE FUNCTION `GET_rawgrossincome`(`OrganizID` INT, `EmpID` INT, `PayPeriodF` DATE, `PayPeriodT` DATE) RETURNS text CHARSET latin1
     DETERMINISTIC
 BEGIN
 

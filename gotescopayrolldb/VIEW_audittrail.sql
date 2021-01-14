@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_audittrail`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_audittrail`(IN `OrganizID` INT, IN `View_ID` INT, IN `UserID` INT, IN `pagenumber` INT)
+CREATE PROCEDURE `VIEW_audittrail`(IN `OrganizID` INT, IN `View_ID` INT, IN `UserID` INT, IN `pagenumber` INT)
     DETERMINISTIC
 BEGIN
 	

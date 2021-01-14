@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_leave_ledger`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_leave_ledger`(IN `OrganizID` INT, IN `paramDateFrom` DATE, IN `paramDateTo` DATE, IN `PayPeriodDateFromID` INT, IN `PayPeriodDateToID` INT)
+CREATE PROCEDURE `RPT_leave_ledger`(IN `OrganizID` INT, IN `paramDateFrom` DATE, IN `paramDateTo` DATE, IN `PayPeriodDateFromID` INT, IN `PayPeriodDateToID` INT)
     DETERMINISTIC
 BEGIN
 

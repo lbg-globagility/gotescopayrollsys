@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_employeerateperday`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_employeerateperday`(`EmpID` INT, `OrgID` INT, `paramDate` DATE) RETURNS decimal(11,6)
+CREATE FUNCTION `GET_employeerateperday`(`EmpID` INT, `OrgID` INT, `paramDate` DATE) RETURNS decimal(11,6)
     DETERMINISTIC
 BEGIN
 

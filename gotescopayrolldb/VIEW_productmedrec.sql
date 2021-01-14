@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_productmedrec`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_productmedrec`(IN `pmed_OrganizationID` INT, IN `pmed_CategoryID` INT)
+CREATE PROCEDURE `VIEW_productmedrec`(IN `pmed_OrganizationID` INT, IN `pmed_CategoryID` INT)
     DETERMINISTIC
     COMMENT 'view the medical illness of an employee according to date from-to of employee''s medical record(s) and organization'
 BEGIN

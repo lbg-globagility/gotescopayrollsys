@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_lastdateofdayname`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `GET_lastdateofdayname`(`ParamDate` DATE, `DayNameIndex` CHAR(2)) RETURNS date
+CREATE FUNCTION `GET_lastdateofdayname`(`ParamDate` DATE, `DayNameIndex` CHAR(2)) RETURNS date
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DEL_employeeallowance`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `DEL_employeeallowance`(IN `EmpAllowanceRowID` INT)
+CREATE PROCEDURE `DEL_employeeallowance`(IN `EmpAllowanceRowID` INT)
     DETERMINISTIC
 BEGIN
 

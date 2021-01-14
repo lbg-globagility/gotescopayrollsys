@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeeawards`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeeawards`(`eawa_RowID` INT, `eawa_OrganizationID` INT, `eawa_Created` TIMESTAMP, `eawa_CreatedBy` INT, `eawa_LastUpd` DATETIME, `eawa_LastUpdBy` INT, `eawa_EmployeeID` INT, `eawa_AwardType` VARCHAR(500), `eawa_AwardDescription` VARCHAR(500), `eawa_AwardDate` VARCHAR(500)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeeawards`(`eawa_RowID` INT, `eawa_OrganizationID` INT, `eawa_Created` TIMESTAMP, `eawa_CreatedBy` INT, `eawa_LastUpd` DATETIME, `eawa_LastUpdBy` INT, `eawa_EmployeeID` INT, `eawa_AwardType` VARCHAR(500), `eawa_AwardDescription` VARCHAR(500), `eawa_AwardDate` VARCHAR(500)) RETURNS int(11)
     DETERMINISTIC
     COMMENT 'will insert a row and return its RowID if ''eawa_int'' don''t exist in employeeawards table or else will update the table base on ''eawa_int'''
 BEGIN

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_EmployeeLackRequirements`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `DBoard_EmployeeLackRequirements`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_EmployeeLackRequirements`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

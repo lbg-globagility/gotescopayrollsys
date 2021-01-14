@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_position`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_position`(IN `I_PositionName` VARCHAR(50), IN `I_LastUpd` DATETIME, IN `I_Created` DATETIME, IN `I_CreatedBy` INT(11), IN `I_OrganizationID` INT(11), IN `I_LastUpdBy` INT(11)
+CREATE PROCEDURE `I_position`(IN `I_PositionName` VARCHAR(50), IN `I_LastUpd` DATETIME, IN `I_Created` DATETIME, IN `I_CreatedBy` INT(11), IN `I_OrganizationID` INT(11), IN `I_LastUpdBy` INT(11)
 	)
     DETERMINISTIC
 BEGIN 

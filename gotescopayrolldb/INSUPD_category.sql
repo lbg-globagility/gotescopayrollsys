@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_category`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_category`(`cat_RowID` INT, `cat_CategoryName` VARCHAR(50), `cat_OrganizationID` INT, `cat_CatalogID` INT) RETURNS int(11)
+CREATE FUNCTION `INSUPD_category`(`cat_RowID` INT, `cat_CategoryName` VARCHAR(50), `cat_OrganizationID` INT, `cat_CatalogID` INT) RETURNS int(11)
     DETERMINISTIC
     COMMENT 'will insert a row and return its RowID if ''cat_RowID'' don''t exist in category table or else will update the table base on ''cat_RowID'''
 BEGIN

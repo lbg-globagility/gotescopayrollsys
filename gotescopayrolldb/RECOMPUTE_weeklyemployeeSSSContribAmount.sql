@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RECOMPUTE_weeklyemployeeSSSContribAmount`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RECOMPUTE_weeklyemployeeSSSContribAmount`(IN `OrganizID` INT, IN `PayPeriodID` INT)
+CREATE PROCEDURE `RECOMPUTE_weeklyemployeeSSSContribAmount`(IN `OrganizID` INT, IN `PayPeriodID` INT)
     DETERMINISTIC
 BEGIN
 

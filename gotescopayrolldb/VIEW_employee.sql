@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employee`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employee`(IN `e_OrganizationID` INT, IN `pagination` INT)
+CREATE PROCEDURE `VIEW_employee`(IN `e_OrganizationID` INT, IN `pagination` INT)
     DETERMINISTIC
     COMMENT 'view all employee base on organization'
 BEGIN

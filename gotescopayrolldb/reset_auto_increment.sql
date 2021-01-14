@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `reset_auto_increment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `reset_auto_increment`(IN `_table` VARCHAR(64))
+CREATE PROCEDURE `reset_auto_increment`(IN `_table` VARCHAR(64))
     DETERMINISTIC
 BEGIN
 

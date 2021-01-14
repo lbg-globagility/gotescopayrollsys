@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeetimeentries`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeetimeentries`(
-	`etent_RowID` INT,
+CREATE FUNCTION `INSUPD_employeetimeentries`(`etent_RowID` INT,
 	`etent_OrganizationID` INT,
 	`etent_CreatedBy` INT,
 	`etent_LastUpdBy` INT,

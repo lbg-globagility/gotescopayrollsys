@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_Users`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_Users`(IN `I_LastName` VARCHAR(50), IN `I_FirstName` VARCHAR(50), IN `I_MiddleName` VARCHAR(50), IN `I_UserID` VARCHAR(50), IN `I_Password` VARCHAR(50), IN `I_OrganizationID` INT(11), IN `I_PositionID` INT(11), IN `I_Created` DATETIME, IN `I_LastUpdBy` INT(11), IN `I_CreatedBy` INT(11), IN `I_LastUpd` DATETIME, IN `I_Status` VARCHAR(10)
+CREATE PROCEDURE `I_Users`(IN `I_LastName` VARCHAR(50), IN `I_FirstName` VARCHAR(50), IN `I_MiddleName` VARCHAR(50), IN `I_UserID` VARCHAR(50), IN `I_Password` VARCHAR(50), IN `I_OrganizationID` INT(11), IN `I_PositionID` INT(11), IN `I_Created` DATETIME, IN `I_LastUpdBy` INT(11), IN `I_CreatedBy` INT(11), IN `I_LastUpd` DATETIME, IN `I_Status` VARCHAR(10)
 , IN `I_EmailAddress` VARCHAR(50)
 , IN `I_dept_mngr_rowid` INT)
     DETERMINISTIC

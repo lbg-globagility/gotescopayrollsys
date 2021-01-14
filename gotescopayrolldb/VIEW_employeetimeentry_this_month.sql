@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeetimeentry_this_month`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_employeetimeentry_this_month`(IN `OrganizID` INT, IN `EmpRowID` INT, IN `ParamDate` DATE)
+CREATE PROCEDURE `VIEW_employeetimeentry_this_month`(IN `OrganizID` INT, IN `EmpRowID` INT, IN `ParamDate` DATE)
     DETERMINISTIC
 BEGIN
 

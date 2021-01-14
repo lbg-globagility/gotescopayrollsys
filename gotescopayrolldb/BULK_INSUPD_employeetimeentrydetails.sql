@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `BULK_INSUPD_employeetimeentrydetails`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `BULK_INSUPD_employeetimeentrydetails`(IN `organiz_rowid` INT, IN `user_rowid` INT, IN `date_from` DATE, IN `date_to` DATE, IN `import_id` INT)
+CREATE PROCEDURE `BULK_INSUPD_employeetimeentrydetails`(IN `organiz_rowid` INT, IN `user_rowid` INT, IN `date_from` DATE, IN `date_to` DATE, IN `import_id` INT)
     DETERMINISTIC
 BEGIN
 

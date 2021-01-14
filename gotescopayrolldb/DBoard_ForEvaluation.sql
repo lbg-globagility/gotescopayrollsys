@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_ForEvaluation`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_ForEvaluation`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_ForEvaluation`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

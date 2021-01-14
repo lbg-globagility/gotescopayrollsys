@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_ProdImport`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_ProdImport`(IN `I_Name` VARCHAR(200), IN `I_OrganizationID` INT(11), IN `I_PartNo` VARCHAR(200), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_Category` VARCHAR(50), IN `I_Catalog` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_UnitPrice` DECIMAL(10,2), IN `I_ReorderPoint` INT(10), IN `I_UnitOfMeasure` VARCHAR(50)
+CREATE PROCEDURE `I_ProdImport`(IN `I_Name` VARCHAR(200), IN `I_OrganizationID` INT(11), IN `I_PartNo` VARCHAR(200), IN `I_Created` DATETIME, IN `I_LastUpd` DATETIME, IN `I_CreatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_Category` VARCHAR(50), IN `I_Catalog` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_UnitPrice` DECIMAL(10,2), IN `I_ReorderPoint` INT(10), IN `I_UnitOfMeasure` VARCHAR(50)
 , IN `I_CategoryID` INT(11), IN `I_BrandName` VARCHAR(50))
     DETERMINISTIC
 BEGIN

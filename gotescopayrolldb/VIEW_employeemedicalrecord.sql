@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeemedicalrecord`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeemedicalrecord`(IN `emedr_RowID` INT, IN `emedr_OrganizationID` INT)
+CREATE PROCEDURE `VIEW_employeemedicalrecord`(IN `emedr_RowID` INT, IN `emedr_OrganizationID` INT)
     DETERMINISTIC
     COMMENT 'view the employee''s medical record(s) base on date from-to, employee RowID and organization'
 BEGIN

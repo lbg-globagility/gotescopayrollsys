@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeemedicalrecord`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeemedicalrecord`(`emedrec_RowID` INT, `emedrec_OrganizationID` INT, `emedrec_Created` TIMESTAMP, `emedrec_CreatedBy` INT, `emedrec_LastUpdBy` INT, `emedrec_EmployeeID` INT, `emedrec_DateFrom` DATE, `emedrec_DateTo` DATE, `emedrec_ProductID` INT, `emedrec_Finding` VARCHAR(50)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeemedicalrecord`(`emedrec_RowID` INT, `emedrec_OrganizationID` INT, `emedrec_Created` TIMESTAMP, `emedrec_CreatedBy` INT, `emedrec_LastUpdBy` INT, `emedrec_EmployeeID` INT, `emedrec_DateFrom` DATE, `emedrec_DateTo` DATE, `emedrec_ProductID` INT, `emedrec_Finding` VARCHAR(50)) RETURNS int(11)
     DETERMINISTIC
     COMMENT 'will insert a row and return its RowID if ''emedrecID'' don''t exist in employeemedicalrecord table or else will update the table base on ''emedrecID'''
 BEGIN

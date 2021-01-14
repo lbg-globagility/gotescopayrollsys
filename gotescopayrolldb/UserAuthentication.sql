@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `UserAuthentication`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `UserAuthentication`(`user_name` VARCHAR(90), `pass_word` VARCHAR(90)) RETURNS int(11)
+CREATE FUNCTION `UserAuthentication`(`user_name` VARCHAR(90), `pass_word` VARCHAR(90)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

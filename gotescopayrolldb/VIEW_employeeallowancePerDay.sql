@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeallowancePerDay`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeallowancePerDay`(IN `OrganizID` INT, IN `PayPeriod_To` DATE, IN `IsTaxable` TEXT)
+CREATE PROCEDURE `VIEW_employeeallowancePerDay`(IN `OrganizID` INT, IN `PayPeriod_To` DATE, IN `IsTaxable` TEXT)
     DETERMINISTIC
 BEGIN
 

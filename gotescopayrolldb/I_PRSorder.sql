@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `I_PRSorder`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `I_PRSorder`(IN `I_Created` DATETIME, IN `I_OrganizationID` INT(11), IN `I_OrderNumber` VARCHAR(10), IN `I_OrderDate` DATETIME, IN `I_Type` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_StatusAsOf` VARCHAR(50), IN `I_InvoiceNo` INT(11), IN `I_LastUpd` DATETIME, IN `I_reatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_InventoryLocationID` INT(11), IN `I_RelatedPRSId` INT(11), IN `I_RelatedRRId` INT(11)
+CREATE PROCEDURE `I_PRSorder`(IN `I_Created` DATETIME, IN `I_OrganizationID` INT(11), IN `I_OrderNumber` VARCHAR(10), IN `I_OrderDate` DATETIME, IN `I_Type` VARCHAR(50), IN `I_Status` VARCHAR(50), IN `I_StatusAsOf` VARCHAR(50), IN `I_InvoiceNo` INT(11), IN `I_LastUpd` DATETIME, IN `I_reatedBy` INT(11), IN `I_LastUpdBy` INT(11), IN `I_InventoryLocationID` INT(11), IN `I_RelatedPRSId` INT(11), IN `I_RelatedRRId` INT(11)
 )
     DETERMINISTIC
 BEGIN 

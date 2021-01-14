@@ -6,8 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GetSSSContribution`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GetSSSContribution`(
-	`employeeType` TEXT,
+CREATE FUNCTION `GetSSSContribution`(`employeeType` TEXT,
 	`workDaysPerYear` DECIMAL(10,2),
 	`salaryAmount` DECIMAL(10,2),
 	`salaryEffectiveDateFrom` DATE,

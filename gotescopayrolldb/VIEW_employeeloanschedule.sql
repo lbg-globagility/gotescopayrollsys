@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeloanschedule`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_employeeloanschedule`(IN `OrganizID` INT, IN `EmpRowID` INT)
+CREATE PROCEDURE `VIEW_employeeloanschedule`(IN `OrganizID` INT, IN `EmpRowID` INT)
     DETERMINISTIC
 BEGIN
 

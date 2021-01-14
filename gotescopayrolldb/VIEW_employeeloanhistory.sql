@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeeloanhistory`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeeloanhistory`(IN `ehist_EmployeeID` INT, IN `ehist_OrganizationID` INT)
+CREATE PROCEDURE `VIEW_employeeloanhistory`(IN `ehist_EmployeeID` INT, IN `ehist_OrganizationID` INT)
     DETERMINISTIC
 BEGIN
 

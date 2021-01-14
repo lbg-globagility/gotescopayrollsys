@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeepromotion`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` FUNCTION `INSUPD_employeepromotion`(`epro_RowID` INT, `OrganizID` INT, `UserRowID` INT, `epro_EmpRowID` INT, `epro_PositionFrom` VARCHAR(50), `epro_PositionTo` VARCHAR(50), `epro_EffectiveDate` DATE, `epro_CompensationChange` CHAR(1), `epro_CompensationValue` DECIMAL(11,2), `epro_EmpSalID` INT, `epro_Reason` VARCHAR(200)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeepromotion`(`epro_RowID` INT, `OrganizID` INT, `UserRowID` INT, `epro_EmpRowID` INT, `epro_PositionFrom` VARCHAR(50), `epro_PositionTo` VARCHAR(50), `epro_EffectiveDate` DATE, `epro_CompensationChange` CHAR(1), `epro_CompensationValue` DECIMAL(11,2), `epro_EmpSalID` INT, `epro_Reason` VARCHAR(200)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

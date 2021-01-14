@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `INSUPD_paystubitemallowances`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystubitemallowances`(
+CREATE PROCEDURE `INSUPD_paystubitemallowances`(
 	IN `og_rowid` INT,
 	IN `e_rowid` INT,
 	IN `pp_rowid` INT,

@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `FN_GetPaystubIDByEmployeeIDAndPayPeriodID`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `FN_GetPaystubIDByEmployeeIDAndPayPeriodID`(`ps_EmployeeID` VARCHAR(50), `ps_PayPeriodID` INT, `OrganizID` INT) RETURNS int(11)
+CREATE FUNCTION `FN_GetPaystubIDByEmployeeIDAndPayPeriodID`(`ps_EmployeeID` VARCHAR(50), `ps_PayPeriodID` INT, `OrganizID` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

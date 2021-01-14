@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_13thmonthpay`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_13thmonthpay`(IN `OrganizID` INT, IN `paramYear` INT)
+CREATE PROCEDURE `RPT_13thmonthpay`(IN `OrganizID` INT, IN `paramYear` INT)
     DETERMINISTIC
 BEGIN
 

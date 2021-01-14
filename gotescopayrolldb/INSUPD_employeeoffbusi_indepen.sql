@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `INSUPD_employeeoffbusi_indepen`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `INSUPD_employeeoffbusi_indepen`(`obf_RowID` INT, `obf_OrganizationID` INT, `obf_CreatedBy` INT, `obf_LastUpdBy` INT, `obf_EmployeeID` INT, `obf_Type` VARCHAR(50), `obf_StartTime` VARCHAR(50), `obf_EndTime` VARCHAR(50), `obf_StartDate` DATE, `obf_EndDate` DATE, `obf_Reason` VARCHAR(500), `obf_Comments` VARCHAR(2000), `obf_Image` LONGBLOB, `obf_OffBusStatus` VARCHAR(500)) RETURNS int(11)
+CREATE FUNCTION `INSUPD_employeeoffbusi_indepen`(`obf_RowID` INT, `obf_OrganizationID` INT, `obf_CreatedBy` INT, `obf_LastUpdBy` INT, `obf_EmployeeID` INT, `obf_Type` VARCHAR(50), `obf_StartTime` VARCHAR(50), `obf_EndTime` VARCHAR(50), `obf_StartDate` DATE, `obf_EndDate` DATE, `obf_Reason` VARCHAR(500), `obf_Comments` VARCHAR(2000), `obf_Image` LONGBLOB, `obf_OffBusStatus` VARCHAR(500)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

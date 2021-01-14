@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_paystub`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_paystub`(IN `paystb_OrganizationID` INT, IN `paystb_EmployeeID` INT, IN `paystb_PayPeriodID` INT)
+CREATE PROCEDURE `VIEW_paystub`(IN `paystb_OrganizationID` INT, IN `paystb_EmployeeID` INT, IN `paystb_PayPeriodID` INT)
     DETERMINISTIC
 BEGIN
 

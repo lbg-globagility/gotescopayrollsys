@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `INSUPD_paystub_proc`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `INSUPD_paystub_proc`(
+CREATE PROCEDURE `INSUPD_paystub_proc`(
 	IN `pstub_RowID` INT,
 	IN `pstub_OrganizationID` INT,
 	IN `pstub_CreatedBy` INT,

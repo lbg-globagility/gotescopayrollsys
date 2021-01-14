@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_loans`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_loans`(IN `OrganizID` INT, IN `PayDateFrom` DATE, IN `PayDateTo` DATE, IN `LoanTypeID` INT)
+CREATE PROCEDURE `RPT_loans`(IN `OrganizID` INT, IN `PayDateFrom` DATE, IN `PayDateTo` DATE, IN `LoanTypeID` INT)
     DETERMINISTIC
 BEGIN
 

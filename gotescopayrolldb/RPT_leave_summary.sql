@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_leave_summary`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_leave_summary`(
+CREATE PROCEDURE `RPT_leave_summary`(
 	IN `org_rowid` INT,
 	IN `emp_rowid` INT,
 	IN `date_from` DATE,

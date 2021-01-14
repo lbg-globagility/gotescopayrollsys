@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `IsEndOfMonth_PayPeriod`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `IsEndOfMonth_PayPeriod`(`payperiodRowID` INT, `selectyear` INT) RETURNS int(11)
+CREATE FUNCTION `IsEndOfMonth_PayPeriod`(`payperiodRowID` INT, `selectyear` INT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 

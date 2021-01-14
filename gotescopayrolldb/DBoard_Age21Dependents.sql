@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `DBoard_Age21Dependents`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DBoard_Age21Dependents`(IN `OrganizID` INT)
+CREATE PROCEDURE `DBoard_Age21Dependents`(IN `OrganizID` INT)
     DETERMINISTIC
 BEGIN
 

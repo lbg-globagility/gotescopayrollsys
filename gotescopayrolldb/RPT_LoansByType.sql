@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RPT_LoansByType`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `RPT_LoansByType`(IN `og_rowid` INT, IN `pay_datefrom` DATE, IN `pay_dateto` DATE, IN `loan_typeid` INT)
+CREATE PROCEDURE `RPT_LoansByType`(IN `og_rowid` INT, IN `pay_datefrom` DATE, IN `pay_dateto` DATE, IN `loan_typeid` INT)
 BEGIN
 
 DECLARE decimal_size INT(11) DEFAULT 2;

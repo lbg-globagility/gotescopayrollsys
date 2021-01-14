@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `view_proc`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `view_proc`(IN `I_ViewName` VARCHAR(100), IN `I_OrganizationID` INT(10)
+CREATE PROCEDURE `view_proc`(IN `I_ViewName` VARCHAR(100), IN `I_OrganizationID` INT(10)
 )
     DETERMINISTIC
 BEGIN 

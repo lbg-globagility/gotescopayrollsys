@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `INS_audittrail`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `INS_audittrail`(IN `au_CreatedBy` INT, IN `au_LastUpdBy` INT, IN `au_OrganizationID` INT, IN `au_ViewID` INT, IN `au_FieldChanged` VARCHAR(200), IN `au_ChangedRowID` VARCHAR(50), IN `au_OldValue` VARCHAR(200), IN `au_NewValue` VARCHAR(200), IN `au_ActionPerformed` VARCHAR(50))
+CREATE PROCEDURE `INS_audittrail`(IN `au_CreatedBy` INT, IN `au_LastUpdBy` INT, IN `au_OrganizationID` INT, IN `au_ViewID` INT, IN `au_FieldChanged` VARCHAR(200), IN `au_ChangedRowID` VARCHAR(50), IN `au_OldValue` VARCHAR(200), IN `au_NewValue` VARCHAR(200), IN `au_ActionPerformed` VARCHAR(50))
     DETERMINISTIC
 BEGIN
 

@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeecertification`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeecertification`(IN `ecert_EmployeeID` INT, IN `ecert_OrganizationID` INT)
+CREATE PROCEDURE `VIEW_employeecertification`(IN `ecert_EmployeeID` INT, IN `ecert_OrganizationID` INT)
     DETERMINISTIC
     COMMENT 'view all employee''s certification(s) base on employee RowID and organization'
 BEGIN

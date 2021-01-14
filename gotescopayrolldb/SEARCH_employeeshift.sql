@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `SEARCH_employeeshift`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `SEARCH_employeeshift`(IN `OrganizID` INT, IN `DivisionRowID` INT, IN `EmployeeIDString` VARCHAR(50))
+CREATE PROCEDURE `SEARCH_employeeshift`(IN `OrganizID` INT, IN `DivisionRowID` INT, IN `EmployeeIDString` VARCHAR(50))
     DETERMINISTIC
 BEGIN
 

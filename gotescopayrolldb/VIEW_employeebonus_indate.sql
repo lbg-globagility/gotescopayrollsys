@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_employeebonus_indate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `VIEW_employeebonus_indate`(IN `ebon_EmployeeID` INT, IN `ebon_OrganizationID` INT, IN `effectivedatefrom` DATE, IN `effectivedateto` DATE)
+CREATE PROCEDURE `VIEW_employeebonus_indate`(IN `ebon_EmployeeID` INT, IN `ebon_OrganizationID` INT, IN `effectivedatefrom` DATE, IN `effectivedateto` DATE)
     DETERMINISTIC
 BEGIN
 

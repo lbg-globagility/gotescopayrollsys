@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `VIEW_division`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `VIEW_division`(IN `OrganizID` INT, IN `SearchDivisionName` VARCHAR(100))
+CREATE PROCEDURE `VIEW_division`(IN `OrganizID` INT, IN `SearchDivisionName` VARCHAR(100))
     DETERMINISTIC
 BEGIN
 

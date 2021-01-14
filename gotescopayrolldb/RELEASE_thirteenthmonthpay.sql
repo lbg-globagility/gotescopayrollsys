@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `RELEASE_thirteenthmonthpay`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RELEASE_thirteenthmonthpay`(
+CREATE PROCEDURE `RELEASE_thirteenthmonthpay`(
 	IN `OrganizID` INT,
 	IN `PayPeriodRowID` INT,
 	IN `UserRowID` INT

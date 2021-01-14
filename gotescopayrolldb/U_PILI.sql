@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `U_PILI`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `U_PILI`(IN `I_RowID` INT(10), IN `I_AvailableQty` INT(10), IN `I_DistributedQty` INT(10), IN `I_RackNo` INT(10), IN `I_ShelfNo` INT(10), IN `I_ColumnNo` INT(10)
+CREATE PROCEDURE `U_PILI`(IN `I_RowID` INT(10), IN `I_AvailableQty` INT(10), IN `I_DistributedQty` INT(10), IN `I_RackNo` INT(10), IN `I_ShelfNo` INT(10), IN `I_ColumnNo` INT(10)
 )
     DETERMINISTIC
 BEGIN 

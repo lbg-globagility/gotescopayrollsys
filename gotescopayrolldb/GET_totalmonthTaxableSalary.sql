@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS `GET_totalmonthTaxableSalary`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `GET_totalmonthTaxableSalary`(`EmployeeRowID` INT, `OrganizRowID` INT, `PayPeriodRowID` INT) RETURNS decimal(11,2)
+CREATE FUNCTION `GET_totalmonthTaxableSalary`(`EmployeeRowID` INT, `OrganizRowID` INT, `PayPeriodRowID` INT) RETURNS decimal(11,2)
     DETERMINISTIC
 BEGIN
 

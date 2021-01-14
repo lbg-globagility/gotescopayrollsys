@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `UpdatePredictedLoans`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdatePredictedLoans`()
+CREATE PROCEDURE `UpdatePredictedLoans`()
 BEGIN
 
 DECLARE i, orgCount INT(11) DEFAULT 0;

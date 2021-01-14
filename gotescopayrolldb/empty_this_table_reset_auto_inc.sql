@@ -6,7 +6,7 @@
 
 DROP PROCEDURE IF EXISTS `empty_this_table_reset_auto_inc`;
 DELIMITER //
-CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `empty_this_table_reset_auto_inc`(IN `table_name` VARCHAR(150))
+CREATE PROCEDURE `empty_this_table_reset_auto_inc`(IN `table_name` VARCHAR(150))
     DETERMINISTIC
 BEGIN
 

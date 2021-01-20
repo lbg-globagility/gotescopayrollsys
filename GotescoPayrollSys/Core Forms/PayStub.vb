@@ -1954,10 +1954,13 @@ Public Class PayStub
                                       Dim str_quer_semimon_allowance =
                                           String.Concat("SELECT i.*",
                                                         ",i.AllowanceAmount - TRIM(SUM(i.HoursToLess * (i.DailyAllowance / 8)))+0 `TotalAllowanceAmount`",
-                                                        " FROM paystubitem_sum_semimon_allowance_group_prodid i",
-                                                        " WHERE i.OrganizationID = ?og_rowid",
-                                                        " AND i.TaxableFlag = ?is_taxable",
-                                                        " AND i.`Date` BETWEEN ?date_from AND ?date_to",
+                                                        " FROM (SELECT
+		                                                        x.*
+		                                                        FROM paystubitem_sum_semimon_allowance_group_prodid x
+		                                                        WHERE x.OrganizationID = ?og_rowid
+		                                                        AND x.TaxableFlag = ?is_taxable
+		                                                        ) i",
+                                                        " WHERE i.`Date` BETWEEN ?date_from AND ?date_to",
                                                         " GROUP BY i.EmployeeID, i.ProductID;")
                                       emp_allowanceSemiM = New SQL(str_quer_semimon_allowance,
                                                                                        New Object() {org_rowid,

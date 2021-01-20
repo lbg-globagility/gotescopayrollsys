@@ -208,7 +208,7 @@ ps.RowID
   ( ps.TotalLoans
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 + ps.TotalEmpWithholdingTax
-	 + ROUND(IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0), 2)
+	 + IF(e.EmployeeType='Daily', 0, ROUND(IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0), 2))
 	 + IFNULL(ua.LateAllowance, 0)
 	 + IFNULL(ua.UndertimeAllowance, 0)
 	 + IFNULL(ua.AbsentAllowance, 0)

@@ -209,9 +209,9 @@ ps.RowID
     + (ps.TotalEmpSSS + ps.TotalEmpPhilhealth + ps.TotalEmpHDMF)
 	 + ps.TotalEmpWithholdingTax
 	 + ROUND(IFNULL(et.Absent, 0) + IFNULL(et.HoursLateAmount, 0) + IFNULL(et.UndertimeHoursAmount, 0), 2)
-	 + IFNULL(ua.LateAllowance, 0)
-	 + IFNULL(ua.UndertimeAllowance, 0)
-	 + IFNULL(ua.AbsentAllowance, 0)
+	 + (IFNULL(ua.LateAllowance, 0) + IFNULL(uda.LateAllowance, 0))
+	 + (IFNULL(ua.UndertimeAllowance, 0) + IFNULL(uda.UndertimeAllowance, 0))
+	 + (IFNULL(ua.AbsentAllowance, 0) + IFNULL(uda.AbsentAllowance, 0))
 	 ) `Column62`
 
 , ROUND(( @totalDeductions

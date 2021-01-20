@@ -1474,9 +1474,9 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
 
         Dim returnValue As Decimal
         If employeeEmployer = EmployeeEmployer.Employee Then
-            returnValue = sssBracket.EmployeeContributionAmount
+            returnValue = sssBracket.EmployeeContributionAmount + sssBracket.EmployeeMPFAmount
         ElseIf employeeEmployer = EmployeeEmployer.Employer Then
-            returnValue = sssBracket.EmployerContributionAmount
+            returnValue = sssBracket.EmployerContributionAmount + sssBracket.EmployerECAmount
         End If
 
         Return returnValue

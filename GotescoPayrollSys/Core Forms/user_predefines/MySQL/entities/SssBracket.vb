@@ -23,4 +23,5 @@ Public Class SssBracket
     Public Property HiddenData As Char
     Public Property EffectiveDateFrom As Date
     Public Property EffectiveDateTo As Date
+    Public Property EmployeeMPFAmount As Decimal
 End Class

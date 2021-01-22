@@ -24,4 +24,5 @@ Public Class SssBracket
     Public Property EffectiveDateFrom As Date
     Public Property EffectiveDateTo As Date
     Public Property EmployeeMPFAmount As Decimal
+    Public Property EmployerMPFAmount As Decimal
 End Class

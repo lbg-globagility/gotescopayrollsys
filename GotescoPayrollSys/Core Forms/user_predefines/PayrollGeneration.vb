@@ -1476,7 +1476,7 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         If employeeEmployer = EmployeeEmployer.Employee Then
             returnValue = sssBracket.EmployeeContributionAmount + sssBracket.EmployeeMPFAmount
         ElseIf employeeEmployer = EmployeeEmployer.Employer Then
-            returnValue = sssBracket.EmployerContributionAmount + sssBracket.EmployerECAmount
+            returnValue = sssBracket.EmployerContributionAmount + sssBracket.EmployerECAmount + sssBracket.EmployerMPFAmount
         End If
 
         Return returnValue

@@ -29,7 +29,7 @@ SET @hourlyAllowance=0.00;
 DROP TEMPORARY TABLE IF EXISTS unearneddailyallowance0; CREATE TEMPORARY TABLE unearneddailyallowance0
 SELECT
 ea.EmployeeID
-, (@hourlyAllowance := ea.AllowanceAmount / @eightHours) `HourlyAllowance`
+, (@hourlyAllowance := ea.AllowanceAmount / eightHours) `HourlyAllowance`
 
 , (@hourlyAllowance * et.HoursTardy) `LateAllowanceAmount`
 , (@hourlyAllowance * et.HoursUndertime) `UndertimeAllowanceAmount`

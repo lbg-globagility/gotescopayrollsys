@@ -340,6 +340,12 @@
       <DependentUpon>New SSS Monthly Report.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core Forms\REPORTS\SSS Monthly Report.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SSS Monthly Report.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Core Forms\REPORTS\ThirteenthMonthSummary.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -943,12 +949,6 @@
       <DependentUpon>Phil Health Monthly Report.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Core Forms\REPORTS\SSS Monthly Report.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SSS Monthly Report.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Core Forms\REPORTS\Tax Monthly Report.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1440,6 +1440,10 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>New SSS Monthly Report.vb</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\REPORTS\SSS Monthly Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>SSS Monthly Report.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\rpt\FiledLeaves.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>FiledLeaves.vb</LastGenOutput>
@@ -1772,10 +1776,6 @@
     <EmbeddedResource Include="Core Forms\REPORTS\Phil Health Monthly Report.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Phil Health Monthly Report.vb</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core Forms\REPORTS\SSS Monthly Report.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>SSS Monthly Report.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\REPORTS\Tax Monthly Report.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

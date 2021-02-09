@@ -51,114 +51,77 @@ SELECT pyp.PayToDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND p
 #Dont remove comments, used in testing
 /*DROP TEMPORARY TABLE IF EXISTS Temp_SSS_Monthly;
 CREATE TEMPORARY TABLE Temp_SSS_Monthly*/
-SELECT i.*
-FROM (
-		SELECT 
-		ee.SSSNo `DatCol1`
-		,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol2`
-		,psi.PayAmount `DatCol3`
-		
-		
-		
-		, ps.TotalCompSSS `DatCol4`
-		, pss.EmployerECAmount `DatCol5`
-		, (pss.EmployerECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
-		
-		, (CASE ee.EmployeeType
-			WHEN 'Fixed' THEN IFNULL((SELECT Salary FROM employeesalary
-										WHERE EmployeeID = ee.RowID
-										AND employeesalary.EffectiveDateFrom <= semimo_paydateto
-										AND semimo_paydatefrom <= employeesalary.EffectiveDateTo),0)
-			WHEN 'Monthly' THEN
-									IF(
-										#WHEN first time salary End of the month or First half
-										(IF(ee.AgencyID IS NOT NULL, IFNULL(d.SSSDeductSchedAgency,d.SSSDeductSched), d.SSSDeductSched)
-											= 'End of the month' AND
-										ee.StartDate BETWEEN semimo_paydatefrom_cutoff_to AND semimo_paydateto)
-										OR
-										(IF(ee.AgencyID IS NOT NULL, IFNULL(d.SSSDeductSchedAgency,d.SSSDeductSched), d.SSSDeductSched)
-											= 'First half' AND
-										ee.StartDate BETWEEN semimo_paydatefrom AND semimo_paydatefrom_cutoff_to)
-										,
-										#THEN compute by TotalDayPay
-										IFNULL((SELECT SUM(TotalDayPay - OvertimeHoursAmount) FROM employeetimeentry
-										WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
-										,
-										#ELSE
-										/*IF(
-											#WHEN first time salary Per pay period
-											(IF(ee.AgencyID IS NOT NULL, IFNULL(d.SSSDeductSchedAgency,d.SSSDeductSched), d.SSSDeductSched)
-											= 'Per pay period' AND
-											ee.StartDate BETWEEN semimo_paydatefrom AND semimo_paydateto)
-											#THEN check first for all possible combinations of pay
-											,*/
-										IFNULL((SELECT Salary FROM employeesalary
-										WHERE EmployeeID = ee.RowID
-										AND employeesalary.EffectiveDateFrom <= semimo_paydateto
-										AND semimo_paydatefrom <= employeesalary.EffectiveDateTo),0)
-										-
-										IFNULL((SELECT SUM(HoursLateAmount + UndertimeHoursAmount + Absent) FROM employeetimeentry
-										WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
-										+
-										IFNULL((SELECT SUM(NightDiffHoursAmount + NightDiffOTHoursAmount + AddedHolidayPayAmount) FROM employeetimeentry
-										WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
-									)
-			WHEN 'Daily' THEN IFNULL((SELECT SUM(TotalDayPay - OvertimeHoursAmount) FROM employeetimeentry
-										WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
-			END) AS `DatCol7`
-		
-		FROM paystub ps
-		INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=1 AND FIND_IN_SET(ee.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-		INNER JOIN product p ON p.PartNo='.SSS' AND p.OrganizationID=OrganizID
-		INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.OrganizationID=OrganizID AND psi.ProductID=p.RowID
-		INNER JOIN paysocialsecurity pss ON pss.EmployeeContributionAmount=psi.PayAmount
-		LEFT JOIN position po ON po.RowID=ee.PositionID
-		LEFT JOIN division d ON d.RowID=po.DivisionId
-		WHERE ps.OrganizationID=OrganizID
-		AND (ps.PayFromDate>=semimo_paydatefrom OR ps.PayToDate>=semimo_paydatefrom)
-		AND (ps.PayToDate<=semimo_paydateto OR ps.PayToDate<=semimo_paydateto)
-		AND IFNULL(psi.PayAmount,0)!=0
-	UNION
-		SELECT 
-		ee.SSSNo `DatCol1`
-		,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `DatCol2`
-		,psi.PayAmount `DatCol3`
-		
-		
-		
-		, ps.TotalCompSSS `DatCol4`
-		, pss.EmployerECAmount `DatCol5`
-		, (pss.EmployerECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
-		
-		, (CASE ee.EmployeeType
-			WHEN 'Fixed' THEN IFNULL((SELECT Salary FROM employeesalary
-										WHERE EmployeeID = ee.RowID
-										AND employeesalary.EffectiveDateFrom <= semimo_paydateto
-										AND semimo_paydatefrom <= employeesalary.EffectiveDateTo),0)
-			WHEN 'Monthly' THEN IFNULL((SELECT Salary FROM employeesalary
-										WHERE EmployeeID = ee.RowID
-										AND employeesalary.EffectiveDateFrom <= semimo_paydateto
-										AND semimo_paydatefrom <= employeesalary.EffectiveDateTo),0)
-										-
-										IFNULL((SELECT SUM(HoursLateAmount + UndertimeHoursAmount + Absent) FROM employeetimeentry
-										WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
-			WHEN 'Daily' THEN IFNULL((SELECT SUM(TotalDayPay) FROM employeetimeentry
-										WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
-			END) AS `DatCol7`
-		
-		FROM paystub ps
-		INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=4 AND FIND_IN_SET(ee.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-		INNER JOIN product p ON p.PartNo='.SSS' AND p.OrganizationID=OrganizID
-		INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.OrganizationID=OrganizID AND psi.ProductID=p.RowID
-		INNER JOIN paysocialsecurity pss ON pss.EmployeeContributionAmount=psi.PayAmount
-		LEFT JOIN position po ON po.RowID=ee.PositionID
-		LEFT JOIN division d ON d.RowID=po.DivisionId
-		WHERE ps.OrganizationID=OrganizID
-		AND (ps.PayFromDate>=wk_paydatefrom OR ps.PayToDate>=wk_paydatefrom)
-		AND (ps.PayToDate<=wk_paydateto OR ps.PayToDate<=wk_paydateto)
-		AND IFNULL(psi.PayAmount,0)!=0
-      ) i
-ORDER BY i.`DatCol2`
+SELECT 
+ee.SSSNo `DatCol1`
+,@fullName:=CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `FullName`
+,ps.TotalEmpSSS `DatCol3`
+
+
+
+, ps.TotalCompSSS `DatCol4`
+, pss.EmployerECAmount `DatCol5`
+, (pss.EmployerECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
+
+, @basicPay:=(CASE ee.EmployeeType
+	WHEN 'Fixed' THEN IFNULL((SELECT Salary FROM employeesalary
+								WHERE EmployeeID = ee.RowID
+								AND employeesalary.EffectiveDateFrom <= semimo_paydateto
+								AND semimo_paydatefrom <= employeesalary.EffectiveDateTo),0)
+	WHEN 'Monthly' THEN
+							IF(
+								#WHEN first time salary End of the month or First half
+								(IF(ee.AgencyID IS NOT NULL, IFNULL(d.SSSDeductSchedAgency,d.SSSDeductSched), d.SSSDeductSched)
+									= 'End of the month' AND
+								ee.StartDate BETWEEN semimo_paydatefrom_cutoff_to AND semimo_paydateto)
+								OR
+								(IF(ee.AgencyID IS NOT NULL, IFNULL(d.SSSDeductSchedAgency,d.SSSDeductSched), d.SSSDeductSched)
+									= 'First half' AND
+								ee.StartDate BETWEEN semimo_paydatefrom AND semimo_paydatefrom_cutoff_to)
+								,
+								#THEN compute by TotalDayPay
+								IFNULL((SELECT SUM(TotalDayPay - OvertimeHoursAmount) FROM employeetimeentry
+								WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
+								,
+								#ELSE
+								/*IF(
+									#WHEN first time salary Per pay period
+									(IF(ee.AgencyID IS NOT NULL, IFNULL(d.SSSDeductSchedAgency,d.SSSDeductSched), d.SSSDeductSched)
+									= 'Per pay period' AND
+									ee.StartDate BETWEEN semimo_paydatefrom AND semimo_paydateto)
+									#THEN check first for all possible combinations of pay
+									,*/
+								IFNULL((SELECT Salary FROM employeesalary
+								WHERE EmployeeID = ee.RowID
+								AND employeesalary.EffectiveDateFrom <= semimo_paydateto
+								AND semimo_paydatefrom <= employeesalary.EffectiveDateTo),0)
+								-
+								IFNULL((SELECT SUM(HoursLateAmount + UndertimeHoursAmount + Absent) FROM employeetimeentry
+								WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
+								+
+								IFNULL((SELECT SUM(NightDiffHoursAmount + NightDiffOTHoursAmount + AddedHolidayPayAmount) FROM employeetimeentry
+								WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
+							)
+	WHEN 'Daily' THEN IFNULL((SELECT SUM(TotalDayPay - OvertimeHoursAmount) FROM employeetimeentry
+								WHERE EmployeeID = ee.RowID AND Date BETWEEN semimo_paydatefrom AND semimo_paydateto),0)
+	END) AS `BasicPay`
+, CONCAT_WS(' - ', CAST(@fullName AS CHAR CHARACTER SET utf8), FORMAT(@basicPay, 2)) `DatCol2`
+
+, pss.EmployeeMPFAmount `DatCol7`
+, pss.EmployerMPFAmount `DatCol8`
+
+FROM paystub ps
+INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=1 AND FIND_IN_SET(ee.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
+
+LEFT JOIN `position` po ON po.RowID=ee.PositionID
+LEFT JOIN division d ON d.RowID=po.DivisionId
+
+INNER JOIN paysocialsecurity pss ON (pss.EmployeeContributionAmount + pss.EmployerContributionAmount + pss.EmployerECAmount + pss.EmployerMPFAmount)=(ps.TotalEmpSSS + ps.TotalCompSSS) AND LAST_DAY(paramDate) BETWEEN pss.EffectiveDateFrom AND pss.EffectiveDateTo 
+
+INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND LAST_DAY(paramDate) = LAST_DAY(STR_TO_DATE(CONCAT(pp.`Month`, '-', 1, '-', pp.`Year`), '%c-%e-%Y'))
+
+WHERE ps.OrganizationID=OrganizID
+AND (ps.TotalEmpSSS + ps.TotalCompSSS) > 0
+order BY CONCAT(ee.LastName, ee.FirstName)
 ;
 
 #Dont remove comments, used in testing

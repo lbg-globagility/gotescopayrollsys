@@ -1467,7 +1467,6 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
     Private Function SssCalculator(amount As Decimal, employeeEmployer As EmployeeEmployer) As Decimal
         Dim sssBracket = _sssBrackets.
             Where(Function(sss) sss.RangeFromAmount <= amount AndAlso sss.RangeToAmount >= amount).
-            Where(Function(sss) sss.EffectiveDateFrom >= PayDateFrom).
             FirstOrDefault
 
         If sssBracket Is Nothing Then Return 0

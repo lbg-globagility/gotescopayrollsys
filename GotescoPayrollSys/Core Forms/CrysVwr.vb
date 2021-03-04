@@ -151,15 +151,13 @@ Public Class CrysVwr
 
     Private Sub btnExportPayrollSummaToExcel_Click(sender As Object, e As EventArgs) Handles btnExportPayrollSummaToExcel.Click
 
-        Dim psefr As New PayrollSummaryExcelFormatReportProvider
+        Dim psefr As New PayrollSummaryExcelFormatReportProvider(is_actual)
 
         With psefr
 
             .PayperiodIDFrom = pp_rowid_from
 
             .PayperiodIDTo = pp_rowid_to
-
-            .IsActual = is_actual
 
             .SalaryDistribution = sal_distrib
 

@@ -101,6 +101,12 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
 #End Region
 
+#Region "Constructor"
+    Public Sub New(isActual As Boolean)
+        Me.IsActual = isActual
+    End Sub
+#End Region
+
 #Region "Properties"
 
     Property PayperiodIDFrom As Object
@@ -127,18 +133,6 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     End Property
 
-    Property IsActual As Boolean
-
-        Get
-            Return is_actual
-        End Get
-
-        Set(value As Boolean)
-            is_actual = value
-        End Set
-
-    End Property
-
     Property SalaryDistribution As String
 
         Get
@@ -156,6 +150,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
     Public Property GotescoReportName As String = String.Empty Implements IReportProvider.GotescoReportName
 
     Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
+    Public ReadOnly Property IsActual As Boolean
 
 #End Region
 

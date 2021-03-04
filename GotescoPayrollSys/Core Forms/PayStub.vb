@@ -7305,7 +7305,7 @@ Public Class PayStub
 
         Dim obj_sender = DirectCast(sender, ToolStripMenuItem)
 
-        Dim paysum As New PayrollSummaryExcelFormatReportProvider With {.IsActual = obj_sender.Tag}
+        Dim paysum As New PayrollSummaryExcelFormatReportProvider(CBool(obj_sender.Tag))
 
         paysum.Run()
 

@@ -34,11 +34,18 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
     Private Const EmployeeRowIDColumnName As String = "EmployeeRowID"
     Private Const PaystubIdColumnName As String = "PaystubId"
+    Private Const FIRST_WORKSHEET_NAME As String = "Sheet1"
+    Private Const SECOND_WORKSHEET_NAME As String = "Sheet2"
 
-    Private ReadOnly _reportColumns As IReadOnlyCollection(Of ReportColumn) = GetReportColumns()
+    Private Shared Function GetReportColumns(workSheetName As String) As ReadOnlyCollection(Of ReportColumn)
+        Const basicRateColumnHeaderText As String = "BASIC RATE"
+        Const allowanceRateColumnHeaderText As String = "ALLOW RATE"
 
-    Private Shared Function GetReportColumns() As ReadOnlyCollection(Of ReportColumn)
+        Const absentAmountSourceName As String = "AbsentAmount"
+        Const lateAmountSourceName As String = "LateAmount"
+        Const underTimeAmountSourceName As String = "UndertimeAmount"
 
+        Const netPayColumnHeaderText As String = "NET PAY"
         Dim reportColumns = New List(Of ReportColumn)({
                 New ReportColumn("PAY PERIOD", "PayperiodDescription", ColumnType.Text),
                 New ReportColumn("Code", "EmployeeNumber", ColumnType.Text),
@@ -46,14 +53,14 @@ Public Class PayrollSummaryExcelFormatReportProvider
                 New ReportColumn("", "FirstName", ColumnType.Text),
                 New ReportColumn("EMP. TYPE", "EmployeeType", ColumnType.Text),
                 New ReportColumn("Work days/year", "WorkDaysPerYear", ColumnType.Text),
-                New ReportColumn("BASIC RATE", "DeclaredSalary", [optional]:=True),
-                New ReportColumn("ALLOW RATE", "UndeclaredSalary", [optional]:=True),
+                New ReportColumn(basicRateColumnHeaderText, "DeclaredSalary", [optional]:=True),
+                New ReportColumn(allowanceRateColumnHeaderText, "UndeclaredSalary", [optional]:=True),
                 New ReportColumn("HRS", "AbsentHours", parentHeader:="ABSENT", [optional]:=True),
-                New ReportColumn("AMOUNT", "AbsentAmount", parentHeader:="ABSENT", [optional]:=True),
+                New ReportColumn("AMOUNT", absentAmountSourceName, parentHeader:="ABSENT", [optional]:=True),
                 New ReportColumn("HRS", "LateHours", parentHeader:="TARDINESS", [optional]:=True),
-                New ReportColumn("AMOUNT", "LateAmount", parentHeader:="TARDINESS", [optional]:=True),
+                New ReportColumn("AMOUNT", lateAmountSourceName, parentHeader:="TARDINESS", [optional]:=True),
                 New ReportColumn("HRS", "UndertimeHours", parentHeader:="UNDERTIME", [optional]:=True),
-                New ReportColumn("AMOUNT", "UndertimeAmount", parentHeader:="UNDERTIME", [optional]:=True),
+                New ReportColumn("AMOUNT", underTimeAmountSourceName, parentHeader:="UNDERTIME", [optional]:=True),
                 New ReportColumn("HRS", "RegularHours", parentHeader:="REGULAR"),
                 New ReportColumn("AMOUNT", "RegularAmount", parentHeader:="REGULAR"),
                 New ReportColumn("HRS", "OvertimeHours", parentHeader:="OVERTIME", [optional]:=True),
@@ -81,12 +88,68 @@ Public Class PayrollSummaryExcelFormatReportProvider
                 New ReportColumn("WTAX", "WithholdingTax", [optional]:=True),
                 New ReportColumn(TotalLoanColumnName, TotalLoanColumnName, [optional]:=True, isBreakdown:=True),
                 New ReportColumn(TotalNegativeAdjustmentColumnName, TotalNegativeAdjustmentColumnName, [optional]:=True, isBreakdown:=True),
-                New ReportColumn("NET PAY", "Net")
+                New ReportColumn(netPayColumnHeaderText, "Net")
             })
+
+        If workSheetName = FIRST_WORKSHEET_NAME Then
+            Dim basicRateReportColumn = reportColumns.OfType(Of ReportColumn).
+                Where(Function(rc) rc.Name = basicRateColumnHeaderText).
+                FirstOrDefault
+            If basicRateReportColumn IsNot Nothing Then
+                Dim reportColumn = reportColumns.IndexOf(basicRateReportColumn)
+                With reportColumns(reportColumn)
+                    .Name = "MONTHLY BASIC RATE"
+                    .Source = "MonthlySalary"
+                End With
+            End If
+
+            Dim netPayReportColumn = reportColumns.OfType(Of ReportColumn).
+                Where(Function(rc) rc.Name = netPayColumnHeaderText).
+                FirstOrDefault
+            If netPayReportColumn IsNot Nothing Then
+                Dim reportColumn = reportColumns.IndexOf(netPayReportColumn)
+                reportColumns(reportColumn).Source = "CustomNet"
+            End If
+
+            Dim excludedReportColumns = reportColumns.OfType(Of ReportColumn).
+                Where(Function(rc) {allowanceRateColumnHeaderText, TotalAllowanceColumnName}.Contains(rc.Name)).
+                ToList()
+
+            excludedReportColumns.
+                ForEach(Sub(rc)
+                            reportColumns.Remove(rc)
+                        End Sub)
+
+        ElseIf workSheetName = SECOND_WORKSHEET_NAME Then
+
+            Dim absentAmountReportColumn = reportColumns.OfType(Of ReportColumn).
+                Where(Function(rc) rc.Source = absentAmountSourceName).
+                FirstOrDefault
+            If absentAmountReportColumn IsNot Nothing Then
+                Dim reportColumn = reportColumns.IndexOf(absentAmountReportColumn)
+                reportColumns(reportColumn).Source = "AbsentAmountWithAllowance"
+            End If
+
+            Dim lateAmountReportColumn = reportColumns.OfType(Of ReportColumn).
+                Where(Function(rc) rc.Source = lateAmountSourceName).
+                FirstOrDefault
+            If lateAmountReportColumn IsNot Nothing Then
+                Dim reportColumn = reportColumns.IndexOf(lateAmountReportColumn)
+                reportColumns(reportColumn).Source = "LateAmountWithAllowance"
+            End If
+
+            Dim underTimeAmountReportColumn = reportColumns.OfType(Of ReportColumn).
+                Where(Function(rc) rc.Source = underTimeAmountSourceName).
+                FirstOrDefault
+            If underTimeAmountReportColumn IsNot Nothing Then
+                Dim reportColumn = reportColumns.IndexOf(underTimeAmountReportColumn)
+                reportColumns(reportColumn).Source = "UndertimeAmountWithAllowance"
+            End If
+
+        End If
 
         Return New ReadOnlyCollection(Of ReportColumn)(reportColumns)
     End Function
-
 
     Dim margin_size() As Decimal = New Decimal() {0.25D, 0.75D, 0.3D}
 
@@ -194,46 +257,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
                 Using xcl As New ExcelPackage(nfile)
 
-                    Dim workSheetName = "Sheet1"
+                    WriteSheet(FIRST_WORKSHEET_NAME, n_PayrollSummaDateSelection, dt, xcl)
 
-                    Dim wsheet = xcl.Workbook.Worksheets(workSheetName)
-
-                    If wsheet IsNot Nothing Then
-                        xcl.Workbook.Worksheets.Delete(wsheet)
-                    End If
-
-                    wsheet = xcl.Workbook.Worksheets.Add(workSheetName)
-
-                    Dim viewableColumns = GetViewableReportColumns(dt.Rows.OfType(Of DataRow).ToList(), _reportColumns)
-                    Dim adjustedDataColumns = AddBreakdownColumnHeaders(New List(Of ReportColumn)(viewableColumns))
-
-                    Dim lastColumnLetter = GetExcelColumnName(adjustedDataColumns.Count)
-
-                    Dim rowindex = ONEVALUE
-
-
-                    rowindex = CreateHeaders(CInt(n_PayrollSummaDateSelection.DateFromID), wsheet, adjustedDataColumns, rowindex)
-
-                    Dim details_start_row_index As Integer = rowindex
-                    rowindex = CreateDetails(dt, wsheet, adjustedDataColumns, rowindex)
-                    CreateTotals(wsheet, lastColumnLetter, rowindex, details_start_row_index, adjustedDataColumns)
-
-                    'add border
-                    Dim border_cell_range_formula = String.Join(":",
-                                                         String.Concat("A", details_start_row_index),
-                                                         String.Concat(lastColumnLetter, rowindex))
-
-                    Dim border_cell_range = wsheet.Cells(border_cell_range_formula)
-                    AddCellBorder(border_cell_range)
-
-                    wsheet.PrinterSettings.Orientation = eOrientation.Landscape
-                    wsheet.PrinterSettings.PaperSize = ePaperSize.Legal
-                    wsheet.PrinterSettings.TopMargin = margin_size(ONEVALUE)
-                    wsheet.PrinterSettings.BottomMargin = margin_size(ONEVALUE)
-                    wsheet.PrinterSettings.LeftMargin = margin_size(0)
-                    wsheet.PrinterSettings.RightMargin = margin_size(0)
-
-                    wsheet.Cells.AutoFitColumns(2, 22.71)
+                    WriteSheet(SECOND_WORKSHEET_NAME, n_PayrollSummaDateSelection, dt, xcl)
 
                     xcl.Save()
                 End Using
@@ -246,6 +272,51 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
         End If
 
+    End Sub
+
+    Private Sub WriteSheet(workSheetName As String, n_PayrollSummaDateSelection As PayrollSummaDateSelection, dt As DataTable, xcl As ExcelPackage)
+        If String.IsNullOrWhiteSpace(workSheetName) Then
+            Throw New ArgumentException($"'{NameOf(workSheetName)}' cannot be null or whitespace", NameOf(workSheetName))
+        End If
+
+        Dim wsheet = xcl.Workbook.Worksheets(workSheetName)
+
+        If wsheet IsNot Nothing Then
+            xcl.Workbook.Worksheets.Delete(wsheet)
+        End If
+
+        wsheet = xcl.Workbook.Worksheets.Add(workSheetName)
+
+        Dim viewableColumns = GetViewableReportColumns(dt.Rows.OfType(Of DataRow).ToList(), GetReportColumns(workSheetName))
+        Dim adjustedDataColumns = AddBreakdownColumnHeaders(New List(Of ReportColumn)(viewableColumns))
+
+        Dim lastColumnLetter = GetExcelColumnName(adjustedDataColumns.Count)
+
+        Dim rowindex = ONEVALUE
+
+
+        rowindex = CreateHeaders(CInt(n_PayrollSummaDateSelection.DateFromID), wsheet, adjustedDataColumns, rowindex)
+
+        Dim details_start_row_index As Integer = rowindex
+        rowindex = CreateDetails(dt, wsheet, adjustedDataColumns, rowindex)
+        CreateTotals(wsheet, lastColumnLetter, rowindex, details_start_row_index, adjustedDataColumns)
+
+        'add border
+        Dim border_cell_range_formula = String.Join(":",
+                                             String.Concat("A", details_start_row_index),
+                                             String.Concat(lastColumnLetter, rowindex))
+
+        Dim border_cell_range = wsheet.Cells(border_cell_range_formula)
+        AddCellBorder(border_cell_range)
+
+        wsheet.PrinterSettings.Orientation = eOrientation.Landscape
+        wsheet.PrinterSettings.PaperSize = ePaperSize.Legal
+        wsheet.PrinterSettings.TopMargin = margin_size(ONEVALUE)
+        wsheet.PrinterSettings.BottomMargin = margin_size(ONEVALUE)
+        wsheet.PrinterSettings.LeftMargin = margin_size(0)
+        wsheet.PrinterSettings.RightMargin = margin_size(0)
+
+        wsheet.Cells.AutoFitColumns(2, 22.71)
     End Sub
 
     Private Function GetViewableReportColumns(allEmployees As ICollection(Of DataRow), adjustedDataColumns As IReadOnlyCollection(Of ReportColumn)) As List(Of ReportColumn)

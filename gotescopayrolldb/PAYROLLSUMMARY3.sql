@@ -17,6 +17,8 @@ BEGIN
 
 DECLARE paydate_from
         ,paydat_to DATE;
+        
+DECLARE monthCount INT DEFAULT 12;
 
 SELECT
 pp.PayFromDate
@@ -30,6 +32,21 @@ INTO paydate_from
 CALL GetUnearnedAllowance(og_rowid, paydate_from, paydat_to);
 
 CALL GetAttendancePeriod(og_rowid, paydate_from, paydat_to, is_actual);
+
+DROP TEMPORARY TABLE IF EXISTS allowancepaystubitem;
+DROP TABLE IF EXISTS allowancepaystubitem;
+CREATE TEMPORARY TABLE allowancepaystubitem
+SELECT
+psi.*
+FROM paystubitem psi
+INNER JOIN product p ON p.RowID=psi.ProductID
+INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Allowance Type'
+INNER JOIN paystub ps ON ps.RowID=psi.PayStubID
+INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND pp.RowID=pp_rowid
+WHERE psi.OrganizationID=og_rowid
+AND psi.Undeclared=is_actual
+AND psi.PayAmount != 0
+;
 
 SELECT MAX(pp.PayToDate)
 FROM payperiod pp
@@ -58,15 +75,19 @@ ps.RowID
 
 , esa.BasicPay `DeclaredSalary`
 , esa.UndeclaredSalary
+, (IF(is_actual, esa.TrueSalary, esa.Salary) * IF(e.EmployeeType = 'Daily', (e.WorkDaysPerYear / monthCount), 1)) `MonthlySalary`
 
 , et.HoursLate `LateHours`
-, IFNULL(et.HoursLateAmount, 0) + IFNULL(ua.LateAllowance, 0) `LateAmount`
+, IFNULL(et.HoursLateAmount, 0) `LateAmount`
+, IFNULL(et.HoursLateAmount, 0) + IFNULL(ua.LateAllowance, 0) `LateAmountWithAllowance`
 
 , et.UndertimeHours `UndertimeHours`
-, IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(ua.UndertimeAllowance, 0) `UndertimeAmount`
+, IFNULL(et.UndertimeHoursAmount, 0) `UndertimeAmount`
+, IFNULL(et.UndertimeHoursAmount, 0) + IFNULL(ua.UndertimeAllowance, 0) `UndertimeAmountWithAllowance`
 
 , et.`AbsentHours` `AbsentHours`
-, IFNULL(et.Absent, 0) + IFNULL(ua.AbsentAllowance, 0) `AbsentAmount`
+, IFNULL(et.Absent, 0) `AbsentAmount`
+, IFNULL(et.Absent, 0) + IFNULL(ua.AbsentAllowance, 0) `AbsentAmountWithAllowance`
 
 , CONCAT_WS(' ', DATE_FORMAT(paydate_from, '%M'), DAY(paydate_from), '-', CONCAT(DAY(paydat_to), ','), YEAR(paydate_from) ) `PayperiodDescription`
 
@@ -102,7 +123,8 @@ ps.RowID
 , ps.TotalEmpPhilhealth `PhilHealth` 
 , ps.TotalEmpHDMF `HDMF` 
 , ps.TotalEmpWithholdingTax `WithholdingTax` 
-, ps.TotalNetSalary `Net` 
+, ps.TotalNetSalary `Net`
+, ps.TotalNetSalary - IFNULL(psi.`TotalAllowance`, 0) `CustomNet`
 
 FROM proper_payroll ps
 
@@ -202,6 +224,12 @@ LEFT JOIN (SELECT d.PayStubID
 
 LEFT JOIN unearnedallowance ua
 	ON ua.EmployeeID=ps.EmployeeID
+
+LEFT JOIN (SELECT *,
+				SUM(PayAmount) `TotalAllowance`
+				FROM allowancepaystubitem
+				GROUP BY PaystubID
+				) psi ON psi.PaystubID = ps.RowID
 
 WHERE ps.OrganizationID=og_rowid
 AND ps.PayPeriodID=pp_rowid

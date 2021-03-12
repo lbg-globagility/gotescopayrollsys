@@ -33,6 +33,7 @@ DECLARE wk_paydatefrom DATE;
 
 DECLARE wk_paydateto DATE;
 
+DECLARE includeOvertimeInSss BOOL DEFAULT FALSE;
 
 SELECT PagIbigDeductionSchedule FROM organization WHERE RowID=OrganizID INTO deduc_sched;
 
@@ -48,19 +49,21 @@ SELECT pyp.PayFromDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND
 	
 SELECT pyp.PayToDate FROM payperiod pyp WHERE pyp.OrganizationID=OrganizID AND pyp.`Year`=YEAR(paramDate) AND pyp.`Month`=(MONTH(paramDate) * 1) AND pyp.TotalGrossSalary=4 ORDER BY pyp.PayFromDate DESC, pyp.PayToDate DESC LIMIT 1 INTO wk_paydateto;
 
+SET includeOvertimeInSss = EXISTS(SELECT RowID FROM listofval l WHERE l.`Type`='SocialSecuritySystem' AND l.LIC='IncludeOvertime' AND l.DisplayValue=TRUE);
+
 #Dont remove comments, used in testing
 /*DROP TEMPORARY TABLE IF EXISTS Temp_SSS_Monthly;
 CREATE TEMPORARY TABLE Temp_SSS_Monthly*/
 SELECT 
 ee.SSSNo `DatCol1`
 ,@fullName:=CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) `FullName`
-,ps.TotalEmpSSS `DatCol3`
+,pss.EmployeeContributionAmount `DatCol3`
 
 
 
-, ps.TotalCompSSS `DatCol4`
+, pss.EmployerContributionAmount `DatCol4`
 , pss.EmployerECAmount `DatCol5`
-, (pss.EmployerECAmount + (ps.TotalCompSSS + ps.TotalEmpSSS)) `DatCol6`
+, (ps.TotalCompSSS + ps.TotalEmpSSS) `DatCol6`
 
 , @basicPay:=(CASE ee.EmployeeType
 	WHEN 'Fixed' THEN IFNULL((SELECT Salary FROM employeesalary
@@ -115,7 +118,7 @@ INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.PayFrequencyID=1 AND FIN
 LEFT JOIN `position` po ON po.RowID=ee.PositionID
 LEFT JOIN division d ON d.RowID=po.DivisionId
 
-INNER JOIN paysocialsecurity pss ON (pss.EmployeeContributionAmount + pss.EmployerContributionAmount + pss.EmployerECAmount + pss.EmployerMPFAmount)=(ps.TotalEmpSSS + ps.TotalCompSSS) AND LAST_DAY(paramDate) BETWEEN pss.EffectiveDateFrom AND pss.EffectiveDateTo 
+INNER JOIN paysocialsecurity pss ON (pss.EmployeeContributionAmount + pss.EmployeeMPFAmount + pss.EmployerContributionAmount + pss.EmployerECAmount + pss.EmployerMPFAmount)=(ps.TotalEmpSSS + ps.TotalCompSSS) AND LAST_DAY(paramDate) BETWEEN pss.EffectiveDateFrom AND pss.EffectiveDateTo
 
 INNER JOIN payperiod pp ON pp.RowID=ps.PayPeriodID AND LAST_DAY(paramDate) = LAST_DAY(STR_TO_DATE(CONCAT(pp.`Month`, '-', 1, '-', pp.`Year`), '%c-%e-%Y'))
 

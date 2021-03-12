@@ -10,6 +10,16 @@ Imports MySql.Data.MySqlClient
 
 Public Class EmployeeForm
 
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        _policyHelper = New PolicyHelper()
+        _philHealthPolicy = _policyHelper.PhilHealthPolicy
+    End Sub
+
     Protected Overrides Sub OnLoad(e As EventArgs)
 
         SplitContainer2.SplitterWidth = 7
@@ -11578,8 +11588,8 @@ Public Class EmployeeForm
 
 #Region "Salary"
 
-    Private ReadOnly philHealthPolicy As New PhilHealthPolicy
-
+    Private ReadOnly _philHealthPolicy As PhilHealthPolicy
+    Private ReadOnly _policyHelper As PolicyHelper
     Dim noofdepd, view_IDSal As Integer
     Dim mStat As String
     Dim payid, filingid, sssid, philID As Integer
@@ -13410,11 +13420,11 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     Private Async Sub btnAutoCalcPhilHealth_ClickAsync(sender As Object, e As EventArgs) Handles btnAutoCalcPhilHealth.Click
         If Not HasSelectedSalary() Then Return
 
-        If philHealthPolicy.IsFormulaBased Then
+        If _philHealthPolicy.IsFormulaBased Then
             Dim salary = Convert.ToDecimal(txtEmpDeclaSal.Text.Trim.Replace(",", ""))
-            txtPhilHealthSal.Text = Math.Round(salary * (philHealthPolicy.Rate * 0.01D), 2)
+            txtPhilHealthSal.Text = Math.Round(salary * (_philHealthPolicy.Rate * 0.01D), 2)
 
-        ElseIf philHealthPolicy.IsBracketBased Then
+        ElseIf _philHealthPolicy.IsBracketBased Then
             is_user_override_phh = False
             btnAutoCalcPhilHealth.Enabled = False
 
@@ -13467,9 +13477,9 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     End Sub
 
     Private Async Function CalculatePhileHealthContributionAsync(employeeRowId As Integer, salary As Decimal) As Task(Of Decimal)
-        If philHealthPolicy.IsFormulaBased Then
-            Return Math.Round(salary * (philHealthPolicy.Rate * 0.01D), 2)
-        ElseIf philHealthPolicy.IsBracketBased Then
+        If _philHealthPolicy.IsFormulaBased Then
+            Return Math.Round(salary * (_philHealthPolicy.Rate * 0.01D), 2)
+        ElseIf _philHealthPolicy.IsBracketBased Then
             Dim phHContribAmount As Decimal
             Dim query =
             <![CDATA[SELECT phh.EmployeeShare

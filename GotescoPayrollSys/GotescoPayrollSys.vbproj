@@ -353,7 +353,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Core Forms\Repositories\ListOfValueCollection.vb" />
-    <Compile Include="Core Forms\Repositories\PhilHealthPolicy.vb" />
+    <Compile Include="Core\Services\Policies\IPolicyHelper.vb" />
+    <Compile Include="Infra\Data\PhilHealthPolicy.vb" />
     <Compile Include="Core Forms\rpt\FiledLeaves.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -567,6 +568,8 @@
     <Compile Include="HRIS Forms\LoanScheduleForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Infra\Data\PolicyHelper.vb" />
+    <Compile Include="Infra\Data\SocialSecurityPolicy.vb" />
     <Compile Include="Initial Forms\FormReports.designer.vb">
       <DependentUpon>FormReports.vb</DependentUpon>
     </Compile>

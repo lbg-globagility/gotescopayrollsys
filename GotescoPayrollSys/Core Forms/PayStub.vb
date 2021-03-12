@@ -83,6 +83,20 @@ Public Class PayStub
 
     Public Shared Property periodRepresentation As Date
 
+    Public ReadOnly Property SocialSecurityPolicy As SocialSecurityPolicy
+
+    Private ReadOnly _policyHelper As PolicyHelper
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        _policyHelper = New PolicyHelper()
+        SocialSecurityPolicy = _policyHelper.SocialSecurityPolicy
+    End Sub
+
     Protected Overrides Sub OnLoad(e As EventArgs)
         CurrLinkPage = First
         SplitContainer1.SplitterWidth = 6

@@ -58,8 +58,8 @@ Public Class PayrollGeneration
 
     Private m_NotifyMainWindow As NotifyMainWindow
 
-    Private form_caller As Form
-
+    Private _paystubForm As PayStub
+    Private ReadOnly _socialSecurityPolicy As SocialSecurityPolicy
     Private ecoal_dat_set As New DataSet
 
     Private str_ecola_forgovt_contrib As String =
@@ -111,43 +111,44 @@ Public Class PayrollGeneration
     Private ReadOnly configCommandTimeOut As Integer
     Private ReadOnly mySqlConnectionText As String
 
-    Sub New(ByVal _employee_dattab As DataTable,
-                  ByVal _isEndOfMonth As String,
-                  ByVal _esal_dattab As DataTable,
-                  ByVal _emp_loans As DataTable,
-                  ByVal _emp_bonus As DataTable,
-                  ByVal _emp_allowanceDaily As DataTable,
-                  ByVal _emp_allowanceMonthly As DataTable,
-                  ByVal _emp_allowanceOnce As DataTable,
-                  ByVal _emp_allowanceSemiM As DataTable,
-                  ByVal _emp_allowanceWeekly As DataTable,
-                  ByVal _notax_allowanceDaily As DataTable,
-                  ByVal _notax_allowanceMonthly As DataTable,
-                  ByVal _notax_allowanceOnce As DataTable,
-                  ByVal _notax_allowanceSemiM As DataTable,
-                  ByVal _notax_allowanceWeekly As DataTable,
-                  ByVal _emp_bonusDaily As DataTable,
-                  ByVal _emp_bonusMonthly As DataTable,
-                  ByVal _emp_bonusOnce As DataTable,
-                  ByVal _emp_bonusSemiM As DataTable,
-                  ByVal _emp_bonusWeekly As DataTable,
-                  ByVal _notax_bonusDaily As DataTable,
-                  ByVal _notax_bonusMonthly As DataTable,
-                  ByVal _notax_bonusOnce As DataTable,
-                  ByVal _notax_bonusSemiM As DataTable,
-                  ByVal _notax_bonusWeekly As DataTable,
-                  ByVal _numofdaypresent As DataTable,
-                  ByVal _etent_totdaypay As DataTable,
-                  ByVal _dtemployeefirsttimesalary As DataTable,
-                  ByVal _prev_empTimeEntry As DataTable,
-                  ByVal _VeryFirstPayPeriodIDOfThisYear As Object,
-                  ByVal _withthirteenthmonthpay As SByte,
-                  Optional pay_stub_frm As PayStub = Nothing)
+    Sub New(_employee_dattab As DataTable,
+             _isEndOfMonth As String,
+             _esal_dattab As DataTable,
+             _emp_loans As DataTable,
+             _emp_bonus As DataTable,
+             _emp_allowanceDaily As DataTable,
+             _emp_allowanceMonthly As DataTable,
+             _emp_allowanceOnce As DataTable,
+             _emp_allowanceSemiM As DataTable,
+             _emp_allowanceWeekly As DataTable,
+             _notax_allowanceDaily As DataTable,
+             _notax_allowanceMonthly As DataTable,
+             _notax_allowanceOnce As DataTable,
+             _notax_allowanceSemiM As DataTable,
+             _notax_allowanceWeekly As DataTable,
+             _emp_bonusDaily As DataTable,
+             _emp_bonusMonthly As DataTable,
+             _emp_bonusOnce As DataTable,
+             _emp_bonusSemiM As DataTable,
+             _emp_bonusWeekly As DataTable,
+             _notax_bonusDaily As DataTable,
+             _notax_bonusMonthly As DataTable,
+             _notax_bonusOnce As DataTable,
+             _notax_bonusSemiM As DataTable,
+             _notax_bonusWeekly As DataTable,
+             _numofdaypresent As DataTable,
+             _etent_totdaypay As DataTable,
+             _dtemployeefirsttimesalary As DataTable,
+             _prev_empTimeEntry As DataTable,
+             _VeryFirstPayPeriodIDOfThisYear As Object,
+             _withthirteenthmonthpay As SByte,
+            paystubForm As PayStub)
 
         configCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
         mySqlConnectionText = $"{mysql_conn_text} default command timeout={configCommandTimeOut};"
 
-        form_caller = pay_stub_frm
+        _paystubForm = paystubForm
+        _socialSecurityPolicy = paystubForm.SocialSecurityPolicy
 
         employee_dattab = _employee_dattab
         isEndOfMonth = _isEndOfMonth
@@ -189,7 +190,7 @@ Public Class PayrollGeneration
 
         filingStatus = New SQL("SELECT * FROM filingstatus;").GetFoundRows.Tables(0)
 
-        m_NotifyMainWindow = AddressOf pay_stub_frm.ProgressCounter
+        m_NotifyMainWindow = AddressOf paystubForm.ProgressCounter
 
     End Sub
 
@@ -923,7 +924,7 @@ Public Class PayrollGeneration
                                                       + ecola_semim_compute)
 
                         'Dim amount_used_to_get_sss_contrib = (monthly_computed_salary + addtl_taxable_daily_allowance + ecola_allowance_amount)
-                        Dim amount_used_to_get_sss_contrib = (monthly_computed_salary + ecola_allowance_amount) '_
+                        Dim amount_used_to_get_sss_contrib = (monthly_computed_salary + ecola_allowance_amount + If(_socialSecurityPolicy.IncludeOvertime, overall_overtime, 0)) '_
                         '+ ValNoComma(emptimeentryOfHoliday.Compute("SUM(HolidayPayAmount)", "EmployeeID = '" & drow("RowID") & "'")) + If(ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")) < 0, 0, ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")))
 
                         Dim sss_ee, sss_er As Double
@@ -1393,7 +1394,7 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
                     New Object() {1,
                                   Convert.ToInt32(drow("RowID"))}
 
-                form_caller.Invoke(m_NotifyMainWindow,
+                _paystubForm.Invoke(m_NotifyMainWindow,
                                    Convert.ToInt32(drow("RowID"))) ', Convert.ToInt32(drow("RowID"))
 
                 Dim my_cmd As String = String.Concat(Convert.ToString(drow("RowID")), "@", Convert.ToString(drow("EmployeeID")))

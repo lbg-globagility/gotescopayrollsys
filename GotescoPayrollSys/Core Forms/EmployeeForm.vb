@@ -15225,17 +15225,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             'enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categallowID & "' AND OrganizationID=" & orgztnID & ";", _
             '               allowance_type) 'cboallowtype
 
-            enlistTheLists("SELECT CONCAT(COALESCE(p.PartNo,''),'@',p.RowID)" &
-                           " FROM product p" &
-                           " INNER JOIN category c ON c.RowID=p.CategoryID" &
-                           " WHERE c.CategoryName='Allowance Type'" &
-                           " AND p.OrganizationID='" & org_rowid & "';",
-                           allowance_type) 'cboallowtype
-
-            For Each strval In allowance_type
-                cboallowtype.Items.Add(getStrBetween(strval, "", "@"))
-                eall_Type.Items.Add(getStrBetween(strval, "", "@"))
-            Next
+            LoanAllowanceTypes()
 
             enlistToCboBox("SELECT DisplayValue FROM listofval WHERE Type='Allowance Frequency' AND DisplayValue NOT LIKE '%One time%' AND Active='Yes' ORDER BY OrderBy;",
                            cboallowfreq)
@@ -15295,6 +15285,23 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
         dgvEmp_SelectionChanged(sender, e)
 
+    End Sub
+
+    Private Sub LoanAllowanceTypes()
+        enlistTheLists("SELECT CONCAT(COALESCE(p.PartNo,''),'@',p.RowID)" &
+                                   " FROM product p" &
+                                   " INNER JOIN category c ON c.RowID=p.CategoryID" &
+                                   " WHERE c.CategoryName='Allowance Type'" &
+                                   " AND p.OrganizationID='" & org_rowid & "';",
+                                   allowance_type) 'cboallowtype
+
+        cboallowtype.Items.Clear()
+        eall_Type.Items.Clear()
+
+        For Each strval In allowance_type
+            cboallowtype.Items.Add(getStrBetween(strval, "", "@"))
+            eall_Type.Items.Add(getStrBetween(strval, "", "@"))
+        Next
     End Sub
 
     Private Sub tsbtnNewAllowance_Click(sender As Object, e As EventArgs) Handles tsbtnNewAllowance.Click
@@ -15993,11 +16000,11 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     End Sub
 
     Private Sub lnklbaddallowtype_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnklbaddallowtype.LinkClicked
-        With newProdAllowa
-            .Show()
-            .BringToFront()
-            .TextBox1.Focus()
-        End With
+        Dim form = New AllowanceTypeForm
+        form.ShowDialog()
+        If form.HasChanged Then
+            LoanAllowanceTypes()
+        End If
     End Sub
 
     Private Sub dgvempallowance_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvempallowance.DataError

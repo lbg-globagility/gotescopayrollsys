@@ -231,7 +231,7 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
             Dim parameters = New Object() {org_rowid,
                                            n_PayrollSummaDateSelection.DateFromID,
-                                           is_actual,
+                                           IsActual,
                                             cash_or_depo}
 
             Dim sql As New SQL("CALL PAYROLLSUMMARY3(?ps_OrganizationID, ?ps_PayPeriodID1, ?psi_undeclared, ?strSalaryDistrib);", '
@@ -706,9 +706,9 @@ Public Class PayrollSummaryExcelFormatReportProvider
 
         _loans = GetLoans(startingPayPeriod.RowID, employeeIds)
 
-        _allowances = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.AllowanceTypeCategory)
+        _allowances = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.ALLOWANCE_TYPE_CATEGORY)
 
-        _bonuses = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.BonusCategory)
+        _bonuses = GetPayStubItems(startingPayPeriod, endingPayPeriod, employeeIds, ProductConstant.BONUS_TYPE_CATEGORY)
 
         Dim adjustments = GetPaystubAdjustments(startingPayPeriod, endingPayPeriod, employeeIds)
 
@@ -878,15 +878,18 @@ Public Class PayrollSummaryExcelFormatReportProvider
                 Continue For
             End If
 
-            loanModels.Add(New LoanModel() With {
-            .ProductId = CInt(loan("LoanTypeID")),
-            .LoanName = loan("ProductName").ToString,
-            .LoanNumber = loan("LoanNumber").ToString,
-            .DeductionAmount = CDec(loan("ProperDeductAmount")),
-            .EmployeeId = CInt(loan("EmployeeID")),
-            .PaystubId = CInt(loan("PaystubID"))
-            })
+            Dim loanModel = New LoanModel() With {
+                .ProductId = CInt(loan("LoanTypeID")),
+                .LoanName = loan("ProductName").ToString,
+                .LoanNumber = loan("LoanNumber").ToString,
+                .DeductionAmount = CDec(loan("ProperDeductAmount")),
+                .EmployeeId = CInt(loan("EmployeeID"))}
 
+            If Not loan("PaystubID").Equals(DBNull.Value) Then
+                loanModel.PaystubId = CInt(loan("PaystubID"))
+            End If
+
+            loanModels.Add(loanModel)
         Next
 
         Return loanModels

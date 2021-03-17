@@ -1987,6 +1987,16 @@ Public Class PayStub
                                                                                        paypFrom,
                                                                                        paypTo}).GetFoundRows.Tables(0)
                                       '###############################
+                                      'total allowances use in sss
+                                      Dim totalAllowancesUseInSss = New SQL(
+                                            "CALL GET_employeeallowance_UseInSss(?orgId, ?periodId);",
+                                            {org_rowid, paypRowID}).
+                                            GetFoundRows
+                                      _totalAllowancesUseInSss = totalAllowancesUseInSss.
+                                        Tables.
+                                        OfType(Of DataTable).
+                                        FirstOrDefault
+                                      '###############################
 
                                       Dim weeklyallowfreq = "Weekly"
 
@@ -2490,7 +2500,9 @@ Public Class PayStub
                                                                               dtemployeefirsttimesalary,
                                                                               prev_empTimeEntry,
                                                                               VeryFirstPayPeriodIDOfThisYear,
-                                                                              withthirteenthmonthpay, Me)
+                                                                              withthirteenthmonthpay,
+                                                                              Me,
+                                                                              totalAllowancesUseInSss:=_totalAllowancesUseInSss)
 
                             With n_PayrollGeneration
                                 .SssBrackets = sssBrackets
@@ -10530,6 +10542,7 @@ Public Class PayStub
     Dim emptimeentryOfLeave As New DataTable
 
     Dim emptimeentryOfHoliday As New DataTable
+    Private _totalAllowancesUseInSss As DataTable
 
     Private Sub bgworkgenpayroll_DoBackGroundWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgworkgenpayroll.DoWork
 

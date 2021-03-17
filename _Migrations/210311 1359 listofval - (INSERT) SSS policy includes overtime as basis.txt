@@ -1,0 +1,5 @@
+
+SET @_type='SocialSecuritySystem';
+SET @_lic='IncludeOvertime';
+SET @id=(SELECT RowID FROM `listofval` WHERE `Type`=@_type AND LIC=@_lic);
+INSERT INTO `listofval` (`RowID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `DisplayValue`, `LIC`, `Type`, `ParentLIC`, `Active`, `Description`, `OrderBy`) VALUES (@id, CURRENT_TIMESTAMP(), 1, CURRENT_TIMESTAMP(), 1, '1', @_lic, @_type, NULL, 'Yes', NULL, 1) ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP(); ALTER TABLE listofval AUTO_INCREMENT = 0;

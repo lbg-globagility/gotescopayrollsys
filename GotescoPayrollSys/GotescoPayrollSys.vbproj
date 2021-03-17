@@ -254,6 +254,18 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Core Forms\Allowance\AllowanceType\AllowanceTypeForm.Designer.vb">
+      <DependentUpon>AllowanceTypeForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Core Forms\Allowance\AllowanceType\AllowanceTypeForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core Forms\Allowance\AllowanceType\NewAllowanceTypeForm.Designer.vb">
+      <DependentUpon>NewAllowanceTypeForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Core Forms\Allowance\AllowanceType\NewAllowanceTypeForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Core Forms\Common\SqlReaderExtensions.vb" />
     <Compile Include="Core Forms\DateRangePickerDialog.designer.vb">
       <DependentUpon>DateRangePickerDialog.vb</DependentUpon>
@@ -354,7 +366,7 @@
     </Compile>
     <Compile Include="Core Forms\Repositories\ListOfValueCollection.vb" />
     <Compile Include="Core\Services\Policies\IPolicyHelper.vb" />
-    <Compile Include="Infra\Data\PhilHealthPolicy.vb" />
+    <Compile Include="Infrastructure\Data\PhilHealthPolicy.vb" />
     <Compile Include="Core Forms\rpt\FiledLeaves.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -568,8 +580,8 @@
     <Compile Include="HRIS Forms\LoanScheduleForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Infra\Data\PolicyHelper.vb" />
-    <Compile Include="Infra\Data\SocialSecurityPolicy.vb" />
+    <Compile Include="Infrastructure\Data\PolicyHelper.vb" />
+    <Compile Include="Infrastructure\Data\SocialSecurityPolicy.vb" />
     <Compile Include="Initial Forms\FormReports.designer.vb">
       <DependentUpon>FormReports.vb</DependentUpon>
     </Compile>
@@ -1419,6 +1431,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gotescomarketing.ico" />
+    <EmbeddedResource Include="Core Forms\Allowance\AllowanceType\AllowanceTypeForm.resx">
+      <DependentUpon>AllowanceTypeForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core Forms\Allowance\AllowanceType\NewAllowanceTypeForm.resx">
+      <DependentUpon>NewAllowanceTypeForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\DateRangePickerDialog.resx">
       <DependentUpon>DateRangePickerDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -2067,6 +2085,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\Data\Repositories\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -5,7 +5,7 @@ Imports AccuPay.Entity
 
 Public Class ListOfValueCollection
 
-    Private _values As IReadOnlyList(Of ListOfValue)
+    Private ReadOnly _values As IReadOnlyList(Of ListOfValue)
 
     Public Sub New(values As IEnumerable(Of ListOfValue))
         _values = New ReadOnlyCollection(Of ListOfValue)(values.ToList)

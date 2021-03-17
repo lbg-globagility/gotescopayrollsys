@@ -2,6 +2,7 @@
 
 Imports System.ComponentModel.DataAnnotations
 Imports System.ComponentModel.DataAnnotations.Schema
+Imports GotescoPayrollSys
 
 Namespace Global.AccuPay.Entity
 
@@ -168,6 +169,34 @@ Namespace Global.AccuPay.Entity
                 Return Fixed = "1"
             End Get
         End Property
+
+        Public Property UseInSss As Boolean
+
+        Public Property UseIn13thMonth As Boolean
+
+        Friend Shared Function NewAllowanceType(
+                organizationId As Integer,
+                userId As Integer,
+                category As Category) As Product
+            Return New Product() With {
+                .OrganizationID = organizationId,
+                .CreatedBy = userId,
+                .CategoryText = category.CategoryName,
+                .CategoryID = category.RowID}
+        End Function
+
+        Friend Sub ApplyAllowanceTypeChanges(userId As Integer,
+                allowanceTypeName As String,
+                useInSss As Boolean,
+                useIn13thMonth As Boolean,
+                isTaxable As Boolean)
+            PartNo = allowanceTypeName
+            Name = allowanceTypeName
+            Status = If(isTaxable, "1", "0")
+            _UseInSss = useInSss
+            _UseIn13thMonth = useIn13thMonth
+            LastUpdBy = userId
+        End Sub
 
     End Class
 

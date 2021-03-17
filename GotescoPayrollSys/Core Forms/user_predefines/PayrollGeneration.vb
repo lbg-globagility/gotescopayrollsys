@@ -46,7 +46,7 @@ Public Class PayrollGeneration
     Private prev_empTimeEntry As DataTable
     Private VeryFirstPayPeriodIDOfThisYear As Object
     Private withthirteenthmonthpay As SByte
-
+    Private ReadOnly _totalAllowancesUseInSss As DataTable
     Private payWTax As DataTable
 
     Private filingStatus As DataTable
@@ -142,7 +142,8 @@ Public Class PayrollGeneration
              _prev_empTimeEntry As DataTable,
              _VeryFirstPayPeriodIDOfThisYear As Object,
              _withthirteenthmonthpay As SByte,
-            paystubForm As PayStub)
+            paystubForm As PayStub,
+            totalAllowancesUseInSss As DataTable)
 
         configCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
         mySqlConnectionText = $"{mysql_conn_text} default command timeout={configCommandTimeOut};"
@@ -185,6 +186,7 @@ Public Class PayrollGeneration
         prev_empTimeEntry = _prev_empTimeEntry
         VeryFirstPayPeriodIDOfThisYear = _VeryFirstPayPeriodIDOfThisYear
         withthirteenthmonthpay = _withthirteenthmonthpay
+        _totalAllowancesUseInSss = totalAllowancesUseInSss
 
         payWTax = New SQL("SELECT * FROM paywithholdingtax;").GetFoundRows.Tables(0)
 
@@ -924,7 +926,13 @@ Public Class PayrollGeneration
                                                       + ecola_semim_compute)
 
                         'Dim amount_used_to_get_sss_contrib = (monthly_computed_salary + addtl_taxable_daily_allowance + ecola_allowance_amount)
-                        Dim amount_used_to_get_sss_contrib = (monthly_computed_salary + ecola_allowance_amount + If(_socialSecurityPolicy.IncludeOvertime, overall_overtime, 0)) '_
+                        Dim amount_used_to_get_sss_contrib =
+                            monthly_computed_salary +
+                            ecola_allowance_amount +
+                            GetTotalAllowanceUseInSss(CInt(drow("RowID")))
+                        If _socialSecurityPolicy.IncludeOvertime Then
+                            amount_used_to_get_sss_contrib += overall_overtime
+                        End If
                         '+ ValNoComma(emptimeentryOfHoliday.Compute("SUM(HolidayPayAmount)", "EmployeeID = '" & drow("RowID") & "'")) + If(ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")) < 0, 0, ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")))
 
                         Dim sss_ee, sss_er As Double
@@ -1459,6 +1467,16 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         filingStatus.Dispose()
 
     End Sub
+
+    Private Function GetTotalAllowanceUseInSss(employeeId As Integer) As Decimal
+        Dim result = _totalAllowancesUseInSss.Compute(
+            "SUM(TotalAllowanceAmount)",
+            $"EmployeeID={employeeId}")
+
+        If result Is Nothing OrElse result.Equals(DBNull.Value) Then Return 0
+
+        Return CDec(result)
+    End Function
 
     Private Enum EmployeeEmployer
         Employee

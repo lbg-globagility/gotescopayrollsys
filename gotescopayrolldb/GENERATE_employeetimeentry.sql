@@ -782,7 +782,7 @@ ELSE
 			SELECT TIMESTAMPDIFF(SECOND, @timeStampLogOut, @dutyEnd) / 3600 `UndertimeHours`
 			INTO ete_HrsUnder;
 			
-			SET ete_HrsUnder = ete_HrsUnder - IFNULL(@lunchBreakHourCount, 0);
+			IF IFNULL(ete_HrsUnder, 0) > IFNULL(@lunchBreakHourCount, 0) THEN SET ete_HrsUnder = ete_HrsUnder - IFNULL(@lunchBreakHourCount, 0); END IF;
 
 		ELSEIF @timeStampLogOut < @dutyEnd THEN
 		

@@ -165,7 +165,7 @@ UPDATE
 	SELECT @@identity `Id` INTO pstub_RowID;
 
 
-CALL RECOMPUTE_thirteenthmonthpay(pstub_OrganizationID, pstub_PayPeriodID, pstub_CreatedBy);
+
 
 CALL INSUPD_monthlyemployeerestdaypayment(pstub_OrganizationID, pstub_EmployeeID, pstub_PayPeriodID, pstub_CreatedBy);
 

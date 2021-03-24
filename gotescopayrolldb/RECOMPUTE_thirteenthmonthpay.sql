@@ -3,10 +3,14 @@
 /*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-DROP PROCEDURE IF EXISTS `RECOMPUTE_thirteenthmonthpay`;
 DELIMITER //
-CREATE PROCEDURE `RECOMPUTE_thirteenthmonthpay`(IN `OrganizID` INT, IN `PayPRowID` INT, IN `UserRowID` INT)
+CREATE PROCEDURE `RECOMPUTE_thirteenthmonthpay`(
+	IN `OrganizID` INT,
+	IN `PayPRowID` INT,
+	IN `UserRowID` INT
+)
     DETERMINISTIC
 BEGIN
 
@@ -63,6 +67,7 @@ INNER JOIN employee e ON e.RowID=i.EmployeeID AND e.EmployeeType='Daily'
 GROUP BY i.EmployeeID
 ;
 
+CALL GET_employeeallowance_UseIn13thMonth(OrganizID, PayPRowID, FALSE);
 
 
 
@@ -70,12 +75,11 @@ GROUP BY i.EmployeeID
 
 
 
+SET @hasFirstHalf=EXISTS(SELECT * FROM firsthalf LIMIT 1);
+SET @hasSecondHalf=EXISTS(SELECT * FROM secondhalf LIMIT 1);
 
-
-
-
-IF EXISTS(SELECT * FROM firsthalf LIMIT 1)
-	AND EXISTS(SELECT * FROM secondhalf LIMIT 1) THEN
+IF @hasFirstHalf
+	AND @hasSecondHalf THEN
 
 	INSERT INTO thirteenthmonthpay
 	(
@@ -91,16 +95,17 @@ IF EXISTS(SELECT * FROM firsthalf LIMIT 1)
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicAmount / thirteenthMonthDivisor)
+	, (i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, 0
 	, 0
 	, 0
 	FROM firsthalf i
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	LEFT JOIN totalallowanceusein13thmonth t ON t.`EmployeeID`=ps.EmployeeID
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
@@ -120,23 +125,24 @@ IF EXISTS(SELECT * FROM firsthalf LIMIT 1)
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicAmount / thirteenthMonthDivisor)
+	, (i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, 0
 	, 0
 	, 0
 	FROM secondhalf i
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	LEFT JOIN totalallowanceusein13thmonth t ON t.`EmployeeID`=ps.EmployeeID
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
 	;
 
-ELSEIF NOT EXISTS(SELECT * FROM secondhalf LIMIT 1)
-	AND EXISTS(SELECT * FROM firsthalf LIMIT 1) THEN
+ELSEIF NOT @hasSecondHalf
+	AND @hasFirstHalf THEN
 
 	INSERT INTO thirteenthmonthpay
 	(
@@ -152,23 +158,24 @@ ELSEIF NOT EXISTS(SELECT * FROM secondhalf LIMIT 1)
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicAmount / thirteenthMonthDivisor)
+	, (i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, 0
 	, 0
 	, 0
 	FROM firsthalf i
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	LEFT JOIN totalallowanceusein13thmonth t ON t.`EmployeeID`=ps.EmployeeID
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
 	;
 
-ELSEIF NOT EXISTS(SELECT * FROM firsthalf LIMIT 1)
-	AND EXISTS(SELECT * FROM secondhalf LIMIT 1) THEN
+ELSEIF NOT @hasFirstHalf
+	AND @hasSecondHalf THEN
 
 	INSERT INTO thirteenthmonthpay
 	(
@@ -184,16 +191,17 @@ ELSEIF NOT EXISTS(SELECT * FROM firsthalf LIMIT 1)
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicAmount / thirteenthMonthDivisor)
+	, (i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, 0
 	, 0
 	, 0
 	FROM secondhalf i
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	LEFT JOIN totalallowanceusein13thmonth t ON t.`EmployeeID`=ps.EmployeeID
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
@@ -271,17 +279,18 @@ ORDER BY i.EmployeeID, pp.OrdinalValue
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicPay / thirteenthMonthDivisor)
+	, (i.BasicPay / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, 0
 	, 0
 	, 0
 	FROM salariesperperiod i
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
+	LEFT JOIN totalallowanceusein13thmonth t ON t.`EmployeeID`=ps.EmployeeID
 	WHERE i.PayPeriodID=PayPRowID
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicPay / thirteenthMonthDivisor)
+	, Amount=(i.BasicPay / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
@@ -292,5 +301,6 @@ END//
 DELIMITER ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

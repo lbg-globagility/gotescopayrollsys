@@ -9,7 +9,8 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS `GET_employeeallowance_UseIn13thMonth`;
 CREATE PROCEDURE `GET_employeeallowance_UseIn13thMonth`(
 	IN `orgId` INT,
-	IN `periodId` INT
+	IN `periodId` INT,
+	IN `showResult` TINYINT
 )
 BEGIN
 
@@ -222,7 +223,7 @@ FROM (SELECT @dailyFrequency `Frequency`, EmployeeID, TotalAllowanceAmount FROM 
 GROUP BY i.EmployeeID
 ;
 
-SELECT * FROM `totalallowanceusein13thmonth`;
+IF showResult THEN SELECT * FROM `totalallowanceusein13thmonth`; END IF;
 
 END//
 DELIMITER ;

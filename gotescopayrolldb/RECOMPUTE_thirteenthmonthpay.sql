@@ -96,17 +96,16 @@ IF @hasFirstHalf
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, (i.BasicAmount / thirteenthMonthDivisor)
 	, 0
 	, 0
 	, 0
 	FROM firsthalf i
 	INNER JOIN paystub ps ON ps.OrganizationID=OrganizID AND ps.PayPeriodID=i.PayPeriodID AND ps.EmployeeID=i.EmployeeID
-	LEFT JOIN totalallowanceusein13thmonth t ON t.`EmployeeID`=ps.EmployeeID
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, Amount=(i.BasicAmount / thirteenthMonthDivisor)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
@@ -126,7 +125,7 @@ IF @hasFirstHalf
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, ((i.BasicAmount + IFNULL(t.`TotalAllowanceAmount`, 0)) / thirteenthMonthDivisor)
 	, 0
 	, 0
 	, 0
@@ -136,7 +135,7 @@ IF @hasFirstHalf
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, Amount=((i.BasicAmount + IFNULL(t.`TotalAllowanceAmount`, 0)) / thirteenthMonthDivisor)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
@@ -159,7 +158,7 @@ ELSEIF NOT @hasSecondHalf
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, ((i.BasicAmount + IFNULL(t.`TotalAllowanceAmount`, 0)) / thirteenthMonthDivisor)
 	, 0
 	, 0
 	, 0
@@ -169,7 +168,7 @@ ELSEIF NOT @hasSecondHalf
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, Amount=((i.BasicAmount + IFNULL(t.`TotalAllowanceAmount`, 0)) / thirteenthMonthDivisor)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
@@ -192,7 +191,7 @@ ELSEIF NOT @hasFirstHalf
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, ((i.BasicAmount + IFNULL(t.`TotalAllowanceAmount`, 0)) / thirteenthMonthDivisor)
 	, 0
 	, 0
 	, 0
@@ -202,7 +201,7 @@ ELSEIF NOT @hasFirstHalf
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicAmount / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, Amount=((i.BasicAmount + IFNULL(t.`TotalAllowanceAmount`, 0)) / thirteenthMonthDivisor)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0
@@ -280,7 +279,7 @@ ORDER BY i.EmployeeID, pp.OrdinalValue
 	, CURRENT_TIMESTAMP()
 	, UserRowID
 	, ps.RowID
-	, (i.BasicPay / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, ((i.BasicPay + IFNULL(t.`TotalAllowanceAmount`, 0)) / thirteenthMonthDivisor)
 	, 0
 	, 0
 	, 0
@@ -291,7 +290,7 @@ ORDER BY i.EmployeeID, pp.OrdinalValue
 	ON DUPLICATE KEY UPDATE
 	LastUpd=CURRENT_TIMESTAMP()
 	, LastUpdBy=UserRowID
-	, Amount=(i.BasicPay / thirteenthMonthDivisor) + IFNULL(t.`TotalAllowanceAmount`, 0)
+	, Amount=((i.BasicPay + IFNULL(t.`TotalAllowanceAmount`, 0)) / thirteenthMonthDivisor)
 	, Amount14=0
 	, Amount15=0
 	, Amount16=0

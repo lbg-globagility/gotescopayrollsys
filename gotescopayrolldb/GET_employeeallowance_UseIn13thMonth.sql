@@ -47,28 +47,31 @@ INTO @datefrom, @dateto, @thismonth, @thisyear, @periodHalf, @isPeriodEndOfMonth
 SET @preceedingMonth=IF(@thismonth=1 AND @periodHalf=1, 24, @thismonth-1);
 
 /*custom employee*/
-SET @sssDeductSched='';
+SET @sssDeductSched='Per pay period';
 
 DROP TEMPORARY TABLE IF EXISTS `customemployee1`;
 CREATE TEMPORARY TABLE IF NOT EXISTS `customemployee1`
 SELECT
 e.RowID,e.OrganizationID,e.Salutation,e.FirstName,e.MiddleName,e.LastName,e.Surname,e.TINNo,e.SSSNo,e.HDMFNo,e.PhilHealthNo,e.EmploymentStatus,e.EmailAddress,e.WorkPhone,e.HomePhone,e.MobilePhone,e.HomeAddress,e.Nickname,e.JobTitle,e.Gender,e.EmployeeType,e.MaritalStatus,e.Birthdate,e.StartDate,e.TerminationDate,e.PositionID,e.PayFrequencyID,e.NoOfDependents,e.UndertimeOverride,e.OvertimeOverride,e.NewEmployeeFlag,e.LeaveBalance,e.SickLeaveBalance,e.MaternityLeaveBalance,e.OtherLeaveBalance,e.LeaveAllowance,e.SickLeaveAllowance,e.MaternityLeaveAllowance,e.OtherLeaveAllowance,e.Image,e.LeavePerPayPeriod,e.SickLeavePerPayPeriod,e.MaternityLeavePerPayPeriod,e.OtherLeavePerPayPeriod,e.AlphaListExempted,e.WorkDaysPerYear,e.DayOfRest,e.ATMNo,e.BankName,e.CalcHoliday,e.CalcSpecialHoliday,e.CalcNightDiff,e.CalcNightDiffOT,e.CalcRestDay,e.CalcRestDayOT,e.DateRegularized,e.DateEvaluated,e.RevealInPayroll,e.LateGracePeriod,e.AgencyID,e.OffsetBalance,e.DateR1A,e.AdditionalVLAllowance,e.AdditionalVLBalance,e.AdditionalVLPerPayPeriod,e.LeaveTenthYearService,e.LeaveFifteenthYearService,e.LeaveAboveFifteenthYearService,e.DeptManager,
-@sssDeductSched:=IF(e.AgencyID IS NOT NULL, IFNULL(d.SSSDeductSchedAgency,d.SSSDeductSched), d.SSSDeductSched) `SSSDeductSched`,
+#@sssDeductSched:=IF(e.AgencyID IS NOT NULL, IFNULL(d.SSSDeductSchedAgency,d.SSSDeductSched), d.SSSDeductSched) `SSSDeductSched`,
+@sssDeductSched `SSSDeductSched`,
 @sssDeductSched='End of the month' `IsEndOfMonth`,
 @sssDeductSched='First half' `IsFirstHalf`,
 @sssDeductSched='Per pay period' `IsPerPayPeriod`,
 
-(CASE @sssDeductSched
+/*(CASE @sssDeductSched
 WHEN 'End of the month' THEN (SELECT pp.PayFromDate FROM payperiod pp WHERE pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.`Month`=@thismonth AND pp.`Year`=@thisyear AND pp.Half=1 LIMIT 1)
 WHEN 'First half' THEN (SELECT pp.PayFromDate FROM payperiod pp WHERE pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.`Month`=@preceedingMonth AND pp.`Year`=@thisyear AND pp.Half=0 LIMIT 1)
 WHEN 'Per pay period' THEN (SELECT @datefrom)
-END) `DateFrom`,
+END) `DateFrom`,*/
+@datefrom `DateFrom`,
 
-(CASE @sssDeductSched
+/*(CASE @sssDeductSched
 WHEN 'End of the month' THEN (SELECT pp.PayToDate FROM payperiod pp WHERE pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.`Month`=@thismonth AND pp.`Year`=@thisyear AND pp.Half=0 LIMIT 1)
 WHEN 'First half' THEN (SELECT pp.PayToDate FROM payperiod pp WHERE pp.OrganizationID=e.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID AND pp.`Month`=@thismonth AND pp.`Year`=@thisyear AND pp.Half=1 LIMIT 1)
 WHEN 'Per pay period' THEN (SELECT @dateto)
-END) `DateTo`
+END) `DateTo`*/
+@dateto `DateTo`
 
 FROM employee e
 INNER JOIN `position` pos ON pos.RowID=e.PositionID
@@ -108,6 +111,8 @@ i.EmployeeID
 ,pr.PayType
 ,0 `AllowanceAmount`
 ,i.TotalAllowanceAmt `TotalAllowanceAmount`
+,e.`DateFrom`
+,e.`DateTo`
 FROM paystubitem_sum_daily_allowance_group_prodid i
 
 INNER JOIN `customemployee1` e ON e.RowID=i.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
@@ -174,6 +179,8 @@ SELECT
 ,ROUND((@dailyallowanceamount - ( ( (et.HoursLate + et.UndertimeHours) / @timediffcount ) * @dailyallowanceamount )),2) `TotalAllowanceAmount`
 ,et.EmployeeID
 ,ea.ProductID
+,e.`DateFrom`
+,e.`DateTo`
 FROM employeetimeentry et
 
 INNER JOIN `customemployee1` e ON e.RowID=et.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
@@ -193,6 +200,8 @@ DROP TEMPORARY TABLE IF EXISTS `allowanceonce1`;
 CREATE TEMPORARY TABLE IF NOT EXISTS `allowanceonce1`
 SELECT SUM(IFNULL(ea.AllowanceAmount,0)) `TotalAllowanceAmount`
 ,ea.EmployeeID
+,e.`DateFrom`
+,e.`DateTo`
 FROM employeeallowance ea
 
 INNER JOIN `customemployee1` e ON e.RowID=ea.EmployeeID AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
@@ -222,6 +231,25 @@ FROM (SELECT @dailyFrequency `Frequency`, EmployeeID, TotalAllowanceAmount FROM 
 		) i
 GROUP BY i.EmployeeID
 ;
+
+
+	DROP TEMPORARY TABLE IF EXISTS `totalallowanceusein13thmonth1`;
+	CREATE TEMPORARY TABLE IF NOT EXISTS `totalallowanceusein13thmonth1`
+	SELECT
+	i.EmployeeID,
+	i.PeriodId,
+	SUM(i.TotalAllowanceAmount) `TotalAllowanceAmount`
+	FROM (SELECT @dailyFrequency `Frequency`, i.EmployeeID, i.TotalAllowanceAmount, pp.RowID `PeriodId` FROM `allowancedaily1` i INNER JOIN payperiod pp ON pp.OrganizationID=orgId AND pp.TotalGrossSalary=1 AND pp.PayToDate=i.`DateTo`
+			UNION
+			SELECT @semiMonthlyFrequency `Frequency`, ii.EmployeeID, ii.TotalAllowanceAmount, pp.RowID `PeriodId` FROM `allowancesemimonthly1` ii INNER JOIN payperiod pp ON pp.OrganizationID=orgId AND pp.TotalGrossSalary=1 AND pp.PayToDate=ii.`DateTo`
+			UNION
+			SELECT @monthlyFrequency `Frequency`, iii.EmployeeID, iii.TotalAllowanceAmount, pp.RowID `PeriodId` FROM `allowancemonthly1` iii INNER JOIN payperiod pp ON pp.OrganizationID=orgId AND pp.TotalGrossSalary=1 AND pp.PayToDate=iii.`DateTo`
+			UNION
+			SELECT @onceFrequency `Frequency`, iv.EmployeeID, iv.TotalAllowanceAmount, pp.RowID `PeriodId` FROM `allowanceonce1` iv INNER JOIN payperiod pp ON pp.OrganizationID=orgId AND pp.TotalGrossSalary=1 AND pp.PayToDate=iv.`DateTo`
+			) i
+	GROUP BY i.EmployeeID, i.PeriodId
+	;
+
 
 IF showResult THEN SELECT * FROM `totalallowanceusein13thmonth`; END IF;
 

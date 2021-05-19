@@ -65,8 +65,15 @@ IF LOCATE('aternity', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 	LEFT JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
 	SET et.LastUpd = CURRENT_TIMESTAMP()
 	,et.LastUpdBy = NEW.LastUpdBy
-	,et.MaternityLeaveHours = 0
-	,et.TotalDayPay = 0
+	,et.MaternityLeaveHours = IF(NEW.`Status` = 'Approved'
+	                            , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
+										 , 0)
+	,et.TotalDayPay = IF(e.EmployeeType = 'Daily'
+	                     , esa.BasicPay
+								, esa.Salary / (e.WorkDaysPerYear / month_count))
+                     * IF(et.EmployeeShiftID IS NULL, 1
+							     , IF((NEW.OfficialValidHours / default_min_hrswork) > 1, 1
+								       , (NEW.OfficialValidHours / default_min_hrswork)))
 	WHERE et.EmployeeID=NEW.EmployeeID
 	AND et.OrganizationID=NEW.OrganizationID;
 

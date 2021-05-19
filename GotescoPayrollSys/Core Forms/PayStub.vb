@@ -2663,6 +2663,7 @@ Public Class PayStub
 
         Dim strQuery = String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
                                      "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);",
+                                     "CALL `RECOMPUTE_thirteenthmonthpay`(@orgId, @periodId, @userId);",
                                      updateLeaveItems)
 
         If withthirteenthmonthpay = 1 Then
@@ -2677,6 +2678,8 @@ Public Class PayStub
                 .AddWithValue("@userId", user_row_id)
                 .AddWithValue("@dateFrom", paypFrom)
                 .AddWithValue("@dateTo", paypTo)
+
+                Dim periodId = CInt(Current_PayPeriodID)
                 .AddWithValue("@periodId", paypRowID)
 
             End With

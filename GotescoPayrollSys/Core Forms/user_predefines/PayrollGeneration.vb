@@ -327,10 +327,6 @@ Public Class PayrollGeneration
 
         emp_dailytype_allowance = ecoal_dat_set.Tables(1)
 
-        Dim emptimeentryOfLeave As New DataTable
-
-        Dim emptimeentryOfHoliday As New DataTable
-
         Dim last_enddate_cutoff_thisyear =
             New SQL("SELECT DATE_FORMAT(pp.PayToDate,@@date_format)" &
                              " FROM payperiod pp" &
@@ -341,11 +337,7 @@ Public Class PayrollGeneration
                              " ORDER BY pp.PayFromDate DESC,pp.PayToDate DESC" &
                              " LIMIT 1;").GetFoundRow
         Dim GET_PREVIOUSMONTHTAXAMOUNT = New SQL("CALL GET_PREVIOUSMONTHTAXAMOUNT('" & n_PayrollRecordID & "')").GetFoundRows.Tables(0)
-        emptimeentryOfLeave = New DataTable 'TotalDayPay
-        emptimeentryOfLeave = New SQL("SELECT ete.*,(ete.TotalDayPay - (ete.RegularHoursAmount + ete.OvertimeHoursAmount + ete.HolidayPayAmount)) AS LeavePayAmount FROM employeetimeentry ete INNER JOIN (SELECT pp.OrganizationID,MIN(pp1.PayFromDate) AS PayFromDate,MAX(pp2.PayToDate) AS PayToDate FROM payperiod pp INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate,PayToDate) pp1 ON pp1.`Month`=pp.`Month` AND pp1.`Year`=pp.`Year` AND pp1.OrganizationID=pp.OrganizationID AND pp1.TotalGrossSalary=pp.TotalGrossSalary INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate DESC,PayToDate DESC) pp2 ON pp2.`Month`=pp.`Month` AND pp2.`Year`=pp.`Year` AND pp2.OrganizationID=pp.OrganizationID AND pp2.TotalGrossSalary=pp.TotalGrossSalary WHERE pp.RowID='" & n_PayrollRecordID & "') i ON i.PayFromDate IS NOT NULL AND i.PayToDate IS NOT NULL AND ete.OrganizationID=i.OrganizationID AND ete.`Date` BETWEEN i.PayFromDate AND i.PayToDate AND (ete.VacationLeaveHours + ete.SickLeaveHours + ete.MaternityLeaveHours + ete.OtherLeaveHours + ete.AdditionalVLHours) > 0 AND ete.RegularHoursAmount=0 ORDER BY ete.EmployeeID,ete.`Date`;").GetFoundRows.Tables(0)
-        emptimeentryOfHoliday = New DataTable 'HolidayPayAmount
-        emptimeentryOfHoliday = New SQL("SELECT ete.*,i.* FROM employeetimeentry ete INNER JOIN payrate pr ON pr.RowID=ete.PayRateID AND pr.PayType!='Regular Day' INNER JOIN (SELECT pp.OrganizationID,MIN(pp1.PayFromDate) AS PayFromDate, MIN(pp1.PayToDate) AS PayFromDate1, MAX(pp2.PayToDate) AS PayToDate, MAX(pp2.PayFromDate) AS PayToDate1 FROM payperiod pp INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate,PayToDate) pp1 ON pp1.`Month`=pp.`Month` AND pp1.`Year`=pp.`Year` AND pp1.OrganizationID=pp.OrganizationID AND pp1.TotalGrossSalary=pp.TotalGrossSalary INNER JOIN (SELECT * FROM payperiod ORDER BY PayFromDate DESC,PayToDate DESC) pp2 ON pp2.`Month`=pp.`Month` AND pp2.`Year`=pp.`Year` AND pp2.OrganizationID=pp.OrganizationID AND pp2.TotalGrossSalary=pp.TotalGrossSalary WHERE pp.RowID='" & n_PayrollRecordID & "') i ON i.PayFromDate IS NOT NULL AND i.PayToDate IS NOT NULL AND ete.OrganizationID=i.OrganizationID AND ete.`Date` BETWEEN i.PayFromDate AND i.PayToDate AND ete.HolidayPayAmount > 0 AND ete.RegularHoursAmount=0 ORDER BY ete.EmployeeID,ete.`Date`;").GetFoundRows.Tables(0)
-        'Dim the_MinimumWageAmount = ValNoComma(drow("MinimumWageAmount"))
+
         Dim the_MinimumWageAmount = ValNoComma(New ExecuteQuery("SELECT MinimumWageValue FROM payperiod WHERE RowID='" & n_PayrollRecordID & "';").Result)
 
         'Dim sel_employee_dattab = employee_dattab.Select("PositionID IS NULL")

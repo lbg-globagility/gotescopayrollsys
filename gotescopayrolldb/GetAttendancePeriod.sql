@@ -100,7 +100,7 @@ IF NOT isActual THEN
 	, et.`NonTaxableDailyBonus`
 	, et.`IsValidForHolidayPayment`
 
-	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`Salary` / @defaultWorkHours), ((`es`.`Salary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
+	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours` + `et`.`MaternityLeaveHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`Salary` / @defaultWorkHours), ((`es`.`Salary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
 	, isActual `AsActual`
 	, IFNULL(sh.WorkHours, 0) `WorkHours`
 	, et.`AddedHolidayPayAmount`
@@ -175,7 +175,7 @@ ELSE
 	, et.`NonTaxableDailyBonus`
 	, ett.`IsValidForHolidayPayment`
 
-	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`TrueSalary` / @defaultWorkHours), ((`es`.`TrueSalary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
+	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours` + `et`.`MaternityLeaveHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`TrueSalary` / @defaultWorkHours), ((`es`.`TrueSalary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
 	, isActual `AsActual`
 	, IFNULL(sh.WorkHours, 0) `WorkHours`
 	, et.`AddedHolidayPayAmount`

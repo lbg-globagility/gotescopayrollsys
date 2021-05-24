@@ -174,7 +174,11 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.TotalDayPay) AS TotalDayPay
 				, SUM(etea.Absent) AS Absent, SUM(etea.HolidayPayAmount) AS HolidayPayAmount
 				, SUM(et.AbsentHours) `AbsentHours`
-				, SUM(IF(et.IsValidForHolidayPayment, et.DailyRate, 0)) `TotalDefaultHolidayPay`
+				, SUM(IF(et.IsValidForHolidayPayment,
+							IF(et.IsLegalHoliday,
+								et.DailyRate,
+								0),
+							0)) `TotalDefaultHolidayPay`
 				, SUM(etea.AddedHolidayPayAmount) `AddedHolidayPayAmount`
 				, SUM(et.RestDayHours) `RestDayHours`
 				, SUM(et.RestDayPay) `RestDayPay`

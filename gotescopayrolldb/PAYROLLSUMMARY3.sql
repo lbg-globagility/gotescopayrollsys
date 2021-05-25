@@ -108,7 +108,7 @@ ps.RowID
 , et.`RestDayAmount` `RestDayAmount`
 
 , et.`AttendedHolidayHours` `HolidayHours`
-, IFNULL(FORMAT( IF(e.EmployeeType='Daily', et.`DefaultHolidayPay` + et.`AddedHolidayPayAmount`, et.`DefaultHolidayPay` + et.`AddedHolidayPayAmount`), 2), 0) `HolidayAmount`
+, IFNULL(FORMAT( IF(e.EmployeeType='Daily', et.`DefaultHolidayPay`, et.`DefaultHolidayPay` + et.`AddedHolidayPayAmount`), 2), 0) `HolidayAmount`
 
 , et.`LeaveHours` `LeaveHours`
 , et.VacationLeaveHours * if(`e`.`EmployeeType` = 'Daily', (IF(ps.AsActual = 1, esa.TrueSalary, esa.Salary) / @defaultWorkHours), ((IF(ps.AsActual = 1, esa.TrueSalary, esa.Salary) / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) `VacationLeaveAmount`
@@ -186,11 +186,10 @@ LEFT JOIN (SELECT
 			  , SUM(et.RestDayPay) `RestDayAmount`
 			  , SUM(et.`AbsentHours`) `AbsentHours`
 			  , SUM(IF(et.IsValidForHolidayPayment = 1
-			           
 			           , et.RegularHoursWorked
 						  , 0)) `HolidayHours`
 			  , SUM(IFNULL(et.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`
-			  , SUM(IF(et.IsValidForHolidayPayment, et.DailyRate, 0)) `DefaultHolidayPay`
+			  , SUM(IF(et.IsValidForHolidayPayment, IF(et.IsLegalHoliday, et.DailyRate, 0), 0)) `DefaultHolidayPay`
 			  , SUM(et.HolidayHours) `AttendedHolidayHours`
 			  
 

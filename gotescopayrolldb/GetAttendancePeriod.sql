@@ -41,7 +41,14 @@ SET @monthlyType='monthly';
 SET @monthCount=12;
 SET @defaultWorkHours=8;
 SET @isRestDay=FALSE;
+
 SET @isHoliday=FALSE;
+SET @isLegalHoliday=FALSE;
+SET @isSpecialHoliday=FALSE;
+
+SET @isDaily=FALSE;
+SET @isMonthly=FALSE;
+SET @isFixed=FALSE;
 
 DROP TEMPORARY TABLE IF EXISTS attendanceperiod;
 DROP TABLE IF EXISTS attendanceperiod;
@@ -68,9 +75,16 @@ IF NOT isActual THEN
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
 	
+	, @isLegalHoliday := pr.PayType=@legalHoliday `IsLegalHoliday`
+	, @isSpecialHoliday := pr.PayType=@specialHoliday `IsSpecialHoliday`
+	
 	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
 	
-	, IF(@isHoliday AND et.IsValidForHolidayPayment, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, @isDaily := e.EmployeeType = 'Daily' `IsDaily`
+	, @isMonthly := e.EmployeeType = 'Monthly' `IsMonthly`
+	, @isFixed := e.EmployeeType = 'Fixed' `IsFixed`
+	
+	, IF(et.IsValidForHolidayPayment AND @isLegalHoliday AND et.`RegularHoursWorked` > 0, et.`RegularHoursWorked`, 0) `HolidayHours`
 	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
 	
 	, et.`TotalHoursWorked`
@@ -107,6 +121,14 @@ IF NOT isActual THEN
 	, es.Percentage `ActualSalaryRate`
 	, es.DailyRate
 	
+	, pr.PayType
+	, pr.`PayRate`
+	, pr.OvertimeRate
+	, pr.NightDifferentialRate
+	, pr.NightDifferentialOTRate
+	, pr.RestDayRate
+	, pr.RestDayOvertimeRate
+
 	FROM employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
 	INNER JOIN payrate pr ON pr.RowID=et.PayRateID
@@ -140,10 +162,17 @@ ELSE
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
-	
+		
+	, @isLegalHoliday := pr.PayType=@legalHoliday `IsLegalHoliday`
+	, @isSpecialHoliday := pr.PayType=@specialHoliday `IsSpecialHoliday`
+
 	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
 	
-	, IF(@isHoliday AND ett.IsValidForHolidayPayment, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, @isDaily := e.EmployeeType = 'Daily' `IsDaily`
+	, @isMonthly := e.EmployeeType = 'Monthly' `IsMonthly`
+	, @isFixed := e.EmployeeType = 'Fixed' `IsFixed`
+	
+	, IF(ett.IsValidForHolidayPayment AND @isLegalHoliday AND et.`RegularHoursWorked` > 0, et.`RegularHoursWorked`, 0) `HolidayHours`
 	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
 	
 	, et.`TotalHoursWorked`
@@ -181,6 +210,14 @@ ELSE
 	, et.`AddedHolidayPayAmount`
 	, es.Percentage `ActualSalaryRate`
 	
+	, pr.PayType
+	, pr.`PayRate`
+	, pr.OvertimeRate
+	, pr.NightDifferentialRate
+	, pr.NightDifferentialOTRate
+	, pr.RestDayRate
+	, pr.RestDayOvertimeRate
+
 	FROM employeetimeentryactual et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
 	INNER JOIN employeetimeentry ett ON ett.EmployeeID=e.RowID AND ett.`Date`=et.`Date` AND ett.OrganizationID=et.OrganizationID

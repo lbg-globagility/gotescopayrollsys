@@ -148,8 +148,9 @@ INNER JOIN (SELECT etea.RowID AS eteRowID
 				, SUM(etea.RegularHoursWorked) AS RegularHoursWorked
 				
 #				, SUM(etea.RegularHoursAmount - IF(etea.RegularHoursAmount = 0 AND etea.TotalDayPay > 0, 0, etea.HolidayPayAmount)) AS RegularHoursAmount
-				, SUM(IF(etea.RegularHoursAmount > 0 AND etea.DailyRate = etea.HolidayPayAmount, 0, IF(isDaily AND etea.IsValidForHolidayPayment, (etea.RegularHoursAmount - etea.AddedHolidayPayAmount), etea.RegularHoursAmount))) `RegularHoursAmount`
+#				, SUM(IF(etea.RegularHoursAmount > 0 AND etea.DailyRate = etea.HolidayPayAmount, 0, IF(isDaily AND etea.IsValidForHolidayPayment, (etea.RegularHoursAmount - etea.AddedHolidayPayAmount), etea.RegularHoursAmount))) `RegularHoursAmount`
 #				, SUM(etea.RegularHoursAmount) AS RegularHoursAmount
+				, SUM(IF(etea.IsValidForHolidayPayment AND etea.IsDaily, IF(etea.IsLegalHoliday, etea.AddedHolidayPayAmount, etea.RegularHoursAmount), etea.RegularHoursAmount)) AS RegularHoursAmount
 				, SUM(etea.TotalHoursWorked) AS TotalHoursWorked
 				, SUM(etea.OvertimeHoursWorked) AS OvertimeHoursWorked
 				, SUM(etea.OvertimeHoursAmount) AS OvertimeHoursAmount

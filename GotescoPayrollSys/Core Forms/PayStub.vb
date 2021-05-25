@@ -8510,6 +8510,7 @@ Public Class PayStub
                 txthrsworkamt.Text = FormatNumber((thebasicpay - thelessamounts), 2)
             Else
                 txthrsworkamt.Text = FormatNumber((ValNoComma(drow("RegularHoursAmount"))), 2)
+                holidaybayad = totalDefaultHolidayPay
             End If
             'Over time
             txttotothrs.Text = ValNoComma(drow("OvertimeHoursWorked"))
@@ -8760,6 +8761,7 @@ Public Class PayStub
                 txthrsworkamt_U.Text = FormatNumber((thebasicpay - thelessamounts), 2)
             Else
                 txthrsworkamt_U.Text = FormatNumber((ValNoComma(drow("RegularHoursAmount"))), 2)
+                holidaybayad = totalDefaultHolidayPay
             End If
             'Over time
             txttotothrs_U.Text = ValNoComma(drow("OvertimeHoursWorked"))

@@ -366,24 +366,27 @@ ELSEIF LCASE(@employee_type)='daily' THEN
 	ELSE
 		SET NEW.HolidayPayAmount = 0;
 	END IF;
-
-	SET @isSatisfied=EXISTS(SELECT e.RowID
+	
+	SET @isSatisfiedSpecial=EXISTS(SELECT e.RowID
 									FROM employee e
 									WHERE e.RowID=NEW.EmployeeID
 									AND isSpecialHoliday=TRUE AND e.CalcSpecialHoliday=TRUE
-									AND NEW.IsValidForHolidayPayment=TRUE
-								UNION
-									SELECT e.RowID
+									AND NEW.IsValidForHolidayPayment=TRUE);
+	SET @isSatisfiedLegal=EXISTS(SELECT e.RowID
 									FROM employee e
 									WHERE e.RowID=NEW.EmployeeID
 									AND isLegalHoliday=TRUE AND e.CalcHoliday=TRUE
-									AND NEW.IsValidForHolidayPayment=TRUE
-									);
+									AND NEW.IsValidForHolidayPayment=TRUE);
+	SET @isSatisfied = (@isSatisfiedSpecial OR @isSatisfiedLegal);
 	IF @isSatisfied=TRUE THEN
 		SET @additional=((NEW.RegularHoursWorked * (NULLIF(rate_this_date, 0) / default_working_hrs)) * NULLIF((payrate_this_date-1),0));
 		SET @additional=IFNULL(@additional,0);
 	
 		SET NEW.AddedHolidayPayAmount=@additional;
+		
+		IF @isSatisfiedLegal THEN SET NEW.TotalDayPay=NEW.TotalDayPay + @additional; END IF;
+		
+#		IF @isSatisfiedSpecial THEN ?? END IF;
 	ELSE
 		SET NEW.AddedHolidayPayAmount=0;
 	END IF;

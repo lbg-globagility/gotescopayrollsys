@@ -84,7 +84,7 @@ IF NOT isActual THEN
 	, @isMonthly := e.EmployeeType = 'Monthly' `IsMonthly`
 	, @isFixed := e.EmployeeType = 'Fixed' `IsFixed`
 	
-	, IF(et.IsValidForHolidayPayment AND @isLegalHoliday AND et.`RegularHoursWorked` > 0, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, IF(et.IsValidForHolidayPayment AND @isLegalHoliday AND et.`RegularHoursWorked` > 0, IF(@isMonthly, et.`RegularHoursWorked`, 0), 0) `HolidayHours`
 	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
 	
 	, et.`TotalHoursWorked`
@@ -172,7 +172,7 @@ ELSE
 	, @isMonthly := e.EmployeeType = 'Monthly' `IsMonthly`
 	, @isFixed := e.EmployeeType = 'Fixed' `IsFixed`
 	
-	, IF(ett.IsValidForHolidayPayment AND @isLegalHoliday AND et.`RegularHoursWorked` > 0, et.`RegularHoursWorked`, 0) `HolidayHours`
+	, IF(ett.IsValidForHolidayPayment AND @isLegalHoliday AND et.`RegularHoursWorked` > 0, IF(@isMonthly, et.`RegularHoursWorked`, 0), 0) `HolidayHours`
 	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
 	
 	, et.`TotalHoursWorked`

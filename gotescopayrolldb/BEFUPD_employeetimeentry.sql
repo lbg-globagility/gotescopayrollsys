@@ -331,6 +331,8 @@ ELSE
 		END IF;
 		
 		SET NEW.Absent = 0;
+		
+		IF NOT NEW.IsValidForHolidayPayment AND emp_type = 'Monthly' THEN SET NEW.Absent = @e_dayrate; END IF;
 	ELSE
 		SET NEW.Absent = NULL; SET NEW.Absent = IFNULL(NEW.Absent,0);
 	END IF;

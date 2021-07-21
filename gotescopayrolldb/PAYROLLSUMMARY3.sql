@@ -189,7 +189,7 @@ LEFT JOIN (SELECT
 			           , et.RegularHoursWorked
 						  , 0)) `HolidayHours`
 			  , SUM(IFNULL(et.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`
-			  , SUM(IF(et.IsValidForHolidayPayment, IF(et.IsLegalHoliday, et.DailyRate, 0), 0)) `DefaultHolidayPay`
+			  , SUM(IF(et.IsValidForHolidayPayment, IF(et.IsLegalHoliday OR (et.IsSpecialHoliday AND et.IsMonthly AND et.RegularHoursWorked = 0), et.DailyRate, 0), 0)) `DefaultHolidayPay`
 			  , SUM(et.HolidayHours) `AttendedHolidayHours`
 			  
 

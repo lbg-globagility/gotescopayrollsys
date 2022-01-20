@@ -88,7 +88,7 @@ AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 									WHERE e.OrganizationID = OrganizID
 									AND e.DateRegularized NOT BETWEEN payDateFrom AND payDateTo
 									AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-									AND e.EmploymentStatus = regularEmplymentStatus
+									AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 									;
 
 
@@ -125,7 +125,7 @@ e.LeavePerPayPeriod =				( e.LeaveAllowance / count_semi_monthly_period_peryear 
 WHERE e.OrganizationID = OrganizID
 AND e.DateRegularized BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.EmploymentStatus = regularEmplymentStatus
+AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 # 5th year ####################################
@@ -149,7 +149,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveTenthYearService / count_semi_monthly_peri
 WHERE e.OrganizationID = OrganizID
 AND ADDDATE(e.DateRegularized, INTERVAL 5 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.EmploymentStatus = regularEmplymentStatus
+AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 # 10th year ####################################
@@ -173,7 +173,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveFifteenthYearService / count_semi_monthly_
 WHERE e.OrganizationID = OrganizID
 AND ADDDATE(e.DateRegularized, INTERVAL 10 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.EmploymentStatus = regularEmplymentStatus
+AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 # 15th year ####################################
@@ -197,7 +197,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveAboveFifteenthYearService / count_semi_mon
 WHERE e.OrganizationID = OrganizID
 AND ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) BETWEEN payDateFrom AND payDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.EmploymentStatus = regularEmplymentStatus
+AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 
@@ -274,7 +274,7 @@ AND (ADDDATE(e.DateRegularized, INTERVAL 6 YEAR) BETWEEN thisYearPayDateFrom AND
      OR ADDDATE(e.DateRegularized, INTERVAL 8 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 9 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo)
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.EmploymentStatus = regularEmplymentStatus
+AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 
@@ -296,7 +296,7 @@ AND (ADDDATE(e.DateRegularized, INTERVAL 11 YEAR) BETWEEN thisYearPayDateFrom AN
      OR ADDDATE(e.DateRegularized, INTERVAL 14 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
      OR ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo)
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.EmploymentStatus = regularEmplymentStatus
+AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 
@@ -316,7 +316,7 @@ AND ADDDATE(e.DateRegularized, INTERVAL 15 YEAR) NOT BETWEEN thisYearPayDateFrom
 AND (ADDDATE(e.DateRegularized, INTERVAL 16 YEAR) <= thisYearPayDateFrom
      OR ADDDATE(e.DateRegularized, INTERVAL 16 YEAR) <= thisYearPayDateTo)
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.EmploymentStatus = regularEmplymentStatus
+AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 
@@ -343,7 +343,7 @@ e.LeaveBalance = e.LeaveAllowance - IFNULL(ete.VacationLeaveHours,0)
 , e.LastUpdBy = IFNULL(e.LastUpdBy, e.CreatedBy)
 WHERE e.OrganizationID = OrganizID
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-AND e.EmploymentStatus = regularEmplymentStatus
+AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 CALL UpdateLeaveBalance(OrganizID, yearPeriod, payDateFrom);

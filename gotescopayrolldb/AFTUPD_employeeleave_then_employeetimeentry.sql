@@ -65,8 +65,8 @@ IF LOCATE('aternity', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 	LEFT JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
 	SET et.LastUpd = CURRENT_TIMESTAMP()
 	,et.LastUpdBy = NEW.LastUpdBy
-	,et.MaternityLeaveHours = IF(NEW.`Status` = 'Approved'
-	                            , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
+	,et.MaternityLeaveHours = IF(NEW.`Status` = 'Approved', NEW.OfficialValidHours
+#	                            , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
 										 , 0)
 	,et.TotalDayPay = IF(e.EmployeeType = 'Daily'
 	                     , esa.BasicPay
@@ -88,8 +88,8 @@ ELSEIF LOCATE('vacation', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 	LEFT JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
 	SET et.LastUpd = CURRENT_TIMESTAMP()
 	,et.LastUpdBy = NEW.LastUpdBy
-	,et.VacationLeaveHours = IF(NEW.`Status` = 'Approved'
-	                            , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
+	,et.VacationLeaveHours = IF(NEW.`Status` = 'Approved', NEW.OfficialValidHours
+#	                            , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
 										 , 0)
 	,et.TotalDayPay = IF(e.EmployeeType = 'Daily'
 	                     , esa.BasicPay
@@ -111,8 +111,8 @@ ELSEIF LOCATE('sick', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 	LEFT JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
 	SET et.LastUpd = CURRENT_TIMESTAMP()
 	,et.LastUpdBy = NEW.LastUpdBy
-	,et.SickLeaveHours = IF(NEW.`Status` = 'Approved'
-	                        , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
+	,et.SickLeaveHours = IF(NEW.`Status` = 'Approved', NEW.OfficialValidHours
+#	                        , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
 									, 0)
 	,et.TotalDayPay = IF(e.EmployeeType = 'Daily'
 	                     , esa.BasicPay
@@ -134,8 +134,8 @@ ELSEIF LOCATE('others', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 	LEFT JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
 	SET et.LastUpd = CURRENT_TIMESTAMP()
 	,et.LastUpdBy = NEW.LastUpdBy
-	,et.OtherLeaveHours = IF(NEW.`Status` = 'Approved'
-	                         , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
+	,et.OtherLeaveHours = IF(NEW.`Status` = 'Approved', NEW.OfficialValidHours
+#	                         , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
 									 , 0)
 	,et.TotalDayPay = IF(e.EmployeeType = 'Daily'
 	                     , esa.BasicPay
@@ -157,8 +157,8 @@ ELSEIF LOCATE('additional', leav_type) > 0 AND NEW.`Status` = 'Approved' THEN
 	LEFT JOIN employeesalary esa ON esa.RowID=et.EmployeeSalaryID
 	SET et.LastUpd = CURRENT_TIMESTAMP()
 	,et.LastUpdBy = NEW.LastUpdBy
-	,et.AdditionalVLHours = IF(NEW.`Status` = 'Approved'
-	                           , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
+	,et.AdditionalVLHours = IF(NEW.`Status` = 'Approved', NEW.OfficialValidHours
+#	                           , IF(et.EmployeeShiftID IS NULL, default_min_hrswork, NEW.OfficialValidHours)
 										, 0)
 	,et.TotalDayPay = IF(e.EmployeeType = 'Daily'
 	                     , esa.BasicPay

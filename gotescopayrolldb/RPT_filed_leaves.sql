@@ -34,7 +34,7 @@ SELECT GROUP_CONCAT(p.RowID)
 FROM product p
 WHERE p.`Category`='Leave type'
 AND p.OrganizationID=org_rowid
-AND p.PartNo IN ('Vacation leave', 'Sick leave', 'Additional VL')
+AND p.PartNo IN ('Vacation leave', 'Sick leave', 'Others', 'Additional VL')
 INTO leave_prodids;
 
 SELECT MAX(pp.`Year`)
@@ -92,10 +92,12 @@ INTO remarks;
 	, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
 	, e.LeaveAllowance
 	, e.SickLeaveAllowance
+	, e.OtherLeaveAllowance
 	, e.AdditionalVLAllowance
 	
 	, (e.LeaveAllowance
 	   + e.SickLeaveAllowance
+	   + e.OtherLeaveAllowance
 	   + e.AdditionalVLAllowance) `TotalLeave`
 	
 	, remarks `Remarks`
@@ -119,7 +121,7 @@ INTO remarks;
 	WHERE et.OrganizationID = org_rowid
 	AND et.`Date` BETWEEN date_from AND date_to
 	# AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
-	AND (et.VacationLeaveHours + et.SickLeaveHours + et.AdditionalVLHours) > 0
+	AND (et.VacationLeaveHours + et.SickLeaveHours + e.OtherLeaveAllowance + et.AdditionalVLHours) > 0
 	#GROUP BY et.RowID
 	ORDER BY CONCAT(e.LastName, e.FirstName), et.`Date`
 	;

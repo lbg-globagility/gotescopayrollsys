@@ -27,7 +27,7 @@ SELECT GROUP_CONCAT(p.RowID)
 FROM product p
 WHERE p.`Category`='Leave type'
 AND p.OrganizationID=org_rowid
-AND p.PartNo IN ('Vacation leave', 'Sick leave', 'Additional VL')
+AND p.PartNo IN ('Vacation leave', 'Sick leave', 'Others', 'Additional VL')
 INTO leave_prodids;
 
 SELECT MAX(pp.`Year`)
@@ -50,7 +50,7 @@ SELECT i.*
 /**/ , (i.LeaveAllowance - SUM(i.VacationLeaveHrs)) `VacationLeaveHours`
 , (i.SickLeaveAllowance - SUM(i.SickLeaveHrs)) `SickLeaveHours`
 # ,i.MaternityLeaveHours `MaternityLeaveHours`
-# ,i.OtherLeaveHours `OtherLeaveHours`
+, (i.OtherLeaveAllowance - SUM(i.OtherLeaveHrs)) `OtherLeaveHours`
 , (i.AdditionalVLAllowance - SUM(i.AdditionalVLHrs)) `AdditionalVLHours`
 
 FROM (SELECT ii.*
@@ -69,10 +69,12 @@ FROM (SELECT ii.*
 				, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
 				, e.LeaveAllowance
 				, e.SickLeaveAllowance
+				, e.OtherLeaveAllowance
 				, e.AdditionalVLAllowance
 				
 				, (e.LeaveAllowance
 				   + e.SickLeaveAllowance
+				   + e.OtherLeaveAllowance
 				   + e.AdditionalVLAllowance) `TotalLeave`
 				
 				, remarks `Remarks`
@@ -120,10 +122,12 @@ FROM (SELECT ii.*
 				, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
 				, e.LeaveAllowance
 				, e.SickLeaveAllowance
+				, e.OtherLeaveAllowance
 				, e.AdditionalVLAllowance
 				
 				, (e.LeaveAllowance
 				   + e.SickLeaveAllowance
+				   + e.OtherLeaveAllowance
 				   + e.AdditionalVLAllowance) `TotalLeave`
 				
 				, remarks `Remarks`
@@ -133,6 +137,7 @@ FROM (SELECT ii.*
 				AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 				AND (e.LeaveAllowance
 				     + e.SickLeaveAllowance
+				     + e.OtherLeaveAllowance
 				     + e.AdditionalVLAllowance) > 0
 				AND (e.DateRegularized BETWEEN date_from AND date_to
 				     OR (e.DateRegularized <= date_from

@@ -4955,6 +4955,8 @@ Partial Public Class DS1
         
         Private columnSickLeaveAllowance As Global.System.Data.DataColumn
         
+        Private columnOtherLeaveAllowance As Global.System.Data.DataColumn
+        
         Private columnAdditionalVLAllowance As Global.System.Data.DataColumn
         
         Private columnTotalLeave As Global.System.Data.DataColumn
@@ -5278,6 +5280,14 @@ Partial Public Class DS1
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property OtherLeaveAllowanceColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnOtherLeaveAllowance
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public ReadOnly Property AdditionalVLAllowanceColumn() As Global.System.Data.DataColumn
             Get
                 Return Me.columnAdditionalVLAllowance
@@ -5373,11 +5383,12 @@ Partial Public Class DS1
                     ByVal FullName As String,  _
                     ByVal LeaveAllowance As Decimal,  _
                     ByVal SickLeaveAllowance As Decimal,  _
+                    ByVal OtherLeaveAllowance As Decimal,  _
                     ByVal AdditionalVLAllowance As Decimal,  _
                     ByVal TotalLeave As String,  _
                     ByVal Remarks As String) As employeetimeentryRow
             Dim rowemployeetimeentryRow As employeetimeentryRow = CType(Me.NewRow,employeetimeentryRow)
-            Dim columnValuesArray() As Object = New Object() {_Date, EmployeeShiftID, EmployeeID, EmployeeSalaryID, EmployeeFixedSalaryFlag, RegularHoursWorked, RegularHoursAmount, TotalHoursWorked, OvertimeHoursWorked, OvertimeHoursAmount, UndertimeHours, UndertimeHoursAmount, NightDifferentialHours, NightDiffHoursAmount, NightDifferentialOTHours, NightDiffOTHoursAmount, HoursLate, HoursLateAmount, LateFlag, PayRateID, VacationLeaveHours, SickLeaveHours, MaternityLeaveHours, OtherLeaveHours, AdditionalVLHours, TotalDayPay, Absent, TaxableDailyAllowance, HolidayPayAmount, TaxableDailyBonus, NonTaxableDailyBonus, IsValidForHolidayPayment, FullName, LeaveAllowance, SickLeaveAllowance, AdditionalVLAllowance, TotalLeave, Remarks}
+            Dim columnValuesArray() As Object = New Object() {_Date, EmployeeShiftID, EmployeeID, EmployeeSalaryID, EmployeeFixedSalaryFlag, RegularHoursWorked, RegularHoursAmount, TotalHoursWorked, OvertimeHoursWorked, OvertimeHoursAmount, UndertimeHours, UndertimeHoursAmount, NightDifferentialHours, NightDiffHoursAmount, NightDifferentialOTHours, NightDiffOTHoursAmount, HoursLate, HoursLateAmount, LateFlag, PayRateID, VacationLeaveHours, SickLeaveHours, MaternityLeaveHours, OtherLeaveHours, AdditionalVLHours, TotalDayPay, Absent, TaxableDailyAllowance, HolidayPayAmount, TaxableDailyBonus, NonTaxableDailyBonus, IsValidForHolidayPayment, FullName, LeaveAllowance, SickLeaveAllowance, OtherLeaveAllowance, AdditionalVLAllowance, TotalLeave, Remarks}
             rowemployeetimeentryRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowemployeetimeentryRow)
             Return rowemployeetimeentryRow
@@ -5435,6 +5446,7 @@ Partial Public Class DS1
             Me.columnFullName = MyBase.Columns("FullName")
             Me.columnLeaveAllowance = MyBase.Columns("LeaveAllowance")
             Me.columnSickLeaveAllowance = MyBase.Columns("SickLeaveAllowance")
+            Me.columnOtherLeaveAllowance = MyBase.Columns("OtherLeaveAllowance")
             Me.columnAdditionalVLAllowance = MyBase.Columns("AdditionalVLAllowance")
             Me.columnTotalLeave = MyBase.Columns("TotalLeave")
             Me.columnRemarks = MyBase.Columns("Remarks")
@@ -5516,6 +5528,8 @@ Partial Public Class DS1
             MyBase.Columns.Add(Me.columnLeaveAllowance)
             Me.columnSickLeaveAllowance = New Global.System.Data.DataColumn("SickLeaveAllowance", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnSickLeaveAllowance)
+            Me.columnOtherLeaveAllowance = New Global.System.Data.DataColumn("OtherLeaveAllowance", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnOtherLeaveAllowance)
             Me.columnAdditionalVLAllowance = New Global.System.Data.DataColumn("AdditionalVLAllowance", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnAdditionalVLAllowance)
             Me.columnTotalLeave = New Global.System.Data.DataColumn("TotalLeave", GetType(String), Nothing, Global.System.Data.MappingType.Element)
@@ -13547,6 +13561,22 @@ Partial Public Class DS1
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property OtherLeaveAllowance() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tableemployeetimeentry.OtherLeaveAllowanceColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'OtherLeaveAllowance' in table 'employeetimeentry' is DBNull"& _ 
+                            ".", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableemployeetimeentry.OtherLeaveAllowanceColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property AdditionalVLAllowance() As Decimal
             Get
                 Try 
@@ -14009,6 +14039,18 @@ Partial Public Class DS1
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub SetSickLeaveAllowanceNull()
             Me(Me.tableemployeetimeentry.SickLeaveAllowanceColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsOtherLeaveAllowanceNull() As Boolean
+            Return Me.IsNull(Me.tableemployeetimeentry.OtherLeaveAllowanceColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetOtherLeaveAllowanceNull()
+            Me(Me.tableemployeetimeentry.OtherLeaveAllowanceColumn) = Global.System.Convert.DBNull
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

@@ -940,7 +940,7 @@ Public Class MDIPrimaryForm
 
             ElseIf groupindex = 3 Then 'Payroll
                 If previousForm.Name = "Paystub" Then
-                    With PayStub
+                    With PayStubForm
 
                         If .bgworkgenpayroll.IsBusy Then
                         Else

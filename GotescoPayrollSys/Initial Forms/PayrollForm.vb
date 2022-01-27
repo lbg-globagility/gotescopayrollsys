@@ -70,8 +70,8 @@
 
     Sub PayrollToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PayrollToolStripMenuItem.Click
         'ChangeForm(PayrollGenerateForm)
-        ChangeForm(PayStub, "Employee Pay Slip")
-        previousForm = PayStub
+        ChangeForm(PayStubForm, "Employee Pay Slip")
+        previousForm = PayStubForm
     End Sub
 
     Private Sub PayrollForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

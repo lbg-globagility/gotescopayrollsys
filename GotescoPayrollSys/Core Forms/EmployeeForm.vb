@@ -22790,8 +22790,8 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                 txtvlallowLeave.Text = r("LeaveAllowance")
                 txtslallowLeave.Text = r("SickLeaveAllowance")
                 txtmlallowleave.Text = r("MaternityLeaveAllowance")
-                txtlvotherallow.Text = r("AdditionalVLAllowance")
-                txtaddvlallow2.Text = r("OtherLeaveAllowance")
+                txtaddvlallow2.Text = r("AdditionalVLAllowance")
+                txtlvotherallow.Text = r("OtherLeaveAllowance")
             End While
 
         End Using

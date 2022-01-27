@@ -267,11 +267,11 @@ Public Class selectPayPeriod
 
                 id_value = dgvpaypers.Item("Column1", 0).Value
 
-                PayStub.paypRowID = .Cells("Column1").Value
+                PayStubForm.paypRowID = .Cells("Column1").Value
 
                 CurrentPayPeriodID = .Cells("Column1").Value
 
-                PayStub.Current_PayPeriodID = CurrentPayPeriodID
+                PayStubForm.Current_PayPeriodID = CurrentPayPeriodID
 
                 Dim prior_index = .Index - 1
 
@@ -291,13 +291,13 @@ Public Class selectPayPeriod
 
                 End If
 
-                PayStub.Prior_PayPeriodID = PriorPayPeriodID
+                PayStubForm.Prior_PayPeriodID = PriorPayPeriodID
 
-                PayStub.paypSSSContribSched = dgvpaypers.Item("SSSContribSched", .Index).Value
+                PayStubForm.paypSSSContribSched = dgvpaypers.Item("SSSContribSched", .Index).Value
 
-                PayStub.paypPhHContribSched = dgvpaypers.Item("PhHContribSched", .Index).Value
+                PayStubForm.paypPhHContribSched = dgvpaypers.Item("PhHContribSched", .Index).Value
 
-                PayStub.paypHDMFContribSched = dgvpaypers.Item("HDMFContribSched", .Index).Value
+                PayStubForm.paypHDMFContribSched = dgvpaypers.Item("HDMFContribSched", .Index).Value
 
                 Dim next_index = .Index + 1
 
@@ -317,13 +317,13 @@ Public Class selectPayPeriod
 
                 End If
 
-                PayStub.Next_PayPeriodID = NextPayPeriodID
+                PayStubForm.Next_PayPeriodID = NextPayPeriodID
 
                 'NextPayPeriodID
 
-                PayStub.paypFrom = Format(CDate(.Cells("Column2").Value), "yyyy-MM-dd")
+                PayStubForm.paypFrom = Format(CDate(.Cells("Column2").Value), "yyyy-MM-dd")
 
-                PayStub.paypTo = Format(CDate(.Cells("Column3").Value), "yyyy-MM-dd")
+                PayStubForm.paypTo = Format(CDate(.Cells("Column3").Value), "yyyy-MM-dd")
 
                 'Dim sel_yearDateFrom = CDate(PayStub.paypFrom).Year
 
@@ -333,35 +333,35 @@ Public Class selectPayPeriod
                 '                  sel_yearDateFrom, _
                 '                  sel_yearDateTo)
 
-                PayStub.isEndOfMonth = Trim(.Cells("Column14").Value)
+                PayStubForm.isEndOfMonth = Trim(.Cells("Column14").Value)
 
-                PayStub.genpayselyear = Format(CDate(.Cells("Column2").Value), "yyyy")
+                PayStubForm.genpayselyear = Format(CDate(.Cells("Column2").Value), "yyyy")
 
-                PayStub.numofweekdays = 0
+                PayStubForm.numofweekdays = 0
 
-                PayStub.numofweekends = 0
+                PayStubForm.numofweekends = 0
 
-                PayStub.periodRepresentation = CDate(.Cells(colDateRepresentation.Name).Value)
+                PayStubForm.periodRepresentation = CDate(.Cells(colDateRepresentation.Name).Value)
 
-                Dim date_diff = DateDiff(DateInterval.Day, CDate(PayStub.paypFrom), CDate(PayStub.paypTo))
+                Dim date_diff = DateDiff(DateInterval.Day, CDate(PayStubForm.paypFrom), CDate(PayStubForm.paypTo))
 
                 For i = 0 To date_diff
 
-                    Dim DayOfWeek = CDate(PayStub.paypFrom).AddDays(i)
+                    Dim DayOfWeek = CDate(PayStubForm.paypFrom).AddDays(i)
 
                     If DayOfWeek.DayOfWeek = 0 Then 'System.DayOfWeek.Sunday
-                        PayStub.numofweekends += 1
+                        PayStubForm.numofweekends += 1
 
                     ElseIf DayOfWeek.DayOfWeek = 6 Then 'System.DayOfWeek.Saturday
-                        PayStub.numofweekends += 1
+                        PayStubForm.numofweekends += 1
                     Else
-                        PayStub.numofweekdays += 1
+                        PayStubForm.numofweekdays += 1
 
                     End If
 
                 Next
 
-                PayStub.withthirteenthmonthpay = 0
+                PayStubForm.withthirteenthmonthpay = 0
 
                 If CheckBox1.Checked Then 'Format(CDate(.Cells("Column3").Value), "MM") = "12"
 
@@ -370,7 +370,7 @@ Public Class selectPayPeriod
 
                     If prompt = Windows.Forms.DialogResult.Yes Then
 
-                        PayStub.withthirteenthmonthpay = 1
+                        PayStubForm.withthirteenthmonthpay = 1
 
                     ElseIf prompt = Windows.Forms.DialogResult.No Then
 
@@ -384,11 +384,11 @@ Public Class selectPayPeriod
 
             End With
 
-            PayStub.VeryFirstPayPeriodIDOfThisYear = id_value
+            PayStubForm.VeryFirstPayPeriodIDOfThisYear = id_value
 
             Dim PayFreqRowID = EXECQUER("SELECT RowID FROM payfrequency WHERE PayFrequencyType='" & quer_empPayFreq & "';")
 
-            PayStub.genpayroll(PayFreqRowID)
+            PayStubForm.genpayroll(PayFreqRowID)
 
         End If
 

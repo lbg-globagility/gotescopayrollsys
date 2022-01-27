@@ -303,10 +303,10 @@
     <Compile Include="Core Forms\PayPeriodGUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core Forms\PayStub.Designer.vb">
-      <DependentUpon>PayStub.vb</DependentUpon>
+    <Compile Include="Core Forms\PayStubForm.Designer.vb">
+      <DependentUpon>PayStubForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Core Forms\PayStub.vb">
+    <Compile Include="Core Forms\PayStubForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Core Forms\PreviewLeaveBalanceForm.designer.vb">
@@ -1443,8 +1443,8 @@
     <EmbeddedResource Include="Core Forms\LoanBackground.resx">
       <DependentUpon>LoanBackground.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core Forms\PayStub.resx">
-      <DependentUpon>PayStub.vb</DependentUpon>
+    <EmbeddedResource Include="Core Forms\PayStubForm.resx">
+      <DependentUpon>PayStubForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\PreviewLeaveBalanceForm.resx">
       <DependentUpon>PreviewLeaveBalanceForm.vb</DependentUpon>
@@ -1504,6 +1504,7 @@
     </EmbeddedResource>
     <None Include="log4.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <EmbeddedResource Include="AboutAndVersion.resx">
       <DependentUpon>AboutAndVersion.vb</DependentUpon>

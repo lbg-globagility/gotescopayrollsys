@@ -58,7 +58,7 @@ Public Class PayrollGeneration
 
     Private m_NotifyMainWindow As NotifyMainWindow
 
-    Private _paystubForm As PayStub
+    Private _paystubForm As PayStubForm
     Private ReadOnly _socialSecurityPolicy As SocialSecurityPolicy
     Private ecoal_dat_set As New DataSet
 
@@ -142,7 +142,7 @@ Public Class PayrollGeneration
              _prev_empTimeEntry As DataTable,
              _VeryFirstPayPeriodIDOfThisYear As Object,
              _withthirteenthmonthpay As SByte,
-            paystubForm As PayStub,
+            paystubForm As PayStubForm,
             totalAllowancesUseInSss As DataTable)
 
         configCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
@@ -304,7 +304,7 @@ Public Class PayrollGeneration
         strSSSdeductsched,
         strHDMFdeductsched As String
 
-    Private n_PayStub As New PayStub
+    Private n_PayStub As New PayStubForm
 
     Private mysql_conn As MySqlConnection
 

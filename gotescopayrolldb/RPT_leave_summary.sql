@@ -83,8 +83,7 @@ FROM (SELECT ii.*
 				LEFT JOIN employeetimeentry et
 				        ON et.OrganizationID = org_rowid
 						     AND et.`Date` BETWEEN date_from AND date_to
-							  # AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
-							  AND (et.VacationLeaveHours + et.SickLeaveHours + et.AdditionalVLHours) > 0
+							  AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
 							  AND et.EmployeeID=e.RowID
 				
 				INNER JOIN employeeleave elv ON elv.EmployeeID=et.EmployeeID AND elv.`Status`='Approved' AND et.`Date` BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate

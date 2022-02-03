@@ -372,56 +372,59 @@ Public Class MetroLogin
 
     Private Sub lnklblleave_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnklblleave.LinkClicked
 
-        Dim n_LeaveForm As New LeaveForm
+        'Dim n_LeaveForm As New LeaveForm
 
-        With n_LeaveForm
+        'With n_LeaveForm
 
-            .CboListOfValue1.Visible = False
+        '    .CboListOfValue1.Visible = False
 
-            .Label3.Visible = False
+        '    .Label3.Visible = False
 
-            .Label4.Visible = False
+        '    .Label4.Visible = False
 
-            .Show()
+        '    .Show()
 
-        End With
-
+        'End With
+        Dim form As New SelfFilingForm(SelfFilingForm.FilingFormType.Leave)
+        form.Show()
     End Sub
 
     Private Sub lnklblovertime_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnklblovertime.LinkClicked
 
-        Dim n_OverTimeForm As New OverTimeForm
+        'Dim n_OverTimeForm As New OverTimeForm
 
-        With n_OverTimeForm
+        'With n_OverTimeForm
 
-            .cboOTStatus.Visible = False
+        '    .cboOTStatus.Visible = False
 
-            .Label186.Visible = False
+        '    .Label186.Visible = False
 
-            .Label4.Visible = False
+        '    .Label4.Visible = False
 
-            .Show()
+        '    .Show()
 
-        End With
-
+        'End With
+        Dim form As New SelfFilingForm(SelfFilingForm.FilingFormType.Overtime)
+        form.Show()
     End Sub
 
     Private Sub lnklblobf_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnklblobf.LinkClicked
 
-        Dim n_OBFForm As New OBFForm
+        'Dim n_OBFForm As New OBFForm
 
-        With n_OBFForm
+        'With n_OBFForm
 
-            .cboOBFStatus.Visible = False
+        '    .cboOBFStatus.Visible = False
 
-            .Label186.Visible = False
+        '    .Label186.Visible = False
 
-            .Label4.Visible = False
+        '    .Label4.Visible = False
 
-            .Show()
+        '    .Show()
 
-        End With
-
+        'End With
+        Dim form As New SelfFilingForm(SelfFilingForm.FilingFormType.OfficialBusiness)
+        form.Show()
     End Sub
 
     Private Function CustomDatePicker1() As Object

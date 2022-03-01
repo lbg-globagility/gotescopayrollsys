@@ -185,7 +185,8 @@ ps.RowID
 , IFNULL(ROUND(et.`RestDayAmount`, 2), 0) `Column16`
 
 , FORMAT(IFNULL(et.`AttendedHolidayHours`, 0), 2) `Column44`
-, IFNULL(FORMAT( IF(e.EmployeeType='Daily', et.`DefaultHolidayPay`, et.HolidayPayAmount), 2), 0) `Column1`
+#, IFNULL(FORMAT( IF(e.EmployeeType='Daily', et.`DefaultHolidayPay`, et.HolidayPayAmount), 2), 0) `Column1`
+, IFNULL(FORMAT( et.`TotalDefaultHolidayPay` + et.`AddedHolidayPayAmount`, 2), 0) `Column1`
 
 , FORMAT(IFNULL(et.`LeaveHours`, 0), 2) `Column45`
 , IFNULL(ROUND(et.`Leavepayment`, 2), 0) `Column15`
@@ -293,6 +294,11 @@ LEFT JOIN (SELECT
 						  , 0)) `HolidayHours`
 			  , SUM(IFNULL(et.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`
 			  , SUM(IF(et.IsValidForHolidayPayment, IF(et.IsLegalHoliday OR (et.IsSpecialHoliday AND et.IsMonthly AND et.RegularHoursWorked = 0), et.DailyRate, 0), 0)) `DefaultHolidayPay`
+			  , SUM(IF(et.IsValidForHolidayPayment,
+			  				IF(et.IsLegalHoliday OR (et.IsSpecialHoliday AND et.IsMonthly AND et.RegularHoursWorked = 0),
+								et.DailyRate,
+								0),
+							0)) `TotalDefaultHolidayPay`
 			  , SUM(et.HolidayHours) `AttendedHolidayHours`
 			  
 #			  FROM proper_time_entry et

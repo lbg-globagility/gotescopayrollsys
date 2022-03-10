@@ -12,9 +12,6 @@ BEGIN
 
 DECLARE obf_ID INT(11);
 
-SET obf_StartTime = STR_TO_DATE(obf_StartTime, '%r');
-SET obf_EndTime = STR_TO_DATE(obf_EndTime, '%r');
-
 INSERT INTO employeeofficialbusiness
 (
     RowID

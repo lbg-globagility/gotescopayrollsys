@@ -15,6 +15,14 @@ CREATE PROCEDURE `GET_employeeloanschedules_ofthisperiod`(
     DETERMINISTIC
 BEGIN
 
+DECLARE datefrom, dateto DATE;
+
+SELECT
+pp.*
+FROM payperiod pp
+WHERE pp.RowID
+INTO datefrom, dateto;
+
 CALL `LoanPrediction`(org_rowid);
 
 SELECT
@@ -32,6 +40,8 @@ FROM (SELECT i.*
 		WHERE i.PayperiodID=payperiod_rowid
 		AND LCASE(i.`Status`) = 'cancelled'
 		AND i.DiscontinuedDate IS NOT NULL
+		AND ((datefrom BETWEEN i.DedEffectiveDateFrom AND i.SubstituteEndDate) OR
+				(dateto BETWEEN i.DedEffectiveDateFrom AND i.SubstituteEndDate))
 		) ii
 WHERE ii.PayperiodID=payperiod_rowid
 GROUP BY ii.EmployeeID, ii.`Nondeductible`

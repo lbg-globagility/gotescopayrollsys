@@ -10,110 +10,54 @@ CREATE PROCEDURE `RPT_loans`(IN `OrganizID` INT, IN `PayDateFrom` DATE, IN `PayD
     DETERMINISTIC
 BEGIN
 
-DECLARE strloantype TEXT;
+SET @orgId=OrganizID;
+SET @datefrom=PayDateFrom;
+SET @dateto=PayDateTo;
 
-DECLARE pp_rowid INT(11);
+CALL `LoanPrediction`(@orgId);
 
-SELECT pp.RowID FROM payperiod pp WHERE pp.OrganizationID=OrganizID AND pp.PayFromDate=PayDateFrom AND pp.PayToDate=PayDateTo AND pp.TotalGrossSalary=1 LIMIT 1 INTO pp_rowid;
+SELECT
+ii.*
+FROM (SELECT
+		e.EmployeeID `DatCol`,
+		CONCAT_WS(', ', e.LastName, e.FirstName) `DatCol2`,
+		p.PartNo `DatCol3`,
+		i.DeductionAmount `DatCol4`,
+		pp.`Year`,
+		pp.OrdinalValue
+		FROM loanpredict i
+		INNER JOIN payperiod pp ON pp.RowID=i.PayPeriodId
+		INNER JOIN employee e ON e.RowID=i.EmployeeID
+		INNER JOIN product p ON p.RowID=i.LoanTypeId
+		WHERE ((@datefrom <= i.PayFromDate AND @dateto <= i.PayToDate)
+		AND (i.PayFromDate <= @dateto AND i.PayToDate <= @dateto))
+		
+		AND IF(pp.Half=0, i.DeductionSchedule IN ('End of the month', 'Per pay period'), i.DeductionSchedule IN ('First half', 'Per pay period'))
+		
+		AND i.LoanTypeId=IFNULL(LoanTypeID, i.LoanTypeId)
+		AND LCASE(i.`Status`) IN ('in progress', 'complete')
+UNION
+		SELECT
+		e.EmployeeID `DatCol`,
+		CONCAT_WS(', ', e.LastName, e.FirstName) `DatCol2`,
+		p.PartNo `DatCol3`,
+		i.DeductionAmount `DatCol4`,
+		pp.`Year`,
+		pp.OrdinalValue
+		FROM loanpredict i
+		INNER JOIN payperiod pp ON pp.RowID=i.PayPeriodId
+		INNER JOIN employee e ON e.RowID=i.EmployeeID
+		INNER JOIN product p ON p.RowID=i.LoanTypeId
+		WHERE ((@datefrom BETWEEN i.DedEffectiveDateFrom AND i.SubstituteEndDate) OR
+				(@dateto BETWEEN i.DedEffectiveDateFrom AND i.SubstituteEndDate))
+		
+		AND IF(pp.Half=0, i.DeductionSchedule IN ('End of the month', 'Per pay period'), i.DeductionSchedule IN ('First half', 'Per pay period'))
+		
+		AND i.LoanTypeId=IFNULL(LoanTypeID, i.LoanTypeId)
+		AND LCASE(i.`Status`) = 'cancelled'
+		) ii
 
-SELECT PartNo FROM product WHERE RowID=LoanTypeID INTO strloantype;
-
-# SELECT
-
-/*elh.Comments
-,ee.EmployeeID
-,CONCAT(ee.LastName,',',ee.FirstName, IF(ee.MiddleName='','',','),INITIALS(ee.MiddleName,'. ','1')) 'Fullname'
-,FORMAT(SUM(IFNULL(elh.DeductionAmount,0)),2) 'DeductionAmount'
-,els.TotalLoanAmount
-,els.TotalBalanceLeft*/
-
-# elh.*,
-
-/*ee.EmployeeID `DatCol1`
-,CONCAT_WS('', ee.LastName, ee.FirstName, LEFT(ee.MiddleName, 1)) `DatCol2`
-,elh.Comments `DatCol3`
-,FORMAT(SUM(IFNULL(elh.DeductionAmount,0)),2) `DatCol4`
-FROM employeeloanhistory elh
-INNER JOIN paystub ps ON ps.RowID=elh.PayStubID AND ps.OrganizationID=elh.OrganizationID
-INNER JOIN employee ee ON ee.RowID=ps.EmployeeID AND ee.OrganizationID=elh.OrganizationID
-INNER JOIN employeeloanschedule els ON els.LoanTypeID=IFNULL(LoanTypeID, els.LoanTypeID) AND els.OrganizationID=OrganizID AND (els.DedEffectiveDateFrom>=PayDateFrom OR els.DedEffectiveDateTo>=PayDateFrom) AND (els.DedEffectiveDateFrom<=PayDateTo OR els.DedEffectiveDateTo<=PayDateTo)
-WHERE elh.DeductionAmount!=0
-AND elh.OrganizationID=OrganizID
-AND elh.DeductionDate BETWEEN PayDateFrom AND PayDateTo
-# AND elh.Comments=strloantype
-GROUP BY elh.EmployeeID, elh.Comments, els.RowID
-# GROUP BY elh.EmployeeID, els.LoanTypeID
-ORDER BY elh.Comments,ee.LastName;*/
-
-# ###############################
-
-SELECT psiloan.*
-FROM (SELECT # ii.*
-      /*,GROUP_CONCAT(ii.LoanName) `Column35`
-      ,GROUP_CONCAT(ROUND(ii.DeductionAmount, 2)) `Column38`
-      ,GROUP_CONCAT(ROUND(ii.BalanceOfLoan, 2)) `Column33`*/
-      
-      ii.EmployeeUniqueId `DatCol1`
-		,ii.FullName `DatCol2`
-		,ii.LoanName `DatCol3`
-		,FORMAT(ii.DeductionAmount, 2) `DatCol4`
-
-      FROM (SELECT i.RowID
-				,i.EmployeeID
-				,i.TotalLoanAmount
-				,i.ppRowID
-				,i.psRowID
-				,(i.TotalLoanAmount - SUM(i.Deduction)) `BalanceOfLoan`
-				,i.LoanName
-				,MAX(i.DeductionAmount) `DeductionAmount`
-				,i.EmployeeUniqueId
-				,i.FullName
-				FROM (SELECT
-						els.RowID
-						,els.OrganizationID
-						,els.EmployeeID
-						,els.TotalLoanAmount
-						,pp.RowID `ppRowID`
-						,pp.PayFromDate
-						,pp.PayToDate
-						,pp.OrdinalValue
-						,
-						(@_ordinal := (@_ordinal + 1)) `AscOrder`
-						
-						,(@_deduction :=
-						 IF(@_ordinal = els.NoOfPayPeriod
-						    , ( els.DeductionAmount + (els.TotalLoanAmount - (els.DeductionAmount * els.NoOfPayPeriod)) )
-							 , els.DeductionAmount)) `Deduction`
-						
-						,IF(pp.RowID = pp_rowid, @_deduction, 0) `DeductionAmount`
-						
-						,ps.RowID `psRowID`
-						,e.EmployeeID `EmployeeUniqueId`
-						,p.PartNo `LoanName`
-						,CONCAT_WS(', ', e.LastName, e.FirstName, LEFT(e.MiddleName, 1)) `FullName`
-						FROM employeeloanschedule els
-						INNER JOIN employee e ON e.RowID=els.EmployeeID AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated') AND e.OrganizationID=els.OrganizationID
-						INNER JOIN payperiod pp ON pp.OrganizationID=els.OrganizationID AND pp.TotalGrossSalary=e.PayFrequencyID
-						AND (els.DedEffectiveDateFrom >= pp.PayFromDate OR els.DedEffectiveDateTo >= pp.PayFromDate)
-						AND (els.DedEffectiveDateFrom <= pp.PayToDate OR els.DedEffectiveDateTo <= pp.PayToDate)
-						
-						LEFT JOIN paystub ps ON ps.OrganizationID=els.OrganizationID AND ps.EmployeeID=els.EmployeeID AND ps.PayPeriodID=pp.RowID
-						
-						INNER JOIN product p ON p.RowID=els.LoanTypeID
-						
-						WHERE els.RowID > 0
-						AND els.OrganizationID=OrganizID
-						# paydate_from paydat_to
-						AND (els.DedEffectiveDateFrom >= PayDateFrom OR els.DedEffectiveDateTo >= PayDateFrom)
-						AND (els.DedEffectiveDateFrom <= PayDateTo OR els.DedEffectiveDateTo <= PayDateTo)
-						ORDER BY pp.OrdinalValue
-				      ) i
-				WHERE i.psRowID IS NOT NULL
-				GROUP BY i.RowID
-		      ) ii
-	  GROUP BY ii.EmployeeID
-     ) psiloan
-# WHERE psiloan.EmployeeID = 55
+ORDER BY ii.`DatCol2`, ii.`DatCol3`, ii.`Year`, ii.OrdinalValue
 ;
 
 END//

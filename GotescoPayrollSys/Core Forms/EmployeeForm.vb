@@ -13422,6 +13422,13 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
         If _philHealthPolicy.IsFormulaBased Then
             Dim salary = Convert.ToDecimal(txtEmpDeclaSal.Text.Trim.Replace(",", ""))
+            If txtEmp_type.Text.Trim().ToLower = "daily" Then
+                Dim annualSalary = salary * Convert.ToDecimal(txtWorkDaysPerYear.Text)
+                Dim monthlySalary = annualSalary / 12
+                txtPhilHealthSal.Text = Math.Round(monthlySalary * (_philHealthPolicy.Rate * 0.01D), 2)
+                Return
+            End If
+
             txtPhilHealthSal.Text = Math.Round(salary * (_philHealthPolicy.Rate * 0.01D), 2)
 
         ElseIf _philHealthPolicy.IsBracketBased Then

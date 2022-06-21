@@ -1,0 +1,3 @@
+UPDATE `gotescopayrolldb`.`listofval` SET `DisplayValue`=4 WHERE  `RowID`=498;
+UPDATE `gotescopayrolldb`.`listofval` SET `DisplayValue`=400 WHERE  `RowID`=499;
+UPDATE `gotescopayrolldb`.`listofval` SET `DisplayValue`=3200 WHERE  `RowID`=500;

@@ -981,9 +981,7 @@ Public Class PayrollGeneration
                         End If
 
                         Dim phh_ee, phh_er As Double
-                        Dim phh_param = New Object() {amount_used_to_get_sss_contrib}
                         Dim employeePrimaKey = Convert.ToInt32(drow("RowID"))
-                        Dim phh_sql As New SQL(phh_contrib_quer, phh_param)
                         Dim caught_result As New DataTable
                         Dim dontContribPhilHealth As Boolean = Convert.ToBoolean(drowsal("OverrideDiscardPhilHealthContrib"))
                         If dontContribPhilHealth Then
@@ -995,6 +993,8 @@ Public Class PayrollGeneration
                                 phh_ee = CalcNewPhilHealth(amount_used_to_get_sss_contrib, True, CDec(drowsal("PhilHealthDeduction")))
                                 phh_er = CalcNewPhilHealth(amount_used_to_get_sss_contrib, False, CDec(drowsal("PhilHealthDeduction")))
                             Else
+                                Dim phh_param = New Object() {amount_used_to_get_sss_contrib}
+                                Dim phh_sql As New SQL(phh_contrib_quer, phh_param)
                                 caught_result = phh_sql.GetFoundRows.Tables(0)
                                 For Each phh_row As DataRow In caught_result.Rows
                                     phh_ee = phh_row(0)

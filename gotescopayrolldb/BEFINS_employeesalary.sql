@@ -36,7 +36,7 @@ IF e_type = 'Daily' THEN
 ELSE
 
 	IF NEW.OverrideDiscardPhilHealthContrib = FALSE THEN
-		SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement((NEW.Salary / (e_workdays_peryear / month_count)), TRUE);
+		SET NEW.PhilHealthDeduction = GET_PhilHealthContribNewImplement(NEW.Salary, TRUE);
 	ELSE
 		SET NEW.PhilHealthDeduction = 0;
 		SET NEW.PayPhilhealthID=NULL;

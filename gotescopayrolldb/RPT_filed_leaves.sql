@@ -52,78 +52,146 @@ AND pp.TotalGrossSalary = 1
 AND date_to BETWEEN pp.PayFromDate AND pp.PayToDate
 INTO remarks;
 
-	/**/ SELECT
-	et.RowID
-	, DATE_FORMAT(et.`Date`, custom_dateformat) `Date`
-	,et.EmployeeShiftID
-	# ,et.EmployeeID
-	,e.EmployeeID
-	,et.EmployeeSalaryID
-	,et.EmployeeFixedSalaryFlag
-	,et.RegularHoursWorked
-	,et.RegularHoursAmount
-	,et.TotalHoursWorked
-	,et.OvertimeHoursWorked
-	,et.OvertimeHoursAmount
-	,et.UndertimeHours
-	,et.UndertimeHoursAmount
-	,et.NightDifferentialHours
-	,et.NightDiffHoursAmount
-	,et.NightDifferentialOTHours
-	,et.NightDiffOTHoursAmount
-	,et.HoursLate
-	,et.HoursLateAmount
-	,et.LateFlag
-	,et.PayRateID
-	,et.VacationLeaveHours
-	,et.SickLeaveHours
-	,et.MaternityLeaveHours
-	,et.OtherLeaveHours
-	,et.AdditionalVLHours
-	,et.TotalDayPay
-	,et.Absent
-	,et.TaxableDailyAllowance
-	,et.HolidayPayAmount
-	,et.TaxableDailyBonus
-	,et.NonTaxableDailyBonus
-	,et.IsValidForHolidayPayment
+SET @eIds='';
+SELECT
+GROUP_CONCAT(i.EmployeeID) `Result`
+FROM (SELECT
+		et.EmployeeID
+		FROM employee e
+		LEFT JOIN employeetimeentry et
+			ON et.EmployeeID = e.RowID
+			AND et.OrganizationID = e.OrganizationID
+			AND et.`Date` BETWEEN date_from AND date_to
+		WHERE et.OrganizationID = org_rowid
+		AND IFNULL(emp_rowid, e.RowID) = e.RowID
+		AND IFNULL(e.TerminationDate, date_to) BETWEEN date_from AND date_to
+		AND (e.LeaveAllowance + e.SickLeaveAllowance + e.OtherLeaveAllowance + e.AdditionalVLAllowance) > 0
+		GROUP BY et.EmployeeID
+		HAVING SUM(IFNULL((et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours), 0)) = 0) i
+INTO @eIds;
+
+	SELECT
+	x.*
+	FROM (SELECT
+			et.RowID
+			, DATE_FORMAT(et.`Date`, custom_dateformat) `Date`
+			,et.`Date` `DateValue`
+			,et.EmployeeShiftID
+			,e.EmployeeID
+			,et.EmployeeSalaryID
+			,et.EmployeeFixedSalaryFlag
+			,et.RegularHoursWorked
+			,et.RegularHoursAmount
+			,et.TotalHoursWorked
+			,et.OvertimeHoursWorked
+			,et.OvertimeHoursAmount
+			,et.UndertimeHours
+			,et.UndertimeHoursAmount
+			,et.NightDifferentialHours
+			,et.NightDiffHoursAmount
+			,et.NightDifferentialOTHours
+			,et.NightDiffOTHoursAmount
+			,et.HoursLate
+			,et.HoursLateAmount
+			,et.LateFlag
+			,et.PayRateID
+			,et.VacationLeaveHours
+			,et.SickLeaveHours
+			,et.MaternityLeaveHours
+			,et.OtherLeaveHours
+			,et.AdditionalVLHours
+			,et.TotalDayPay
+			,et.Absent
+			,et.TaxableDailyAllowance
+			,et.HolidayPayAmount
+			,et.TaxableDailyBonus
+			,et.NonTaxableDailyBonus
+			,et.IsValidForHolidayPayment
+			
+			, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
+			, e.LeaveAllowance
+			, e.SickLeaveAllowance
+			, e.OtherLeaveAllowance
+			, e.AdditionalVLAllowance
+			
+			, (e.LeaveAllowance
+			   + e.SickLeaveAllowance
+			   + e.OtherLeaveAllowance
+			   + e.AdditionalVLAllowance) `TotalLeave`
+			
+			, remarks `Remarks`
+			
+			,TRUE `HasLeave`
+			FROM employeetimeentry et
+			
+			INNER JOIN employee e
+				ON e.RowID=et.EmployeeID
+				AND e.RowID = IFNULL(emp_rowid, e.RowID)
+				AND e.OrganizationID = et.OrganizationID
+				AND IFNULL(e.TerminationDate, date_to) BETWEEN date_from AND date_to
+					     
+			WHERE et.OrganizationID = org_rowid
+			AND et.`Date` BETWEEN date_from AND date_to
+			AND (et.VacationLeaveHours + et.SickLeaveHours + et.MaternityLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
+		
+		UNION
+			SELECT
+			NULL `RowID`
+			,NULL `Date`
+			,NULL `DateValue`
+			,NULL `EmployeeShiftID`
+			,e.EmployeeID
+			,NULL `EmployeeSalaryID`
+			,NULL `EmployeeFixedSalaryFlag`
+			,NULL `RegularHoursWorked`
+			,NULL `RegularHoursAmount`
+			,NULL `TotalHoursWorked`
+			,NULL `OvertimeHoursWorked`
+			,NULL `OvertimeHoursAmount`
+			,NULL `UndertimeHours`
+			,NULL `UndertimeHoursAmount`
+			,NULL `NightDifferentialHours`
+			,NULL `NightDiffHoursAmount`
+			,NULL `NightDifferentialOTHours`
+			,NULL `NightDiffOTHoursAmount`
+			,NULL `HoursLate`
+			,NULL `HoursLateAmount`
+			,NULL `LateFlag`
+			,NULL `PayRateID`
+			,NULL `VacationLeaveHours`
+			,NULL `SickLeaveHours`
+			,NULL `MaternityLeaveHours`
+			,NULL `OtherLeaveHours`
+			,NULL `AdditionalVLHours`
+			,NULL `TotalDayPay`
+			,NULL `Absent`
+			,NULL `TaxableDailyAllowance`
+			,NULL `HolidayPayAmount`
+			,NULL `TaxableDailyBonus`
+			,NULL `NonTaxableDailyBonus`
+			,NULL `IsValidForHolidayPayment`
+			
+			, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
+			, e.LeaveAllowance
+			, e.SickLeaveAllowance
+			, e.OtherLeaveAllowance
+			, e.AdditionalVLAllowance
+			
+			, (e.LeaveAllowance
+			   + e.SickLeaveAllowance
+			   + e.OtherLeaveAllowance
+			   + e.AdditionalVLAllowance) `TotalLeave`
+			
+			, remarks `Remarks`
+			
+			,FALSE `HasLeave`
+			FROM employee e
+			WHERE LOCATE(e.RowID, @eIds) > 0
+			AND IFNULL(e.TerminationDate, date_to) BETWEEN date_from AND date_to
+			) x
 	
-	, e.EmployeeID
-	, PROPERCASE(CONCAT_WS(', ', e.LastName, e.FirstName)) `FullName`
-	, e.LeaveAllowance
-	, e.SickLeaveAllowance
-	, e.OtherLeaveAllowance
-	, e.AdditionalVLAllowance
-	
-	, (e.LeaveAllowance
-	   + e.SickLeaveAllowance
-	   + e.OtherLeaveAllowance
-	   + e.AdditionalVLAllowance) `TotalLeave`
-	
-	, remarks `Remarks`
-	FROM employeetimeentry et
-	
-	INNER JOIN employee e
-	        ON e.RowID=et.EmployeeID
-			     /*AND e.RowID = IFNULL(emp_rowid, e.RowID)
-			     AND e.OrganizationID = et.OrganizationID
-			     AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
-				  AND (e.DateRegularized BETWEEN date_from AND date_to
-					    OR (e.DateRegularized <= date_from
-						     OR e.DateRegularized <= date_to)
-						 )*/
-	
-	#INNER JOIN payperiod pp ON pp.TotalGrossSalary=e.PayFrequencyID AND pp.OrganizationID=e.OrganizationID AND pp.`Year` = yeartofollow AND et.`Date` BETWEEN pp.PayFromDate AND pp.PayToDate
-	
-	#LEFT JOIN paystub ps ON ps.OrganizationID=e.OrganizationID AND ps.EmployeeID=e.RowID AND ps.PayPeriodID=pp.RowID
-	#LEFT JOIN paystubitem psi ON psi.PayStubID = ps.RowID AND FIND_IN_SET(psi.ProductID, leave_prodids) > 0
-	
-	WHERE et.OrganizationID = org_rowid
-	AND et.`Date` BETWEEN date_from AND date_to
-	# AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours) > 0
-	AND (et.VacationLeaveHours + et.SickLeaveHours + e.OtherLeaveAllowance + et.AdditionalVLHours) > 0
-	#GROUP BY et.RowID
-	ORDER BY CONCAT(e.LastName, e.FirstName), et.`Date`
+#	ORDER BY CONCAT(e.LastName, e.FirstName), et.`DateValue`
+	ORDER BY x.`FullName`, x.`DateValue`
 	;
 
 END//

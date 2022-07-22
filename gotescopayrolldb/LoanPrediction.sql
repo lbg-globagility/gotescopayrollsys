@@ -88,6 +88,8 @@ FROM (SELECT els.*
 				)*/
 
 		WHERE els.OrganizationID = organizID
+		AND els.`Status` NOT IN ('Cancelled')
+		AND els.NoOfPayPeriod > 0
 		ORDER BY els.RowID, pp.`Year`, pp.OrdinalValue
 		) i
 ;

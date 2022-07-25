@@ -1,8 +1,11 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 DROP TRIGGER IF EXISTS `AFTINS_paystub_then_paystubitem`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
@@ -748,11 +751,22 @@ SELECT e.StartDate,e.EmployeeType,pf.PayFrequencyType FROM employee e INNER JOIN
 
 SELECT (e_startdate BETWEEN NEW.PayFromDate AND NEW.PayToDate) INTO IsFirstTimeSalary;
 
+SET @legalHoliday='Regular Holiday';
+SET @specialHoliday='Special Non-Working Holiday';
+
 SET @monthlyType='monthly';
 
 SET @monthCount=12;
 SET @defaultWorkHours=8;
 SET @isRestDay=FALSE;
+
+SET @isHoliday=FALSE;
+SET @isLegalHoliday=FALSE;
+SET @isSpecialHoliday=FALSE;
+
+SET @isDaily=FALSE;
+SET @isMonthly=FALSE;
+SET @isFixed=FALSE;
 
 	DROP TEMPORARY TABLE IF EXISTS attendanceperiodofemployee;
 	CREATE TEMPORARY TABLE attendanceperiodofemployee
@@ -770,23 +784,36 @@ SET @isRestDay=FALSE;
 	, (@isRestDay := IFNULL(esh.RestDay, FALSE)) `IsRestDay`
 	, IF(@isRestDay, et.RegularHoursWorked, 0) `RestDayHours`
 	, IF(@isRestDay
-			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * ((pr.RestDayRate-pr.`PayRate`) / pr.RestDayRate), 2), et.RegularHoursAmount)
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (IF(pr.PayType='Special Non-Working Holiday', ((pr.RestDayRate MOD 1) / pr.RestDayRate), IF(pr.PayType='Regular Holiday', ((pr.RestDayRate MOD 1) / pr.RestDayRate), ((pr.RestDayRate MOD 1) / pr.RestDayRate)))), 2), et.RegularHoursAmount)
 			, 0) `RestDayPay`
-
+	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
+		
+	, @isLegalHoliday := pr.PayType=@legalHoliday `IsLegalHoliday`
+	, @isSpecialHoliday := pr.PayType=@specialHoliday `IsSpecialHoliday`
+
+	, (@isHoliday := IFNULL(pr.PayType IN (@legalHoliday, @specialHoliday), FALSE)) `IsHoliday`
+	
+	, @isDaily := e.EmployeeType = 'Daily' `IsDaily`
+	, @isMonthly := e.EmployeeType = 'Monthly' `IsMonthly`
+	, @isFixed := e.EmployeeType = 'Fixed' `IsFixed`
+	
+	, IF(ett.IsValidForHolidayPayment AND @isLegalHoliday AND et.`RegularHoursWorked` > 0, IF(@isMonthly, et.`RegularHoursWorked`, 0), 0) `HolidayHours`
+	, IF(@isHoliday=TRUE AND et.`RegularHoursWorked` > 0, et.HolidayPayAmount, 0) `HolidayPay`
+	
 	, et.`TotalHoursWorked`
 	, et.`OvertimeHoursWorked`
 	, et.`OvertimeHoursAmount`
 	, ett.HoursUndertime `UndertimeHours`
-#	, TRIM(ett.HoursUndertime * @hourlyRate)+0 `UndertimeHoursAmount`
+
 	, et.UndertimeHoursAmount
 	, et.`NightDifferentialHours`
 	, et.`NightDiffHoursAmount`
 	, et.`NightDifferentialOTHours`
 	, et.`NightDiffOTHoursAmount`
 	, ett.HoursTardy `HoursLate`
-#	, TRIM(ett.HoursTardy * @hourlyRate)+0 `HoursLateAmount`
+
 	, et.HoursLateAmount
 	, et.`LateFlag`
 	, et.`PayRateID`
@@ -803,14 +830,22 @@ SET @isRestDay=FALSE;
 	, et.`TaxableDailyBonus`
 	, et.`NonTaxableDailyBonus`
 	, ett.`IsValidForHolidayPayment`
-#	, @trueSalary := TRIM(es.Percentage * es.Salary)+0 `ActualSalary`
-	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`TrueSalary` / @defaultWorkHours), ((`es`.`TrueSalary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
+
+	, ROUND(( (`et`.`VacationLeaveHours` + `et`.`SickLeaveHours` + `et`.`OtherLeaveHours` + `et`.`AdditionalVLHours` + `et`.`MaternityLeaveHours`) * if(`e`.`EmployeeType` = 'Daily', (`es`.`TrueSalary` / @defaultWorkHours), ((`es`.`TrueSalary` / (`e`.`WorkDaysPerYear` / @monthCount)) / @defaultWorkHours)) ), 2) `Leavepayment`
 	, IFNULL(sh.WorkHours, 0) `WorkHours`
 	, et.`AddedHolidayPayAmount`
 	, es.Percentage `ActualSalaryRate`
 	
+	, pr.PayType
+	, pr.`PayRate`
+	, pr.OvertimeRate
+	, pr.NightDifferentialRate
+	, pr.NightDifferentialOTRate
+	, pr.RestDayRate
+	, pr.RestDayOvertimeRate
+
 	FROM employeetimeentryactual et
-	INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.RowID=NEW.EmployeeID
+	INNER JOIN employee e ON e.RowID=NEW.EmployeeID AND e.RowID=et.EmployeeID
 	INNER JOIN employeetimeentry ett ON ett.EmployeeID=e.RowID AND ett.`Date`=et.`Date` AND ett.OrganizationID=et.OrganizationID
 	INNER JOIN payrate pr ON pr.RowID=ett.PayRateID
 	LEFT JOIN employeesalary_withdailyrate es ON es.RowID=et.EmployeeSalaryID
@@ -1200,6 +1235,8 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
 
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

@@ -1328,7 +1328,7 @@ ELSE
 					, payrateRowID
 					, ete_TotalDayPay
 					, ete_RegHrsWorkd + ete_OvertimeHrs
-					, ((ete_RegHrsWorkd - ete_NDiffHrs) * rateperhour) * ((commonrate + restday_rate) - 1)
+					, ((ete_RegHrsWorkd - ete_NDiffHrs) * rateperhour) * restday_rate
 					, (ete_OvertimeHrs * rateperhourforOT) * ((commonrate + restdayot_rate) - 1)
 					, (ete_HrsUnder * rateperhour)
 					, (ete_NDiffHrs * rateperhour) * ndiffrate

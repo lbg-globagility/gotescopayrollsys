@@ -23,6 +23,7 @@ DECLARE secondsPerHour INT(11) DEFAULT 3600;
 
 SET @shFrom = CONCAT_DATETIME(etDate, shiftTimeFrom);
 SET @shTo = GetNextStartDateTime(@shFrom, shiftTimeTo);
+SET @shToMax = SUBDATE(ADDDATE(@shFrom,INTERVAL 1 DAY),INTERVAL 1 SECOND);
 
 SELECT
  TIMESTAMPDIFF(SECOND
@@ -36,7 +37,8 @@ SELECT
                 , GREATEST(CONCAT_DATETIME(etDate, postOt.OTStartTime)
 					            , @shTo)
                 , LEAST(etd.TimeStampOut
-					         , GetNextStartDateTime(CONCAT_DATETIME(etDate, postOt.OTStartTime), postOt.OTEndTime))
+					         , GetNextStartDateTime(CONCAT_DATETIME(etDate, postOt.OTStartTime), postOt.OTEndTime)
+					         , @shToMax)
                 ) / secondsPerHour `PostOvertime`
 
 FROM employeeshift esh
@@ -49,7 +51,9 @@ LEFT JOIN (SELECT *
 
 LEFT JOIN (SELECT *
            FROM employeeovertime postOt
-			  WHERE postOt.EmployeeID = employeeRowID AND etDate BETWEEN postOt.OTStartDate AND postOt.OTEndDate AND postOt.OTStatus = approvedStatus AND CONCAT_DATETIME(etDate, postOt.OTStartTime) >= @shTo
+			  WHERE postOt.EmployeeID = employeeRowID AND etDate BETWEEN postOt.OTStartDate AND postOt.OTEndDate AND postOt.OTStatus = approvedStatus
+			  AND GetNextStartDateTime(CONCAT_DATETIME(etDate, postOt.OTStartTime), postOt.OTEndTime) BETWEEN @shTo AND @shToMax
+			  ORDER BY GetNextStartDateTime(CONCAT_DATETIME(etDate, postOt.OTStartTime), postOt.OTEndTime) DESC
 			  LIMIT 1) postOt ON postOt.RowID IS NOT NULL
 
 LEFT JOIN (SELECT *

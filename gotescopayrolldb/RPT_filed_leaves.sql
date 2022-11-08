@@ -186,7 +186,8 @@ INTO @eIds;
 			
 			,FALSE `HasLeave`
 			FROM employee e
-			WHERE LOCATE(e.RowID, @eIds) > 0
+			WHERE @eIds IS NOT NULL
+			AND LOCATE(e.RowID, @eIds) > 0
 			AND IFNULL(e.TerminationDate, date_to) BETWEEN date_from AND date_to
 			) x
 	

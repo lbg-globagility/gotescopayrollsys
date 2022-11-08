@@ -37,7 +37,7 @@ SELECT EXISTS(SELECT RowID
 												FROM employee e
 												WHERE e.OrganizationID=OrganizID
 												AND e.StartDate < @thisyearfirstdate
-												AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 59
+												AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 999
 												AND e.EmploymentStatus IN ('Regular','Probationary'))
 					AND OrganizationID=OrganizID
 					AND EffectiveDateFrom=@thisyearfirstdate
@@ -47,7 +47,7 @@ INTO hasalreadyseniorcitizensalary;
 IF hasalreadyseniorcitizensalary = '0' AND userhasprivilege = '1' THEN
 
 	UPDATE employeesalary es
-	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.StartDate < @thisyearfirstdate AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 59 AND e.EmploymentStatus IN ('Regular','Probationary') AND es.EmployeeID=e.RowID
+	INNER JOIN employee e ON e.OrganizationID=OrganizID AND e.StartDate < @thisyearfirstdate AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 999 AND e.EmploymentStatus IN ('Regular','Probationary') AND es.EmployeeID=e.RowID
 	SET es.PaySocialSecurityID=NULL
 	,es.PayPhilhealthID=NULL
 	,es.HDMFAmount=0
@@ -89,13 +89,13 @@ IF hasalreadyseniorcitizensalary = '0' AND userhasprivilege = '1' THEN
 												FROM employee e
 												WHERE e.OrganizationID=OrganizID
 												AND e.StartDate < @thisyearfirstdate
-												AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 59
+												AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 999
 												AND e.EmploymentStatus IN ('Regular','Probationary'))
 					AND OrganizationID=OrganizID
 					AND EffectiveDateTo IS NULL
 					GROUP BY EmployeeID) ees ON ees.EmployeeID=e.RowID
 	
-	WHERE e.OrganizationID=OrganizID AND e.StartDate < @thisyearfirstdate AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 59 AND e.EmploymentStatus IN ('Regular','Probationary')
+	WHERE e.OrganizationID=OrganizID AND e.StartDate < @thisyearfirstdate AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 999 AND e.EmploymentStatus IN ('Regular','Probationary')
 	ON
 	DUPLICATE
 	KEY
@@ -111,7 +111,7 @@ IF hasalreadyseniorcitizensalary = '0' AND userhasprivilege = '1' THEN
 	UPDATE employeesalary es
 	INNER JOIN employee e ON e.OrganizationID=OrganizID
 								AND e.StartDate < @thisyearfirstdate
-								AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 59
+								AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 999
 								AND e.EmploymentStatus IN ('Regular','Probationary')
 								AND es.EmployeeID=e.RowID
 	SET es.EffectiveDateTo=IF(SUBDATE(@thisyearfirstdate, INTERVAL 1 DAY) >= es.EffectiveDateFrom, SUBDATE(@thisyearfirstdate, INTERVAL 1 DAY), es.EffectiveDateFrom)
@@ -152,7 +152,7 @@ SELECT EXISTS(SELECT RowID
 												FROM employee e
 												WHERE e.OrganizationID=OrganizID
 												AND e.StartDate > @thisyearfirstdate
-												AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 59
+												AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 999
 												AND e.EmploymentStatus IN ('Regular','Probationary'))
 					AND OrganizationID=OrganizID
 					AND EffectiveDateFrom=@thisyearfirstdate
@@ -165,7 +165,7 @@ IF hasalreadyseniorcitizensalary = '0' AND userhasprivilege = '1' THEN
 	UPDATE employeesalary es
 	INNER JOIN employee e ON e.OrganizationID=OrganizID
 								AND e.StartDate > @thisyearfirstdate
-								AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 59
+								AND TIMESTAMPDIFF(YEAR,e.Birthdate, CURDATE()) >= 999
 								AND e.EmploymentStatus IN ('Regular','Probationary')
 								AND es.EmployeeID=e.RowID
 	SET es.PaySocialSecurityID=NULL

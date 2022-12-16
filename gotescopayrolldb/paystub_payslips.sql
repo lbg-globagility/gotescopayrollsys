@@ -186,7 +186,8 @@ ps.RowID
 
 , FORMAT(IFNULL(et.`AttendedHolidayHours`, 0), 2) `Column44`
 #, IFNULL(FORMAT( IF(e.EmployeeType='Daily', et.`DefaultHolidayPay`, et.HolidayPayAmount), 2), 0) `Column1`
-, IFNULL(FORMAT( et.`TotalDefaultHolidayPay` + et.`AddedHolidayPayAmount`, 2), 0) `Column1`
+#, IFNULL(FORMAT( et.`TotalDefaultHolidayPay` + et.`AddedHolidayPayAmount`, 2), 0) `Column1`
+, IFNULL(FORMAT( IF(e.EmployeeType='Daily', IF(et.`AddedHolidayPayAmount`=0, et.`TotalDefaultHolidayPay`, et.`AddedHolidayPayAmount`), IFNULL(FORMAT( et.`TotalDefaultHolidayPay` + et.`AddedHolidayPayAmount`, 2), 0)), 2), 0) `Column1`
 
 , FORMAT(IFNULL(et.`LeaveHours`, 0), 2) `Column45`
 , IFNULL(ROUND(et.`Leavepayment`, 2), 0) `Column15`

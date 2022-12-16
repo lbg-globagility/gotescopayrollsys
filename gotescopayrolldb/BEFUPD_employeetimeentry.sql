@@ -411,7 +411,7 @@ ELSEIF LCASE(@employee_type)='daily' THEN
 	
 		SET NEW.AddedHolidayPayAmount=@additional;
 
-		IF @isSatisfiedLegal THEN SET NEW.TotalDayPay=NEW.TotalDayPay + @additional; END IF;
+#		IF @isSatisfiedLegal THEN SET NEW.TotalDayPay=NEW.TotalDayPay + @additional; END IF;
 		
 #		IF @isSatisfiedSpecial THEN ?? END IF;
 	ELSE

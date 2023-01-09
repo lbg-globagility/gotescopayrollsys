@@ -52,6 +52,8 @@ DECLARE regularEmplymentStatus VARCHAR(50) DEFAULT 'Regular';
 SET payDateFrom = minimum_date;
 SET payDateTo = custom_maximum_date;
 
+IF EXISTS(SELECT pp.RowID FROM payperiod pp INNER JOIN payperiod ppd ON ppd.OrganizationID=pp.OrganizationID AND ppd.`Year`=pp.`Year` AND ppd.TotalGrossSalary=pp.TotalGrossSalary AND ppd.BeginLeaveReset=1 WHERE pp.OrganizationID=OrganizID AND pp.PayFromDate=payDateFrom AND pp.PayToDate=payDateTo LIMIT 1) THEN
+
 UPDATE employee e
 SET e.AdditionalVLAllowance=0
 WHERE e.OrganizationID = OrganizID
@@ -347,6 +349,7 @@ AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
 CALL UpdateLeaveBalance(OrganizID, yearPeriod, payDateFrom);
+END IF;
 
 END//
 DELIMITER ;

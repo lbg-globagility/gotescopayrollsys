@@ -82,6 +82,35 @@ INNER JOIN payperiod pp ON pp.OrganizationID=pr.OrganizationID AND pp.TotalGross
 WHERE pr.RowID=NEW.PayPeriodID
 INTO IsrbxpayrollFirstHalfOfMonth, firstPayDateFrom, firstPayDateTo;
 
+IF NOT EXISTS(SELECT pp.RowID FROM payperiod pp INNER JOIN payperiod ppd ON ppd.OrganizationID=pp.OrganizationID AND ppd.`Year`=pp.`Year` AND ppd.TotalGrossSalary=pp.TotalGrossSalary AND ppd.BeginLeaveReset=1 WHERE pp.RowID=NEW.PayPeriodID LIMIT 1) THEN
+	
+	SET @_year=0;
+#	SET @_periodId=0;
+	
+	SELECT
+#	pp.RowID,
+	pp2.PayFromDate,
+	pp2.PayToDate,	
+	pp1.`Year`
+	FROM payperiod pp
+	INNER JOIN payperiod pp1 ON pp1.RowID=NEW.PayPeriodID
+	INNER JOIN payperiod pp2 ON pp2.`Year`=pp1.`Year` AND pp2.OrganizationID=pp1.OrganizationID AND pp2.TotalGrossSalary=pp1.TotalGrossSalary AND pp2.`Month`=pp1.`Month`-1 AND pp2.Half=IF(pp1.Half=0,1,0)
+	WHERE pp.`Year`=pp1.`Year`-1
+	AND pp.OrganizationID=pp1.OrganizationID
+	AND pp.TotalGrossSalary=pp1.TotalGrossSalary
+	AND pp.BeginLeaveReset=TRUE
+	LIMIT 1
+	INTO firstPayDateFrom,
+		firstPayDateTo,
+		@_year;
+	
+	IF firstPayDateFrom IS NULL THEN
+		SET firstPayDateFrom = CONCAT(@_year-1, '-01-01');
+		SET firstPayDateTo = CONCAT(@_year-1, '-01-15');
+	END IF;
+	
+END IF;
+
 SELECT pr.PayFromDate
 FROM payperiod pr
 INNER JOIN payperiod prt ON prt.RowID=NEW.PayPeriodID

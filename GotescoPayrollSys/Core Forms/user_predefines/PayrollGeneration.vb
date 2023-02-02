@@ -105,7 +105,7 @@ Public Class PayrollGeneration
         String.Concat("\", firstchar_requiredforparametername, "\w+")
 
     Const year2018 As Integer = 2018
-
+    Private Const YEAR_2023 As Integer = 2023
     Private config As Specialized.NameValueCollection = ConfigurationManager.AppSettings
 
     Private ReadOnly configCommandTimeOut As Integer
@@ -1107,7 +1107,7 @@ Public Class PayrollGeneration
                                     'If is_year2018 = False Then
                                     wtx_sqlquery = Replace(wtax_sqlquery, "?fs_rowid", "IFNULL(ptx.FilingStatusID, 0)")
                                     wtx_sqlquery = Replace(wtx_sqlquery, "?amount", the_taxable_salary)
-                                    wtx_sqlquery = Replace(wtx_sqlquery, ";", String.Concat(" AND MAKEDATE(", year2018, ", 1) BETWEEN ptx.EffectiveDateFrom AND ptx.EffectiveDateTo;"))
+                                    wtx_sqlquery = Replace(wtx_sqlquery, ";", String.Concat(" AND CURDATE() BETWEEN ptx.EffectiveDateFrom AND ptx.EffectiveDateTo;"))
                                 End If
 
                                 Dim sel_wtax = New SQL(wtx_sqlquery).GetFoundRows.Tables(0)
@@ -1124,6 +1124,14 @@ Public Class PayrollGeneration
 
                                 'For Each drowtax As DataRow In paywithholdingtax.rows
                                 For Each drowtax In sel_payWTax
+                                    Dim is2023Onwards = CType(drowtax("EffectiveDateFrom"), Date).Year >= YEAR_2023
+                                    If is2023Onwards Then
+                                        tax_amount = CType(drowtax("ConstantTaxAmount"), Decimal) +
+                                            (CType(drowtax("ExemptionInExcessAmount"), Decimal) *
+                                                (the_taxable_salary - CType(drowtax("TaxableIncomeFromAmount"), Decimal)))
+                                        Exit For
+                                    End If
+
                                     Dim taxrowID = drowtax("RowID")
                                     'emp_taxabsal = emptaxabsal - (Val(drowtax("ExemptionAmount")) + _
                                     '             ((emptaxabsal - Val(drowtax("TaxableIncomeFromAmount"))) * Val(drowtax("ExemptionInExcessAmount"))) _
@@ -1137,7 +1145,6 @@ Public Class PayrollGeneration
                                     'ValNoComma(the_values(1))
 
                                     Exit For
-
                                 Next
 
                             End If

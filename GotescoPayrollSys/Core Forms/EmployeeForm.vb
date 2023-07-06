@@ -13420,8 +13420,13 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
     Private Async Sub btnAutoCalcPhilHealth_ClickAsync(sender As Object, e As EventArgs) Handles btnAutoCalcPhilHealth.Click
         If Not HasSelectedSalary() Then Return
 
-        If _philHealthPolicy.IsFormulaBased Then
+        If _philHealthPolicy.IsFormulaBased AndAlso Not String.IsNullOrEmpty(txtEmpDeclaSal.Text.Trim) Then
             Dim salary = Convert.ToDecimal(txtEmpDeclaSal.Text.Trim.Replace(",", ""))
+            If dgvEmp.CurrentRow IsNot Nothing AndAlso
+                dgvEmp.CurrentRow.Cells("Column34").Value = "Daily" Then
+                Dim salaryPerMonth = (salary * Convert.ToDecimal(txtWorkDaysPerYear.Text.Trim.Replace(",", ""))) / 12
+                salary = salaryPerMonth
+            End If
             txtPhilHealthSal.Text = Math.Round(salary * (_philHealthPolicy.Rate * 0.01D), 2)
 
         ElseIf _philHealthPolicy.IsBracketBased Then

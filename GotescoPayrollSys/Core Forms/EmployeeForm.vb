@@ -13540,7 +13540,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
         <![CDATA[SELECT GetSSSContribution(
                 (SELECT EmployeeType FROM employee WHERE RowID=@employeePrimaID)
                 , (SELECT WorkDaysPerYear FROM employee WHERE RowID=@employeePrimaID)
-                , (SELECT IF(LCASE(e.EmployeeType)='daily', @salaryAmount * (e.WorkDaysPerYear / 12), @salaryAmount) FROM employee e WHERE e.RowID=@employeePrimaID)
+                , @salaryAmount
                 , @salaryEffectiveDateFrom
                 , @salaryEffectiveDateTo);]]>.Value
         Using connection As New MySqlConnection(connectionString),

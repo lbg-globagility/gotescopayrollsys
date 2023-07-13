@@ -2643,6 +2643,8 @@ Public Class EmployeeForm
 
                         dgvempleave_SelectionChanged(sender, e)
 
+                        ShowEmpLeaveBalance()
+
                     Case 6 'Disciplinary Action
 
                         controlclear()
@@ -22804,7 +22806,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     Private Sub ShowEmpLeaveBalance()
 
-        If TabControl3.SelectedIndex = 1 Then
+        If TabControl3.SelectedIndex = 1 OrElse TabControl4.SelectedTab Is TabPage7 Then
             tbpleavebal_Enter(tbpleavebal, New EventArgs)
         End If
 

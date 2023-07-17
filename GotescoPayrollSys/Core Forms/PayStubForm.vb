@@ -1972,13 +1972,17 @@ Public Class PayStubForm
 
         Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
 
-        Dim getJanuaryOnePayPeriod = $"SELECT ppd.RowID, ppd.PayFromDate, ppd.PayToDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` WHERE pp.PayFromDate='{paypFrom}' AND pp.PayToDate='{paypTo}' AND pp.OrganizationID={org_rowid} ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1 INTO @_payPeriodId, @_dateFrom, @_dateTo;"
+        Dim getJanuaryOnePayPeriod =
+            Function(selectedColumn As String)
+                If String.IsNullOrEmpty(selectedColumn) Then selectedColumn = "ppd.RowID"
 
-        Dim strQuery = String.Concat(getJanuaryOnePayPeriod,
-            "CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @_dateFrom, @_dateTo);",
+                Return $"SELECT {selectedColumn} FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` WHERE pp.PayFromDate='{paypFrom}' AND pp.PayToDate='{paypTo}' AND pp.OrganizationID={org_rowid} ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1"
+            End Function
+
+        Dim strQuery = String.Concat($"CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, ({getJanuaryOnePayPeriod("ppd.PayFromDate")}), ({getJanuaryOnePayPeriod("ppd.PayToDate")}));",
             "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);",
             "CALL `RECOMPUTE_thirteenthmonthpay`(@orgId, @periodId, @userId);",
-            "CALL `UpdateLeaveItems`(@orgId, @_payPeriodId);")
+            $"CALL `UpdateLeaveItems`(@orgId, ({getJanuaryOnePayPeriod(String.Empty)}));")
 
         If withthirteenthmonthpay = 1 Then
             strQuery = String.Concat(strQuery, "CALL `RELEASE_thirteenthmonthpay`(@orgId, @periodId, @userId);")
@@ -2005,14 +2009,21 @@ Public Class PayStubForm
             Try
                 Await command.ExecuteNonQueryAsync()
                 transaction.Commit()
+
+                MessageBox.Show($"All payroll generation system tasks are done. ✔",
+                    "Done generating payroll",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information)
+
+                MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll. ✔")
             Catch ex As Exception
                 _logger.Error("LEAVE_gainingbalance & MASSUPD_employeeloanschedulebacktrack_ofthisperiod", ex)
                 transaction.Rollback()
 
                 MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
-                                    "",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Exclamation)
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
             End Try
 
         End Using
@@ -9135,10 +9146,14 @@ Public Class PayStubForm
 
                 MDIPrimaryForm.systemprogressbar.Visible = False
 
-                MDIPrimaryForm.CaptionMainFormStatus("finishing system tasks")
+                MessageBox.Show($"Please wait while the system is finishing it's task in the background.{Environment.NewLine}The system will prompt you once it is done.",
+                                "Background work",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information)
+
+                MDIPrimaryForm.CaptionMainFormStatus("finishing system tasks in background...")
 
                 Await Task.Run(Async Function()
-                                   MDIPrimaryForm.CaptionMainFormStatus("Done generating payroll, OK")
                                    Await GainingLeaveBalancesAsync()
                                    Return Task.FromResult(False)
                                End Function)

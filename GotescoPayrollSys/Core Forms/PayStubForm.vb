@@ -1972,10 +1972,15 @@ Public Class PayStubForm
 
         Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
 
+        Dim getJanuaryOnePayPeriod =
+            Function()
+                Return $"SELECT ppd.RowID FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate='{paypFrom}' AND pp.PayToDate='{paypTo}' AND pp.OrganizationID={org_rowid} ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1"
+            End Function
+
         Dim strQuery = String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
             "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);",
             "CALL `RECOMPUTE_thirteenthmonthpay`(@orgId, @periodId, @userId);",
-            "CALL `UpdateLeaveItems`(@orgId, @periodId);")
+            $"CALL `UpdateLeaveItems`(@orgId, ({getJanuaryOnePayPeriod()}));")
 
         If withthirteenthmonthpay = 1 Then
             strQuery = String.Concat(strQuery, "CALL `RELEASE_thirteenthmonthpay`(@orgId, @periodId, @userId);")

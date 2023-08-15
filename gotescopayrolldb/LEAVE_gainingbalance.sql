@@ -209,7 +209,7 @@ e.AdditionalVLPerPayPeriod = ( e.LeaveTenthYearService / count_semi_monthly_peri
 , e.LastUpd=CURRENT_TIMESTAMP()
 , e.LastUpdBy=IFNULL(e.LastUpdBy, e.CreatedBy)
 WHERE e.OrganizationID = OrganizID
-AND ADDDATE(e.DateRegularized, INTERVAL 5 YEAR) BETWEEN payDateFrom AND payDateTo
+AND ADDDATE(e.DateRegularized, INTERVAL 5 YEAR) BETWEEN thisYearPayDateFrom AND thisYearPayDateTo
 AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;

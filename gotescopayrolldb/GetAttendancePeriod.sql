@@ -56,6 +56,9 @@ IF NOT isActual THEN
 	, IF(@isRestDay
 			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (IF(pr.PayType='Special Non-Working Holiday', ((pr.RestDayRate MOD 1) / pr.RestDayRate), IF(pr.PayType='Regular Holiday', ((pr.RestDayRate MOD 1) / pr.RestDayRate), ((pr.RestDayRate MOD 1) / pr.RestDayRate)))), 2), et.RegularHoursAmount)
 			, 0) `RestDayPay`
+	, IF(@isRestDay
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDayOT=TRUE, et.OvertimeHoursAmount, 0)
+			, 0) `RestDayOvertimePay`
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
@@ -105,7 +108,7 @@ IF NOT isActual THEN
 	, et.`AddedHolidayPayAmount`
 	, es.Percentage `ActualSalaryRate`
 	, es.DailyRate
-	
+	, es.BasicPay
 	, pr.PayType
 	, pr.`PayRate`
 	, pr.OvertimeRate
@@ -144,6 +147,9 @@ ELSE
 	, IF(@isRestDay
 			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDay=TRUE, ROUND(et.RegularHoursAmount * (IF(pr.PayType='Special Non-Working Holiday', ((pr.RestDayRate MOD 1) / pr.RestDayRate), IF(pr.PayType='Regular Holiday', ((pr.RestDayRate MOD 1) / pr.RestDayRate), ((pr.RestDayRate MOD 1) / pr.RestDayRate)))), 2), et.RegularHoursAmount)
 			, 0) `RestDayPay`
+	, IF(@isRestDay
+			, IF(LCASE(e.EmployeeType)=@monthlyType AND e.CalcRestDayOT=TRUE, et.OvertimeHoursAmount, 0)
+			, 0) `RestDayOvertimePay`
 	
 	, IF(@isRestDay, 0, et.`RegularHoursWorked`) `RegularHoursWorked`
 	, IF(@isRestDay, 0, et.`RegularHoursAmount`) `RegularHoursAmount`
@@ -194,7 +200,7 @@ ELSE
 	, IFNULL(sh.WorkHours, 0) `WorkHours`
 	, et.`AddedHolidayPayAmount`
 	, es.Percentage `ActualSalaryRate`
-	
+	, es.BasicPay
 	, pr.PayType
 	, pr.`PayRate`
 	, pr.OvertimeRate

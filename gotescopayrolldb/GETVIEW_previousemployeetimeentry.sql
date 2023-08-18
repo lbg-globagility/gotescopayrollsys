@@ -44,7 +44,9 @@ SELECT WithholdingDeductionSchedule FROM organization WHERE RowID=ogRowID INTO t
 
 SET @prev_payperiod_rowid = NULL;
 
-SELECT pp.RowID
+SELECT pp.RowID,
+pp.PayFromDate,
+pp.PayToDate
 FROM payperiod pp
 INNER JOIN payperiod pyp
         ON pyp.RowID=WeeklySSSSchedPayPeriodID
@@ -62,58 +64,58 @@ AND pp.`Month`=pyp.`Month`
 AND pp.`Year`=pyp.`Year`
 # ORDER BY pp.PayFromDate DESC, pp.PayToDate DESC
 LIMIT 1
-INTO @prev_payperiod_rowid;
+INTO @prev_payperiod_rowid
+	,@datefrom
+	,@dateto;
 
 SELECT SSSContribSched FROM payperiod WHERE RowID=WeeklySSSSchedPayPeriodID INTO isSSSContribSched;
 
 IF payfreqID = 1 THEN
-
+	CALL GetAttendancePeriod(OrganizID, @datefrom, @dateto, FALSE);
+	
 	SELECT
-	ete.EmployeeID
-	,SUM(ete.RegularHoursWorked) `RegularHoursWorked`
-	,SUM(ete.RegularHoursAmount) `RegularHoursAmount`
-	,SUM(ete.TotalHoursWorked) `TotalHoursWorked`
-	,SUM(ete.OvertimeHoursWorked) `OvertimeHoursWorked`
-	,SUM(ete.OvertimeHoursAmount) `OvertimeHoursAmount`
-	,SUM(ete.UndertimeHours) `UndertimeHours`
-	,SUM(ete.UndertimeHoursAmount) `UndertimeHoursAmount`
-	,SUM(ete.NightDifferentialHours) `NightDifferentialHours`
-	,SUM(ete.NightDiffHoursAmount) `NightDiffHoursAmount`
-	,SUM(ete.NightDifferentialOTHours) `NightDifferentialOTHours`
-	,SUM(ete.NightDiffOTHoursAmount) `NightDiffOTHoursAmount`
-	,SUM(ete.HoursLate) `HoursLate`
-	,SUM(ete.HoursLateAmount) `HoursLateAmount`
-	,SUM(ete.VacationLeaveHours) `VacationLeaveHours`
-	,SUM(ete.SickLeaveHours) `SickLeaveHours`
-	,SUM(ete.MaternityLeaveHours) `MaternityLeaveHours`
-	,SUM(ete.OtherLeaveHours) `OtherLeaveHours`
-	,SUM(ete.AdditionalVLHours) `AdditionalVLHours`
-	,SUM(ete.TotalDayPay) `TotalDayPay`
-	,SUM(ete.Absent) `Absent`
-	,SUM(ete.TaxableDailyAllowance) `TaxableDailyAllowance`
-	,SUM(ete.HolidayPayAmount) `HolidayPayAmount`
-	,SUM(IFNULL(ete.AddedHolidayPayAmount, 0)) `AddedHolidayPayAmount`
-	,SUM(ete.TaxableDailyBonus) `TaxableDailyBonus`
-	,SUM(ete.NonTaxableDailyBonus) `NonTaxableDailyBonus`
-	,IFNULL(ps.TotalGrossSalary
-	        - (ps.TotalBonus + ps.TotalAllowance + SUM(ete.OvertimeHoursAmount)
-			     + SUM(ete.NightDiffHoursAmount)
-				  + SUM(ete.NightDiffOTHoursAmount))
-	        , 0) `TotalGrossSalary`
-	,esa.BasicPay
-	FROM employeetimeentry ete
-	INNER JOIN payperiod pyp ON pyp.RowID=@prev_payperiod_rowid
-	INNER JOIN employee e ON e.RowID=ete.EmployeeID
-	LEFT JOIN paystub ps
-	       ON ps.EmployeeID=ete.EmployeeID
-			    AND ps.OrganizationID=ete.OrganizationID
-				 AND ps.PayPeriodID=pyp.RowID
-	INNER JOIN employeesalary_withdailyrate esa ON esa.RowID=ete.EmployeeSalaryID
-	WHERE ete.`Date` BETWEEN pyp.PayFromDate AND pyp.PayToDate
-	AND ete.OrganizationID=OrganizID
-	AND e.PayFrequencyID=payfreqID
-	GROUP BY ete.EmployeeID;
-
+		i.`EmployeeID`,
+		GROUP_CONCAT(i.`Date`) `Dates`,
+		SUM(i.RestDayHours) `RestDayHours`,
+		SUM(i.RestDayPay) `RestDayPay`,
+		SUM(i.RestDayOvertimePay) `RestDayOvertimePay`,
+		SUM(i.RegularHoursWorked) `RegularHoursWorked`,
+		SUM(i.RegularHoursAmount) `RegularHoursAmount`,
+		SUM(i.HolidayHours) `HolidayHours`,
+		SUM(i.HolidayPay) `HolidayPay`,
+		SUM(i.TotalHoursWorked) `TotalHoursWorked`,
+		SUM(i.OvertimeHoursWorked) `OvertimeHoursWorked`,
+		SUM(i.OvertimeHoursAmount) `OvertimeHoursAmount`,
+		SUM(i.UndertimeHours) `UndertimeHours`,
+		SUM(i.UndertimeHoursAmount) `UndertimeHoursAmount`,
+		SUM(i.NightDifferentialHours) `NightDifferentialHours`,
+		SUM(i.NightDiffHoursAmount) `NightDiffHoursAmount`,
+		SUM(i.NightDifferentialOTHours) `NightDifferentialOTHours`,
+		SUM(i.NightDiffOTHoursAmount) `NightDiffOTHoursAmount`,
+		SUM(i.HoursLate) `HoursLate`,
+		SUM(i.HoursLateAmount) `HoursLateAmount`,
+		SUM(i.VacationLeaveHours) `VacationLeaveHours`,
+		SUM(i.SickLeaveHours) `SickLeaveHours`,
+		SUM(i.MaternityLeaveHours) `MaternityLeaveHours`,
+		SUM(i.OtherLeaveHours) `OtherLeaveHours`,
+		SUM(i.AdditionalVLHours) `AdditionalVLHours`,
+		SUM(i.TotalDayPay) `TotalDayPay`,
+		SUM(i.Absent) `Absent`,
+		SUM(i.AbsentHours) `AbsentHours`,
+		SUM(i.TaxableDailyAllowance) `TaxableDailyAllowance`,
+		SUM(i.HolidayPayAmount) `HolidayPayAmount`,
+		SUM(i.TaxableDailyBonus) `TaxableDailyBonus`,
+		SUM(i.NonTaxableDailyBonus) `NonTaxableDailyBonus`,
+		SUM(i.Leavepayment) `Leavepayment`,
+		SUM(i.WorkHours) `WorkHours`,
+		SUM(i.AddedHolidayPayAmount) `AddedHolidayPayAmount`,
+		0 `TotalGrossSalary`,
+		i.BasicPay
+		
+	FROM `attendanceperiod` i
+	GROUP BY i.EmployeeID
+	;
+	
 	IF tax_sched_text = 'End of the month' THEN
 
 		IF isEndOfTheMonth = '1' THEN
@@ -125,41 +127,7 @@ IF payfreqID = 1 THEN
 		ELSE
 
 			SET prev_payperiodID = NULL;
-			/*
-			SELECT
-			ete.EmployeeID
-			,SUM(ete.RegularHoursWorked) `RegularHoursWorked`
-			,SUM(ete.RegularHoursAmount) `RegularHoursAmount`
-			,SUM(ete.TotalHoursWorked) `TotalHoursWorked`
-			,SUM(ete.OvertimeHoursWorked) `OvertimeHoursWorked`
-			,SUM(ete.OvertimeHoursAmount) `OvertimeHoursAmount`
-			,SUM(ete.UndertimeHours) `UndertimeHours`
-			,SUM(ete.UndertimeHoursAmount) `UndertimeHoursAmount`
-			,SUM(ete.NightDifferentialHours) `NightDifferentialHours`
-			,SUM(ete.NightDiffHoursAmount) `NightDiffHoursAmount`
-			,SUM(ete.NightDifferentialOTHours) `NightDifferentialOTHours`
-			,SUM(ete.NightDiffOTHoursAmount) `NightDiffOTHoursAmount`
-			,SUM(ete.HoursLate) `HoursLate`
-			,SUM(ete.HoursLateAmount) `HoursLateAmount`
-			,SUM(ete.VacationLeaveHours) `VacationLeaveHours`
-			,SUM(ete.SickLeaveHours) `SickLeaveHours`
-			,SUM(ete.MaternityLeaveHours) `MaternityLeaveHours`
-			,SUM(ete.OtherLeaveHours) `OtherLeaveHours`
-			,SUM(ete.AdditionalVLHours) `AdditionalVLHours`
-			,SUM(ete.TotalDayPay) `TotalDayPay`
-			,SUM(ete.Absent) `Absent`
-			,SUM(ete.TaxableDailyAllowance) `TaxableDailyAllowance`
-			,SUM(ete.HolidayPayAmount) `HolidayPayAmount`
-			,SUM(ete.TaxableDailyBonus) `TaxableDailyBonus`
-			,SUM(ete.NonTaxableDailyBonus) `NonTaxableDailyBonus`
-			FROM employeetimeentry ete
-			INNER JOIN payperiod pyp ON pyp.RowID=prev_payperiodID
-			INNER JOIN employee e ON e.RowID=ete.EmployeeID
-			WHERE ete.`Date` IS NULL#BETWEEN '1900-01-01' AND '1900-01-01'
-			AND ete.OrganizationID < 0
-			AND e.PayFrequencyID=payfreqID
-			GROUP BY ete.EmployeeID;
-         */
+			
 		END IF;
 
 	ELSEIF tax_sched_text = 'First half' THEN

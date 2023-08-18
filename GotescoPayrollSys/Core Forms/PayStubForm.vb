@@ -1113,6 +1113,7 @@ Public Class PayStubForm
                                                 , SUM(NonTaxableDailyBonus) `NonTaxableDailyBonus`
                                                 , SUM(AddedHolidayPayAmount) `AddedHolidayPayAmount`
                                                 , SUM(RestDayPay) `RestDayPay`
+                                                , SUM(RestDayOvertimePay) `RestDayOvertimePay`
                                                 FROM attendanceperiod
                                                 GROUP BY EmployeeID;").GetFoundRows.Tables(0)
 

@@ -792,6 +792,8 @@ Public Class PayrollGeneration
 
                 Dim restday_pay_formonthlyemployee As Double = 0
 
+                Dim restday_overtime_pay_formonthlyemployee As Double = 0
+
                 For Each drowtotdaypay In emptotdaypay
 
                     grossincome = Val(0)
@@ -857,8 +859,12 @@ Public Class PayrollGeneration
                         ElseIf employment_type = "Monthly" Then
 
                             restday_pay_formonthlyemployee =
-                                Convert.ToDecimal(drowtotdaypay("RestDayPay"))
+                                Convert.ToDecimal(drowtotdaypay("RestDayPay")) _
+                                + ValNoComma(prev_empTimeEntry.Compute("SUM(RestDayPay)", "EmployeeID = '" & drow("RowID") & "'"))
                             'ValNoComma(monthlyemployee_restday_payment.Compute("SUM(AddtlRestDayPayment)", String.Concat("EmployeeID = ", drow("RowID"))))
+                            restday_overtime_pay_formonthlyemployee =
+                                Convert.ToDecimal(drowtotdaypay("RestDayOvertimePay")) _
+                                + ValNoComma(prev_empTimeEntry.Compute("SUM(RestDayOvertimePay)", "EmployeeID = '" & drow("RowID") & "'"))
 
                             If isFirstTimeGetPaid And employment_type = "Monthly" Then
                                 grossincome = ValNoComma(drowtotdaypay("TotalDayPay"))
@@ -922,10 +928,11 @@ Public Class PayrollGeneration
                             monthly_computed_salary +
                             ecola_allowance_amount +
                             GetTotalAllowanceUseInSss(CInt(drow("RowID")))
-                        If _socialSecurityPolicy.IncludeOvertime Then
-                            amount_used_to_get_sss_contrib += overall_overtime
-                        End If
-                        '+ ValNoComma(emptimeentryOfHoliday.Compute("SUM(HolidayPayAmount)", "EmployeeID = '" & drow("RowID") & "'")) + If(ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")) < 0, 0, ValNoComma(emptimeentryOfLeave.Compute("SUM(LeavePayAmount)", "EmployeeID = '" & drow("RowID") & "'")))
+                        If _socialSecurityPolicy.IncludeOvertime Then amount_used_to_get_sss_contrib += overall_overtime
+
+                        If _socialSecurityPolicy.IncludeRestDay Then amount_used_to_get_sss_contrib += restday_pay_formonthlyemployee
+
+                        If _socialSecurityPolicy.IncludeRestDayOvertime Then amount_used_to_get_sss_contrib += restday_overtime_pay_formonthlyemployee
 
                         Dim sss_ee, sss_er As Double
 
@@ -991,9 +998,9 @@ Public Class PayrollGeneration
                             phh_er = 0
                         Else
                             If is_year2018 Then
-
-                                phh_ee = CalcNewPhilHealth(amount_used_to_get_sss_contrib, True, CDec(drowsal("PhilHealthDeduction")))
-                                phh_er = CalcNewPhilHealth(amount_used_to_get_sss_contrib, False, CDec(drowsal("PhilHealthDeduction")))
+                                ' amount_worked is_for_employee new_philhealth_deduction
+                                phh_ee = CalcNewPhilHealth(is_for_employee:=True, new_philhealth_deduction:=CDec(drowsal("PhilHealthDeduction")))
+                                phh_er = CalcNewPhilHealth(is_for_employee:=False, new_philhealth_deduction:=CDec(drowsal("PhilHealthDeduction")))
                             Else
                                 caught_result = phh_sql.GetFoundRows.Tables(0)
                                 For Each phh_row As DataRow In caught_result.Rows
@@ -1290,10 +1297,10 @@ Public Class PayrollGeneration
                 Dim _gross, _net As Double
 
                 _gross =
-                    (grossincome + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce + restday_pay_formonthlyemployee)
+                    (grossincome + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce + restday_pay_formonthlyemployee + restday_overtime_pay_formonthlyemployee)
 
                 _net =
-                    (tot_net_pay + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce + thirteenthmoval + restday_pay_formonthlyemployee)
+                    (tot_net_pay + totalemployeebonus + totalnotaxemployeebonus + totalnotaxemployeeallownce + totalemployeeallownce + thirteenthmoval + restday_pay_formonthlyemployee + restday_overtime_pay_formonthlyemployee)
 
                 Dim paystub_params =
                     New Object() {DBNull.Value,
@@ -1499,7 +1506,7 @@ String.Concat("CALL INSUPD_paystub_proc(?pstub_RowID,?pstub_OrganizationID,?pstu
         Return returnValue
     End Function
 
-    Private Function CalcNewPhilHealth(amount_worked As Decimal, is_for_employee As Boolean, Optional new_philhealth_deduction As Decimal = 0) As Decimal
+    Private Function CalcNewPhilHealth(new_philhealth_deduction As Decimal, is_for_employee As Boolean, Optional amount_worked As Decimal = 0) As Decimal
         Static base_multiplier As Decimal = 0.01
         Static half_divisor As Decimal = 2
 

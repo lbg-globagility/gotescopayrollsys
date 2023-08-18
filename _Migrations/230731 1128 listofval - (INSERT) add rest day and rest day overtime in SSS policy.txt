@@ -1,0 +1,7 @@
+SET @_type='SocialSecuritySystem';
+
+SET @_id=(SELECT RowID FROM listofval WHERE `Type`=@_type AND `LIC`='IncludeRestDay' LIMIT 1);
+INSERT INTO `gotescopayrolldb`.`listofval` (`RowID`, `DisplayValue`, `LIC`, `Type`, `Active`, `Created`, `CreatedBy`, `LastUpd`, `OrderBy`, `LastUpdBy`) VALUES (@_id, '1', 'IncludeRestDay', @_type, 'Yes', '2021-03-17 13:30:00', 1, '2021-03-17 13:30:00', 1, 1) ON DUPLICATE KEY UPDATE `LastUpd`=CURRENT_TIMESTAMP();
+
+SET @_id=(SELECT RowID FROM listofval WHERE `Type`=@_type AND `LIC`='IncludeRestDayOvertime' LIMIT 1);
+INSERT INTO `gotescopayrolldb`.`listofval` (`RowID`, `DisplayValue`, `LIC`, `Type`, `Active`, `Created`, `CreatedBy`, `LastUpd`, `OrderBy`, `LastUpdBy`) VALUES (@_id, '1', 'IncludeRestDayOvertime', @_type, 'Yes', '2021-03-17 13:30:00', 1, '2021-03-17 13:30:00', 1, 1) ON DUPLICATE KEY UPDATE `LastUpd`=CURRENT_TIMESTAMP();

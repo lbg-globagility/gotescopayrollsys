@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Gotesco Payroll System"
-#define MyAppVersion "1.7.5"
+#define MyAppVersion "1.7.6"
 #define MyAppPublisher "Globagility, Inc."
 #define MyAppURL "http://www.globagilityinc.com/"
 #define MyAppExeName "GotescoPayrollSys.exe"
@@ -69,7 +69,7 @@ Source: ".\GotescoPayrollSys\bin\Debug\FlashControlV71.dll"; DestDir: "{app}"; F
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.pdb"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
-Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+; Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 ; Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.vshost.exe.config"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\GotescoPayrollSys.xml"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
 Source: ".\GotescoPayrollSys\bin\Debug\LBGClassLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full

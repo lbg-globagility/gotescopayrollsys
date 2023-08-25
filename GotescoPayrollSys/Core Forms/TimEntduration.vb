@@ -1,4 +1,5 @@
-﻿Imports System.Threading.Tasks
+﻿Imports System.Configuration
+Imports System.Threading.Tasks
 Imports MySql.Data.MySqlClient
 
 Public Class TimEntduration
@@ -1132,7 +1133,7 @@ Public Class TimEntduration
     End Sub
 
     'FIRST_METHOD
-    Private Sub bgWork_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWork.DoWork
+    Private Async Sub bgWork_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWork.DoWork
         backgroundworking = 1
 
         Dim lastbound = DateDiff(DateInterval.Day,
@@ -1150,7 +1151,7 @@ Public Class TimEntduration
 
         Dim str_query As String =
             String.Concat(
-            "SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid) `Result`",
+            "SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid, NULL) `Result`",
             " FROM dates d",
             " INNER JOIN (SELECT RowID, OrganizationID, StartDate, TerminationDate, PayFrequencyID, PositionID FROM employee WHERE OrganizationID=", org_rowid, " AND GREATEST(StartDate, ?payDateFrom) BETWEEN StartDate AND IFNULL(TerminationDate, ?payDateTo)) e ON e.OrganizationID=?og_rowid",
             " INNER JOIN (SELECT RowID, DivisionId FROM `position` WHERE OrganizationID=", org_rowid, ") pos ON pos.RowID=e.PositionID",
@@ -1203,12 +1204,13 @@ Public Class TimEntduration
 
         'Next
 
+        Await PostProcessRestDayAbsencesFeatureAsync()
     End Sub
 
     Private Async Function TimeEntryGenerationAsync() As Task(Of Boolean)
         Dim str_query As String =
             String.Concat(
-            "SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid) `Result`",
+            "SELECT GENERATE_employeetimeentry(e.RowID, e.OrganizationID, d.DateValue, ?u_rowid, NULL) `Result`",
             " FROM dates d",
             " INNER JOIN (SELECT RowID, OrganizationID, StartDate, TerminationDate, PayFrequencyID, PositionID FROM employee WHERE OrganizationID=?og_rowid) e ON e.OrganizationID=?og_rowid",
             " INNER JOIN (SELECT RowID, DivisionId FROM `position` WHERE OrganizationID=?og_rowid) pos ON pos.RowID=e.PositionID",
@@ -1250,6 +1252,86 @@ Public Class TimEntduration
         End Using
 
         Return succeed
+    End Function
+
+    Private Async Function PostProcessRestDayAbsencesFeatureAsync() As Task
+        Dim config As Specialized.NameValueCollection = ConfigurationManager.AppSettings
+
+        Dim sql = <![CDATA[
+            CALL `GetRestdayScheds`(@orgId, @datefrom, @dateto);
+            CALL `GetEmployeeTimeEntries`(@orgId, @datefrom, @dateto);
+            
+            SELECT GENERATE_employeetimeentry(e.RowID,
+                e.OrganizationID,
+                d.DateValue,
+                @userId,
+                (CASE
+	                WHEN i.`SetNewDay`=1 THEN (SELECT TRUE `HasNoTotalDayPay` FROM `timeentries` WHERE EmployeeID=e.RowID AND `Date` BETWEEN i.`PriorDateToValidate` AND i.`SetCurDate` HAVING SUM(TotalDayPay) = 0)
+	                WHEN i.`SetNewDay`=2 THEN (SELECT TRUE `HasNoTotalDayPay` FROM `timeentries` WHERE EmployeeID=e.RowID AND `Date` BETWEEN ii.`PriorDateToValidate` AND i.`SetCurDate` HAVING SUM(TotalDayPay) = 0)
+	                ELSE NULL
+                END)
+            ) `Result`
+            FROM (SELECT DISTINCT r.DateValue FROM `restdayscheds` r) d
+            INNER JOIN (
+            SELECT RowID, OrganizationID, StartDate, TerminationDate, PayFrequencyID, PositionID
+            FROM employee
+            WHERE OrganizationID=@orgId
+
+            AND RowID=289
+
+            AND GREATEST(StartDate, @datefrom) BETWEEN StartDate AND IFNULL(TerminationDate, @dateto)) e ON e.OrganizationID=@orgId
+            INNER JOIN (
+            SELECT RowID, DivisionId
+            FROM `position`
+            WHERE OrganizationID=@orgId) pos ON pos.RowID=e.PositionID
+            INNER JOIN (
+            SELECT RowID
+            FROM division
+            WHERE OrganizationID=@orgId) dv ON dv.RowID=pos.DivisionId AND dv.RowID=IFNULL(@divisionId, dv.RowID)
+            INNER JOIN (
+            SELECT RowID, PayFrequencyType
+            FROM payfrequency) pf ON pf.RowID=e.PayFrequencyID AND pf.PayFrequencyType='Semi-monthly'
+
+            LEFT JOIN `restdayscheds` i ON i.EmployeeID=e.RowID AND i.`DateValue`=d.DateValue #AND i.`IsRegularDay`=TRUE
+
+            LEFT JOIN `restdayscheds` ii ON ii.EmployeeID=e.RowID AND ii.`DateValue` < i.`DateValue` AND i.`IsRegularDay`=TRUE AND ii.`SetNewDay` = (i.`SetNewDay`-1)
+
+            WHERE i.SetCurDate IS NOT NULL #AND ii.SetCurDate IS NOT NULL
+            AND d.DateValue BETWEEN @datefrom AND @dateto
+            ORDER BY e.RowID, d.DateValue
+        ]]>.Value
+
+        Dim connectionText = $"{mysql_conn_text}default command timeout={Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault())};"
+
+        Using command = New MySqlCommand(cmdText:=sql,
+            connection:=New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@datefrom", dayFrom)
+                .AddWithValue("@dateto", dayTo)
+                .AddWithValue("@divisionId", If(DivisionID = 0, DBNull.Value, DivisionID))
+                .AddWithValue("@userId", user_row_id)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+            Catch ex As Exception
+                _logger.Error("RenewLeaveBalances", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    "Error reset leave balance",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+            End Try
+        End Using
     End Function
 
     'BEFORE_LAST_METHOD

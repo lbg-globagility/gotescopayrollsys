@@ -1,49 +1,20 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 DROP FUNCTION IF EXISTS `GENERATE_employeetimeentry`;
 DELIMITER //
-CREATE FUNCTION `GENERATE_employeetimeentry`(`ete_EmpRowID` INT,
+CREATE FUNCTION `GENERATE_employeetimeentry`(
+	`ete_EmpRowID` INT,
 	`ete_OrganizID` INT,
 	`ete_Date` DATE,
-	`ete_UserRowID` INT
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	`ete_UserRowID` INT,
+	`isSetRestdayToAbsent` TINYINT
 ) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -1006,6 +977,7 @@ IF pr_DayBefore IS NULL THEN
 				, 0
 				, 0
 				, 0
+				, isSetRestdayToAbsent
 		) INTO anyINT;
 		
 
@@ -1050,6 +1022,7 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, @leavePayment
+					, isSetRestdayToAbsent
 			) INTO anyINT;
 			
 			
@@ -1085,6 +1058,7 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, @leavePayment
+					, isSetRestdayToAbsent
 			) INTO anyINT;
 			
 		END IF;
@@ -1133,6 +1107,7 @@ IF pr_DayBefore IS NULL THEN
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
 						, 0
+						, isSetRestdayToAbsent
 				) INTO anyINT;
 				
 			ELSE
@@ -1167,6 +1142,7 @@ IF pr_DayBefore IS NULL THEN
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
 						, 0
+						, isSetRestdayToAbsent
 				) INTO anyINT;
 				
 				
@@ -1213,6 +1189,7 @@ IF pr_DayBefore IS NULL THEN
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, @leavePayment
+					, isSetRestdayToAbsent
 			) INTO anyINT;
 			
 		END IF;
@@ -1270,17 +1247,20 @@ ELSE
 	INTO @availed_leave_hrs;
 	
 	SET @availed_leave_hrs = IFNULL(@availed_leave_hrs, 0);
+	SET @isCalcRestDay=FALSE;
 	
 	SELECT
 	IFNULL(et.TotalDayPay,0)
 	,IFNULL(et.TotalHoursWorked,0)
+	,e.CalcRestDay
 	FROM employeetimeentry et
 	INNER JOIN employee e ON e.RowID=et.EmployeeID
 	WHERE et.EmployeeID=ete_EmpRowID
 	AND et.OrganizationID=ete_OrganizID
 	AND et.`Date`=IF(CHAR_TO_DAYOFWEEK(e.DayOfRest) = DAYNAME(pr_DayBefore), SUBDATE(pr_DayBefore, INTERVAL 1 DAY), pr_DayBefore)
 	INTO yester_TotDayPay
-		  ,yester_TotHrsWorkd;
+		  ,yester_TotHrsWorkd
+		  ,@isCalcRestDay;
 	SELECT EXISTS(SELECT elv.RowID FROM employeeleave elv WHERE elv.EmployeeID=ete_EmpRowID AND elv.`Status`='Approved' AND elv.OrganizationID=ete_OrganizID AND ete_Date BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate LIMIT 1) INTO hasLeave;
 	IF yester_TotDayPay IS NULL THEN
 		SET yester_TotDayPay = 0;
@@ -1335,6 +1315,7 @@ ELSE
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, (@availed_leave_hrs * rateperhour)
+					, isSetRestdayToAbsent
 			) INTO anyINT;
 			
 		ELSE
@@ -1380,6 +1361,7 @@ ELSE
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, (@availed_leave_hrs * rateperhour)
+					, isSetRestdayToAbsent
 			) INTO anyINT;
 			
 		END IF;
@@ -1392,7 +1374,8 @@ ELSE
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
 										 + (@availed_leave_hrs * rateperhour);
-
+#IF ete_Date='2023-08-05' THEN SELECT ((ete_RegHrsWorkd - ete_NDiffHrs) * rateperhour) * ((commonrate + restday_rate) - 1) INTO OUTFILE 'D:/TEST.txt'; END IF;
+# OVER HERE...
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID
@@ -1412,13 +1395,14 @@ ELSE
 					, payrateRowID
 					, ete_TotalDayPay
 					, ete_RegHrsWorkd + ete_OvertimeHrs
-					, ((ete_RegHrsWorkd - ete_NDiffHrs) * rateperhour) * ((commonrate + restday_rate) - 1)
-					, (ete_OvertimeHrs * rateperhourforOT) * ((commonrate + restdayot_rate) - 1)
+					, ((ete_RegHrsWorkd - ete_NDiffHrs) * rateperhour) * IF(@isCalcRestDay=TRUE, commonrate, default_payrate)
+					, (ete_OvertimeHrs * rateperhourforOT) * IF(@isCalcRestDay=TRUE, commonrate, default_payrate)
 					, (ete_HrsUnder * rateperhour)
 					, (ete_NDiffHrs * rateperhour) * ndiffrate
 					, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 					, (ete_HrsLate * rateperhour)
 					, (@availed_leave_hrs * rateperhour)
+					, isSetRestdayToAbsent
 			) INTO anyINT;
 				
 			
@@ -1465,6 +1449,7 @@ ELSE
 						, (ete_NDiffOTHrs * rateperhour) * ndiffotrate
 						, (ete_HrsLate * rateperhour)
 						, (@availed_leave_hrs * rateperhour)
+						, isSetRestdayToAbsent
 				) INTO anyINT;
 				
 			ELSE
@@ -1497,6 +1482,7 @@ ELSE
 						, 0
 						, 0
 						, 0
+						, isSetRestdayToAbsent
 				) INTO anyINT;
 				
 			END IF;
@@ -1529,6 +1515,8 @@ RETURN yes_true;
 END//
 DELIMITER ;
 
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

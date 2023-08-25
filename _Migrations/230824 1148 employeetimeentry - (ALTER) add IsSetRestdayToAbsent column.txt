@@ -1,0 +1,3 @@
+ALTER TABLE `employeetimeentry`
+	ADD COLUMN IF NOT EXISTS `IsSetRestdayToAbsent` TINYINT(1) NULL DEFAULT NULL AFTER `IsValidForHolidayPayment`;
+

@@ -1275,11 +1275,7 @@ Public Class TimEntduration
             INNER JOIN (
             SELECT RowID, OrganizationID, StartDate, TerminationDate, PayFrequencyID, PositionID
             FROM employee
-            WHERE OrganizationID=@orgId
-
-            AND RowID=289
-
-            AND GREATEST(StartDate, @datefrom) BETWEEN StartDate AND IFNULL(TerminationDate, @dateto)) e ON e.OrganizationID=@orgId
+            WHERE OrganizationID=@orgId AND GREATEST(StartDate, @datefrom) BETWEEN StartDate AND IFNULL(TerminationDate, @dateto)) e ON e.OrganizationID=@orgId
             INNER JOIN (
             SELECT RowID, DivisionId
             FROM `position`

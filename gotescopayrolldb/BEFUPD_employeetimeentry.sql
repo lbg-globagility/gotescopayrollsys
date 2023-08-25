@@ -473,6 +473,10 @@ IF NEW.LastUpd != TIMESTAMP('1900-01-01 00:00:00') THEN
 
 END IF;
 
+IF NEW.IsSetRestdayToAbsent IS NOT NULL AND NEW.IsSetRestdayToAbsent THEN
+	SET NEW.Absent=e_rateperday;
+END IF;
+
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;

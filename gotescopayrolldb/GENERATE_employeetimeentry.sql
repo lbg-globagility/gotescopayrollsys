@@ -1374,8 +1374,7 @@ ELSE
 			SET ete_TotalDayPay = ((ete_RegHrsWorkd * rateperhour) * commonrate)
 										 + ((ete_OvertimeHrs * rateperhourforOT) * otrate)
 										 + (@availed_leave_hrs * rateperhour);
-#IF ete_Date='2023-08-05' THEN SELECT ((ete_RegHrsWorkd - ete_NDiffHrs) * rateperhour) * ((commonrate + restday_rate) - 1) INTO OUTFILE 'D:/TEST.txt'; END IF;
-# OVER HERE...
+
 			SELECT INSUPD_employeetimeentries(
 					anyINT
 					, ete_OrganizID

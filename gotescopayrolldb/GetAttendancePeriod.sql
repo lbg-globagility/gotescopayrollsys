@@ -95,7 +95,7 @@ IF NOT isActual THEN
 	, et.`AdditionalVLHours`
 	, et.`TotalDayPay`
 	, et.`Absent`
-	, IF(et.Absent > 0, sh.WorkHours, 0) `AbsentHours`
+	, IF(et.Absent > 0, IF(@isMonthly, IFNULL(sh.WorkHours, 8), sh.WorkHours), 0) `AbsentHours`
 	, et.`TaxableDailyAllowance`
 	, et.`HolidayPayAmount`
 	, et.`TaxableDailyBonus`
@@ -188,7 +188,7 @@ ELSE
 	, et.`AdditionalVLHours`
 	, et.`TotalDayPay`
 	, et.`Absent`
-	, IF(et.Absent > 0, sh.WorkHours, 0) `AbsentHours`
+	, IF(et.Absent > 0, IF(@isMonthly, IFNULL(sh.WorkHours, 8), sh.WorkHours), 0) `AbsentHours`
 	, et.`TaxableDailyAllowance`
 	, et.`HolidayPayAmount`
 	, et.`TaxableDailyBonus`

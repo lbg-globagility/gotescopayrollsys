@@ -16,8 +16,17 @@ CREATE PROCEDURE `GetRestdayScheds`(
 )
 BEGIN
 
+DECLARE employeeTypes TEXT;
+
 SET @_datefrom=SUBDATE(dateFrom, INTERVAL 1 WEEK);
 SET @_dateto=dateTo;
+
+SELECT
+GROUP_CONCAT(l.DisplayValue) `Result`
+FROM listofval l
+WHERE l.`Type`='RestdayAbsentPolicy'
+INTO employeeTypes
+;
 
 DROP TEMPORARY TABLE IF EXISTS `restdaysched`;
 CREATE TEMPORARY TABLE IF NOT EXISTS `restdaysched`
@@ -34,7 +43,8 @@ pr.PayType IN ('Regular Holiday', 'Special Non-Working Holiday') `IsHoliday`
 
 FROM dates d
 INNER JOIN payrate pr ON pr.OrganizationID=orgId AND pr.`Date`=d.DateValue
-LEFT JOIN employeeshift esh ON esh.OrganizationID=pr.OrganizationID AND d.DateValue BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
+INNER JOIN employee e ON e.OrganizationID=orgId AND FIND_IN_SET(e.EmployeeType, employeeTypes) > 0
+LEFT JOIN employeeshift esh ON esh.EmployeeID=e.RowID AND esh.OrganizationID=pr.OrganizationID AND d.DateValue BETWEEN esh.EffectiveFrom AND esh.EffectiveTo
 WHERE d.DateValue BETWEEN @_datefrom AND @_dateto
 order BY esh.EmployeeID, d.DateValue
 ;

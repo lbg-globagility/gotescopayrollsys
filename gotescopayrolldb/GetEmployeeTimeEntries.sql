@@ -16,11 +16,21 @@ CREATE PROCEDURE `GetEmployeeTimeEntries`(
 )
 BEGIN
 
+DECLARE employeeTypes TEXT;
+
+SELECT
+GROUP_CONCAT(l.DisplayValue) `Result`
+FROM listofval l
+WHERE l.`Type`='RestdayAbsentPolicy'
+INTO employeeTypes
+;
+
 DROP TEMPORARY TABLE IF EXISTS `timeentries`;
 CREATE TEMPORARY TABLE IF NOT EXISTS `timeentries`
 SELECT
 et.*
 FROM employeetimeentry et
+INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID AND FIND_IN_SET(e.EmployeeType, employeeTypes) > 0
 WHERE et.OrganizationID=orgId
 AND et.`Date` BETWEEN dateFrom AND dateTo
 ;

@@ -1,0 +1,6 @@
+SET @_type='RestdayAbsentPolicy';
+SET @_lic='EmployeeType';
+SET @_dispalyValue='Monthly';
+SET @_id=(SELECT RowID FROM `gotescopayrolldb`.`listofval` WHERE `Type`=@_type AND `LIC`=@_lic AND `DisplayValue`=@_dispalyValue LIMIT 1);
+
+INSERT INTO `gotescopayrolldb`.`listofval` (`RowID`, `DisplayValue`, `LIC`, `Type`, `ParentLIC`, `Active`, `Created`, `CreatedBy`, `LastUpd`, `OrderBy`, `LastUpdBy`) VALUES (@_id, @_dispalyValue, @_lic, @_type, '', 'Yes', CURRENT_TIMESTAMP(), 1, CURRENT_TIMESTAMP(), 1, 1) ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();

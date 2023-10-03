@@ -1259,7 +1259,7 @@ Public Class TimEntduration
 
         Dim sql = <![CDATA[
             CALL `GetRestdayScheds`(@orgId, @datefrom, @dateto);
-            CALL `GetEmployeeTimeEntries`(@orgId, @datefrom, @dateto);
+            CALL `GetEmployeeTimeEntries`(@orgId, SUBDATE(@datefrom, INTERVAL 1 WEEK), @dateto);
             
             SELECT GENERATE_employeetimeentry(e.RowID,
                 e.OrganizationID,

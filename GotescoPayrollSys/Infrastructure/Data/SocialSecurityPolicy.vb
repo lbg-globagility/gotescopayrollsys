@@ -27,13 +27,13 @@ Public Class SocialSecurityPolicy
         End Get
     End Property
 
-    Public ReadOnly Property IncludeRestDay As Boolean
+    Public ReadOnly Property IncludeRestDay() As Boolean
         Get
             Return _settings.GetBoolean($"{SOCIAL_SECURITY_POLICY_TYPE}.IncludeRestDay")
         End Get
     End Property
 
-    Public ReadOnly Property IncludeRestDayOvertime As Boolean
+    Public ReadOnly Property IncludeRestDayOvertime() As Boolean
         Get
             Return _settings.GetBoolean($"{SOCIAL_SECURITY_POLICY_TYPE}.IncludeRestDayOvertime")
         End Get

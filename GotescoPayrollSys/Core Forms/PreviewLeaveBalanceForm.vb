@@ -61,7 +61,26 @@ Public Class PreviewLeaveBalanceForm
 
                 If policy.LeaveAllowanceAmount = RenewLeaveBalancePolicy.LeaveAllowanceAmountBasis.Default Then
 
-                    Await RenewLeaveBalances()
+                    Await PerformGainLeaveBalanceAsync().
+                       ContinueWith(Async Sub(antecedent1)
+                                        If Not antecedent1.IsCompleted Then Return
+
+                                        Await ResetAllLeaveAllowances()
+                                    End Sub).
+                                    ContinueWith(Async Sub(antecedent2)
+                                                     If Not antecedent2.IsCompleted Then Return
+
+                                                     Await Task.WhenAll(UpdateLeaveBalanceVacation(),
+                                                        UpdateLeaveBalanceSick(),
+                                                        UpdateLeaveBalanceAdditionalVL(),
+                                                        UpdateLeaveBalanceOthers(),
+                                                        UpdateLeaveBalanceParental()).
+                                                     ContinueWith(Async Sub(antecedent3)
+                                                                      If Not antecedent3.IsCompleted Then Return
+
+                                                                      Await UpdateLeaveItemsAsync()
+                                                                  End Sub)
+                                                 End Sub)
                 End If
             Else
 
@@ -71,47 +90,6 @@ Public Class PreviewLeaveBalanceForm
         End If
 
     End Sub
-
-    Private Async Function RenewLeaveBalances() As Task
-        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
-
-        Using command = New MySqlCommand(String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
-                                                       "CALL `UpdateLeaveItems`(@orgId, @startingPeriodId);"),
-                                         New MySqlConnection(connectionText))
-            With command.Parameters
-                .AddWithValue("@orgId", organizationId)
-                .AddWithValue("@userId", user_row_id)
-                .AddWithValue("@dateFrom", periodDateFrom)
-                .AddWithValue("@dateTo", periodDateTo)
-                .AddWithValue("@startingPeriodId", payPeriodId)
-
-            End With
-
-            Await command.Connection.OpenAsync
-
-            Dim transaction = Await command.Connection.BeginTransactionAsync()
-
-            Try
-                Await command.ExecuteNonQueryAsync()
-                transaction.Commit()
-
-                MessageBox.Show("Leave balance were reset successfully",
-                                "Done reset leave balance",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information)
-            Catch ex As Exception
-                _logger.Error("RenewLeaveBalances", ex)
-                transaction.Rollback()
-
-                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
-                                "Error reset leave balance",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Exclamation)
-            End Try
-
-        End Using
-    End Function
-
     Private Function CreateCreditLeaveTransaction(context As DatabaseContext, employee As EmployeeModel, employeeId As Integer, leaveLedgerId As Integer, leaveType As LeaveType) As LeaveTransaction
         Dim lt As New LeaveTransaction With {
         .OrganizationID = organizationId,
@@ -285,5 +263,383 @@ Public Class PreviewLeaveBalanceForm
         End Property
 
     End Class
+
+    Private Async Function PerformGainLeaveBalanceAsync() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", organizationId)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", periodDateFrom)
+                .AddWithValue("@dateTo", periodDateTo)
+                '.AddWithValue("@startingPeriodId", payPeriodId)
+            End With
+
+            Await command.Connection.OpenAsync
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("PerformGainLeaveBalanceAsync", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function ResetAllLeaveAllowances() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "UPDATE employee e
+                        SET e.LeaveBalance=e.LeaveAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.LeaveAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;
+
+                        UPDATE employee e
+                        SET e.SickLeaveBalance=e.SickLeaveAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.SickLeaveAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;
+
+                        UPDATE employee e
+                        SET e.AdditionalVLBalance=e.AdditionalVLAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.AdditionalVLAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;
+
+                        UPDATE employee e
+                        SET e.MaternityLeaveBalance=e.MaternityLeaveAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.MaternityLeaveAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;
+
+                        UPDATE employee e
+                        SET e.OtherLeaveBalance=e.OtherLeaveAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.OtherLeaveAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", organizationId)
+                .AddWithValue("@userId", user_row_id)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("ResetLeaveAllowances", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceVacation() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceVacation`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", organizationId)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", periodDateFrom)
+                .AddWithValue("@periodId", payPeriodId)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceVacation", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceSick() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceSick`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", organizationId)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", periodDateFrom)
+                .AddWithValue("@periodId", payPeriodId)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceSick", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceAdditionalVL() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceAdditionalVL`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", organizationId)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", periodDateFrom)
+                .AddWithValue("@periodId", payPeriodId)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceAdditionalVL", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceOthers() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceOthers`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", organizationId)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", periodDateFrom)
+                .AddWithValue("@periodId", payPeriodId)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceOthers", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceParental() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceParental`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", organizationId)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", periodDateFrom)
+                .AddWithValue("@periodId", payPeriodId)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceParental", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveItemsAsync() As Task
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim getJanuaryOnePayPeriod =
+            Function()
+                Return $"SELECT ppd.RowID FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate='{periodDateFrom:yyyy-MM-dd}' AND pp.PayToDate='{periodDateTo:yyyy-MM-dd}' AND pp.OrganizationID={organizationId} ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1"
+            End Function
+
+        Dim strQuery = $"CALL `UpdateLeaveItems`(@orgId, ({getJanuaryOnePayPeriod()}));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", organizationId)
+                '.AddWithValue("@userId", user_row_id)
+                '.AddWithValue("@dateFrom", periodDateFrom)
+                '.AddWithValue("@dateTo", periodDateTo)
+                '.AddWithValue("@periodId", payPeriodId)
+
+            End With
+
+            Await command.Connection.OpenAsync
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync
+
+            Try
+                Await command.ExecuteNonQueryAsync()
+                transaction.Commit()
+
+                MessageBox.Show("Leave balance were reset successfully",
+                    "Done reset leave balance",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information)
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveItemsAsync", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    "Error reset leave balance",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+            End Try
+
+        End Using
+    End Function
 
 End Class

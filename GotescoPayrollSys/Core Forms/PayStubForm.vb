@@ -2117,7 +2117,7 @@ Public Class PayStubForm
                 '.AddWithValue("@dateto", paypTo)
 
                 'Dim periodId = CInt(Current_PayPeriodID)
-                .AddWithValue("@periodId", 16360) 'paypRowID
+                .AddWithValue("@periodId", paypRowID)
             End With
 
             Await command.Connection.OpenAsync()

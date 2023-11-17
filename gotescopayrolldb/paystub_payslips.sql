@@ -503,7 +503,7 @@ LEFT JOIN (SELECT
 			  INNER JOIN product p ON p.RowID=psi.ProductID
 			  INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave Type'
 			  WHERE psi.OrganizationID = og_rowid
-			  AND psi.Undeclared = TRUE
+			  AND psi.Undeclared = FALSE
 			  AND psi.PayAmount != 0
 			  GROUP BY psi.PayStubID
 			  ORDER BY psi.RowID

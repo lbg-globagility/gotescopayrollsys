@@ -90,7 +90,7 @@ WHILE eIndex < @eIDCount DO
 	SET @psiRowID = NULL;
 	
 	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
-	CREATE TEMPORARY TABLE paystubitemleavebalance
+	CREATE TEMPORARY TABLE IF NOT EXISTS paystubitemleavebalance
 	SELECT psi.RowID
 	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
 	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
@@ -131,7 +131,7 @@ WHILE eIndex < @eIDCount DO
 	SET @psiRowID = NULL;
 	
 	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
-	CREATE TEMPORARY TABLE paystubitemleavebalance
+	CREATE TEMPORARY TABLE IF NOT EXISTS paystubitemleavebalance
 	SELECT psi.RowID
 	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
 	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
@@ -172,7 +172,7 @@ WHILE eIndex < @eIDCount DO
 	SET @psiRowID = NULL;
 	
 	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
-	CREATE TEMPORARY TABLE paystubitemleavebalance
+	CREATE TEMPORARY TABLE IF NOT EXISTS paystubitemleavebalance
 	SELECT psi.RowID
 	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
 	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
@@ -213,7 +213,7 @@ WHILE eIndex < @eIDCount DO
 	SET @psiRowID = NULL;
 	
 	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
-	CREATE TEMPORARY TABLE paystubitemleavebalance
+	CREATE TEMPORARY TABLE IF NOT EXISTS paystubitemleavebalance
 	SELECT psi.RowID
 	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
 	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
@@ -254,7 +254,7 @@ WHILE eIndex < @eIDCount DO
 	SET @psiRowID = NULL;
 	
 	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
-	CREATE TEMPORARY TABLE paystubitemleavebalance
+	CREATE TEMPORARY TABLE IF NOT EXISTS paystubitemleavebalance
 	SELECT psi.RowID
 	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
 	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`

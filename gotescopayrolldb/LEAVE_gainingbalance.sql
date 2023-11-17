@@ -353,7 +353,6 @@ AND FIND_IN_SET(e.EmploymentStatus, UNEMPLOYEMENT_STATUSES()) = 0
 AND e.EmploymentStatus IN (regularEmplymentStatus, 'Probationary')
 ;
 
-CALL UpdateLeaveBalance(OrganizID, yearPeriod, payDateFrom);
 END IF;
 
 END//

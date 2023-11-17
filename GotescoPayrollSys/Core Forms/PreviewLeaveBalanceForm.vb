@@ -1,5 +1,6 @@
 ﻿Imports System.Configuration
 Imports System.Data.Entity
+Imports System.Threading.Tasks
 Imports AccuPay.Entity
 Imports log4net
 Imports MySql.Data.MySqlClient
@@ -71,7 +72,7 @@ Public Class PreviewLeaveBalanceForm
 
     End Sub
 
-    Private Async Function RenewLeaveBalances() As Threading.Tasks.Task
+    Private Async Function RenewLeaveBalances() As Task
         Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
 
         Using command = New MySqlCommand(String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",

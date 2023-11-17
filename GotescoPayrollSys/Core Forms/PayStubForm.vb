@@ -546,7 +546,6 @@ Public Class PayStubForm
 
             End If
 
-
             If _once Then
                 _once = False
                 CurrLinkPage = New LinkLabel
@@ -1117,7 +1116,6 @@ Public Class PayStubForm
                                                 FROM attendanceperiod
                                                 GROUP BY EmployeeID;").GetFoundRows.Tables(0)
 
-
                                       Dim sum_emp_loans = String.Empty
 
                                       Select Case PayFreqRowID
@@ -1243,7 +1241,6 @@ Public Class PayStubForm
                                                                   " AND IF(SubstituteEndDate IS NULL, `Status`, '" & loan_inprogress_status & "')='In Progress'" &
                                                                   " AND DeductionSchedule IN ('First half','Per pay period')" &
                                                                   " ORDER BY LoanTypeID;"
-
                                               Else '                      'means, end of the month
 
                                                   segregate_emp_loan = "SELECT LoanTypeID,DeductionAmount,DeductionPercentage,EmployeeID,IF(LoanPayPeriodLeft BETWEEN 1 AND 1.99, '1', '0') 'LoanDueDate',TotalLoanAmount,DeductionAmount,NoOfPayPeriod" &
@@ -1669,7 +1666,6 @@ Public Class PayStubForm
                                                               " AND '", paypTo, "'",
                                                               " GROUP BY ete.EmployeeID",
                                                               " HAVING COUNT(ete.RowID) < 5;")).GetFoundRows.Tables(0)
-
                                   Catch ex As Exception
                                       errlogger.Error("genpayroll(preparing for generation)", ex)
                                   End Try
@@ -1978,8 +1974,7 @@ Public Class PayStubForm
                 Return $"SELECT ppd.RowID FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate='{paypFrom}' AND pp.PayToDate='{paypTo}' AND pp.OrganizationID={org_rowid} ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1"
             End Function
 
-        Dim strQuery = String.Concat("CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);",
-            "CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);",
+        Dim strQuery = String.Concat("CALL `MASSUPD_employeeloanschedulebacktrack_ofthisperiod`(@orgId, @periodId, @userId, NULL);",
             "CALL `RECOMPUTE_thirteenthmonthpay`(@orgId, @periodId, @userId);",
             $"CALL `UpdateLeaveItems`(@orgId, ({getJanuaryOnePayPeriod()}));")
 
@@ -2026,6 +2021,351 @@ Public Class PayStubForm
             End Try
 
         End Using
+    End Function
+
+    Private Async Function ResetAllLeaveAllowances() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "UPDATE employee e
+                        SET e.LeaveBalance=e.LeaveAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.LeaveAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;
+
+                        UPDATE employee e
+                        SET e.SickLeaveBalance=e.SickLeaveAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.SickLeaveAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;
+
+                        UPDATE employee e
+                        SET e.AdditionalVLBalance=e.AdditionalVLAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.AdditionalVLAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;
+
+                        UPDATE employee e
+                        SET e.MaternityLeaveBalance=e.MaternityLeaveAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.MaternityLeaveAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;
+
+                        UPDATE employee e
+                        SET e.OtherLeaveBalance=e.OtherLeaveAllowance,
+                        e.LastUpdBy=@userId
+                        WHERE e.OrganizationID=@orgId
+                        AND e.OtherLeaveAllowance=0
+                        AND e.EmploymentStatus NOT IN ('Resigned', 'Terminated')
+                        ;"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("ResetLeaveAllowances", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceVacation() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceVacation`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@datefrom", paypFrom)
+                '.AddWithValue("@dateto", paypTo)
+
+                'Dim periodId = CInt(Current_PayPeriodID)
+                .AddWithValue("@periodId", 16360) 'paypRowID
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceVacation", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceSick() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceSick`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@datefrom", paypFrom)
+                '.AddWithValue("@dateto", paypTo)
+
+                Dim periodId = CInt(Current_PayPeriodID)
+                .AddWithValue("@periodId", paypRowID)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceSick", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceAdditionalVL() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceAdditionalVL`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@datefrom", paypFrom)
+                '.AddWithValue("@dateto", paypTo)
+
+                Dim periodId = CInt(Current_PayPeriodID)
+                .AddWithValue("@periodId", paypRowID)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceAdditionalVL", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceOthers() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceOthers`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@datefrom", paypFrom)
+                '.AddWithValue("@dateto", paypTo)
+
+                Dim periodId = CInt(Current_PayPeriodID)
+                .AddWithValue("@periodId", paypRowID)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceOthers", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function UpdateLeaveBalanceParental() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `UpdateLeaveBalanceParental`(@orgId, @userId, @periodId, (SELECT ppd.PayFromDate FROM payperiod pp INNER JOIN payperiod ppd ON ppd.`Year`=pp.`Year` And ppd.OrganizationID=pp.OrganizationID And ppd.TotalGrossSalary=pp.TotalGrossSalary And YEAR(ppd.PayFromDate)=pp.`Year` AND DATE_FORMAT(ppd.PayFromDate, '%m-%d')='01-01' WHERE pp.PayFromDate=@datefrom AND pp.OrganizationID=@orgId ORDER BY ppd.PayFromDate, ppd.PayToDate LIMIT 1));"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@datefrom", paypFrom)
+                '.AddWithValue("@dateto", paypTo)
+
+                Dim periodId = CInt(Current_PayPeriodID)
+                .AddWithValue("@periodId", paypRowID)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("UpdateLeaveBalanceParental", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
+
+    Private Async Function PerformGainLeaveBalanceAsync() As Task(Of Integer)
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
+
+        Dim strQuery = "CALL `LEAVE_gainingbalance`(@orgId, NULL, @userId, @dateFrom, @dateTo);"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@dateFrom", paypFrom)
+                .AddWithValue("@dateTo", paypTo)
+            End With
+
+            Await command.Connection.OpenAsync
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("PerformGainLeaveBalanceAsync", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
     End Function
 
 #End Region
@@ -2243,7 +2583,6 @@ Public Class PayStubForm
 
                         End If
                     Next
-
 
                     objText = .ReportObjects("loansubdetails")
 
@@ -4260,7 +4599,6 @@ Public Class PayStubForm
 
                     End If
 
-
                     INSUPD_paystubitem(, paystubID, miscs(3).ToString, OTAmount) 'Overtime
 
                     INSUPD_paystubitem(, paystubID, miscs(2).ToString, NightDiffOTAmount) 'Night differential OT
@@ -4280,7 +4618,6 @@ Public Class PayStubForm
                         Next
 
                     End If
-
 
                     Array.Sort(emp_totals)
 
@@ -4359,7 +4696,6 @@ Public Class PayStubForm
                                     Next
 
                                 End If
-
                             Else
                                 For Each elvrow In sel_empleave
                                     If elvrow("LeaveType").ToString = "Vacation leave" Then
@@ -4370,7 +4706,6 @@ Public Class PayStubForm
 
                                     ElseIf elvrow("LeaveType").ToString = "Maternity/paternity leave" Then
                                         maternbal = Val(elvrow("NumOfHoursLeave")) 'FormatNumber(Val(elvrow("NumOfHoursLeave")), 2)
-
                                     Else '
                                         If elvrow("LeaveType").ToString = "Others" Then
                                             othersbal = Val(elvrow("NumOfHoursLeave"))
@@ -4425,7 +4760,6 @@ Public Class PayStubForm
                                 End If
 
                             End If
-
                         Else 'zero accruance of leave for probationary employees only
 
                             For Each strval In leavtyp
@@ -4782,7 +5116,6 @@ Public Class PayStubForm
             End If
 
             VIEW_payperiodofyear(searchdate)
-
         Else
 
         End If
@@ -5163,7 +5496,6 @@ Public Class PayStubForm
         bgwPrintAllPaySlip.RunWorkerAsync()
     End Sub
 
-
     Dim dtempalldistrib As New DataTable
 
     Function GET_employeeallowance(Optional employeeRowID = Nothing,
@@ -5259,7 +5591,6 @@ Public Class PayStubForm
                             End If
 
                         Next
-
                     Else '                              'five days a week
 
                         numofweekdays = 0
@@ -5531,7 +5862,6 @@ Public Class PayStubForm
                                     End If
 
                                 Next
-
 
                             ElseIf allowancefrequensi = "Semi-monthly" Then
 
@@ -5886,7 +6216,6 @@ Public Class PayStubForm
                 overtimeval = ValNoComma(AbsTardiUTNDifOTHolipay.Compute("SUM(PayAmount)", "PartNo='Overtime' AND Undeclared='" & params(3, 1) & "'"))
 
                 ndiffval = ValNoComma(AbsTardiUTNDifOTHolipay.Compute("SUM(PayAmount)", "PartNo='Night differential' AND Undeclared='" & params(3, 1) & "'"))
-
 
                 newdatrow("DatCol32") = FormatNumber(absentval, 2) 'Absent
 
@@ -6388,7 +6717,6 @@ Public Class PayStubForm
             da = New MySqlDataAdapter(cmd)
             da.Fill(dtJosh)
             dgvAdjustments.DataSource = dtJosh
-
         Catch ex As Exception
             dgvAdjustments.DataSource = Nothing
         Finally
@@ -7452,7 +7780,6 @@ Public Class PayStubForm
                         End If
                     Next
 
-
                     objText = .ReportObjects("loansubdetails")
 
                     Dim loanvalues As CrystalDecisions.CrystalReports.Engine.TextObject = .ReportObjects("loanvalues")
@@ -8191,7 +8518,6 @@ Public Class PayStubForm
 
             newdatrow("Column9") = "₱ " & FormatNumber(totalamountofloan, 2)
 
-
             For Each dgvrow As DataGridViewRow In dgvempbon.Rows 'Bonuses
                 If dgvrow.Index = 0 Then
                     newdatrow("Column36") = dgvrow.Cells("bon_Type").Value
@@ -8204,7 +8530,6 @@ Public Class PayStubForm
 
                 End If
             Next
-
 
             rptdattab.Rows.Add(newdatrow)
 
@@ -8975,7 +9300,6 @@ Public Class PayStubForm
                                              " AND e.OrganizationID='" & org_rowid & "';")
                     End If
 
-
                 End If
 
                 Dim procparam_array = New String() {org_rowid,
@@ -9145,19 +9469,40 @@ Public Class PayStubForm
 
                 MDIPrimaryForm.systemprogressbar.Visible = False
 
+                'Dim t As New Thread(AddressOf CloseMessageBox)
+                't.Start(4)
                 MessageBox.Show($"Please wait while the system is finishing it's task in the background.{Environment.NewLine}The system will prompt you once it is done.",
-                                "Background work",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information)
+                    "Background work",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information)
 
-                MDIPrimaryForm.CaptionMainFormStatus("finishing system tasks in background...")
+                'MDIPrimaryForm.CaptionMainFormStatus("finishing system tasks in background...")
 
                 Await Task.Run(Async Function()
-                                   Await GainingLeaveBalancesAsync()
-                                   Return Task.FromResult(False)
-                               End Function)
+                                   Await PerformGainLeaveBalanceAsync()
+                               End Function).
+                       ContinueWith(Async Sub(antecedent1)
+                                        If Not antecedent1.IsCompleted Then Return
 
-                MDIPrimaryForm.CaptionMainFormStatus("✔")
+                                        Await ResetAllLeaveAllowances()
+                                    End Sub).
+                                    ContinueWith(Async Sub(antecedent2)
+                                                     If Not antecedent2.IsCompleted Then Return
+
+                                                     Await Task.WhenAll(UpdateLeaveBalanceVacation(),
+                                                        UpdateLeaveBalanceSick(),
+                                                        UpdateLeaveBalanceAdditionalVL(),
+                                                        UpdateLeaveBalanceOthers(),
+                                                        UpdateLeaveBalanceParental()).
+                                                     ContinueWith(Async Sub(antecedent3)
+                                                                      If Not antecedent3.IsCompleted Then Return
+
+                                                                      Await GainingLeaveBalancesAsync()
+                                                                  End Sub)
+                                                 End Sub)
+
+                'MDIPrimaryForm.CaptionMainFormStatus("✔")
+
             Else
 
             End If
@@ -9179,7 +9524,6 @@ Public Class PayStubForm
             dgvpayper_SelectionChanged(sender, e)
 
             backgroundworking = 0
-
         Else
 
             Console.WriteLine("batch still in process...")
@@ -9189,6 +9533,22 @@ Public Class PayStubForm
 
     End Sub
 
+    Private Declare Sub keybd_event Lib "user32" _
+                      (ByVal bVk As Byte,
+                       ByVal bScan As Byte,
+                       ByVal dwFlags As Byte,
+                       ByVal dwExtraInfo As Byte)
+
+    Private Const VK_RETURN As Byte = &HD
+    Private Const KEYEVENTF_KEYDOWN As Byte = &H0
+    Private Const KEYEVENTF_KEYUP As Byte = &H2
+
+    Private Sub CloseMessageBox(ByVal delay As Object)
+        Thread.Sleep(CInt(delay) * 1000)
+        AppActivate(Title:=Text)
+        keybd_event(VK_RETURN, 0, KEYEVENTF_KEYDOWN, 0)
+        keybd_event(VK_RETURN, 0, KEYEVENTF_KEYUP, 0)
+    End Sub
 End Class
 
 Friend Class PrintAllPaySlipOfficialFormat

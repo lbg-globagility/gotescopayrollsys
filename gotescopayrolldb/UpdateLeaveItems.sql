@@ -1,23 +1,17 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 DROP PROCEDURE IF EXISTS `UpdateLeaveItems`;
 DELIMITER //
 CREATE PROCEDURE `UpdateLeaveItems`(
 	IN `orgId` INT,
 	IN `startingPeriodId` INT
-
-
-
-
-
-
-
-
-
 )
 BEGIN
 
@@ -123,11 +117,11 @@ SELECT
 				, e.AdditionalVLAllowance
 				, e.MaternityLeaveAllowance
 				
-				, SUM(et.VacationLeaveHours) `VacationLeaveHours`
-				, SUM(et.SickLeaveHours) `SickLeaveHours`
-				, SUM(et.OtherLeaveHours) `OtherLeaveHours`
-				, SUM(et.AdditionalVLHours) `AdditionalVLHours`
-				, SUM(et.MaternityLeaveHours) `MaternityLeaveHours`
+				, SUM(IF(et.VacationLeaveHours < 0, IF(elv.LeaveType='Vacation leave', elv.OfficialValidHours, 0), et.VacationLeaveHours)) `VacationLeaveHours`
+				, SUM(IF(et.SickLeaveHours < 0, IF(elv.LeaveType='Sick leave', elv.OfficialValidHours, 0), et.SickLeaveHours)) `SickLeaveHours`
+				, SUM(IF(et.OtherLeaveHours < 0, IF(elv.LeaveType='Others', elv.OfficialValidHours, 0), et.OtherLeaveHours)) `OtherLeaveHours`
+				, SUM(IF(et.AdditionalVLHours < 0, IF(elv.LeaveType='Additional VL', elv.OfficialValidHours, 0), et.AdditionalVLHours)) `AdditionalVLHours`
+				, SUM(IF(et.MaternityLeaveHours < 0, IF(elv.LeaveType='Maternity/paternity leave', elv.OfficialValidHours, 0), et.MaternityLeaveHours)) `MaternityLeaveHours`
 				
 				FROM payperiod pp
 				LEFT JOIN employeetimeentry et
@@ -136,6 +130,8 @@ SELECT
 								AND et.OrganizationID=pp.OrganizationID
 				INNER JOIN employee e ON e.RowID=et.EmployeeID
 								AND pp.TotalGrossSalary=e.PayFrequencyID
+				
+				LEFT JOIN employeeleave elv ON elv.EmployeeID=e.RowID AND et.Date BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
 				
 				WHERE pp.OrganizationID = orgId
 #				AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours + et.MaternityLeaveHours) > 0
@@ -197,6 +193,8 @@ SET psi.PayAmount = ii.VacationBalanceDecrement
 END//
 DELIMITER ;
 
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

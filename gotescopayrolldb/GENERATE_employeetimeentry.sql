@@ -302,11 +302,14 @@ INTO OTCount;
 SET @breakFrom = NULL; SET @breakTo = NULL;
 
 
+SET @_officialRestDay=FALSE;
+
 SELECT
 sh.TimeFrom
 ,sh.TimeTo
 ,esh.RowID	
 ,sh.RowID, sh.BreakTimeFrom, sh.BreakTimeTo
+,esh.RestDay
 FROM employeeshift esh
 INNER JOIN shift sh ON sh.RowID=esh.ShiftID
 WHERE esh.EmployeeID=ete_EmpRowID
@@ -317,8 +320,10 @@ LIMIT 1
 INTO shifttimefrom
 	  ,shifttimeto
 	  ,eshRowID
-	  ,sh_rowID, @breakFrom, @breakTo;
-	  
+	  ,sh_rowID, @breakFrom, @breakTo, @_officialRestDay;
+
+SET isRestDay=IFNULL(@_officialRestDay, IFNULL(isRestDay, FALSE));
+
 IF OTCount = 1 THEN
 	
 	SELECT
@@ -825,7 +830,6 @@ IF ete_RegHrsWorkd IS NULL THEN
 	SET ete_RegHrsWorkd = 0;
 END IF;
 
-#IF isRestDay = '0' THEN
 IF FALSE THEN
 
 	IF (ete_RegHrsWorkd > 4 AND ete_RegHrsWorkd < 5) AND COMPUTE_TimeDifference(shifttimefrom, shifttimeto) = 9 THEN
@@ -944,7 +948,7 @@ IF pr_DayBefore IS NULL THEN
 		SET yester_TotDayPay = 0;
 		
 	END IF;
-	
+
 	IF ete_Date < e_StartDate THEN 
 		
 

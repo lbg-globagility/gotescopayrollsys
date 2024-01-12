@@ -1,0 +1,63 @@
+INSERT INTO `payrate` (`OrganizationID`, `Created`, `CreatedBy`, `DayBefore`, `Date`, `PayType`, `Description`, `PayRate`, `OvertimeRate`, `NightDifferentialRate`, `NightDifferentialOTRate`, `RestDayRate`, `RestDayOvertimeRate`, `TomorrowDate`)
+SELECT
+og.RowID, CURRENT_TIMESTAMP(), 2, NULL, d.DateValue, 'Regular Day', NULL, 1, 1.25, 1.1, 1.375, 1.3, 1.69, NULL
+FROM dates d
+INNER JOIN `organization` og ON og.RowID IS NOT NULL AND og.NoPurpose=FALSE
+WHERE d.DateValue BETWEEN MAKEDATE(2024, 1) AND LAST_DAY('2024-12-01')
+order BY og.RowID, d.DateValue
+;
+
+DROP TEMPORARY TABLE IF EXISTS `holidays24`;
+CREATE TEMPORARY TABLE IF NOT EXISTS `holidays24`
+SELECT
+i.*
+FROM (SELECT 'Regular Holiday' `PayType`, 'New Year’s Day' `Description`, '2024-01-01' `Date`
+UNION SELECT 'Regular Holiday', 'Maundy Thursday', '2024-03-28'
+UNION SELECT 'Regular Holiday', 'Good Friday', '2024-03-29'
+UNION SELECT 'Regular Holiday', 'Araw ng Kagitingan', '2024-04-09'
+UNION SELECT 'Regular Holiday', 'Labor Day', '2024-05-01'
+UNION SELECT 'Regular Holiday', 'Independence Day', '2024-06-12'
+UNION SELECT 'Regular Holiday', 'National Heroes Day', '2024-08-26'
+UNION SELECT 'Regular Holiday', 'Bonifacio Day', '2024-11-30'
+UNION SELECT 'Regular Holiday', 'Christmas Day', '2024-12-25'
+UNION SELECT 'Regular Holiday', 'Rizal Day', '2024-12-30'
+
+UNION SELECT 'Special Non-working Holiday', 'Chinese New Year', '2024-02-10'
+#UNION SELECT 'Special Non-working Holiday', 'EDSA People Power Revolution Anniversary', '2024-02-25'
+UNION SELECT 'Special Non-working Holiday', 'Black Saturday', '2024-03-30'
+UNION SELECT 'Special Non-working Holiday', 'Ninoy Aquino Day', '2024-08-21'
+UNION SELECT 'Special Non-working Holiday', 'All Saints’ Day', '2024-11-01'
+UNION SELECT 'Special Non-working Holiday', 'All Souls’ Day', '2024-11-02'
+UNION SELECT 'Special Non-working Holiday', 'Feast of the Immaculate Conception of Mary', '2024-12-08'
+UNION SELECT 'Special Non-working Holiday', 'Christmas Eve', '2024-12-24'
+UNION SELECT 'Special Non-working Holiday', 'Last Day of the Year', '2024-12-31'
+UNION SELECT 'Special Non-working Holiday', 'Special non-working holiday', '2024-01-02'
+) i
+order BY i.`Date`
+;
+
+UPDATE payrate pr
+INNER JOIN `holidays24` i ON i.`Date`=pr.`Date`
+SET pr.DayBefore=SUBDATE(pr.`Date`, INTERVAL 1 DAY),
+pr.TomorrowDate=ADDDATE(pr.`Date`, INTERVAL 1 DAY),
+pr.`Description`=i.`Description`,
+pr.PayType=i.PayType
+;
+
+DROP TEMPORARY TABLE IF EXISTS `holidayrates`;
+CREATE TEMPORARY TABLE IF NOT EXISTS `holidayrates`
+SELECT 'Regular Holiday' `PayType`, 2.0000 `PayRate`, 2.6000 `OvertimeRate`, 2.2000 `NightDifferentialRate`, 2.8600 `NightDifferentialOTRate`, 2.6000 `RestDayRate`, 3.3800 `RestDayOvertimeRate`
+UNION SELECT 'Special Non-working Holiday', 1.3000, 1.6900, 1.4300, 1.8590, 1.5000, 1.9500
+;
+
+UPDATE payrate pr
+INNER JOIN `holidayrates` i ON i.`PayType`=pr.`PayType`
+SET pr.`PayRate`=i.`PayRate`,
+pr.OvertimeRate=i.OvertimeRate,
+pr.NightDifferentialRate=i.NightDifferentialRate,
+pr.NightDifferentialOTRate=i.NightDifferentialOTRate,
+pr.RestDayRate=i.RestDayRate,
+pr.RestDayOvertimeRate=i.RestDayOvertimeRate
+;
+
+COMMIT;

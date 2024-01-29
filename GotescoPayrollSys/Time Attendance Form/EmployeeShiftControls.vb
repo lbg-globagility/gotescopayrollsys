@@ -1,4 +1,6 @@
-﻿Imports Indigo.CollapsibleGroupBox
+﻿Imports System.Text
+Imports System.Threading.Tasks
+Imports Indigo.CollapsibleGroupBox
 Imports Microsoft.Win32
 Imports MySql.Data.MySqlClient
 
@@ -515,7 +517,7 @@ Public Class EmployeeShiftControls
 
     Public dutyShiftRowID As Integer = Nothing
 
-    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+    Private Async Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
 
         If dgvEmpList.RowCount = 0 Then
             Exit Sub
@@ -718,6 +720,8 @@ Public Class EmployeeShiftControls
                     Next
 
                 Next
+
+                Await INSUPD_employeeshiftbyday2()
 
                 customEmployeeShift.Dispose()
 
@@ -1651,4 +1655,69 @@ Public Class EmployeeShiftControls
         MyBase.OnDeactivate(e)
     End Sub
 
+    Private Async Function INSUPD_employeeshiftbyday2() As Task(Of Integer)
+        If dgvEmpList.Tag Is Nothing Then
+            MessageBox.Show(text:="Please select an employee.",
+                caption:="Invalid Employee",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
+            Return 0
+        End If
+
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=120;")
+
+        Dim strQuery = "CALL `INSUPD_employeeshiftbyday2`(@param1, @orgId, @userId, @employeeId);"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                Dim query As String = String.Empty
+                dgvWeek.Columns.OfType(Of DataGridViewColumn).
+                    ToList().
+                    ForEach(Sub(t)
+                                Dim shiftId = dgvWeek.Item(t.Index, 0).Tag
+
+                                Dim _index = t.Index + 1
+
+                                Dim _shiftId = If(shiftId = Nothing, 0, shiftId)
+
+                                Dim _query = $"CREATE TEMPORARY TABLE IF NOT EXISTS `shiftbyday` SELECT {_index} `Index`, {_shiftId} `ShiftId`"
+
+                                If Not t.Index = 0 Then _query = $"UNION SELECT {_index}, {_shiftId}"
+
+                                query = String.Join(Environment.NewLine, query, _query)
+                            End Sub)
+                .AddWithValue("@param1", $"{query};")
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@userId", user_row_id)
+                .AddWithValue("@employeeId", dgvEmpList.Tag)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("INSUPD_employeeshiftbyday2", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
 End Class

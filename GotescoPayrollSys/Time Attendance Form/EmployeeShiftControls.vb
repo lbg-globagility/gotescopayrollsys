@@ -1635,7 +1635,7 @@ Public Class EmployeeShiftControls
 
             Next
 
-            For Each rindx In row_index
+            For Each rindx In row_index.OrderByDescending(Function(t) CInt(t))
 
                 dgvEmpShiftList.Rows.Remove(dgvEmpShiftList.Rows(rindx))
 

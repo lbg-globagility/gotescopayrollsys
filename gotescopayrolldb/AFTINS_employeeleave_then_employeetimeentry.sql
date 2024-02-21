@@ -109,7 +109,7 @@ SET @correct_date = CURDATE();
         SELECT
 
 
-        INSUPD_employeetimeentries(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, d.DateValue, esh.RowID, NEW.EmployeeID, es.RowID, 0, 0, 0, 0, 0, 0, 0, pr.RowID, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        INSUPD_employeetimeentries(NULL, NEW.OrganizationID, NEW.CreatedBy, NEW.CreatedBy, d.DateValue, esh.RowID, NEW.EmployeeID, es.RowID, 0, 0, 0, 0, 0, 0, 0, pr.RowID, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)
 
 
 

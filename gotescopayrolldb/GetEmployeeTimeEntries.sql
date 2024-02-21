@@ -31,6 +31,7 @@ SELECT
 et.*
 FROM employeetimeentry et
 INNER JOIN employee e ON e.RowID=et.EmployeeID AND e.OrganizationID=et.OrganizationID AND FIND_IN_SET(e.EmployeeType, employeeTypes) > 0
+AND e.EmploymentStatus NOT IN ('Probationary')
 WHERE et.OrganizationID=orgId
 AND et.`Date` BETWEEN dateFrom AND dateTo
 ;

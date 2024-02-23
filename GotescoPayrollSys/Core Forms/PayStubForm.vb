@@ -9401,39 +9401,41 @@ Public Class PayStubForm
 
             If prompt = Windows.Forms.DialogResult.Yes Then
 
-                Dim query = String.Concat("CALL `DEL_specificpaystub`((SELECT RowID FROM paystub WHERE OrganizationID=@orgId AND EmployeeID=@eId AND PayPeriodID=@ppId LIMIT 1));")
+                Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", configCommandTimeOut, ";")
 
-                Using command = New MySqlCommand(query, New MySqlConnection(mysql_conn_text))
-                    With command
-                        .Parameters.AddWithValue("@orgId", org_rowid)
-                        .Parameters.AddWithValue("@eId", dgvemployees.Tag)
-                        .Parameters.AddWithValue("@ppId", paypRowID)
+                Dim strQuery = String.Concat("CALL `DEL_specificpaystub`((SELECT RowID FROM paystub WHERE OrganizationID=@orgId AND EmployeeID=@eId AND PayPeriodID=@ppId LIMIT 1));")
+
+                Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+                    With command.Parameters
+                        .AddWithValue("@orgId", org_rowid)
+                        .AddWithValue("@eId", If(dgvemployees.Tag = Nothing, DBNull.Value, dgvemployees.Tag))
+                        .AddWithValue("@eId", If(String.IsNullOrEmpty(paypRowID), DBNull.Value, paypRowID))
                     End With
 
                     Await command.Connection.OpenAsync()
 
-                    Dim transaction = command.Connection.BeginTransaction()
-                    Dim succeed = False
+                    Dim transaction = Await command.Connection.BeginTransactionAsync()
+
                     Try
                         Await command.ExecuteNonQueryAsync()
-                        transaction.Commit()
-                        succeed = True
-                    Catch ex As Exception
-                        transaction.Rollback()
-                        _logger.Error("Error deleting paystub", ex)
-                        MessageBox.Show(String.Concat("Oops! Something went wrong, please contact ", My.Resources.SystemDeveloper, " to report this issue."), "Error deleting paystub", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Finally
-                        If succeed Then
-                            MessageBox.Show("Successfully deleted paystub.", "Done delete paystub", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                            Select Case tabEarned.SelectedIndex
-                                Case 0
-                                    TabPage1_Enter1(TabPage1, New EventArgs)
-                                Case 1
-                                    TabPage4_Enter1(TabPage4, New EventArgs)
-                            End Select
-                        End If
+                        transaction.Commit()
+
+                        MessageBox.Show("Successfully deleted paystub.", "Done delete paystub", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                        Select Case tabEarned.SelectedIndex
+                            Case 0
+                                TabPage1_Enter1(TabPage1, New EventArgs)
+                            Case 1
+                                TabPage4_Enter1(TabPage4, New EventArgs)
+                        End Select
+                    Catch ex As Exception
+                        _logger.Error("UpdateLeaveBalanceVacation", ex)
+                        transaction.Rollback()
+                        MessageBox.Show(String.Concat("Oops! Something went wrong, please contact ", My.Resources.SystemDeveloper, " to report this issue."), "Error deleting paystub", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
+
                 End Using
 
             End If

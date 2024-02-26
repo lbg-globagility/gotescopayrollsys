@@ -9408,9 +9408,10 @@ Public Class PayStubForm
                 Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
 
                     With command.Parameters
+                        .Clear()
                         .AddWithValue("@orgId", org_rowid)
                         .AddWithValue("@eId", If(dgvemployees.Tag = Nothing, DBNull.Value, dgvemployees.Tag))
-                        .AddWithValue("@eId", If(String.IsNullOrEmpty(paypRowID), DBNull.Value, paypRowID))
+                        .AddWithValue("@ppId", If(String.IsNullOrEmpty(paypRowID), DBNull.Value, paypRowID))
                     End With
 
                     Await command.Connection.OpenAsync()

@@ -1,4 +1,6 @@
-﻿Imports System.Runtime.InteropServices
+﻿Imports System.Configuration
+Imports System.Runtime.InteropServices
+Imports System.Threading.Tasks
 Imports MySql.Data.MySqlClient
 
 Public Class EmpTimeEntry
@@ -84,6 +86,10 @@ Public Class EmpTimeEntry
 
     Public today_date As Object
 
+    Private config As Specialized.NameValueCollection = ConfigurationManager.AppSettings
+
+    Private ReadOnly Property ConfigCommandTimeOut As Integer
+
     Protected Overrides Sub OnLoad(e As EventArgs)
         'DataGridViewCellStyle { BackColor=Color [Window], ForeColor=Color [ControlText]
         ', SelectionBackColor=Color [Highlight], SelectionForeColor=Color [HighlightText]
@@ -93,7 +99,7 @@ Public Class EmpTimeEntry
     End Sub
 
     Private Sub EmpTimeEntry_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'dbconn()
+        _ConfigCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
 
         new_conn.ConnectionString = db_connectinstring 'conn.ConnectionString
 
@@ -7638,4 +7644,74 @@ Public Class EmpTimeEntry
 
     End Sub
 
+    Private Async Sub ToolStripButtonDeletePeriod_Click(sender As Object, e As EventArgs) Handles ToolStripButtonDeletePeriod.Click
+        Dim hasEmployee As Boolean = If(dgvEmployi.CurrentRow?.Cells(cemp_RowID.Name)?.Value, 0) > 0
+        Dim hasPeriod As Boolean = curr_YYYY IsNot Nothing AndAlso
+            curr_mm IsNot Nothing AndAlso
+            curr_dd IsNot Nothing
+
+        If Not (hasEmployee AndAlso hasPeriod) Then Return
+
+        Await DeleteTimeEntryPeriodAsync(If(dgvEmployi.CurrentRow?.Cells(cemp_RowID.Name)?.Value, 0))
+    End Sub
+
+    Private Async Function DeleteTimeEntryPeriodAsync(employeeId As Integer) As Task(Of Integer)
+        Dim virtualDate = New Date(year:=CInt(curr_YYYY), month:=CInt(curr_mm), day:=CInt(curr_dd))
+
+        Dim prompt = MessageBox.Show(text:=$"Are you sure you want to delete time entry between{Environment.NewLine}{If(virtualDate.Day = 15, $"{virtualDate:MMM 01}", $"{virtualDate:MMM 16}")}-{virtualDate:dd, yyyy} for employee #{dgvEmployi.CurrentRow?.Cells(cemp_EmployeeID.Name)?.Value}?",
+            caption:=String.Empty,
+            buttons:=MessageBoxButtons.YesNoCancel,
+            icon:=MessageBoxIcon.Question,
+            defaultButton:=MessageBoxDefaultButton.Button2)
+
+        If Not (prompt = DialogResult.Yes) Then Return 0
+
+        Dim integerResult = New Integer
+
+        Dim connectionText = String.Concat(mysql_conn_text, "default command timeout=", ConfigCommandTimeOut, ";")
+        'curr_mm,
+        'curr_dd,
+        'curr_YYYY
+
+        Dim strQuery = $"DELETE FROM employeetimeentry WHERE EmployeeID=@employeeId AND OrganizationID=@orgId AND `Date` BETWEEN @datefrom AND @dateto;"
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(connectionText))
+
+            With command.Parameters
+                .AddWithValue("@orgId", org_rowid)
+                .AddWithValue("@employeeId", employeeId)
+                .AddWithValue("@datefrom", If(virtualDate.Day = 15, New Date(year:=virtualDate.Year, month:=virtualDate.Month, day:=1), New Date(year:=virtualDate.Year, month:=virtualDate.Month, day:=16)))
+                .AddWithValue("@dateto", virtualDate.Date.Date)
+            End With
+
+            Await command.Connection.OpenAsync()
+
+            Dim transaction = Await command.Connection.BeginTransactionAsync()
+
+            Try
+                Dim result = Await command.ExecuteNonQueryAsync()
+
+                transaction.Commit()
+
+                MessageBox.Show(text:=$"Successful deleting time entry between{Environment.NewLine}{If(virtualDate.Day = 15, $"{virtualDate:MMM 01}", $"{virtualDate:MMM 16}")}-{virtualDate:dd, yyyy} for employee #{dgvEmployi.CurrentRow?.Cells(cemp_EmployeeID.Name)?.Value}?",
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information)
+
+                integerResult = result
+            Catch ex As Exception
+                _logger.Error("DeleteTimeEntryPeriodAsync", ex)
+                transaction.Rollback()
+
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact ", My.Resources.SystemDeveloper),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return integerResult
+    End Function
 End Class

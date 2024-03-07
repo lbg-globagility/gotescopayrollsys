@@ -126,8 +126,11 @@ Partial Class EmpTimeEntry
         Me.tsbtnCancelempawar = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnCloseempawar = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnAudittrail = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.tstbnResetLeaveBalance = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
+        Me.ToolStripButtonDeletePeriod = New System.Windows.Forms.ToolStripButton()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.ComboBox10 = New System.Windows.Forms.ComboBox()
@@ -405,7 +408,6 @@ Partial Class EmpTimeEntry
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         CType(Me.dgvEmployi, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
         Me.TabControl2.SuspendLayout()
@@ -957,7 +959,7 @@ Partial Class EmpTimeEntry
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.Transparent
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNewtimeent, Me.tsbtnSavetimeent, Me.tsbtnrecalc, Me.tsbtnCancelempawar, Me.tsbtnCloseempawar, Me.tsbtnAudittrail, Me.ToolStripLabel1, Me.tstbnResetLeaveBalance, Me.ToolStripProgressBar1})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnNewtimeent, Me.tsbtnSavetimeent, Me.tsbtnrecalc, Me.tsbtnCancelempawar, Me.tsbtnCloseempawar, Me.tsbtnAudittrail, Me.ToolStripLabel1, Me.tstbnResetLeaveBalance, Me.ToolStripProgressBar1, Me.ToolStripLabel2, Me.ToolStripButtonDeletePeriod})
         Me.ToolStrip1.Location = New System.Drawing.Point(3, 3)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(843, 25)
@@ -977,7 +979,7 @@ Partial Class EmpTimeEntry
         Me.tsbtnSavetimeent.Image = Global.GotescoPayrollSys.My.Resources.Resources.Save
         Me.tsbtnSavetimeent.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbtnSavetimeent.Name = "tsbtnSavetimeent"
-        Me.tsbtnSavetimeent.Size = New System.Drawing.Size(111, 22)
+        Me.tsbtnSavetimeent.Size = New System.Drawing.Size(110, 22)
         Me.tsbtnSavetimeent.Text = "&Save Time entry"
         '
         'tsbtnrecalc
@@ -1016,6 +1018,13 @@ Partial Class EmpTimeEntry
         Me.tsbtnAudittrail.Text = "ToolStripButton1"
         Me.tsbtnAudittrail.ToolTipText = "Show audit trails"
         '
+        'ToolStripLabel1
+        '
+        Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(22, 22)
+        Me.ToolStripLabel1.Text = "     "
+        '
         'tstbnResetLeaveBalance
         '
         Me.tstbnResetLeaveBalance.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
@@ -1031,6 +1040,21 @@ Partial Class EmpTimeEntry
         Me.ToolStripProgressBar1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
         Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 22)
+        '
+        'ToolStripLabel2
+        '
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(52, 22)
+        Me.ToolStripLabel2.Text = "               "
+        '
+        'ToolStripButtonDeletePeriod
+        '
+        Me.ToolStripButtonDeletePeriod.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButtonDeletePeriod.Image = CType(resources.GetObject("ToolStripButtonDeletePeriod.Image"), System.Drawing.Image)
+        Me.ToolStripButtonDeletePeriod.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonDeletePeriod.Name = "ToolStripButtonDeletePeriod"
+        Me.ToolStripButtonDeletePeriod.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButtonDeletePeriod.Text = "Delete Period"
         '
         'TabControl2
         '
@@ -1397,7 +1421,7 @@ Partial Class EmpTimeEntry
         Me.ToolStrip3.Location = New System.Drawing.Point(1, 25)
         Me.ToolStrip3.Name = "ToolStrip3"
         Me.ToolStrip3.ShowItemToolTips = False
-        Me.ToolStrip3.Size = New System.Drawing.Size(3406, 25)
+        Me.ToolStrip3.Size = New System.Drawing.Size(3828, 25)
         Me.ToolStrip3.TabIndex = 168
         Me.ToolStrip3.Text = "ToolStrip3"
         '
@@ -3081,7 +3105,7 @@ Partial Class EmpTimeEntry
         Me.ToolStrip2.Location = New System.Drawing.Point(6, 65)
         Me.ToolStrip2.Name = "ToolStrip2"
         Me.ToolStrip2.ShowItemToolTips = False
-        Me.ToolStrip2.Size = New System.Drawing.Size(9049, 25)
+        Me.ToolStrip2.Size = New System.Drawing.Size(9295, 25)
         Me.ToolStrip2.TabIndex = 164
         Me.ToolStrip2.Text = "ToolStrip2"
         '
@@ -3538,13 +3562,6 @@ Partial Class EmpTimeEntry
         'BackgroundWorker1
         '
         '
-        'ToolStripLabel1
-        '
-        Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(22, 22)
-        Me.ToolStripLabel1.Text = "     "
-        '
         'EmpTimeEntry
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3957,4 +3974,6 @@ Partial Class EmpTimeEntry
     Friend WithEvents ToolStripProgressBar1 As System.Windows.Forms.ToolStripProgressBar
     Friend WithEvents tstbnResetLeaveBalance As ToolStripButton
     Friend WithEvents ToolStripLabel1 As ToolStripLabel
+    Friend WithEvents ToolStripLabel2 As ToolStripLabel
+    Friend WithEvents ToolStripButtonDeletePeriod As ToolStripButton
 End Class

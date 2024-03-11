@@ -454,17 +454,28 @@ Partial Class EmployeeForm
         Me.ToolStripButton15 = New System.Windows.Forms.ToolStripButton()
         Me.tbpLeave = New System.Windows.Forms.TabPage()
         Me.Panel15 = New System.Windows.Forms.Panel()
-        Me.lblDeptMngrApproveLeave = New System.Windows.Forms.Label()
-        Me.Label345 = New System.Windows.Forms.Label()
-        Me.Label346 = New System.Windows.Forms.Label()
-        Me.cboleavestatus = New System.Windows.Forms.ComboBox()
-        Me.Label324 = New System.Windows.Forms.Label()
-        Me.Label323 = New System.Windows.Forms.Label()
-        Me.dtpendate = New System.Windows.Forms.DateTimePicker()
-        Me.dtpstartdate = New System.Windows.Forms.DateTimePicker()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.pbEmpPicLeave = New System.Windows.Forms.PictureBox()
+        Me.lblDeptMngrApproveLeave = New System.Windows.Forms.Label()
+        Me.Label233 = New System.Windows.Forms.Label()
+        Me.Label345 = New System.Windows.Forms.Label()
+        Me.Label225 = New System.Windows.Forms.Label()
+        Me.imglstQuestMark = New System.Windows.Forms.ImageList(Me.components)
+        Me.Label346 = New System.Windows.Forms.Label()
+        Me.Label224 = New System.Windows.Forms.Label()
+        Me.cboleavestatus = New System.Windows.Forms.ComboBox()
+        Me.txtendate = New System.Windows.Forms.TextBox()
+        Me.txtreason = New System.Windows.Forms.TextBox()
+        Me.txtstartdate = New System.Windows.Forms.TextBox()
+        Me.dtpendate = New System.Windows.Forms.DateTimePicker()
+        Me.txtcomments = New System.Windows.Forms.TextBox()
+        Me.dtpstartdate = New System.Windows.Forms.DateTimePicker()
+        Me.txtendtime = New System.Windows.Forms.TextBox()
+        Me.Label38 = New System.Windows.Forms.Label()
         Me.cboleavetypes = New System.Windows.Forms.ComboBox()
+        Me.txtstarttime = New System.Windows.Forms.TextBox()
         Me.Label199 = New System.Windows.Forms.Label()
+        Me.Label37 = New System.Windows.Forms.Label()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
         Me.TabPage7 = New System.Windows.Forms.TabPage()
         Me.Label381 = New System.Windows.Forms.Label()
@@ -514,22 +525,17 @@ Partial Class EmployeeForm
         Me.Label121 = New System.Windows.Forms.Label()
         Me.Label122 = New System.Windows.Forms.Label()
         Me.txtslpaypLeave = New System.Windows.Forms.TextBox()
-        Me.Label198 = New System.Windows.Forms.Label()
-        Me.txtFNameLeave = New System.Windows.Forms.TextBox()
-        Me.Label197 = New System.Windows.Forms.Label()
-        Me.txtEmpIDLeave = New System.Windows.Forms.TextBox()
-        Me.Label196 = New System.Windows.Forms.Label()
-        Me.btnleavtyp = New System.Windows.Forms.Button()
-        Me.Label195 = New System.Windows.Forms.Label()
-        Me.Label32 = New System.Windows.Forms.Label()
-        Me.btndlleavefile = New System.Windows.Forms.Button()
-        Me.Label33 = New System.Windows.Forms.Label()
-        Me.Button6 = New System.Windows.Forms.Button()
-        Me.Label34 = New System.Windows.Forms.Label()
-        Me.Button7 = New System.Windows.Forms.Button()
-        Me.Label35 = New System.Windows.Forms.Label()
-        Me.pbempleave = New System.Windows.Forms.PictureBox()
         Me.Label36 = New System.Windows.Forms.Label()
+        Me.Label198 = New System.Windows.Forms.Label()
+        Me.Label35 = New System.Windows.Forms.Label()
+        Me.txtFNameLeave = New System.Windows.Forms.TextBox()
+        Me.Label34 = New System.Windows.Forms.Label()
+        Me.Label197 = New System.Windows.Forms.Label()
+        Me.Label33 = New System.Windows.Forms.Label()
+        Me.txtEmpIDLeave = New System.Windows.Forms.TextBox()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.Label196 = New System.Windows.Forms.Label()
+        Me.Label195 = New System.Windows.Forms.Label()
         Me.dgvempleave = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.elv_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.elv_Type = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -546,18 +552,15 @@ Partial Class EmployeeForm
         Me.elv_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.AdditionalOverrideLeaveBalance = New GotescoPayrollSys.DataGridViewNumberColumn()
         Me.elv_DateCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Label37 = New System.Windows.Forms.Label()
-        Me.txtstarttime = New System.Windows.Forms.TextBox()
-        Me.Label38 = New System.Windows.Forms.Label()
-        Me.txtendtime = New System.Windows.Forms.TextBox()
-        Me.txtcomments = New System.Windows.Forms.TextBox()
-        Me.txtstartdate = New System.Windows.Forms.TextBox()
-        Me.txtreason = New System.Windows.Forms.TextBox()
-        Me.txtendate = New System.Windows.Forms.TextBox()
-        Me.Label224 = New System.Windows.Forms.Label()
-        Me.imglstQuestMark = New System.Windows.Forms.ImageList(Me.components)
-        Me.Label225 = New System.Windows.Forms.Label()
-        Me.Label233 = New System.Windows.Forms.Label()
+        Me.Panel18 = New System.Windows.Forms.Panel()
+        Me.pbempleave = New System.Windows.Forms.PictureBox()
+        Me.Button7 = New System.Windows.Forms.Button()
+        Me.Label323 = New System.Windows.Forms.Label()
+        Me.Button6 = New System.Windows.Forms.Button()
+        Me.btndlleavefile = New System.Windows.Forms.Button()
+        Me.Label324 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnleavtyp = New System.Windows.Forms.Button()
         Me.lblLeaveBalOverrideHint = New System.Windows.Forms.Label()
         Me.ToolStrip5 = New System.Windows.Forms.ToolStrip()
         Me.tsbtnNewLeave = New System.Windows.Forms.ToolStripButton()
@@ -1580,13 +1583,18 @@ Partial Class EmployeeForm
         Me.ToolStrip3.SuspendLayout
         Me.tbpLeave.SuspendLayout
         Me.Panel15.SuspendLayout
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SplitContainer1.Panel1.SuspendLayout
+        Me.SplitContainer1.Panel2.SuspendLayout
+        Me.SplitContainer1.SuspendLayout
         CType(Me.pbEmpPicLeave, System.ComponentModel.ISupportInitialize).BeginInit
         Me.TabControl4.SuspendLayout
         Me.TabPage7.SuspendLayout
         Me.TabPage6.SuspendLayout
         Me.TabPage8.SuspendLayout
-        CType(Me.pbempleave, System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.dgvempleave, System.ComponentModel.ISupportInitialize).BeginInit
+        Me.Panel18.SuspendLayout
+        CType(Me.pbempleave, System.ComponentModel.ISupportInitialize).BeginInit
         Me.ToolStrip5.SuspendLayout
         Me.tbpDiscipAct.SuspendLayout
         Me.Panel14.SuspendLayout
@@ -1693,7 +1701,7 @@ Partial Class EmployeeForm
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
         Me.Label1.Location = New System.Drawing.Point(8, 13)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(97, 16)
+        Me.Label1.Size = New System.Drawing.Size(96, 16)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Employee ID"
         '
@@ -2313,7 +2321,7 @@ Partial Class EmployeeForm
         Me.SplitContainer2.Panel2.Controls.Add(Me.lblforballoon1)
         Me.SplitContainer2.Panel2.Cursor = System.Windows.Forms.Cursors.Default
         Me.SplitContainer2.Size = New System.Drawing.Size(858, 430)
-        Me.SplitContainer2.SplitterDistance = 107
+        Me.SplitContainer2.SplitterDistance = 101
         Me.SplitContainer2.SplitterWidth = 7
         Me.SplitContainer2.TabIndex = 114
         '
@@ -2446,11 +2454,11 @@ Partial Class EmployeeForm
         '
         Me.lnklblAddBank.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lnklblAddBank.AutoSize = True
-        Me.lnklblAddBank.Font = New System.Drawing.Font("Segoe Marker", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lnklblAddBank.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lnklblAddBank.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.lnklblAddBank.Location = New System.Drawing.Point(258, 97)
         Me.lnklblAddBank.Name = "lnklblAddBank"
-        Me.lnklblAddBank.Size = New System.Drawing.Size(26, 15)
+        Me.lnklblAddBank.Size = New System.Drawing.Size(32, 16)
         Me.lnklblAddBank.TabIndex = 517
         Me.lnklblAddBank.TabStop = True
         Me.lnklblAddBank.Text = "Add"
@@ -3699,7 +3707,7 @@ Partial Class EmployeeForm
         Me.dgvDepen.Name = "dgvDepen"
         Me.dgvDepen.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvDepen.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvDepen.Size = New System.Drawing.Size(856, 289)
+        Me.dgvDepen.Size = New System.Drawing.Size(856, 295)
         Me.dgvDepen.TabIndex = 116
         '
         'Colmn0
@@ -5341,84 +5349,157 @@ Partial Class EmployeeForm
         '
         'Panel15
         '
-        Me.Panel15.AutoScroll = True
-        Me.Panel15.Controls.Add(Me.lblDeptMngrApproveLeave)
-        Me.Panel15.Controls.Add(Me.Label345)
-        Me.Panel15.Controls.Add(Me.Label346)
-        Me.Panel15.Controls.Add(Me.cboleavestatus)
-        Me.Panel15.Controls.Add(Me.Label324)
-        Me.Panel15.Controls.Add(Me.Label323)
-        Me.Panel15.Controls.Add(Me.dtpendate)
-        Me.Panel15.Controls.Add(Me.dtpstartdate)
-        Me.Panel15.Controls.Add(Me.pbEmpPicLeave)
-        Me.Panel15.Controls.Add(Me.cboleavetypes)
-        Me.Panel15.Controls.Add(Me.Label199)
-        Me.Panel15.Controls.Add(Me.TabControl4)
-        Me.Panel15.Controls.Add(Me.Label198)
-        Me.Panel15.Controls.Add(Me.txtFNameLeave)
-        Me.Panel15.Controls.Add(Me.Label197)
-        Me.Panel15.Controls.Add(Me.txtEmpIDLeave)
-        Me.Panel15.Controls.Add(Me.Label196)
-        Me.Panel15.Controls.Add(Me.btnleavtyp)
-        Me.Panel15.Controls.Add(Me.Label195)
-        Me.Panel15.Controls.Add(Me.Label32)
-        Me.Panel15.Controls.Add(Me.btndlleavefile)
-        Me.Panel15.Controls.Add(Me.Label33)
-        Me.Panel15.Controls.Add(Me.Button6)
-        Me.Panel15.Controls.Add(Me.Label34)
-        Me.Panel15.Controls.Add(Me.Button7)
-        Me.Panel15.Controls.Add(Me.Label35)
-        Me.Panel15.Controls.Add(Me.pbempleave)
-        Me.Panel15.Controls.Add(Me.Label36)
-        Me.Panel15.Controls.Add(Me.dgvempleave)
-        Me.Panel15.Controls.Add(Me.Label37)
-        Me.Panel15.Controls.Add(Me.txtstarttime)
-        Me.Panel15.Controls.Add(Me.Label38)
-        Me.Panel15.Controls.Add(Me.txtendtime)
-        Me.Panel15.Controls.Add(Me.txtcomments)
-        Me.Panel15.Controls.Add(Me.txtstartdate)
-        Me.Panel15.Controls.Add(Me.txtreason)
-        Me.Panel15.Controls.Add(Me.txtendate)
-        Me.Panel15.Controls.Add(Me.Label224)
-        Me.Panel15.Controls.Add(Me.Label225)
-        Me.Panel15.Controls.Add(Me.Label233)
-        Me.Panel15.Controls.Add(Me.lblLeaveBalOverrideHint)
+        Me.Panel15.Controls.Add(Me.SplitContainer1)
         Me.Panel15.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel15.Location = New System.Drawing.Point(3, 28)
         Me.Panel15.Name = "Panel15"
         Me.Panel15.Size = New System.Drawing.Size(858, 430)
         Me.Panel15.TabIndex = 188
         '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.pbEmpPicLeave)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.lblDeptMngrApproveLeave)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label233)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label345)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label225)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label346)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label224)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.cboleavestatus)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtendate)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtreason)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtstartdate)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.dtpendate)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtcomments)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.dtpstartdate)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtendtime)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label38)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.cboleavetypes)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtstarttime)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label199)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label37)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.TabControl4)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label36)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label198)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label35)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtFNameLeave)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label34)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label197)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label33)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.txtEmpIDLeave)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label32)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label196)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label195)
+        Me.SplitContainer1.Panel1MinSize = 256
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.dgvempleave)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Panel18)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Label324)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Panel1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.btnleavtyp)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.lblLeaveBalOverrideHint)
+        Me.SplitContainer1.Size = New System.Drawing.Size(858, 430)
+        Me.SplitContainer1.SplitterDistance = 256
+        Me.SplitContainer1.TabIndex = 511
+        '
+        'pbEmpPicLeave
+        '
+        Me.pbEmpPicLeave.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.pbEmpPicLeave.Location = New System.Drawing.Point(3, 3)
+        Me.pbEmpPicLeave.Name = "pbEmpPicLeave"
+        Me.pbEmpPicLeave.Size = New System.Drawing.Size(89, 77)
+        Me.pbEmpPicLeave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbEmpPicLeave.TabIndex = 180
+        Me.pbEmpPicLeave.TabStop = False
+        '
         'lblDeptMngrApproveLeave
         '
         Me.lblDeptMngrApproveLeave.AutoSize = True
         Me.lblDeptMngrApproveLeave.ForeColor = System.Drawing.Color.Green
-        Me.lblDeptMngrApproveLeave.Location = New System.Drawing.Point(212, 233)
+        Me.lblDeptMngrApproveLeave.Location = New System.Drawing.Point(183, 228)
         Me.lblDeptMngrApproveLeave.Name = "lblDeptMngrApproveLeave"
         Me.lblDeptMngrApproveLeave.Size = New System.Drawing.Size(109, 13)
         Me.lblDeptMngrApproveLeave.TabIndex = 510
         Me.lblDeptMngrApproveLeave.Text = "Dept. mngr. approves"
         Me.lblDeptMngrApproveLeave.Visible = False
         '
+        'Label233
+        '
+        Me.Label233.AutoSize = True
+        Me.Label233.Location = New System.Drawing.Point(617, 236)
+        Me.Label233.Name = "Label233"
+        Me.Label233.Size = New System.Drawing.Size(51, 13)
+        Me.Label233.TabIndex = 190
+        Me.Label233.Text = "Label233"
+        Me.Label233.Visible = False
+        '
         'Label345
         '
         Me.Label345.AutoSize = True
-        Me.Label345.Location = New System.Drawing.Point(29, 233)
+        Me.Label345.Location = New System.Drawing.Point(0, 228)
         Me.Label345.Name = "Label345"
         Me.Label345.Size = New System.Drawing.Size(37, 13)
         Me.Label345.TabIndex = 507
         Me.Label345.Text = "Status"
+        '
+        'Label225
+        '
+        Me.Label225.AutoSize = True
+        Me.Label225.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.Label225.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label225.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Label225.ImageIndex = 0
+        Me.Label225.ImageList = Me.imglstQuestMark
+        Me.Label225.Location = New System.Drawing.Point(175, 170)
+        Me.Label225.Name = "Label225"
+        Me.Label225.Size = New System.Drawing.Size(19, 15)
+        Me.Label225.TabIndex = 189
+        Me.Label225.Text = "    "
+        Me.ToolTip1.SetToolTip(Me.Label225, "How to input Time ?")
+        '
+        'imglstQuestMark
+        '
+        Me.imglstQuestMark.ImageStream = CType(resources.GetObject("imglstQuestMark.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imglstQuestMark.TransparentColor = System.Drawing.Color.Transparent
+        Me.imglstQuestMark.Images.SetKeyName(0, "question-mark-32.ico")
         '
         'Label346
         '
         Me.Label346.AutoSize = True
         Me.Label346.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
         Me.Label346.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.Label346.Location = New System.Drawing.Point(61, 225)
+        Me.Label346.Location = New System.Drawing.Point(32, 220)
         Me.Label346.Name = "Label346"
         Me.Label346.Size = New System.Drawing.Size(18, 24)
         Me.Label346.TabIndex = 508
         Me.Label346.Text = "*"
+        '
+        'Label224
+        '
+        Me.Label224.AutoSize = True
+        Me.Label224.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.Label224.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label224.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Label224.ImageIndex = 0
+        Me.Label224.ImageList = Me.imglstQuestMark
+        Me.Label224.Location = New System.Drawing.Point(853, 124)
+        Me.Label224.Name = "Label224"
+        Me.Label224.Size = New System.Drawing.Size(19, 15)
+        Me.Label224.TabIndex = 188
+        Me.Label224.Text = "    "
+        Me.ToolTip1.SetToolTip(Me.Label224, "How to input Date ?")
+        Me.Label224.Visible = False
         '
         'cboleavestatus
         '
@@ -5427,56 +5508,83 @@ Partial Class EmployeeForm
         Me.cboleavestatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboleavestatus.DropDownWidth = 150
         Me.cboleavestatus.FormattingEnabled = True
-        Me.cboleavestatus.Location = New System.Drawing.Point(106, 224)
+        Me.cboleavestatus.Location = New System.Drawing.Point(77, 219)
         Me.cboleavestatus.Name = "cboleavestatus"
         Me.cboleavestatus.Size = New System.Drawing.Size(100, 21)
         Me.cboleavestatus.TabIndex = 7
         '
-        'Label324
+        'txtendate
         '
-        Me.Label324.AutoSize = True
-        Me.Label324.ForeColor = System.Drawing.Color.White
-        Me.Label324.Location = New System.Drawing.Point(29, 605)
-        Me.Label324.Name = "Label324"
-        Me.Label324.Size = New System.Drawing.Size(25, 13)
-        Me.Label324.TabIndex = 505
-        Me.Label324.Text = "___"
+        Me.txtendate.BackColor = System.Drawing.Color.White
+        Me.txtendate.Location = New System.Drawing.Point(755, 147)
+        Me.txtendate.Name = "txtendate"
+        Me.txtendate.Size = New System.Drawing.Size(100, 20)
+        Me.txtendate.TabIndex = 4
+        Me.txtendate.Visible = False
         '
-        'Label323
+        'txtreason
         '
-        Me.Label323.AutoSize = True
-        Me.Label323.ForeColor = System.Drawing.Color.White
-        Me.Label323.Location = New System.Drawing.Point(847, 435)
-        Me.Label323.Name = "Label323"
-        Me.Label323.Size = New System.Drawing.Size(25, 13)
-        Me.Label323.TabIndex = 504
-        Me.Label323.Text = "___"
+        Me.txtreason.BackColor = System.Drawing.Color.White
+        Me.txtreason.Location = New System.Drawing.Point(262, 89)
+        Me.txtreason.MaxLength = 500
+        Me.txtreason.Multiline = True
+        Me.txtreason.Name = "txtreason"
+        Me.txtreason.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtreason.Size = New System.Drawing.Size(190, 59)
+        Me.txtreason.TabIndex = 8
+        '
+        'txtstartdate
+        '
+        Me.txtstartdate.BackColor = System.Drawing.Color.White
+        Me.txtstartdate.Location = New System.Drawing.Point(755, 121)
+        Me.txtstartdate.Name = "txtstartdate"
+        Me.txtstartdate.Size = New System.Drawing.Size(100, 20)
+        Me.txtstartdate.TabIndex = 3
+        Me.txtstartdate.Visible = False
         '
         'dtpendate
         '
         Me.dtpendate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpendate.Location = New System.Drawing.Point(106, 146)
+        Me.dtpendate.Location = New System.Drawing.Point(77, 141)
         Me.dtpendate.Name = "dtpendate"
         Me.dtpendate.Size = New System.Drawing.Size(100, 20)
         Me.dtpendate.TabIndex = 4
         '
+        'txtcomments
+        '
+        Me.txtcomments.BackColor = System.Drawing.Color.White
+        Me.txtcomments.Location = New System.Drawing.Point(262, 157)
+        Me.txtcomments.MaxLength = 2000
+        Me.txtcomments.Multiline = True
+        Me.txtcomments.Name = "txtcomments"
+        Me.txtcomments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtcomments.Size = New System.Drawing.Size(190, 59)
+        Me.txtcomments.TabIndex = 9
+        '
         'dtpstartdate
         '
         Me.dtpstartdate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpstartdate.Location = New System.Drawing.Point(106, 120)
+        Me.dtpstartdate.Location = New System.Drawing.Point(77, 115)
         Me.dtpstartdate.Name = "dtpstartdate"
         Me.dtpstartdate.Size = New System.Drawing.Size(100, 20)
         Me.dtpstartdate.TabIndex = 3
         '
-        'pbEmpPicLeave
+        'txtendtime
         '
-        Me.pbEmpPicLeave.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.pbEmpPicLeave.Location = New System.Drawing.Point(32, 8)
-        Me.pbEmpPicLeave.Name = "pbEmpPicLeave"
-        Me.pbEmpPicLeave.Size = New System.Drawing.Size(89, 77)
-        Me.pbEmpPicLeave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.pbEmpPicLeave.TabIndex = 180
-        Me.pbEmpPicLeave.TabStop = False
+        Me.txtendtime.BackColor = System.Drawing.Color.White
+        Me.txtendtime.Location = New System.Drawing.Point(77, 193)
+        Me.txtendtime.Name = "txtendtime"
+        Me.txtendtime.Size = New System.Drawing.Size(100, 20)
+        Me.txtendtime.TabIndex = 6
+        '
+        'Label38
+        '
+        Me.Label38.AutoSize = True
+        Me.Label38.Location = New System.Drawing.Point(0, 175)
+        Me.Label38.Name = "Label38"
+        Me.Label38.Size = New System.Drawing.Size(51, 13)
+        Me.Label38.TabIndex = 139
+        Me.Label38.Text = "Start time"
         '
         'cboleavetypes
         '
@@ -5485,28 +5593,45 @@ Partial Class EmployeeForm
         Me.cboleavetypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboleavetypes.DropDownWidth = 150
         Me.cboleavetypes.FormattingEnabled = True
-        Me.cboleavetypes.Location = New System.Drawing.Point(106, 93)
+        Me.cboleavetypes.Location = New System.Drawing.Point(77, 88)
         Me.cboleavetypes.Name = "cboleavetypes"
         Me.cboleavetypes.Size = New System.Drawing.Size(100, 21)
         Me.cboleavetypes.TabIndex = 2
+        '
+        'txtstarttime
+        '
+        Me.txtstarttime.BackColor = System.Drawing.Color.White
+        Me.txtstarttime.Location = New System.Drawing.Point(77, 167)
+        Me.txtstarttime.Name = "txtstarttime"
+        Me.txtstarttime.Size = New System.Drawing.Size(100, 20)
+        Me.txtstarttime.TabIndex = 5
         '
         'Label199
         '
         Me.Label199.AutoSize = True
         Me.Label199.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
         Me.Label199.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.Label199.Location = New System.Drawing.Point(74, 146)
+        Me.Label199.Location = New System.Drawing.Point(45, 141)
         Me.Label199.Name = "Label199"
         Me.Label199.Size = New System.Drawing.Size(18, 24)
         Me.Label199.TabIndex = 187
         Me.Label199.Text = "*"
+        '
+        'Label37
+        '
+        Me.Label37.AutoSize = True
+        Me.Label37.Location = New System.Drawing.Point(0, 201)
+        Me.Label37.Name = "Label37"
+        Me.Label37.Size = New System.Drawing.Size(48, 13)
+        Me.Label37.TabIndex = 140
+        Me.Label37.Text = "End time"
         '
         'TabControl4
         '
         Me.TabControl4.Controls.Add(Me.TabPage7)
         Me.TabControl4.Controls.Add(Me.TabPage6)
         Me.TabControl4.Controls.Add(Me.TabPage8)
-        Me.TabControl4.Location = New System.Drawing.Point(487, 93)
+        Me.TabControl4.Location = New System.Drawing.Point(458, 88)
         Me.TabControl4.Name = "TabControl4"
         Me.TabControl4.SelectedIndex = 0
         Me.TabControl4.Size = New System.Drawing.Size(291, 164)
@@ -6004,16 +6129,34 @@ Partial Class EmployeeForm
         Me.txtslpaypLeave.Size = New System.Drawing.Size(84, 20)
         Me.txtslpaypLeave.TabIndex = 154
         '
+        'Label36
+        '
+        Me.Label36.AutoSize = True
+        Me.Label36.Location = New System.Drawing.Point(0, 97)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(60, 13)
+        Me.Label36.TabIndex = 141
+        Me.Label36.Text = "Leave type"
+        '
         'Label198
         '
         Me.Label198.AutoSize = True
         Me.Label198.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
         Me.Label198.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.Label198.Location = New System.Drawing.Point(77, 120)
+        Me.Label198.Location = New System.Drawing.Point(48, 115)
         Me.Label198.Name = "Label198"
         Me.Label198.Size = New System.Drawing.Size(18, 24)
         Me.Label198.TabIndex = 186
         Me.Label198.Text = "*"
+        '
+        'Label35
+        '
+        Me.Label35.AutoSize = True
+        Me.Label35.Location = New System.Drawing.Point(0, 123)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Size = New System.Drawing.Size(53, 13)
+        Me.Label35.TabIndex = 141
+        Me.Label35.Text = "Start date"
         '
         'txtFNameLeave
         '
@@ -6021,23 +6164,41 @@ Partial Class EmployeeForm
         Me.txtFNameLeave.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtFNameLeave.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold)
         Me.txtFNameLeave.ForeColor = System.Drawing.Color.FromArgb(CType(CType(242, Byte), Integer), CType(CType(149, Byte), Integer), CType(CType(54, Byte), Integer))
-        Me.txtFNameLeave.Location = New System.Drawing.Point(127, 22)
+        Me.txtFNameLeave.Location = New System.Drawing.Point(98, 17)
         Me.txtFNameLeave.MaxLength = 250
         Me.txtFNameLeave.Name = "txtFNameLeave"
         Me.txtFNameLeave.ReadOnly = True
-        Me.txtFNameLeave.Size = New System.Drawing.Size(516, 28)
+        Me.txtFNameLeave.Size = New System.Drawing.Size(720, 28)
         Me.txtFNameLeave.TabIndex = 175
+        '
+        'Label34
+        '
+        Me.Label34.AutoSize = True
+        Me.Label34.Location = New System.Drawing.Point(0, 149)
+        Me.Label34.Name = "Label34"
+        Me.Label34.Size = New System.Drawing.Size(50, 13)
+        Me.Label34.TabIndex = 141
+        Me.Label34.Text = "End date"
         '
         'Label197
         '
         Me.Label197.AutoSize = True
         Me.Label197.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
         Me.Label197.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.Label197.Location = New System.Drawing.Point(72, 198)
+        Me.Label197.Location = New System.Drawing.Point(43, 193)
         Me.Label197.Name = "Label197"
         Me.Label197.Size = New System.Drawing.Size(18, 24)
         Me.Label197.TabIndex = 185
         Me.Label197.Text = "*"
+        '
+        'Label33
+        '
+        Me.Label33.AutoSize = True
+        Me.Label33.Location = New System.Drawing.Point(197, 99)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Size = New System.Drawing.Size(44, 13)
+        Me.Label33.TabIndex = 141
+        Me.Label33.Text = "Reason"
         '
         'txtEmpIDLeave
         '
@@ -6045,128 +6206,43 @@ Partial Class EmployeeForm
         Me.txtEmpIDLeave.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txtEmpIDLeave.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
         Me.txtEmpIDLeave.ForeColor = System.Drawing.Color.FromArgb(CType(CType(89, Byte), Integer), CType(CType(89, Byte), Integer), CType(CType(89, Byte), Integer))
-        Me.txtEmpIDLeave.Location = New System.Drawing.Point(127, 49)
+        Me.txtEmpIDLeave.Location = New System.Drawing.Point(98, 44)
         Me.txtEmpIDLeave.MaxLength = 50
         Me.txtEmpIDLeave.Name = "txtEmpIDLeave"
         Me.txtEmpIDLeave.ReadOnly = True
-        Me.txtEmpIDLeave.Size = New System.Drawing.Size(516, 22)
+        Me.txtEmpIDLeave.Size = New System.Drawing.Size(720, 22)
         Me.txtEmpIDLeave.TabIndex = 170
+        '
+        'Label32
+        '
+        Me.Label32.AutoSize = True
+        Me.Label32.Location = New System.Drawing.Point(197, 165)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(51, 13)
+        Me.Label32.TabIndex = 141
+        Me.Label32.Text = "Comment"
         '
         'Label196
         '
         Me.Label196.AutoSize = True
         Me.Label196.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
         Me.Label196.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.Label196.Location = New System.Drawing.Point(75, 172)
+        Me.Label196.Location = New System.Drawing.Point(46, 167)
         Me.Label196.Name = "Label196"
         Me.Label196.Size = New System.Drawing.Size(18, 24)
         Me.Label196.TabIndex = 184
         Me.Label196.Text = "*"
-        '
-        'btnleavtyp
-        '
-        Me.btnleavtyp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnleavtyp.Location = New System.Drawing.Point(202, 296)
-        Me.btnleavtyp.Name = "btnleavtyp"
-        Me.btnleavtyp.Size = New System.Drawing.Size(21, 23)
-        Me.btnleavtyp.TabIndex = 143
-        Me.btnleavtyp.Text = "..."
-        Me.btnleavtyp.TextAlign = System.Drawing.ContentAlignment.BottomLeft
-        Me.btnleavtyp.UseVisualStyleBackColor = True
-        Me.btnleavtyp.Visible = False
         '
         'Label195
         '
         Me.Label195.AutoSize = True
         Me.Label195.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
         Me.Label195.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.Label195.Location = New System.Drawing.Point(84, 94)
+        Me.Label195.Location = New System.Drawing.Point(55, 89)
         Me.Label195.Name = "Label195"
         Me.Label195.Size = New System.Drawing.Size(18, 24)
         Me.Label195.TabIndex = 183
         Me.Label195.Text = "*"
-        '
-        'Label32
-        '
-        Me.Label32.AutoSize = True
-        Me.Label32.Location = New System.Drawing.Point(226, 170)
-        Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(51, 13)
-        Me.Label32.TabIndex = 141
-        Me.Label32.Text = "Comment"
-        '
-        'btndlleavefile
-        '
-        Me.btndlleavefile.Location = New System.Drawing.Point(649, 481)
-        Me.btndlleavefile.Name = "btndlleavefile"
-        Me.btndlleavefile.Size = New System.Drawing.Size(75, 21)
-        Me.btndlleavefile.TabIndex = 182
-        Me.btndlleavefile.Text = "Download"
-        Me.btndlleavefile.UseVisualStyleBackColor = True
-        '
-        'Label33
-        '
-        Me.Label33.AutoSize = True
-        Me.Label33.Location = New System.Drawing.Point(226, 104)
-        Me.Label33.Name = "Label33"
-        Me.Label33.Size = New System.Drawing.Size(44, 13)
-        Me.Label33.TabIndex = 141
-        Me.Label33.Text = "Reason"
-        '
-        'Button6
-        '
-        Me.Button6.Location = New System.Drawing.Point(766, 454)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(75, 21)
-        Me.Button6.TabIndex = 138
-        Me.Button6.Text = "Clear"
-        Me.Button6.UseVisualStyleBackColor = True
-        '
-        'Label34
-        '
-        Me.Label34.AutoSize = True
-        Me.Label34.Location = New System.Drawing.Point(29, 154)
-        Me.Label34.Name = "Label34"
-        Me.Label34.Size = New System.Drawing.Size(50, 13)
-        Me.Label34.TabIndex = 141
-        Me.Label34.Text = "End date"
-        '
-        'Button7
-        '
-        Me.Button7.Location = New System.Drawing.Point(649, 454)
-        Me.Button7.Name = "Button7"
-        Me.Button7.Size = New System.Drawing.Size(75, 21)
-        Me.Button7.TabIndex = 136
-        Me.Button7.Text = "&Browse..."
-        Me.Button7.UseVisualStyleBackColor = True
-        '
-        'Label35
-        '
-        Me.Label35.AutoSize = True
-        Me.Label35.Location = New System.Drawing.Point(29, 128)
-        Me.Label35.Name = "Label35"
-        Me.Label35.Size = New System.Drawing.Size(53, 13)
-        Me.Label35.TabIndex = 141
-        Me.Label35.Text = "Start date"
-        '
-        'pbempleave
-        '
-        Me.pbempleave.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.pbempleave.Location = New System.Drawing.Point(649, 257)
-        Me.pbempleave.Name = "pbempleave"
-        Me.pbempleave.Size = New System.Drawing.Size(192, 191)
-        Me.pbempleave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.pbempleave.TabIndex = 1
-        Me.pbempleave.TabStop = False
-        '
-        'Label36
-        '
-        Me.Label36.AutoSize = True
-        Me.Label36.Location = New System.Drawing.Point(29, 102)
-        Me.Label36.Name = "Label36"
-        Me.Label36.Size = New System.Drawing.Size(60, 13)
-        Me.Label36.TabIndex = 141
-        Me.Label36.Text = "Leave type"
         '
         'dgvempleave
         '
@@ -6186,12 +6262,13 @@ Partial Class EmployeeForm
         DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgvempleave.DefaultCellStyle = DataGridViewCellStyle13
+        Me.dgvempleave.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvempleave.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgvempleave.Location = New System.Drawing.Point(32, 257)
+        Me.dgvempleave.Location = New System.Drawing.Point(0, 43)
         Me.dgvempleave.MultiSelect = False
         Me.dgvempleave.Name = "dgvempleave"
         Me.dgvempleave.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.dgvempleave.Size = New System.Drawing.Size(611, 345)
+        Me.dgvempleave.Size = New System.Drawing.Size(650, 125)
         Me.dgvempleave.TabIndex = 0
         '
         'elv_RowID
@@ -6358,132 +6435,101 @@ Partial Class EmployeeForm
         Me.elv_DateCreated.ReadOnly = True
         Me.elv_DateCreated.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
-        'Label37
+        'Panel18
         '
-        Me.Label37.AutoSize = True
-        Me.Label37.Location = New System.Drawing.Point(29, 206)
-        Me.Label37.Name = "Label37"
-        Me.Label37.Size = New System.Drawing.Size(48, 13)
-        Me.Label37.TabIndex = 140
-        Me.Label37.Text = "End time"
+        Me.Panel18.Controls.Add(Me.pbempleave)
+        Me.Panel18.Controls.Add(Me.Button7)
+        Me.Panel18.Controls.Add(Me.Label323)
+        Me.Panel18.Controls.Add(Me.Button6)
+        Me.Panel18.Controls.Add(Me.btndlleavefile)
+        Me.Panel18.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel18.Location = New System.Drawing.Point(650, 43)
+        Me.Panel18.Name = "Panel18"
+        Me.Panel18.Size = New System.Drawing.Size(206, 125)
+        Me.Panel18.TabIndex = 1
         '
-        'txtstarttime
+        'pbempleave
         '
-        Me.txtstarttime.BackColor = System.Drawing.Color.White
-        Me.txtstarttime.Location = New System.Drawing.Point(106, 172)
-        Me.txtstarttime.Name = "txtstarttime"
-        Me.txtstarttime.Size = New System.Drawing.Size(100, 20)
-        Me.txtstarttime.TabIndex = 5
+        Me.pbempleave.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.pbempleave.Location = New System.Drawing.Point(6, 0)
+        Me.pbempleave.Name = "pbempleave"
+        Me.pbempleave.Size = New System.Drawing.Size(192, 191)
+        Me.pbempleave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbempleave.TabIndex = 1
+        Me.pbempleave.TabStop = False
         '
-        'Label38
+        'Button7
         '
-        Me.Label38.AutoSize = True
-        Me.Label38.Location = New System.Drawing.Point(29, 180)
-        Me.Label38.Name = "Label38"
-        Me.Label38.Size = New System.Drawing.Size(51, 13)
-        Me.Label38.TabIndex = 139
-        Me.Label38.Text = "Start time"
+        Me.Button7.Location = New System.Drawing.Point(6, 197)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(75, 21)
+        Me.Button7.TabIndex = 136
+        Me.Button7.Text = "&Browse..."
+        Me.Button7.UseVisualStyleBackColor = True
         '
-        'txtendtime
+        'Label323
         '
-        Me.txtendtime.BackColor = System.Drawing.Color.White
-        Me.txtendtime.Location = New System.Drawing.Point(106, 198)
-        Me.txtendtime.Name = "txtendtime"
-        Me.txtendtime.Size = New System.Drawing.Size(100, 20)
-        Me.txtendtime.TabIndex = 6
+        Me.Label323.AutoSize = True
+        Me.Label323.ForeColor = System.Drawing.Color.White
+        Me.Label323.Location = New System.Drawing.Point(206, 184)
+        Me.Label323.Name = "Label323"
+        Me.Label323.Size = New System.Drawing.Size(25, 13)
+        Me.Label323.TabIndex = 504
+        Me.Label323.Text = "___"
         '
-        'txtcomments
+        'Button6
         '
-        Me.txtcomments.BackColor = System.Drawing.Color.White
-        Me.txtcomments.Location = New System.Drawing.Point(291, 162)
-        Me.txtcomments.MaxLength = 2000
-        Me.txtcomments.Multiline = True
-        Me.txtcomments.Name = "txtcomments"
-        Me.txtcomments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtcomments.Size = New System.Drawing.Size(190, 59)
-        Me.txtcomments.TabIndex = 9
+        Me.Button6.Location = New System.Drawing.Point(123, 197)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(75, 21)
+        Me.Button6.TabIndex = 138
+        Me.Button6.Text = "Clear"
+        Me.Button6.UseVisualStyleBackColor = True
         '
-        'txtstartdate
+        'btndlleavefile
         '
-        Me.txtstartdate.BackColor = System.Drawing.Color.White
-        Me.txtstartdate.Location = New System.Drawing.Point(784, 126)
-        Me.txtstartdate.Name = "txtstartdate"
-        Me.txtstartdate.Size = New System.Drawing.Size(100, 20)
-        Me.txtstartdate.TabIndex = 3
-        Me.txtstartdate.Visible = False
+        Me.btndlleavefile.Location = New System.Drawing.Point(6, 224)
+        Me.btndlleavefile.Name = "btndlleavefile"
+        Me.btndlleavefile.Size = New System.Drawing.Size(75, 21)
+        Me.btndlleavefile.TabIndex = 182
+        Me.btndlleavefile.Text = "Download"
+        Me.btndlleavefile.UseVisualStyleBackColor = True
         '
-        'txtreason
+        'Label324
         '
-        Me.txtreason.BackColor = System.Drawing.Color.White
-        Me.txtreason.Location = New System.Drawing.Point(291, 94)
-        Me.txtreason.MaxLength = 500
-        Me.txtreason.Multiline = True
-        Me.txtreason.Name = "txtreason"
-        Me.txtreason.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtreason.Size = New System.Drawing.Size(190, 59)
-        Me.txtreason.TabIndex = 8
+        Me.Label324.AutoSize = True
+        Me.Label324.ForeColor = System.Drawing.Color.White
+        Me.Label324.Location = New System.Drawing.Point(0, 393)
+        Me.Label324.Name = "Label324"
+        Me.Label324.Size = New System.Drawing.Size(25, 13)
+        Me.Label324.TabIndex = 505
+        Me.Label324.Text = "___"
         '
-        'txtendate
+        'Panel1
         '
-        Me.txtendate.BackColor = System.Drawing.Color.White
-        Me.txtendate.Location = New System.Drawing.Point(784, 152)
-        Me.txtendate.Name = "txtendate"
-        Me.txtendate.Size = New System.Drawing.Size(100, 20)
-        Me.txtendate.TabIndex = 4
-        Me.txtendate.Visible = False
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(856, 43)
+        Me.Panel1.TabIndex = 0
         '
-        'Label224
+        'btnleavtyp
         '
-        Me.Label224.AutoSize = True
-        Me.Label224.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Label224.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label224.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Label224.ImageIndex = 0
-        Me.Label224.ImageList = Me.imglstQuestMark
-        Me.Label224.Location = New System.Drawing.Point(882, 129)
-        Me.Label224.Name = "Label224"
-        Me.Label224.Size = New System.Drawing.Size(19, 15)
-        Me.Label224.TabIndex = 188
-        Me.Label224.Text = "    "
-        Me.ToolTip1.SetToolTip(Me.Label224, "How to input Date ?")
-        Me.Label224.Visible = False
-        '
-        'imglstQuestMark
-        '
-        Me.imglstQuestMark.ImageStream = CType(resources.GetObject("imglstQuestMark.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.imglstQuestMark.TransparentColor = System.Drawing.Color.Transparent
-        Me.imglstQuestMark.Images.SetKeyName(0, "question-mark-32.ico")
-        '
-        'Label225
-        '
-        Me.Label225.AutoSize = True
-        Me.Label225.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Label225.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label225.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Label225.ImageIndex = 0
-        Me.Label225.ImageList = Me.imglstQuestMark
-        Me.Label225.Location = New System.Drawing.Point(204, 175)
-        Me.Label225.Name = "Label225"
-        Me.Label225.Size = New System.Drawing.Size(19, 15)
-        Me.Label225.TabIndex = 189
-        Me.Label225.Text = "    "
-        Me.ToolTip1.SetToolTip(Me.Label225, "How to input Time ?")
-        '
-        'Label233
-        '
-        Me.Label233.AutoSize = True
-        Me.Label233.Location = New System.Drawing.Point(646, 241)
-        Me.Label233.Name = "Label233"
-        Me.Label233.Size = New System.Drawing.Size(51, 13)
-        Me.Label233.TabIndex = 190
-        Me.Label233.Text = "Label233"
-        Me.Label233.Visible = False
+        Me.btnleavtyp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnleavtyp.Location = New System.Drawing.Point(173, 84)
+        Me.btnleavtyp.Name = "btnleavtyp"
+        Me.btnleavtyp.Size = New System.Drawing.Size(21, 23)
+        Me.btnleavtyp.TabIndex = 143
+        Me.btnleavtyp.Text = "..."
+        Me.btnleavtyp.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.btnleavtyp.UseVisualStyleBackColor = True
+        Me.btnleavtyp.Visible = False
         '
         'lblLeaveBalOverrideHint
         '
         Me.lblLeaveBalOverrideHint.AutoSize = True
         Me.lblLeaveBalOverrideHint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblLeaveBalOverrideHint.Location = New System.Drawing.Point(518, 259)
+        Me.lblLeaveBalOverrideHint.Location = New System.Drawing.Point(489, 47)
         Me.lblLeaveBalOverrideHint.Name = "lblLeaveBalOverrideHint"
         Me.lblLeaveBalOverrideHint.Size = New System.Drawing.Size(123, 15)
         Me.lblLeaveBalOverrideHint.TabIndex = 509
@@ -16187,7 +16233,12 @@ Partial Class EmployeeForm
         Me.tbpLeave.ResumeLayout(False)
         Me.tbpLeave.PerformLayout
         Me.Panel15.ResumeLayout(False)
-        Me.Panel15.PerformLayout
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.PerformLayout
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.PerformLayout
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit
+        Me.SplitContainer1.ResumeLayout(False)
         CType(Me.pbEmpPicLeave, System.ComponentModel.ISupportInitialize).EndInit
         Me.TabControl4.ResumeLayout(False)
         Me.TabPage7.ResumeLayout(False)
@@ -16196,8 +16247,10 @@ Partial Class EmployeeForm
         Me.TabPage6.PerformLayout
         Me.TabPage8.ResumeLayout(False)
         Me.TabPage8.PerformLayout
-        CType(Me.pbempleave, System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.dgvempleave, System.ComponentModel.ISupportInitialize).EndInit
+        Me.Panel18.ResumeLayout(False)
+        Me.Panel18.PerformLayout
+        CType(Me.pbempleave, System.ComponentModel.ISupportInitialize).EndInit
         Me.ToolStrip5.ResumeLayout(False)
         Me.ToolStrip5.PerformLayout
         Me.tbpDiscipAct.ResumeLayout(False)
@@ -17778,4 +17831,7 @@ Partial Class EmployeeForm
     Friend WithEvents btnAutoCalcPhilHealth As Button
     Friend WithEvents datefrom As DateTimePicker
     Friend WithEvents dtpRegularizationDate As DateTimePicker
+    Friend WithEvents SplitContainer1 As SplitContainer
+    Friend WithEvents Panel18 As Panel
+    Friend WithEvents Panel1 As Panel
 End Class

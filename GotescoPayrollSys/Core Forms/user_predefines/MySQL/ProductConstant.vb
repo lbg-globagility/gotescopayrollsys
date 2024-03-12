@@ -6,4 +6,6 @@
 
     Public Shared ReadOnly BONUS_TYPE_CATEGORY As String = "Bonus"
 
+    Public Shared ReadOnly LEAVE_TYPE_CATEGORY As String = "Leave Type"
+
 End Class

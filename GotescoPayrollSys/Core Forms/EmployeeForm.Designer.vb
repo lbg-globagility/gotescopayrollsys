@@ -35,8 +35,6 @@ Partial Class EmployeeForm
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -100,6 +98,8 @@ Partial Class EmployeeForm
         Dim DataGridViewCellStyle74 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle75 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle76 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.txtEmpID = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.rdMale = New System.Windows.Forms.RadioButton()
@@ -536,32 +536,33 @@ Partial Class EmployeeForm
         Me.Label32 = New System.Windows.Forms.Label()
         Me.Label196 = New System.Windows.Forms.Label()
         Me.Label195 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.dgvempleave = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.elv_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_Type = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_StartTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_EndTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_StartDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
-        Me.elv_EndDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
-        Me.elv_Reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_Comment = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_Image = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_viewimage = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.elv_attafilename = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_attafileextensn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.elv_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.AdditionalOverrideLeaveBalance = New GotescoPayrollSys.DataGridViewNumberColumn()
-        Me.elv_DateCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Panel18 = New System.Windows.Forms.Panel()
         Me.pbempleave = New System.Windows.Forms.PictureBox()
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Label323 = New System.Windows.Forms.Label()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.btndlleavefile = New System.Windows.Forms.Button()
-        Me.Label324 = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.btnleavtyp = New System.Windows.Forms.Button()
         Me.lblLeaveBalOverrideHint = New System.Windows.Forms.Label()
+        Me.Label324 = New System.Windows.Forms.Label()
+        Me.btnleavtyp = New System.Windows.Forms.Button()
+        Me.CollapsibleGroupBox2 = New Indigo.CollapsibleGroupBox()
+        Me.Panel19 = New System.Windows.Forms.Panel()
+        Me.Panel23 = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanelLeaveStatus = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Label387 = New System.Windows.Forms.Label()
+        Me.Panel22 = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanelLeaveType = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Label386 = New System.Windows.Forms.Label()
+        Me.Panel21 = New System.Windows.Forms.Panel()
+        Me.Label389 = New System.Windows.Forms.Label()
+        Me.Label388 = New System.Windows.Forms.Label()
+        Me.DateTimePickerLeaveStart = New System.Windows.Forms.DateTimePicker()
+        Me.DateTimePickerLeaveEnd = New System.Windows.Forms.DateTimePicker()
+        Me.Panel20 = New System.Windows.Forms.Panel()
+        Me.ButtonResetFilterLeave = New System.Windows.Forms.Button()
+        Me.ButtonFilterLeave = New System.Windows.Forms.Button()
         Me.ToolStrip5 = New System.Windows.Forms.ToolStrip()
         Me.tsbtnNewLeave = New System.Windows.Forms.ToolStripButton()
         Me.tsbtnSaveLeave = New System.Windows.Forms.ToolStripButton()
@@ -1546,6 +1547,21 @@ Partial Class EmployeeForm
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.BalloonToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolTipLeaveBalOverride = New System.Windows.Forms.ToolTip(Me.components)
+        Me.elv_RowID = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_Type = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_StartTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_EndTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_StartDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.elv_EndDate = New DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn()
+        Me.elv_Reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_Comment = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_Image = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_viewimage = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.elv_attafilename = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_attafileextensn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.elv_Status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.AdditionalOverrideLeaveBalance = New GotescoPayrollSys.DataGridViewNumberColumn()
+        Me.elv_DateCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tabctrlemp.SuspendLayout
         Me.tbpempchklist.SuspendLayout
         Me.ToolStrip15.SuspendLayout
@@ -1592,9 +1608,16 @@ Partial Class EmployeeForm
         Me.TabPage7.SuspendLayout
         Me.TabPage6.SuspendLayout
         Me.TabPage8.SuspendLayout
+        Me.Panel1.SuspendLayout
         CType(Me.dgvempleave, System.ComponentModel.ISupportInitialize).BeginInit
         Me.Panel18.SuspendLayout
         CType(Me.pbempleave, System.ComponentModel.ISupportInitialize).BeginInit
+        Me.CollapsibleGroupBox2.SuspendLayout
+        Me.Panel19.SuspendLayout
+        Me.Panel23.SuspendLayout
+        Me.Panel22.SuspendLayout
+        Me.Panel21.SuspendLayout
+        Me.Panel20.SuspendLayout
         Me.ToolStrip5.SuspendLayout
         Me.tbpDiscipAct.SuspendLayout
         Me.Panel14.SuspendLayout
@@ -2321,7 +2344,7 @@ Partial Class EmployeeForm
         Me.SplitContainer2.Panel2.Controls.Add(Me.lblforballoon1)
         Me.SplitContainer2.Panel2.Cursor = System.Windows.Forms.Cursors.Default
         Me.SplitContainer2.Size = New System.Drawing.Size(858, 430)
-        Me.SplitContainer2.SplitterDistance = 101
+        Me.SplitContainer2.SplitterDistance = 59
         Me.SplitContainer2.SplitterWidth = 7
         Me.SplitContainer2.TabIndex = 114
         '
@@ -3707,7 +3730,7 @@ Partial Class EmployeeForm
         Me.dgvDepen.Name = "dgvDepen"
         Me.dgvDepen.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvDepen.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvDepen.Size = New System.Drawing.Size(856, 295)
+        Me.dgvDepen.Size = New System.Drawing.Size(856, 337)
         Me.dgvDepen.TabIndex = 116
         '
         'Colmn0
@@ -5403,12 +5426,8 @@ Partial Class EmployeeForm
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.dgvempleave)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Panel18)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Label324)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Panel1)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.btnleavtyp)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.lblLeaveBalOverrideHint)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.CollapsibleGroupBox2)
         Me.SplitContainer1.Size = New System.Drawing.Size(858, 430)
         Me.SplitContainer1.SplitterDistance = 256
         Me.SplitContainer1.TabIndex = 511
@@ -6244,6 +6263,20 @@ Partial Class EmployeeForm
         Me.Label195.TabIndex = 183
         Me.Label195.Text = "*"
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.dgvempleave)
+        Me.Panel1.Controls.Add(Me.Panel18)
+        Me.Panel1.Controls.Add(Me.lblLeaveBalOverrideHint)
+        Me.Panel1.Controls.Add(Me.Label324)
+        Me.Panel1.Controls.Add(Me.btnleavtyp)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(0, 105)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(856, 63)
+        Me.Panel1.TabIndex = 1
+        Me.Panel1.Tag = "0"
+        '
         'dgvempleave
         '
         Me.dgvempleave.AllowUserToDeleteRows = False
@@ -6264,176 +6297,13 @@ Partial Class EmployeeForm
         Me.dgvempleave.DefaultCellStyle = DataGridViewCellStyle13
         Me.dgvempleave.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvempleave.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgvempleave.Location = New System.Drawing.Point(0, 43)
+        Me.dgvempleave.Location = New System.Drawing.Point(0, 0)
         Me.dgvempleave.MultiSelect = False
         Me.dgvempleave.Name = "dgvempleave"
         Me.dgvempleave.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.dgvempleave.Size = New System.Drawing.Size(650, 125)
+        Me.dgvempleave.Size = New System.Drawing.Size(650, 63)
         Me.dgvempleave.TabIndex = 0
-        '
-        'elv_RowID
-        '
-        Me.elv_RowID.HeaderText = "RowID"
-        Me.elv_RowID.Name = "elv_RowID"
-        Me.elv_RowID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_RowID.Visible = False
-        '
-        'elv_Type
-        '
-        Me.elv_Type.HeaderText = "Leave type"
-        Me.elv_Type.Name = "elv_Type"
-        Me.elv_Type.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_Type.Width = 150
-        '
-        'elv_StartTime
-        '
-        Me.elv_StartTime.HeaderText = "Start time"
-        Me.elv_StartTime.Name = "elv_StartTime"
-        Me.elv_StartTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'elv_EndTime
-        '
-        Me.elv_EndTime.HeaderText = "End time"
-        Me.elv_EndTime.Name = "elv_EndTime"
-        Me.elv_EndTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'elv_StartDate
-        '
-        '
-        '
-        '
-        Me.elv_StartDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.elv_StartDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
-        Me.elv_StartDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_StartDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
-        Me.elv_StartDate.HeaderText = "Start date"
-        Me.elv_StartDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
-        '
-        '
-        '
-        Me.elv_StartDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.elv_StartDate.MonthCalendar.BackgroundStyle.Class = ""
-        Me.elv_StartDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        '
-        '
-        '
-        Me.elv_StartDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
-        Me.elv_StartDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_StartDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
-        Me.elv_StartDate.MonthCalendar.MarkedDates = New Date(-1) {}
-        Me.elv_StartDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.elv_StartDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
-        Me.elv_StartDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_StartDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
-        Me.elv_StartDate.Name = "elv_StartDate"
-        Me.elv_StartDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_StartDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'elv_EndDate
-        '
-        '
-        '
-        '
-        Me.elv_EndDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.elv_EndDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
-        Me.elv_EndDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_EndDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
-        Me.elv_EndDate.HeaderText = "End date"
-        Me.elv_EndDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
-        '
-        '
-        '
-        Me.elv_EndDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.elv_EndDate.MonthCalendar.BackgroundStyle.Class = ""
-        Me.elv_EndDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        '
-        '
-        '
-        Me.elv_EndDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
-        Me.elv_EndDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_EndDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
-        Me.elv_EndDate.MonthCalendar.MarkedDates = New Date(-1) {}
-        Me.elv_EndDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
-        '
-        '
-        '
-        Me.elv_EndDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
-        Me.elv_EndDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
-        Me.elv_EndDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
-        Me.elv_EndDate.Name = "elv_EndDate"
-        Me.elv_EndDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_EndDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'elv_Reason
-        '
-        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_Reason.DefaultCellStyle = DataGridViewCellStyle11
-        Me.elv_Reason.HeaderText = "Reason"
-        Me.elv_Reason.Name = "elv_Reason"
-        Me.elv_Reason.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_Reason.Width = 190
-        '
-        'elv_Comment
-        '
-        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.elv_Comment.DefaultCellStyle = DataGridViewCellStyle12
-        Me.elv_Comment.HeaderText = "Comments"
-        Me.elv_Comment.MaxInputLength = 499
-        Me.elv_Comment.Name = "elv_Comment"
-        Me.elv_Comment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_Comment.Width = 190
-        '
-        'elv_Image
-        '
-        Me.elv_Image.HeaderText = "Image"
-        Me.elv_Image.MaxInputLength = 1999
-        Me.elv_Image.Name = "elv_Image"
-        Me.elv_Image.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.elv_Image.Visible = False
-        '
-        'elv_viewimage
-        '
-        Me.elv_viewimage.HeaderText = ""
-        Me.elv_viewimage.Name = "elv_viewimage"
-        '
-        'elv_attafilename
-        '
-        Me.elv_attafilename.HeaderText = "Attachment file name"
-        Me.elv_attafilename.Name = "elv_attafilename"
-        '
-        'elv_attafileextensn
-        '
-        Me.elv_attafileextensn.HeaderText = "Attachment file extension"
-        Me.elv_attafileextensn.Name = "elv_attafileextensn"
-        '
-        'elv_Status
-        '
-        Me.elv_Status.HeaderText = "Status"
-        Me.elv_Status.Name = "elv_Status"
-        '
-        'AdditionalOverrideLeaveBalance
-        '
-        Me.AdditionalOverrideLeaveBalance.HeaderText = "Override Leave Balance"
-        Me.AdditionalOverrideLeaveBalance.MaxInputLength = 11
-        Me.AdditionalOverrideLeaveBalance.Name = "AdditionalOverrideLeaveBalance"
-        Me.AdditionalOverrideLeaveBalance.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        '
-        'elv_DateCreated
-        '
-        Me.elv_DateCreated.HeaderText = "Date created"
-        Me.elv_DateCreated.Name = "elv_DateCreated"
-        Me.elv_DateCreated.ReadOnly = True
-        Me.elv_DateCreated.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.dgvempleave.Tag = "1"
         '
         'Panel18
         '
@@ -6443,10 +6313,11 @@ Partial Class EmployeeForm
         Me.Panel18.Controls.Add(Me.Button6)
         Me.Panel18.Controls.Add(Me.btndlleavefile)
         Me.Panel18.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel18.Location = New System.Drawing.Point(650, 43)
+        Me.Panel18.Location = New System.Drawing.Point(650, 0)
         Me.Panel18.Name = "Panel18"
-        Me.Panel18.Size = New System.Drawing.Size(206, 125)
+        Me.Panel18.Size = New System.Drawing.Size(206, 63)
         Me.Panel18.TabIndex = 1
+        Me.Panel18.Tag = "2"
         '
         'pbempleave
         '
@@ -6495,28 +6366,30 @@ Partial Class EmployeeForm
         Me.btndlleavefile.Text = "Download"
         Me.btndlleavefile.UseVisualStyleBackColor = True
         '
+        'lblLeaveBalOverrideHint
+        '
+        Me.lblLeaveBalOverrideHint.AutoSize = True
+        Me.lblLeaveBalOverrideHint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblLeaveBalOverrideHint.Location = New System.Drawing.Point(497, -1)
+        Me.lblLeaveBalOverrideHint.Name = "lblLeaveBalOverrideHint"
+        Me.lblLeaveBalOverrideHint.Size = New System.Drawing.Size(123, 15)
+        Me.lblLeaveBalOverrideHint.TabIndex = 509
+        Me.lblLeaveBalOverrideHint.Text = "lblLeaveBalOverrideHint"
+        '
         'Label324
         '
         Me.Label324.AutoSize = True
         Me.Label324.ForeColor = System.Drawing.Color.White
-        Me.Label324.Location = New System.Drawing.Point(0, 393)
+        Me.Label324.Location = New System.Drawing.Point(8, 345)
         Me.Label324.Name = "Label324"
         Me.Label324.Size = New System.Drawing.Size(25, 13)
         Me.Label324.TabIndex = 505
         Me.Label324.Text = "___"
         '
-        'Panel1
-        '
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(856, 43)
-        Me.Panel1.TabIndex = 0
-        '
         'btnleavtyp
         '
         Me.btnleavtyp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnleavtyp.Location = New System.Drawing.Point(173, 84)
+        Me.btnleavtyp.Location = New System.Drawing.Point(181, 36)
         Me.btnleavtyp.Name = "btnleavtyp"
         Me.btnleavtyp.Size = New System.Drawing.Size(21, 23)
         Me.btnleavtyp.TabIndex = 143
@@ -6525,15 +6398,157 @@ Partial Class EmployeeForm
         Me.btnleavtyp.UseVisualStyleBackColor = True
         Me.btnleavtyp.Visible = False
         '
-        'lblLeaveBalOverrideHint
+        'CollapsibleGroupBox2
         '
-        Me.lblLeaveBalOverrideHint.AutoSize = True
-        Me.lblLeaveBalOverrideHint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblLeaveBalOverrideHint.Location = New System.Drawing.Point(489, 47)
-        Me.lblLeaveBalOverrideHint.Name = "lblLeaveBalOverrideHint"
-        Me.lblLeaveBalOverrideHint.Size = New System.Drawing.Size(123, 15)
-        Me.lblLeaveBalOverrideHint.TabIndex = 509
-        Me.lblLeaveBalOverrideHint.Text = "lblLeaveBalOverrideHint"
+        Me.CollapsibleGroupBox2.Controls.Add(Me.Panel19)
+        Me.CollapsibleGroupBox2.Controls.Add(Me.Panel20)
+        Me.CollapsibleGroupBox2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.CollapsibleGroupBox2.Location = New System.Drawing.Point(0, 0)
+        Me.CollapsibleGroupBox2.Name = "CollapsibleGroupBox2"
+        Me.CollapsibleGroupBox2.Size = New System.Drawing.Size(856, 105)
+        Me.CollapsibleGroupBox2.TabIndex = 0
+        Me.CollapsibleGroupBox2.TabStop = False
+        Me.CollapsibleGroupBox2.Text = "Filter Leave"
+        '
+        'Panel19
+        '
+        Me.Panel19.Controls.Add(Me.Panel23)
+        Me.Panel19.Controls.Add(Me.Panel22)
+        Me.Panel19.Controls.Add(Me.Panel21)
+        Me.Panel19.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel19.Location = New System.Drawing.Point(3, 16)
+        Me.Panel19.Name = "Panel19"
+        Me.Panel19.Size = New System.Drawing.Size(850, 64)
+        Me.Panel19.TabIndex = 1
+        '
+        'Panel23
+        '
+        Me.Panel23.Controls.Add(Me.FlowLayoutPanelLeaveStatus)
+        Me.Panel23.Controls.Add(Me.Label387)
+        Me.Panel23.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel23.Location = New System.Drawing.Point(688, 0)
+        Me.Panel23.Name = "Panel23"
+        Me.Panel23.Size = New System.Drawing.Size(162, 64)
+        Me.Panel23.TabIndex = 3
+        '
+        'FlowLayoutPanelLeaveStatus
+        '
+        Me.FlowLayoutPanelLeaveStatus.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanelLeaveStatus.Location = New System.Drawing.Point(0, 16)
+        Me.FlowLayoutPanelLeaveStatus.Name = "FlowLayoutPanelLeaveStatus"
+        Me.FlowLayoutPanelLeaveStatus.Size = New System.Drawing.Size(162, 48)
+        Me.FlowLayoutPanelLeaveStatus.TabIndex = 2
+        '
+        'Label387
+        '
+        Me.Label387.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Label387.Location = New System.Drawing.Point(0, 0)
+        Me.Label387.Name = "Label387"
+        Me.Label387.Size = New System.Drawing.Size(162, 16)
+        Me.Label387.TabIndex = 0
+        Me.Label387.Text = "Status"
+        '
+        'Panel22
+        '
+        Me.Panel22.Controls.Add(Me.FlowLayoutPanelLeaveType)
+        Me.Panel22.Controls.Add(Me.Label386)
+        Me.Panel22.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Panel22.Location = New System.Drawing.Point(254, 0)
+        Me.Panel22.Name = "Panel22"
+        Me.Panel22.Size = New System.Drawing.Size(434, 64)
+        Me.Panel22.TabIndex = 2
+        '
+        'FlowLayoutPanelLeaveType
+        '
+        Me.FlowLayoutPanelLeaveType.AutoScroll = True
+        Me.FlowLayoutPanelLeaveType.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanelLeaveType.Location = New System.Drawing.Point(0, 16)
+        Me.FlowLayoutPanelLeaveType.Name = "FlowLayoutPanelLeaveType"
+        Me.FlowLayoutPanelLeaveType.Size = New System.Drawing.Size(434, 48)
+        Me.FlowLayoutPanelLeaveType.TabIndex = 2
+        '
+        'Label386
+        '
+        Me.Label386.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Label386.Location = New System.Drawing.Point(0, 0)
+        Me.Label386.Name = "Label386"
+        Me.Label386.Size = New System.Drawing.Size(434, 16)
+        Me.Label386.TabIndex = 0
+        Me.Label386.Text = "Leave Type"
+        '
+        'Panel21
+        '
+        Me.Panel21.Controls.Add(Me.Label389)
+        Me.Panel21.Controls.Add(Me.Label388)
+        Me.Panel21.Controls.Add(Me.DateTimePickerLeaveStart)
+        Me.Panel21.Controls.Add(Me.DateTimePickerLeaveEnd)
+        Me.Panel21.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Panel21.Location = New System.Drawing.Point(0, 0)
+        Me.Panel21.Name = "Panel21"
+        Me.Panel21.Size = New System.Drawing.Size(254, 64)
+        Me.Panel21.TabIndex = 1
+        '
+        'Label389
+        '
+        Me.Label389.Location = New System.Drawing.Point(121, 0)
+        Me.Label389.Name = "Label389"
+        Me.Label389.Size = New System.Drawing.Size(54, 16)
+        Me.Label389.TabIndex = 2
+        Me.Label389.Text = "End"
+        '
+        'Label388
+        '
+        Me.Label388.Location = New System.Drawing.Point(15, 0)
+        Me.Label388.Name = "Label388"
+        Me.Label388.Size = New System.Drawing.Size(54, 16)
+        Me.Label388.TabIndex = 1
+        Me.Label388.Text = "Start"
+        '
+        'DateTimePickerLeaveStart
+        '
+        Me.DateTimePickerLeaveStart.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DateTimePickerLeaveStart.Location = New System.Drawing.Point(18, 19)
+        Me.DateTimePickerLeaveStart.Name = "DateTimePickerLeaveStart"
+        Me.DateTimePickerLeaveStart.ShowCheckBox = True
+        Me.DateTimePickerLeaveStart.Size = New System.Drawing.Size(100, 20)
+        Me.DateTimePickerLeaveStart.TabIndex = 0
+        '
+        'DateTimePickerLeaveEnd
+        '
+        Me.DateTimePickerLeaveEnd.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DateTimePickerLeaveEnd.Location = New System.Drawing.Point(124, 19)
+        Me.DateTimePickerLeaveEnd.Name = "DateTimePickerLeaveEnd"
+        Me.DateTimePickerLeaveEnd.ShowCheckBox = True
+        Me.DateTimePickerLeaveEnd.Size = New System.Drawing.Size(100, 20)
+        Me.DateTimePickerLeaveEnd.TabIndex = 0
+        '
+        'Panel20
+        '
+        Me.Panel20.Controls.Add(Me.ButtonResetFilterLeave)
+        Me.Panel20.Controls.Add(Me.ButtonFilterLeave)
+        Me.Panel20.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel20.Location = New System.Drawing.Point(3, 80)
+        Me.Panel20.Name = "Panel20"
+        Me.Panel20.Size = New System.Drawing.Size(850, 22)
+        Me.Panel20.TabIndex = 1
+        '
+        'ButtonResetFilterLeave
+        '
+        Me.ButtonResetFilterLeave.Location = New System.Drawing.Point(99, 0)
+        Me.ButtonResetFilterLeave.Name = "ButtonResetFilterLeave"
+        Me.ButtonResetFilterLeave.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonResetFilterLeave.TabIndex = 1
+        Me.ButtonResetFilterLeave.Text = "Reset"
+        Me.ButtonResetFilterLeave.UseVisualStyleBackColor = True
+        '
+        'ButtonFilterLeave
+        '
+        Me.ButtonFilterLeave.Location = New System.Drawing.Point(18, 0)
+        Me.ButtonFilterLeave.Name = "ButtonFilterLeave"
+        Me.ButtonFilterLeave.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonFilterLeave.TabIndex = 0
+        Me.ButtonFilterLeave.Text = "&Filter"
+        Me.ButtonFilterLeave.UseVisualStyleBackColor = True
         '
         'ToolStrip5
         '
@@ -16161,6 +16176,161 @@ Partial Class EmployeeForm
         Me.ToolTipLeaveBalOverride.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info
         Me.ToolTipLeaveBalOverride.ToolTipTitle = "Hint"
         '
+        'elv_RowID
+        '
+        Me.elv_RowID.HeaderText = "RowID"
+        Me.elv_RowID.Name = "elv_RowID"
+        Me.elv_RowID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.elv_RowID.Visible = False
+        '
+        'elv_Type
+        '
+        Me.elv_Type.HeaderText = "Leave type"
+        Me.elv_Type.Name = "elv_Type"
+        Me.elv_Type.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.elv_Type.Width = 150
+        '
+        'elv_StartTime
+        '
+        Me.elv_StartTime.HeaderText = "Start time"
+        Me.elv_StartTime.Name = "elv_StartTime"
+        '
+        'elv_EndTime
+        '
+        Me.elv_EndTime.HeaderText = "End time"
+        Me.elv_EndTime.Name = "elv_EndTime"
+        '
+        'elv_StartDate
+        '
+        '
+        '
+        '
+        Me.elv_StartDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.elv_StartDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.elv_StartDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_StartDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.elv_StartDate.HeaderText = "Start date"
+        Me.elv_StartDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.elv_StartDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.elv_StartDate.MonthCalendar.BackgroundStyle.Class = ""
+        Me.elv_StartDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.elv_StartDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.elv_StartDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_StartDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
+        Me.elv_StartDate.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.elv_StartDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.elv_StartDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.elv_StartDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_StartDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.elv_StartDate.Name = "elv_StartDate"
+        Me.elv_StartDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        '
+        'elv_EndDate
+        '
+        '
+        '
+        '
+        Me.elv_EndDate.BackgroundStyle.BackColor = System.Drawing.SystemColors.Window
+        Me.elv_EndDate.BackgroundStyle.Class = "DataGridViewDateTimeBorder"
+        Me.elv_EndDate.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_EndDate.BackgroundStyle.TextColor = System.Drawing.SystemColors.ControlText
+        Me.elv_EndDate.HeaderText = "End date"
+        Me.elv_EndDate.InputHorizontalAlignment = DevComponents.Editors.eHorizontalAlignment.Left
+        '
+        '
+        '
+        Me.elv_EndDate.MonthCalendar.AnnuallyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.elv_EndDate.MonthCalendar.BackgroundStyle.Class = ""
+        Me.elv_EndDate.MonthCalendar.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        '
+        '
+        '
+        Me.elv_EndDate.MonthCalendar.CommandsBackgroundStyle.Class = ""
+        Me.elv_EndDate.MonthCalendar.CommandsBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_EndDate.MonthCalendar.DisplayMonth = New Date(2015, 5, 1, 0, 0, 0, 0)
+        Me.elv_EndDate.MonthCalendar.MarkedDates = New Date(-1) {}
+        Me.elv_EndDate.MonthCalendar.MonthlyMarkedDates = New Date(-1) {}
+        '
+        '
+        '
+        Me.elv_EndDate.MonthCalendar.NavigationBackgroundStyle.Class = ""
+        Me.elv_EndDate.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.elv_EndDate.MonthCalendar.WeeklyMarkedDays = New System.DayOfWeek(-1) {}
+        Me.elv_EndDate.Name = "elv_EndDate"
+        Me.elv_EndDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        '
+        'elv_Reason
+        '
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.elv_Reason.DefaultCellStyle = DataGridViewCellStyle11
+        Me.elv_Reason.HeaderText = "Reason"
+        Me.elv_Reason.Name = "elv_Reason"
+        Me.elv_Reason.Width = 190
+        '
+        'elv_Comment
+        '
+        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.elv_Comment.DefaultCellStyle = DataGridViewCellStyle12
+        Me.elv_Comment.HeaderText = "Comments"
+        Me.elv_Comment.MaxInputLength = 499
+        Me.elv_Comment.Name = "elv_Comment"
+        Me.elv_Comment.Width = 190
+        '
+        'elv_Image
+        '
+        Me.elv_Image.HeaderText = "Image"
+        Me.elv_Image.MaxInputLength = 1999
+        Me.elv_Image.Name = "elv_Image"
+        Me.elv_Image.Visible = False
+        '
+        'elv_viewimage
+        '
+        Me.elv_viewimage.HeaderText = ""
+        Me.elv_viewimage.Name = "elv_viewimage"
+        '
+        'elv_attafilename
+        '
+        Me.elv_attafilename.HeaderText = "Attachment file name"
+        Me.elv_attafilename.Name = "elv_attafilename"
+        '
+        'elv_attafileextensn
+        '
+        Me.elv_attafileextensn.HeaderText = "Attachment file extension"
+        Me.elv_attafileextensn.Name = "elv_attafileextensn"
+        '
+        'elv_Status
+        '
+        Me.elv_Status.HeaderText = "Status"
+        Me.elv_Status.Name = "elv_Status"
+        '
+        'AdditionalOverrideLeaveBalance
+        '
+        Me.AdditionalOverrideLeaveBalance.HeaderText = "Override Leave Balance"
+        Me.AdditionalOverrideLeaveBalance.MaxInputLength = 11
+        Me.AdditionalOverrideLeaveBalance.Name = "AdditionalOverrideLeaveBalance"
+        Me.AdditionalOverrideLeaveBalance.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        '
+        'elv_DateCreated
+        '
+        Me.elv_DateCreated.HeaderText = "Date created"
+        Me.elv_DateCreated.Name = "elv_DateCreated"
+        Me.elv_DateCreated.ReadOnly = True
+        '
         'EmployeeForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -16236,7 +16406,6 @@ Partial Class EmployeeForm
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel1.PerformLayout
         Me.SplitContainer1.Panel2.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.PerformLayout
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit
         Me.SplitContainer1.ResumeLayout(False)
         CType(Me.pbEmpPicLeave, System.ComponentModel.ISupportInitialize).EndInit
@@ -16247,10 +16416,18 @@ Partial Class EmployeeForm
         Me.TabPage6.PerformLayout
         Me.TabPage8.ResumeLayout(False)
         Me.TabPage8.PerformLayout
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout
         CType(Me.dgvempleave, System.ComponentModel.ISupportInitialize).EndInit
         Me.Panel18.ResumeLayout(False)
         Me.Panel18.PerformLayout
         CType(Me.pbempleave, System.ComponentModel.ISupportInitialize).EndInit
+        Me.CollapsibleGroupBox2.ResumeLayout(False)
+        Me.Panel19.ResumeLayout(False)
+        Me.Panel23.ResumeLayout(False)
+        Me.Panel22.ResumeLayout(False)
+        Me.Panel21.ResumeLayout(False)
+        Me.Panel20.ResumeLayout(False)
         Me.ToolStrip5.ResumeLayout(False)
         Me.ToolStrip5.PerformLayout
         Me.tbpDiscipAct.ResumeLayout(False)
@@ -17792,21 +17969,6 @@ Partial Class EmployeeForm
     Friend WithEvents obf_attafilename As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents obf_attafileextensn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents obf_DateCreated As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_RowID As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_Type As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_StartTime As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_EndTime As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_StartDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
-    Friend WithEvents elv_EndDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
-    Friend WithEvents elv_Reason As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_Comment As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_Image As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_viewimage As System.Windows.Forms.DataGridViewButtonColumn
-    Friend WithEvents elv_attafilename As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_attafileextensn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents elv_Status As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents AdditionalOverrideLeaveBalance As GotescoPayrollSys.DataGridViewNumberColumn
-    Friend WithEvents elv_DateCreated As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents eot_RowID As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents eot_Type As System.Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents eot_StartTime As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -17834,4 +17996,35 @@ Partial Class EmployeeForm
     Friend WithEvents SplitContainer1 As SplitContainer
     Friend WithEvents Panel18 As Panel
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents CollapsibleGroupBox2 As Indigo.CollapsibleGroupBox
+    Friend WithEvents DateTimePickerLeaveStart As DateTimePicker
+    Friend WithEvents DateTimePickerLeaveEnd As DateTimePicker
+    Friend WithEvents Panel19 As Panel
+    Friend WithEvents FlowLayoutPanelLeaveType As FlowLayoutPanel
+    Friend WithEvents FlowLayoutPanelLeaveStatus As FlowLayoutPanel
+    Friend WithEvents Panel21 As Panel
+    Friend WithEvents Panel20 As Panel
+    Friend WithEvents Panel22 As Panel
+    Friend WithEvents Label386 As Label
+    Friend WithEvents Panel23 As Panel
+    Friend WithEvents Label387 As Label
+    Friend WithEvents ButtonFilterLeave As Button
+    Friend WithEvents Label389 As Label
+    Friend WithEvents Label388 As Label
+    Friend WithEvents ButtonResetFilterLeave As Button
+    Friend WithEvents elv_RowID As DataGridViewTextBoxColumn
+    Friend WithEvents elv_Type As DataGridViewTextBoxColumn
+    Friend WithEvents elv_StartTime As DataGridViewTextBoxColumn
+    Friend WithEvents elv_EndTime As DataGridViewTextBoxColumn
+    Friend WithEvents elv_StartDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents elv_EndDate As DevComponents.DotNetBar.Controls.DataGridViewDateTimeInputColumn
+    Friend WithEvents elv_Reason As DataGridViewTextBoxColumn
+    Friend WithEvents elv_Comment As DataGridViewTextBoxColumn
+    Friend WithEvents elv_Image As DataGridViewTextBoxColumn
+    Friend WithEvents elv_viewimage As DataGridViewButtonColumn
+    Friend WithEvents elv_attafilename As DataGridViewTextBoxColumn
+    Friend WithEvents elv_attafileextensn As DataGridViewTextBoxColumn
+    Friend WithEvents elv_Status As DataGridViewTextBoxColumn
+    Friend WithEvents AdditionalOverrideLeaveBalance As DataGridViewNumberColumn
+    Friend WithEvents elv_DateCreated As DataGridViewTextBoxColumn
 End Class

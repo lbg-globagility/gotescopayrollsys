@@ -3,10 +3,13 @@
 'Imports Emgu.CV.OCR
 'Imports Emgu.CV.
 'Imports Tesseract.Interop
+Imports System.Configuration
 Imports System.Data.Entity
 Imports System.IO
 Imports System.Threading.Tasks
+Imports AccuPay.Entity
 Imports MySql.Data.MySqlClient
+Imports PresentationControls
 
 Public Class EmployeeForm
 
@@ -1975,7 +1978,8 @@ Public Class EmployeeForm
 
     Dim paytypestring As String
 
-    Private Sub Employee_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub Employee_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        configCommandTimeOut = Convert.ToInt32(config.GetValues("MySqlCommandTimeOut").FirstOrDefault)
 
         If dbnow = Nothing Then
 
@@ -2040,6 +2044,8 @@ Public Class EmployeeForm
 
         AddHandler dgvEmp.SelectionChanged, AddressOf dgvEmp_SelectionChanged
 
+        Await LoadFilterLeaveTypesAsync()
+        Await LoadFilterLeaveStatusAsync()
     End Sub
 
     Private Sub Employee_ResizeEnd(sender As Object, e As EventArgs) Handles Me.ResizeEnd
@@ -6464,6 +6470,7 @@ Public Class EmployeeForm
         Catch ex As Exception
             ErrorNotif(ex)
         Finally
+            _employeeLeaveGridRows = dgvempleave.Rows?.OfType(Of DataGridViewRow)?.ToList()
             AddHandler dgvempleave.SelectionChanged, AddressOf dgvempleave_SelectionChanged
         End Try
 
@@ -22905,6 +22912,85 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             End If
         End Try
 
+    End Sub
+
+    Private configCommandTimeOut As Integer = 0
+
+    Private config As Specialized.NameValueCollection = ConfigurationManager.AppSettings
+    Private _employeeLeaveGridRows As List(Of DataGridViewRow)
+
+    Private Async Function LoadFilterLeaveTypesAsync() As Task
+        '"SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categleavID & "' AND OrganizationID=" & org_rowid & ";"
+        Using context = New DatabaseContext
+            Dim products = Await context.Products.
+                AsNoTracking().
+                Include(Function(p) p.Category).
+                Where(Function(p) p.OrganizationID = z_OrganizationID).
+                Where(Function(p) p.CategoryText = ProductConstant.LEAVE_TYPE_CATEGORY).
+                OrderBy(Function(p) p.PartNo).
+                ToListAsync()
+
+            For Each p In products
+                FlowLayoutPanelLeaveType.Controls.Add(New CheckBox() With {.Name = $"CheckBoxLeaveType{p.PartNo.Replace(" ", String.Empty)}",
+                    .Text = p.PartNo,
+                    .Checked = True,
+                    .Tag = p.RowID.Value})
+            Next
+        End Using
+    End Function
+
+    Private Async Function LoadFilterLeaveStatusAsync() As Task
+        '"SELECT DisplayValue FROM listofval WHERE `Type`='Employee Leave Status' AND Active='Yes' ORDER BY OrderBy;"
+        Using context = New DatabaseContext
+            Dim listOfValues = Await context.ListOfValues.
+                AsNoTracking().
+                Where(Function(p) p.Type = "Employee Leave Status").
+                Where(Function(p) p.Active = "Yes").
+                ToListAsync()
+
+            For Each l In listOfValues
+                FlowLayoutPanelLeaveStatus.Controls.Add(New CheckBox() With {.Name = $"CheckBoxLeaveStatus{l.DisplayValue.Replace(" ", String.Empty)}",
+                    .Text = l.DisplayValue,
+                    .Checked = True,
+                    .Tag = l.RowID.Value})
+            Next
+        End Using
+    End Function
+
+    Private Sub ButtonFilterLeave_Click(sender As Object, e As EventArgs) Handles ButtonFilterLeave.Click
+
+        Dim start = DateTimePickerLeaveStart.Value.Date
+        Dim [end] = DateTimePickerLeaveEnd.Value.Date
+
+        Dim leaveTypes = FlowLayoutPanelLeaveType.Controls.
+            OfType(Of CheckBox).
+            Where(Function(t) t.Checked).
+            Select(Function(t) t.Text).
+            ToList()
+
+        Dim leaveStatuses = FlowLayoutPanelLeaveStatus.Controls.
+            OfType(Of CheckBox).
+            Where(Function(t) t.Checked).
+            Select(Function(t) t.Text).
+            ToList()
+
+        Dim query = _employeeLeaveGridRows.
+            Where(Function(t) leaveTypes.Any(Function(s) CStr(t.Cells(elv_Type.Index)?.Value) = s)).
+            Where(Function(t) leaveStatuses.Any(Function(s) CStr(t.Cells(elv_Status.Index)?.Value) = s))
+
+        If DateTimePickerLeaveStart.Checked Then query = query.Where(Function(t) CDate(t.Cells(elv_StartDate.Index)?.Value) >= start)
+
+        If DateTimePickerLeaveEnd.Checked Then query = query.Where(Function(t) CDate(t.Cells(elv_EndDate.Index)?.Value) <= [end])
+
+        Dim rows = query.ToList()
+
+        dgvempleave.Rows.Clear()
+        dgvempleave.Rows.AddRange(rows.ToArray())
+    End Sub
+
+    Private Sub ButtonResetFilterLeave_Click(sender As Object, e As EventArgs) Handles ButtonResetFilterLeave.Click
+        dgvempleave.Rows.Clear()
+        dgvempleave.Rows.AddRange(_employeeLeaveGridRows.ToArray())
     End Sub
 
 End Class

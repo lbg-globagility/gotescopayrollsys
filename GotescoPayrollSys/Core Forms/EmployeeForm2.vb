@@ -348,7 +348,7 @@ Partial Public Class EmployeeForm
         Dim rows = query.ToList()
 
         dgvOBF.Rows.Clear()
-        dgvOBF.Rows.AddRange(_employeeOBGridRows.ToArray())
+        dgvOBF.Rows.AddRange(rows.ToArray())
     End Sub
 
     Private Sub ButtonFilterOBReset_Click(sender As Object, e As EventArgs) Handles ButtonFilterOBReset.Click

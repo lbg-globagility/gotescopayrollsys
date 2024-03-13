@@ -16,10 +16,20 @@ Partial Public Class EmployeeForm
                 ToListAsync()
 
             For Each p In products
-                FlowLayoutPanelLeaveType.Controls.Add(New CheckBox() With {.Name = $"CheckBoxLeaveType{p.PartNo.Replace(" ", String.Empty)}",
+                Dim checkBoxControl = New CheckBox() With {.Name = $"CheckBoxLeaveType{p.PartNo.Replace(" ", String.Empty)}",
                     .Text = p.PartNo,
                     .Checked = True,
-                    .Tag = p.RowID.Value})
+                    .Tag = p.RowID.Value,
+                    .Margin = New Padding(0, 0, 0, 0)}
+
+                Dim textSize = TextRenderer.MeasureText(checkBoxControl.Text, checkBoxControl.Font)
+
+                Dim width = checkBoxControl.Size.Width
+                checkBoxControl.AutoSize = False
+                checkBoxControl.AutoEllipsis = False
+                checkBoxControl.Width = textSize.Width + (width * 0.5)
+
+                FlowLayoutPanelLeaveType.Controls.Add(checkBoxControl)
             Next
         End Using
     End Function
@@ -37,7 +47,8 @@ Partial Public Class EmployeeForm
                 FlowLayoutPanelLeaveStatus.Controls.Add(New CheckBox() With {.Name = $"CheckBoxLeaveStatus{l.DisplayValue.Replace(" ", String.Empty)}",
                     .Text = l.DisplayValue,
                     .Checked = True,
-                    .Tag = l.RowID.Value})
+                    .Tag = l.RowID.Value,
+                    .Margin = New Padding(0, 0, 0, 0)})
             Next
         End Using
     End Function
@@ -177,13 +188,18 @@ Partial Public Class EmployeeForm
                     .Text = p.PartNo,
                     .Checked = True,
                     .Tag = p.RowID.Value,
-                    .AutoSize = False,
-                    .AutoEllipsis = False,
-                    .Width = 256}
+                    .Margin = New Padding(0, 0, 0, 0)}
 
-                AddHandler checkBoxControl.CheckedChanged, AddressOf checkBoxControl_CheckedChanged
+                Dim textSize = TextRenderer.MeasureText(checkBoxControl.Text, checkBoxControl.Font)
+
+                Dim width = checkBoxControl.Size.Width
+                checkBoxControl.AutoSize = False
+                checkBoxControl.AutoEllipsis = False
+                checkBoxControl.Width = textSize.Width + (width * 0.5)
 
                 FlowLayoutPanelLoanTypes.Controls.Add(checkBoxControl)
+
+                AddHandler checkBoxControl.CheckedChanged, AddressOf checkBoxControl_CheckedChanged
             Next
 
             LabelLoanFilterLoanTypes.Text = $"Loan Type({If(products?.Count(), 0)})"
@@ -198,7 +214,8 @@ Partial Public Class EmployeeForm
             FlowLayoutPanelLoanStatuses.Controls.Add(New CheckBox() With {.Name = $"CheckBoxLoanStatus{status.Replace(" ", String.Empty)}",
                 .Text = status,
                 .Checked = True,
-                .Tag = Nothing})
+                .Tag = Nothing,
+                .Margin = New Padding(0, 0, 0, 0)})
         Next
     End Function
 
@@ -244,12 +261,14 @@ Partial Public Class EmployeeForm
                 FlowLayoutPanelFilterOvertimeStatus.Controls.Add(New CheckBox() With {.Name = $"CheckBoxOvertimeStatus{l.DisplayValue.Replace(" ", String.Empty)}",
                     .Text = l.DisplayValue,
                     .Checked = True,
-                    .Tag = l.RowID.Value})
+                    .Tag = l.RowID.Value,
+                    .Margin = New Padding(0, 0, 0, 0)})
 
                 FlowLayoutPanelFilterOBStatus.Controls.Add(New CheckBox() With {.Name = $"CheckBoxOBStatus{l.DisplayValue.Replace(" ", String.Empty)}",
                     .Text = l.DisplayValue,
                     .Checked = True,
-                    .Tag = l.RowID.Value})
+                    .Tag = l.RowID.Value,
+                    .Margin = New Padding(0, 0, 0, 0)})
             Next
         End Using
     End Function

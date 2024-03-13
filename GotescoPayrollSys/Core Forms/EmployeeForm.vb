@@ -10427,7 +10427,7 @@ Partial Public Class EmployeeForm
                            " UNION SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categloantypeID & "' AND OrganizationID='" & org_rowid & "';",
                            loan_type)
 
-            For Each strval In loan_type
+            For Each strval In loan_type.Cast(Of String).OrderBy(Function(s) s)
                 cboloantype.Items.Add(getStrBetween(strval, "", "@"))
             Next
 
@@ -19529,7 +19529,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
             enlistTheLists("SELECT CONCAT(COALESCE(PartNo,''),'@',RowID) FROM product WHERE CategoryID='" & categBonusID & "' AND OrganizationID=" & org_rowid & ";",
                            bonus_type) 'cboallowtype
 
-            For Each strval In bonus_type
+            For Each strval In bonus_type.Cast(Of String).OrderBy(Function(s) s)
                 cbobontype.Items.Add(getStrBetween(strval, "", "@"))
                 bon_Type.Items.Add(getStrBetween(strval, "", "@"))
             Next

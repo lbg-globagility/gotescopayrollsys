@@ -22,10 +22,10 @@ Partial Class Form4
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.tvPosit = New System.Windows.Forms.TreeView()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
@@ -73,11 +73,39 @@ Partial Class Form4
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.txtcombo = New System.Windows.Forms.TextBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.CollapsibleGroupBox2 = New Indigo.CollapsibleGroupBox()
+        Me.Panel19 = New System.Windows.Forms.Panel()
+        Me.Panel23 = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanelLeaveStatus = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Label387 = New System.Windows.Forms.Label()
+        Me.Panel22 = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanelLeaveType = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Label386 = New System.Windows.Forms.Label()
+        Me.Panel21 = New System.Windows.Forms.Panel()
+        Me.Label389 = New System.Windows.Forms.Label()
+        Me.Label388 = New System.Windows.Forms.Label()
+        Me.DateTimePickerLeaveStart = New System.Windows.Forms.DateTimePicker()
+        Me.DateTimePickerLeaveEnd = New System.Windows.Forms.DateTimePicker()
+        Me.Panel20 = New System.Windows.Forms.Panel()
+        Me.ButtonResetFilterLeave = New System.Windows.Forms.Button()
+        Me.ButtonFilterLeave = New System.Windows.Forms.Button()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.TabControl1.SuspendLayout()
         CType(Me.DataGridViewX1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridViewX2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridViewX3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridViewX4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
+        Me.CollapsibleGroupBox2.SuspendLayout()
+        Me.Panel19.SuspendLayout()
+        Me.Panel23.SuspendLayout()
+        Me.Panel22.SuspendLayout()
+        Me.Panel21.SuspendLayout()
+        Me.Panel20.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
         'tvPosit
@@ -138,14 +166,14 @@ Partial Class Form4
         Me.DataGridViewX1.AllowUserToOrderColumns = True
         Me.DataGridViewX1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewX1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column4})
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX1.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle13.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX1.DefaultCellStyle = DataGridViewCellStyle13
         Me.DataGridViewX1.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX1.Location = New System.Drawing.Point(12, 95)
         Me.DataGridViewX1.Name = "DataGridViewX1"
@@ -182,14 +210,14 @@ Partial Class Form4
         Me.DataGridViewX2.AllowUserToOrderColumns = True
         Me.DataGridViewX2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewX2.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3})
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX2.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle14.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX2.DefaultCellStyle = DataGridViewCellStyle14
         Me.DataGridViewX2.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX2.Location = New System.Drawing.Point(425, 112)
         Me.DataGridViewX2.Name = "DataGridViewX2"
@@ -298,14 +326,14 @@ Partial Class Form4
         Me.DataGridViewX3.BackgroundColor = System.Drawing.Color.White
         Me.DataGridViewX3.ColumnHeadersHeight = 34
         Me.DataGridViewX3.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.esalar_RowID, Me.esalar_EmpID, Me.esalar_fstatID, Me.esalar_fstatus, Me.esalar_PaySSSID, Me.esalar_EmpContribAmt, Me.esalar_phhID, Me.esalary_EmployerShare, Me.esalar_HDMFAmt, Me.esalar_numofdepen, Me.esalar_maritstat, Me.esalar_posID, Me.esalar_posit, Me.esalar_efffrom, Me.esalar_effto})
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX3.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX3.DefaultCellStyle = DataGridViewCellStyle15
         Me.DataGridViewX3.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX3.Location = New System.Drawing.Point(733, 361)
         Me.DataGridViewX3.MultiSelect = False
@@ -400,14 +428,14 @@ Partial Class Form4
         Me.DataGridViewX4.AllowUserToOrderColumns = True
         Me.DataGridViewX4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewX4.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5})
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX4.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle16.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewX4.DefaultCellStyle = DataGridViewCellStyle16
         Me.DataGridViewX4.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewX4.Location = New System.Drawing.Point(880, 70)
         Me.DataGridViewX4.Name = "DataGridViewX4"
@@ -487,12 +515,193 @@ Partial Class Form4
         Me.txtcombo.Size = New System.Drawing.Size(100, 20)
         Me.txtcombo.TabIndex = 331
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.CollapsibleGroupBox2)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1.Location = New System.Drawing.Point(0, 532)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1370, 218)
+        Me.Panel1.TabIndex = 332
+        '
+        'CollapsibleGroupBox2
+        '
+        Me.CollapsibleGroupBox2.Controls.Add(Me.Panel19)
+        Me.CollapsibleGroupBox2.Controls.Add(Me.Panel20)
+        Me.CollapsibleGroupBox2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.CollapsibleGroupBox2.Location = New System.Drawing.Point(0, 0)
+        Me.CollapsibleGroupBox2.Name = "CollapsibleGroupBox2"
+        Me.CollapsibleGroupBox2.Size = New System.Drawing.Size(1370, 105)
+        Me.CollapsibleGroupBox2.TabIndex = 1
+        Me.CollapsibleGroupBox2.TabStop = False
+        Me.CollapsibleGroupBox2.Text = "Filter Leave"
+        '
+        'Panel19
+        '
+        Me.Panel19.Controls.Add(Me.Panel23)
+        Me.Panel19.Controls.Add(Me.Panel22)
+        Me.Panel19.Controls.Add(Me.Panel21)
+        Me.Panel19.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel19.Location = New System.Drawing.Point(3, 16)
+        Me.Panel19.Name = "Panel19"
+        Me.Panel19.Size = New System.Drawing.Size(1364, 64)
+        Me.Panel19.TabIndex = 1
+        '
+        'Panel23
+        '
+        Me.Panel23.Controls.Add(Me.FlowLayoutPanelLeaveStatus)
+        Me.Panel23.Controls.Add(Me.Label387)
+        Me.Panel23.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel23.Location = New System.Drawing.Point(688, 0)
+        Me.Panel23.Name = "Panel23"
+        Me.Panel23.Size = New System.Drawing.Size(676, 64)
+        Me.Panel23.TabIndex = 3
+        '
+        'FlowLayoutPanelLeaveStatus
+        '
+        Me.FlowLayoutPanelLeaveStatus.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanelLeaveStatus.Location = New System.Drawing.Point(0, 16)
+        Me.FlowLayoutPanelLeaveStatus.Name = "FlowLayoutPanelLeaveStatus"
+        Me.FlowLayoutPanelLeaveStatus.Size = New System.Drawing.Size(676, 48)
+        Me.FlowLayoutPanelLeaveStatus.TabIndex = 2
+        '
+        'Label387
+        '
+        Me.Label387.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Label387.Location = New System.Drawing.Point(0, 0)
+        Me.Label387.Name = "Label387"
+        Me.Label387.Size = New System.Drawing.Size(676, 16)
+        Me.Label387.TabIndex = 0
+        Me.Label387.Text = "Status"
+        '
+        'Panel22
+        '
+        Me.Panel22.Controls.Add(Me.FlowLayoutPanelLeaveType)
+        Me.Panel22.Controls.Add(Me.Label386)
+        Me.Panel22.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Panel22.Location = New System.Drawing.Point(254, 0)
+        Me.Panel22.Name = "Panel22"
+        Me.Panel22.Size = New System.Drawing.Size(434, 64)
+        Me.Panel22.TabIndex = 2
+        '
+        'FlowLayoutPanelLeaveType
+        '
+        Me.FlowLayoutPanelLeaveType.AutoScroll = True
+        Me.FlowLayoutPanelLeaveType.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanelLeaveType.Location = New System.Drawing.Point(0, 16)
+        Me.FlowLayoutPanelLeaveType.Name = "FlowLayoutPanelLeaveType"
+        Me.FlowLayoutPanelLeaveType.Size = New System.Drawing.Size(434, 48)
+        Me.FlowLayoutPanelLeaveType.TabIndex = 2
+        '
+        'Label386
+        '
+        Me.Label386.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Label386.Location = New System.Drawing.Point(0, 0)
+        Me.Label386.Name = "Label386"
+        Me.Label386.Size = New System.Drawing.Size(434, 16)
+        Me.Label386.TabIndex = 0
+        Me.Label386.Text = "Leave Type"
+        '
+        'Panel21
+        '
+        Me.Panel21.Controls.Add(Me.Label389)
+        Me.Panel21.Controls.Add(Me.Label388)
+        Me.Panel21.Controls.Add(Me.DateTimePickerLeaveStart)
+        Me.Panel21.Controls.Add(Me.DateTimePickerLeaveEnd)
+        Me.Panel21.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Panel21.Location = New System.Drawing.Point(0, 0)
+        Me.Panel21.Name = "Panel21"
+        Me.Panel21.Size = New System.Drawing.Size(254, 64)
+        Me.Panel21.TabIndex = 1
+        '
+        'Label389
+        '
+        Me.Label389.Location = New System.Drawing.Point(121, 0)
+        Me.Label389.Name = "Label389"
+        Me.Label389.Size = New System.Drawing.Size(54, 16)
+        Me.Label389.TabIndex = 2
+        Me.Label389.Text = "End"
+        '
+        'Label388
+        '
+        Me.Label388.Location = New System.Drawing.Point(15, 0)
+        Me.Label388.Name = "Label388"
+        Me.Label388.Size = New System.Drawing.Size(54, 16)
+        Me.Label388.TabIndex = 1
+        Me.Label388.Text = "Start"
+        '
+        'DateTimePickerLeaveStart
+        '
+        Me.DateTimePickerLeaveStart.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DateTimePickerLeaveStart.Location = New System.Drawing.Point(18, 19)
+        Me.DateTimePickerLeaveStart.Name = "DateTimePickerLeaveStart"
+        Me.DateTimePickerLeaveStart.ShowCheckBox = True
+        Me.DateTimePickerLeaveStart.Size = New System.Drawing.Size(100, 20)
+        Me.DateTimePickerLeaveStart.TabIndex = 0
+        '
+        'DateTimePickerLeaveEnd
+        '
+        Me.DateTimePickerLeaveEnd.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.DateTimePickerLeaveEnd.Location = New System.Drawing.Point(124, 19)
+        Me.DateTimePickerLeaveEnd.Name = "DateTimePickerLeaveEnd"
+        Me.DateTimePickerLeaveEnd.ShowCheckBox = True
+        Me.DateTimePickerLeaveEnd.Size = New System.Drawing.Size(100, 20)
+        Me.DateTimePickerLeaveEnd.TabIndex = 0
+        '
+        'Panel20
+        '
+        Me.Panel20.Controls.Add(Me.ButtonResetFilterLeave)
+        Me.Panel20.Controls.Add(Me.ButtonFilterLeave)
+        Me.Panel20.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel20.Location = New System.Drawing.Point(3, 80)
+        Me.Panel20.Name = "Panel20"
+        Me.Panel20.Size = New System.Drawing.Size(1364, 22)
+        Me.Panel20.TabIndex = 1
+        '
+        'ButtonResetFilterLeave
+        '
+        Me.ButtonResetFilterLeave.Location = New System.Drawing.Point(99, 0)
+        Me.ButtonResetFilterLeave.Name = "ButtonResetFilterLeave"
+        Me.ButtonResetFilterLeave.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonResetFilterLeave.TabIndex = 1
+        Me.ButtonResetFilterLeave.Text = "Reset"
+        Me.ButtonResetFilterLeave.UseVisualStyleBackColor = True
+        '
+        'ButtonFilterLeave
+        '
+        Me.ButtonFilterLeave.Location = New System.Drawing.Point(18, 0)
+        Me.ButtonFilterLeave.Name = "ButtonFilterLeave"
+        Me.ButtonFilterLeave.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonFilterLeave.TabIndex = 0
+        Me.ButtonFilterLeave.Text = "&Filter"
+        Me.ButtonFilterLeave.UseVisualStyleBackColor = True
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SplitContainer1.Location = New System.Drawing.Point(1100, 384)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
+        Me.SplitContainer1.Size = New System.Drawing.Size(150, 100)
+        Me.SplitContainer1.TabIndex = 333
+        '
+        'Panel2
+        '
+        Me.Panel2.Location = New System.Drawing.Point(1125, 162)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(200, 100)
+        Me.Panel2.TabIndex = 334
+        '
         'Form4
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(1370, 750)
+        Me.Controls.Add(Me.Panel2)
+        Me.Controls.Add(Me.SplitContainer1)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.txtcombo)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.ComboBox1)
@@ -521,6 +730,15 @@ Partial Class Form4
         CType(Me.DataGridViewX2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridViewX3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridViewX4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.CollapsibleGroupBox2.ResumeLayout(False)
+        Me.Panel19.ResumeLayout(False)
+        Me.Panel23.ResumeLayout(False)
+        Me.Panel22.ResumeLayout(False)
+        Me.Panel21.ResumeLayout(False)
+        Me.Panel20.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -572,4 +790,23 @@ Partial Class Form4
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents txtcombo As System.Windows.Forms.TextBox
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents CollapsibleGroupBox2 As Indigo.CollapsibleGroupBox
+    Friend WithEvents Panel19 As Panel
+    Friend WithEvents Panel23 As Panel
+    Friend WithEvents FlowLayoutPanelLeaveStatus As FlowLayoutPanel
+    Friend WithEvents Label387 As Label
+    Friend WithEvents Panel22 As Panel
+    Friend WithEvents FlowLayoutPanelLeaveType As FlowLayoutPanel
+    Friend WithEvents Label386 As Label
+    Friend WithEvents Panel21 As Panel
+    Friend WithEvents Label389 As Label
+    Friend WithEvents Label388 As Label
+    Friend WithEvents DateTimePickerLeaveStart As DateTimePicker
+    Friend WithEvents DateTimePickerLeaveEnd As DateTimePicker
+    Friend WithEvents Panel20 As Panel
+    Friend WithEvents ButtonResetFilterLeave As Button
+    Friend WithEvents ButtonFilterLeave As Button
+    Friend WithEvents SplitContainer1 As SplitContainer
+    Friend WithEvents Panel2 As Panel
 End Class

@@ -58,7 +58,7 @@ IF is_deptmngr = TRUE THEN
 			GROUP BY eot.RowID
 			ORDER BY eot.OTStartDate DESC,eot.OTEndDate DESC
 			) i
-	LIMIT pagenumber, 10;
+			;
 
 ELSE
 
@@ -109,7 +109,7 @@ ELSE
 			AND eot.EmployeeID=eot_EmployeeID) i
 	
 	ORDER BY i.OTStartDate DESC, i.OTEndDate DESC
-	LIMIT pagenumber, 10;
+	;
 	
 END IF;
 	

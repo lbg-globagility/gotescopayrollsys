@@ -35,7 +35,7 @@ LEFT JOIN product p ON p.RowID=els.LoanTypeID AND p.OrganizationID=els.Organizat
 
 WHERE els.OrganizationID=OrganizID
 AND els.EmployeeID=EmpRowID
-ORDER BY els.LoanNumber,TIME_FORMAT(els.Created,'%p%H%i%s'),DATE_FORMAT(els.Created,'%Y%c%e');
+ORDER BY els.DedEffectiveDateFrom DESC, els.Created DESC;
 
 
 

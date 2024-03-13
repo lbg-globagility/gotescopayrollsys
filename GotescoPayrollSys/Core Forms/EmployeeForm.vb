@@ -21,6 +21,8 @@ Partial Public Class EmployeeForm
 
     Private _employeeOvertimeGridRows As List(Of DataGridViewRow)
 
+    Private _employeeOBGridRows As List(Of DataGridViewRow)
+
     Public Sub New()
 
         ' This call is required by the designer.
@@ -3258,6 +3260,7 @@ Partial Public Class EmployeeForm
             If _employeeLeaveGridRows IsNot Nothing Then _employeeLeaveGridRows?.Clear()
             If _employeeLoanGridRows IsNot Nothing Then _employeeLoanGridRows?.Clear()
             If _employeeOvertimeGridRows IsNot Nothing Then _employeeOvertimeGridRows?.Clear()
+            If _employeeOBGridRows IsNot Nothing Then _employeeOBGridRows?.Clear()
 
         End If
 
@@ -18180,6 +18183,7 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
                             "VIEW_employeeoffbusi",
                             dgvOBF, 1, 1)
 
+        _employeeOBGridRows = dgvOBF.Rows?.OfType(Of DataGridViewRow)?.ToList()
     End Sub
 
     Sub tsbtnNewOBF_Click(sender As Object, e As EventArgs) Handles tsbtnNewOBF.Click

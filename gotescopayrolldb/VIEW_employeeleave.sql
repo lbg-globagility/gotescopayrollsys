@@ -57,59 +57,64 @@ IF is_deptmngr = TRUE THEN
 		AND elv.EmployeeID=elv_EmployeeID
 #		AND elv.LeaveTypeID IS NOT NULL
 		GROUP BY elv.RowID
+		order BY elv.LeaveStartDate DESC, elv.LeaveEndDate DESC
 ;
 
 ELSE
 		SELECT
-		elv.RowID
-		,COALESCE(elv.LeaveType,'') `LeaveType`
-		,IF(elv.LeaveStartTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(elv.LeaveStartTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(elv.LeaveStartTime,'%r'),3))) `LeaveStartTime`
-		,IF(elv.LeaveEndTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(elv.LeaveEndTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(elv.LeaveEndTime,'%r'),3))) `LeaveEndTime`
-		,COALESCE(DATE_FORMAT(elv.LeaveStartDate,'%m/%d/%Y'),'') `LeaveStartDate`
-		,COALESCE(DATE_FORMAT(elv.LeaveEndDate,'%m/%d/%Y'),'') `LeaveEndDate`
-		,COALESCE(elv.Reason,'') `Reason`
-		,COALESCE(elv.Comments,'') `Comments`
-		,COALESCE(elv.Image,'') `Image`
-		,'view this'
-		,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=elv.EmployeeID AND `Type`=CONCAT('Employee Leave@',elv.RowID)),'') `FileName`
-		,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=elv.EmployeeID AND `Type`=CONCAT('Employee Leave@',elv.RowID)),'') `FileExtens`
-		,elv.`Status`
-		,elv.AdditionalOverrideLeaveBalance
-	   , DATE_FORMAT(elv.Created, '%c/%e/%Y %h:%i %p') `Created`
-	   , is_deptmngr
-		FROM employeeleave elv
-		INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.DeptManager IS NULL
-		WHERE elv.OrganizationID=elv_OrganizationID
-		AND elv.EmployeeID=elv_EmployeeID
-#		AND elv.LeaveTypeID IS NOT NULL
-
-	UNION
-		SELECT
-		elv.RowID
-		,COALESCE(elv.LeaveType,'') `LeaveType`
-		,IF(elv.LeaveStartTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(elv.LeaveStartTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(elv.LeaveStartTime,'%r'),3))) `LeaveStartTime`
-		,IF(elv.LeaveEndTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(elv.LeaveEndTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(elv.LeaveEndTime,'%r'),3))) `LeaveEndTime`
-		,COALESCE(DATE_FORMAT(elv.LeaveStartDate,'%m/%d/%Y'),'') `LeaveStartDate`
-		,COALESCE(DATE_FORMAT(elv.LeaveEndDate,'%m/%d/%Y'),'') `LeaveEndDate`
-		,COALESCE(elv.Reason,'') `Reason`
-		,COALESCE(elv.Comments,'') `Comments`
-		,COALESCE(elv.Image,'') `Image`
-		,'view this'
-		,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=elv.EmployeeID AND `Type`=CONCAT('Employee Leave@',elv.RowID)),'') `FileName`
-		,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=elv.EmployeeID AND `Type`=CONCAT('Employee Leave@',elv.RowID)),'') `FileExtens`
-		,elv.`Status`
-		,elv.AdditionalOverrideLeaveBalance
-	   , DATE_FORMAT(elv.Created, '%c/%e/%Y %h:%i %p') `Created`
-	   , is_deptmngr
-		FROM employeeleave elv
-		INNER JOIN employee e
-		        ON e.RowID=elv.EmployeeID
-				     AND e.OrganizationID=elv.OrganizationID
-					  AND e.DeptManager IS NOT NULL
-		WHERE elv.OrganizationID=elv_OrganizationID
-					  AND elv.Status2 = 'Approved'
-		AND elv.EmployeeID=elv_EmployeeID
-#		AND elv.LeaveTypeID IS NOT NULL
+		i.*
+		FROM (SELECT
+				elv.RowID
+				,COALESCE(elv.LeaveType,'') `LeaveType`
+				,IF(elv.LeaveStartTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(elv.LeaveStartTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(elv.LeaveStartTime,'%r'),3))) `LeaveStartTime`
+				,IF(elv.LeaveEndTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(elv.LeaveEndTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(elv.LeaveEndTime,'%r'),3))) `LeaveEndTime`
+				,COALESCE(DATE_FORMAT(elv.LeaveStartDate,'%m/%d/%Y'),'') `LeaveStartDate`
+				,COALESCE(DATE_FORMAT(elv.LeaveEndDate,'%m/%d/%Y'),'') `LeaveEndDate`
+				,COALESCE(elv.Reason,'') `Reason`
+				,COALESCE(elv.Comments,'') `Comments`
+				,COALESCE(elv.Image,'') `Image`
+				,'view this'
+				,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=elv.EmployeeID AND `Type`=CONCAT('Employee Leave@',elv.RowID)),'') `FileName`
+				,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=elv.EmployeeID AND `Type`=CONCAT('Employee Leave@',elv.RowID)),'') `FileExtens`
+				,elv.`Status`
+				,elv.AdditionalOverrideLeaveBalance
+			   , DATE_FORMAT(elv.Created, '%c/%e/%Y %h:%i %p') `Created`
+			   , is_deptmngr
+				FROM employeeleave elv
+				INNER JOIN employee e ON e.RowID=elv.EmployeeID AND e.OrganizationID=elv.OrganizationID AND e.DeptManager IS NULL
+				WHERE elv.OrganizationID=elv_OrganizationID
+				AND elv.EmployeeID=elv_EmployeeID
+		#		AND elv.LeaveTypeID IS NOT NULL
+		
+			UNION
+				SELECT
+				elv.RowID
+				,COALESCE(elv.LeaveType,'') `LeaveType`
+				,IF(elv.LeaveStartTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(elv.LeaveStartTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(elv.LeaveStartTime,'%r'),3))) `LeaveStartTime`
+				,IF(elv.LeaveEndTime IS NULL,'',CONCAT(SUBSTRING_INDEX(TIME_FORMAT(elv.LeaveEndTime,'%h:%i:%s'),':',2),RIGHT(TIME_FORMAT(elv.LeaveEndTime,'%r'),3))) `LeaveEndTime`
+				,COALESCE(DATE_FORMAT(elv.LeaveStartDate,'%m/%d/%Y'),'') `LeaveStartDate`
+				,COALESCE(DATE_FORMAT(elv.LeaveEndDate,'%m/%d/%Y'),'') `LeaveEndDate`
+				,COALESCE(elv.Reason,'') `Reason`
+				,COALESCE(elv.Comments,'') `Comments`
+				,COALESCE(elv.Image,'') `Image`
+				,'view this'
+				,COALESCE((SELECT FileName FROM employeeattachments WHERE EmployeeID=elv.EmployeeID AND `Type`=CONCAT('Employee Leave@',elv.RowID)),'') `FileName`
+				,COALESCE((SELECT FileType FROM employeeattachments WHERE EmployeeID=elv.EmployeeID AND `Type`=CONCAT('Employee Leave@',elv.RowID)),'') `FileExtens`
+				,elv.`Status`
+				,elv.AdditionalOverrideLeaveBalance
+			   , DATE_FORMAT(elv.Created, '%c/%e/%Y %h:%i %p') `Created`
+			   , is_deptmngr
+				FROM employeeleave elv
+				INNER JOIN employee e
+				        ON e.RowID=elv.EmployeeID
+						     AND e.OrganizationID=elv.OrganizationID
+							  AND e.DeptManager IS NOT NULL
+				WHERE elv.OrganizationID=elv_OrganizationID
+							  AND elv.Status2 = 'Approved'
+				AND elv.EmployeeID=elv_EmployeeID
+		#		AND elv.LeaveTypeID IS NOT NULL
+				) i
+		order BY i.LeaveStartDate DESC, i.LeaveEndDate DESC
 ;
 
 END IF;

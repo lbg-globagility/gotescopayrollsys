@@ -245,6 +245,11 @@ Partial Public Class EmployeeForm
                     .Text = l.DisplayValue,
                     .Checked = True,
                     .Tag = l.RowID.Value})
+
+                FlowLayoutPanelFilterOBStatus.Controls.Add(New CheckBox() With {.Name = $"CheckBoxOBStatus{l.DisplayValue.Replace(" ", String.Empty)}",
+                    .Text = l.DisplayValue,
+                    .Checked = True,
+                    .Tag = l.RowID.Value})
             Next
         End Using
     End Function
@@ -298,6 +303,57 @@ Partial Public Class EmployeeForm
     Private Sub ButtonFilterOvertimeReset_Click(sender As Object, e As EventArgs) Handles ButtonFilterOvertimeReset.Click
         dgvempOT.Rows.Clear()
         dgvempOT.Rows.AddRange(_employeeOvertimeGridRows.ToArray())
+    End Sub
+
+    Private Sub ButtonFilterOB_Click(sender As Object, e As EventArgs) Handles ButtonFilterOB.Click
+
+        Dim start = DateTimePickerFilterOBStart.Value.Date
+        Dim [end] = DateTimePickerFilterOBEnd.Value.Date
+
+        Dim obStatuses = FlowLayoutPanelFilterOBStatus.Controls.
+            OfType(Of CheckBox).
+            Where(Function(t) t.Checked).
+            Select(Function(t) t.Text).
+            ToList()
+
+        Dim query = _employeeOBGridRows.Where(Function(t) True)
+
+        If Not String.IsNullOrEmpty(TextBoxFilterOBReasonComment.Text) Then query = query.
+            Where(Function(t)
+                      Dim thisString = String.Concat(If(t.Cells(obf_Reason.Index)?.Value, String.Empty),
+                        If(t.Cells(obf_Comment.Index)?.Value, String.Empty))
+                      If String.IsNullOrEmpty(thisString) Then
+                          Return False
+                      Else
+                          Return thisString.SimilarTo(TextBoxFilterOBReasonComment.Text)
+                      End If
+                  End Function)
+
+        If If(obStatuses?.Any(), False) Then query = query.
+            Where(Function(t)
+
+                      If String.IsNullOrEmpty(If(t.Cells(obf_Status.Index)?.Value, String.Empty)) Then
+                          Return False
+                      Else
+                          Return obStatuses.Any(Function(s) CStr(t.Cells(obf_Status.Index).Value).SimilarTo(s))
+                      End If
+                  End Function)
+
+        If DateTimePickerFilterOBStart.Checked Then query = query.
+            Where(Function(t) CDate(t.Cells(obf_StartDate.Index)?.Value) >= start)
+
+        If DateTimePickerFilterOBEnd.Checked Then query = query.
+            Where(Function(t) CDate(t.Cells(obf_EndDate.Index)?.Value) <= [end])
+
+        Dim rows = query.ToList()
+
+        dgvOBF.Rows.Clear()
+        dgvOBF.Rows.AddRange(_employeeOBGridRows.ToArray())
+    End Sub
+
+    Private Sub ButtonFilterOBReset_Click(sender As Object, e As EventArgs) Handles ButtonFilterOBReset.Click
+        dgvOBF.Rows.Clear()
+        dgvOBF.Rows.AddRange(_employeeOBGridRows.ToArray())
     End Sub
 
 End Class

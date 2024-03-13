@@ -216,7 +216,7 @@ Public Class LoanSummaryReportProvider
             AND i.PayToDate<=@dateTo*/
             AND ((i.PayFromDate BETWEEN @dateFrom AND @dateTo)
                  AND (i.PayToDate BETWEEN @dateFrom AND @dateTo))
-            ORDER BY CONCAT(e.LastName, e.FirstName), i.RowID, i.PayFromDate, i.PayToDate
+            ORDER BY CONCAT(e.LastName, e.FirstName), i.PayFromDate, i.PayToDate, p.PartNo
             ;]]>.Value
 
         Dim columns =

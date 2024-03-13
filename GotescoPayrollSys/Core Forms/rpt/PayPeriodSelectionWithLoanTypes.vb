@@ -18,9 +18,9 @@
     Private Sub LoadLoanTypes()
         Dim params = New Object() {org_rowid}
         Dim strQuery =
-            String.Concat("SELECT NULL `RowID`, 'All' `PartNo`",
+            String.Concat("SELECT NULL `RowID`, 'ALL' `PartNo`",
                           " UNION SELECT p.RowID, p.PartNo FROM category c INNER JOIN product p ON p.CategoryID=c.RowID WHERE c.OrganizationID=?og_rowid AND c.CategoryName='Loan Type' AND p.ActiveData=TRUE")
-        Dim query = $"SELECT i.* FROM ({strQuery}) i ORDER BY i.PartNo;"
+        Dim query = $"SELECT i.* FROM ({strQuery}) i ORDER BY FIELD(ISNULL(i.`RowID`), TRUE, FALSE), i.PartNo;"
         Dim sql As New SQL(query, params)
 
         Dim dt As New DataTable

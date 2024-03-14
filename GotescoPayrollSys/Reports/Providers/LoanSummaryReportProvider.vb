@@ -172,19 +172,16 @@ Public Class LoanSummaryReportProvider
     End Sub
 
     Private Async Sub Method3Async()
-        Dim n_PayrollSummaDateSelection As New PayPeriodSelectionWithLoanTypes
+        Dim form As New PayPeriodsSelectionDialog(z_OrganizationID, True)
+        If Not form.ShowDialog() = DialogResult.OK Then Return
 
-        If Not n_PayrollSummaDateSelection.ShowDialog = DialogResult.OK Then Return
-
-        Dim dateFrom, dateTo, loanTypeID As Object
-
-        dateFrom = n_PayrollSummaDateSelection.DateFrom
-        dateTo = n_PayrollSummaDateSelection.DateTo
-        loanTypeID = n_PayrollSummaDateSelection.LoanTypeId
+        Dim selectedPayPeriodIds = form.SelectedPayPeriodIds
+        Dim selectedLoanTypeIds = form.SelectedLoanTypeIds
+        Dim loanTypeID = If(selectedLoanTypeIds?.FirstOrDefault(), 0)
+        Dim startDate = form.StartDate
+        Dim endDate = form.EndDate
 
         Dim queryText = String.Empty
-        'Dim filtersLoanType = <![CDATA[INNER JOIN product p ON p.RowID=i.LoanTypeID]]>.Value
-        'If Not IsDBNull(loanTypeID) Then filtersLoanType = <![CDATA[INNER JOIN product p ON p.RowID=i.LoanTypeID AND i.RowID=@loanTypeID]]>.Value
 
         queryText =
         <![CDATA[CALL `LoanPrediction`(@orgID);
@@ -209,7 +206,7 @@ Public Class LoanSummaryReportProvider
                   AND lp.DiscontinuedDate IS NOT NULL
                   ) i
             INNER JOIN employee e ON e.RowID=i.EmployeeID
-            INNER JOIN product p ON p.RowID=i.LoanTypeID AND p.RowID=IFNULL(@loanTypeID, p.RowID)
+            INNER JOIN product p ON p.RowID=i.LoanTypeID AND FIND_IN_SET(p.RowID, @loanTypeIds) > 0
             INNER JOIN paystub ps ON ps.EmployeeID=e.RowID AND ps.PayPeriodID=i.PayperiodID
             INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID AND psi.ProductID=p.RowID
             /*WHERE i.PayFromDate>=@dateFrom
@@ -237,9 +234,11 @@ Public Class LoanSummaryReportProvider
 
             With command.Parameters
                 .AddWithValue("@orgID", org_rowid)
-                .AddWithValue("@dateFrom", dateFrom)
-                .AddWithValue("@dateTo", dateTo)
-                .AddWithValue("@loanTypeID", loanTypeID) 'If(IsDBNull(loanTypeID), "NULL", loanTypeID)
+                .AddWithValue("@dateFrom", startDate)
+                .AddWithValue("@dateTo", endDate)
+                .AddWithValue("@loanTypeID", loanTypeID)
+                Dim loanTypeIds = String.Join(",", selectedLoanTypeIds)
+                .AddWithValue("@loanTypeIds", loanTypeIds)
             End With
 
             Await connection.OpenAsync()
@@ -273,9 +272,9 @@ Public Class LoanSummaryReportProvider
 
                     objText.Text =
                         String.Concat("for the period of ",
-                                      DirectCast(dateFrom, Date).ToShortDateString,
+                                      {startDate?.ToShortDateString()},
                                       " to ",
-                                      DirectCast(dateTo, Date).ToShortDateString)
+                                      {endDate?.ToShortDateString()})
 
                     objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtOrganizationName"), TextObject)
 

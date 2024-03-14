@@ -130,4 +130,10 @@ Public Class ReportsList
         Close()
     End Sub
 
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        Dim form As New PayPeriodsSelectionDialog(z_OrganizationID, True)
+        If Not form.ShowDialog() = DialogResult.OK Then Return
+
+        Console.WriteLine($"{form.SelectedPayPeriodIds} {form.SelectedLoanTypeIds}")
+    End Sub
 End Class

@@ -502,8 +502,8 @@ SELECT p.PartNo `Allowance name`
 # INNER JOIN (SELECT
 LEFT JOIN (SELECT
            PayStubID
-           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', UCASE(p.PartNo))) `Column30`
-           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2))) `Column31`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', UCASE(p.PartNo)) order BY p.PartNo) `Column30`
+           ,GROUP_CONCAT(IF(psi.PayAmount = 0, '', ROUND(psi.PayAmount, 2)) order BY p.PartNo) `Column31`
            FROM paystubitem psi
 			  INNER JOIN product p ON p.RowID=psi.ProductID
 			  INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave Type'

@@ -29,6 +29,13 @@ Public Class PayPeriodsSelectionDialog
         If _withLoanTypes Then Await LoadLoanTypesAsync()
 
         Await LoadPayPeriodsAsync(selectedYear)
+
+        ChangeYearDisplayText()
+    End Sub
+
+    Private Sub ChangeYearDisplayText()
+        LinkLabelPrev.Text = $"←{selectedYear - 1}"
+        LinkLabelNext.Text = $"{selectedYear + 1}→"
     End Sub
 
     Private Async Function LoadPayPeriodsAsync(getYear As Integer) As Task
@@ -187,6 +194,7 @@ Public Class PayPeriodsSelectionDialog
 
         Await LoadPayPeriodsAsync(selectedYear)
 
+        ChangeYearDisplayText()
         Panel4.Enabled = True
     End Sub
 
@@ -196,6 +204,7 @@ Public Class PayPeriodsSelectionDialog
 
         Await LoadPayPeriodsAsync(selectedYear)
 
+        ChangeYearDisplayText()
         Panel4.Enabled = True
     End Sub
 
@@ -204,4 +213,5 @@ Public Class PayPeriodsSelectionDialog
 
         If e.ColumnIndex = Column2.Index Then DataGridViewXPeriods.EndEdit()
     End Sub
+
 End Class

@@ -270,11 +270,7 @@ Public Class LoanSummaryReportProvider
 
                     objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("PeriodDate"), TextObject)
 
-                    objText.Text =
-                        String.Concat("for the period of ",
-                                      {startDate?.ToShortDateString()},
-                                      " to ",
-                                      {endDate?.ToShortDateString()})
+                    objText.Text = $"for the period of {startDate:MMM dd, yyyy} to {endDate:MMM dd, yyyy}"
 
                     objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtOrganizationName"), TextObject)
 

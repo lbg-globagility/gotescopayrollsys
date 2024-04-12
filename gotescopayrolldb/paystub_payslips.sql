@@ -132,8 +132,8 @@ ps.RowID
 , NEWLINECHARTRIMMER(REPLACE(REPLACE(psiallw.`Column34`, ',', '\r\n'), '|', ',')) `Column34`
 , NEWLINECHARTRIMMER(REPLACE(REPLACE(psiallw.`Column37`, ',', '\r\n'), '|', ',')) `Column37`
 
-, RidCharacater(REPLACE(REPLACE(psibon.`Column36`, ',', '\r\n'), '|', ','), '\r\n') `Column36`
-, RidCharacater(REPLACE(REPLACE(psibon.`Column39`, ',', '\r\n'), '|', ','), '\r\n') `Column39`
+, RidCharacater(REPLACE(REPLACE(REPLACE(psibon.`Column36`, ',', '\r\n'), '\r\n\r\n', '\r\n'), '|', ','), '\r\n') `Column36`
+, RidCharacater(REPLACE(REPLACE(REPLACE(psibon.`Column39`, ',', '\r\n'), '\r\n\r\n', '\r\n'), '|', ','), '\r\n') `Column39`
 
 /**/ , REPLACE(NEWLINECHARTRIMMER(REPLACE(psiloan.`Column35`, ',', '\n'))
           , '|', ',')  `Column35`

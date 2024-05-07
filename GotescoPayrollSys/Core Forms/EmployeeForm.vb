@@ -11585,16 +11585,17 @@ Partial Public Class EmployeeForm
 
             Dim dtloanhist As New DataTable
 
-            dtloanhist = retAsDatTbl("SELECT COALESCE(DATE_FORMAT(DeductionDate,'%m/%d/%Y'),'') 'DeductionDate'" &
-                                     ",COALESCE(DeductionAmount,0) 'DeductionAmount'" &
-                                     ",COALESCE(Status,'') 'Status'" &
-                                     ",COALESCE(Comments,'') 'Comments'" &
-                                     ",RowID" &
-                                     " FROM employeeloanhistory" &
-                                     " WHERE EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "'" &
-                                     " AND OrganizationID='" & org_rowid & "'" &
-                                     " AND Comments='" & cbohistoloantype.Text & "'" &
-                                     " ORDER BY DeductionDate DESC;")
+            dtloanhist = retAsDatTbl("SELECT COALESCE(DATE_FORMAT(IFNULL(elh.DeductionDate, pp.PayFromDate),'%m/%d/%Y'),'') 'DeductionDate'" &
+                                     ",COALESCE(elh.DeductionAmount,0) 'DeductionAmount'" &
+                                     ",COALESCE(elh.`Status`,'') 'Status'" &
+                                     ",COALESCE(elh.Comments,'') 'Comments'" &
+                                     ",elh.RowID" &
+                                     " FROM employeeloanhistory elh" &
+                                     " INNER JOIN payperiod pp ON pp.RowID=elh.PayPeriodID" &
+                                     " WHERE elh.EmployeeID='" & dgvEmp.CurrentRow.Cells("RowID").Value & "'" &
+                                     " AND elh.OrganizationID='" & org_rowid & "'" &
+                                     " AND elh.Comments='" & cbohistoloantype.Text & "'" &
+                                     " ORDER BY pp.`Year` DESC, pp.OrdinalValue DESC;")
 
             dgvloanhisto.Rows.Clear()
 

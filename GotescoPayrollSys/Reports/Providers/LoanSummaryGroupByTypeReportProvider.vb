@@ -10,59 +10,55 @@ Public Class LoanSummaryGroupByTypeReportProvider
     Public Property IsFreeRangeOfDate As Boolean Implements IReportProvider.IsFreeRangeOfDate
 
     Public Sub Run() Implements IReportProvider.Run
+        Dim form As New PayPeriodsSelectionDialog(z_OrganizationID, True)
+        If Not form.ShowDialog() = DialogResult.OK Then Return
 
-        Dim n_PayrollSummaDateSelection As New PayPeriodSelectionWithLoanTypes
+        Dim selectedPayPeriodIds = form.SelectedPayPeriodIds
+        Dim selectedLoanTypeIds = form.SelectedLoanTypeIds
+        Dim loanTypeID = If(selectedLoanTypeIds?.FirstOrDefault(), 0)
+        Dim startDate = form.StartDate
+        Dim endDate = form.EndDate
+        Dim loanTypeIds = String.Join(",", selectedLoanTypeIds)
 
-        If n_PayrollSummaDateSelection.ShowDialog = Windows.Forms.DialogResult.OK Then
+        Dim params = New Object() {org_rowid, startDate, endDate, loanTypeID, loanTypeIds}
 
-            Dim date_from, date_to, _loanTypeID As Object
+        Dim sql As _
+            New SQL("CALL RPT_LoansByType(?og_rowid, ?date_f, ?date_t, ?loan_typeid, ?loan_typeids);",
+                    params)
 
-            date_from = n_PayrollSummaDateSelection.DateFrom
-            date_to = n_PayrollSummaDateSelection.DateTo
-            _loanTypeID = n_PayrollSummaDateSelection.LoanTypeId
+        Try
+            Dim rptdoc = New LoanSummaryGroupByType
 
-            Dim params = New Object() {org_rowid, date_from, date_to, _loanTypeID}
+            Dim dt As New DataTable
+            dt = sql.GetFoundRows.Tables.OfType(Of DataTable).First
 
-            Dim sql As _
-                New SQL("CALL RPT_LoansByType(?og_rowid, ?date_f, ?date_t, ?loan_typeid);",
-                        params)
+            rptdoc.SetDataSource(dt)
 
-            Try
-                Dim rptdoc = New LoanSummaryGroupByType
+            Dim objText As TextObject = Nothing
 
-                Dim dt As New DataTable
-                dt = sql.GetFoundRows.Tables.OfType(Of DataTable).First
+            objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("PeriodDate"), TextObject)
 
-                rptdoc.SetDataSource(dt)
+            objText.Text =
+                String.Concat("As of ",
+                              endDate.Value.ToLongDateString)
 
-                Dim objText As TextObject = Nothing
+            objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtReportTitle"), TextObject)
 
-                objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("PeriodDate"), TextObject)
+            objText.Text =
+                String.Concat("LOAN REPORT - SUMMARY",
+                              " (",
+                              LoanNames(loanTypeID).Replace(",", "/"),
+                              ")")
 
-                objText.Text =
-                    String.Concat("As of ",
-                                  DirectCast(date_to, Date).ToLongDateString)
+            Dim crvwr As New CrysRepForm
 
-                objText = DirectCast(rptdoc.ReportDefinition.Sections(1).ReportObjects("txtReportTitle"), TextObject)
+            crvwr.crysrepvwr.ReportSource = rptdoc
 
-                objText.Text =
-                    String.Concat("LOAN REPORT - SUMMARY",
-                                  " (",
-                                  LoanNames(_loanTypeID).Replace(",", "/"),
-                                  ")")
+            crvwr.Show()
+        Catch ex As Exception
 
-                Dim crvwr As New CrysRepForm
-
-                crvwr.crysrepvwr.ReportSource = rptdoc
-
-                crvwr.Show()
-            Catch ex As Exception
-
-                MsgBox(getErrExcptn(ex, Name))
-            End Try
-
-        End If
-
+            MsgBox(getErrExcptn(ex, Name))
+        End Try
     End Sub
 
     Private Function LoanNames(LoanTypeId As Object) As String

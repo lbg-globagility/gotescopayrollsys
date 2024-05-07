@@ -22,7 +22,7 @@ Partial Class PayPeriodsSelectionDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.DataGridViewXPeriods = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -35,6 +35,7 @@ Partial Class PayPeriodsSelectionDialog
         Me.Button1 = New System.Windows.Forms.Button()
         Me.PanelLoanTypes = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanelLoanTypes = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.LinkLabelUnSelectAll = New System.Windows.Forms.LinkLabel()
         Me.LabelSelectedLoanTypes = New System.Windows.Forms.Label()
@@ -45,7 +46,6 @@ Partial Class PayPeriodsSelectionDialog
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel1.SuspendLayout()
         CType(Me.DataGridViewXPeriods, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
@@ -61,7 +61,7 @@ Partial Class PayPeriodsSelectionDialog
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(365, 311)
+        Me.Panel1.Size = New System.Drawing.Size(365, 353)
         Me.Panel1.TabIndex = 0
         '
         'DataGridViewXPeriods
@@ -71,19 +71,19 @@ Partial Class PayPeriodsSelectionDialog
         Me.DataGridViewXPeriods.AllowUserToOrderColumns = True
         Me.DataGridViewXPeriods.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewXPeriods.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewXPeriods.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewXPeriods.DefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridViewXPeriods.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewXPeriods.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.DataGridViewXPeriods.Location = New System.Drawing.Point(0, 0)
         Me.DataGridViewXPeriods.Name = "DataGridViewXPeriods"
-        Me.DataGridViewXPeriods.Size = New System.Drawing.Size(365, 287)
+        Me.DataGridViewXPeriods.Size = New System.Drawing.Size(365, 329)
         Me.DataGridViewXPeriods.TabIndex = 153
         '
         'Column1
@@ -122,7 +122,7 @@ Partial Class PayPeriodsSelectionDialog
         Me.Panel4.Controls.Add(Me.LinkLabelPrev)
         Me.Panel4.Controls.Add(Me.Button1)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel4.Location = New System.Drawing.Point(0, 287)
+        Me.Panel4.Location = New System.Drawing.Point(0, 329)
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(365, 24)
         Me.Panel4.TabIndex = 152
@@ -168,9 +168,9 @@ Partial Class PayPeriodsSelectionDialog
         Me.PanelLoanTypes.Controls.Add(Me.Panel2)
         Me.PanelLoanTypes.Controls.Add(Me.Panel5)
         Me.PanelLoanTypes.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelLoanTypes.Location = New System.Drawing.Point(0, 311)
+        Me.PanelLoanTypes.Location = New System.Drawing.Point(0, 353)
         Me.PanelLoanTypes.Name = "PanelLoanTypes"
-        Me.PanelLoanTypes.Size = New System.Drawing.Size(365, 80)
+        Me.PanelLoanTypes.Size = New System.Drawing.Size(365, 189)
         Me.PanelLoanTypes.TabIndex = 1
         '
         'FlowLayoutPanelLoanTypes
@@ -179,8 +179,16 @@ Partial Class PayPeriodsSelectionDialog
         Me.FlowLayoutPanelLoanTypes.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanelLoanTypes.Location = New System.Drawing.Point(16, 24)
         Me.FlowLayoutPanelLoanTypes.Name = "FlowLayoutPanelLoanTypes"
-        Me.FlowLayoutPanelLoanTypes.Size = New System.Drawing.Size(349, 56)
+        Me.FlowLayoutPanelLoanTypes.Size = New System.Drawing.Size(349, 165)
         Me.FlowLayoutPanelLoanTypes.TabIndex = 1
+        '
+        'Panel2
+        '
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Panel2.Location = New System.Drawing.Point(0, 24)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(16, 165)
+        Me.Panel2.TabIndex = 0
         '
         'Panel5
         '
@@ -221,7 +229,7 @@ Partial Class PayPeriodsSelectionDialog
         Me.Panel3.Controls.Add(Me.ButtonClose)
         Me.Panel3.Controls.Add(Me.ButtonOK)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel3.Location = New System.Drawing.Point(0, 391)
+        Me.Panel3.Location = New System.Drawing.Point(0, 542)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(365, 59)
         Me.Panel3.TabIndex = 2
@@ -277,20 +285,12 @@ Partial Class PayPeriodsSelectionDialog
         Me.DataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.DataGridViewTextBoxColumn3.Width = 128
         '
-        'Panel2
-        '
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Left
-        Me.Panel2.Location = New System.Drawing.Point(0, 24)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(16, 56)
-        Me.Panel2.TabIndex = 0
-        '
         'PayPeriodsSelectionDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(365, 450)
+        Me.ClientSize = New System.Drawing.Size(365, 601)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.PanelLoanTypes)
         Me.Controls.Add(Me.Panel3)

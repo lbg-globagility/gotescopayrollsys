@@ -97,7 +97,10 @@ Partial Public Class EmployeeForm
         If DateTimePickerLeaveEnd.Checked Then query = query.
             Where(Function(t) CDate(t.Cells(elv_EndDate.Index)?.Value) <= [end])
 
-        Dim rows = query.ToList()
+        Dim rows = query.
+            OrderByDescending(Function(t) CDate(t.Cells(elv_StartDate.Index)?.Value)).
+            ThenByDescending(Function(t) CDate(t.Cells(elv_EndDate.Index)?.Value)).
+            ToList()
 
         dgvempleave.Rows.Clear()
         dgvempleave.Rows.AddRange(rows.ToArray())
@@ -162,7 +165,10 @@ Partial Public Class EmployeeForm
         If DateTimePickerLoanEnd.Checked Then query = query.
             Where(Function(t) CDate(t.Cells(c_dedeffectivedatefrom.Index)?.Value) <= [end])
 
-        Dim rows = query.ToList()
+        Dim rows = query.
+            OrderByDescending(Function(t) CDate(t.Cells(c_dedeffectivedatefrom.Index)?.Value)).
+            ThenByDescending(Function(t) CDate(t.Cells(c_dedeffectivedatefrom.Index)?.Value)).
+            ToList()
 
         dgvLoanList.Rows.Clear()
         dgvLoanList.Rows.AddRange(rows.ToArray())
@@ -313,7 +319,10 @@ Partial Public Class EmployeeForm
         If DateTimePickerFilterOvertimeEnd.Checked Then query = query.
             Where(Function(t) CDate(t.Cells(eot_EndDate.Index)?.Value) <= [end])
 
-        Dim rows = query.ToList()
+        Dim rows = query.
+            OrderByDescending(Function(t) CDate(t.Cells(eot_StartDate.Index)?.Value)).
+            ThenByDescending(Function(t) CDate(t.Cells(eot_EndDate.Index)?.Value)).
+            ToList()
 
         dgvempOT.Rows.Clear()
         dgvempOT.Rows.AddRange(rows.ToArray())
@@ -364,7 +373,10 @@ Partial Public Class EmployeeForm
         If DateTimePickerFilterOBEnd.Checked Then query = query.
             Where(Function(t) CDate(t.Cells(obf_EndDate.Index)?.Value) <= [end])
 
-        Dim rows = query.ToList()
+        Dim rows = query.
+            OrderByDescending(Function(t) CDate(t.Cells(obf_StartDate.Index)?.Value)).
+            ThenByDescending(Function(t) CDate(t.Cells(obf_EndDate.Index)?.Value)).
+            ToList()
 
         dgvOBF.Rows.Clear()
         dgvOBF.Rows.AddRange(rows.ToArray())

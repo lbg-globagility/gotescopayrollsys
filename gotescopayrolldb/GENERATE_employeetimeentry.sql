@@ -708,7 +708,7 @@ ELSE
 		SET @leaveStartDateTime = CONCAT_DATETIME(ete_Date, @leaveStartTime);
 		SET @leaveEndDateTime = GetNextStartDateTime(CONCAT_DATETIME(ete_Date, shifttimefrom), @leaveEndTime);
 		
-		SET @shEndDateTime = ADDDATE(@shStartDateTime, INTERVAL @shiftHours HOUR);
+		SET @shEndDateTime = ADDDATE(@shStartDateTime, INTERVAL (@shiftHours * 3600) SECOND);
 		
 		SELECT TIMESTAMPDIFF(SECOND
 									, @shStartDateTime

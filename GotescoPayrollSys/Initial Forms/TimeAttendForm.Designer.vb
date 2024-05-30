@@ -51,19 +51,20 @@ Partial Class TimeAttendForm
         'TimeEntryLogsToolStripMenuItem
         '
         Me.TimeEntryLogsToolStripMenuItem.Name = "TimeEntryLogsToolStripMenuItem"
-        Me.TimeEntryLogsToolStripMenuItem.Size = New System.Drawing.Size(101, 20)
+        Me.TimeEntryLogsToolStripMenuItem.Size = New System.Drawing.Size(100, 20)
         Me.TimeEntryLogsToolStripMenuItem.Text = "Time entry logs"
+        Me.TimeEntryLogsToolStripMenuItem.Visible = False
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(118, 20)
-        Me.ToolStripMenuItem2.Text = "Time entry logs (2)"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(100, 20)
+        Me.ToolStripMenuItem2.Text = "Time entry logs"
         '
         'TimeEntryToolStripMenuItem
         '
         Me.TimeEntryToolStripMenuItem.Name = "TimeEntryToolStripMenuItem"
-        Me.TimeEntryToolStripMenuItem.Size = New System.Drawing.Size(76, 20)
+        Me.TimeEntryToolStripMenuItem.Size = New System.Drawing.Size(75, 20)
         Me.TimeEntryToolStripMenuItem.Text = "Time entry"
         '
         'TimeEntToolStripMenuItem

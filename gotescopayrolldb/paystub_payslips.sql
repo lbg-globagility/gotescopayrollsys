@@ -178,8 +178,8 @@ ps.RowID
 
 ,logo `Column40`
 
-,NEWLINECHARTRIMMER(REPLACE(psilv.`Column30`, ',', '\n')) `Column30`
-,NEWLINECHARTRIMMER(REPLACE(psilv.`Column31`, ',', '\n')) `Column31`
+, RidCharacater(REPLACE(REPLACE(REPLACE(psilv.`Column30`, ',', '\r\n'), '\r\n\r\n', '\r\n'), '|', ','), '\r\n') `Column30`
+, RidCharacater(REPLACE(REPLACE(REPLACE(psilv.`Column31`, ',', '\r\n'), '\r\n\r\n', '\r\n'), '|', ','), '\r\n') `Column31`
 
 , ROUND(IFNULL(et.`RestDayHours`, 0), 2) `Column25`
 , IFNULL(ROUND(et.`RestDayAmount`, 2), 0) `Column16`

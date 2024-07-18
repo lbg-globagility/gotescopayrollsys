@@ -117,11 +117,11 @@ SELECT
 				, e.AdditionalVLAllowance
 				, e.MaternityLeaveAllowance
 				
-				, SUM(IF(et.VacationLeaveHours < 0, IF(elv.LeaveType='Vacation leave', elv.OfficialValidHours, 0), et.VacationLeaveHours)) `VacationLeaveHours`
-				, SUM(IF(et.SickLeaveHours < 0, IF(elv.LeaveType='Sick leave', elv.OfficialValidHours, 0), et.SickLeaveHours)) `SickLeaveHours`
-				, SUM(IF(et.OtherLeaveHours < 0, IF(elv.LeaveType='Others', elv.OfficialValidHours, 0), et.OtherLeaveHours)) `OtherLeaveHours`
-				, SUM(IF(et.AdditionalVLHours < 0, IF(elv.LeaveType='Additional VL', elv.OfficialValidHours, 0), et.AdditionalVLHours)) `AdditionalVLHours`
-				, SUM(IF(et.MaternityLeaveHours < 0, IF(elv.LeaveType='Maternity/paternity leave', elv.OfficialValidHours, 0), et.MaternityLeaveHours)) `MaternityLeaveHours`
+				, SUM(IF(et.VacationLeaveHours < 0, IF(elv1.LeaveType='Vacation leave', elv1.OfficialValidHours, 0), et.VacationLeaveHours)) `VacationLeaveHours`
+				, SUM(IF(et.SickLeaveHours < 0, IF(elv2.LeaveType='Sick leave', elv2.OfficialValidHours, 0), et.SickLeaveHours)) `SickLeaveHours`
+				, SUM(IF(et.OtherLeaveHours < 0, IF(elv3.LeaveType='Others', elv3.OfficialValidHours, 0), et.OtherLeaveHours)) `OtherLeaveHours`
+				, SUM(IF(et.AdditionalVLHours < 0, IF(elv4.LeaveType='Additional VL', elv4.OfficialValidHours, 0), et.AdditionalVLHours)) `AdditionalVLHours`
+				, SUM(IF(et.MaternityLeaveHours < 0, IF(elv5.LeaveType='Maternity/paternity leave', elv5.OfficialValidHours, 0), et.MaternityLeaveHours)) `MaternityLeaveHours`
 				
 				FROM payperiod pp
 				LEFT JOIN employeetimeentry et
@@ -131,7 +131,11 @@ SELECT
 				INNER JOIN employee e ON e.RowID=et.EmployeeID
 								AND pp.TotalGrossSalary=e.PayFrequencyID
 				
-				LEFT JOIN employeeleave elv ON elv.EmployeeID=e.RowID AND et.Date BETWEEN elv.LeaveStartDate AND elv.LeaveEndDate
+				LEFT JOIN employeeleave elv1 ON elv1.LeaveType='Vacation leave' AND elv1.EmployeeID=e.RowID AND et.`Date` BETWEEN elv1.LeaveStartDate AND elv1.LeaveEndDate AND et.VacationLeaveHours != 0
+				LEFT JOIN employeeleave elv2 ON elv2.LeaveType='Sick leave' AND elv2.EmployeeID=e.RowID AND et.`Date` BETWEEN elv2.LeaveStartDate AND elv2.LeaveEndDate AND et.SickLeaveHours != 0
+				LEFT JOIN employeeleave elv3 ON elv3.LeaveType='Others' AND elv3.EmployeeID=e.RowID AND et.`Date` BETWEEN elv3.LeaveStartDate AND elv3.LeaveEndDate AND et.OtherLeaveHours != 0
+				LEFT JOIN employeeleave elv4 ON elv4.LeaveType='Additional VL' AND elv4.EmployeeID=e.RowID AND et.`Date` BETWEEN elv4.LeaveStartDate AND elv4.LeaveEndDate AND et.AdditionalVLHours != 0
+				LEFT JOIN employeeleave elv5 ON elv5.LeaveType='Maternity/paternity leave' AND elv5.EmployeeID=e.RowID AND et.`Date` BETWEEN elv5.LeaveStartDate AND elv5.LeaveEndDate AND et.MaternityLeaveHours != 0
 				
 				WHERE pp.OrganizationID = orgId
 #				AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours + et.MaternityLeaveHours) > 0

@@ -389,6 +389,7 @@
     <Compile Include="Core Forms\Self-filing\SelfFilingForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Core Forms\user_predefines\MySQL\entities\PayRateEntity.vb" />
     <Compile Include="Core\Services\Policies\IPolicyHelper.vb" />
     <Compile Include="Infrastructure\Data\PhilHealthPolicy.vb" />
     <Compile Include="Core Forms\rpt\FiledLeaves.vb">
@@ -1267,6 +1268,12 @@
     <Compile Include="Core Forms\viewtotloan.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Others\Form1.Designer.vb">
+      <DependentUpon>Form1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Others\Form1.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Primary\Payroll\PayrollResources.vb" />
     <Compile Include="Reports\Providers\AgencyFeeReportProvider.vb" />
     <Compile Include="Reports\Providers\AttendanceSheetReportProvider.vb" />
@@ -1530,6 +1537,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Core Forms\Self-filing\SelfFilingForm.resx">
       <DependentUpon>SelfFilingForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Others\Form1.resx">
+      <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Providers\DateRangeDialog.resx">
       <DependentUpon>DateRangeDialog.vb</DependentUpon>

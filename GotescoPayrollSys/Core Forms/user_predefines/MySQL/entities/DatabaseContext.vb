@@ -59,7 +59,11 @@ Public Class DatabaseContext
 
     Public Overridable Property EmployeeTimeEntryDetails() As DbSet(Of EmployeeTimeEntryDetails)
 
+    Public Overridable Property Organizations() As DbSet(Of Organization)
+
     Public Overridable Property PayPeriods() As DbSet(Of PayPeriod)
+
+    Public Overridable Property PayRates() As DbSet(Of PayRateEntity)
 
     Public Overridable Property PayStubItems() As DbSet(Of PaystubItem)
 

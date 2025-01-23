@@ -1,5 +1,6 @@
 ﻿'Option Strict On
 Imports System.Data.Entity
+Imports System.Threading.Tasks
 Imports NHotkey
 Imports NHotkey.WindowsForms
 
@@ -626,19 +627,26 @@ Public Class TimeEntryLogs
     Private Async Sub LoadPayPeriodsAsync()
 
         Try
-            Using _mod = New DatabaseContext
+            Using context = New DatabaseContext
+                Dim query = context.TimeEntryLogsPerCutOff.
+                    AsNoTracking().
+                    Where(Function(t) t.YearValue = this_year).
+                    Where(Function(t) t.OrganizationId = organization_rowid).
+                    AsQueryable()
 
-                Dim _payperiods =
-                    (From t In _mod.TimeEntryLogsPerCutOff
-                     Where t.YearValue = this_year And t.OrganizationId = organization_rowid
-                     Group By t.PayPeriodID
-                     Into tl = Group
-                     Let uniquepayperiod = tl.FirstOrDefault
-                     Select New With {.PayFromDate = uniquepayperiod.PayFromDate,
-                                      .PayToDate = uniquepayperiod.PayToDate}
-                     )
+                Dim payPeriods = Await Task.FromResult(query.
+                    AsEnumerable().
+                    ToList())
 
-                DataGridViewX1.DataSource = Await _payperiods.ToListAsync()
+                Dim groupPayPeriods = payPeriods.
+                    GroupBy(Function(t) t.UniquePeriodDateRange).
+                    Select(Function(t) New With {
+                        .PayFromDate = t.FirstOrDefault().PayFromDate,
+                        .PayToDate = t.FirstOrDefault().PayToDate
+                    }).
+                    ToList()
+
+                DataGridViewX1.DataSource = groupPayPeriods
 
             End Using
         Catch ex As Exception

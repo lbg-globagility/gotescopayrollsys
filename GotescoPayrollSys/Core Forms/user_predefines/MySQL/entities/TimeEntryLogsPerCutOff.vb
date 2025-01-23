@@ -58,4 +58,11 @@ Public Class TimeEntryLogsPerCutOff
 
     Public Property TimeOutText As String
 
+    <NotMapped>
+    Public ReadOnly Property UniquePeriodDateRange As String
+        Get
+            Return $"{PayFromDate.ToShortDateString()}-{PayFromDate.ToShortDateString()}"
+        End Get
+    End Property
+
 End Class

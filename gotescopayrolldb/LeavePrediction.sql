@@ -109,8 +109,8 @@ IF isVacation THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.LeaveAllowance - IFNEGATIVE(i.VacationLeaveHours, 0))
-			, (@leaveBal := @leaveBal - IFNEGATIVE(i.VacationLeaveHours, 0))) `ProperLeaveBalance`
+			, (@leaveBal := i.LeaveAllowance - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.VacationLeaveHours, 0)))
+			, (@leaveBal := @leaveBal - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.VacationLeaveHours, 0)))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`
@@ -129,8 +129,8 @@ ELSEIF isSick THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.SickLeaveAllowance - IFNEGATIVE(i.SickLeaveHours, 0))
-			, (@leaveBal := @leaveBal - IFNEGATIVE(i.SickLeaveHours, 0))) `ProperLeaveBalance`
+			, (@leaveBal := i.SickLeaveAllowance - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.SickLeaveHours, 0)))
+			, (@leaveBal := @leaveBal - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.SickLeaveHours, 0)))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`
@@ -147,8 +147,8 @@ ELSEIF isAddtl THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.AdditionalVLAllowance - IFNEGATIVE(i.AdditionalVLHours, 0))
-			, (@leaveBal := @leaveBal - IFNEGATIVE(i.AdditionalVLHours, 0))) `ProperLeaveBalance`
+			, (@leaveBal := i.AdditionalVLAllowance - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.AdditionalVLHours, 0)))
+			, (@leaveBal := @leaveBal - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.AdditionalVLHours, 0)))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`
@@ -165,8 +165,8 @@ ELSEIF isOther THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.OtherLeaveAllowance - IFNEGATIVE(i.OtherLeaveHours, 0))
-			, (@leaveBal := @leaveBal - IFNEGATIVE(i.OtherLeaveHours, 0))) `ProperLeaveBalance`
+			, (@leaveBal := i.OtherLeaveAllowance - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.OtherLeaveHours, 0)))
+			, (@leaveBal := @leaveBal - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.OtherLeaveHours, 0)))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`
@@ -183,8 +183,8 @@ ELSEIF isMaternity THEN
 	, (@isAnotherID := @eID != i.EmployeeID) `IsAnother`
 	, IF(@isAnotherID, (@eID := i.EmployeeID), @eID) `AssignAnotherID`
 	, IF(@isAnotherID
-			, (@leaveBal := i.MaternityLeaveAllowance - IFNEGATIVE(i.MaternityLeaveHours, 0))
-			, (@leaveBal := @leaveBal - IFNEGATIVE(i.MaternityLeaveHours, 0))) `ProperLeaveBalance`
+			, (@leaveBal := i.MaternityLeaveAllowance - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.MaternityLeaveHours, 0)))
+			, (@leaveBal := @leaveBal - IF(i.`Status`='Pending', 0, IFNEGATIVE(i.MaternityLeaveHours, 0)))) `ProperLeaveBalance`
 	, IF(@isAnotherID
 	     , @indx := 1
 		  , (@indx := @indx + 1)) `OrdinalIndex`

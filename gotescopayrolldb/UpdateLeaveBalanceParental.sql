@@ -57,51 +57,23 @@ SET e.MaternityLeaveBalance = i.CurrentLeaveBalance,
 e.LastUpdBy = UserId
 ;
 
-SET @eIDCount = (SELECT COUNT(EmployeeID) FROM currentleavebalancepredict);
-SET eIndex = 1;
+DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
+CREATE TEMPORARY TABLE IF NOT EXISTS paystubitemleavebalance
+SELECT
+GROUP_CONCAT(DISTINCT psi.RowID) `RowIDs`,
+MIN(i.ProperLeaveBalance) `ProperLeaveBalance`
+FROM leavebalancepredict i
+INNER JOIN paystub ps ON ps.EmployeeID=i.EmployeeID AND i.`Date` BETWEEN ps.PayFromDate AND ps.PayToDate
+INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID
+INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo=i.LeaveType AND p.`Category`='Leave type'
+GROUP BY i.EmployeeID, ps.PayPeriodID
+;
 
-/**/WHILE eIndex < @eIDCount DO
-
-	SET @eID = (SELECT EmployeeID FROM currentleavebalancepredict LIMIT eIndex, 1);
-	SET @i = NULL;
-	SET @psiRowID = NULL;
-	
-	DROP TEMPORARY TABLE IF EXISTS paystubitemleavebalance;
-	CREATE TEMPORARY TABLE IF NOT EXISTS paystubitemleavebalance
-	SELECT psi.RowID
-#	, @i := (SELECT MIN(ProperLeaveBalance) FROM leavebalancepredict ii WHERE ii.PayperiodID=ps.PayPeriodID AND ii.EmployeeID=ps.EmployeeID AND ii.LeaveType=p.PartNo) `ProperLeaveBalance`
-	, @i := ii.ProperLeaveBalance `ProperLeaveBalance`
-	, IF(@i IS NOT NULL, @psiRowID := psi.RowID, (SELECT PayAmount FROM paystubitem WHERE RowID=@psiRowID)) `Result`
-	, e.LeaveAllowance
-	FROM payperiod pp
-	INNER JOIN paystub ps ON ps.PayPeriodID=pp.RowID AND ps.EmployeeID=@eID
-	INNER JOIN employee e ON e.RowID=ps.EmployeeID
-	INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID
-	INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo=@leaveType # Maternity/paternity leave
-	INNER JOIN category c ON c.RowID=p.CategoryID AND c.CategoryName='Leave type'
-	INNER JOIN (SELECT
-					#ii.PayperiodID,
-					EmployeeID,
-#					MIN(ProperLeaveBalance) `ProperLeaveBalance`
-					ProperLeaveBalance,
-					PayPeriodID
-					FROM leavebalancepredict
-					WHERE LeaveType=@leaveType
-					AND EmployeeID=@eID
-#					GROUP BY ii.EmployeeID
-					) ii ON ii.EmployeeID=ps.EmployeeID AND ii.PayPeriodID=ps.PayPeriodID
-	WHERE pp.`Year`=yearPeriod
-	AND pp.OrganizationID=OrganizID
-	ORDER BY pp.OrdinalValue
-	;
-
-	UPDATE paystubitem psi
-	INNER JOIN paystubitemleavebalance i ON i.RowID=psi.RowID
-	SET psi.PayAmount = IFNULL(IFNULL(i.`ProperLeaveBalance`, i.`Result`), i.LeaveAllowance)
-	;
-	
-	SET eIndex = eIndex + 1;
-END WHILE;
+UPDATE paystubitem psi
+INNER JOIN paystubitemleavebalance i ON FIND_IN_SET(psi.RowID, i.`RowIDs`) > 0
+SET psi.PayAmount = i.`ProperLeaveBalance`
+WHERE IFNULL(psi.PayAmount, 0) != IFNULL(i.`ProperLeaveBalance`, 0)
+;
 
 END//
 DELIMITER ;

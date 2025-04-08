@@ -146,7 +146,7 @@ SELECT
 
 
 
-
+/************
 UPDATE paystub ps
 INNER JOIN serviceperiods ii ON ps.EmployeeID = ii.EmployeeID AND ps.PayPeriodID = ii.PayPeriodID
 
@@ -169,8 +169,6 @@ SET psi.PayAmount = ii.VacationBalanceDecrement
 , psv.LastUpd = CURRENT_TIMESTAMP()
 ;
 
-/************
-*************/
 UPDATE paystub ps
 INNER JOIN serviceperiods ii ON ps.EmployeeID = ii.EmployeeID AND ps.PayPeriodID = ii.PayPeriodID
 
@@ -192,7 +190,7 @@ SET psi.PayAmount = ii.VacationBalanceDecrement
 , psiv.LastUpd = CURRENT_TIMESTAMP()
 , psv.LastUpd = CURRENT_TIMESTAMP()
 ;
-
+*************/
 
 END//
 DELIMITER ;

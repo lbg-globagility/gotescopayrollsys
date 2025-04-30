@@ -1,5 +1,6 @@
 ﻿Imports System.Data.Entity
 Imports System.Threading.Tasks
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Text
 
 Public Class PayPeriodsSelectionDialog
     Private ReadOnly _organizationId As Integer
@@ -9,6 +10,8 @@ Public Class PayPeriodsSelectionDialog
     Private ReadOnly Property selectedYear As Integer
     Public ReadOnly Property SelectedLoanTypeIds As List(Of Integer)
     Public ReadOnly Property SelectedPayPeriodIds As List(Of Integer)
+
+    Private tickedPeriodIds As New List(Of (id As Integer, selected As Boolean))
 
     Public Sub New(organizationId As Integer,
         Optional withLoanTypes As Boolean = False)
@@ -53,7 +56,7 @@ Public Class PayPeriodsSelectionDialog
             DataGridViewXPeriods.Rows.Clear()
             For Each payPeriod In payPeriods
                 Dim rowIndex = DataGridViewXPeriods.Rows.Add(payPeriod.RowID,
-                    False,
+                    If(tickedPeriodIds?.Any(Function(t) t.id = payPeriod.RowID And t.selected), False),
                     payPeriod.PayFromDate.Value.Date.ToShortDateString(),
                     payPeriod.PayToDate.Value.Date.ToShortDateString())
 
@@ -136,7 +139,7 @@ Public Class PayPeriodsSelectionDialog
 
     End Sub
 
-    Private Sub DataGridViewXPeriods_CellContentClick1(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewXPeriods.CellContentClick
+    Private Async Sub DataGridViewXPeriods_CellContentClick1(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewXPeriods.CellContentClick
         If Not e.RowIndex > -1 Then Return
 
         If e.ColumnIndex = Column2.Index Then
@@ -146,32 +149,37 @@ Public Class PayPeriodsSelectionDialog
             Button1.Focus()
             DataGridViewXPeriods.CurrentCell = DataGridViewXPeriods.Item(columnIndex:=Column2.Index, rowIndex:=e.RowIndex)
 
-            Dim rows = DataGridViewXPeriods.Rows.
-                OfType(Of DataGridViewRow).
-                Where(Function(t) CBool(t.Cells(Column2.Index).Value)).
-                ToList()
+            'Dim hasQuery = tickedPeriodIds?.Where(Function(t) If(tickedPeriodIds?.Any(Function(x) x.id = CInt(DataGridViewXPeriods.CurrentRow.Cells(Column1.Index).Value)), False))
+            Dim hasQuery = tickedPeriodIds?.Where(Function(t) t.id = CInt(DataGridViewXPeriods.CurrentRow.Cells(Column1.Index).Value))
+            If If(hasQuery?.Any(), False) Then
+                For Each item In hasQuery.ToList()
+                    tickedPeriodIds.Remove(item)
+                Next
+            End If
 
-            Dim start As Date? = If(String.IsNullOrEmpty(If(rows.FirstOrDefault()?.Cells(Column3.Index).Value, String.Empty)),
-                Nothing,
-                CDate(rows.FirstOrDefault()?.Cells(Column3.Index).Value))
-            _StartDate = start
+            tickedPeriodIds.Add((id:=CInt(DataGridViewXPeriods.CurrentRow.Cells(Column1.Index).Value),
+                selected:=CBool(DataGridViewXPeriods.CurrentRow.Cells(Column2.Index).Value)))
 
-            Dim [end] As Date? = If(String.IsNullOrEmpty(If(rows.LastOrDefault()?.Cells(Column4.Index).Value, String.Empty)),
-                Nothing,
-                CDate(rows.LastOrDefault()?.Cells(Column4.Index).Value))
-            _EndDate = [end]
+            Dim posdfosd = tickedPeriodIds.Where(Function(t) t.selected)
+            posdfosd.Reverse()
+            posdfosd = posdfosd.Take(2)
+            posdfosd.Reverse()
 
-            Dim twoSelectedPeriods = (
-                CInt(If(rows.FirstOrDefault()?.Cells(Column1.Index).Value, 0)),
-                CInt(If(rows.LastOrDefault()?.Cells(Column1.Index).Value, 0))
-                )
+            _SelectedPayPeriodIds = posdfosd.Select(Function(t) t.id).ToList()
 
-            Dim fsdfsd = If(twoSelectedPeriods.Item1 = twoSelectedPeriods.Item2,
-                New List(Of Integer) From {twoSelectedPeriods.Item1},
-                New List(Of Integer) From {twoSelectedPeriods.Item1, twoSelectedPeriods.Item2})
-            _SelectedPayPeriodIds = fsdfsd.Where(Function(i) i > 0).ToList()
+            Using context = New DatabaseContext
+                Dim payPeriods = Await context.PayPeriods.
+                AsNoTracking().
+                Where(Function(p) _SelectedPayPeriodIds.Contains(p.RowID)).
+                ToListAsync()
 
-            LabelPeriodDisplayText.Text = $"From: {start:MMM dd, yyyy}{Environment.NewLine}To: {[end]:MMM dd, yyyy}"
+                'LabelPeriodDisplayText.Text = $"From: {start:MMM dd, yyyy}{Environment.NewLine}To: {[end]:MMM dd, yyyy}"
+                LabelPeriodDisplayText.Text = $"From: {payPeriods?.FirstOrDefault()?.PayFromDate:MMM dd, yyyy}{Environment.NewLine}To: {payPeriods?.LastOrDefault()?.PayToDate:MMM dd, yyyy}"
+
+                _StartDate = payPeriods?.FirstOrDefault()?.PayFromDate?.Date
+                _EndDate = payPeriods?.LastOrDefault()?.PayToDate?.Date
+
+            End Using
 
         Else
             _SelectedPayPeriodIds = Enumerable.Empty(Of Integer).ToList()

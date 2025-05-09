@@ -131,11 +131,11 @@ SELECT
 				INNER JOIN employee e ON e.RowID=et.EmployeeID
 								AND pp.TotalGrossSalary=e.PayFrequencyID
 				
-				LEFT JOIN employeeleave elv1 ON elv1.LeaveType='Vacation leave' AND elv1.EmployeeID=e.RowID AND et.`Date` BETWEEN elv1.LeaveStartDate AND elv1.LeaveEndDate AND et.VacationLeaveHours != 0
-				LEFT JOIN employeeleave elv2 ON elv2.LeaveType='Sick leave' AND elv2.EmployeeID=e.RowID AND et.`Date` BETWEEN elv2.LeaveStartDate AND elv2.LeaveEndDate AND et.SickLeaveHours != 0
-				LEFT JOIN employeeleave elv3 ON elv3.LeaveType='Others' AND elv3.EmployeeID=e.RowID AND et.`Date` BETWEEN elv3.LeaveStartDate AND elv3.LeaveEndDate AND et.OtherLeaveHours != 0
-				LEFT JOIN employeeleave elv4 ON elv4.LeaveType='Additional VL' AND elv4.EmployeeID=e.RowID AND et.`Date` BETWEEN elv4.LeaveStartDate AND elv4.LeaveEndDate AND et.AdditionalVLHours != 0
-				LEFT JOIN employeeleave elv5 ON elv5.LeaveType='Maternity/paternity leave' AND elv5.EmployeeID=e.RowID AND et.`Date` BETWEEN elv5.LeaveStartDate AND elv5.LeaveEndDate AND et.MaternityLeaveHours != 0
+				LEFT JOIN employeeleave elv1 ON elv1.`Status`='Approved' AND elv1.LeaveType='Vacation leave' AND elv1.EmployeeID=e.RowID AND et.`Date` BETWEEN elv1.LeaveStartDate AND elv1.LeaveEndDate AND et.VacationLeaveHours != 0
+				LEFT JOIN employeeleave elv2 ON elv2.`Status`='Approved' AND elv2.LeaveType='Sick leave' AND elv2.EmployeeID=e.RowID AND et.`Date` BETWEEN elv2.LeaveStartDate AND elv2.LeaveEndDate AND et.SickLeaveHours != 0
+				LEFT JOIN employeeleave elv3 ON elv3.`Status`='Approved' AND elv3.LeaveType='Others' AND elv3.EmployeeID=e.RowID AND et.`Date` BETWEEN elv3.LeaveStartDate AND elv3.LeaveEndDate AND et.OtherLeaveHours != 0
+				LEFT JOIN employeeleave elv4 ON elv4.`Status`='Approved' AND elv4.LeaveType='Additional VL' AND elv4.EmployeeID=e.RowID AND et.`Date` BETWEEN elv4.LeaveStartDate AND elv4.LeaveEndDate AND et.AdditionalVLHours != 0
+				LEFT JOIN employeeleave elv5 ON elv5.`Status`='Approved' AND elv5.LeaveType='Maternity/paternity leave' AND elv5.EmployeeID=e.RowID AND et.`Date` BETWEEN elv5.LeaveStartDate AND elv5.LeaveEndDate AND et.MaternityLeaveHours != 0
 				
 				WHERE pp.OrganizationID = orgId
 #				AND (et.VacationLeaveHours + et.SickLeaveHours + et.OtherLeaveHours + et.AdditionalVLHours + et.MaternityLeaveHours) > 0

@@ -2856,7 +2856,7 @@ Partial Public Class EmployeeForm
 
                         listofEditRowEmpOT.Clear()
 
-                        VIEW_employeeOT(.Cells("RowID").Value)
+                        Await VIEW_employeeOT(.Cells("RowID").Value)
 
                         dgvEmpOT_SelectionChanged(sender, e)
 
@@ -6545,7 +6545,7 @@ Partial Public Class EmployeeForm
 
     Dim dontUpdateLeave As SByte = 0
 
-    Sub SaveLeave_Click(sender As Object, e As EventArgs) Handles tsbtnSaveLeave.Click
+    Private Async Sub SaveLeave_Click(sender As Object, e As EventArgs) Handles tsbtnSaveLeave.Click
 
         pbEmpPicLeave.Focus()
 
@@ -6668,7 +6668,8 @@ Partial Public Class EmployeeForm
 
                         param(13, 1) = If(r.Cells("elv_Status").Value = Nothing, "", r.Cells("elv_Status").Value)
                         param(14, 1) = ValNoComma(r.Cells("AdditionalOverrideLeaveBalance").Value)
-                        r.Cells("elv_RowID").Value = EXEC_INSUPD_PROCEDURE(param, "INSUPD_employeeleave", "empleaveID")
+                        'r.Cells("elv_RowID").Value = EXEC_INSUPD_PROCEDURE(param, "INSUPD_employeeleave", "empleaveID")
+                        r.Cells("elv_RowID").Value = Await InsertUpdateEmployeeLeaveAsync(param)
 
                         INSUPD_employeeattachments(, dgvEmp.CurrentRow.Cells("RowID").Value,
                                                     "Employee Leave@" & r.Cells("elv_RowID").Value,
@@ -6700,7 +6701,8 @@ Partial Public Class EmployeeForm
 
                         param(13, 1) = If(r.Cells("elv_Status").Value = Nothing, "", r.Cells("elv_Status").Value)
                         param(14, 1) = ValNoComma(r.Cells("AdditionalOverrideLeaveBalance").Value)
-                        EXEC_INSUPD_PROCEDURE(param, "INSUPD_employeeleave", "empleaveID")
+                        'EXEC_INSUPD_PROCEDURE(param, "INSUPD_employeeleave", "empleaveID")
+                        Await InsertUpdateEmployeeLeaveAsync(param)
 
                         INSUPD_employeeattachments(, dgvEmp.CurrentRow.Cells("RowID").Value,
                                                     "Employee Leave@" & r.Cells("elv_RowID").Value,
@@ -6729,6 +6731,46 @@ Partial Public Class EmployeeForm
         AddHandler dgvEmp.SelectionChanged, AddressOf dgvEmp_SelectionChanged
 
     End Sub
+
+    Private Async Function InsertUpdateEmployeeLeaveAsync(param(,) As Object) As Task(Of Integer)
+        Dim returnValue As Integer = 0
+
+        Dim connectionText = mysql_conn_text
+
+        Dim paramNames = New String() {"@elv_RowID", "@elv_OrganizationID", "@elv_LeaveStartTime", "@elv_LeaveType", "@elv_CreatedBy", "@elv_LastUpdBy", "@elv_EmployeeID", "@elv_LeaveEndTime", "@elv_LeaveStartDate", "@elv_LeaveEndDate", "@elv_Reason", "@elv_Comments", "@elv_Image", "@elv_Status", "@elv_OverrideLeaveBal"}
+
+        'Dim sqlText = $"SELECT INSUPD_employeeleave({String.Join(", ", paramNames)}) `Result`;"
+
+        Using command = New MySqlCommand("INSUPD_employeeleave", New MySqlConnection(connectionText))
+
+            Await command.Connection.OpenAsync
+
+            Const sdfsdf = "empleaveID"
+
+            command.Parameters.Clear()
+            command.CommandType = CommandType.StoredProcedure
+            command.Parameters.Add(sdfsdf, MySqlDbType.Int32)
+            command.Parameters(sdfsdf).Direction = ParameterDirection.ReturnValue
+
+            Const parameterValuesRowIndex = 1
+
+            Dim columnIndex = 0
+            For Each paramName In paramNames
+                Dim value = param(columnIndex, parameterValuesRowIndex)
+                command.Parameters.AddWithValue(parameterName:=paramName, value)
+
+                columnIndex += 1
+            Next
+
+            Dim reader = Await command.ExecuteReaderAsync()
+
+            returnValue = Convert.ToInt32(command.Parameters("empleaveID").Value)
+
+        End Using
+
+        Return returnValue
+
+    End Function
 
     Sub INSUPD_employeeattachments(Optional eatta_RowID As Object = Nothing,
                                    Optional eatta_EmployeeID As Object = Nothing,
@@ -16364,30 +16406,52 @@ DiscardPHhValue: txtPhilHealthSal.Text = "0.00"
 
     Dim pagenumberOT As Integer = 0
 
-    Sub VIEW_employeeOT(ByVal EmployeeID As Object) '3722
+    Private Async Function VIEW_employeeOT(ByVal EmployeeID As Object) As Task
+        dgvempOT.Rows.Clear()
 
         RemoveHandler dgvempOT.SelectionChanged, AddressOf dgvEmpOT_SelectionChanged
 
-        Dim param(3, 3) As Object
+        Dim connectionText = mysql_conn_text
 
-        param(0, 0) = "eot_EmployeeID"
-        param(1, 0) = "eot_OrganizationID"
-        param(2, 0) = "pagenumber"
-        param(3, 0) = "user_rowid"
+        Dim sqlText = "CALL VIEW_employeeOT(@eot_EmployeeID, @eot_OrganizationID, @pagenumber, @user_rowid);"
 
-        param(0, 1) = EmployeeID
-        param(1, 1) = org_rowid
-        param(2, 1) = pagenumberOT
-        param(3, 1) = user_row_id
+        Using command = New MySqlCommand(sqlText,
+            New MySqlConnection(connectionText))
 
-        EXEC_VIEW_PROCEDURE(param,
-                           "VIEW_employeeOT",
-                           dgvempOT, 1, 1)
+            With command.Parameters
+                .AddWithValue("@eot_EmployeeID", EmployeeID)
+                .AddWithValue("@eot_OrganizationID", org_rowid)
+                .AddWithValue("@pagenumber", pagenumberOT)
+                .AddWithValue("@user_rowid", user_row_id)
+            End With
+
+            Await command.Connection.OpenAsync
+
+            Dim dAdapter = New MySqlDataAdapter(command)
+            Dim dSet = New DataSet()
+            Await dAdapter.FillAsync(dSet)
+
+            Dim columns = dgvempOT.Columns
+
+            For Each row In dSet.Tables.OfType(Of DataTable).FirstOrDefault().Rows
+                Dim gridRowIndex = dgvempOT.Rows.Add()
+
+                Dim i = 0
+
+                For Each column In columns
+                    dgvempOT.Item(columnName:=column.Name, rowIndex:=gridRowIndex).Value = row(i)
+                    i += 1
+                Next
+
+            Next
+
+        End Using
 
         AddHandler dgvempOT.SelectionChanged, AddressOf dgvEmpOT_SelectionChanged
 
         _employeeOvertimeGridRows = dgvempOT.Rows?.OfType(Of DataGridViewRow)?.ToList()
-    End Sub
+
+    End Function
 
     Sub tsbtnNewEmpOT_Click(sender As Object, e As EventArgs) Handles tsbtnNewEmpOT.Click
 

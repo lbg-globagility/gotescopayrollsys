@@ -799,14 +799,14 @@ Partial Class EmployeeForm
         Me.tbpLoans = New System.Windows.Forms.TabPage()
         Me.Panel10 = New System.Windows.Forms.Panel()
         Me.SplitContainer4 = New System.Windows.Forms.SplitContainer()
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.Label349 = New System.Windows.Forms.Label()
         Me.pbEmpPicLoan = New System.Windows.Forms.PictureBox()
         Me.txtloannumber = New CustomObject.TextBox()
         Me.BlankContextMenuStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Label350 = New System.Windows.Forms.Label()
-        Me.Label349 = New System.Windows.Forms.Label()
         Me.Label94 = New System.Windows.Forms.Label()
         Me.txtloaninterest = New System.Windows.Forms.TextBox()
-        Me.TextBox6 = New System.Windows.Forms.TextBox()
         Me.Label314 = New System.Windows.Forms.Label()
         Me.Label93 = New System.Windows.Forms.Label()
         Me.Label231 = New System.Windows.Forms.Label()
@@ -2438,7 +2438,7 @@ Partial Class EmployeeForm
         Me.SplitContainer2.Panel2.Controls.Add(Me.lblforballoon1)
         Me.SplitContainer2.Panel2.Cursor = System.Windows.Forms.Cursors.Default
         Me.SplitContainer2.Size = New System.Drawing.Size(858, 430)
-        Me.SplitContainer2.SplitterDistance = 338
+        Me.SplitContainer2.SplitterDistance = 335
         Me.SplitContainer2.SplitterWidth = 7
         Me.SplitContainer2.TabIndex = 114
         '
@@ -3824,7 +3824,7 @@ Partial Class EmployeeForm
         Me.dgvDepen.Name = "dgvDepen"
         Me.dgvDepen.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvDepen.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvDepen.Size = New System.Drawing.Size(856, 58)
+        Me.dgvDepen.Size = New System.Drawing.Size(856, 61)
         Me.dgvDepen.TabIndex = 116
         '
         'Colmn0
@@ -9019,6 +9019,26 @@ Partial Class EmployeeForm
         Me.SplitContainer4.SplitterDistance = 280
         Me.SplitContainer4.TabIndex = 508
         '
+        'TextBox6
+        '
+        Me.TextBox6.Location = New System.Drawing.Point(493, 98)
+        Me.TextBox6.MaxLength = 2000
+        Me.TextBox6.Multiline = True
+        Me.TextBox6.Name = "TextBox6"
+        Me.TextBox6.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox6.Size = New System.Drawing.Size(203, 138)
+        Me.TextBox6.TabIndex = 363
+        '
+        'Label349
+        '
+        Me.Label349.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
+        Me.Label349.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
+        Me.Label349.Location = New System.Drawing.Point(589, 235)
+        Me.Label349.Name = "Label349"
+        Me.Label349.Size = New System.Drawing.Size(13, 13)
+        Me.Label349.TabIndex = 506
+        Me.Label349.Text = "*"
+        '
         'pbEmpPicLoan
         '
         Me.pbEmpPicLoan.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
@@ -9053,16 +9073,6 @@ Partial Class EmployeeForm
         Me.Label350.TabIndex = 507
         Me.Label350.Text = "*"
         '
-        'Label349
-        '
-        Me.Label349.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold)
-        Me.Label349.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
-        Me.Label349.Location = New System.Drawing.Point(589, 235)
-        Me.Label349.Name = "Label349"
-        Me.Label349.Size = New System.Drawing.Size(13, 13)
-        Me.Label349.TabIndex = 506
-        Me.Label349.Text = "*"
-        '
         'Label94
         '
         Me.Label94.AutoSize = True
@@ -9081,16 +9091,6 @@ Partial Class EmployeeForm
         Me.txtloaninterest.ShortcutsEnabled = False
         Me.txtloaninterest.Size = New System.Drawing.Size(203, 20)
         Me.txtloaninterest.TabIndex = 362
-        '
-        'TextBox6
-        '
-        Me.TextBox6.Location = New System.Drawing.Point(493, 98)
-        Me.TextBox6.MaxLength = 2000
-        Me.TextBox6.Multiline = True
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox6.Size = New System.Drawing.Size(203, 138)
-        Me.TextBox6.TabIndex = 363
         '
         'Label314
         '

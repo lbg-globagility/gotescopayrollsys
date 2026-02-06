@@ -230,6 +230,8 @@ ps.RowID
 	              )
 	  , '') `Column64`
 
+, (adj_positive.`AdjustmentName` IS NULL OR adj_negative.`AdjustmentName` IS NULL) AND IFNULL(psiloan.`LoanCount`, 0) > 8 `Column65`
+
 FROM proper_payroll ps
 
 # INNER JOIN employee e
@@ -358,6 +360,7 @@ LEFT JOIN (SELECT
 				                      , ',', '|') order BY FIELD(ii.LoanName, 'PartNo','ABSENT','Advance Salary prev','advances','ANTIGEN TEST','ATD','ATD-SSS LOAN','Authority To Deduct','AUTHORIZATION TO DEDUCT','BIR Penalty','Calamity','Calamity Loan','car loam','Car Loan','Cash Advance','CASH ADVANCE NONDEDUCTIBLE','Cash Advance-CV 46936','cv refund boracay sept 2019','CV-46936','cv000817 4000-2500','double payment june 30','EXCESS BDO CREDIT','FOR MEDICAL','lates not yet deducted','Negative Salary-prev','NHIP ADDTL AUG & SEPT 2020','NIAGARA INV#84936','NIAGARA INV#84939','Overpaid Salary prev','Overpayment Allow','overpayment aug 7 not yet employed','Overpayment OT','OVERPAYMENT SALARY SSS PREVIOUS','OVERPAYMENT SALARY UT PREVIOUS','overpayment salary wtax previous','OVERPAYMENT WFH 20%','Overpayment-Salary','Overpayment-SIL','pag ibig cont aug 2023','pag ibig contribution july 2023','PAG-IBIG (ADDITIONAL CONTRI)','PAG-IBIG (ADDITONAL CONTRIBUTION)','PAG-IBIG CONTRI - MARCH 30, 2019','Pag-Ibig Loan','Pag-Ibig Loan - March','Pag-ibig MP2','Pag-Ibig Premium (Addl)','PAGIBIG','PF#00624','PhilHealth','PHILHEALTH PREVIOUS','Prepaid Card','Provident Fund','Provident Loan','safety jogger shoes','Salary Deduction','SHORTAGE IN LIQUIDATION','SMART BILLING EXCESS
 ','SSS','SSS ADDITIONAL','SSS ADDTL OCT 2020','SSS Cont Previous','SSS FEB 2023 PREM ADDTL','SSS Loan','SSS Loan - March','SSS LOAN ADDITIONAL','SSS LOAN SHORT PAYMENT','SSS LOAN UNPAID JUNE 30','SSS LOAN UNPAID MAY 31','sss prem july addtl','SSS Restructured Loan','SWAB TEST','UNDERTIME','voucher change','VOUCHER14777','W/TAX Prev','wtax feb 2023','wtax june 2022','wtax september 2020')
 				              ) `Column33`
+            ,COUNT(ii.LoanName) `LoanCount`
  				FROM (SELECT
 						i.OrganizationID
 						, i.Created

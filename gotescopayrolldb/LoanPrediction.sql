@@ -44,8 +44,8 @@ SELECT i.*
 , @loanBalans :=
  TRIM(
    IF(@isAnotherID
-		, (@totalLoan := i.TotalLoanAmount - i.DeductionAmount)
-		, (@totalLoan := @totalLoan - i.DeductionAmount))
+		, (@totalLoan := IF(i.TotalLoanAmount - i.DeductionAmount < 0, 0, i.TotalLoanAmount - i.DeductionAmount))
+		, (@totalLoan := IF(@totalLoan - i.DeductionAmount < 0, 0, @totalLoan - i.DeductionAmount)))
 		)+0 `LoanBalance`
 
 , IF(@isAnotherID
@@ -65,8 +65,8 @@ SELECT i.*
 		, i.DeductionAmount
 		, TRIM(
 			  IF(@loanBalans < 0
-			     , ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2)
-			     , ROUND(@progInterval * i.TotalLoanAmount, 2)
+			     , IF(ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2) < 0, 0, ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2))
+			     , IF(ROUND(@progInterval * i.TotalLoanAmount, 2) < 0, 0, ROUND(@progInterval * i.TotalLoanAmount, 2))
 				  ))+0) `ProperDeductAmount`
 
 FROM (SELECT els.*

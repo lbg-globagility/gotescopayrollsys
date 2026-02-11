@@ -41,7 +41,7 @@ ELSE
 		SET @kulangsobra = (NEW.TotalLoanAmount - (NEW.DeductionAmount * NEW.NoOfPayPeriod));
 		
 		# SET NEW.DeductionAmount = loan_amount_update;
-		SET NEW.DeductionAmount = (NEW.DeductionAmount + (@kulangsobra));
+		SET NEW.DeductionAmount = IF((NEW.DeductionAmount + (@kulangsobra)) < 0, NEW.DeductionAmount, (NEW.DeductionAmount + (@kulangsobra)));
 	
 		# SET NEW.TotalBalanceLeft = loan_amount_update;
 		# SET NEW.TotalBalanceLeft = NEW.DeductionAmount; # (NEW.TotalBalanceLeft + (@kulangsobra));

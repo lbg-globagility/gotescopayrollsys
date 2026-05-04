@@ -1,19 +1,16 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 DROP PROCEDURE IF EXISTS `LoanPrediction`;
 DELIMITER //
 CREATE PROCEDURE `LoanPrediction`(
 	IN `organizID` INT
-
-
-
-
-
-
 )
 BEGIN
 
@@ -41,17 +38,11 @@ SELECT i.*
 , (@isAnotherID := @elsID != i.RowID) `IsAnother`
 , IF(@isAnotherID, (@elsID := i.RowID), @elsID) `AssignAnotherID`
 
-, @loanBalans :=
- TRIM(
-   IF(@isAnotherID
-		, (@totalLoan := IF(i.TotalLoanAmount - i.DeductionAmount < 0, 0, i.TotalLoanAmount - i.DeductionAmount))
-		, (@totalLoan := IF(@totalLoan - i.DeductionAmount < 0, 0, @totalLoan - i.DeductionAmount)))
-		)+0 `LoanBalance`
-
 , IF(@isAnotherID
 		, @ordinalIndex := 1
 		, @ordinalIndex := @ordinalIndex + 1) `OrdinalIndex`
-, @isLast := (@totalLoan <= 0 AND @ordinalIndex = i.NoOfPayPeriod) `IsLast`
+#, @isLast := (@totalLoan <= 0 AND @ordinalIndex = i.NoOfPayPeriod) `IsLast`
+, @isLast := FLOOR(@ordinalIndex / i.NoOfPayPeriod) `IsLast`
 
 , @progAmt := @ordinalIndex / i.NoOfPayPeriod `Progress`
 
@@ -61,15 +52,22 @@ SELECT i.*
 		   , @progInterval := @progAmt - ((@ordinalIndex - 1) / i.NoOfPayPeriod)
 		   ))+0 `ProgressInterval`
 
-, IF(@isLast=FALSE
+, @properDeduction:=IF(@isLast=FALSE
 		, i.DeductionAmount
-		, TRIM(
-			  IF(@loanBalans < 0
-			     , IF(ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2) < 0, 0, ROUND((@progInterval * i.TotalLoanAmount) + @loanBalans, 2))
-			     , IF(ROUND(@progInterval * i.TotalLoanAmount, 2) < 0, 0, ROUND(@progInterval * i.TotalLoanAmount, 2))
-				  ))+0) `ProperDeductAmount`
+		, IF((i.TotalLoanAmount / i.DeductionAmount) < i.NoOfPayPeriod,
+			(i.DeductionAmount * ((i.TotalLoanAmount / i.DeductionAmount) MOD 1)),
+			IF((i.TotalLoanAmount / i.DeductionAmount) > i.NoOfPayPeriod,
+				(i.DeductionAmount * ((i.TotalLoanAmount / i.DeductionAmount) - (i.NoOfPayPeriod-1))),
+				i.DeductionAmount))) `ProperDeductAmount`
 
-FROM (SELECT els.*
+, @loanBalans :=
+ TRIM(
+   IF(@isAnotherID
+		, (@totalLoan := IF(i.TotalLoanAmount - i.DeductionAmount < 0, 0, i.TotalLoanAmount - i.DeductionAmount))
+		, (@totalLoan := IF(@totalLoan - @properDeduction < 0, 0, ROUND(@totalLoan - @properDeduction, 2))))
+		)+0 `LoanBalance`
+
+FROM (SELECT els.`RowID`, els.`OrganizationID`, els.`Created`, els.`CreatedBy`, els.`LastUpd`, els.`LastUpdBy`, els.`EmployeeID`, els.`LoanNumber`, els.`DedEffectiveDateFrom`, els.`DedEffectiveDateTo`, els.`TotalLoanAmount`, els.`DeductionSchedule`, els.`TotalBalanceLeft`, IFNULL(els.OriginDeductionAmount, els.`DeductionAmount`) `DeductionAmount`, els.`Status`, els.`LoanTypeID`, els.`DeductionPercentage`, els.`NoOfPayPeriod`, els.`LoanPayPeriodLeft`, els.`Comments`, els.`Nondeductible`, els.`ReferenceLoanID`, els.`SubstituteEndDate`, els.`PayStubID`, els.`DiscontinuedDate`
 		, pp.RowID `PayperiodID`, pp.PayFromDate, pp.PayToDate
 		, e.EmployeeID `EmployeeUniqueID`
 		, CONCAT_WS(', ', e.LastName, e.FirstName) `FullName`
@@ -112,6 +110,8 @@ SET ii.Balance = i.LoanBalance
 END//
 DELIMITER ;
 
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

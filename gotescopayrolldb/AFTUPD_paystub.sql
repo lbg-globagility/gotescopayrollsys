@@ -713,6 +713,7 @@ INSERT INTO paystubitem
 				AND (eb.EffectiveStartDate IS NOT NULL AND eb.EffectiveEndDate IS NOT NULL)
 				AND (eb.EffectiveStartDate >= pp.PayFromDate OR eb.EffectiveEndDate >= pp.PayFromDate)
 				AND (eb.EffectiveStartDate <= pp.PayToDate OR eb.EffectiveEndDate <= pp.PayToDate)
+				AND IF(eb.AllowanceFrequency='Monthly', pp.Half='0', TRUE)
 				
 			UNION
 				SELECT

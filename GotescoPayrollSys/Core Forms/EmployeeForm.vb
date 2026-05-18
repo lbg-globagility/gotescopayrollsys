@@ -7260,56 +7260,21 @@ Partial Public Class EmployeeForm
     Dim haserrinputleave As SByte
 
     Function MilitTime(ByVal timeval As Object) As Object
-
-        Dim retrnObj As Object
-
-        retrnObj = New Object
-
-        If timeval = Nothing Then
-            retrnObj = DBNull.Value
-        Else
-
-            Dim endtime As Object = timeval
-
-            If endtime.ToString.Contains("P") Then
-
-                Dim hrs As String = If(Val(getStrBetween(endtime, "", ":")) = 12, 12, Val(getStrBetween(endtime, "", ":")) + 12)
-
-                Dim mins As String = StrReverse(getStrBetween(StrReverse(endtime.ToString), "", ":"))
-
-                mins = getStrBetween(mins, "", " ")
-
-                retrnObj = hrs & ":" & mins
-
-            ElseIf endtime.ToString.Contains("A") Then
-
-                Dim i As Integer = StrReverse(endtime).ToString.IndexOf(" ")
-
-                endtime = endtime.ToString.Replace("A", "")
-
-                'Dim i As Integer = StrReverse("3:15 AM").ToString.IndexOf(" ")
-
-                ''endtime = endtime.ToString.Replace("A", "")
-
-                'MsgBox(Trim(StrReverse(StrReverse("3:15 AM").ToString.Substring(i, ("3:15 AM").ToString.Length - i))).Length)
-
-                Dim amTime As String = Trim(StrReverse(StrReverse(endtime.ToString).Substring(i,
-                                                                                  endtime.ToString.Length - i)
-                                          )
-                               )
-
-                amTime = If(getStrBetween(amTime, "", ":") = "12",
-                            24 & ":" & StrReverse(getStrBetween(StrReverse(amTime), "", ":")),
-                            amTime)
-
-                retrnObj = amTime
-
-            End If
-
+        ' Return DBNull if the input is missing, null, or empty
+        If timeval Is Nothing OrElse IsDBNull(timeval) OrElse String.IsNullOrWhiteSpace(timeval.ToString()) Then
+            Return DBNull.Value
         End If
 
-        Return retrnObj
+        Dim parsedDate As DateTime
 
+        ' Let .NET handle the complex time parsing automatically
+        If DateTime.TryParse(timeval.ToString(), parsedDate) Then
+            ' "HH:mm" outputs 24-hour military time (e.g., "13:00", "00:15")
+            Return parsedDate.ToString("HH:mm")
+        Else
+            ' Return DBNull if the text wasn't a valid time format
+            Return DBNull.Value
+        End If
     End Function
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click

@@ -645,10 +645,19 @@ Module myModule
     Public Sub InfoBalloon(Optional ToolTipStringContent As String = Nothing, Optional ToolTipStringTitle As String = Nothing, Optional objct As System.Windows.Forms.IWin32Window = Nothing, Optional x As Integer = 0, Optional y As Integer = 0, Optional dispo As SByte = 0, Optional duration As Integer = 3000)
         Try
             If dispo = 1 Then
-                infohint.Active = False
-                infohint.Hide(objct)
-                infohint.Dispose()
+                ' Only run this if infohint is not null
+                If infohint IsNot Nothing Then
+                    infohint.Active = False
+                    infohint.Hide(objct)
+                    infohint.Dispose()
+                    infohint = Nothing ' Reset it back to Nothing after disposing
+                End If
             Else
+                ' Always dispose of an existing tooltip before creating a new one to prevent memory leaks
+                If infohint IsNot Nothing Then
+                    infohint.Dispose()
+                End If
+
                 infohint = New ToolTip
                 infohint.IsBalloon = True
                 infohint.ToolTipTitle = ToolTipStringTitle
@@ -670,11 +679,18 @@ Module myModule
         'Dim hint As New ToolTip
         Try
             If dispo = 1 Then
-                hintWarn.Hide(objct)
-                hintWarn.Dispose()
+                If hintWarn IsNot Nothing Then
+                    hintWarn.Hide(objct)
+                    hintWarn.Dispose()
+                    hintWarn = Nothing
+                End If
+
                 'Exit Try
                 'Exit Sub
             Else
+                If hintWarn IsNot Nothing Then
+                    hintWarn.Dispose()
+                End If
                 hintWarn = New ToolTip
                 hintWarn.IsBalloon = True
                 hintWarn.ToolTipTitle = ToolTipStringTitle

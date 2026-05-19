@@ -6702,12 +6702,19 @@ Partial Public Class EmployeeForm
                         param(13, 1) = If(r.Cells("elv_Status").Value = Nothing, "", r.Cells("elv_Status").Value)
                         param(14, 1) = ValNoComma(r.Cells("AdditionalOverrideLeaveBalance").Value)
                         'EXEC_INSUPD_PROCEDURE(param, "INSUPD_employeeleave", "empleaveID")
-                        Await InsertUpdateEmployeeLeaveAsync(param)
-
-                        INSUPD_employeeattachments(, dgvEmp.CurrentRow.Cells("RowID").Value,
+                        Await InsertUpdateEmployeeLeaveAsync(param).
+                            ContinueWith(Sub(t)
+                                             If t.Exception IsNot Nothing Then
+                                                 ErrorNotif(t.Exception)
+                                             Else
+                                                 INSUPD_employeeattachments(, dgvEmp.CurrentRow.Cells("RowID").Value,
                                                     "Employee Leave@" & r.Cells("elv_RowID").Value,
                                                     r.Cells("elv_attafileextensn").Value,
                                                     r.Cells("elv_attafilename").Value)
+                                             End If
+                                         End Sub)
+
+
 
                     End If
 

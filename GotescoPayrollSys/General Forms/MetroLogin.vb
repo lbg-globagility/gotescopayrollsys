@@ -1,4 +1,5 @@
-﻿Imports System.Threading.Tasks
+﻿Imports System.Configuration
+Imports System.Threading.Tasks
 Imports log4net
 Imports MySql.Data.MySqlClient
 
@@ -84,7 +85,8 @@ Public Class MetroLogin
 
     End Sub
 
-    Private Sub MetroLogin_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub MetroLogin_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Await CheckAppVersion()
         'Dim datenow = CDate(New ExecuteQuery(CURDATE_MDY).Result)
 
         'CustomDatePicker1.Value = datenow
@@ -478,6 +480,34 @@ Public Class MetroLogin
         cbxorganiz.DropDownWidth = max_drp_downwidhth 'wiidth, cb_width
 
     End Sub
+
+    Public Async Function CheckAppVersion() As Task
+        Dim warningMessage As String = String.Empty
+
+        Try
+            Dim appSettings = ConfigurationManager.AppSettings
+            Dim currentVersion = appSettings.Get("VersionUpdate")
+
+            Dim latestVersion = "1.8.4"
+
+            warningMessage = $"Please install the version {latestVersion} (yours: {currentVersion}). Contact your IT Department or Globagility Inc. for assistance."
+
+            If Not currentVersion = latestVersion Then
+
+                MessageBox.Show(text:=warningMessage, caption:=String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                _logger.Error($"Incorrect version. Current version '{currentVersion}' | Latest version '{latestVersion}'")
+                Me.Close()
+
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(text:=warningMessage, caption:=String.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            _logger.Error("Exception in checking app version in desktop login.", ex)
+            Me.Close()
+
+        End Try
+
+    End Function
 
 End Class
 

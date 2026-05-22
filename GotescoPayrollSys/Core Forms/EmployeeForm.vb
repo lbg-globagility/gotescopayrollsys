@@ -7,6 +7,7 @@ Imports System.Configuration
 Imports System.Data.Entity
 Imports System.IO
 Imports System.Threading.Tasks
+Imports log4net.Repository.Hierarchy
 Imports MySql.Data.MySqlClient
 
 Partial Public Class EmployeeForm
@@ -6506,7 +6507,7 @@ Partial Public Class EmployeeForm
             Dim st As StackTrace = New StackTrace(ex, True)
             Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
 
-            _logger.Error(sf.GetMethod.Name, ex)
+            _logger.Error(sf?.GetMethod?.Name, ex)
         End If
 
     End Sub
@@ -6739,8 +6740,8 @@ Partial Public Class EmployeeForm
 
     End Sub
 
-    Private Async Function InsertUpdateEmployeeLeaveAsync(param(,) As Object) As Task(Of Integer)
-        Dim returnValue As Integer = 0
+    Private Async Function InsertUpdateEmployeeLeaveAsync(param(,) As Object) As Task(Of Integer?)
+        Dim returnValue As Integer? = Nothing
 
         Dim connectionText = mysql_conn_text
 
@@ -6769,9 +6770,13 @@ Partial Public Class EmployeeForm
                 columnIndex += 1
             Next
 
-            Dim reader = Await command.ExecuteReaderAsync()
+            Try
+                Dim reader = Await command.ExecuteReaderAsync()
+            Catch ex As Exception
+                _logger.Error("InsertUpdateEmployeeLeaveAsync", ex)
+            End Try
 
-            returnValue = Convert.ToInt32(command.Parameters("empleaveID").Value)
+            If command.Parameters("empleaveID")?.Value IsNot Nothing AndAlso Not Equals(command.Parameters("empleaveID")?.Value, DBNull.Value) Then returnValue = Convert.ToInt32(command.Parameters("empleaveID").Value)
 
         End Using
 

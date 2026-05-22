@@ -481,15 +481,12 @@ Public Class MetroLogin
 
     End Sub
 
-    Public Async Function CheckAppVersion() As Task
+    Public Async Function CheckAppVersion(Optional latestVersion As String = "1.8.5") As Task
         Dim warningMessage As String = String.Empty
 
         Try
             Dim appSettings = ConfigurationManager.AppSettings
             Dim currentVersion = appSettings.Get("VersionUpdate")
-
-            Dim latestVersion = "1.8.4"
-
             warningMessage = $"Please install the version {latestVersion} (yours: {currentVersion}). Contact your IT Department or Globagility Inc. for assistance."
 
             If Not currentVersion = latestVersion Then

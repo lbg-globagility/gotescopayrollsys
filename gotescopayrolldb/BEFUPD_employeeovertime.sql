@@ -87,7 +87,7 @@ IF NEW.OTStatus = 'Approved' THEN
 	FROM employeetimeentrydetails etd
 	WHERE etd.EmployeeID=NEW.EmployeeID
 	AND etd.OrganizationID=NEW.OrganizationID
-	AND etd.`Date` BETWEEN NEW.OTStartDate AND NEW.OTEndDate
+	AND IF(DATEDIFF(NEW.OTEndDate, NEW.OTStartDate) > 0, etd.`Date` = NEW.OTStartDate, etd.`Date` BETWEEN NEW.OTStartDate AND NEW.OTEndDate)
 	ORDER BY IFNULL(etd.LastUpd, etd.Created) DESC
 	LIMIT 1
 	INTO @etd_timelog_in

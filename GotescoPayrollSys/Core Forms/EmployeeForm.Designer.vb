@@ -2438,7 +2438,7 @@ Partial Class EmployeeForm
         Me.SplitContainer2.Panel2.Controls.Add(Me.lblforballoon1)
         Me.SplitContainer2.Panel2.Cursor = System.Windows.Forms.Cursors.Default
         Me.SplitContainer2.Size = New System.Drawing.Size(858, 430)
-        Me.SplitContainer2.SplitterDistance = 335
+        Me.SplitContainer2.SplitterDistance = 332
         Me.SplitContainer2.SplitterWidth = 7
         Me.SplitContainer2.TabIndex = 114
         '
@@ -3824,7 +3824,7 @@ Partial Class EmployeeForm
         Me.dgvDepen.Name = "dgvDepen"
         Me.dgvDepen.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvDepen.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvDepen.Size = New System.Drawing.Size(856, 61)
+        Me.dgvDepen.Size = New System.Drawing.Size(856, 64)
         Me.dgvDepen.TabIndex = 116
         '
         'Colmn0
@@ -5488,7 +5488,6 @@ Partial Class EmployeeForm
         Me.SplitContainer1.Panel1.Controls.Add(Me.lblDeptMngrApproveLeave)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Label233)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Label345)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.Label225)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Label346)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Label224)
         Me.SplitContainer1.Panel1.Controls.Add(Me.cboleavestatus)
@@ -5516,6 +5515,7 @@ Partial Class EmployeeForm
         Me.SplitContainer1.Panel1.Controls.Add(Me.Label32)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Label196)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Label195)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label225)
         Me.SplitContainer1.Panel1MinSize = 256
         '
         'SplitContainer1.Panel2

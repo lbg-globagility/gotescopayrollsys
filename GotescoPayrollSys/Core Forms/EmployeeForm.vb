@@ -6838,7 +6838,7 @@ Partial Public Class EmployeeForm
 
         Try
 
-            If dgvempleave.RowCount > 0 Then
+            If dgvempleave.RowCount > 0 AndAlso dgvempleave.CurrentRow IsNot Nothing Then
 
                 If dgvempleave.CurrentRow.IsNewRow Then
                     ToolTipLeaveBalOverride.Hide(lblLeaveBalOverrideHint)

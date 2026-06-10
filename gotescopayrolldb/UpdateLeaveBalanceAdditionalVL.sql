@@ -63,7 +63,7 @@ SELECT
 GROUP_CONCAT(DISTINCT psi.RowID) `RowIDs`,
 MIN(i.ProperLeaveBalance) `ProperLeaveBalance`
 FROM leavebalancepredict i
-INNER JOIN paystub ps ON ps.EmployeeID=i.EmployeeID AND i.`Date` BETWEEN ps.PayFromDate AND ps.PayToDate
+INNER JOIN paystub ps ON ps.EmployeeID=i.EmployeeID AND ps.PayPeriodID=PeriodId
 INNER JOIN paystubitem psi ON psi.PayStubID=ps.RowID
 INNER JOIN product p ON p.RowID=psi.ProductID AND p.PartNo=i.LeaveType AND p.`Category`='Leave type'
 GROUP BY i.EmployeeID, ps.PayPeriodID

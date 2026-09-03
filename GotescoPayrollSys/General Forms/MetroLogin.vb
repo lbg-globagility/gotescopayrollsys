@@ -481,7 +481,7 @@ Public Class MetroLogin
 
     End Sub
 
-    Public Async Function CheckAppVersion(Optional latestVersion As String = "1.8.5") As Task
+    Public Async Function CheckAppVersion(Optional latestVersion As String = "1.8.6") As Task
         Dim warningMessage As String = String.Empty
 
         Try

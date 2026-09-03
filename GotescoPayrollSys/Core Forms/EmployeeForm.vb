@@ -11118,7 +11118,7 @@ Partial Public Class EmployeeForm
         If Double.TryParse(txtdedamt.Text, dedamt) Then
             dedamt = Val(txtdedamt.Text.Replace(",", ""))
             loanamt = Val(txtloanamt.Text.Replace(",", ""))
-            totalded = loanamt / dedamt
+            totalded = ComputePayPeriod(dedamt, loanamt)
         End If
 
         Dim decimaldigit = Microsoft.VisualBasic.Right(FormatNumber(totalded, 1).ToString, 1)
@@ -11132,7 +11132,20 @@ Partial Public Class EmployeeForm
         End If
 
     End Sub
+    Function ComputePayPeriod(DeductionAmount As Decimal, baseAmount As Decimal)
 
+        If (DeductionAmount = 0 Or baseAmount = 0) Then
+            Return 0
+        End If
+
+        If (DeductionAmount > baseAmount) Then
+            Return 1
+        End If
+
+
+        Return Convert.ToInt32(Math.Ceiling(baseAmount / DeductionAmount))
+
+    End Function
     Private Sub txtnoofpayper_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtnoofpayper.KeyPress
         Dim e_KAsc As String = Asc(e.KeyChar)
 

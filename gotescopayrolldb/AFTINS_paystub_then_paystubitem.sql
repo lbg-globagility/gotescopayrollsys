@@ -559,7 +559,7 @@ INSERT INTO paystubitem(OrganizationID,Created,CreatedBy,PayStubID,ProductID,Pay
 	,NEW.CreatedBy
 	,NEW.RowID
 	,els.LoanTypeID
-	,IFNULL(els.DeductionAmount,0)
+	,IFNULL(LEAST(els.DeductionAmount, IFNULL(els.TotalBalanceLeft, els.DeductionAmount)),0)
 	,FALSE
 	FROM (SELECT els.*
 			FROM employeeloanschedule els

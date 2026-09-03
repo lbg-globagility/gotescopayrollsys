@@ -1,12 +1,18 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               10.4.28-MariaDB - mariadb.org binary distribution
+-- Server OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
+-- --------------------------------------------------------
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for trigger gotescopayroll_alltest.AFTUPD_paystub
 DROP TRIGGER IF EXISTS `AFTUPD_paystub`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
@@ -638,6 +644,28 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		,LastUpdBy=NEW.LastUpdBy
 		,PayAmount=els.DeductionAmount;
 	
+	
+	
+	UPDATE employeeloanschedule els set
+	els.LoanPayPeriodLeft = (els.LoanPayPeriodLeft - @min_decremnt)
+	,els.TotalBalanceLeft = if(els.TotalBalanceLeft<=els.DeductionAmount,0,els.TotalBalanceLeft-els.DeductionAmount)
+	,els.PayStubID=NEW.RowID
+	WHERE els.OrganizationID=NEW.OrganizationID
+	AND els.`Status` IN ('In Progress', 'Complete')
+	AND els.EmployeeID=NEW.EmployeeID
+	AND els.DeductionSchedule IN (@payperiod_sched_type, 'Per pay period')
+	AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DedEffectiveDateTo >= NEW.PayFromDate) # PayToDate
+	AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DedEffectiveDateTo <= NEW.PayToDate)
+	AND NOT EXISTS (
+		SELECT 1
+		FROM employeeloanhistoitem elhi
+		INNER JOIN employeeloanhistory elh ON elh.RowID=elhi.LoanHistoID AND elh.OrganizationID=elhi.OrganizationID
+		WHERE elhi.OrganizationID=els.OrganizationID
+		AND elhi.EmpLoanID=els.RowID
+		AND elh.PayStubID=NEW.RowID
+		AND elh.DeductionAmount=els.DeductionAmount
+		AND elh.Active=1
+	);
 	INSERT INTO employeeloanhistory
 	(
 		OrganizationID
@@ -649,6 +677,7 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		,DeductionDate
 		,DeductionAmount
 		,Comments
+		,Active
 	) SELECT
 		psi.OrganizationID
 		,@loan_items_timestamp
@@ -659,6 +688,7 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		,NEW.PayFromDate
 		,psi.PayAmount
 		,p.PartNo
+		,1
 		FROM paystubitem psi
 		INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Loan type'
 		WHERE (psi.Created=@loan_items_timestamp
@@ -667,18 +697,8 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		ON DUPLICATE KEY UPDATE
 		   LastUpd=@loan_items_timestamp
 			,LastUpdBy=NEW.LastUpdBy;
+	 
 	
-	UPDATE employeeloanschedule els SET
-	els.LoanPayPeriodLeft = (els.LoanPayPeriodLeft - @min_decremnt)
-	,els.TotalBalanceLeft = (els.TotalBalanceLeft - els.DeductionAmount)
-	,els.PayStubID=NEW.RowID
-	WHERE els.OrganizationID=NEW.OrganizationID
-	AND els.`Status` IN ('In Progress', 'Complete')
-	AND els.EmployeeID=NEW.EmployeeID
-	AND els.TotalLoanAmount = els.TotalBalanceLeft
-	AND els.DeductionSchedule IN (@payperiod_sched_type, 'Per pay period')
-	AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DedEffectiveDateTo >= NEW.PayFromDate) # PayToDate
-	AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DedEffectiveDateTo <= NEW.PayToDate);
 	
 /* ########################################################################## */
 
@@ -1118,7 +1138,6 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

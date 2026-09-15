@@ -12,8 +12,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Dumping structure for trigger gotescopayroll_alltest.AFTUPD_paystub
-DROP TRIGGER IF EXISTS `AFTUPD_paystub`;
+-- Dumping structure for trigger gotesco.AFTUPD_paystub
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `AFTUPD_paystub` AFTER UPDATE ON `paystub` FOR EACH ROW BEGIN
@@ -656,6 +655,7 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 	AND els.DeductionSchedule IN (@payperiod_sched_type, 'Per pay period')
 	AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DedEffectiveDateTo >= NEW.PayFromDate) # PayToDate
 	AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DedEffectiveDateTo <= NEW.PayToDate)
+	AND NEW.PayFromDate>="2026-08-16"
 	AND NOT EXISTS (
 		SELECT 1
 		FROM employeeloanhistoitem elhi
@@ -663,7 +663,6 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		WHERE elhi.OrganizationID=els.OrganizationID
 		AND elhi.EmpLoanID=els.RowID
 		AND elh.PayStubID=NEW.RowID
-		AND elh.DeductionAmount=els.DeductionAmount
 		AND elh.Active=1
 	);
 	INSERT INTO employeeloanhistory

@@ -643,28 +643,6 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		,LastUpdBy=NEW.LastUpdBy
 		,PayAmount=els.DeductionAmount;
 	
-	
-	
-	UPDATE employeeloanschedule els set
-	els.LoanPayPeriodLeft = (els.LoanPayPeriodLeft - @min_decremnt)
-	,els.TotalBalanceLeft = if(els.TotalBalanceLeft<=els.DeductionAmount,0,els.TotalBalanceLeft-els.DeductionAmount)
-	,els.PayStubID=NEW.RowID
-	WHERE els.OrganizationID=NEW.OrganizationID
-	AND els.`Status` IN ('In Progress', 'Complete')
-	AND els.EmployeeID=NEW.EmployeeID
-	AND els.DeductionSchedule IN (@payperiod_sched_type, 'Per pay period')
-	AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DedEffectiveDateTo >= NEW.PayFromDate) # PayToDate
-	AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DedEffectiveDateTo <= NEW.PayToDate)
-	AND NEW.PayFromDate>="2026-08-16"
-	AND NOT EXISTS (
-		SELECT 1
-		FROM employeeloanhistoitem elhi
-		INNER JOIN employeeloanhistory elh ON elh.RowID=elhi.LoanHistoID AND elh.OrganizationID=elhi.OrganizationID
-		WHERE elhi.OrganizationID=els.OrganizationID
-		AND elhi.EmpLoanID=els.RowID
-		AND elh.PayStubID=NEW.RowID
-		AND elh.Active=1
-	);
 	INSERT INTO employeeloanhistory
 	(
 		OrganizationID
@@ -676,7 +654,6 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		,DeductionDate
 		,DeductionAmount
 		,Comments
-		,Active
 	) SELECT
 		psi.OrganizationID
 		,@loan_items_timestamp
@@ -687,7 +664,6 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		,NEW.PayFromDate
 		,psi.PayAmount
 		,p.PartNo
-		,1
 		FROM paystubitem psi
 		INNER JOIN product p ON p.RowID=psi.ProductID AND p.`Category`='Loan type'
 		WHERE (psi.Created=@loan_items_timestamp
@@ -696,11 +672,63 @@ SET @loan_items_timestamp = CURRENT_TIMESTAMP();
 		ON DUPLICATE KEY UPDATE
 		   LastUpd=@loan_items_timestamp
 			,LastUpdBy=NEW.LastUpdBy;
-	 
 	
+	UPDATE employeeloanschedule els SET
+	els.LoanPayPeriodLeft = (els.LoanPayPeriodLeft - @min_decremnt)
+	,els.TotalBalanceLeft = (els.TotalBalanceLeft - els.DeductionAmount)
+	,els.PayStubID=NEW.RowID
+	WHERE els.OrganizationID=NEW.OrganizationID
+	AND els.`Status` IN ('In Progress', 'Complete')
+	AND els.EmployeeID=NEW.EmployeeID
+	AND els.DeductionSchedule IN (@payperiod_sched_type, 'Per pay period')
+	AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DedEffectiveDateTo >= NEW.PayFromDate) # PayToDate
+	AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DedEffectiveDateTo <= NEW.PayToDate)
+	AND NOT EXISTS (
+		SELECT 1
+		FROM employeeloanschedulelog elsl
+		WHERE elsl.OrganizationID=els.OrganizationID
+		AND elsl.EmployeeID=els.EmployeeID
+		AND elsl.PayStubID=NEW.RowID
+		AND elsl.PayPeriodID=NEW.PayPeriodID
+		AND elsl.EmployeeLoanID=els.RowID
+	);
 	
 /* ########################################################################## */
-
+INSERT INTO `employeeloanschedulelog` (
+    `PayStubID`, 
+    `PayPeriodID`, 
+    `EmployeeLoanID`, -- Added column
+    `DeductionDate`, 
+    `EmployeeID`, 
+    `OrganizationID`, 
+    `CreatedBy`
+)
+SELECT 
+    NEW.RowID,          
+    NEW.PayPeriodID,          
+    els.RowID,                -- Grabs the specific Loan ID dynamically from the join
+    NEW.PayFromDate, 
+    NEW.EmployeeID,         
+    NEW.OrganizationID,           
+    NEW.LastUpdBy            
+FROM `employeeloanschedule` els
+WHERE els.OrganizationID = NEW.OrganizationID
+  AND els.`Status` IN ('In Progress', 'Complete')
+  AND els.EmployeeID = NEW.EmployeeID
+  AND els.DeductionSchedule IN (@payperiod_sched_type, 'Per pay period')
+  AND (els.DedEffectiveDateFrom >= NEW.PayFromDate OR els.DedEffectiveDateTo >= NEW.PayFromDate)
+  AND (els.DedEffectiveDateFrom <= NEW.PayToDate OR els.DedEffectiveDateTo <= NEW.PayToDate)
+  -- Prevent duplicate logging for the exact same loan + pay stub combo
+  AND NOT EXISTS (
+      SELECT 1 
+      FROM `employeeloanschedulelog` elsl
+      WHERE elsl.PayStubID = NEW.RowID       
+        AND elsl.PayPeriodID = NEW.PayPeriodID     
+        AND elsl.EmployeeLoanID = els.RowID
+        AND elsl.OrganizationID = NEW.OrganizationID
+        AND elsl.EmployeeID = NEW.EmployeeID
+		   
+  );
 /* paystubitem - BONUS (start)*/
 INSERT INTO paystubitem
 (

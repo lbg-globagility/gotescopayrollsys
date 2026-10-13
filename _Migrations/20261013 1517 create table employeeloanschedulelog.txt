@@ -1,0 +1,14 @@
+CREATE TABLE `employeeloanschedulelog` (
+	`RowID` INT(11) NOT NULL AUTO_INCREMENT,
+	`PayStubID` INT(11) NULL DEFAULT '0',
+	`EmployeeLoanID` INT(11) NULL DEFAULT '0',
+	`PayPeriodID` INT(11) NULL DEFAULT '0',
+	`EmployeeID` INT(11) NULL DEFAULT '0',
+	`OrganizationID` INT(11) NULL DEFAULT '0',
+	`DeductionDate` DATE NULL,
+	`CreatedBy` INT(11) NULL DEFAULT '0',
+	`CreatedAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP(),
+	PRIMARY KEY (`RowID`)
+)
+COLLATE='utf8_general_ci'
+;
